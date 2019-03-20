@@ -1,0 +1,13 @@
+*.rp filter=lfs diff=lfs merge=lfs -text
+*.xlsx filter=lfs diff=lfs merge=lfs -text
+*.xls filter=lfs diff=lfs merge=lfs -text
+*.doc filter=lfs diff=lfs merge=lfs -text
+*.docx filter=lfs diff=lfs merge=lfs -text
+*.ppt filter=lfs diff=lfs merge=lfs -text
+*.pptx filter=lfs diff=lfs merge=lfs -text
+*.pdf filter=lfs diff=lfs merge=lfs -text
+*.eap filter=lfs diff=lfs merge=lfs -text
+*.mmap filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+docs/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+docs/**/*.png filter=lfs diff=lfs merge=lfs -text
