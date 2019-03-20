@@ -1,0 +1,17 @@
+version: "3"
+services:
+  app:
+    image: beginor/net-core-app
+    container_name: net-core-app
+    hostname: net-core-app
+    ports:
+      - 1811:80
+    # volumes:
+    #   - ./default.conf:/etc/nginx/conf.d/default.conf
+    #   - ./html:/usr/share/nginx/html
+    #   - ./log:/var/log/nginx
+    restart: unless-stopped
+networks:
+  default:
+    external:
+      name: compose
