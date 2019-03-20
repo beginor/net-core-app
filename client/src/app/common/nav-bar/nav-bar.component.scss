@@ -1,0 +1,22 @@
+@import '../../../base';
+
+:host {
+  // background-color: #ccc;
+
+  .navbar {
+    @include box-shadow(0 0 4px 0 $dark);
+
+    .navbar-brand {
+      text-shadow: 0 0 1px $light;
+    }
+
+    .navbar-nav {
+
+      .nav-item.active {
+        border-bottom: .25rem solid $navbar-dark-active-color;
+        margin-bottom: -0.5rem;
+      }
+    }
+  }
+
+}
