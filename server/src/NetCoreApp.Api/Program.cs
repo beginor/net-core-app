@@ -1,24 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Beginor.AppFx.Logging.Log4net;
 
-namespace NetCoreApp.Api
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
+namespace Beginor.NetCoreApp.Api {
+
+    public class Program {
+
+        public static void Main(string[] args) {
             CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureLogging(logging => {
+                    logging.ClearProviders();
+                    var path = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "log.config"
+                    );
+                    logging.AddLog4net(path);
+                })
                 .UseStartup<Startup>();
     }
 }
