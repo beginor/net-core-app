@@ -1,18 +1,18 @@
 using NUnit.Framework;
 
-namespace Tests
-{
-    public class NetCoreAppTest
-    {
+namespace Beginor.NetCoreApp.Test {
+
+    public class NetCoreAppTest {
+        
         [SetUp]
-        public void Setup()
-        {
+        public void Setup() {
         }
 
         [Test]
-        public void Test1()
-        {
+        public void Test1() {
             Assert.Pass();
         }
+        
     }
+    
 }
