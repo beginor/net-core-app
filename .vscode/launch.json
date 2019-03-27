@@ -2,6 +2,25 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Server",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "dotnet:build",
+      "program": "${workspaceFolder}/server/src/NetCoreApp.Api/bin/Debug/netcoreapp2.2/Beginor.NetCoreApp.Api.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/server/src/NetCoreApp.Api",
+      "stopAtEntry": false,
+      "launchBrowser": {
+        "enabled": false,
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/server/src/NetCoreApp.Api/Views"
+      }
+    },
+    {
       "type": "chrome",
       "request": "launch",
       "name": "Client",
@@ -10,7 +29,9 @@
       "osx": {
         "runtimeExecutable": "/Applications/Chromium.app/Contents/MacOS/Chromium"
       },
-      "runtimeArgs": ["--incognito"],
+      "runtimeArgs": [
+        "--incognito"
+      ],
       "disableNetworkCache": true
     }
   ]

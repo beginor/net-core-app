@@ -44,6 +44,27 @@
       "options": {
         "cwd": "${workspaceRoot}/client"
       }
+    },
+    {
+      "label": "dotnet:build",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["build"],
+      "problemMatcher": ["$msCompile"],
+      "group": { "kind": "build", "isDefault": true },
+      "options": {
+        "cwd": "${workspaceRoot}/server/src/NetCoreApp.Api"
+      }
+    },
+    {
+      "label": "dotnet:run",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["run"],
+      "problemMatcher": ["$msCompile"],
+      "options": {
+        "cwd": "${workspaceRoot}/server/src/NetCoreApp.Api"
+      }
     }
   ]
 }
