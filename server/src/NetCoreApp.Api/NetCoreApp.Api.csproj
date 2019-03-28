@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="log.config">
+    <Content Update="log.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
 
 </Project>

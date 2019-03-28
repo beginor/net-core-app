@@ -9,19 +9,22 @@ namespace Beginor.NetCoreApp.Api {
     public class Program {
 
         public static void Main(string[] args) {
-            CreateWebHostBuilder(args).Build().Run();
+            var host = CreateWebHostBuilder(args).Build();
+            host.Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        private static IWebHostBuilder CreateWebHostBuilder(string[] args) {
+            return WebHost.CreateDefaultBuilder(args)
                 .ConfigureLogging(logging => {
-                    logging.ClearProviders();
-                    var path = Path.Combine(
-                        Directory.GetCurrentDirectory(),
-                        "log.config"
-                    );
-                    logging.AddLog4net(path);
-                })
+                        logging.ClearProviders();
+                        var path = Path.Combine(
+                            Directory.GetCurrentDirectory(),
+                            "log.config"
+                        );
+                        logging.AddLog4net(path);
+                    })
                 .UseStartup<Startup>();
+        }
+
     }
 }
