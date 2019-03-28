@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
+    /// <summary>
+    /// 测试 API
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase {
@@ -14,13 +13,17 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         // GET api/values
+        /// <summary>
+        /// 获取全部的值
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get() {
             return new string[] { "value1", "value2" };
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public ActionResult<string> Get(int id) {
             return "value";
         }
@@ -31,12 +34,12 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         }
 
         // PUT api/values/5
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public void Put(int id, [FromBody] string value) {
         }
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public void Delete(int id) {
         }
 
