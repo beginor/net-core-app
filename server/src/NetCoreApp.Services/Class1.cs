@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace NetCoreApp.Services
-{
-    public class Class1
-    {
+namespace Beginor.NetCoreApp.Services {
+
+    public class Class1 {
     }
+
 }

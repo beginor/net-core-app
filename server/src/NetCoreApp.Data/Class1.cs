@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace NetCoreApp.Data
-{
-    public class Class1
-    {
+namespace Beginor.NetCoreApp.Data {
+    
+    public class Class1 {
     }
+
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace NetCoreApp.Models
-{
-    public class Class1
-    {
+namespace Beginor.NetCoreApp.Models {
+    
+    public class Class1 {
     }
+    
 }

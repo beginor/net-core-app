@@ -10,7 +10,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
     [ApiController]
     public class ValuesController : ControllerBase {
 
-        log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        log4net.ILog logger = log4net.LogManager.GetLogger(
+            System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
+        );
 
         // GET api/values
         /// <summary>

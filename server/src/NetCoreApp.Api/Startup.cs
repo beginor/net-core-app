@@ -6,10 +6,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using SysEnvironment = System.Environment;
+using NHibernate.NetCore;
+using NHibernate.Cfg;
 
 namespace Beginor.NetCoreApp.Api {
 
@@ -57,14 +60,61 @@ namespace Beginor.NetCoreApp.Api {
             log.Debug("Configure app completed.");
         }
 
+        #region "NHibernate"
+        private void ConfigureHibernateServices(
+            IServiceCollection services,
+            IHostingEnvironment env
+        ) {
+            var cfg = new Configuration();
+            var configFile = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "hibernate.config"
+            );
+            cfg.Configure(configFile);
+            cfg.SetProperty(
+                NHibernate.Cfg.Environment.ShowSql,
+                env.IsDevelopment().ToString()
+            );
+            cfg.SetProperty(
+                NHibernate.Cfg.Environment.FormatSql,
+                env.IsDevelopment().ToString().ToString()
+            );
+            services.AddHibernate(configFile);
+        }
+
+        private void ConfigureHibernate(
+            IApplicationBuilder app,
+            IHostingEnvironment env
+        ) {
+
+        }
+        #endregion
+
         #region "Mvc"
         private void ConfigureMvcServices(IServiceCollection services) {
             services.AddMvc()
+                .ConfigureApplicationPartManager(manager => {
+                    manager.ApplicationParts.Clear();
+                    manager.ApplicationParts.Add(
+                        new AssemblyPart(typeof(Startup).Assembly)
+                    );
+                })
+                .AddControllersAsServices()
+                .ConfigureApiBehaviorOptions(opts => {
+                    opts.SuppressConsumesConstraintForFormFileParameters = true;
+                    opts.SuppressInferBindingSourcesForParameters = true;
+                    opts.SuppressModelStateInvalidFilter = true;
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         private void ConfigureMvc(IApplicationBuilder app) {
-            app.UseMvc();
+            app.UseMvc(routes => {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}"
+                );
+            });
         }
         #endregion
 
