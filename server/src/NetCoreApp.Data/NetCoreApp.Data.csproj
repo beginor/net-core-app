@@ -6,4 +6,14 @@
     <RootNamespace>Beginor.NetCoreApp.Data</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NHibernate" Version="5.2.4" />
+    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Entities\*.hbm.xml" />
+    <EmbeddedResource Include="Entities\*.hbm.xml" />
+  </ItemGroup>
+
 </Project>
