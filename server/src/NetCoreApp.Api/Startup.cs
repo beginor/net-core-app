@@ -14,10 +14,10 @@ using SysEnvironment = System.Environment;
 namespace Beginor.NetCoreApp.Api {
 
     public class Startup {
-        
+
         private readonly IConfiguration config;
         private readonly IHostingEnvironment env;
-        
+
         private readonly log4net.ILog log = log4net.LogManager.GetLogger(
             MethodBase.GetCurrentMethod().DeclaringType
         );
@@ -34,11 +34,10 @@ namespace Beginor.NetCoreApp.Api {
         // This method gets called by the runtime. Use this method to add
         // services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            AddSwaggerServices(services);
+            ConfigureMvcServices(services);
+            ConfigureSwaggerServices(services);
         }
-        
+
         // This method gets called by the runtime. Use this method to configure
         // the HTTP request pipeline.
         public void Configure(
@@ -46,21 +45,31 @@ namespace Beginor.NetCoreApp.Api {
             IHostingEnvironment env
         ) {
             log.Debug("Startup configure app.");
+            if (env.IsDevelopment()) {
+                app.UseDeveloperExceptionPage();
+            }
             var pathbase = SysEnvironment.GetEnvironmentVariable(
                 "ASPNETCORE_PATHBASE"
             );
             ConfigurePathBase(app, pathbase);
-            
-            if (env.IsDevelopment()) {
-                app.UseDeveloperExceptionPage();
-            }
-            app.UseMvc();
-            ConfigSwagger(app, pathbase);
+            ConfigureMvc(app);
+            ConfigureSwagger(app, pathbase);
             log.Debug("Configure app completed.");
         }
 
+        #region "Mvc"
+        private void ConfigureMvcServices(IServiceCollection services) {
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+        }
+
+        private void ConfigureMvc(IApplicationBuilder app) {
+            app.UseMvc();
+        }
+        #endregion
+
         #region "Swagger"
-        private void AddSwaggerServices(IServiceCollection services) {
+        private void ConfigureSwaggerServices(IServiceCollection services) {
             log.Debug("Start add swagger related services...");
             services.AddSwaggerGen(opt => {
                 opt.SwaggerDoc("v1", new Info {
@@ -83,16 +92,15 @@ namespace Beginor.NetCoreApp.Api {
             });
             log.Debug("Add swagger related service completed.");
         }
-        
-        private void ConfigSwagger(
+        private void ConfigureSwagger(
             IApplicationBuilder app,
             string pathbase
         ) {
             app.UseSwagger();
             app.UseSwaggerUI(c => {
-                // c.RoutePrefix = pathBase;
+                // c.RoutePrefix = pathbase;
                 c.SwaggerEndpoint(
-                    "/swagger/v1/swagger.json",
+                    pathbase + "/swagger/v1/swagger.json",
                     "NetCoreApp API V1"
                 );
             });
