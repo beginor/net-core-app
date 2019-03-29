@@ -11,12 +11,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using SysEnvironment = System.Environment;
+using NHibernate.AspNetCore.Identity;
 using NHibernate.NetCore;
 using NHibernate.Cfg;
+using Beginor.NetCoreApp.Data.Entities;
 
 namespace Beginor.NetCoreApp.Api {
 
-    public class Startup {
+    public partial class Startup {
 
         private readonly IConfiguration config;
         private readonly IHostingEnvironment env;
@@ -36,139 +38,46 @@ namespace Beginor.NetCoreApp.Api {
 
         // This method gets called by the runtime. Use this method to add
         // services to the container.
-        public void ConfigureServices(IServiceCollection services) {
-            ConfigureMvcServices(services);
-            ConfigureSwaggerServices(services);
+        public void ConfigureServices(
+            IServiceCollection services
+        ) {
+            log.Debug("Start configure services ...");
+            ConfigureHibernateServices(services, env);
+            ConfigureIdentityServices(services, env);
+            ConfigurePathBaseServices(services, env);
+            ConfigureAuthenticationServices(services, env);
+            ConfigureCookiePolicyServices(services, env);
+            ConfigureSwaggerServices(services, env);
+            ConfigureStaticFilesServices(services, env);
+            ConfigureMvcServices(services, env);
+            log.Debug("Configure services completed!");
         }
 
         // This method gets called by the runtime. Use this method to configure
         // the HTTP request pipeline.
         public void Configure(
-            IApplicationBuilder app,
-            IHostingEnvironment env
+            IApplicationBuilder app
         ) {
-            log.Debug("Startup configure app.");
+            log.Debug("Start configure app.");
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
-            var pathbase = SysEnvironment.GetEnvironmentVariable(
-                "ASPNETCORE_PATHBASE"
-            );
-            ConfigurePathBase(app, pathbase);
-            ConfigureMvc(app);
-            ConfigureSwagger(app, pathbase);
+            ConfigureHibernate(app, env);
+            ConfigureIdentity(app, env);
+            ConfigurePathBase(app, env);
+            ConfigureAuthentication(app, env);
+            ConfigureCookiePolicy(app, env);
+            ConfigureSwagger(app, env);
+            ConfigureStaticFiles(app, env);
+            ConfigureMvc(app, env);
             log.Debug("Configure app completed.");
         }
 
-        #region "NHibernate"
-        private void ConfigureHibernateServices(
-            IServiceCollection services,
-            IHostingEnvironment env
-        ) {
-            var cfg = new Configuration();
-            var configFile = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "hibernate.config"
+        private string GetAppPathbase() {
+            return SysEnvironment.GetEnvironmentVariable(
+                "ASPNETCORE_PATHBASE"
             );
-            cfg.Configure(configFile);
-            cfg.SetProperty(
-                NHibernate.Cfg.Environment.ShowSql,
-                env.IsDevelopment().ToString()
-            );
-            cfg.SetProperty(
-                NHibernate.Cfg.Environment.FormatSql,
-                env.IsDevelopment().ToString().ToString()
-            );
-            services.AddHibernate(configFile);
         }
 
-        private void ConfigureHibernate(
-            IApplicationBuilder app,
-            IHostingEnvironment env
-        ) {
-
-        }
-        #endregion
-
-        #region "Mvc"
-        private void ConfigureMvcServices(IServiceCollection services) {
-            services.AddMvc()
-                .ConfigureApplicationPartManager(manager => {
-                    manager.ApplicationParts.Clear();
-                    manager.ApplicationParts.Add(
-                        new AssemblyPart(typeof(Startup).Assembly)
-                    );
-                })
-                .AddControllersAsServices()
-                .ConfigureApiBehaviorOptions(opts => {
-                    opts.SuppressConsumesConstraintForFormFileParameters = true;
-                    opts.SuppressInferBindingSourcesForParameters = true;
-                    opts.SuppressModelStateInvalidFilter = true;
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-        }
-
-        private void ConfigureMvc(IApplicationBuilder app) {
-            app.UseMvc(routes => {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}"
-                );
-            });
-        }
-        #endregion
-
-        #region "Swagger"
-        private void ConfigureSwaggerServices(IServiceCollection services) {
-            log.Debug("Start add swagger related services...");
-            services.AddSwaggerGen(opt => {
-                opt.SwaggerDoc("v1", new Info {
-                    Title = "NetCoreApp API Help",
-                    Version = "1.0.0"
-                });
-                var dir = new DirectoryInfo(
-                    AppDomain.CurrentDomain.BaseDirectory
-                );
-                var xmlFiles = dir.EnumerateFiles(
-                    "*.xml",
-                    SearchOption.AllDirectories
-                ).Select(f => f.FullName);
-                foreach (var xmlFile in xmlFiles) {
-                    log.Debug(
-                        $"include xml comments {xmlFile} to swagger"
-                    );
-                    opt.IncludeXmlComments(xmlFile);
-                }
-            });
-            log.Debug("Add swagger related service completed.");
-        }
-        private void ConfigureSwagger(
-            IApplicationBuilder app,
-            string pathbase
-        ) {
-            app.UseSwagger();
-            app.UseSwaggerUI(c => {
-                // c.RoutePrefix = pathbase;
-                c.SwaggerEndpoint(
-                    pathbase + "/swagger/v1/swagger.json",
-                    "NetCoreApp API V1"
-                );
-            });
-        }
-        #endregion
-
-        #region "Pathbase"
-        private void ConfigurePathBase(
-            IApplicationBuilder app,
-            string pathbase
-        ) {
-            if (string.IsNullOrEmpty(pathbase)) {
-                return;
-            }
-            app.UsePathBase(new PathString(pathbase));
-            var message = "Hosting pathbase: " + pathbase;
-            log.Debug(message);
-        }
-        #endregion
     }
 }
