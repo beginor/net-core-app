@@ -1,20 +1,10 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.Swagger;
 using SysEnvironment = System.Environment;
-using NHibernate.AspNetCore.Identity;
-using NHibernate.NetCore;
-using NHibernate.Cfg;
-using Beginor.NetCoreApp.Data.Entities;
 
 namespace Beginor.NetCoreApp.Api {
 
@@ -23,7 +13,7 @@ namespace Beginor.NetCoreApp.Api {
         private readonly IConfiguration config;
         private readonly IHostingEnvironment env;
 
-        private readonly log4net.ILog log = log4net.LogManager.GetLogger(
+        private readonly log4net.ILog logger = log4net.LogManager.GetLogger(
             MethodBase.GetCurrentMethod().DeclaringType
         );
 
@@ -41,7 +31,7 @@ namespace Beginor.NetCoreApp.Api {
         public void ConfigureServices(
             IServiceCollection services
         ) {
-            log.Debug("Start configure services ...");
+            logger.Debug("Start configure services ...");
             ConfigureHibernateServices(services, env);
             ConfigureIdentityServices(services, env);
             ConfigurePathBaseServices(services, env);
@@ -50,7 +40,7 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureSwaggerServices(services, env);
             ConfigureStaticFilesServices(services, env);
             ConfigureMvcServices(services, env);
-            log.Debug("Configure services completed!");
+            logger.Debug("Configure services completed!");
         }
 
         // This method gets called by the runtime. Use this method to configure
@@ -58,9 +48,9 @@ namespace Beginor.NetCoreApp.Api {
         public void Configure(
             IApplicationBuilder app
         ) {
-            log.Debug("Start configure app.");
+            logger.Debug("Start configure app.");
             if (env.IsDevelopment()) {
-                app.UseDeveloperExceptionPage();
+                // app.UseDeveloperExceptionPage();
             }
             ConfigureHibernate(app, env);
             ConfigureIdentity(app, env);
@@ -70,7 +60,7 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureSwagger(app, env);
             ConfigureStaticFiles(app, env);
             ConfigureMvc(app, env);
-            log.Debug("Configure app completed.");
+            logger.Debug("Configure app completed.");
         }
 
         private string GetAppPathbase() {

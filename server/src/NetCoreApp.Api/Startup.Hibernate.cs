@@ -30,7 +30,7 @@ namespace Beginor.NetCoreApp.Api {
                 env.IsDevelopment().ToString().ToString()
             );
             cfg.AddIdentityMappingsForPostgres();
-            services.AddHibernate(configFile);
+            services.AddHibernate(cfg);
         }
 
         private void ConfigureHibernate(

@@ -14,7 +14,7 @@ namespace Beginor.NetCoreApp.Api {
             IServiceCollection services,
             IHostingEnvironment env
         ) {
-            log.Debug("Start add swagger related services...");
+            logger.Debug("Start add swagger related services...");
             services.AddSwaggerGen(opt => {
                 opt.SwaggerDoc("v1", new Info {
                     Title = "NetCoreApp API Help",
@@ -28,13 +28,13 @@ namespace Beginor.NetCoreApp.Api {
                     SearchOption.AllDirectories
                 ).Select(f => f.FullName);
                 foreach (var xmlFile in xmlFiles) {
-                    log.Debug(
+                    logger.Debug(
                         $"include xml comments {xmlFile} to swagger"
                     );
                     opt.IncludeXmlComments(xmlFile);
                 }
             });
-            log.Debug("Add swagger related service completed.");
+            logger.Debug("Add swagger related service completed.");
         }
 
         private void ConfigureSwagger(
