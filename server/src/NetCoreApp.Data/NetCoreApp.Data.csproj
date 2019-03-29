@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Entities\*.hbm.xml" />
-    <EmbeddedResource Include="Entities\*.hbm.xml" />
+    <None Remove="Entities/*.hbm.xml" />
+    <EmbeddedResource Include="Entities/*.hbm.xml" />
   </ItemGroup>
 
 </Project>
