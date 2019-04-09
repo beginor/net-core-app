@@ -9,6 +9,8 @@
   <ItemGroup>
     <PackageReference Include="NHibernate" Version="5.2.4" />
     <PackageReference Include="NHibernate.AspNetCore.Identity" Version="1.2.0" />
+    <PackageReference Include="Beginor.AppFx.Repository.Hibernate" Version="2.2.0" />
+    <PackageReference Include="Beginor.AppFx.Core" Version="2.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,4 +18,7 @@
     <EmbeddedResource Include="Entities/*.hbm.xml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\" />
+  </ItemGroup>
 </Project>

@@ -40,6 +40,7 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureSwaggerServices(services, env);
             ConfigureStaticFilesServices(services, env);
             ConfigureMvcServices(services, env);
+            ConfigureAppServices(services, env);
             logger.Debug("Configure services completed!");
         }
 
@@ -60,6 +61,7 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureSwagger(app, env);
             ConfigureStaticFiles(app, env);
             ConfigureMvc(app, env);
+            ConfigureApp(app, env);
             logger.Debug("Configure app completed.");
         }
 
