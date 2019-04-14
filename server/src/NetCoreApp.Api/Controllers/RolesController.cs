@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 using Beginor.NetCoreApp.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NHibernate.AspNetCore.Identity;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
@@ -19,24 +21,66 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
         );
 
-        private IRoleService service;
+        private RoleManager<ApplicationRole> manager;
 
-        public RolesController(IRoleService service) {
-            this.service = service;
+        public RolesController(RoleManager<ApplicationRole> manager) {
+            this.manager = manager;
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                service = null;
+                manager = null;
             }
             base.Dispose(disposing);
         }
 
-        [HttpGet("")]
-        public async Task<ActionResult<IList<ApplicationRoleModel>>> GetAll() {
+        [HttpPost("")]
+        public async Task<ActionResult<ApplicationRoleModel>> Create(
+            [FromBody]ApplicationRoleModel model
+        ) {
             try {
-                var roles = await service.GetAllAsync();
-                return roles.ToList();
+                if (await manager.RoleExistsAsync(model.Name)) {
+                    return BadRequest($"Role already {model.Name} exists!");
+                }
+                var role = Mapper.Map<ApplicationRole>(model);
+                var result = await manager.CreateAsync(role);
+                if (result.Succeeded) {
+                    Mapper.Map(role, model);
+                    return model;
+                }
+                return StatusCode(406, result.GetErrorsString());
+            }
+            catch (Exception ex) {
+                logger.Error($"Can not create role", ex);
+                return StatusCode(500, ex.GetOriginalMessage());
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(string id) {
+            try {
+                var role = await manager.FindByIdAsync(id);
+                if (role == null) {
+                    return NoContent();
+                }
+                var result = await manager.DeleteAsync(role);
+                if (result.Succeeded) {
+                    return NoContent();
+                }
+                return StatusCode(406, result.GetErrorsString());
+            }
+            catch (Exception ex) {
+                logger.Error($"Can not delete role", ex);
+                return StatusCode(500, ex.GetOriginalMessage());
+            }
+        }
+
+        [HttpGet("")]
+        public ActionResult<IList<ApplicationRoleModel>> GetAll() {
+            try {
+                var roles = manager.Roles.ToList();
+                var models = Mapper.Map<IList<ApplicationRoleModel>>(roles);
+                return models.ToList();
             }
             catch (Exception ex) {
                 logger.Error("Can not get all roles!", ex);
@@ -49,7 +93,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             string id
         ) {
             try {
-                var model = await service.GetByIdAsync(id);
+                var role = await manager.FindByIdAsync(id);
+                if (role == null) {
+                    return NotFound();
+                }
+                var model = Mapper.Map<ApplicationRoleModel>(role);
                 return model;
             }
             catch (Exception ex) {
@@ -58,43 +106,26 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
         }
 
-        [HttpPost("")]
-        public async Task<ActionResult<ApplicationRoleModel>> Create(
-            [FromBody]ApplicationRoleModel model
-        ) {
-            try {
-                var result = await service.CreateAsync(model);
-                return result;
-            }
-            catch (Exception ex) {
-                logger.Error($"Can not create role", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
-            }
-        }
-
         [HttpPut("{id}")]
         public async Task<ActionResult<ApplicationRoleModel>> Update(
             [FromRoute]string id,
-            [FromBody]ApplicationRoleModel role
+            [FromBody]ApplicationRoleModel model
         ) {
             try {
-                var result = await service.UpdateAsync(id, role);
-                return result;
+                var role = await manager.FindByIdAsync(id);
+                if (role == null) {
+                    return NotFound();
+                }
+                Mapper.Map(model, role);
+                var result = await manager.UpdateAsync(role);
+                if (result.Succeeded) {
+                    Mapper.Map(role, model);
+                    return model;
+                }
+                return StatusCode(406, result.GetErrorsString());
             }
             catch (Exception ex) {
                 logger.Error($"Can not update role", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
-            }
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(string id) {
-            try {
-                await service.DeleteAsync(id);
-                return NoContent();
-            }
-            catch (Exception ex) {
-                logger.Error($"Can not delete role", ex);
                 return StatusCode(500, ex.GetOriginalMessage());
             }
         }
