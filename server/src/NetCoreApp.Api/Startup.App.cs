@@ -12,7 +12,7 @@ namespace Beginor.NetCoreApp.Api {
             IHostingEnvironment env
         ) {
             ModelMapping.Setup();
-            services.AddScoped<IRoleService, RoleService>();
+            // services.AddScoped<IRoleService, RoleService>();
         }
 
         private static void ConfigureApp(

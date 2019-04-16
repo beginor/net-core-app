@@ -6,13 +6,13 @@ using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
-using Beginor.NetCoreApp.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NHibernate.AspNetCore.Identity;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
+    /// <summary>角色 API</summary>
     [Route("api/[controller]")]
     [ApiController]
     public class RolesController : Controller {
@@ -34,6 +34,10 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             base.Dispose(disposing);
         }
 
+        /// <summary>创建角色</summary>
+        /// <response code="200">创建角色成功并返回角色信息</response>
+        /// <response code="400">创建角色失败并返回错误信息</response>
+        /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
         public async Task<ActionResult<ApplicationRoleModel>> Create(
             [FromBody]ApplicationRoleModel model
@@ -48,7 +52,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     Mapper.Map(role, model);
                     return model;
                 }
-                return StatusCode(406, result.GetErrorsString());
+                return BadRequest(result.GetErrorsString());
             }
             catch (Exception ex) {
                 logger.Error($"Can not create role", ex);
@@ -56,6 +60,10 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
         }
 
+        /// <summary>删除指定的角色</summary>
+        /// <response code="204">删除角色成功并返回角色信息</response>
+        /// <response code="400">删除角色出错并返回错误信息</response>
+        /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(string id) {
             try {
@@ -67,7 +75,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (result.Succeeded) {
                     return NoContent();
                 }
-                return StatusCode(406, result.GetErrorsString());
+                return BadRequest(result.GetErrorsString());
             }
             catch (Exception ex) {
                 logger.Error($"Can not delete role", ex);
@@ -75,6 +83,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
         }
 
+        /// <summary>获取角色列表</summary>
+        /// <response code="200">获取成功并返回角色列表。</response>
+        /// <response code="500">服务器内部错误。</response>
         [HttpGet("")]
         public ActionResult<IList<ApplicationRoleModel>> GetAll() {
             try {
@@ -88,6 +99,10 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
         }
 
+        /// <summary>获取指定角色</summary>
+        /// <response code="404">找不到指定的角色。</response>
+        /// <response code="200">获取角色成功，返回角色信息。</response>
+        /// <response code="500">服务器内部错误</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<ApplicationRoleModel>> GetById(
             string id
@@ -106,6 +121,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
         }
 
+        /// <summary>更新指定的角色</summary>
+        /// <response code="200">更新成功并返回角色信息</response>
+        /// <response code="400">更新角色出错并返回角色信息</response>
+        /// <response code="404">指定的角色不存在</response>
+        /// <response code="500">服务器内部错误</response>
         [HttpPut("{id}")]
         public async Task<ActionResult<ApplicationRoleModel>> Update(
             [FromRoute]string id,
@@ -122,7 +142,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     Mapper.Map(role, model);
                     return model;
                 }
-                return StatusCode(406, result.GetErrorsString());
+                return BadRequest(result.GetErrorsString());
             }
             catch (Exception ex) {
                 logger.Error($"Can not update role", ex);
