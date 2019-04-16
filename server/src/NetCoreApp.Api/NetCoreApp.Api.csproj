@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Beginor.AppFx.Core" Version="2.3.0" />
+    <PackageReference Include="Beginor.AppFx.Core" Version="2.4.0" />
     <PackageReference Include="Beginor.AppFx.DependencyInjection" Version="2.0.0" />
     <PackageReference Include="Beginor.AppFx.Logging.Log4net" Version="2.0.0" />
     <PackageReference Include="log4net" Version="2.0.8" />
