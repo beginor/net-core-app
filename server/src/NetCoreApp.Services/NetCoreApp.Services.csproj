@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Beginor.AppFx.Core" Version="2.3.0" />
+    <PackageReference Include="Beginor.AppFx.Core" Version="2.4.0" />
     <PackageReference Include="AutoMapper" Version="8.0.0" />
   </ItemGroup>
 </Project>
