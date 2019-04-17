@@ -14,17 +14,17 @@ namespace Beginor.NetCoreApp.Test {
 
         [OneTimeSetUp]
         public void OneTimeSetUp() {
-            if (ServiceProvider != null) {
-                return;
-            }
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile("appsettings.Development.json", true, true)
-                .Build();
-            IHostingEnvironment env = new TestHostingEnvironment();
+            //if (ServiceProvider != null) {
+            //    return;
+            //}
+            //var config = new ConfigurationBuilder()
+            //    .AddJsonFile("appsettings.json", true, true)
+            //    .AddJsonFile("appsettings.Development.json", true, true)
+            //    .Build();
+            //IHostingEnvironment env = new TestHostingEnvironment();
             var services = new ServiceCollection();
-            var startup = new Startup(config, env);
-            startup.ConfigureServices(services);
+            //var startup = new Startup(config, env);
+            //startup.ConfigureServices(services);
             ServiceProvider = services.BuildServiceProvider(true);
         }
 
