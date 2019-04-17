@@ -1,3 +1,4 @@
+using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,8 @@ namespace Beginor.NetCoreApp.Api {
             IHostingEnvironment env
         ) {
             ModelMapping.Setup();
+            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
             // services.AddScoped<IRoleService, RoleService>();
         }
 
