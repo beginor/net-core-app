@@ -1,20 +1,14 @@
 using Beginor.NetCoreApp.Data.Repositories;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Beginor.NetCoreApp.Test.Data {
 
-    [TestFixture]
+    [TestClass]
     public class AttachmentRepositoryTest : BaseTest<IAttachmentRepository> {
 
-        [SetUp]
-        public void SetUp() {}
-
-        [TearDown]
-        public void TearDown() {}
-
-        [Test]
+        [TestMethod]
         public void _01_CanResolveTarget() {
-            Assert.NotNull(Target);
+            Assert.IsNotNull(Target);
         }
 
     }

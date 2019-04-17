@@ -1,14 +1,14 @@
 using Beginor.NetCoreApp.Api.Controllers;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Beginor.NetCoreApp.Test.Api {
 
-    [TestFixture]
+    [TestClass]
     public class RolesControllerTest : BaseTest<RolesController> {
 
-        [Test]
+        [TestMethod]
         public void _01_CanResolveTarget() {
-            Assert.NotNull(Target);
+            Assert.IsNotNull(Target);
         }
 
     }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Beginor.NetCoreApp.Test {
 
@@ -12,24 +12,19 @@ namespace Beginor.NetCoreApp.Test {
 
         protected static IServiceProvider ServiceProvider { get; private set; }
 
-        [OneTimeSetUp]
-        public void OneTimeSetUp() {
-            //if (ServiceProvider != null) {
-            //    return;
-            //}
-            //var config = new ConfigurationBuilder()
-            //    .AddJsonFile("appsettings.json", true, true)
-            //    .AddJsonFile("appsettings.Development.json", true, true)
-            //    .Build();
-            //IHostingEnvironment env = new TestHostingEnvironment();
+        protected BaseTest() {
+            if (ServiceProvider != null) {
+                return;
+            }
+            var config = new ConfigurationBuilder()
+//                .AddJsonFile("appsettings.json", true, true)
+//                .AddJsonFile("appsettings.Development.json", true, true)
+                .Build();
+            IHostingEnvironment env = new TestHostingEnvironment();
             var services = new ServiceCollection();
-            //var startup = new Startup(config, env);
-            //startup.ConfigureServices(services);
-            ServiceProvider = services.BuildServiceProvider(true);
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown() {
+            var startup = new Startup(config, env);
+            startup.ConfigureServices(services);
+            ServiceProvider = services.BuildServiceProvider(false);
         }
 
     }

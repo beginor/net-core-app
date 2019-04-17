@@ -1,21 +1,15 @@
 using Beginor.NetCoreApp.Data.Entities;
 using Microsoft.AspNetCore.Identity;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Beginor.NetCoreApp.Test.Security {
 
-    [TestFixture]
+    [TestClass]
     public class RoleManagerTest : BaseTest<RoleManager<ApplicationRole>> {
 
-        [SetUp]
-        public void SetUp() {}
-
-        [TearDown]
-        public void TearDown() {}
-
-        [Test]
+        [TestMethod]
         public void _01_CanResolveTarget() {
-            Assert.NotNull(Target);
+            Assert.IsNotNull(Target);
         }
 
     }

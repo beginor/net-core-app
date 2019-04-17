@@ -1,14 +1,14 @@
 using NHibernate;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Beginor.NetCoreApp.Test.Data {
 
-    [TestFixture]
+    [TestClass]
     public class HibernateTest : BaseTest<ISession> {
 
-        [Test]
+        [TestMethod]
         public void _01_CanResolveTarget() {
-            Assert.NotNull(Target);
+            Assert.IsNotNull(Target);
         }
 
     }
