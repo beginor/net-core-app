@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.60.6" />
     <PackageReference Include="NHibernate" Version="5.2.4" />
     <PackageReference Include="NHibernate.AspNetCore.Identity" Version="1.2.0" />
     <PackageReference Include="Beginor.AppFx.Repository.Hibernate" Version="2.2.0" />
