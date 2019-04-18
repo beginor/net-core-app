@@ -94,19 +94,19 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误。</response>
         [HttpGet("")]
         public async Task<ActionResult<PaginatedResponseModel<ApplicationUserModel>>> GetAll(
-            [FromQuery]UserSearchRequestModel param
+            [FromQuery]UserSearchRequestModel model
         ) {
             try {
                 var query = manager.Users;
-                if (param.UserName.IsNotNullOrEmpty()) {
-                    query = query.Where(u => u.UserName.Contains(param.UserName));
+                if (model.UserName.IsNotNullOrEmpty()) {
+                    query = query.Where(u => u.UserName.Contains(model.UserName));
                 }
-                var total = query.Count();
+                var total = await query.LongCountAsync();
                 var data = await query.ToListAsync();
                 var models = Mapper.Map<IList<ApplicationUserModel>>(data);
                 var result = new PaginatedResponseModel<ApplicationUserModel> {
-                    Skip = param.Skip,
-                    Take = param.Take,
+                    Skip = model.Skip,
+                    Take = model.Take,
                     Total = total,
                     Data = models
                 };

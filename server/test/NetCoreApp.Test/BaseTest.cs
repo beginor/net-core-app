@@ -51,4 +51,16 @@ namespace Beginor.NetCoreApp.Test {
 
     }
 
+    [TestClass]
+    public class HostingEnvironmentTest {
+
+        [TestMethod]
+        public void TestEnvironment() {
+            var target = new TestHostingEnvironment();
+            Assert.IsFalse(target.IsProduction());
+            Assert.IsFalse(target.IsDevelopment());
+        }
+
+    }
+
 }

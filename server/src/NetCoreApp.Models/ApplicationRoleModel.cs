@@ -16,7 +16,7 @@ namespace Beginor.NetCoreApp.Models {
 
     }
 
-    public class RoleSearchParam : PaginatedRequestModel {
+    public class RoleSearchRequestModel : PaginatedRequestModel {
         public string Name { get; set; }
     }
 

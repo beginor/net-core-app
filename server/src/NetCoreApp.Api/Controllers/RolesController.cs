@@ -9,6 +9,7 @@ using Beginor.NetCoreApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NHibernate.AspNetCore.Identity;
+using NHibernate.Linq;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
@@ -87,11 +88,24 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">获取成功并返回角色列表。</response>
         /// <response code="500">服务器内部错误。</response>
         [HttpGet("")]
-        public ActionResult<IList<ApplicationRoleModel>> GetAll() {
+        public async Task<ActionResult<PaginatedResponseModel<ApplicationRoleModel>>> GetAll(
+            [FromQuery]RoleSearchRequestModel model
+        ) {
             try {
-                var roles = manager.Roles.ToList();
+                var query = manager.Roles;
+                if (model.Name.IsNotNullOrEmpty()) {
+                    query = query.Where(r => r.Name.Contains(model.Name));
+                }
+                var total = await query.LongCountAsync();
+                var roles = await query.ToListAsync();
                 var models = Mapper.Map<IList<ApplicationRoleModel>>(roles);
-                return models.ToList();
+                var result = new PaginatedResponseModel<ApplicationRoleModel> {
+                    Skip = model.Skip,
+                    Take = model.Take,
+                    Total = total,
+                    Data = models
+                };
+                return result;
             }
             catch (Exception ex) {
                 logger.Error("Can not get all roles!", ex);
