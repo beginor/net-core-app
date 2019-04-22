@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Reflection;
 using Beginor.AppFx.DependencyInjection;
 using Beginor.NetCoreApp.Data.Repositories;
@@ -15,13 +17,14 @@ namespace Beginor.NetCoreApp.Api {
             IHostingEnvironment env
         ) {
             ModelMapping.Setup();
+            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
             services.AddServiceWithDefaultImplements(
-                Assembly.LoadFrom("Beginor.NetCoreApp.Data.dll"),
+                Assembly.LoadFrom(Path.Combine(baseDir, "Beginor.NetCoreApp.Data.dll")),
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
             services.AddServiceWithDefaultImplements(
-                Assembly.LoadFrom("Beginor.NetCoreApp.Services.dll"),
+                Assembly.LoadFrom(Path.Combine(baseDir, "Beginor.NetCoreApp.Services.dll")),
                 t => t.Name.EndsWith("Service"),
                 ServiceLifetime.Scoped
             );
