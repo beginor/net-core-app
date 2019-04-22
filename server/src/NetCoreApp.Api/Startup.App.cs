@@ -16,12 +16,12 @@ namespace Beginor.NetCoreApp.Api {
         ) {
             ModelMapping.Setup();
             services.AddServiceWithDefaultImplements(
-                Assembly.LoadFrom("Beginor.NetCoreApp.Data"),
+                Assembly.LoadFrom("Beginor.NetCoreApp.Data.dll"),
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
             services.AddServiceWithDefaultImplements(
-                Assembly.LoadFrom("Beginor.NetCoreApp.Services"),
+                Assembly.LoadFrom("Beginor.NetCoreApp.Services.dll"),
                 t => t.Name.EndsWith("Service"),
                 ServiceLifetime.Scoped
             );

@@ -22,9 +22,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
         );
 
-        private UserManager<ApplicationUser> manager;
+        private UserManager<AppUser> manager;
 
-        public UsersController(UserManager<ApplicationUser> manager) {
+        public UsersController(UserManager<AppUser> manager) {
             this.manager = manager;
         }
 
@@ -52,7 +52,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (user != null) {
                     return BadRequest($"User with {model.Email} exists!");
                 }
-                user = Mapper.Map<ApplicationUser>(model);
+                user = Mapper.Map<AppUser>(model);
                 var result = await manager.CreateAsync(user);
                 if (result.Succeeded) {
                     Mapper.Map(user, model);

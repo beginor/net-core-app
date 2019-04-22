@@ -5,14 +5,14 @@
   xmlns="urn:nhibernate-mapping-2.2"
   namespace="Beginor.NetCoreApp.Data.Entities" assembly="Beginor.NetCoreApp.Data">
 
-    <class name="Attachment" table="attachments" schema="public">
+    <class name="AppAttachment" table="app_attachments" schema="public">
       <id name="Id" column="id" type="long">
         <generator class="trigger-identity" />
       </id>
       <property name="ContentType" column="content_type" type="string" />
       <property name="Content" column="content" type="binary" not-null="false" />
-      <property name="CreateTime" column="create_time" type="datetime" not-null="true" generated="insert" update="false" insert="false" />
-      <property name="UserId" column="user_id" type="string" length="32" not-null="true" />
+      <property name="CreateTime" column="created_at" type="datetime" not-null="true" generated="insert" update="false" insert="false" />
+      <property name="UserId" column="creator_id" type="string" length="32" not-null="true" />
     </class>
 
 </hibernate-mapping>

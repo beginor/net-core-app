@@ -5,7 +5,7 @@ using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Services {
 
-    public class AttachmentService : BaseService<IAttachmentRepository, Attachment, AttachmentModel, long>, IAttachmentService {
+    public class AttachmentService : BaseService<IAttachmentRepository, AppAttachment, AttachmentModel, long>, IAttachmentService {
 
         public AttachmentService(IAttachmentRepository repository) : base(repository) { }
 

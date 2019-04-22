@@ -17,7 +17,7 @@ namespace Beginor.NetCoreApp.Test.Data {
         [TestMethod]
         public void _02_CanQueryApplicationUsers() {
             using (var session = Target.OpenSession()) {
-                var users = session.Query<ApplicationUser>().ToList();
+                var users = session.Query<AppUser>().ToList();
                 Console.WriteLine(users.Count);
                 Assert.IsTrue(users.Count >= 0);
             }

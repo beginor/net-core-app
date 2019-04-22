@@ -12,8 +12,8 @@ namespace Beginor.NetCoreApp.Api {
             IServiceCollection services,
             IHostingEnvironment env
         ) {
-            services.AddDefaultIdentity<ApplicationUser>()
-                .AddRoles<ApplicationRole>()
+            services.AddDefaultIdentity<AppUser>()
+                .AddRoles<AppRole>()
                 .AddHibernateStores();
         }
 

@@ -11,13 +11,13 @@ using NHibernate.Linq;
 namespace Beginor.NetCoreApp.Data.Repositories {
 
     public class AttachmentRepository
-        : HibernateRepository<Attachment, long>, IAttachmentRepository {
+        : HibernateRepository<AppAttachment, long>, IAttachmentRepository {
 
         public AttachmentRepository(ISessionFactory sessionFactory)
             : base(sessionFactory) {
         }
 
-        public async Task<IList<Attachment>> GetByUser(string userId) {
+        public async Task<IList<AppAttachment>> GetByUser(string userId) {
             Argument.NotNullOrEmpty(userId, nameof(userId));
             var data = await base.QueryAsync(a => a.UserId == userId);
             return data;

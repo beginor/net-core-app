@@ -22,9 +22,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
         );
 
-        private RoleManager<ApplicationRole> manager;
+        private RoleManager<AppRole> manager;
 
-        public RolesController(RoleManager<ApplicationRole> manager) {
+        public RolesController(RoleManager<AppRole> manager) {
             this.manager = manager;
         }
 
@@ -47,7 +47,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (await manager.RoleExistsAsync(model.Name)) {
                     return BadRequest($"Role already {model.Name} exists!");
                 }
-                var role = Mapper.Map<ApplicationRole>(model);
+                var role = Mapper.Map<AppRole>(model);
                 var result = await manager.CreateAsync(role);
                 if (result.Succeeded) {
                     Mapper.Map(role, model);

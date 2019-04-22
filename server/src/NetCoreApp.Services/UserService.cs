@@ -14,9 +14,9 @@ namespace Beginor.NetCoreApp.Services {
 
     public partial class UserService : IUserService {
 
-        private UserManager<ApplicationUser> manager;
+        private UserManager<AppUser> manager;
 
-        public UserService(UserManager<ApplicationUser> manager) {
+        public UserService(UserManager<AppUser> manager) {
             this.manager = manager;
         }
 
@@ -24,7 +24,7 @@ namespace Beginor.NetCoreApp.Services {
             ApplicationUserModel model
         ) {
             Argument.NotNull(model, nameof(model));
-            var user = Mapper.Map<ApplicationUser>(model);
+            var user = Mapper.Map<AppUser>(model);
             var result = await manager.CreateAsync(user);
             if (!result.Succeeded) {
                 throw new InvalidOperationException(result.GetErrorsString());

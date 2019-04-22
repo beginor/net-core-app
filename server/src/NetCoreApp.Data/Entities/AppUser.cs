@@ -3,7 +3,7 @@ using NHIdentityUser = NHibernate.AspNetCore.Identity.IdentityUser;
 
 namespace Beginor.NetCoreApp.Data.Entities {
 
-    public class ApplicationUser : NHIdentityUser {
+    public class AppUser : NHIdentityUser {
 
         public virtual DateTime CreateTime { get; set; }
 
