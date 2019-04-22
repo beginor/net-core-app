@@ -1,12 +1,12 @@
 using Beginor.NetCoreApp.Services;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Beginor.NetCoreApp.Test.Services {
 
-    [TestClass]
+    [TestFixture]
     public class AppAttachmentServiceTest : BaseTest<IAppAttachmentService> {
 
-        [TestMethod]
+        [Test]
         public void _01_CanResolveTarget() {
             Assert.IsNotNull(Target);
         }

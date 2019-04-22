@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Beginor.NetCoreApp.Test {
 
@@ -51,10 +51,10 @@ namespace Beginor.NetCoreApp.Test {
 
     }
 
-    [TestClass]
+    [TestFixture]
     public class HostingEnvironmentTest {
 
-        [TestMethod]
+        [Test]
         public void TestEnvironment() {
             var target = new TestHostingEnvironment();
             Assert.IsFalse(target.IsProduction());

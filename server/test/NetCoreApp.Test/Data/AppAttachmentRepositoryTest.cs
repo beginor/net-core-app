@@ -1,18 +1,18 @@
 using System.Threading.Tasks;
 using Beginor.NetCoreApp.Data.Repositories;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Beginor.NetCoreApp.Test.Data {
 
-    [TestClass]
+    [TestFixture]
     public class AppAttachmentRepositoryTest : BaseTest<IAppAttachmentRepository> {
 
-        [TestMethod]
+        [Test]
         public void _01_CanResolveTarget() {
             Assert.IsNotNull(Target);
         }
 
-        [TestMethod]
+        [Test]
         public async Task _02_CanGetByUser() {
             var data = await Target.GetByUser("test");
             Assert.IsNotNull(data);

@@ -2,19 +2,19 @@ using System;
 using System.Linq;
 using Beginor.NetCoreApp.Data.Entities;
 using NHibernate;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Beginor.NetCoreApp.Test.Data {
 
-    [TestClass]
+    [TestFixture]
     public class HibernateTest : BaseTest<ISessionFactory> {
 
-        [TestMethod]
+        [Test]
         public void _01_CanResolveTarget() {
             Assert.IsNotNull(Target);
         }
 
-        [TestMethod]
+        [Test]
         public void _02_CanQueryApplicationUsers() {
             using (var session = Target.OpenSession()) {
                 var users = session.Query<AppUser>().ToList();
