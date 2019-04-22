@@ -1,3 +1,5 @@
+using System.Reflection;
+using Beginor.AppFx.DependencyInjection;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Services;
 using Microsoft.AspNetCore.Builder;
@@ -13,9 +15,16 @@ namespace Beginor.NetCoreApp.Api {
             IHostingEnvironment env
         ) {
             ModelMapping.Setup();
-            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
-            services.AddScoped<IAttachmentService, AttachmentService>();
-            // services.AddScoped<IRoleService, RoleService>();
+            services.AddServiceWithDefaultImplements(
+                Assembly.LoadFrom("Beginor.NetCoreApp.Data"),
+                t => t.Name.EndsWith("Repository"),
+                ServiceLifetime.Scoped
+            );
+            services.AddServiceWithDefaultImplements(
+                Assembly.LoadFrom("Beginor.NetCoreApp.Services"),
+                t => t.Name.EndsWith("Service"),
+                ServiceLifetime.Scoped
+            );
         }
 
         private static void ConfigureApp(
