@@ -1,7 +1,6 @@
 using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate.AspNetCore.Identity;
 using NHibernate.Cfg;
@@ -21,13 +20,14 @@ namespace Beginor.NetCoreApp.Api {
                 "hibernate.config"
             );
             cfg.Configure(configFile);
+            var isNotProd = !env.IsProduction();
             cfg.SetProperty(
                 NHibernate.Cfg.Environment.ShowSql,
-                env.IsDevelopment().ToString()
+                isNotProd.ToString()
             );
             cfg.SetProperty(
                 NHibernate.Cfg.Environment.FormatSql,
-                env.IsDevelopment().ToString().ToString()
+                isNotProd.ToString()
             );
             cfg.AddIdentityMappingsForPostgres();
             services.AddHibernate(cfg);
