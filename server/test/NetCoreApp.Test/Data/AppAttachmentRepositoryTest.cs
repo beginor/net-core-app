@@ -13,8 +13,10 @@ namespace Beginor.NetCoreApp.Test.Data {
         }
 
         [Test]
-        public async Task _02_CanGetByUser() {
-            var data = await Target.GetByUser("test");
+        [TestCase("user01")]
+        [TestCase("user02")]
+        public async Task _02_CanGetByUser(string userId) {
+            var data = await Target.GetByUser(userId);
             Assert.IsNotNull(data);
         }
 
