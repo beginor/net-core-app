@@ -69,6 +69,7 @@ namespace Beginor.AppFx.Services {
             Argument.NotNullOrEmpty(id, nameof(id));
             await Repository.DeleteAsync(ConvertIdFromString(id));
         }
+        
     }
 
 }

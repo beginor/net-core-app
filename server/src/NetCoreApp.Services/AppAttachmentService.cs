@@ -5,9 +5,9 @@ using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Services {
 
-    public class AttachmentService : BaseService<IAttachmentRepository, AppAttachment, AttachmentModel, long>, IAttachmentService {
+    public class AppAttachmentService : BaseService<IAppAttachmentRepository, AppAttachment, AppAttachmentModel, long>, IAppAttachmentService {
 
-        public AttachmentService(IAttachmentRepository repository) : base(repository) { }
+        public AppAttachmentService(IAppAttachmentRepository repository) : base(repository) { }
 
         protected override long ConvertIdFromString(string id) {
             return long.Parse(id);

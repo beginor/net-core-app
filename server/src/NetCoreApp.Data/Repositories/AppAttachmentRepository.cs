@@ -10,10 +10,10 @@ using NHibernate.Linq;
 
 namespace Beginor.NetCoreApp.Data.Repositories {
 
-    public class AttachmentRepository
-        : HibernateRepository<AppAttachment, long>, IAttachmentRepository {
+    public class AppAttachmentRepository
+        : HibernateRepository<AppAttachment, long>, IAppAttachmentRepository {
 
-        public AttachmentRepository(ISessionFactory sessionFactory)
+        public AppAttachmentRepository(ISessionFactory sessionFactory)
             : base(sessionFactory) {
         }
 

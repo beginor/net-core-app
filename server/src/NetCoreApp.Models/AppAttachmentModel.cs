@@ -3,7 +3,7 @@ using Beginor.AppFx.Core;
 
 namespace Beginor.NetCoreApp.Models {
 
-    public class AttachmentModel : StringEntity {
+    public class AppAttachmentModel : StringEntity {
 
         public string ContentType { get; set; }
         public byte[] Content { get; set; }

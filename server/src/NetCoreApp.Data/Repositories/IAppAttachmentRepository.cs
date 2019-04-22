@@ -5,7 +5,7 @@ using Beginor.NetCoreApp.Data.Entities;
 
 namespace Beginor.NetCoreApp.Data.Repositories {
 
-    public interface IAttachmentRepository : IRepository<AppAttachment, long> {
+    public interface IAppAttachmentRepository : IRepository<AppAttachment, long> {
 
         Task<IList<AppAttachment>> GetByUser(string userId);
 

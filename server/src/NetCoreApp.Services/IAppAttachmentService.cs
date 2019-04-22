@@ -4,7 +4,7 @@ using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Services {
 
-    public interface IAttachmentService : IBaseService<AttachmentModel> {
+    public interface IAppAttachmentService : IBaseService<AppAttachmentModel> {
 
         
 

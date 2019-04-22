@@ -5,7 +5,7 @@ using Beginor.AppFx.Core;
 namespace Beginor.NetCoreApp.Models {
 
     /// <summary>应用程序用户模型</summary>
-    public class ApplicationUserModel : StringEntity {
+    public class AppUserModel : StringEntity {
         /// <summary>用户名</summary>
         [Required(ErrorMessage = "用户名称必须填写！")]
         public string UserName { get; set; }

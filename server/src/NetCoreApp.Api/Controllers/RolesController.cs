@@ -40,8 +40,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="400">创建角色失败并返回错误信息</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
-        public async Task<ActionResult<ApplicationRoleModel>> Create(
-            [FromBody]ApplicationRoleModel model
+        public async Task<ActionResult<AppRoleModel>> Create(
+            [FromBody]AppRoleModel model
         ) {
             try {
                 if (await manager.RoleExistsAsync(model.Name)) {
@@ -88,7 +88,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">获取成功并返回角色列表。</response>
         /// <response code="500">服务器内部错误。</response>
         [HttpGet("")]
-        public async Task<ActionResult<PaginatedResponseModel<ApplicationRoleModel>>> GetAll(
+        public async Task<ActionResult<PaginatedResponseModel<AppRoleModel>>> GetAll(
             [FromQuery]RoleSearchRequestModel model
         ) {
             try {
@@ -98,8 +98,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 }
                 var total = await query.LongCountAsync();
                 var roles = await query.ToListAsync();
-                var models = Mapper.Map<IList<ApplicationRoleModel>>(roles);
-                var result = new PaginatedResponseModel<ApplicationRoleModel> {
+                var models = Mapper.Map<IList<AppRoleModel>>(roles);
+                var result = new PaginatedResponseModel<AppRoleModel> {
                     Skip = model.Skip,
                     Take = model.Take,
                     Total = total,
@@ -118,7 +118,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">获取角色成功，返回角色信息。</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id}")]
-        public async Task<ActionResult<ApplicationRoleModel>> GetById(
+        public async Task<ActionResult<AppRoleModel>> GetById(
             string id
         ) {
             try {
@@ -126,7 +126,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (role == null) {
                     return NotFound();
                 }
-                var model = Mapper.Map<ApplicationRoleModel>(role);
+                var model = Mapper.Map<AppRoleModel>(role);
                 return model;
             }
             catch (Exception ex) {
@@ -141,9 +141,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">指定的角色不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id}")]
-        public async Task<ActionResult<ApplicationRoleModel>> Update(
+        public async Task<ActionResult<AppRoleModel>> Update(
             [FromRoute]string id,
-            [FromBody]ApplicationRoleModel model
+            [FromBody]AppRoleModel model
         ) {
             try {
                 var role = await manager.FindByIdAsync(id);

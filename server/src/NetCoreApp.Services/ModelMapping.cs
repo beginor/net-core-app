@@ -14,8 +14,8 @@ namespace Beginor.NetCoreApp.Services {
                 return;
             }
             Mapper.Initialize(config => {
-                config.CreateMap<AppRole, ApplicationRoleModel>().ReverseMap();
-                config.CreateMap<AppUser, ApplicationUserModel>().ReverseMap();
+                config.CreateMap<AppRole, AppRoleModel>().ReverseMap();
+                config.CreateMap<AppUser, AppUserModel>().ReverseMap();
                 // 添加其它的映射
                 // 初始化完成
                 Initialized = true;

@@ -40,8 +40,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="400">创建用户出错</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
-        public async Task<ActionResult<ApplicationUserModel>> Create(
-            [FromBody]ApplicationUserModel model
+        public async Task<ActionResult<AppUserModel>> Create(
+            [FromBody]AppUserModel model
         ) {
             try {
                 var user = await manager.FindByNameAsync(model.UserName);
@@ -93,7 +93,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">获取成功并返回用户列表。</response>
         /// <response code="500">服务器内部错误。</response>
         [HttpGet("")]
-        public async Task<ActionResult<PaginatedResponseModel<ApplicationUserModel>>> GetAll(
+        public async Task<ActionResult<PaginatedResponseModel<AppUserModel>>> GetAll(
             [FromQuery]UserSearchRequestModel model
         ) {
             try {
@@ -103,8 +103,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 }
                 var total = await query.LongCountAsync();
                 var data = await query.ToListAsync();
-                var models = Mapper.Map<IList<ApplicationUserModel>>(data);
-                var result = new PaginatedResponseModel<ApplicationUserModel> {
+                var models = Mapper.Map<IList<AppUserModel>>(data);
+                var result = new PaginatedResponseModel<AppUserModel> {
                     Skip = model.Skip,
                     Take = model.Take,
                     Total = total,
@@ -123,13 +123,13 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">获取用户成功，返回用户信息。</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id}")]
-        public async Task<ActionResult<ApplicationUserModel>> GetById(string id) {
+        public async Task<ActionResult<AppUserModel>> GetById(string id) {
             try {
                 var user = await manager.FindByIdAsync(id);
                 if (user == null) {
                     return NotFound();
                 }
-                var model = Mapper.Map<ApplicationUserModel>(user);
+                var model = Mapper.Map<AppUserModel>(user);
                 return model;
             }
             catch (Exception ex) {
@@ -144,9 +144,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">指定的用户不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id}")]
-        public async Task<ActionResult<ApplicationUserModel>> Update(
+        public async Task<ActionResult<AppUserModel>> Update(
             [FromRoute]string id,
-            [FromBody]ApplicationUserModel model
+            [FromBody]AppUserModel model
         ) {
             try {
                 var user = await manager.FindByIdAsync(id);
