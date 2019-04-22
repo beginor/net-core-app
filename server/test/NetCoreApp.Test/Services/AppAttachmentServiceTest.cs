@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Beginor.NetCoreApp.Test.Services {
 
     [TestClass]
-    public class AttachmentServiceTest : BaseTest<IAppAttachmentService> {
+    public class AppAttachmentServiceTest : BaseTest<IAppAttachmentService> {
 
         [TestMethod]
         public void _01_CanResolveTarget() {
