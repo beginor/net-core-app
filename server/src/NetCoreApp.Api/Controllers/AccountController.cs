@@ -39,11 +39,15 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         }
 
         /// <summary>获取用户登录信息</summary>
+        /// <response code="200">返回用户信息</response>
+        /// <response code="403">用户未登录</response>
+        /// <response code="404">用户不存在</response>
+        /// <response code="500">服务器内部错误</response>
         [HttpGet("info")]
         public async Task<ActionResult<AccountInfoModel>> GetInfo() {
             try {
                 if (!User.Identity.IsAuthenticated) {
-                    return NotFound();
+                    return Forbid();
                 }
                 var user = await userMgr.FindByNameAsync(User.Identity.Name);
                 if (user == null) {
@@ -75,6 +79,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         }
 
         /// <summary>用户登录</summary>
+        /// <response code="200">登录成功</response>
+        /// <response code="400">登录失败，返回错误信息</response>
+        /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
         public async Task<ActionResult> SignIn(
             [FromBody]AccountLoginModel model
@@ -112,7 +119,10 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         }
 
         /// <summary>注销</summary>
+        /// <response code="204">注销成功</response>
+        /// <response code="500">服务器内部错误</response>
         [HttpDelete("")]
+        [ProducesResponseType(204)]
         public async Task<ActionResult> SignOut() {
             try {
                 await signinMgr.SignOutAsync();
