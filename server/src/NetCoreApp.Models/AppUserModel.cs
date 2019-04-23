@@ -7,7 +7,7 @@ namespace Beginor.NetCoreApp.Models {
     /// <summary>应用程序用户模型</summary>
     public class AppUserModel : StringEntity {
         /// <summary>用户名</summary>
-        [Required(ErrorMessage = "用户名称必须填写！")]
+        [Required(ErrorMessage = "用户名必须填写！")]
         public string UserName { get; set; }
         /// <summary>电子邮箱地址</summary>
         [Required(ErrorMessage = "电子邮箱地址必须填写！")]
