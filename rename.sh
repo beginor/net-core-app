@@ -1,31 +1,38 @@
 #!/bin/bash -e
 
-# 客户端应用名称
-NEW_CLIENT_NAME=soil-env-gis
 # 公司名称
 COMPANY_NAME=HuiTian
 # 服务端项目名称
 PROJ_NAME=SoilEnvGIS
+# 部署虚拟目录
+CONTEXT_ROOT=soil-env-gis
 # 新的服务端项目前缀（公司名称+项目名称, 特殊符号需要用 \ 进行转义）
 SERVER_PREFIX="${COMPANY_NAME}.${PROJ_NAME}"
 
 # 修改客户端相关文件
-sed -i .bak "s/net-core-app/${NEW_CLIENT_NAME}/g" ./client/build-docker.sh
-sed -i .bak "s/net-core-app/${NEW_CLIENT_NAME}/g" ./client/default.conf
-sed -i .bak "s/net-core-app/${NEW_CLIENT_NAME}/g" ./client/Dockerfile
-sed -i .bak "s/net-core-app/${NEW_CLIENT_NAME}/g" ./client/e2e/src/app.e2e-spec.ts
-sed -i .bak "s/net-core-app/${NEW_CLIENT_NAME}/g" ./client/e2e/src/home/home.e2e-spec.ts
-sed -i .bak "s/net-core-app/${NEW_CLIENT_NAME}/g" ./client/package-lock.json
-sed -i .bak "s/net-core-app/${NEW_CLIENT_NAME}/g" ./client/package.json
-sed -i .bak "s/net-core-app/${NEW_CLIENT_NAME}/g" ./docker-compose.test.yml
-sed -i .bak "s/net-core-app/${NEW_CLIENT_NAME}/g" ./docker-compose.yml
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/build-docker.sh
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/default.conf
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/Dockerfile
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/e2e/src/app.e2e-spec.ts
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/e2e/src/home/home.e2e-spec.ts
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/package-lock.json
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/package.json
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker-compose.yml
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker-compose.test.yml
+sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./client/build-docker.sh
+sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker-compose.yml
+sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./client/package.json
+sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker-compose.test.yml
 # 删除备份文件
 find . -name '*.bak' -delete
 # 提交一下客户端文件
 git add *
 git commit -m "Rename client app"
 # 修改服务端相关文件
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./server/src/NetCoreApp.Api/Properties/launchSettings.json
 grep Beginor.NetCoreApp  -rl server --include *.cs | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+grep Beginor.NetCoreApp  -rl server --include *.hbm.xml | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+grep Beginor.NetCoreApp  -rl server --include *.config | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp  -rl server --include *.csproj | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp  -rl server --include *.config | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 # 删除备份文件
