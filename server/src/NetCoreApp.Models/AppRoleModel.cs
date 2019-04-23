@@ -16,7 +16,10 @@ namespace Beginor.NetCoreApp.Models {
 
     }
 
+    /// <summary>角色搜索参数</summary>
     public class RoleSearchRequestModel : PaginatedRequestModel {
+
+        /// <summary>角色名称</summary>
         public string Name { get; set; }
     }
 

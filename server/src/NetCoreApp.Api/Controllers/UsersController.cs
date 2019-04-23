@@ -71,6 +71,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="400">删除用户出错</response>
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
         public async Task<ActionResult> Delete(string id) {
             try {
                 var user = await manager.FindByIdAsync(id);

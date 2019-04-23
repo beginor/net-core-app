@@ -37,6 +37,8 @@ namespace Beginor.NetCoreApp.Models {
 
     /// <summary>用户搜索参数</summary>
     public class UserSearchRequestModel : PaginatedRequestModel {
+
+        /// <summary>用户名</summary>
         public string UserName { get; set; }
     }
 

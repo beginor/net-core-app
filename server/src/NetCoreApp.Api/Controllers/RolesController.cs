@@ -62,10 +62,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         }
 
         /// <summary>删除指定的角色</summary>
-        /// <response code="204">删除角色成功并返回角色信息</response>
+        /// <response code="204">删除角色成功</response>
         /// <response code="400">删除角色出错并返回错误信息</response>
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
         public async Task<ActionResult> Delete(string id) {
             try {
                 var role = await manager.FindByIdAsync(id);
