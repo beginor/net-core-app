@@ -1,8 +1,8 @@
 ﻿{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "iisSettings": {
-    "windowsAuthentication": false, 
-    "anonymousAuthentication": true, 
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:24952",
       "sslPort": 44302
@@ -15,7 +15,7 @@
       "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_PATHBASE": "/netcore-app"
+        "ASPNETCORE_PATHBASE": "/net-core-app"
       }
     },
     "NetCoreApp.Api": {
