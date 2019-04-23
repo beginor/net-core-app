@@ -38,6 +38,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             base.Dispose(disposing);
         }
 
+        /// <summary>获取用户登录信息</summary>
         [HttpGet("info")]
         public async Task<ActionResult<AccountInfoModel>> GetInfo() {
             try {
@@ -118,7 +119,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return NoContent();
             }
             catch (Exception ex) {
-                logger.Error($"Can not signout user.", ex);
+                logger.Error($"Can not sign out user.", ex);
                 return StatusCode(500, ex.GetOriginalMessage());
             }
         }
