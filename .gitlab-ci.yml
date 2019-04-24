@@ -5,6 +5,7 @@ stages:
   - deploy
 # Cache client/node_modules between jobs
 cache:
+  key: ${CI_COMMIT_REF_SLUG}
   untracked: true
   paths:
     - client/node_modules/
