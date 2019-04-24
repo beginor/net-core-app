@@ -1,11 +1,11 @@
 #!/bin/bash -e
 
 # 公司名称
-COMPANY_NAME=HuiTian
+COMPANY_NAME=MyCompany
 # 服务端项目名称
-PROJ_NAME=SoilEnvGIS
+PROJ_NAME=TplApp
 # 部署虚拟目录
-CONTEXT_ROOT=soil-env-gis
+CONTEXT_ROOT=tpl-app
 # 新的服务端项目前缀（公司名称+项目名称, 特殊符号需要用 \ 进行转义）
 SERVER_PREFIX="${COMPANY_NAME}.${PROJ_NAME}"
 
@@ -19,6 +19,7 @@ sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/package-lock.json
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/package.json
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker-compose.yml
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker-compose.test.yml
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/angular.json
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./client/build-docker.sh
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker-compose.yml
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./client/package.json
