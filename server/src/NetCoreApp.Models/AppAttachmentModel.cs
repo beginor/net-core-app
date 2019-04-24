@@ -17,4 +17,15 @@ namespace Beginor.NetCoreApp.Models {
 
     }
 
+    /// <summary>附件搜索参数</summary>
+    public class AppAttachmentSearchModel : PaginatedRequestModel {
+
+        /// <summary>用户ID</summary>
+        public string UserId { get; set; }
+
+        /// <summary>文件类型</summary>
+        public string ContentType { get; set; }
+
+    }
+
 }

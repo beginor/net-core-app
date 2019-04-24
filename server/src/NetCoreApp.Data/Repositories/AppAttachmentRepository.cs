@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
@@ -17,24 +19,40 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             : base(sessionFactory) {
         }
 
-        public async Task<IList<AppAttachment>> GetByUser(string userId) {
-            Argument.NotNullOrEmpty(userId, nameof(userId));
-            var data = await base.QueryAsync(a => a.UserId == userId);
-            return data;
-
-            //using (var session = SessionFactory.OpenSession()) {
-            //    var query = session.Query<Attachment>().Where(a => a.UserId == userId);
-            //    var data = await query.ToListAsync();
-            //    return data;
-            //}
-
-            //using (var session = SessionFactory.OpenSession()) {
-            //    Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
-            //    var conn = session.Connection;
-            //    var data = await conn.QueryAsync<Attachment>("select * from public.attachments where user_id = #userId", new { userId });
-            //    return data.ToList();
-            //}
+        public async Task<long> QueryCountAsync(string userId, string contentType) {
+            using (var session = SessionFactory.OpenSession()) {
+                var query = session.Query<AppAttachment>();
+                if (userId.IsNotNullOrEmpty()) {
+                    query = query.Where(x => x.UserId == userId);
+                }
+                if (contentType.IsNotNullOrEmpty()) {
+                    query = query.Where(x => x.ContentType == contentType);
+                }
+                var count = await query.LongCountAsync();
+                return count;
+            }
         }
+
+        public async Task<IList<AppAttachment>> QueryAsync(
+            string userId,
+            string contentType,
+            int skip,
+            int take
+        ) {
+            using (var session = SessionFactory.OpenSession()) {
+                var query = session.Query<AppAttachment>();
+                if (userId.IsNotNullOrEmpty()) {
+                    query = query.Where(x => x.UserId == userId);
+                }
+                if (contentType.IsNotNullOrEmpty()) {
+                    query = query.Where(x => x.ContentType == contentType);
+                }
+                var data = await query.Skip(skip).Take(take).ToListAsync();
+                return data;
+            }
+        }
+
+
 
     }
 
