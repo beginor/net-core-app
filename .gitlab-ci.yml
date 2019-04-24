@@ -4,10 +4,10 @@ stages:
   - test
   - deploy
 # Cache client/node_modules between jobs
-cache:
-  untracked: true
-  paths:
-    - client/node_modules/
+# cache:
+#   untracked: true
+#   paths:
+#     - client/node_modules/
 setup:
   stage: setup
   script:
