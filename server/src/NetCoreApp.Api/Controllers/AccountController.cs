@@ -53,10 +53,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (user == null) {
                     return NotFound();
                 }
-                var model = new AccountInfoModel();
-                model.Id = user.Id;
-                model.UserName = user.UserName;
-                model.Roles = await userMgr.GetRolesAsync(user);
+                var model = new AccountInfoModel {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Roles = await userMgr.GetRolesAsync(user)
+                };
                 var claims = await userMgr.GetClaimsAsync(user);
                 var surname = claims.FirstOrDefault(
                     c => c.Type == ClaimTypes.Surname
@@ -110,6 +111,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                         $"输入的密码不正确， 请重试！"
                     );
                 }
+                await signinMgr.SignInAsync(user, model.IsPersistent);
                 return Ok();
             }
             catch (Exception ex) {
