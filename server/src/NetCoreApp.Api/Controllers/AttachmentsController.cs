@@ -78,6 +78,46 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
         }
 
+        /// <summary>
+        /// 获取指定的附件
+        /// </summary>
+        /// <response code="200">返回附件信息</response>
+        /// <response code="404">附件不存在</response>
+        /// <response code="500">服务器内部错误</response>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AppAttachmentModel>> GetById(string id) {
+            try {
+                var result = await attachmentSvc.GetByIdAsync(id);
+                if (result == null) {
+                    return NotFound();
+                }
+                return result;
+            }
+            catch (Exception ex) {
+                logger.Error($"Can not get attachment with {id}.", ex);
+                return StatusCode(500, ex.GetOriginalMessage());
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<AppAttachmentModel>> Update(
+            [FromRoute]string id,
+            [FromBody]AppAttachmentModel model
+        ) {
+            try {
+                var modelInDb = await attachmentSvc.GetByIdAsync(id);
+                if (modelInDb == null) {
+                    return NotFound();
+                }
+                await attachmentSvc.UpdateAsync(id, model);
+                return model;
+            }
+            catch (Exception ex) {
+                logger.Error($"Can not update attachment with {id}.", ex);
+                return StatusCode(500, ex.GetOriginalMessage());
+            }
+        }
+
     }
 
 }
