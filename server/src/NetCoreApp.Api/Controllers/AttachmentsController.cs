@@ -99,6 +99,12 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
         }
 
+        /// <summary>
+        /// 更新附件
+        /// </summary>
+        /// <response code="200">更新成功，返回附件信息</response>
+        /// <response code="404">附件不存在</response>
+        /// <response code="500">服务器内部错误</response>
         [HttpPut("{id}")]
         public async Task<ActionResult<AppAttachmentModel>> Update(
             [FromRoute]string id,
