@@ -15,14 +15,16 @@ namespace Beginor.NetCoreApp.Api {
 
         private static IWebHostBuilder CreateWebHostBuilder(string[] args) {
             return WebHost.CreateDefaultBuilder(args)
-                .ConfigureLogging(logging => {
+                .ConfigureLogging(
+                    logging => {
                         logging.ClearProviders();
                         var path = Path.Combine(
                             Directory.GetCurrentDirectory(),
                             "log.config"
                         );
                         logging.AddLog4net(path);
-                    })
+                    }
+                )
                 .UseStartup<Startup>();
         }
 
