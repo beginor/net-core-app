@@ -19,7 +19,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             : base(sessionFactory) {
         }
 
-        public async Task<long> QueryCountAsync(string userId, string contentType) {
+        public async Task<long> CountAsync(string userId, string contentType) {
             using (var session = SessionFactory.OpenSession()) {
                 var query = session.Query<AppAttachment>();
                 if (userId.IsNotNullOrEmpty()) {

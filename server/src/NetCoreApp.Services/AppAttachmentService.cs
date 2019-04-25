@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Beginor.AppFx.Core;
@@ -21,7 +22,7 @@ namespace Beginor.NetCoreApp.Services {
             AppAttachmentSearchModel model
         ) {
             var repo = base.Repository;
-            var total = await repo.QueryCountAsync(
+            var total = await repo.CountAsync(
                 model.UserId,
                 model.ContentType
             );

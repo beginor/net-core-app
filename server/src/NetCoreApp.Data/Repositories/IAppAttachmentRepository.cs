@@ -9,7 +9,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
 
     public interface IAppAttachmentRepository : IRepository<AppAttachment, long> {
 
-        Task<long> QueryCountAsync(string userId, string contentType);
+        Task<long> CountAsync(string userId, string contentType);
 
         Task<IList<AppAttachment>> QueryAsync(
             string userId,
