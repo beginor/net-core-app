@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
@@ -75,7 +76,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error($"Can not get user account info.", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
@@ -116,7 +117,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error($"Can not signin user.", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
@@ -132,7 +133,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error($"Can not sign out user.", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 

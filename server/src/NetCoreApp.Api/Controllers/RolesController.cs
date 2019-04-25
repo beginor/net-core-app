@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
@@ -57,7 +58,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error($"Can not create role", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
@@ -81,7 +82,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error($"Can not delete role", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
@@ -110,7 +111,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error("Can not get all roles!", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
@@ -132,7 +133,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error($"Can not get role by id {id}", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
@@ -161,7 +162,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error($"Can not update role", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 

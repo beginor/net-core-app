@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Models;
 using Beginor.NetCoreApp.Services;
@@ -43,7 +44,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error("Can not create attachment.", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
@@ -59,7 +60,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error("Can not delete attachment.", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
@@ -74,7 +75,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error("Can not get all attachments.", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
@@ -95,7 +96,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error($"Can not get attachment with {id}.", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
@@ -120,7 +121,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error($"Can not update attachment with {id}.", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
