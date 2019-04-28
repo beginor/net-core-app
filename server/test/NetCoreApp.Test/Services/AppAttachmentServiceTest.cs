@@ -22,7 +22,7 @@ namespace Beginor.NetCoreApp.Test.Services {
             var model = new AppAttachmentSearchModel {
                 Skip = 0,
                 Take = 1,
-                UserId = userId,
+                CreatorId = userId,
                 ContentType = contentType
             };
             var result = await Target.Search(model);
@@ -36,7 +36,7 @@ namespace Beginor.NetCoreApp.Test.Services {
             Assert.NotNull(result);
             if (result.Count > 0) {
                 foreach (var model in result) {
-                    Assert.AreEqual(userId, model.UserId);
+                    Assert.AreEqual(userId, model.CreatorId);
                 }
             }
         }
