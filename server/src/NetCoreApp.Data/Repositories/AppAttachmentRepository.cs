@@ -23,7 +23,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             using (var session = SessionFactory.OpenSession()) {
                 var query = session.Query<AppAttachment>();
                 if (userId.IsNotNullOrEmpty()) {
-                    query = query.Where(x => x.UserId == userId);
+                    query = query.Where(x => x.CreatorId == userId);
                 }
                 if (contentType.IsNotNullOrEmpty()) {
                     query = query.Where(x => x.ContentType == contentType);
@@ -42,7 +42,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             using (var session = SessionFactory.OpenSession()) {
                 var query = session.Query<AppAttachment>();
                 if (userId.IsNotNullOrEmpty()) {
-                    query = query.Where(x => x.UserId == userId);
+                    query = query.Where(x => x.CreatorId == userId);
                 }
                 if (contentType.IsNotNullOrEmpty()) {
                     query = query.Where(x => x.ContentType == contentType);

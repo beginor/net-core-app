@@ -15,7 +15,11 @@ namespace Beginor.NetCoreApp.Services {
         public AppAttachmentService(IAppAttachmentRepository repository) : base(repository) { }
 
         protected override long ConvertIdFromString(string id) {
-            return long.Parse(id);
+            long result;
+            if (long.TryParse(id, out result)) {
+                return result;
+            }
+            return result;
         }
 
         public async Task<PaginatedResponseModel<AppAttachmentModel>> Search(
@@ -41,7 +45,7 @@ namespace Beginor.NetCoreApp.Services {
         }
 
         public async Task<IList<AppAttachmentModel>> GetByUser(string userId) {
-            var data = await Repository.QueryAsync(a => a.UserId == userId);
+            var data = await Repository.QueryAsync(a => a.CreatorId == userId);
             var models = Mapper.Map<IList<AppAttachmentModel>>(data);
             return models;
         }
