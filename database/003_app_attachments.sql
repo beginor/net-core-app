@@ -50,4 +50,4 @@ COMMENT ON COLUMN public.app_attachments.length
     IS '附件大小';
 
 COMMENT ON COLUMN public.app_attachments.business_id
-    IS '附件所属的业务ID，可以是任意表的ID，如果业务表有附件， 则需要来这里删除。';
+    IS '附件所属的业务ID，可以是任意表的ID，如果业务表有附件， 则需要根据业务表记录的ID，删除对应的附件。';
