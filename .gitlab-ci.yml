@@ -30,7 +30,7 @@ build:
 test:
   stage: test
   script:
-    - cd server
+    - cd server/test/NetCoreApp.Test
     - dotnet test
     - cd ..
 deploy:

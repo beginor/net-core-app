@@ -36,6 +36,10 @@ grep Beginor.NetCoreApp  -rl server --include *.hbm.xml | xargs sed -i .bak "s/B
 grep Beginor.NetCoreApp  -rl server --include *.config | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp  -rl server --include *.csproj | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp  -rl server --include *.config | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./.gitlab-ci.yml
+sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./.vscode/launch.json
+sed -i .bak "s/Beginor/${COMPANY_NAME}/g" ./.vscode/launch.json
+sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./.vscode/tasks.json
 # 删除备份文件
 find . -name '*.bak' -delete
 # 提交一下服务端文件
