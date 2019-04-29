@@ -31,15 +31,17 @@ git add *
 git commit -m "Rename client app"
 # 修改服务端相关文件
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./server/src/NetCoreApp.Api/Properties/launchSettings.json
-grep Beginor.NetCoreApp  -rl server --include *.cs | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
-grep Beginor.NetCoreApp  -rl server --include *.hbm.xml | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
-grep Beginor.NetCoreApp  -rl server --include *.config | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
-grep Beginor.NetCoreApp  -rl server --include *.csproj | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
-grep Beginor.NetCoreApp  -rl server --include *.config | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+grep Beginor.NetCoreApp -rl server --include *.cs | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+grep Beginor.NetCoreApp -rl server --include *.hbm.xml | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+grep Beginor.NetCoreApp -rl server --include *.config | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+grep Beginor.NetCoreApp -rl server --include *.csproj | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+grep Beginor.NetCoreApp -rl server --include *.config | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./.gitlab-ci.yml
 sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./.vscode/launch.json
 sed -i .bak "s/Beginor/${COMPANY_NAME}/g" ./.vscode/launch.json
 sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./.vscode/tasks.json
+sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./server/smart-code.yml
+sed -i .bak "s/Beginor/${COMPANY_NAME}/g" ./server/smart-code.yml
 # 删除备份文件
 find . -name '*.bak' -delete
 # 提交一下服务端文件
@@ -62,7 +64,7 @@ git add *
 git commit -m "Move server app"
 # 修改项目引用路径
 sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" server/${PROJ_NAME}.sln
-grep NetCoreApp  -rl server --include *.csproj | xargs sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g"
+grep NetCoreApp -rl server --include *.csproj | xargs sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g"
 # 删除备份文件
 find . -name '*.bak' -delete
 # 提交一下服务端文件
