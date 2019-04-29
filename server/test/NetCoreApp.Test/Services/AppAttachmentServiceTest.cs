@@ -14,31 +14,17 @@ namespace Beginor.NetCoreApp.Test.Services {
         }
 
         [Test]
-        [TestCase("", "")]
-        [TestCase("000", "")]
-        [TestCase("", "xml")]
-        [TestCase("000", "xml")]
-        public async Task _02_CanSearch(string userId, string contentType) {
+        public async Task _02_CanSearch() {
             var model = new AppAttachmentSearchModel {
                 Skip = 0,
-                Take = 1,
-                CreatorId = userId,
-                ContentType = contentType
+                Take = 10
             };
-            var result = await Target.Search(model);
-            Assert.NotNull(result);
-        }
-
-        [Test]
-        [TestCase("0000")]
-        public async Task _03_CanGetByUser(string userId) {
-            var result = await Target.GetByUser(userId);
-            Assert.NotNull(result);
-            if (result.Count > 0) {
-                foreach (var model in result) {
-                    Assert.AreEqual(userId, model.CreatorId);
-                }
-            }
+            var result = await Target.SearchAsync(model);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(model.Skip, result.Skip);
+            Assert.AreEqual(model.Take, result.Take);
+            Assert.IsNotNull(result.Data);
+            Assert.GreaterOrEqual(model.Take, result.Data.Count);
         }
 
     }

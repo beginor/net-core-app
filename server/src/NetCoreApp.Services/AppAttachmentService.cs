@@ -24,7 +24,7 @@ namespace Beginor.NetCoreApp.Services {
         }
 
         /// <summary>附件表搜索，返回分页结果。</summary>
-        public async Task<PaginatedResponseModel<AppAttachmentModel>> Search(
+        public async Task<PaginatedResponseModel<AppAttachmentModel>> SearchAsync(
             AppAttachmentSearchModel model
         ) {
             var repo = base.Repository;

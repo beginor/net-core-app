@@ -10,7 +10,7 @@ namespace Beginor.NetCoreApp.Services {
     public partial interface IAppAttachmentService : IBaseService<AppAttachmentModel> {
 
         /// <summary>附件表搜索，返回分页结果。</summary>
-        Task<PaginatedResponseModel<AppAttachmentModel>> Search(
+        Task<PaginatedResponseModel<AppAttachmentModel>> SearchAsync(
             AppAttachmentSearchModel model
         );
 

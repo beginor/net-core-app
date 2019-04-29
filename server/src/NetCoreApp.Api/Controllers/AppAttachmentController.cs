@@ -63,13 +63,15 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
         }
 
-        /// <summary>获取全部 附件表 </summary>
+        /// <summary>搜索 附件表 ， 分页返回结果</summary>
+        /// <response code="200">成功, 分页返回结果</response>
+        /// <response code="500">服务器内部错误</response>
         [HttpGet("")]
         public async Task<ActionResult<PaginatedResponseModel<AppAttachmentModel>>> GetAll(
             [FromQuery]AppAttachmentSearchModel model
         ) {
             try {
-                var result = await service.Search(model);
+                var result = await service.SearchAsync(model);
                 return result;
             }
             catch (Exception ex) {
