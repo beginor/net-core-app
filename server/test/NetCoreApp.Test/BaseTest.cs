@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Beginor.NetCoreApp.Api;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -16,14 +17,19 @@ namespace Beginor.NetCoreApp.Test {
             if (ServiceProvider != null) {
                 return;
             }
+            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
             var config = new ConfigurationBuilder()
-//                .AddJsonFile("appsettings.json", true, true)
-//                .AddJsonFile("appsettings.Development.json", true, true)
+               .AddJsonFile(Path.Combine(baseDir, "appsettings.json"))
+                .AddJsonFile(
+                    Path.Combine(baseDir, "appsettings.Development.json")
+                )
                 .Build();
             IHostingEnvironment env = new TestHostingEnvironment();
             var services = new ServiceCollection();
             var startup = new Startup(config, env);
             startup.ConfigureServices(services);
+            services.AddSingleton<IConfiguration>(config);
+            services.AddSingleton(env);
             ServiceProvider = services.BuildServiceProvider(false);
         }
 
