@@ -22,11 +22,11 @@ namespace Beginor.NetCoreApp.Api {
             cfg.Configure(configFile);
             var isNotProd = !env.IsProduction();
             cfg.SetProperty(
-                NHibernate.Cfg.Environment.ShowSql,
+                Environment.ShowSql,
                 isNotProd.ToString()
             );
             cfg.SetProperty(
-                NHibernate.Cfg.Environment.FormatSql,
+                Environment.FormatSql,
                 isNotProd.ToString()
             );
             cfg.AddIdentityMappingsForPostgres();
