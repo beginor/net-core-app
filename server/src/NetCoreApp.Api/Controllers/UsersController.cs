@@ -24,14 +24,20 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         );
 
         private UserManager<AppUser> manager;
+        private RoleManager<AppRole> roleMgr;
 
-        public UsersController(UserManager<AppUser> manager) {
+        public UsersController(
+            UserManager<AppUser> manager,
+            RoleManager<AppRole> roleMgr
+        ) {
             this.manager = manager;
+            this.roleMgr = roleMgr;
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 manager = null;
+                roleMgr = null;
             }
             base.Dispose(disposing);
         }
@@ -71,7 +77,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="204">删除用户成功</response>
         /// <response code="400">删除用户出错</response>
         /// <response code="500">服务器内部错误</response>
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
         public async Task<ActionResult> Delete(string id) {
             try {
@@ -124,7 +130,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">找不到指定的用户。</response>
         /// <response code="200">获取用户成功，返回用户信息。</response>
         /// <response code="500">服务器内部错误</response>
-        [HttpGet("{id}")]
+        [HttpGet("{id:long}")]
         public async Task<ActionResult<AppUserModel>> GetById(string id) {
             try {
                 var user = await manager.FindByIdAsync(id);
@@ -145,7 +151,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="400">更新用户出错并返回用户信息</response>
         /// <response code="404">指定的用户不存在</response>
         /// <response code="500">服务器内部错误</response>
-        [HttpPut("{id}")]
+        [HttpPut("{id:long}")]
         public async Task<ActionResult<AppUserModel>> Update(
             [FromRoute]string id,
             [FromBody]AppUserModel model
@@ -168,7 +174,203 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
-        
+
+        /// <summary>
+        /// 重置密码
+        /// </summary>
+        /// <param name="id">用户id</param>
+        /// <param name="model">密码模型</param>
+        /// <response code="200">更新密码成功。</response>
+        /// <response code="404">用户不存在。</response>
+        /// <response code="400">重置密码出错并返回信息。</response>
+        /// <response code="500">服务器内部错误。</response>
+        // POST api/users/{id:long}/reset-pass
+        [HttpPost("{id:long}/reset-pass")]
+        public async Task<ActionResult> ResetPassword(
+            string id,
+            ResetPasswordModel model
+        ) {
+            try {
+                var user = await manager.FindByIdAsync(id);
+                if (user == null) {
+                    return NotFound();
+                }
+                var token = await manager.GeneratePasswordResetTokenAsync(user);
+                var result = await manager.ResetPasswordAsync(
+                    user,
+                    token,
+                    model.Password
+                );
+                if (result.Succeeded) {
+                    return Ok();
+                }
+                return BadRequest(result.GetErrorsString());
+            }
+            catch (Exception ex) {
+                logger.Error($"Can not reset password", ex);
+                return StatusCode(500, ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>
+        /// 锁定用户
+        /// </summary>
+        /// <param name="id">用户id</param>
+        /// <param name="lockEndTime">锁定期限</param>
+        /// <response code="200">锁定用户成功。</response>
+        /// <response code="404">用户不存在。</response>
+        /// <response code="400">时间小于当前时间出错并返回信息。</response>
+        /// <response code="500">服务器内部错误。</response>
+        [HttpPut, Route("{id:length(24)}/lock/{lockEndTime:datetime}")]
+        public async Task<ActionResult> LockUser(
+            string id,
+            DateTime lockEndTime
+        ) {
+            try {
+                var user = await manager.FindByIdAsync(id);
+                if (user == null) {
+                    return NotFound();
+                }
+                if (lockEndTime < DateTime.Now) {
+                    return BadRequest($"Cannot be less than the current time");
+                }
+                var offset = new DateTimeOffset(lockEndTime);
+                await manager.SetLockoutEndDateAsync(user, offset);
+                return Ok();
+            }
+            catch (Exception ex) {
+                logger.Error($"Can not Lock user s", ex);
+                return StatusCode(500, ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>
+        /// 解锁用户
+        /// </summary>
+        /// <param name="id">用户id</param>
+        /// <response code="200">解锁用户成功。</response>
+        /// <response code="404">用户不存在。</response>
+        /// <response code="500">服务器内部错误。</response>
+        [HttpPut("{id:length(24)}/unlocking")]
+        public async Task<ActionResult> UnlockUser(string id) {
+            try {
+                var user = await manager.FindByIdAsync(id);
+                if (user == null) {
+                    return NotFound();
+                }
+                // await manager.SetLockoutEnabledAsync(user, false);
+                await manager.SetLockoutEndDateAsync(
+                    user,
+                    DateTimeOffset.Now.AddDays(-1)
+                );
+                await manager.ResetAccessFailedCountAsync(user);
+                return Ok();
+            }
+            catch (Exception ex) {
+                logger.Error($"Can not Unlocking", ex);
+                return StatusCode(500, ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>
+        /// 读取用户角色
+        /// </summary>
+        /// <param name="userId">用户id</param>
+        /// <response code="200">读取用户角色成功。</response>
+        /// <response code="404">用户不存在。</response>
+        /// <response code="500">服务器内部错误。</response>
+        [HttpGet("{userId}/roles")]
+        public async Task<ActionResult<IList<AppRoleModel>>> GetUserRole(
+            string userId
+        ) {
+            try {
+                var user = await manager.FindByIdAsync(userId);
+                if (user == null) {
+                    return NotFound();
+                }
+                var roleNames = await manager.GetRolesAsync(user);
+                var roles = await roleMgr.Roles
+                        .Where(r => roleNames.Contains(r.Name))
+                        .ToListAsync();
+                var model = Mapper.Map<IList<AppRoleModel>>(roles);
+                return model.ToList();
+            }
+            catch (Exception ex) {
+                logger.Error($"Can not User Role", ex);
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>
+        /// 添加用户权限
+        /// </summary>
+        /// <param name="userId">用户id</param>
+        /// <param name="roleName">角色名称</param>
+        /// <response code="200">添加用户权限用户成功。</response>
+        /// <response code="404">用户或角色不存在。</response>
+        /// <response code="500">服务器内部错误。</response>
+        [HttpPut("{userId:length(24)}/{roleName}")]
+        public async Task<ActionResult> AddUserToRole(
+            [FromRoute]string userId,
+            [FromRoute]string roleName
+        ) {
+            try {
+                var user = await manager.FindByIdAsync(userId);
+                if (user == null) {
+                    return NotFound();
+                }
+                var role = await manager.GetUsersInRoleAsync(roleName);
+                if (role == null) {
+                    return NotFound();
+                }
+                var result = await manager.AddToRoleAsync(user, roleName);
+                if (result.Succeeded) {
+                    return Ok();
+                }
+                return BadRequest(result.GetErrorsString());
+            }
+            catch (Exception ex) {
+                logger.Error($"Failed to add user permissions", ex);
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>
+        /// 删除用户权限
+        /// </summary>
+        /// <param name="userId">用户id</param>
+        /// <param name="roleName">角色名称</param>
+        /// /// <response code="204">删除用户权限成功。</response>
+        /// <response code="404">用户或角色不存在。</response>
+        /// <response code="400">删除用户角色出错。</response>
+        /// <response code="500">服务器内部错误。</response>
+        [HttpDelete("~/api/users{userId:length(24)}/{roleName}")]
+        public async Task<ActionResult> RemoveUserFromRole(
+            string userId,
+            string roleName
+        ) {
+            try {
+                var user = await manager.FindByIdAsync(userId);
+                if (user == null) {
+                    return NotFound();
+                }
+                var role = await manager.GetUsersInRoleAsync(roleName);
+                if (role == null) {
+                    return NotFound();
+                }
+                var modelRole = Mapper.Map<AppRoleModel>(role);
+                var result = await manager.RemoveFromRoleAsync(user, modelRole.Name);
+                if (result.Succeeded) {
+                    return NoContent();
+                }
+                return BadRequest(result.GetErrorsString());
+            }
+            catch (Exception ex) {
+                logger.Error($"Failed to delete user permissions", ex);
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
     }
 
 }

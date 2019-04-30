@@ -42,4 +42,23 @@ namespace Beginor.NetCoreApp.Models {
         public string UserName { get; set; }
     }
 
+    /// <summary>
+    /// 重置密码参数
+    /// </summary>
+    public class ResetPasswordModel {
+
+        /// <summary>
+        /// 密码
+        /// </summary>
+        [Required(ErrorMessage = "密码必须填写！")]
+        public string Password { get; set; }
+
+        /// <summary>
+        /// 密码确认
+        /// </summary>
+        [Compare("Password", ErrorMessage = "必须确认密码！")]
+        public string ConfirmPassword { get; set; }
+
+    }
+
 }
