@@ -185,10 +185,10 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="400">重置密码出错并返回信息。</response>
         /// <response code="500">服务器内部错误。</response>
         // POST api/users/{id:long}/reset-pass
-        [HttpPost("{id:long}/reset-pass")]
+        [HttpPut("{id:long}/reset-pass")]
         public async Task<ActionResult> ResetPassword(
-            string id,
-            ResetPasswordModel model
+            [FromRoute]string id,
+            [FromBody]ResetPasswordModel model
         ) {
             try {
                 var user = await manager.FindByIdAsync(id);
@@ -221,7 +221,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">用户不存在。</response>
         /// <response code="400">时间小于当前时间出错并返回信息。</response>
         /// <response code="500">服务器内部错误。</response>
-        [HttpPut, Route("{id:length(24)}/lock/{lockEndTime:datetime}")]
+        [HttpPut, Route("{id:long}/lock/{lockEndTime:datetime}")]
         public async Task<ActionResult> LockUser(
             string id,
             DateTime lockEndTime
@@ -251,8 +251,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">解锁用户成功。</response>
         /// <response code="404">用户不存在。</response>
         /// <response code="500">服务器内部错误。</response>
-        [HttpPut("{id:length(24)}/unlocking")]
-        public async Task<ActionResult> UnlockUser(string id) {
+        [HttpPut("{id:long}/unlock")]
+        public async Task<ActionResult> Unlock(string id) {
             try {
                 var user = await manager.FindByIdAsync(id);
                 if (user == null) {
@@ -267,7 +267,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return Ok();
             }
             catch (Exception ex) {
-                logger.Error($"Can not Unlocking", ex);
+                logger.Error($"Can not unlock", ex);
                 return StatusCode(500, ex.GetOriginalMessage());
             }
         }
@@ -275,16 +275,16 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <summary>
         /// 读取用户角色
         /// </summary>
-        /// <param name="userId">用户id</param>
+        /// <param name="id">用户id</param>
         /// <response code="200">读取用户角色成功。</response>
         /// <response code="404">用户不存在。</response>
         /// <response code="500">服务器内部错误。</response>
-        [HttpGet("{userId}/roles")]
-        public async Task<ActionResult<IList<AppRoleModel>>> GetUserRole(
-            string userId
+        [HttpGet("{id:long}/roles")]
+        public async Task<ActionResult<IList<AppRoleModel>>> GetUserRoles(
+            string id
         ) {
             try {
-                var user = await manager.FindByIdAsync(userId);
+                var user = await manager.FindByIdAsync(id);
                 if (user == null) {
                     return NotFound();
                 }
@@ -304,18 +304,18 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <summary>
         /// 添加用户权限
         /// </summary>
-        /// <param name="userId">用户id</param>
+        /// <param name="id">用户id</param>
         /// <param name="roleName">角色名称</param>
         /// <response code="200">添加用户权限用户成功。</response>
         /// <response code="404">用户或角色不存在。</response>
         /// <response code="500">服务器内部错误。</response>
-        [HttpPut("{userId:length(24)}/{roleName}")]
+        [HttpPut("{id:long}/{roleName}")]
         public async Task<ActionResult> AddUserToRole(
-            [FromRoute]string userId,
+            [FromRoute]string id,
             [FromRoute]string roleName
         ) {
             try {
-                var user = await manager.FindByIdAsync(userId);
+                var user = await manager.FindByIdAsync(id);
                 if (user == null) {
                     return NotFound();
                 }
@@ -338,19 +338,19 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <summary>
         /// 删除用户权限
         /// </summary>
-        /// <param name="userId">用户id</param>
+        /// <param name="id">用户id</param>
         /// <param name="roleName">角色名称</param>
         /// /// <response code="204">删除用户权限成功。</response>
         /// <response code="404">用户或角色不存在。</response>
         /// <response code="400">删除用户角色出错。</response>
         /// <response code="500">服务器内部错误。</response>
-        [HttpDelete("~/api/users{userId:length(24)}/{roleName}")]
+        [HttpDelete("~/api/users{id:long}/{roleName}")]
         public async Task<ActionResult> RemoveUserFromRole(
-            string userId,
+            string id,
             string roleName
         ) {
             try {
-                var user = await manager.FindByIdAsync(userId);
+                var user = await manager.FindByIdAsync(id);
                 if (user == null) {
                     return NotFound();
                 }
