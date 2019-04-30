@@ -21,9 +21,9 @@ namespace Beginor.NetCoreApp.Api {
                 })
                 .AddControllersAsServices()
                 .ConfigureApiBehaviorOptions(opts => {
-                    opts.SuppressConsumesConstraintForFormFileParameters = true;
-                    opts.SuppressInferBindingSourcesForParameters = true;
-                    opts.SuppressModelStateInvalidFilter = true;
+                    opts.SuppressConsumesConstraintForFormFileParameters = false;
+                    opts.SuppressInferBindingSourcesForParameters = false;
+                    opts.SuppressModelStateInvalidFilter = false;
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
