@@ -39,6 +39,7 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureCookiePolicyServices(services, env);
             ConfigureSwaggerServices(services, env);
             ConfigureStaticFilesServices(services, env);
+            ConfigureCorsServices(services, env);
             ConfigureMvcServices(services, env);
             ConfigureAppServices(services, env);
             logger.Debug("Configure services completed!");
@@ -60,6 +61,7 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureCookiePolicy(app, env);
             ConfigureSwagger(app, env);
             ConfigureStaticFiles(app, env);
+            ConfigureCors(app, env);
             ConfigureMvc(app, env);
             ConfigureApp(app, env);
             logger.Debug("Configure app completed.");

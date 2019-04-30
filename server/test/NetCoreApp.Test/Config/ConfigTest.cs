@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
@@ -24,7 +25,7 @@ namespace Beginor.NetCoreApp.Test.Config {
         }
 
         [Test]
-        public void _023CanResolveOptions() {
+        public void _03_CanResolveOptions() {
             var section = Target.GetSection("IdentityOptions");
             var options = section.Get<IdentityOptions>();
             // Test Config Options
@@ -34,6 +35,16 @@ namespace Beginor.NetCoreApp.Test.Config {
                 TimeSpan.FromHours(1),
                 options.Lockout.DefaultLockoutTimeSpan
             );
+        }
+
+        [Test]
+        public void _04_CanResolveCorsPolicy() {
+            var section = Target.GetSection("corsPolicy");
+            var policy = section.Get<CorsPolicy>();
+            Assert.IsTrue(policy.AllowAnyOrigin);
+            Assert.IsTrue(policy.AllowAnyHeader);
+            Assert.IsTrue(policy.AllowAnyMethod);
+            Assert.IsTrue(policy.SupportsCredentials);
         }
 
     }
