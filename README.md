@@ -23,10 +23,17 @@
 
 ## 代码生成
 
-1. 克隆 `https://github.com/beginor/SmartCode.git` 至本地目录， 并打开命令行， 切换到 `src/SmartCode.CLI` 目录；
-2. 复制 `server/smart-code.yml` 的完整路径；
-3. 根据业务需求创建数据表；
-3. 在第一步的窗口中输入命令 `dotnet run <上一步复制的配置文件地址>`;
+### 准备工作
+
+1. 克隆 `https://github.com/beginor/SmartCode.git` 至本地工作区目录（~/Projects/smartcode）；
+
+### 代码生成
+
+1. 根据业务需求创建数据表；
+2. 打开命令行， 切换到 `server` 目录；
+3. 在第一步的窗口中输入命令 `dotnet run --project ../../smartcode/src/SmartCode.CLI ./smartcode.yml` 即可自动生成代码;
+4. 运行单元测试， 确认全部单元测试通过；
+5. 运行 Api 项目， 确认生成的 Api 可用。
 
 ## 建议使用的工具
 
