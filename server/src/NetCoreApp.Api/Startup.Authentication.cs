@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Beginor.NetCoreApp.Api {
@@ -10,8 +12,13 @@ namespace Beginor.NetCoreApp.Api {
             IServiceCollection services,
             IHostingEnvironment env
         ) {
+            var section = config.GetSection("cookieAuthOptions");
+            var settings = section.Get<CookieAuthenticationOptions>();
             services.AddAuthentication()
-                .AddCookie();
+                .AddCookie(options => {
+                    options.SlidingExpiration = settings.SlidingExpiration;
+                    options.ExpireTimeSpan = settings.ExpireTimeSpan;
+                });
         }
 
         private void ConfigureAuthentication(
