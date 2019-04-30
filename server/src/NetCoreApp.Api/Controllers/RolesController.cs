@@ -66,7 +66,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="204">删除角色成功</response>
         /// <response code="400">删除角色出错并返回错误信息</response>
         /// <response code="500">服务器内部错误</response>
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
         public async Task<ActionResult> Delete(string id) {
             try {
@@ -119,7 +119,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">找不到指定的角色。</response>
         /// <response code="200">获取角色成功，返回角色信息。</response>
         /// <response code="500">服务器内部错误</response>
-        [HttpGet("{id}")]
+        [HttpGet("{id:long}")]
         public async Task<ActionResult<AppRoleModel>> GetById(
             string id
         ) {
@@ -142,7 +142,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="400">更新角色出错并返回角色信息</response>
         /// <response code="404">指定的角色不存在</response>
         /// <response code="500">服务器内部错误</response>
-        [HttpPut("{id}")]
+        [HttpPut("{id:long}")]
         public async Task<ActionResult<AppRoleModel>> Update(
             [FromRoute]string id,
             [FromBody]AppRoleModel model

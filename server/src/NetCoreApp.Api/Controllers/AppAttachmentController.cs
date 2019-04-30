@@ -50,7 +50,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <summary>删除 附件表 </summary>
         /// <response code="204">删除 附件表 成功</response>
         /// <response code="500">服务器内部错误</response>
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
         public async Task<ActionResult> Delete(string id) {
             try {
@@ -86,7 +86,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">返回 附件表 信息</response>
         /// <response code="404"> 附件表 不存在</response>
         /// <response code="500">服务器内部错误</response>
-        [HttpGet("{id}")]
+        [HttpGet("{id:long}")]
         public async Task<ActionResult<AppAttachmentModel>> GetById(string id) {
             try {
                 var result = await service.GetByIdAsync(id);
@@ -107,7 +107,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">更新成功，返回 附件表 信息</response>
         /// <response code="404"> 附件表 不存在</response>
         /// <response code="500">服务器内部错误</response>
-        [HttpPut("{id}")]
+        [HttpPut("{id:long}")]
         public async Task<ActionResult<AppAttachmentModel>> Update(
             [FromRoute]string id,
             [FromBody]AppAttachmentModel model
