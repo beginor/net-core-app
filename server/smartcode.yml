@@ -20,6 +20,8 @@ Build:
     Type: Table
     Module: Data
     IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
+    IgnoreNoPKTable: true
+    IgnoreView: true
     TemplateEngine:
       Path: Entity.cshtml
     Output:
@@ -55,6 +57,8 @@ Build:
     Type: Table
     Module: Data
     IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
+    IgnoreNoPKTable: true
+    IgnoreView: true
     TemplateEngine:
       Path: Hbm.cshtml
     Output:
@@ -90,6 +94,8 @@ Build:
     Type: Table
     Module: Data
     IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
+    IgnoreNoPKTable: true
+    IgnoreView: true
     TemplateEngine:
       Path: IRepository.cshtml
     Output:
@@ -125,6 +131,8 @@ Build:
     Type: Table
     Module: Data
     IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
+    IgnoreNoPKTable: true
+    IgnoreView: true
     TemplateEngine:
       Path: Repository.cshtml
     Output:
@@ -160,6 +168,8 @@ Build:
     Type: Table
     Module: Models
     IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
+    IgnoreNoPKTable: true
+    IgnoreView: true
     TemplateEngine:
       Path: Model.cshtml
     Output:
@@ -195,6 +205,8 @@ Build:
     Type: Table
     Module: Services
     IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
+    IgnoreNoPKTable: true
+    IgnoreView: true
     TemplateEngine:
       Path: IService.cshtml
     Output:
@@ -230,6 +242,8 @@ Build:
     Type: Table
     Module: Services
     IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
+    IgnoreNoPKTable: true
+    IgnoreView: true
     TemplateEngine:
       Path: Service.cshtml
     Output:
@@ -265,6 +279,8 @@ Build:
     Type: Table
     Module: Api
     IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
+    IgnoreNoPKTable: true
+    IgnoreView: true
     TemplateEngine:
       Path: Api.cshtml
     Output:
@@ -300,6 +316,8 @@ Build:
     Type: Table
     Module: Test
     IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
+    IgnoreNoPKTable: true
+    IgnoreView: true
     TemplateEngine:
       Path: RepositoryTest.cshtml
     Output:
@@ -335,6 +353,8 @@ Build:
     Type: Table
     Module: Test
     IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
+    IgnoreNoPKTable: true
+    IgnoreView: true
     TemplateEngine:
       Path: ServiceTest.cshtml
     Output:
@@ -370,6 +390,8 @@ Build:
     Type: Table
     Module: Test
     IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
+    IgnoreNoPKTable: true
+    IgnoreView: true
     TemplateEngine:
       Path: ApiTest.cshtml
     Output:
