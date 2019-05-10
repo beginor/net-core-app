@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,11 +15,30 @@ namespace Beginor.NetCoreApp.Api {
         ) {
             var section = config.GetSection("cookieAuthOptions");
             var settings = section.Get<CookieAuthenticationOptions>();
-            services.AddAuthentication()
-                .AddCookie(options => {
+            services
+                .ConfigureApplicationCookie(options => {
+                    options.LoginPath = null;
                     options.SlidingExpiration = settings.SlidingExpiration;
                     options.ExpireTimeSpan = settings.ExpireTimeSpan;
-                });
+                })
+                .ConfigureExternalCookie(options => {
+                    options.SlidingExpiration = settings.SlidingExpiration;
+                    options.ExpireTimeSpan = settings.ExpireTimeSpan;
+                })
+                .Configure<CookieAuthenticationOptions>(
+                    IdentityConstants.TwoFactorRememberMeScheme,
+                    options => {
+                        options.SlidingExpiration = settings.SlidingExpiration;
+                        options.ExpireTimeSpan = settings.ExpireTimeSpan;
+                    }
+                )
+                .Configure<CookieAuthenticationOptions>(
+                    IdentityConstants.TwoFactorUserIdScheme,
+                    options => {
+                        options.SlidingExpiration = settings.SlidingExpiration;
+                        options.ExpireTimeSpan = settings.ExpireTimeSpan;
+                    }
+                );
         }
 
         private void ConfigureAuthentication(

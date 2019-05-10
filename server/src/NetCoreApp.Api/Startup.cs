@@ -33,8 +33,8 @@ namespace Beginor.NetCoreApp.Api {
         ) {
             logger.Debug("Start configure services ...");
             ConfigureHibernateServices(services, env);
-            ConfigureIdentityServices(services, env);
             ConfigurePathBaseServices(services, env);
+            ConfigureIdentityServices(services, env);
             ConfigureAuthenticationServices(services, env);
             ConfigureCookiePolicyServices(services, env);
             ConfigureSwaggerServices(services, env);
@@ -55,8 +55,8 @@ namespace Beginor.NetCoreApp.Api {
                 // app.UseDeveloperExceptionPage();
             }
             ConfigureHibernate(app, env);
-            ConfigureIdentity(app, env);
             ConfigurePathBase(app, env);
+            ConfigureIdentity(app, env);
             ConfigureAuthentication(app, env);
             ConfigureCookiePolicy(app, env);
             ConfigureSwagger(app, env);

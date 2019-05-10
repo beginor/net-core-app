@@ -14,26 +14,25 @@ namespace Beginor.NetCoreApp.Api {
             IServiceCollection services,
             IHostingEnvironment env
         ) {
-            var section = config.GetSection("identityOptions");
-            var settings = section.Get<IdentityOptions>();
+            var identitySection = config.GetSection("identityOptions");
+            var identitySettings = identitySection.Get<IdentityOptions>();
             services
-                .Configure<IdentityOptions>(options => {
+                .AddIdentity<AppUser, AppRole>(options => {
                     // user settings;
-                    options.User.RequireUniqueEmail = settings.User.RequireUniqueEmail;
+                    options.User.RequireUniqueEmail = identitySettings.User.RequireUniqueEmail;
                     // password settings;
-                    options.Password.RequireDigit = settings.Password.RequireDigit;
-                    options.Password.RequireLowercase = settings.Password.RequireLowercase;
-                    options.Password.RequireNonAlphanumeric = settings.Password.RequireNonAlphanumeric;
-                    options.Password.RequireUppercase = settings.Password.RequireUppercase;
-                    options.Password.RequiredLength = settings.Password.RequiredLength;
-                    options.Password.RequiredUniqueChars = settings.Password.RequiredUniqueChars;
+                    options.Password.RequireDigit = identitySettings.Password.RequireDigit;
+                    options.Password.RequireLowercase = identitySettings.Password.RequireLowercase;
+                    options.Password.RequireNonAlphanumeric = identitySettings.Password.RequireNonAlphanumeric;
+                    options.Password.RequireUppercase = identitySettings.Password.RequireUppercase;
+                    options.Password.RequiredLength = identitySettings.Password.RequiredLength;
+                    options.Password.RequiredUniqueChars = identitySettings.Password.RequiredUniqueChars;
                     // lockout settings;
-                    options.Lockout.AllowedForNewUsers = settings.Lockout.AllowedForNewUsers;
-                    options.Lockout.DefaultLockoutTimeSpan = settings.Lockout.DefaultLockoutTimeSpan;
-                    options.Lockout.MaxFailedAccessAttempts = settings.Lockout.MaxFailedAccessAttempts;
+                    options.Lockout.AllowedForNewUsers = identitySettings.Lockout.AllowedForNewUsers;
+                    options.Lockout.DefaultLockoutTimeSpan = identitySettings.Lockout.DefaultLockoutTimeSpan;
+                    options.Lockout.MaxFailedAccessAttempts = identitySettings.Lockout.MaxFailedAccessAttempts;
                 })
-                .AddDefaultIdentity<AppUser>()
-                .AddRoles<AppRole>()
+                .AddDefaultTokenProviders()
                 .AddHibernateStores();
         }
 
