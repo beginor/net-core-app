@@ -17,7 +17,6 @@ namespace Beginor.NetCoreApp.Api {
             var settings = section.Get<CookieAuthenticationOptions>();
             services
                 .ConfigureApplicationCookie(options => {
-                    options.LoginPath = null;
                     options.SlidingExpiration = settings.SlidingExpiration;
                     options.ExpireTimeSpan = settings.ExpireTimeSpan;
                 })
