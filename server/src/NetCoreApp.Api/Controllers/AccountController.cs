@@ -113,6 +113,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     );
                 }
                 await signinMgr.SignInAsync(user, model.IsPersistent);
+                user.LastLogin = DateTime.Now;
+                user.LoginCount += 1;
+                await userMgr.UpdateAsync(user);
                 return Ok();
             }
             catch (Exception ex) {
