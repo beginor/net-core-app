@@ -23,15 +23,21 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
         );
 
-        private RoleManager<AppRole> manager;
+        private RoleManager<AppRole> roleMgr;
+        private UserManager<AppUser> userMgr;
 
-        public RolesController(RoleManager<AppRole> manager) {
-            this.manager = manager;
+        public RolesController(
+            RoleManager<AppRole> roleMgr,
+            UserManager<AppUser> userMgr
+        ) {
+            this.roleMgr = roleMgr;
+            this.userMgr = userMgr;
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                manager = null;
+                roleMgr = null;
+                userMgr = null;
             }
             base.Dispose(disposing);
         }
@@ -45,11 +51,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppRoleModel model
         ) {
             try {
-                if (await manager.RoleExistsAsync(model.Name)) {
+                if (await roleMgr.RoleExistsAsync(model.Name)) {
                     return BadRequest($"Role already {model.Name} exists!");
                 }
                 var role = Mapper.Map<AppRole>(model);
-                var result = await manager.CreateAsync(role);
+                var result = await roleMgr.CreateAsync(role);
                 if (result.Succeeded) {
                     Mapper.Map(role, model);
                     return model;
@@ -70,11 +76,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [ProducesResponseType(204)]
         public async Task<ActionResult> Delete(string id) {
             try {
-                var role = await manager.FindByIdAsync(id);
+                var role = await roleMgr.FindByIdAsync(id);
                 if (role == null) {
                     return NoContent();
                 }
-                var result = await manager.DeleteAsync(role);
+                var result = await roleMgr.DeleteAsync(role);
                 if (result.Succeeded) {
                     return NoContent();
                 }
@@ -94,7 +100,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromQuery]RoleSearchRequestModel model
         ) {
             try {
-                var query = manager.Roles;
+                var query = roleMgr.Roles;
                 if (model.Name.IsNotNullOrEmpty()) {
                     query = query.Where(r => r.Name.Contains(model.Name));
                 }
@@ -124,7 +130,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             string id
         ) {
             try {
-                var role = await manager.FindByIdAsync(id);
+                var role = await roleMgr.FindByIdAsync(id);
                 if (role == null) {
                     return NotFound();
                 }
@@ -139,7 +145,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
 
         /// <summary>更新指定的角色</summary>
         /// <response code="200">更新成功并返回角色信息</response>
-        /// <response code="400">更新角色出错并返回角色信息</response>
+        /// <response code="400">更新角色出错并返回错误信息</response>
         /// <response code="404">指定的角色不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
@@ -148,12 +154,12 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppRoleModel model
         ) {
             try {
-                var role = await manager.FindByIdAsync(id);
+                var role = await roleMgr.FindByIdAsync(id);
                 if (role == null) {
                     return NotFound();
                 }
                 Mapper.Map(model, role);
-                var result = await manager.UpdateAsync(role);
+                var result = await roleMgr.UpdateAsync(role);
                 if (result.Succeeded) {
                     Mapper.Map(role, model);
                     return model;
@@ -162,6 +168,29 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error($"Can not update role", ex);
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>获取指定角色下的的用户</summary>
+        /// <response code="200">获取成功，返回该角色的用户列表</response>
+        /// <response code="404">指定的角色不存在</response>
+        /// <response code=""></response>
+        [HttpGet("{id:long}/users")]
+        public async Task<ActionResult<IList<AppUserModel>>> GetUsersInRole(
+            string id
+        ) {
+            try {
+                var role = await roleMgr.FindByIdAsync(id);
+                if (role == null) {
+                    return NotFound();
+                }
+                var users = await userMgr.GetUsersInRoleAsync(role.Name);
+                var models = Mapper.Map<IList<AppUserModel>>(users);
+                return models.ToList();
+            }
+            catch (Exception ex) {
+                logger.Error($"Can not get users in role", ex);
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
