@@ -23,20 +23,20 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
         );
 
-        private UserManager<AppUser> manager;
+        private UserManager<AppUser> userMgr;
         private RoleManager<AppRole> roleMgr;
 
         public UsersController(
-            UserManager<AppUser> manager,
+            UserManager<AppUser> userMgr,
             RoleManager<AppRole> roleMgr
         ) {
-            this.manager = manager;
+            this.userMgr = userMgr;
             this.roleMgr = roleMgr;
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                manager = null;
+                userMgr = null;
                 roleMgr = null;
             }
             base.Dispose(disposing);
@@ -51,16 +51,16 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppUserModel model
         ) {
             try {
-                var user = await manager.FindByNameAsync(model.UserName);
+                var user = await userMgr.FindByNameAsync(model.UserName);
                 if (user != null) {
                     return BadRequest($"User with {model.UserName} exists!");
                 }
-                user = await manager.FindByEmailAsync(model.Email);
+                user = await userMgr.FindByEmailAsync(model.Email);
                 if (user != null) {
                     return BadRequest($"User with {model.Email} exists!");
                 }
                 user = Mapper.Map<AppUser>(model);
-                var result = await manager.CreateAsync(user);
+                var result = await userMgr.CreateAsync(user);
                 if (result.Succeeded) {
                     Mapper.Map(user, model);
                     return model;
@@ -81,11 +81,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [ProducesResponseType(204)]
         public async Task<ActionResult> Delete(string id) {
             try {
-                var user = await manager.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id);
                 if (user == null) {
                     return NoContent();
                 }
-                var result = await manager.DeleteAsync(user);
+                var result = await userMgr.DeleteAsync(user);
                 if (result.Succeeded) {
                     return NoContent();
                 }
@@ -105,7 +105,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromQuery]UserSearchRequestModel model
         ) {
             try {
-                var query = manager.Users;
+                var query = userMgr.Users;
                 if (model.UserName.IsNotNullOrEmpty()) {
                     query = query.Where(u => u.UserName.Contains(model.UserName));
                 }
@@ -133,7 +133,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [HttpGet("{id:long}")]
         public async Task<ActionResult<AppUserModel>> GetById(string id) {
             try {
-                var user = await manager.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id);
                 if (user == null) {
                     return NotFound();
                 }
@@ -157,12 +157,12 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppUserModel model
         ) {
             try {
-                var user = await manager.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id);
                 if (user == null) {
                     return NotFound();
                 }
                 Mapper.Map(model, user);
-                var result = await manager.UpdateAsync(user);
+                var result = await userMgr.UpdateAsync(user);
                 if (result.Succeeded) {
                     Mapper.Map(user, model);
                     return model;
@@ -191,12 +191,12 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]ResetPasswordModel model
         ) {
             try {
-                var user = await manager.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id);
                 if (user == null) {
                     return NotFound();
                 }
-                var token = await manager.GeneratePasswordResetTokenAsync(user);
-                var result = await manager.ResetPasswordAsync(
+                var token = await userMgr.GeneratePasswordResetTokenAsync(user);
+                var result = await userMgr.ResetPasswordAsync(
                     user,
                     token,
                     model.Password
@@ -227,7 +227,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             DateTime lockEndTime
         ) {
             try {
-                var user = await manager.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id);
                 if (user == null) {
                     return NotFound();
                 }
@@ -235,7 +235,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     return BadRequest($"Cannot be less than the current time");
                 }
                 var offset = new DateTimeOffset(lockEndTime);
-                await manager.SetLockoutEndDateAsync(user, offset);
+                await userMgr.SetLockoutEndDateAsync(user, offset);
                 return Ok();
             }
             catch (Exception ex) {
@@ -254,16 +254,16 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [HttpPut("{id:long}/unlock")]
         public async Task<ActionResult> Unlock(string id) {
             try {
-                var user = await manager.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id);
                 if (user == null) {
                     return NotFound();
                 }
                 // await manager.SetLockoutEnabledAsync(user, false);
-                await manager.SetLockoutEndDateAsync(
+                await userMgr.SetLockoutEndDateAsync(
                     user,
                     DateTimeOffset.Now.AddDays(-1)
                 );
-                await manager.ResetAccessFailedCountAsync(user);
+                await userMgr.ResetAccessFailedCountAsync(user);
                 return Ok();
             }
             catch (Exception ex) {
@@ -284,11 +284,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             string id
         ) {
             try {
-                var user = await manager.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id);
                 if (user == null) {
                     return NotFound();
                 }
-                var roleNames = await manager.GetRolesAsync(user);
+                var roleNames = await userMgr.GetRolesAsync(user);
                 var roles = await roleMgr.Roles
                         .Where(r => roleNames.Contains(r.Name))
                         .ToListAsync();
@@ -315,15 +315,15 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromRoute]string roleName
         ) {
             try {
-                var user = await manager.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id);
                 if (user == null) {
                     return NotFound();
                 }
-                var role = await manager.GetUsersInRoleAsync(roleName);
+                var role = await roleMgr.FindByNameAsync(roleName);
                 if (role == null) {
                     return NotFound();
                 }
-                var result = await manager.AddToRoleAsync(user, roleName);
+                var result = await userMgr.AddToRoleAsync(user, role.Name);
                 if (result.Succeeded) {
                     return Ok();
                 }
@@ -340,7 +340,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// </summary>
         /// <param name="id">用户id</param>
         /// <param name="roleName">角色名称</param>
-        /// /// <response code="204">删除用户权限成功。</response>
+        /// <response code="204">删除用户权限成功。</response>
         /// <response code="404">用户或角色不存在。</response>
         /// <response code="400">删除用户角色出错。</response>
         /// <response code="500">服务器内部错误。</response>
@@ -350,16 +350,19 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             string roleName
         ) {
             try {
-                var user = await manager.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id);
                 if (user == null) {
                     return NotFound();
                 }
-                var role = await manager.GetUsersInRoleAsync(roleName);
+                var role = await roleMgr.FindByNameAsync(roleName);
                 if (role == null) {
                     return NotFound();
                 }
-                var modelRole = Mapper.Map<AppRoleModel>(role);
-                var result = await manager.RemoveFromRoleAsync(user, modelRole.Name);
+                var isInRole = await userMgr.IsInRoleAsync(user, role.Name);
+                if (!isInRole) {
+                    return NoContent();
+                }
+                var result = await userMgr.RemoveFromRoleAsync(user, role.Name);
                 if (result.Succeeded) {
                     return NoContent();
                 }
