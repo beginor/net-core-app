@@ -344,7 +344,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">用户或角色不存在。</response>
         /// <response code="400">删除用户角色出错。</response>
         /// <response code="500">服务器内部错误。</response>
-        [HttpDelete("~/api/users{id:long}/{roleName}")]
+        [HttpDelete("{id:long}/{roleName}")]
         public async Task<ActionResult> RemoveUserFromRole(
             string id,
             string roleName
