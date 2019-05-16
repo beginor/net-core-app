@@ -20,6 +20,8 @@ sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/package.json
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker-compose.yml
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker-compose.test.yml
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/angular.json
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/src/environments/environment.ts
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/src/environments/environment.prod.ts
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./client/build-docker.sh
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker-compose.yml
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./client/package.json
