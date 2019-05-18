@@ -1,6 +1,21 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# IDE - Visual Studio
-.vs
+# compiled output
+dist
+tmp
+out-tsc
+
+# dependencies
+node_modules
+
+# IDEs and editors
+.idea
+.project
+.classpath
+.c9
+*.launch
+.settings
+*.sublime-workspace
 
 # IDE - VSCode
 .vscode/*
@@ -9,8 +24,19 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# IDE - JetBrains
-.idea
+# misc
+.sass-cache
+connect.lock
+coverage
+libpeerconnection.log
+npm-debug.log
+testem.log
+typings
+
+# e2e
+e2e/*.js
+e2e/*.map
+!e2e/protractor.conf.js
 
 # System Files
 .DS_Store
