@@ -1,0 +1,33 @@
+<mat-toolbar color="primary" class="mat-elevation-z4">
+  <button mat-icon-button (click)="toggleDrawer()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>首页</span>
+</mat-toolbar>
+
+<div class="page-body">
+  <mat-grid-list cols="2" rowHeight="5rem" style="margin-top: 16px;">
+    <mat-grid-tile>
+      <mat-card class="left" matBadge="22" matBadgeColor="accent">
+        任务
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-card class="right" matBadge="4">
+        活动
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-card class="left" matBadge="4">
+        轨迹
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-card class="right" matBadge="4">
+        活动
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+
+</div>
+

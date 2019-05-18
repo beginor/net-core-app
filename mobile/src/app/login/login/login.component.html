@@ -1,0 +1,31 @@
+<mat-toolbar color="primary" class="mat-elevation-z4">
+  登录
+</mat-toolbar>
+
+<form class="login-form" #loginForm="ngForm">
+  <mat-form-field class="form-field">
+    <input name="username" matInput type="text" placeholder="用户名"
+      [(ngModel)]="model.userName" required #username="ngModel" />
+    <button mat-icon-button *ngIf="model.userName" matSuffix aria-label="Clear"
+      (click)="model.userName = ''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  <mat-form-field class="form-field">
+    <input name="password" matInput type="password" placeholder="密码"
+      [(ngModel)]="model.password" required #password="ngModel"/>
+    <button mat-icon-button *ngIf="model.password" matSuffix aria-label="Clear"
+      (click)="model.password = ''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  <div class="form-field">
+    <mat-checkbox name="isPersistent" [(ngModel)]="model.isPersistent">
+      记住我
+    </mat-checkbox>
+  </div>
+  <button class="login-button" type="button" mat-raised-button color="primary"
+    (click)="login()" [disabled]="(username.invalid || password.invalid)">
+    登录
+  </button>
+</form>

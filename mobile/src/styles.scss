@@ -1,0 +1,36 @@
+@import "./base";
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~material-design-icons/iconfont/material-icons.css";
+
+html {
+  @include full-width-height();
+  @include no-margin-padding();
+  overflow: hidden;
+}
+
+body {
+  @extend html;
+
+  .app-root {
+    display: block;
+    @include full-width-height();
+    @include no-margin-padding();
+
+    .loading-indicator {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      width: 200px;
+      height: 48px;
+      margin-left: -100px;
+      margin-top: -50px;
+      text-align: center;
+      line-height: 48px;
+    }
+  }
+
+  .toolbar-spacer {
+    flex: 1 1 auto;
+  }
+}
