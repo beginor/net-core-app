@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="Beginor.AppFx.Api" Version="2.0.0" />
-    <PackageReference Include="Beginor.AppFx.Core" Version="2.6.0" />
+    <PackageReference Include="Beginor.AppFx.Core" Version="2.7.0" />
     <PackageReference Include="Beginor.AppFx.DependencyInjection" Version="2.1.0" />
     <PackageReference Include="Beginor.AppFx.Logging.Log4net" Version="2.0.0" />
     <PackageReference Include="log4net" Version="2.0.8" />

@@ -11,7 +11,7 @@
     <PackageReference Include="NHibernate" Version="5.2.5" />
     <PackageReference Include="NHibernate.AspNetCore.Identity" Version="1.5.0" />
     <PackageReference Include="Beginor.AppFx.Repository.Hibernate" Version="2.4.0" />
-    <PackageReference Include="Beginor.AppFx.Core" Version="2.6.0" />
+    <PackageReference Include="Beginor.AppFx.Core" Version="2.7.0" />
     <PackageReference Include="NHibernate.Extensions.NpgSql" Version="1.1.2" />
   </ItemGroup>
 
