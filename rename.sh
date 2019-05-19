@@ -38,6 +38,7 @@ grep Beginor.NetCoreApp -rl server --include *.hbm.xml | xargs sed -i .bak "s/Be
 grep Beginor.NetCoreApp -rl server --include *.config | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp -rl server --include *.csproj | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp -rl server --include *.config | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./server/test/NetCoreApp.Test/NetCoreApp.Test.csproj
 sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./.gitlab-ci.yml
 sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./.vscode/launch.json
 sed -i .bak "s/Beginor/${COMPANY_NAME}/g" ./.vscode/launch.json
