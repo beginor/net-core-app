@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Beginor.NetCoreApp.Data.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -15,9 +16,8 @@ namespace Beginor.NetCoreApp.Test.Security {
         }
 
         [Test]
-        [Ignore("Do not test UserManager")]
         public async Task _02_CanQueryAllRoles() {
-            var roles = await Target.Roles.ToListAsync();
+            var roles = Target.Roles.ToList();
             Assert.IsNotNull(roles);
         }
 
