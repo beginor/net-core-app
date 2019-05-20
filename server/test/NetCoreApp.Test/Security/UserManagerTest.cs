@@ -15,6 +15,7 @@ namespace Beginor.NetCoreApp.Test.Security {
         }
 
         [Test]
+        [Ignore("Do not test UserManager")]
         public async Task _02_CanQueryAllUsers() {
             var users = await Target.Users.ToListAsync();
             Assert.IsNotNull(users);
