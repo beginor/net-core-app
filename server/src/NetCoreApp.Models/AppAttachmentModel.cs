@@ -8,12 +8,10 @@ namespace Beginor.NetCoreApp.Models {
 
         /// <summary>内容类型（HTTP Content Type）</summary>
         public string ContentType { get; set; }
-        /// <summary>附件内容</summary>
-        public byte[] Content { get; set; }
         /// <summary>创建时间</summary>
         public DateTime CreatedAt { get; set; }
-        /// <summary>创建附件的用户ID</summary>
-        public string CreatorId { get; set; }
+        /// <summary>创建附件的用户</summary>
+        public StringIdNameEntity Creator { get; set; }
         /// <summary>文件名</summary>
         public string FileName { get; set; }
         /// <summary>附件大小</summary>
