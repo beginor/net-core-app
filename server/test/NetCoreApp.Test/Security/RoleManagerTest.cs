@@ -16,7 +16,7 @@ namespace Beginor.NetCoreApp.Test.Security {
         }
 
         [Test]
-        public async Task _02_CanQueryAllRoles() {
+        public void _02_CanQueryAllRoles() {
             var roles = Target.Roles.ToList();
             Assert.IsNotNull(roles);
         }
