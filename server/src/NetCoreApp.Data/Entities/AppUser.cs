@@ -1,4 +1,5 @@
 using System;
+using Beginor.AppFx.Core;
 using NHIdentityUser = NHibernate.AspNetCore.Identity.IdentityUser;
 
 namespace Beginor.NetCoreApp.Data.Entities {
