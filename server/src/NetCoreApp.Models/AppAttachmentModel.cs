@@ -15,7 +15,7 @@ namespace Beginor.NetCoreApp.Models {
         /// <summary>文件名</summary>
         public string FileName { get; set; }
         /// <summary>附件大小</summary>
-        public string Length { get; set; }
+        public long Length { get; set; }
         /// <summary>附件所属的业务ID，可以是任意表的ID，如果业务表有附件， 则需要根据业务表记录的ID，删除对应的附件。</summary>
         public string BusinessId { get; set; }
 

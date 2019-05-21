@@ -41,7 +41,7 @@ namespace Beginor.NetCoreApp.Test.Config {
         public void _04_CanResolveCorsPolicy() {
             var section = Target.GetSection("corsPolicy");
             var policy = section.Get<CorsPolicy>();
-            Assert.IsTrue(policy.AllowAnyOrigin);
+            Assert.IsFalse(policy.AllowAnyOrigin);
             Assert.IsTrue(policy.AllowAnyHeader);
             Assert.IsTrue(policy.AllowAnyMethod);
             Assert.IsTrue(policy.SupportsCredentials);

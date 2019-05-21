@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Beginor.AppFx.Logging.Log4net;
 using Beginor.NetCoreApp.Api;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,9 @@ namespace Beginor.NetCoreApp.Test {
             IHostingEnvironment env = new TestHostingEnvironment();
             var services = new ServiceCollection();
             var startup = new Startup(config, env);
+            services.AddLogging(logging => {
+                logging.AddLog4net(Path.Combine(baseDir, "log.config"));
+            });
             startup.ConfigureServices(services);
             services.AddSingleton<IConfiguration>(config);
             services.AddSingleton(env);

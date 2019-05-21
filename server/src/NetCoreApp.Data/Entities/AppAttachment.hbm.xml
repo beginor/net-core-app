@@ -18,10 +18,8 @@
     <property name="FileName" column="file_name" type="string" not-null="true" length="256" />
     <property name="Length" column="length" type="long" not-null="true" />
     <property name="BusinessId" column="business_id" type="long" not-null="true" />
-    
-    <many-to-one name="Creator" class="AppUser" fetch="join">
-      <column name="creator_id" />
-    </many-to-one>
+
+    <many-to-one name="Creator" column="creator_id" class="AppUser" not-found="ignore" />
 
   </class>
 
