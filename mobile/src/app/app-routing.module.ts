@@ -3,24 +3,29 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { environment } from '../environments/environment';
 import { AuthGuard } from './services/auth.guard';
+import { XsrfGuard } from './services/xsrf.guard';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     {
         path: 'home',
         loadChildren: './home/home.module#HomeModule',
-        canLoad: [AuthGuard],
+        canLoad: [XsrfGuard, AuthGuard],
         canActivate: [AuthGuard],
         data: { }
     },
     {
         path: 'about',
         loadChildren: './about/about.module#AboutModule',
-        canLoad: [AuthGuard],
+        canLoad: [XsrfGuard, AuthGuard],
         canActivate: [AuthGuard],
         data: { }
     },
-    { path: 'login', loadChildren: './login/login.module#LoginModule' }
+    {
+        path: 'login',
+        loadChildren: './login/login.module#LoginModule',
+        canLoad: [XsrfGuard]
+    }
 ];
 
 @NgModule({

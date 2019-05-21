@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
-    CanLoad, CanActivate, Route, UrlSegment, Router, ActivatedRouteSnapshot, RouterStateSnapshot
+    CanLoad, CanActivate, Route, UrlSegment, Router, ActivatedRouteSnapshot,
+    RouterStateSnapshot
 } from '@angular/router';
 
 import { AccountService } from './account.service';

@@ -4,7 +4,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    apiRoot: 'http://localhost:5000/net-core-app/api',
+    apiRoot: './api',
     production: false
 };
 
