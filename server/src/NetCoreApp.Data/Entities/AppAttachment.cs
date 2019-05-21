@@ -6,7 +6,7 @@ namespace Beginor.NetCoreApp.Data.Entities {
     /// <summary>附件表</summary>
     public partial class AppAttachment : BaseEntity<long>  {
 
-            /// <summary>内容类型（HTTP Content Type）</summary>
+        /// <summary>内容类型（HTTP Content Type）</summary>
         public virtual string ContentType { get; set; }
             /// <summary>创建时间</summary>
         public virtual DateTime CreatedAt { get; set; }
