@@ -6,6 +6,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
 
     /// <summary>安全相关的 API</summary>
     [Route("api/[controller]")]
+    [ApiController]
     public class SecurityController : Controller {
 
         private IAntiforgery antiforgery;
@@ -24,6 +25,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         }
 
         /// <summary>获取跨站请求令牌</summary>
+        /// <response code="200">获取成功，返回跨站请求令牌。</response>
         [HttpGet("xsrf-token")]
         public ActionResult GetXsrfToken() {
             // todo: 根据信任主机来进行验证是否颁发 XSRF 令牌
