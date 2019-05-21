@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,10 @@ namespace Beginor.NetCoreApp.Api {
             services.Configure<CookiePolicyOptions>(opts => {
                 opts.CheckConsentNeeded = context => true;
                 opts.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+            services.AddAntiforgery(options => {
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.HeaderName = "X-XSRF-TOKEN";
             });
         }
 

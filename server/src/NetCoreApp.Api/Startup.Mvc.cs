@@ -12,7 +12,14 @@ namespace Beginor.NetCoreApp.Api {
             IServiceCollection services,
             IHostingEnvironment env
         ) {
-            services.AddMvc()
+            services
+                .AddMvc(options => {
+                    if (env.IsProduction()) {
+                        options.Filters.Add(
+                            new AutoValidateAntiforgeryTokenAttribute()
+                        );
+                    }
+                })
                 .ConfigureApplicationPartManager(manager => {
                     manager.ApplicationParts.Clear();
                     manager.ApplicationParts.Add(
