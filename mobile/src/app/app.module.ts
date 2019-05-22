@@ -9,7 +9,7 @@ import { MatModule } from './mat/mat.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { ApiInterceptorService } from './services/api-interceptor.service';
+import { ApiInterceptor } from './services/api.interceptor';
 
 @NgModule({
     declarations: [
@@ -28,7 +28,7 @@ import { ApiInterceptorService } from './services/api-interceptor.service';
     providers: [
         {
             provide: HTTP_INTERCEPTORS,
-            useClass: ApiInterceptorService,
+            useClass: ApiInterceptor,
             multi: true
         }
     ],

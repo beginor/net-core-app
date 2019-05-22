@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable()
-export class ApiInterceptorService implements HttpInterceptor {
+export class ApiInterceptor implements HttpInterceptor {
 
     public intercept(
         req: HttpRequest<any>,

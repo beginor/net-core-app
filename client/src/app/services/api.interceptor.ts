@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 
-export class AuthInterceptor implements HttpInterceptor {
+export class ApiInterceptor implements HttpInterceptor {
 
     public intercept(
         req: HttpRequest<any>,

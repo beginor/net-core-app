@@ -6,8 +6,8 @@ describe('ApiInterceptor', () => {
     beforeEach(() => TestBed.configureTestingModule({}));
 
     it('should be created', () => {
-        const service: ApiInterceptor = TestBed.get(ApiInterceptor);
+        const service: ApiInterceptor
+            = TestBed.get(ApiInterceptor);
         expect(service).toBeTruthy();
     });
-
 });

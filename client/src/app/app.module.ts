@@ -14,7 +14,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppCommonModule } from './common/app-common.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthInterceptor } from './services/api.interceptor';
+import { ApiInterceptor } from './services/api.interceptor';
 
 @NgModule({
     declarations: [
@@ -35,7 +35,7 @@ import { AuthInterceptor } from './services/api.interceptor';
     providers: [
         {
             provide: HTTP_INTERCEPTORS,
-            useClass: AuthInterceptor,
+            useClass: ApiInterceptor,
             multi: true
         }
     ],
