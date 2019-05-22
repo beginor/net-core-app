@@ -8,11 +8,11 @@ import { AsyncSubject } from 'rxjs';
 })
 export class UiService {
 
-    drawer = new AsyncSubject<MatDrawer>();
+    public drawer = new AsyncSubject<MatDrawer>();
 
     constructor() { }
 
-    setDrawer(drawer: MatDrawer): void {
+    public setDrawer(drawer: MatDrawer): void {
         this.drawer.next(drawer);
         this.drawer.complete();
     }

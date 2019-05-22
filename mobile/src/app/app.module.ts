@@ -11,7 +11,6 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { ApiInterceptorService } from './services/api-interceptor.service';
 
-
 @NgModule({
     declarations: [
         AppComponent,

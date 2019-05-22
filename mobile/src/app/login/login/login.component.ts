@@ -11,7 +11,7 @@ import { AccountService, LoginModel } from '../../services/account.service';
 })
 export class LoginComponent implements OnInit {
 
-    model: LoginModel = { };
+    public model: LoginModel = { };
 
     constructor(
         private router: Router,
@@ -20,10 +20,10 @@ export class LoginComponent implements OnInit {
         private accountSvc: AccountService
     ) { }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
     }
 
-    async login(): Promise<void> {
+    public async login(): Promise<void> {
         try {
             await this.accountSvc.login(this.model);
             await this.accountSvc.getInfo();

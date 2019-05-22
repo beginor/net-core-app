@@ -13,14 +13,14 @@ import { UiService } from './services/ui.service';
 export class AppComponent implements AfterViewInit {
 
     @ViewChild(MatDrawer)
-    drawer: MatDrawer;
+    public drawer: MatDrawer;
 
     constructor(
         private ui: UiService
     ) {
     }
 
-    ngAfterViewInit(): void {
+    public ngAfterViewInit(): void {
         this.ui.setDrawer(this.drawer);
     }
 

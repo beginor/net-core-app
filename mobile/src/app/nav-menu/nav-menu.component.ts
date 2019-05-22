@@ -19,16 +19,16 @@ export class NavMenuComponent implements OnInit {
         public accountSvc: AccountService
     ) { }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
     }
 
-    toggleDrawer(): void {
+    public toggleDrawer(): void {
         this.ui.drawer.subscribe(drawer => {
             drawer.close();
         });
     }
 
-    async logout(): Promise<void> {
+    public async logout(): Promise<void> {
         await this.accountSvc.logout();
         this.toggleDrawer();
         await this.router.navigate(['/login'], { replaceUrl: true });

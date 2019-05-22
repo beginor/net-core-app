@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class NavMenuService {
 
-    menuItems: BehaviorSubject<MenuItem[]>;
+    public menuItems: BehaviorSubject<MenuItem[]>;
 
     constructor() {
         const items: MenuItem[] = [

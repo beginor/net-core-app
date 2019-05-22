@@ -16,7 +16,10 @@ export class AuthGuard implements CanLoad, CanActivate {
         private svc: AccountService
     ) { }
 
-    async canLoad(route: Route, segments: UrlSegment[]): Promise<boolean> {
+    public async canLoad(
+        route: Route,
+        segments: UrlSegment[]
+    ): Promise<boolean> {
         try {
             const info = await this.svc.getInfo();
             return !!info;
@@ -30,7 +33,7 @@ export class AuthGuard implements CanLoad, CanActivate {
         }
     }
 
-    canActivate(
+    public canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): Promise<boolean> {

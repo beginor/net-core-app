@@ -11,7 +11,7 @@ export class XsrfGuard implements CanLoad {
 
     constructor(private http: HttpClient) { }
 
-    canLoad(route: Route, segments: UrlSegment[]): Promise<boolean> {
+    public canLoad(route: Route, segments: UrlSegment[]): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             const url = environment.apiRoot + '/security/xsrf-token';
             this.http.get(url).toPromise()

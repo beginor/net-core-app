@@ -13,10 +13,10 @@ export class HomeComponent implements OnInit {
         private ui: UiService
     ) { }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
     }
 
-    toggleDrawer(): void {
+    public toggleDrawer(): void {
         this.ui.drawer.subscribe(drawer => {
             drawer.toggle();
         });

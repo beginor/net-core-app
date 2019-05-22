@@ -9,25 +9,25 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AccountService {
 
-    info = new BehaviorSubject<AccountInfo>({});
+    public info = new BehaviorSubject<AccountInfo>({});
 
     constructor(
         private http: HttpClient
     ) { }
 
-    async getInfo(): Promise<AccountInfo> {
+    public async getInfo(): Promise<AccountInfo> {
         const url = environment.apiRoot + '/account/info';
         const info = await this.http.get<AccountInfo>(url).toPromise();
         this.info.next(info);
         return info;
     }
 
-    async login(model: LoginModel): Promise<void> {
+    public async login(model: LoginModel): Promise<void> {
         const url = environment.apiRoot + '/account';
         await this.http.post<any>(url, model).toPromise();
     }
 
-    async logout(): Promise<void> {
+    public async logout(): Promise<void> {
         const url = environment.apiRoot + '/account';
         await this.http.delete(url).toPromise();
         this.info.next({});

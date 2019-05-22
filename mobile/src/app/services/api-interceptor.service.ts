@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class ApiInterceptorService implements HttpInterceptor {
 
-    intercept(
+    public intercept(
         req: HttpRequest<any>,
         next: HttpHandler
     ): Observable<HttpEvent<any>> {

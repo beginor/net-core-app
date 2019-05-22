@@ -18,6 +18,7 @@
       "call-signature",
       "parameter",
       "property-declaration"
-    ]
+    ],
+    "member-access": true
   }
 }
