@@ -33,4 +33,18 @@ body {
   .toolbar-spacer {
     flex: 1 1 auto;
   }
+
+  .mat-icon-spinner {
+    animation: mat-icon-spin 2s infinite linear
+  }
+
+  @keyframes mat-icon-spin {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    to {
+        transform: rotate(1turn)
+    }
+  }
 }
