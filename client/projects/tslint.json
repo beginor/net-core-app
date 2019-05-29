@@ -1,6 +1,7 @@
 {
   "extends": "../tslint.json",
   "rules": {
+    "one-line": [true, "check-open-brace", "check-whitespace"],
     "directive-selector": [
       true,
       "attribute",

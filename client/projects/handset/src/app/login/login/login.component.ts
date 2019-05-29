@@ -27,12 +27,13 @@ export class LoginComponent implements OnInit {
         try {
             await this.accountSvc.login(this.model);
             await this.accountSvc.getInfo();
-            const returnUrl = this.route.snapshot.params['returnUrl'] || 'home';
+            const returnUrl = this.route.snapshot.params.returnUrl || 'home';
             this.router.navigate(
                 ['/' + returnUrl],
                 { replaceUrl: true }
             );
         }
+// tslint:disable-next-line: one-line
         catch (ex) {
             console.error(ex);
             this.snackBar.open(ex.error, '确定', { duration: 3000 });

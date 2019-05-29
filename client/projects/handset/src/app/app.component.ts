@@ -12,7 +12,7 @@ import { UiService } from './services/ui.service';
 })
 export class AppComponent implements AfterViewInit {
 
-    @ViewChild(MatDrawer)
+    @ViewChild(MatDrawer, { static: true })
     public drawer: MatDrawer;
 
     constructor(

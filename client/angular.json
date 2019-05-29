@@ -118,6 +118,122 @@
           }
         }
       }
+    },
+    "handset": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/handset",
+      "sourceRoot": "projects/handset/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/handset",
+            "index": "projects/handset/src/index.html",
+            "main": "projects/handset/src/main.ts",
+            "polyfills": "projects/handset/src/polyfills.ts",
+            "tsConfig": "projects/handset/tsconfig.app.json",
+            "assets": [
+              "projects/handset/src/favicon.ico",
+              "projects/handset/src/assets"
+            ],
+            "styles": [
+              "projects/handset/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/handset/src/environments/environment.ts",
+                  "with": "projects/handset/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "handset:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "handset:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "handset:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/handset/src/test.ts",
+            "polyfills": "projects/handset/src/polyfills.ts",
+            "tsConfig": "projects/handset/tsconfig.spec.json",
+            "karmaConfig": "projects/handset/karma.conf.js",
+            "assets": [
+              "projects/handset/src/favicon.ico",
+              "projects/handset/src/assets"
+            ],
+            "styles": [
+              "projects/handset/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/handset/tsconfig.app.json",
+              "projects/handset/tsconfig.spec.json",
+              "projects/handset/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/handset/e2e/protractor.conf.js",
+            "devServerTarget": "handset:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "handset:serve:production"
+            }
+          }
+        }
+      }
     }
   },
   "defaultProject": "web"
