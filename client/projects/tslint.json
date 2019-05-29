@@ -20,6 +20,9 @@
       "parameter",
       "property-declaration"
     ],
-    "member-access": true
+    "member-access": true,
+    "object-literal-shorthand": false,
+    "no-string-literal": false,
+    "ban-types": false
   }
 }
