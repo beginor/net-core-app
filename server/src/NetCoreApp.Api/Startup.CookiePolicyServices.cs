@@ -14,10 +14,10 @@ namespace Beginor.NetCoreApp.Api {
         ) {
             services.Configure<CookiePolicyOptions>(opts => {
                 opts.CheckConsentNeeded = context => true;
-                opts.MinimumSameSitePolicy = SameSiteMode.None;
+                opts.MinimumSameSitePolicy = SameSiteMode.Lax;
             });
             services.AddAntiforgery(options => {
-                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SameSite = SameSiteMode.Lax;
                 options.HeaderName = "X-XSRF-TOKEN";
             });
         }

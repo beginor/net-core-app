@@ -37,7 +37,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     HttpOnly = false,
                     Path = "/",
                     IsEssential = true,
-                    SameSite = SameSiteMode.None
+                    SameSite = SameSiteMode.Lax
                 }
             );
             return Ok();
