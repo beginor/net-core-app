@@ -1,4 +1,4 @@
 export const environment = {
-    apiUrl: './api',
+    apiUrl: '/net-core-app/api',
     production: true
 };
