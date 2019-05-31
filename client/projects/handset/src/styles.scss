@@ -35,16 +35,15 @@ body {
   }
 
   .mat-icon-spinner {
-    animation: mat-icon-spin 2s infinite linear
+    animation: mat-icon-spin 2s infinite linear;
   }
 
   @keyframes mat-icon-spin {
     0% {
-        transform: rotate(0deg)
+      transform: rotate(0deg);
     }
-
     to {
-        transform: rotate(1turn)
+      transform: rotate(1turn);
     }
   }
 }
