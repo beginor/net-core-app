@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Beginor.NetCoreApp.Api.Controllers {
 
     /// <summary>附件表服务接口</summary>
-    [Route("api/[controller]")]
+    [Route("api/attachments")]
     [ApiController]
     public class AppAttachmentsController : Controller {
 

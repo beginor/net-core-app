@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Beginor.NetCoreApp.Api {
@@ -13,6 +15,9 @@ namespace Beginor.NetCoreApp.Api {
             IHostingEnvironment env
         ) {
             services
+                .AddRouting(options => {
+                    options.LowercaseUrls = true;
+                })
                 .AddMvc(options => {
                     if (env.IsProduction()) {
                         options.Filters.Add(
@@ -39,7 +44,8 @@ namespace Beginor.NetCoreApp.Api {
             IApplicationBuilder app,
             IHostingEnvironment env
         ) {
-            app.UseMvc(routes => {
+            // app.UseMiddleware<Beginor.NetCoreApp.Api.Middlewares.AuditMiddleware>();
+            app.UseEndpointRouting().UseMvc(routes => {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}"
