@@ -13,7 +13,7 @@ TemplateEngine:
   Root: Contributions/NHibernate
 Output:
   Type: File
-  Path: '/Users/zhang/Projects/net-core-app/server/src'
+  Path: './src'
 
 Build:
   Entities:

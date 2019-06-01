@@ -31,7 +31,7 @@
 
 1. 根据业务需求创建数据表；
 2. 打开命令行， 切换到 `server` 目录；
-3. 在第一步的窗口中输入命令 `dotnet run --project ../../smartcode/src/SmartCode.CLI ./smartcode.yml` 即可自动生成代码;
+3. 在第一步的窗口中输入命令 `./smartcode.sh` 即可自动生成代码;
 4. 运行单元测试， 确认全部单元测试通过；
 5. 运行 Api 项目， 确认生成的 Api 可用。
 
