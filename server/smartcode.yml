@@ -13,413 +13,143 @@ TemplateEngine:
   Root: Contributions/NHibernate
 Output:
   Type: File
-  Path: './src'
+  Path: ./src
+NamingConverter:
+  Table:
+    Tokenizer:
+      Type: Default
+      Parameters:
+        IgnorePrefix: 'T_'
+        Delimiter: '_'
+    Converter:
+      Type: Pascal
+      Parameters: { }
+  View:
+    Tokenizer:
+      Type: Default
+      Parameters:
+        IgnorePrefix: 'V_'
+        Delimiter: '_'
+    Converter:
+      Type: Pascal
+  Column:
+    Tokenizer:
+      Type: Default
+      Parameters:
+        Delimiter: '_'
+    Converter:
+      Type: Pascal
+TableFilter:
+  IgnoreTables:
+    - app_roles
+    - app_users
+    - aspnet_role_claims
+    - aspnet_roles
+    - aspnet_user_claims
+    - aspnet_user_logins
+    - aspnet_user_roles
+    - aspnet_user_tokens
+    - aspnet_users
+  IgnoreNoPKTable: true
+  IgnoreView: true
 
 Build:
   Entities:
     Type: Table
     Module: Data
-    IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
-    IgnoreNoPKTable: true
-    IgnoreView: true
     TemplateEngine:
       Path: Entity.cshtml
     Output:
       Path: '{{Project.Module}}.{{Build.Module}}/Entities'
       Name: '{{Items.CurrentTable.ConvertedName}}'
       Extension: '.cs'
-    NamingConverter:
-      Table:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'T_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-          Parameters: { }
-      View:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'V_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-      Column:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
   Hbm:
     Type: Table
     Module: Data
-    IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
-    IgnoreNoPKTable: true
-    IgnoreView: true
     TemplateEngine:
       Path: Hbm.cshtml
     Output:
       Path: '{{Project.Module}}.{{Build.Module}}/Entities'
       Name: '{{Items.CurrentTable.ConvertedName}}'
       Extension: '.hbm.xml'
-    NamingConverter:
-      Table:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'T_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-          Parameters: { }
-      View:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'V_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-      Column:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
   IRepository:
     Type: Table
     Module: Data
-    IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
-    IgnoreNoPKTable: true
-    IgnoreView: true
     TemplateEngine:
       Path: IRepository.cshtml
     Output:
       Path: '{{Project.Module}}.{{Build.Module}}/Repositories'
       Name: 'I{{Items.CurrentTable.ConvertedName}}Repository'
       Extension: '.cs'
-    NamingConverter:
-      Table:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'T_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-          Parameters: { }
-      View:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'V_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-      Column:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
   Repository:
     Type: Table
     Module: Data
-    IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
-    IgnoreNoPKTable: true
-    IgnoreView: true
     TemplateEngine:
       Path: Repository.cshtml
     Output:
       Path: '{{Project.Module}}.{{Build.Module}}/Repositories'
       Name: '{{Items.CurrentTable.ConvertedName}}Repository'
       Extension: '.cs'
-    NamingConverter:
-      Table:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'T_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-          Parameters: { }
-      View:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'V_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-      Column:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
   Model:
     Type: Table
     Module: Models
-    IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
-    IgnoreNoPKTable: true
-    IgnoreView: true
     TemplateEngine:
       Path: Model.cshtml
     Output:
       Path: '{{Project.Module}}.{{Build.Module}}'
       Name: '{{Items.CurrentTable.ConvertedName}}Model'
       Extension: '.cs'
-    NamingConverter:
-      Table:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'T_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-          Parameters: { }
-      View:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'V_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-      Column:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
   IService:
     Type: Table
     Module: Services
-    IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
-    IgnoreNoPKTable: true
-    IgnoreView: true
     TemplateEngine:
       Path: IService.cshtml
     Output:
       Path: '{{Project.Module}}.{{Build.Module}}'
       Name: 'I{{Items.CurrentTable.ConvertedName}}Service'
       Extension: '.cs'
-    NamingConverter:
-      Table:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'T_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-          Parameters: { }
-      View:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'V_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-      Column:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
   Service:
     Type: Table
     Module: Services
-    IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
-    IgnoreNoPKTable: true
-    IgnoreView: true
     TemplateEngine:
       Path: Service.cshtml
     Output:
       Path: '{{Project.Module}}.{{Build.Module}}'
       Name: '{{Items.CurrentTable.ConvertedName}}Service'
       Extension: '.cs'
-    NamingConverter:
-      Table:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'T_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-          Parameters: { }
-      View:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'V_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-      Column:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
   Api:
     Type: Table
     Module: Api
-    IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
-    IgnoreNoPKTable: true
-    IgnoreView: true
     TemplateEngine:
       Path: Api.cshtml
     Output:
       Path: '{{Project.Module}}.{{Build.Module}}/Controllers'
       Name: '{{Items.CurrentTable.ConvertedName}}Controller'
       Extension: '.cs'
-    NamingConverter:
-      Table:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'T_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-          Parameters: { }
-      View:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'V_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-      Column:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
   RepositoryTest:
     Type: Table
     Module: Test
-    IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
-    IgnoreNoPKTable: true
-    IgnoreView: true
     TemplateEngine:
       Path: RepositoryTest.cshtml
     Output:
       Path: '../test/{{Project.Module}}.{{Build.Module}}/Data'
       Name: '{{Items.CurrentTable.ConvertedName}}RepositoryTest'
       Extension: '.cs'
-    NamingConverter:
-      Table:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'T_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-          Parameters: { }
-      View:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'V_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-      Column:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
   ServiceTest:
     Type: Table
     Module: Test
-    IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
-    IgnoreNoPKTable: true
-    IgnoreView: true
     TemplateEngine:
       Path: ServiceTest.cshtml
     Output:
       Path: '../test/{{Project.Module}}.{{Build.Module}}/Services'
       Name: '{{Items.CurrentTable.ConvertedName}}ServiceTest'
       Extension: '.cs'
-    NamingConverter:
-      Table:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'T_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-          Parameters: { }
-      View:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'V_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-      Column:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
   ApiTest:
     Type: Table
     Module: Test
-    IgnoreTables: ["app_roles", "app_users", "aspnet_role_claims", "aspnet_roles", "aspnet_user_claims", "aspnet_user_logins", "aspnet_user_roles", "aspnet_user_tokens", "aspnet_users"]
-    IgnoreNoPKTable: true
-    IgnoreView: true
     TemplateEngine:
       Path: ApiTest.cshtml
     Output:
       Path: '../test/{{Project.Module}}.{{Build.Module}}/Api'
       Name: '{{Items.CurrentTable.ConvertedName}}ControllerTest'
       Extension: '.cs'
-    NamingConverter:
-      Table:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'T_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-          Parameters: { }
-      View:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            IgnorePrefix: 'V_'
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
-      Column:
-        Tokenizer:
-          Type: Default
-          Parameters:
-            Delimiter: '_'
-        Converter:
-          Type: Pascal
