@@ -11,7 +11,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
     /// <summary>附件表服务接口</summary>
     [Route("api/attachments")]
     [ApiController]
-    public class AppAttachmentsController : Controller {
+    public class AppAttachmentController : Controller {
 
         log4net.ILog logger = log4net.LogManager.GetLogger(
             System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
@@ -19,7 +19,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
 
         private IAppAttachmentService service;
 
-        public AppAttachmentsController(IAppAttachmentService service) {
+        public AppAttachmentController(IAppAttachmentService service) {
             this.service = service;
         }
 
