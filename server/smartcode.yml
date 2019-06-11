@@ -22,7 +22,7 @@ NamingConverter:
         IgnorePrefix: 'T_'
         Delimiter: '_'
     Converter:
-      Type: Pascal
+      Type: PascalSingular
       Parameters: { }
   View:
     Tokenizer:
