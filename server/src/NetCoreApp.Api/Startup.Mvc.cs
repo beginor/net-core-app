@@ -44,7 +44,6 @@ namespace Beginor.NetCoreApp.Api {
             IApplicationBuilder app,
             IHostingEnvironment env
         ) {
-            // app.UseMiddleware<Beginor.NetCoreApp.Api.Middlewares.AuditMiddleware>();
             app.UseEndpointRouting().UseMvc(routes => {
                 routes.MapRoute(
                     name: "default",

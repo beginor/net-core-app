@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<hibernate-mapping
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="urn:nhibernate-mapping-2.2"
+  assembly="Beginor.NetCoreApp.Data" namespace="Beginor.NetCoreApp.Data.Entities">
+
+  <class name="AppAuditLog" table="app_audit_logs" schema="public">
+    <id name="Id" column="id" type="long">
+      <generator class="trigger-identity">
+      </generator>
+    </id>
+
+    <property name="RequestPath" column="request_path" type="string" not-null="true" length="256" />
+    <property name="RequestMethod" column="request_method" type="string" not-null="true" length="8" />
+    <property name="UserName" column="user_name" type="string" not-null="false" length="64" />
+    <property name="StartAt" column="start_at" type="datetime" not-null="true" />
+    <property name="Duration" column="duration" type="long" not-null="true" />
+    <property name="ResponseCode" column="response_code" type="int" not-null="true" />
+    <property name="ControllerName" column="controller_name" type="string" not-null="false" length="64" />
+    <property name="ActionName" column="action_name" type="string" not-null="false" length="64" />
+    <property name="Description" column="description" type="string" not-null="false" length="256" />
+  </class>
+
+</hibernate-mapping>

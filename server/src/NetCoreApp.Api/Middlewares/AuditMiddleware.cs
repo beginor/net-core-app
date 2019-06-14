@@ -1,28 +1,36 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using Beginor.NetCoreApp.Data.Entities;
+using Beginor.NetCoreApp.Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Template;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Beginor.NetCoreApp.Api.Middlewares {
 
     public class AuditMiddleware {
 
         private readonly RequestDelegate next;
-        IActionDescriptorCollectionProvider provider;
-        IActionSelector selector;
+        private IActionDescriptorCollectionProvider provider;
+        private IActionSelector selector;
+        private IServiceProvider serviceProvider;
 
         public AuditMiddleware(
             RequestDelegate next,
             IActionDescriptorCollectionProvider provider,
-            IActionSelector selector
+            IActionSelector selector,
+            IServiceProvider serviceProvider
         ) {
             this.next = next;
             this.provider = provider;
             this.selector = selector;
+            this.serviceProvider = serviceProvider;
         }
 
         public ActionDescriptor GetMatchingAction(string path, string httpMethod) {
@@ -73,13 +81,34 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
         }
 
         public async Task InvokeAsync(HttpContext context) {
-            var action = GetMatchingAction(
-                context.Request.Path,
-                context.Request.Method
-            );
+            var log = new AppAuditLog {
+                RequestPath = context.Request.Path,
+                RequestMethod = context.Request.Method
+            };
+            if (context.User.Identity.IsAuthenticated) {
+                log.UserName = context.User.Identity.Name;
+            }
+            log.StartAt = DateTime.Now;
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             await next.Invoke(context);
-            var responseCode = context.Response.StatusCode;
-            System.Console.WriteLine(responseCode);
+            stopwatch.Stop();
+            log.Duration = stopwatch.ElapsedMilliseconds;
+            log.ResponseCode = context.Response.StatusCode;
+            var action = GetMatchingAction(
+                log.RequestPath,
+                log.RequestMethod
+            ) as ControllerActionDescriptor;
+            if (action != null) {
+                log.ControllerName = action.ControllerTypeInfo.Name;
+                log.ActionName = action.MethodInfo.Name;
+            }
+            using (var scope = serviceProvider.CreateScope()) {
+                var repo = scope.ServiceProvider.GetService<IAppAuditLogRepository>();
+                await repo.SaveAsync(log);
+            }
         }
+
     }
+
 }
