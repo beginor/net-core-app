@@ -5,7 +5,7 @@
 <div class="container">
   <div class="row">
     <div class="offset-md-4 col-md-4">
-      <form class="login-form" #loginForm="ngForm">
+      <form class="login-form mt-sm-2 mt-md-3 mt-lg-4" #loginForm="ngForm">
         <mat-form-field class="form-field">
           <input name="username" matInput type="text" placeholder="用户名"
             [(ngModel)]="model.userName" required #username="ngModel" />
@@ -28,7 +28,8 @@
           </mat-checkbox>
         </div>
         <button class="login-button" type="button" mat-raised-button color="primary"
-          (click)="login()" [disabled]="(username.invalid || password.invalid)">
+          (click)="login()" [disabled]="(username.invalid || password.invalid)"
+          cdkFocusInitial>
           <ng-container *ngIf="loading;else loginTpl">
             <mat-icon class="mat-icon-spinner">refresh</mat-icon> 登录中 ...
           </ng-container>

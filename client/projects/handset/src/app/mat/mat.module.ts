@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 
+import { A11yModule } from '@angular/cdk/a11y';
+
 import {
     MatButtonModule,
     MatCheckboxModule,
@@ -20,6 +22,7 @@ import {
 
 @NgModule({
     imports: [
+        A11yModule,
         MatButtonModule,
         MatCheckboxModule,
         MatIconModule,
@@ -37,6 +40,7 @@ import {
         MatBadgeModule
     ],
     exports: [
+        A11yModule,
         MatButtonModule,
         MatCheckboxModule,
         MatIconModule,
