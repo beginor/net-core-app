@@ -12,6 +12,7 @@ import { AccountService, LoginModel } from '../../services/account.service';
 export class LoginComponent implements OnInit {
 
     public model: LoginModel = { };
+    public loading = false;
 
     constructor(
         private router: Router,
@@ -24,7 +25,11 @@ export class LoginComponent implements OnInit {
     }
 
     public async login(): Promise<void> {
+        if (this.loading) {
+            return;
+        }
         try {
+            this.loading = true;
             await this.accountSvc.login(this.model);
             await this.accountSvc.getInfo();
             const returnUrl = this.route.snapshot.params.returnUrl || 'home';
@@ -33,10 +38,12 @@ export class LoginComponent implements OnInit {
                 { replaceUrl: true }
             );
         }
-// tslint:disable-next-line: one-line
         catch (ex) {
             console.error(ex);
             this.snackBar.open(ex.error, '确定', { duration: 3000 });
+        }
+        finally {
+            this.loading = false;
         }
     }
 
