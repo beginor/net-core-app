@@ -1,19 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CanLoad, Route, UrlSegment } from '@angular/router';
-
-import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class XsrfGuard implements CanLoad {
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,
+        @Inject('apiRoot') private apiRoot: string
+    ) { }
 
     public canLoad(route: Route, segments: UrlSegment[]): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            const url = environment.apiUrl + '/security/xsrf-token';
+            const url = this.apiRoot + '/security/xsrf-token';
             this.http.get(url).toPromise()
                 .then(() => {
                     resolve(true);
