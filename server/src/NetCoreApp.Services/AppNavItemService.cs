@@ -1,0 +1,53 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using Beginor.AppFx.Core;
+using Beginor.AppFx.Services;
+using Beginor.NetCoreApp.Data.Entities;
+using Beginor.NetCoreApp.Data.Repositories;
+using Beginor.NetCoreApp.Models;
+
+namespace Beginor.NetCoreApp.Services {
+
+    /// <summary>导航节点（菜单）服务实现</summary>
+    public partial class AppNavItemService : BaseService<IAppNavItemRepository, AppNavItem, AppNavItemModel, long>, IAppNavItemService {
+
+        public AppNavItemService(IAppNavItemRepository repository) : base(repository) { }
+
+        protected override long ConvertIdFromString(string id) {
+            long result;
+            if (long.TryParse(id, out result)) {
+                return result;
+            }
+            return result;
+        }
+
+        /// <summary>导航节点（菜单）搜索，返回分页结果。</summary>
+        public async Task<PaginatedResponseModel<AppNavItemModel>> SearchAsync(
+            AppNavItemSearchModel model
+        ) {
+            var repo = base.Repository;
+            var total = await repo.CountAsync(
+                query => {
+                    // todo: add custom query here;
+                    return query;
+                }
+            );
+            var data = await repo.QueryAsync(
+                query => {
+                    // todo: add custom query here;
+                    return query.Skip(model.Skip).Take(model.Take);
+                }
+            );
+            return new PaginatedResponseModel<AppNavItemModel> {
+                Total = total,
+                Data = Mapper.Map<IList<AppNavItemModel>>(data),
+                Skip = model.Skip,
+                Take = model.Take
+            };
+        }
+
+    }
+
+}

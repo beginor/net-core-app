@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<hibernate-mapping
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="urn:nhibernate-mapping-2.2"
+  assembly="Beginor.NetCoreApp.Data" namespace="Beginor.NetCoreApp.Data.Entities">
+
+  <class name="AppNavItem" table="app_nav_items" schema="public">
+    <id name="Id" column="id" type="long">
+      <generator class="trigger-identity">
+      </generator>
+    </id>
+
+    <property name="ParentId" column="parent_id" type="long" not-null="false" />
+    <property name="Title" column="title" type="string" not-null="true" length="16" />
+    <property name="Tooltip" column="tooltip" type="string" not-null="false" length="64" />
+    <property name="Icon" column="icon" type="string" not-null="false" length="32" />
+    <property name="Url" column="url" type="string" not-null="false" length="256" />
+    <property name="Sequence" column="sequence" type="float" not-null="false" />
+    <property name="CreatorId" column="creator_id" type="string" not-null="true" length="32" />
+    <property name="CreatedAt" column="created_at" type="datetime" not-null="true" />
+    <property name="UpdaterId" column="updater_id" type="string" not-null="true" length="32" />
+    <property name="UpdateAt" column="update_at" type="datetime" not-null="true" />
+    <property name="IsDeleted" column="is_deleted" type="bool" not-null="true" />
+  </class>
+
+</hibernate-mapping>
