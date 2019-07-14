@@ -14,6 +14,10 @@ namespace Beginor.NetCoreApp.Services {
             AppNavItemSearchModel model
         );
 
+        Task CreateAsync(AppNavItemModel model, string userName);
+
+        Task UpdateAsync(string id, AppNavItemModel model, string userName);
+
     }
 
 }

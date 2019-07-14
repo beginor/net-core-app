@@ -25,6 +25,7 @@ namespace Beginor.NetCoreApp.Services {
                     .ReverseMap();
                 config.CreateMap<AppRole, StringIdNameEntity>().ReverseMap();
                 // 添加其它的映射
+                config.CreateMap<AppNavItem, AppNavItemModel>().ReverseMap();
                 // 初始化完成
                 Initialized = true;
             });

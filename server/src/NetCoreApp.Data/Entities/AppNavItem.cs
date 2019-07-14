@@ -19,11 +19,11 @@ namespace Beginor.NetCoreApp.Data.Entities {
         /// <summary>顺序</summary>
         public virtual float? Sequence { get; set; }
         /// <summary>创建者ID</summary>
-        public virtual string CreatorId { get; set; }
+        public virtual AppUser Creator { get; set; }
         /// <summary>创建时间</summary>
         public virtual DateTime CreatedAt { get; set; }
         /// <summary>更新者ID</summary>
-        public virtual string UpdaterId { get; set; }
+        public virtual AppUser Updater { get; set; }
         /// <summary>更新时间</summary>
         public virtual DateTime UpdateAt { get; set; }
         /// <summary>是否删除</summary>

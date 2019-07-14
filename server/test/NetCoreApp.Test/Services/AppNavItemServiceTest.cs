@@ -27,6 +27,28 @@ namespace Beginor.NetCoreApp.Test.Services {
             Assert.GreaterOrEqual(model.Take, result.Data.Count);
         }
 
+        [Test]
+        public async Task _03_CanDoSoftDelete() {
+            var model = new AppNavItemModel {
+                ParentId = "0",
+                Title = "test model",
+                Tooltip = "",
+                Icon = "",
+                Url = "",
+                Sequence = 0
+            };
+            await Target.CreateAsync(model, "beginor@qq.com");
+            Assert.IsNotEmpty(model.Id);
+            var modelInDb = await Target.GetByIdAsync(model.Id);
+            Assert.IsNotNull(modelInDb);
+            Assert.AreEqual(model.Id, modelInDb.Id);
+            modelInDb.Tooltip = "Test tooltip";
+            await Target.UpdateAsync(model.Id, model, "beginor@qq.com");
+            await Target.DeleteAsync(model.Id);
+            modelInDb = await Target.GetByIdAsync(model.Id);
+            Assert.IsNull(modelInDb);
+        }
+
     }
 
 }

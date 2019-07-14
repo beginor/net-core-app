@@ -5,7 +5,7 @@
   xmlns="urn:nhibernate-mapping-2.2"
   assembly="Beginor.NetCoreApp.Data" namespace="Beginor.NetCoreApp.Data.Entities">
 
-  <class name="AppNavItem" table="app_nav_items" schema="public">
+  <class name="AppNavItem" table="app_nav_items" schema="public" where="is_deleted = false">
     <id name="Id" column="id" type="long">
       <generator class="trigger-identity">
       </generator>
@@ -17,9 +17,9 @@
     <property name="Icon" column="icon" type="string" not-null="false" length="32" />
     <property name="Url" column="url" type="string" not-null="false" length="256" />
     <property name="Sequence" column="sequence" type="float" not-null="false" />
-    <property name="CreatorId" column="creator_id" type="string" not-null="true" length="32" />
+    <many-to-one name="Creator" column="creator_id" class="AppUser" not-found="ignore" />
     <property name="CreatedAt" column="created_at" type="datetime" not-null="true" />
-    <property name="UpdaterId" column="updater_id" type="string" not-null="true" length="32" />
+    <many-to-one name="Updater" column="updater_id" class="AppUser" not-found="ignore" />
     <property name="UpdateAt" column="update_at" type="datetime" not-null="true" />
     <property name="IsDeleted" column="is_deleted" type="bool" not-null="true" />
   </class>
