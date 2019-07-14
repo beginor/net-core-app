@@ -1,57 +1,57 @@
--- Table: public.app_audit_logs
+-- table: public.app_audit_logs
 
--- DROP TABLE public.app_audit_logs;
+-- drop table public.app_audit_logs;
 
-CREATE TABLE public.app_audit_logs
+create table public.app_audit_logs
 (
-    id bigint NOT NULL DEFAULT snow_flake_id(),
-    request_path character varying (256) COLLATE pg_catalog."default" NOT NULL,
-    request_method character varying(8) COLLATE pg_catalog."default" NOT NULL,
-    user_name character varying(64) COLLATE pg_catalog."default",
-    start_at timestamp without time zone NOT NULL,
-    duration double precision NOT NULL,
-    response_code integer NOT NULL,
-    controller_name character varying(64) COLLATE pg_catalog."default",
-    action_name character varying(64) COLLATE pg_catalog."default",
-    description character varying(256) COLLATE pg_catalog."default",
-    CONSTRAINT app_audit_logs_pkey PRIMARY KEY (id)
+    id bigint not null default snow_flake_id(),
+    request_path character varying (256) collate pg_catalog."default" not null,
+    request_method character varying(8) collate pg_catalog."default" not null,
+    user_name character varying(64) collate pg_catalog."default",
+    start_at timestamp without time zone not null,
+    duration double precision not null,
+    response_code integer not null,
+    controller_name character varying(64) collate pg_catalog."default",
+    action_name character varying(64) collate pg_catalog."default",
+    description character varying(256) collate pg_catalog."default",
+    constraint app_audit_logs_pkey primary key (id)
 )
-WITH (
-    OIDS = FALSE
+with (
+    oids = false
 )
-TABLESPACE pg_default;
+tablespace pg_default;
 
-ALTER TABLE public.app_audit_logs
-    OWNER to postgres;
-COMMENT ON TABLE public.app_audit_logs
-    IS '审计日志';
+alter table public.app_audit_logs
+    owner to postgres;
+comment on table public.app_audit_logs
+    is '审计日志';
 
-COMMENT ON COLUMN public.app_audit_logs.id
-    IS '审计日志ID';
+comment on column public.app_audit_logs.id
+    is '审计日志id';
 
-COMMENT ON COLUMN public.app_audit_logs.request_path
-    IS '请求路径';
+comment on column public.app_audit_logs.request_path
+    is '请求路径';
 
-COMMENT ON COLUMN public.app_audit_logs.request_method
-    IS '请求方法';
+comment on column public.app_audit_logs.request_method
+    is '请求方法';
 
-COMMENT ON COLUMN public.app_audit_logs.user_name
-    IS '用户名';
+comment on column public.app_audit_logs.user_name
+    is '用户名';
 
-COMMENT ON COLUMN public.app_audit_logs.start_at
-    IS '开始时间';
+comment on column public.app_audit_logs.start_at
+    is '开始时间';
 
-COMMENT ON COLUMN public.app_audit_logs.duration
-    IS '耗时(毫秒)';
+comment on column public.app_audit_logs.duration
+    is '耗时(毫秒)';
 
-COMMENT ON COLUMN public.app_audit_logs.response_code
-    IS '响应状态码';
+comment on column public.app_audit_logs.response_code
+    is '响应状态码';
 
-COMMENT ON COLUMN public.app_audit_logs.controller_name
-    IS '控制器名称';
+comment on column public.app_audit_logs.controller_name
+    is '控制器名称';
 
-COMMENT ON COLUMN public.app_audit_logs.action_name
-    IS '动作名称';
+comment on column public.app_audit_logs.action_name
+    is '动作名称';
 
-COMMENT ON COLUMN public.app_audit_logs.description
-    IS '描述';
+comment on column public.app_audit_logs.description
+    is '描述';

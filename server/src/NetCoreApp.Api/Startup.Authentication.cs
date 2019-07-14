@@ -1,4 +1,6 @@
+using Beginor.NetCoreApp.Api.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -38,6 +40,7 @@ namespace Beginor.NetCoreApp.Api {
                         options.ExpireTimeSpan = settings.ExpireTimeSpan;
                     }
                 );
+            services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
         }
 
         private void ConfigureAuthentication(

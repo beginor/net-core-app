@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Api.Filters;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NHibernate.AspNetCore.Identity;
@@ -47,6 +49,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="400">创建角色失败并返回错误信息</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
+        [Authorize(Policy = "app_roles.create")]
         public async Task<ActionResult<AppRoleModel>> Create(
             [FromBody]AppRoleModel model
         ) {
@@ -74,6 +77,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
+        [Authorize(Policy = "app_roles.delete")]
         public async Task<ActionResult> Delete(string id) {
             try {
                 var role = await roleMgr.FindByIdAsync(id);
@@ -96,6 +100,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">获取成功并返回角色列表。</response>
         /// <response code="500">服务器内部错误。</response>
         [HttpGet("")]
+        [Authorize(Policy = "app_roles.read")]
         public async Task<ActionResult<PaginatedResponseModel<AppRoleModel>>> GetAll(
             [FromQuery]RoleSearchRequestModel model
         ) {
@@ -126,6 +131,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">获取角色成功，返回角色信息。</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
+        [Authorize(Policy = "app_roles.read")]
         public async Task<ActionResult<AppRoleModel>> GetById(
             string id
         ) {
@@ -149,6 +155,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">指定的角色不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
+        [Authorize(Policy = "app_roles.update")]
         public async Task<ActionResult<AppRoleModel>> Update(
             [FromRoute]string id,
             [FromBody]AppRoleModel model
@@ -177,6 +184,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">指定的角色不存在</response>
         /// <response code=""></response>
         [HttpGet("{id:long}/users")]
+        [Authorize(Policy = "app_roles.read_user_toles")]
         public async Task<ActionResult<IList<AppUserModel>>> GetUsersInRole(
             string id
         ) {
