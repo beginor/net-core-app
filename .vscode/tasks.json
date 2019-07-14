@@ -60,6 +60,16 @@
       "label": "dotnet:run",
       "command": "dotnet",
       "type": "shell",
+      "args": ["run"],
+      "problemMatcher": ["$msCompile"],
+      "options": {
+        "cwd": "${workspaceRoot}/server/src/NetCoreApp.Api"
+      }
+    },
+    {
+      "label": "dotnet:watch",
+      "command": "dotnet",
+      "type": "shell",
       "args": ["watch", "run"],
       "problemMatcher": ["$msCompile"],
       "options": {
