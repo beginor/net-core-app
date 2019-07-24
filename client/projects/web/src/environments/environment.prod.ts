@@ -1,4 +1,4 @@
 export const environment = {
-    apiRoot: '/net-core-app/api',
+    apiRoot: 'http://localhost:5000/net-core-app/api',
     production: true
 };
