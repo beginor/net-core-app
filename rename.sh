@@ -13,14 +13,14 @@ SERVER_PREFIX="${COMPANY_NAME}.${PROJ_NAME}"
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/build-docker.sh
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/default.conf
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/Dockerfile
-sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/e2e/src/app.e2e-spec.ts
-sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/e2e/src/home/home.e2e-spec.ts
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/web/e2e/src/app.e2e-spec.ts
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/web/e2e/src/home/home.e2e-spec.ts
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/package-lock.json
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/package.json
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker-compose.yml
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker-compose.test.yml
-sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/src/environments/environment.ts
-sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/src/environments/environment.prod.ts
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/web/src/environments/environment.ts
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/web/src/environments/environment.prod.ts
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./client/build-docker.sh
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker-compose.yml
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./client/package.json
@@ -42,8 +42,8 @@ sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./.gitlab-ci.yml
 sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./.vscode/launch.json
 sed -i .bak "s/Beginor/${COMPANY_NAME}/g" ./.vscode/launch.json
 sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./.vscode/tasks.json
-sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./server/smart-code.yml
-sed -i .bak "s/Beginor/${COMPANY_NAME}/g" ./server/smart-code.yml
+sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./server/smartcode.yml
+sed -i .bak "s/Beginor/${COMPANY_NAME}/g" ./server/smartcode.yml
 # 删除备份文件
 find . -name '*.bak' -delete
 # 提交一下服务端文件
