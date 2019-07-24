@@ -25,6 +25,7 @@ sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/web/src/environ
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/web/src/environments/environment.prod.ts
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/handset/src/environments/environment.ts
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/handset/src/environments/environment.prod.ts
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/proxy.conf.json
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./client/build-docker.sh
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker-compose.yml
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./client/package.json
