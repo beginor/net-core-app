@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Api.Filters;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 using Microsoft.AspNetCore.Authorization;

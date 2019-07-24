@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Api.Filters;
 using Beginor.NetCoreApp.Models;
 using Beginor.NetCoreApp.Services;
 using Microsoft.AspNetCore.Authorization;
