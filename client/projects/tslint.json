@@ -2,12 +2,7 @@
   "extends": "../tslint.json",
   "rules": {
     "one-line": [true, "check-open-brace", "check-whitespace"],
-    "typedef": [
-      true,
-      "call-signature",
-      "parameter",
-      "property-declaration"
-    ],
+    "typedef": [true, "call-signature", "parameter", "property-declaration"],
     "member-access": true,
     "object-literal-shorthand": false,
     "no-string-literal": false,
