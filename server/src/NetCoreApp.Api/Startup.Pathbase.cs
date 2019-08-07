@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -24,7 +25,7 @@ namespace Beginor.NetCoreApp.Api {
             }
             app.UsePathBase(new PathString(pathbase));
             var message = "Hosting pathbase: " + pathbase;
-            logger.Debug(message);
+            Console.WriteLine(message);
         }
 
     }
