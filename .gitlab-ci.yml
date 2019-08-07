@@ -40,4 +40,6 @@ deploy:
   only:
     - master
   script:
-    - echo "deploy pass!"
+    - cd docker
+    - ./build-docker-images.sh
+    - ./deploy-images.sh
