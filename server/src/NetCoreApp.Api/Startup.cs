@@ -2,6 +2,7 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SysEnvironment = System.Environment;
@@ -53,7 +54,16 @@ namespace Beginor.NetCoreApp.Api {
         ) {
             logger.Debug("Start configure app.");
             if (env.IsDevelopment()) {
-                // app.UseDeveloperExceptionPage();
+                app.Use(async (ctx, next) => {
+                    try {
+                        await next.Invoke();
+                    }
+                    catch (Exception ex) {
+                        var msg = ex.ToString();
+                        ctx.Response.StatusCode = 500;
+                        await ctx.Response.WriteAsync(msg);
+                    }
+                });
             }
             ConfigureHibernate(app, env);
             ConfigurePathBase(app, env);
