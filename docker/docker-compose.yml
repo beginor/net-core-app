@@ -17,6 +17,8 @@ services:
       - 5000:80
     volumes:
       - ./api/log:/api/log
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
     restart: unless-stopped
 networks:
   default:

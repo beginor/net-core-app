@@ -14,4 +14,3 @@ rm dist/*.bak
 # Build docker image
 docker build --no-cache --rm -t beginor/net-core-app/api .
 rm -rf dist
-cd ..

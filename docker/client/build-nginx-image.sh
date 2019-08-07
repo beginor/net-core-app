@@ -13,4 +13,3 @@ cd ../docker/client/
 # Build client image (nginx).
 docker build --no-cache --rm -t beginor/net-core-app/nginx .
 rm -rf dist
-cd ..
