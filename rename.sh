@@ -19,6 +19,7 @@ sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" .
 
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/server/build-api-image.sh
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/server/build-api-image.sh
+sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./docker/server/build-api-image.sh
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/server/deploy-api-image.sh
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/server/deploy-api-image.sh
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/server/Dockerfile
