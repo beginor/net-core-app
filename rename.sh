@@ -24,6 +24,8 @@ sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/server/deploy-api-image.
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/server/deploy-api-image.sh
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/server/Dockerfile
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/server/Dockerfile
+sed -i .bak "s/Beginor/${COMPANY_NAME}/g" ./docker/server/Dockerfile
+sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./docker/server/Dockerfile
 
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/build-docker-images.sh
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/build-docker-images.sh
@@ -55,6 +57,7 @@ git add *
 git commit -m "Rename client app"
 # 修改服务端相关文件
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./server/src/NetCoreApp.Api/Properties/launchSettings.json
+sed -i .bak "s/NetCoreApp/${PROJ_NAME}/g" ./server/src/NetCoreApp.Api/Properties/launchSettings.json
 grep Beginor.NetCoreApp -rl server --include *.cs | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp -rl server --include *.hbm.xml | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp -rl server --include *.config | xargs sed -i .bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
