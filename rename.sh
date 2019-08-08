@@ -15,12 +15,14 @@ sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/client/default.conf
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/client/deploy-nginx-image.sh
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/client/deploy-nginx-image.sh
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/client/Dockerfile
+sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/client/Dockerfile
 
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/server/build-api-image.sh
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/server/build-api-image.sh
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/server/deploy-api-image.sh
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/server/deploy-api-image.sh
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/server/Dockerfile
+sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/server/Dockerfile
 
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/build-docker-images.sh
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/build-docker-images.sh
