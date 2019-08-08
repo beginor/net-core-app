@@ -26,8 +26,13 @@ sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/build-docker-images.sh
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/build-docker-images.sh
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/docker-compose.yml
 sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/docker-compose.yml
+sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/deploy-images.sh
+sed -i .bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/deploy-images.sh
 # 删除备份文件
 find . -name '*.bak' -delete
+# 提交一下 Docker 文件
+git add *
+git commit -m "Rename docker files"
 # 修改客户端相关文件
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/web/e2e/src/app.e2e-spec.ts
 sed -i .bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/web/e2e/src/home/home.e2e-spec.ts
