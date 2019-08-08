@@ -8,7 +8,8 @@
       <form class="login-form mt-sm-2 mt-md-3 mt-lg-4" #loginForm="ngForm">
         <mat-form-field class="form-field">
           <input name="username" matInput type="text" placeholder="用户名"
-            [(ngModel)]="model.userName" required #username="ngModel" />
+            [(ngModel)]="model.userName" required #username="ngModel"
+            autocomplete="username" />
           <button mat-icon-button *ngIf="model.userName" matSuffix aria-label="Clear"
             (click)="model.userName = ''">
             <mat-icon>close</mat-icon>
@@ -16,7 +17,8 @@
         </mat-form-field>
         <mat-form-field class="form-field">
           <input name="password" matInput type="password" placeholder="密码"
-            [(ngModel)]="model.password" required #password="ngModel" />
+            [(ngModel)]="model.password" required #password="ngModel"
+            autocomplete="current-password"/>
           <button mat-icon-button *ngIf="model.password" matSuffix aria-label="Clear"
             (click)="model.password = ''">
             <mat-icon>close</mat-icon>
