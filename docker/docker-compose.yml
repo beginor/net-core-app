@@ -16,7 +16,7 @@ services:
     ports:
       - 5000:80
     volumes:
-      - ./api/log:/api/log
+      - ./api/log:/net-core-app/api/log
     environment:
       ASPNETCORE_ENVIRONMENT: Development
     restart: unless-stopped
