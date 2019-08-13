@@ -34,7 +34,13 @@ import { environment } from '../environments/environment';
         },
         {
             provide: 'apiRoot',
-            useFactory: () => environment.apiRoot
+            useFactory: () => {
+                let url = environment.apiRoot;
+                if (url.startsWith('/')) {
+                    url = `${location.protocol}//${location.host}${url}`;
+                }
+                return url;
+            }
         }
     ],
     bootstrap: [AppComponent]
