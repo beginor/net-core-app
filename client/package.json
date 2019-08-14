@@ -9,6 +9,8 @@
     "build": "npm run build-web && npm run build-handset",
     "build-web": "ng build web --prod --base-href=/net-core-app/web/",
     "build-handset": "ng build handset --prod --base-href=/net-core-app/handset/",
+    "watch-web": "ng build web --watch --base-href=/net-core-app/web/",
+    "watch-handset": "ng build handset --watch --base-href=/net-core-app/handset/",
     "lint": "ng lint",
     "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json",
     "test": "ng test --watch",
