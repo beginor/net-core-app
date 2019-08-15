@@ -16,7 +16,6 @@ namespace Beginor.NetCoreApp.Api {
             IServiceCollection services,
             IHostingEnvironment env
         ) {
-            ModelMapping.Setup();
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
             services.AddServiceWithDefaultImplements(
                 Assembly.LoadFrom(Path.Combine(baseDir, "Beginor.NetCoreApp.Data.dll")),

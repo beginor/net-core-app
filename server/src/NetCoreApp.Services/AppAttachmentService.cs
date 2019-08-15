@@ -13,7 +13,7 @@ namespace Beginor.NetCoreApp.Services {
     /// <summary>附件表服务实现</summary>
     public partial class AppAttachmentService : BaseService<IAppAttachmentRepository, AppAttachment, AppAttachmentModel, long>, IAppAttachmentService {
 
-        public AppAttachmentService(IAppAttachmentRepository repository) : base(repository) { }
+        public AppAttachmentService(IAppAttachmentRepository repository, IMapper mapper) : base(repository, mapper) { }
 
         protected override long ConvertIdFromString(string id) {
             long result;

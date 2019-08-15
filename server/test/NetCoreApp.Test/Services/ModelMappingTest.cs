@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Beginor.NetCoreApp.Test.Services {
 
     [TestFixture]
-    public class ModelMappingTest : BaseTest {
+    public class ModelMappingTest : BaseTest<IMapper> {
 
         [Test]
         public void _01_CanMapAppUser() {
@@ -14,10 +14,10 @@ namespace Beginor.NetCoreApp.Test.Services {
                 Id = "000000001",
                 UserName = "TestUser"
             };
-            var entity = Mapper.Map<StringIdNameEntity>(user);
+            var entity = Target.Map<StringIdNameEntity>(user);
             Assert.AreEqual(user.Id, entity.Id);
             Assert.AreEqual(user.UserName, entity.Name);
-            user = Mapper.Map<AppUser>(entity);
+            user = Target.Map<AppUser>(entity);
             Assert.AreEqual(user.Id, entity.Id);
             Assert.AreEqual(user.UserName, entity.Name);
         }
@@ -28,10 +28,10 @@ namespace Beginor.NetCoreApp.Test.Services {
                 Id = "000001",
                 Name = "TestRole"
             };
-            var entity = Mapper.Map<StringIdNameEntity>(role);
+            var entity = Target.Map<StringIdNameEntity>(role);
             Assert.AreEqual(role.Id, entity.Id);
             Assert.AreEqual(role.Name, entity.Name);
-            role = Mapper.Map<AppRole>(entity);
+            role = Target.Map<AppRole>(entity);
             Assert.AreEqual(role.Id, entity.Id);
             Assert.AreEqual(role.Name, entity.Name);
         }

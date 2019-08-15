@@ -34,7 +34,7 @@ namespace Beginor.NetCoreApp.Test.Data {
                         }
                     };
                 var data = query.ToList();
-                var models = Mapper.Map<List<AppAttachmentModel>>(data);
+                Assert.IsNotNull(data);
             }
         }
 
@@ -57,6 +57,7 @@ namespace Beginor.NetCoreApp.Test.Data {
                     });
                     //.ProjectTo<AppAttachmentModel>();
                 var data = query.ToList();
+                Assert.IsNotNull(data);
             }
         }
 

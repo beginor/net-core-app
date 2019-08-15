@@ -19,8 +19,9 @@ namespace Beginor.NetCoreApp.Services {
 
         public AppNavItemService(
             IAppNavItemRepository repository,
-            UserManager<AppUser> userManager
-        ) : base(repository) {
+            UserManager<AppUser> userManager,
+            IMapper mapper
+        ) : base(repository, mapper) {
             this.userManager = userManager;
         }
 

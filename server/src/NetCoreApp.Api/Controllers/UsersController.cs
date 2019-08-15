@@ -26,19 +26,23 @@ namespace Beginor.NetCoreApp.Api.Controllers {
 
         private UserManager<AppUser> userMgr;
         private RoleManager<AppRole> roleMgr;
+        private AutoMapper.IMapper mapper;
 
         public UsersController(
             UserManager<AppUser> userMgr,
-            RoleManager<AppRole> roleMgr
+            RoleManager<AppRole> roleMgr,
+            AutoMapper.IMapper mapper
         ) {
             this.userMgr = userMgr;
             this.roleMgr = roleMgr;
+            this.mapper = mapper;
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 userMgr = null;
                 roleMgr = null;
+                mapper = null;
             }
             base.Dispose(disposing);
         }
@@ -61,10 +65,10 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (user != null) {
                     return BadRequest($"User with {model.Email} exists!");
                 }
-                user = Mapper.Map<AppUser>(model);
+                user = mapper.Map<AppUser>(model);
                 var result = await userMgr.CreateAsync(user);
                 if (result.Succeeded) {
-                    Mapper.Map(user, model);
+                    mapper.Map(user, model);
                     return model;
                 }
                 return BadRequest(result.GetErrorsString());
@@ -115,7 +119,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 }
                 var total = await query.LongCountAsync();
                 var data = await query.ToListAsync();
-                var models = Mapper.Map<IList<AppUserModel>>(data);
+                var models = mapper.Map<IList<AppUserModel>>(data);
                 var result = new PaginatedResponseModel<AppUserModel> {
                     Skip = model.Skip,
                     Take = model.Take,
@@ -142,7 +146,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (user == null) {
                     return NotFound();
                 }
-                var model = Mapper.Map<AppUserModel>(user);
+                var model = mapper.Map<AppUserModel>(user);
                 return model;
             }
             catch (Exception ex) {
@@ -167,10 +171,10 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (user == null) {
                     return NotFound();
                 }
-                Mapper.Map(model, user);
+                mapper.Map(model, user);
                 var result = await userMgr.UpdateAsync(user);
                 if (result.Succeeded) {
-                    Mapper.Map(user, model);
+                    mapper.Map(user, model);
                     return model;
                 }
                 return BadRequest(result.GetErrorsString());
@@ -302,7 +306,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 var roles = await roleMgr.Roles
                         .Where(r => roleNames.Contains(r.Name))
                         .ToListAsync();
-                var model = Mapper.Map<IList<AppRoleModel>>(roles);
+                var model = mapper.Map<IList<AppRoleModel>>(roles);
                 return model.ToList();
             }
             catch (Exception ex) {

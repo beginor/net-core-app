@@ -13,7 +13,7 @@ namespace Beginor.NetCoreApp.Services {
     /// <summary>审计日志服务实现</summary>
     public partial class AppAuditLogService : BaseService<IAppAuditLogRepository, AppAuditLog, AppAuditLogModel, long>, IAppAuditLogService {
 
-        public AppAuditLogService(IAppAuditLogRepository repository) : base(repository) { }
+        public AppAuditLogService(IAppAuditLogRepository repository, IMapper mapper) : base(repository, mapper) { }
 
         protected override long ConvertIdFromString(string id) {
             long result;

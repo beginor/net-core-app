@@ -44,6 +44,7 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureMiddlewareServices(services, env);
             ConfigureMvcServices(services, env);
             ConfigureAppServices(services, env);
+            ConfigureAutoMapperServices(services, env);
             logger.Debug("Configure services completed!");
         }
 
@@ -76,6 +77,7 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureMiddleware(app, env);
             ConfigureMvc(app, env);
             ConfigureApp(app, env);
+            ConfigureAutoMapper(app, env);
             logger.Debug("Configure app completed.");
         }
 
