@@ -1,11 +1,7 @@
 import { CommonModule } from '@angular/common';
-import {
-    HttpClientJsonpModule,
-    HttpClientModule,
-    HTTP_INTERCEPTORS
-} from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -26,9 +22,7 @@ import { environment } from '../environments/environment';
         BrowserAnimationsModule,
         CommonModule,
         FormsModule,
-        ReactiveFormsModule,
         HttpClientModule,
-        HttpClientJsonpModule,
         NgbModule,
         AppCommonModule,
         AppRoutingModule
@@ -42,11 +36,7 @@ import { environment } from '../environments/environment';
         {
             provide: 'apiRoot',
             useFactory: () => {
-                let url = environment.apiRoot;
-                if (url.startsWith('/')) {
-                    url = `${location.protocol}//${location.host}${url}`;
-                }
-                return url;
+                return environment.apiRoot;;
             }
         }
     ],
