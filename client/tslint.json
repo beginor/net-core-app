@@ -7,7 +7,7 @@
     "array-type": false,
     "arrow-parens": false,
     "deprecation": {
-      "severity": "warn"
+      "severity": "warning"
     },
     "import-blacklist": [
       true,
@@ -17,7 +17,7 @@
     "max-classes-per-file": false,
     "max-line-length": [
       true,
-      80
+      140
     ],
     "member-access": false,
     "member-ordering": [
