@@ -21,7 +21,7 @@ const routes: Routes = [
 @NgModule({
     imports: [
         RouterModule.forRoot(routes, {
-            useHash: false,
+            useHash: !environment.production,
             enableTracing: !environment.production
         })
     ],
