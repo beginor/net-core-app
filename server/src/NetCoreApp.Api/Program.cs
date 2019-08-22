@@ -25,6 +25,9 @@ namespace Beginor.NetCoreApp.Api {
                         logging.AddLog4net(path);
                     }
                 )
+                #if DEBUG
+                .UseWebRoot("../../../client/dist/")
+                #endif
                 .UseStartup<Startup>();
         }
 
