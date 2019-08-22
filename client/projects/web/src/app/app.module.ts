@@ -36,7 +36,7 @@ import { environment } from '../environments/environment';
         {
             provide: 'apiRoot',
             useFactory: () => {
-                return environment.apiRoot;;
+                return environment.apiRoot;
             }
         }
     ],
