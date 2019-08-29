@@ -37,6 +37,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">创建 系统权限 成功</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
+        [Authorize(Policy = "app_privileges.create")]
         public async Task<ActionResult<AppPrivilegeModel>> Create(
             [FromBody]AppPrivilegeModel model
         ) {
@@ -55,9 +56,10 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
-        public async Task<ActionResult> Delete(string id) {
+        [Authorize(Policy = "app_privileges.delete")]
+        public async Task<ActionResult> Delete(long id) {
             try {
-                await service.DeleteAsync(id);
+                await service.DeleteAsync(id.ToString());
                 return NoContent();
             }
             catch (Exception ex) {
@@ -70,6 +72,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">成功, 分页返回结果</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("")]
+        [Authorize(Policy = "app_privileges.read")]
         public async Task<ActionResult<PaginatedResponseModel<AppPrivilegeModel>>> GetAll(
             [FromQuery]AppPrivilegeSearchModel model
         ) {
@@ -78,7 +81,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return result;
             }
             catch (Exception ex) {
-                logger.Error("Can not get all app_privileges.", ex);
+                logger.Error("Can not get all app_privileges .", ex);
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -90,9 +93,10 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404"> 系统权限 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        public async Task<ActionResult<AppPrivilegeModel>> GetById(string id) {
+        [Authorize(Policy = "app_privileges.read")]
+        public async Task<ActionResult<AppPrivilegeModel>> GetById(long id) {
             try {
-                var result = await service.GetByIdAsync(id);
+                var result = await service.GetByIdAsync(id.ToString());
                 if (result == null) {
                     return NotFound();
                 }
@@ -111,16 +115,17 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404"> 系统权限 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
+        [Authorize(Policy = "app_privileges.update")]
         public async Task<ActionResult<AppPrivilegeModel>> Update(
-            [FromRoute]string id,
+            [FromRoute]long id,
             [FromBody]AppPrivilegeModel model
         ) {
             try {
-                var modelInDb = await service.GetByIdAsync(id);
+                var modelInDb = await service.GetByIdAsync(id.ToString());
                 if (modelInDb == null) {
                     return NotFound();
                 }
-                await service.UpdateAsync(id, model);
+                await service.UpdateAsync(id.ToString(), model);
                 return model;
             }
             catch (Exception ex) {
@@ -132,7 +137,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <summary>同步系统必须的权限</summary>
         /// <response code="200">同步成功， 客户端刷新权限列表即可看到更新。</response>
         /// <response code="500">服务器内部错误</response>
-        [HttpGet("sync/required")]
+        [HttpGet("sync-required")]
+        [Authorize(Policy = "app_privileges.sync_required")]
         public async Task<ActionResult> SyncRequired() {
             try {
                 var assembly = GetType().Assembly;

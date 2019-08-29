@@ -18,4 +18,8 @@ namespace Beginor.NetCoreApp.Api.Authorization {
 
     }
 
+    public static class Consts {
+        public static readonly string PrivilegeClaimType = "AppPrivilege";
+    }
+
 }
