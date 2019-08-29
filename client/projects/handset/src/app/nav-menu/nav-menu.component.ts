@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { AccountService } from 'services';
+
 import { UiService } from '../services/ui.service';
 import { NavMenuService } from './nav-menu.service';
-import { AccountService } from '../services/account.service';
 
 @Component({
     selector: 'app-nav-menu',

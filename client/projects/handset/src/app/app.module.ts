@@ -5,11 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { ServicesModule, ApiInterceptor } from 'services';
+
 import { MatModule } from './mat/mat.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { ApiInterceptor } from './services/api.interceptor';
+
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -23,6 +25,7 @@ import { environment } from '../environments/environment';
         CommonModule,
         FormsModule,
         HttpClientModule,
+        ServicesModule,
         AppRoutingModule,
         MatModule
     ],

@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { environment } from '../environments/environment';
-import { AuthGuard } from './services/auth.guard';
-import { XsrfGuard } from './services/xsrf.guard';
+
+import { XsrfGuard, AuthGuard } from 'services';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
