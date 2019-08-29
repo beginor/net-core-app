@@ -15,6 +15,18 @@ const routes: Routes = [
         path: 'about',
         loadChildren: './about/about.module#AboutModule',
         canLoad: [XsrfGuard]
+    },
+    {
+        path: 'admin',
+        // tslint:disable-next-line: max-line-length
+        loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+        canLoad: [XsrfGuard]
+    },
+    {
+        path: 'login',
+        // tslint:disable-next-line: max-line-length
+        loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
+        canLoad: [XsrfGuard]
     }
 ];
 
