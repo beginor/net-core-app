@@ -4,7 +4,7 @@
 
 create table public.app_nav_items
 (
-    id bigint not null default snow_flake_id(),
+    id bigint not null default public.snow_flake_id(),
     parent_id bigint,
     title character varying(16) collate pg_catalog."default" not null,
     tooltip character varying(64) collate pg_catalog."default",
