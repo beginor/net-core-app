@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -65,6 +66,18 @@ namespace Beginor.NetCoreApp.Services {
                     await Repository.SaveAsync(model);
                 }
             }
+        }
+
+        /// <summary>根据 id 删除指定的权限， 但是不能删除 IsRequired 为 true 的权限。</summary>
+        public override async Task DeleteAsync(string id) {
+            var entity = await Repository.GetByIdAsync(ConvertIdFromString(id));
+            if (entity == null) {
+                return;
+            }
+            if (entity.IsRequired) {
+                throw new InvalidOperationException("无法删除必须的权限！");
+            }
+            await Repository.DeleteAsync(entity.Id);
         }
 
     }
