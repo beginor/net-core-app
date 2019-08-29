@@ -86,9 +86,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
         [Authorize(Policy = "app_users.delete")]
-        public async Task<ActionResult> Delete(string id) {
+        public async Task<ActionResult> Delete(long id) {
             try {
-                var user = await userMgr.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id.ToString());
                 if (user == null) {
                     return NoContent();
                 }
@@ -140,9 +140,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
         [Authorize(Policy = "app_users.read")]
-        public async Task<ActionResult<AppUserModel>> GetById(string id) {
+        public async Task<ActionResult<AppUserModel>> GetById(long id) {
             try {
-                var user = await userMgr.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id.ToString());
                 if (user == null) {
                     return NotFound();
                 }
@@ -163,11 +163,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [HttpPut("{id:long}")]
         [Authorize(Policy = "app_users.update")]
         public async Task<ActionResult<AppUserModel>> Update(
-            [FromRoute]string id,
+            [FromRoute]long id,
             [FromBody]AppUserModel model
         ) {
             try {
-                var user = await userMgr.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id.ToString());
                 if (user == null) {
                     return NotFound();
                 }
@@ -198,11 +198,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [HttpPut("{id:long}/reset-pass")]
         [Authorize(Policy = "app_users.reset_pass")]
         public async Task<ActionResult> ResetPassword(
-            [FromRoute]string id,
+            [FromRoute]long id,
             [FromBody]ResetPasswordModel model
         ) {
             try {
-                var user = await userMgr.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id.ToString());
                 if (user == null) {
                     return NotFound();
                 }
@@ -235,11 +235,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [HttpPut, Route("{id:long}/lock/{lockEndTime:datetime}")]
         [Authorize(Policy = "app_users.lock")]
         public async Task<ActionResult> LockUser(
-            string id,
+            long id,
             DateTime lockEndTime
         ) {
             try {
-                var user = await userMgr.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id.ToString());
                 if (user == null) {
                     return NotFound();
                 }
@@ -265,9 +265,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误。</response>
         [HttpPut("{id:long}/unlock")]
         [Authorize(Policy = "app_users.unlock")]
-        public async Task<ActionResult> Unlock(string id) {
+        public async Task<ActionResult> Unlock(long id) {
             try {
-                var user = await userMgr.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id.ToString());
                 if (user == null) {
                     return NotFound();
                 }
@@ -295,10 +295,10 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [HttpGet("{id:long}/roles")]
         [Authorize(Policy = "app_users.read_user_roles")]
         public async Task<ActionResult<IList<AppRoleModel>>> GetUserRoles(
-            string id
+            long id
         ) {
             try {
-                var user = await userMgr.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id.ToString());
                 if (user == null) {
                     return NotFound();
                 }
@@ -326,11 +326,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [HttpPut("{id:long}/{roleName}")]
         [Authorize(Policy = "app_users.add_role_to_user")]
         public async Task<ActionResult> AddUserToRole(
-            [FromRoute]string id,
+            [FromRoute]long id,
             [FromRoute]string roleName
         ) {
             try {
-                var user = await userMgr.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id.ToString());
                 if (user == null) {
                     return NotFound();
                 }
@@ -362,11 +362,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [HttpDelete("{id:long}/{roleName}")]
         [Authorize(Policy = "app_users.remove_role_from_user")]
         public async Task<ActionResult> RemoveUserFromRole(
-            string id,
+            long id,
             string roleName
         ) {
             try {
-                var user = await userMgr.FindByIdAsync(id);
+                var user = await userMgr.FindByIdAsync(id.ToString());
                 if (user == null) {
                     return NotFound();
                 }
