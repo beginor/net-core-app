@@ -51,6 +51,22 @@ namespace Beginor.NetCoreApp.Services {
             };
         }
 
+        /// <summary>同步必须的权限</summary>
+        public async Task SyncRequired(IEnumerable<string> names) {
+            foreach (var name in names) {
+                var exists = await Repository.ExistsAsync(name);
+                if (!exists) {
+                    var model = new AppPrivilege {
+                        Name = name,
+                        Module = name.Substring(0, name.IndexOf('.')),
+                        Description = string.Empty,
+                        IsRequired = true
+                    };
+                    await Repository.SaveAsync(model);
+                }
+            }
+        }
+
     }
 
 }

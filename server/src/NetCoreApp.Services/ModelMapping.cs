@@ -20,6 +20,7 @@ namespace Beginor.NetCoreApp.Services {
             // 添加其它的映射
             CreateMap<AppAttachment, AppAttachmentModel>().ReverseMap();
             CreateMap<AppNavItem, AppNavItemModel>().ReverseMap();
+            CreateMap<AppPrivilege, AppPrivilegeModel>().ReverseMap();
         }
 
     }

@@ -14,6 +14,9 @@ namespace Beginor.NetCoreApp.Services {
             AppPrivilegeSearchModel model
         );
 
+        /// <summary>同步必须的权限</summary>
+        Task SyncRequired(IEnumerable<string> names);
+
     }
 
 }

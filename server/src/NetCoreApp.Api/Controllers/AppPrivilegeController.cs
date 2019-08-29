@@ -1,9 +1,12 @@
 using System;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Models;
 using Beginor.NetCoreApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
@@ -75,7 +78,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return result;
             }
             catch (Exception ex) {
-                logger.Error("Can not get all app_privilegess.", ex);
+                logger.Error("Can not get all app_privileges.", ex);
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -122,6 +125,27 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.Error($"Can not update app_privileges with {id}.", ex);
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>同步系统必须的权限</summary>
+        /// <response code="200">同步成功， 客户端刷新权限列表即可看到更新。</response>
+        /// <response code="500">服务器内部错误</response>
+        [HttpGet("sync/required")]
+        public async Task<ActionResult> SyncRequired() {
+            try {
+                var assembly = GetType().Assembly;
+                var policies = assembly.ExportedTypes
+                    .Where(t => t.IsSubclassOf(typeof(ControllerBase)))
+                    .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Instance))
+                    .SelectMany(m => m.GetCustomAttributes<AuthorizeAttribute>(false))
+                    .Select(attr => attr.Policy);
+                await service.SyncRequired(policies);
+                return Ok();
+            }
+            catch (Exception ex) {
+                logger.Error($"Can not sync required app_privileges.", ex);
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
