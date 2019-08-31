@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Api.Authorization;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 using Microsoft.AspNetCore.Identity;
@@ -50,28 +51,32 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (!User.Identity.IsAuthenticated) {
                     return Forbid();
                 }
-                var user = await userMgr.FindByNameAsync(User.Identity.Name);
-                if (user == null) {
+                var appUser = await userMgr.FindByNameAsync(User.Identity.Name);
+                if (appUser == null) {
                     return NotFound();
                 }
                 var model = new AccountInfoModel {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    Roles = await userMgr.GetRolesAsync(user)
+                    Id = appUser.Id,
+                    UserName = appUser.UserName
                 };
-                var claims = await userMgr.GetClaimsAsync(user);
-                var surname = claims.FirstOrDefault(
+                var roles = await userMgr.GetRolesAsync(appUser);
+                model.Roles = roles.ToDictionary(r => r, r => true);
+                var surname = User.Claims.FirstOrDefault(
                     c => c.Type == ClaimTypes.Surname
                 );
                 if (surname != null) {
                     model.Surname = surname.Value;
                 }
-                var givenName = claims.FirstOrDefault(
+                var givenName = User.Claims.FirstOrDefault(
                     c => c.Type == ClaimTypes.GivenName
                 );
                 if (givenName != null) {
                     model.GivenName = givenName.Value;
                 }
+                model.Privileges = User.Claims
+                    .Where(c => c.Type == Consts.PrivilegeClaimType)
+                    .Select(c => c.Value)
+                    .ToDictionary(p => p, p => true);
                 return model;
             }
             catch (Exception ex) {
