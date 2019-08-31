@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { XsrfGuard, AuthGuard } from 'services';
+
 import { environment } from '../environments/environment';
-import { XsrfGuard } from './services/xsrf.guard';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -14,13 +15,14 @@ const routes: Routes = [
     {
         path: 'about',
         loadChildren: './about/about.module#AboutModule',
-        canLoad: [XsrfGuard]
+        canLoad: [XsrfGuard, AuthGuard]
     },
     {
         path: 'admin',
         // tslint:disable-next-line: max-line-length
         loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
-        canLoad: [XsrfGuard]
+        canLoad: [XsrfGuard, AuthGuard],
+        canActivate: [AuthGuard]
     },
     {
         path: 'login',

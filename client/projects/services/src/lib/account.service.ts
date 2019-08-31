@@ -40,7 +40,8 @@ export interface AccountInfo {
     userName?: string;
     givenName?: string;
     surename?: string;
-    roles?: string[];
+    roles?: { [key: string]: boolean };
+    privileges?: { [key: string]: boolean };
 }
 
 export interface LoginModel {
