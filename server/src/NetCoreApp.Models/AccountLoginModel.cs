@@ -33,7 +33,10 @@ namespace Beginor.NetCoreApp.Models {
         public string Surname { get; set; }
 
         /// <summary>角色</summary>
-        public IList<string> Roles { get; set; }
+        public IDictionary<string, bool> Roles { get; set; }
+
+        /// <summary>权限</summary>
+        public IDictionary<string, bool> Privileges { get; set; }
 
     }
 
