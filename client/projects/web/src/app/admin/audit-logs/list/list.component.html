@@ -1,0 +1,106 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">首页</a></li>
+    <li class="breadcrumb-item"><a routerLink="/admin">管理</a></li>
+    <li class="breadcrumb-item active" aria-current="page">审计日志</li>
+  </ol>
+</nav>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <!-- <div class="card-header">
+          <h3 class="card-title">审计日志</h3>
+        </div> -->
+        <div class="table-responsive">
+          <form class="p-2">
+            <div class="form-row">
+              <div class="col-6">
+                <div class="row no-gutters">
+                  <label for="pageSize" class="col-1 col-form-label col-form-label-sm">
+                    显示：
+                  </label>
+                  <div class="col-1">
+                    <select id="pageSize" name="pageSize" class="form-control form-control-sm">
+                      <option [value]="10">10</option>
+                      <option [value]="25">25</option>
+                      <option [value]="50">50</option>
+                      <option [value]="100">100</option>
+                    </select>
+                  </div>
+                  <div class="col-2 text-muted px-2 py-1">条记录</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="row no-gutters">
+                  <div class="col-6">
+                    <div class="row no-gutters">
+                      <label for="requestDate" class="col-2 col-form-label col-form-label-sm">日期：</label>
+                      <div class="col-6">
+                        <div class="input-group input-group-sm">
+                          <input type="text" class="form-control form-control-sm"
+                            name="requestDate" id="requestDate" placeholder="yyyy-mm-dd"
+                            ngbDatepicker #d="ngbDatepicker">
+                          <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                              <i class="fa fa-calendar-day"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="input-group input-group-sm">
+                      <input class="form-control form-control-sm" type="text" placeholder="用户名搜索" name="name">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button">
+                          <i class="fa fa-search"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <table class="table table-sm table-striped">
+            <thead>
+              <tr>
+                <th scope="col" class="text-center text-muted">#</th>
+                <th scope="col" class="text-center text-muted">请求地址</th>
+                <th scope="col" class="text-center text-muted">请求方法</th>
+                <th scope="col" class="text-center text-muted">用户名</th>
+                <th scope="col" class="text-center text-muted">开始时间</th>
+                <th scope="col" class="text-center text-muted">耗时</th>
+                <th scope="col" class="text-center text-muted">响应代码</th>
+                <th scope="col" class="text-center text-muted">控制器</th>
+                <th scope="col" class="text-center text-muted">动作名称</th>
+                <th scope="col" class="text-center text-muted">说明</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="(vm.data | async) as data">
+              <tr *ngFor="let item of data; let i = index;">
+                <th scope="row" class="text-right text-muted">{{i+1}}</th>
+                <td class="text-left">{{item.requestPath}}</td>
+                <td class="text-center">{{item.requestMethod}}</td>
+                <td class="text-center">{{item.userName}}</td>
+                <td class="text-center">{{item.startAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                <td class="text-right">{{item.duration}}</td>
+                <td class="text-right">{{item.responseCode}}</td>
+                <td class="text-left">{{item.controllerName}}</td>
+                <td class="text-left">{{item.actionName}}</td>
+                <td class="text-left">{{item.description}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row">
+            <div class="col-6"></div>
+            <div class="col-6"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

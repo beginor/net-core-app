@@ -1,0 +1,36 @@
+{
+  "route": "/",
+  "title": ".NET Core App",
+  "children": [
+    {
+      "route": "/home",
+      "title": "首页"
+    },
+    {
+      "route": "/admin",
+      "title": "管理",
+      "children": [
+        {
+          "route": "/admin/users",
+          "title": "用户管理"
+        },
+        {
+          "route": "/admin/roles",
+          "title": "角色管理"
+        },
+        {
+          "route": "/admin/priviliges",
+          "title": "权限管理"
+        },
+        {
+          "route": "/admin/audit-logs",
+          "title": "审计日志"
+        }
+      ]
+    },
+    {
+      "route": "/about",
+      "title": "关于"
+    }
+  ]
+}

@@ -11,6 +11,21 @@ const routes: Routes = [
         path: 'users',
         // tslint:disable-next-line: max-line-length
         loadChildren: () => import('./users/users.module').then(m => m.UsersModule)
+    },
+    {
+        path: 'roles',
+        // tslint:disable-next-line: max-line-length
+        loadChildren: () => import('./roles/roles.module').then(m => m.RolesModule)
+    },
+    {
+        path: 'priviliges',
+        // tslint:disable-next-line: max-line-length
+        loadChildren: () => import('./priviliges/priviliges.module').then(m => m.PrivilegesModule)
+    },
+    {
+        path: 'audit-logs',
+        // tslint:disable-next-line: max-line-length
+        loadChildren: () => import('./audit-logs/audit-logs.module').then(m => m.AuditLogsModule)
     }
 ];
 

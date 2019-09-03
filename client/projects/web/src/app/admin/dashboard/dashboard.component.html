@@ -1,1 +1,47 @@
-<p>dashboard works!</p>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">首页</a></li>
+    <li class="breadcrumb-item active" aria-current="page">管理</li>
+  </ol>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6 col-lg-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a class="card-link" routerLink="../users">用户管理</a>
+          </h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a class="card-link" routerLink="../roles">角色管理</a>
+          </h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a class="card-link" routerLink="../priviliges">权限管理</a>
+          </h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a class="card-link" routerLink="../audit-logs">审计日志</a>
+          </h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

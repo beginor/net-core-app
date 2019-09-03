@@ -1,1 +1,41 @@
-<p>list works!</p>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">首页</a></li>
+    <li class="breadcrumb-item"><a routerLink="/admin">管理</a></li>
+    <li class="breadcrumb-item active" aria-current="page">用户管理</li>
+  </ol>
+</nav>
+<div class="container-fluid">
+  <div class="row">
+    <table class="mx-3 table table-sm table-striped table-bordered table-hover">
+      <thead>
+        <tr>
+          <th scope="col" class="text-center">#</th>
+          <th scope="col" class="text-center">姓氏</th>
+          <th scope="col" class="text-center">名称</th>
+          <th scope="col" class="text-center">用户名</th>
+          <th scope="col" class="text-center">邮箱</th>
+          <th scope="col" class="text-center">电话</th>
+          <th scope="col" class="text-center">是否锁定</th>
+          <th scope="col" class="text-center">创建时间</th>
+          <th scope="col" class="text-center">最近登录</th>
+          <th scope="col" class="text-center">登录次数</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="(vm.data | async) as data">
+        <tr *ngFor="let item of data; let i = index;">
+          <th scope="row" class="text-right">{{i + 1}}</th>
+          <td class="text-center">{{item.sn}}</td>
+          <td class="text-center">{{item.givenName}}</td>
+          <td class="text-center">{{item.userName}}</td>
+          <td class="text-center" [ngClass]="{ 'text-success': item.emailConfirmed, 'text-warning': !item.emailConfirmed }">{{item.email}}</td>
+          <td class="text-center">{{item.phoneNumber}}</td>
+          <td class="text-center"></td>
+          <td class="text-center">{{item.createTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+          <td class="text-center">{{item.lastLogin | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+          <td class="text-right">{{item.loginCount}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
