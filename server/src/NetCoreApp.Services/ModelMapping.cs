@@ -21,6 +21,7 @@ namespace Beginor.NetCoreApp.Services {
             CreateMap<AppAttachment, AppAttachmentModel>().ReverseMap();
             CreateMap<AppNavItem, AppNavItemModel>().ReverseMap();
             CreateMap<AppPrivilege, AppPrivilegeModel>().ReverseMap();
+            CreateMap<AppAuditLog, AppAuditLogModel>().ReverseMap();
         }
 
     }
