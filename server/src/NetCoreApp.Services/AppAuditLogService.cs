@@ -38,7 +38,7 @@ namespace Beginor.NetCoreApp.Services {
                         );
                     }
                     if (model.UserName.IsNotNullOrEmpty()) {
-                        query = query.Where(log => log.UserName == model.UserName);
+                        query = query.Where(log => log.UserName.Contains(model.UserName));
                     }
                     return query;
                 }
@@ -53,7 +53,7 @@ namespace Beginor.NetCoreApp.Services {
                         );
                     }
                     if (model.UserName.IsNotNullOrEmpty()) {
-                        query = query.Where(log => log.UserName == model.UserName);
+                        query = query.Where(log => log.UserName.Contains(model.UserName));
                     }
                     return query.OrderByDescending(log => log.Id)
                         .Skip(model.Skip)
