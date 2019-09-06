@@ -1,15 +1,18 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuditLogsService {
+
     public searchModel: AuditLogSearchModel = {
         skip: 0,
         take: 10
     };
+    public searchDate: NgbDate;
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<AuditLogModel[]>([]);
 
@@ -18,9 +21,18 @@ export class AuditLogsService {
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string
-    ) { }
+    ) {
+        const today = new Date();
+        this.searchDate = new NgbDate(
+            today.getFullYear(),
+            today.getMonth() + 1,
+            today.getDate()
+        );
+    }
 
     public async search(): Promise<void> {
+        const d = this.searchDate;
+        this.searchModel.requestDate = `${d.year}-${d.month}-${d.day}`;
         let params = new HttpParams();
         for (const key in this.searchModel) {
             if (this.searchModel.hasOwnProperty(key)) {
