@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 
 import { AuditLogsService } from '../audit-logs.service';
-import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-audits-list',
