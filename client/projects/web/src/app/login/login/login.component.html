@@ -1,54 +1,56 @@
 <div class="container">
   <div class="row">
-    <div class="col-md-4 offset-md-4">
-      <div class="card mt-5 mb-2">
-        <div class="card-header">
-          登录
+    <div class="col col-login mx-auto">
+      <form class="card" #loginForm="ngForm" (submit)="login()" method="post">
+        <div class="card-body p-5">
+          <div class="card-title text-secondary">
+            登录您的账户
+          </div>
+          <div class="form-group" [class.is-valid]="username.valid"
+            [class.is-invalid]="!(username.valid || username.pristine)">
+            <label class="form-label text-muted" for="username">用户名：</label>
+            <input class="form-control" type="text" id="username" name="username"
+              placeholder="请输入用户名 ..." [(ngModel)]="model.userName"
+              [class.is-invalid]="!(username.valid || username.pristine)"
+              [class.is-valid]="username.valid"
+              required #username="ngModel" autocomplete="username" />
+          </div>
+          <div class="form-group" [class.is-valid]="password.valid"
+            [class.is-invalid]="!(password.valid || password.pristine)">
+            <label class="form-label text-muted" for="password">密码：</label>
+            <input class="form-control" type="password" name="password"
+              placeholder="请输入密码 ..." required id="password"
+              [(ngModel)]="model.password"
+              #password="ngModel"
+              [class.is-invalid]="!(password.valid || password.pristine)"
+              [class.is-valid]="password.valid"
+              autocomplete="current-password"/>
+          </div>
+          <div class="form-group">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input"
+                id="isPersistent" name="isPersistent"
+                [(ngModel)]="model.isPersistent">
+              <label class="custom-control-label text-muted"
+                for="isPersistent">
+                记住密码
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <button [disabled]="(!loginForm.valid) || loading"
+              class="btn btn-sm btn-outline-primary btn-block"
+              type="button" (click)="login()">
+              <ng-container *ngIf="loading; else loginTpl;">
+                <i class="fa fa-spinner fa-spin"></i> 登录中 ...
+              </ng-container>
+              <ng-template #loginTpl>
+                登录
+              </ng-template>
+            </button>
+          </div>
         </div>
-        <div class="card-body">
-          <form #loginForm="ngForm" (submit)="login()" method="POST">
-            <div class="form-group" [class.is-valid]="username.valid"
-              [class.is-invalid]="!(username.valid || username.pristine)">
-              <input class="form-control" type="text" name="username"
-                placeholder="请输入用户名 ..." [(ngModel)]="model.userName"
-                [class.is-invalid]="!(username.valid || username.pristine)"
-                [class.is-valid]="username.valid"
-                required #username="ngModel" autocomplete="username" />
-            </div>
-            <div class="form-group" [class.is-valid]="password.valid"
-                [class.is-invalid]="!(password.valid || password.pristine)">
-                <input class="form-control" type="password" name="password"
-                  placeholder="请输入密码 ..." [(ngModel)]="model.password"
-                  required #password="ngModel"
-                  [class.is-invalid]="!(password.valid || password.pristine)"
-                  [class.is-valid]="password.valid"
-                  autocomplete="current-password"/>
-            </div>
-            <div class="form-group row no-gutters">
-              <div class="col-4">
-                <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input"
-                    id="isPersistent" name="isPersistent"
-                    [(ngModel)]="model.isPersistent">
-                  <label class="custom-control-label" for="isPersistent">记住密码</label>
-                </div>
-              </div>
-              <div class="col-4 offset-4">
-                <button [disabled]="(!loginForm.valid) || loading"
-                  class="btn btn-sm btn-outline-primary btn-block"
-                  type="button" (click)="login()">
-                  <ng-container *ngIf="loading; else loginTpl;">
-                    <i class="fa fa-spinner fa-spin"></i> 登录中 ...
-                  </ng-container>
-                  <ng-template #loginTpl>
-                    登录
-                  </ng-template>
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
+      </form>
       <ngb-alert type="danger" *ngIf="(message | async) as msg"
         (close)="clearMessage()">
         {{ msg }}

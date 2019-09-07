@@ -1,0 +1,21 @@
+@import "../../../variables";
+
+:host {
+  @include full-width-height();
+  @include no-margin-padding();
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  background-color: var(--light);
+
+  .col-login {
+    max-width: 24rem;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: .375rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+}
