@@ -2,7 +2,96 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a routerLink="/">首页</a></li>
     <li class="breadcrumb-item"><a routerLink="/admin">管理</a></li>
-    <li class="breadcrumb-item active" aria-current="page">权限管理</li>
+    <li class="breadcrumb-item active" aria-current="page">系统权限</li>
   </ol>
 </nav>
-<p>list works!</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">系统权限</h5>
+        </div>
+        <form class="p-2 bg-light">
+          <div class="form-row">
+            <div class="col-6">
+              <div class="row no-gutters">
+                <label for="pageSize" class="col-1 col-form-label col-form-label-sm">
+                  显示：
+                </label>
+                <div class="col-1">
+                  <select id="pageSize" name="pageSize"
+                    class="form-control form-control-sm"
+                    [(ngModel)]="vm.searchModel.take"
+                    (change)="onPageSizeChange($event)">
+                    <option [value]="10">10</option>
+                    <option [value]="25">25</option>
+                    <option [value]="50">50</option>
+                    <option [value]="100">100</option>
+                  </select>
+                </div>
+                <div class="col-2 text-muted px-2 py-1">条记录</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="row no-gutters">
+                <div class="col-6">
+                  <span class="text-muted">其它工具栏</span>
+                </div>
+                <div class="col-6">
+                  <span class="text-muted">其它工具栏</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead>
+              <tr>
+                <th scope="col" class="text-center text-nowrap text-muted border-left-0">#</th>
+                <th scope="col" class="text-center text-nowrap text-muted">权限模块</th>
+                <th scope="col" class="text-center text-nowrap text-muted">权限名称</th>
+                <th scope="col" class="text-center text-nowrap text-muted">权限描述</th>
+                <th scope="col" class="text-center text-nowrap text-muted">是否必须</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="(vm.data | async) as data">
+              <tr *ngFor="let item of data; let i = index;">
+                <th scope="row" class="text-right text-muted">{{i+1+vm.searchModel.skip}}</th>
+                <td class="text-left">{{item.module}}</td>
+                <td class="text-left">{{item.name}}</td>
+                <td class="text-left">{{item.description}}</td>
+                <td class="text-left">{{item.isRequired}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer">
+          <div *ngIf="(vm.data | async) as data" class="row no-gutters">
+            <div class="col-6 d-flex align-items-center">
+              <div class="text-muted">
+                正在显示 {{vm.total | async}} 条记录中的第 {{vm.searchModel.skip + 1}} 至 {{vm.searchModel.skip + data.length}} 条
+              </div>
+            </div>
+            <div class="col-6">
+              <ngb-pagination class="d-flex justify-content-end"
+                *ngIf="(vm.total | async) > data.length"
+                size="sm"
+                [collectionSize]="vm.total | async"
+                [page]="(vm.searchModel.skip / vm.searchModel.take) + 1"
+                [pageSize]="vm.searchModel.take"
+                [maxSize]="5"
+                [rotate]="true"
+                [boundaryLinks]="true"
+                [ellipses]="true"
+                (pageChange)="onPageChange($event)">
+              </ngb-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

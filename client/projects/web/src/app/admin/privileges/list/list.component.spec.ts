@@ -2,15 +2,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ListComponent } from './list.component';
 
-describe('ListComponent', () => {
+describe('AppPrivilege-ListComponent', () => {
+
     let component: ListComponent;
     let fixture: ComponentFixture<ListComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [ListComponent]
-        })
-            .compileComponents();
+        }).compileComponents();
     }));
 
     beforeEach(() => {
@@ -22,4 +22,5 @@ describe('ListComponent', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
+
 });
