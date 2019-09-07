@@ -19,7 +19,7 @@
           "title": "角色管理"
         },
         {
-          "route": "/admin/priviliges",
+          "route": "/admin/privileges",
           "title": "权限管理"
         },
         {

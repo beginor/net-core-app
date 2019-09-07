@@ -18,9 +18,9 @@ const routes: Routes = [
         loadChildren: () => import('./roles/roles.module').then(m => m.RolesModule)
     },
     {
-        path: 'priviliges',
+        path: 'privileges',
         // tslint:disable-next-line: max-line-length
-        loadChildren: () => import('./priviliges/priviliges.module').then(m => m.PrivilegesModule)
+        loadChildren: () => import('./privileges/privileges.module').then(m => m.PrivilegesModule)
     },
     {
         path: 'audit-logs',
