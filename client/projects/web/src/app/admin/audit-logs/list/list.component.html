@@ -15,11 +15,11 @@
         <form class="p-2 bg-light">
           <div class="form-row">
             <div class="col-6">
-              <div class="row no-gutters">
-                <label for="pageSize" class="col-1 col-form-label col-form-label-sm">
+              <div class="row no-gutters align-items-center">
+                <label for="pageSize" class="col-auto col-form-label col-form-label-sm">
                   显示：
                 </label>
-                <div class="col-1">
+                <div class="col-auto">
                   <select id="pageSize" name="pageSize" class="form-control form-control-sm"
                     [(ngModel)]="vm.searchModel.take"
                     (change)="onPageSizeChange($event)">
@@ -29,15 +29,15 @@
                     <option [value]="100">100</option>
                   </select>
                 </div>
-                <div class="col-2 text-muted px-2 py-1">条记录</div>
+                <div class="col-auto text-muted px-2">条记录</div>
               </div>
             </div>
             <div class="col-6">
               <div class="row no-gutters">
-                <div class="col-6">
+                <div class="col-6 pr-2">
                   <div class="row no-gutters">
-                    <label for="requestDate" class="col-2 col-form-label col-form-label-sm">日期：</label>
-                    <div class="col-6">
+                    <label for="requestDate" class="col-auto col-form-label col-form-label-sm">日期：</label>
+                    <div class="col">
                       <div class="input-group input-group-sm">
                         <input type="text" class="form-control form-control-sm"
                           name="requestDate" id="requestDate" placeholder="yyyy-mm-dd"
@@ -108,8 +108,11 @@
         <div class="card-footer">
           <div *ngIf="(vm.data | async) as data" class="row no-gutters">
             <div class="col-6 d-flex align-items-center">
-              <div class="text-muted">
-                正在显示 {{vm.total | async}} 条记录中的第 {{vm.searchModel.skip + 1}} 至 {{vm.searchModel.skip + data.length}} 条
+              <div [class]="data.length > 0 ? 'text-muted' : 'text-warning'">
+                <ng-container *ngIf="data.length > 0;else emptyTpl">
+                  显示 {{vm.total | async}} 条记录中的第 {{vm.searchModel.skip + 1}} 至 {{vm.searchModel.skip + data.length}} 条
+                </ng-container>
+                <ng-template #emptyTpl>无数据！</ng-template>
               </div>
             </div>
             <div class="col-6">
