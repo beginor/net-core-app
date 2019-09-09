@@ -34,13 +34,17 @@ namespace Beginor.NetCoreApp.Services {
             var repo = base.Repository;
             var total = await repo.CountAsync(
                 query => {
-                    // todo: add custom query here;
+                    if (!string.IsNullOrEmpty(model.Module)) {
+                        query = query.Where(p => p.Module == model.Module);
+                    }
                     return query;
                 }
             );
             var data = await repo.QueryAsync(
                 query => {
-                    // todo: add custom query here;
+                    if (!string.IsNullOrEmpty(model.Module)) {
+                        query = query.Where(p => p.Module == model.Module);
+                    }
                     return query.Skip(model.Skip).Take(model.Take);
                 }
             );
@@ -53,7 +57,7 @@ namespace Beginor.NetCoreApp.Services {
         }
 
         /// <summary>同步必须的权限</summary>
-        public async Task SyncRequired(IEnumerable<string> names) {
+        public async Task SyncRequiredAsync(IEnumerable<string> names) {
             foreach (var name in names) {
                 var exists = await Repository.ExistsAsync(name);
                 if (!exists) {
@@ -78,6 +82,12 @@ namespace Beginor.NetCoreApp.Services {
                 throw new InvalidOperationException("无法删除必须的权限！");
             }
             await Repository.DeleteAsync(entity.Id);
+        }
+
+        /// <summary>返回权限表的所有模块名称</summary>
+        public async Task<IList<string>> GetModulesAsync() {
+            var modules = await Repository.GetModulesAsync();
+            return modules;
         }
 
     }
