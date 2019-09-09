@@ -147,11 +147,27 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Instance))
                     .SelectMany(m => m.GetCustomAttributes<AuthorizeAttribute>(false))
                     .Select(attr => attr.Policy);
-                await service.SyncRequired(policies);
+                await service.SyncRequiredAsync(policies);
                 return Ok();
             }
             catch (Exception ex) {
                 logger.Error($"Can not sync required app_privileges.", ex);
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>获取权限表的模块列表</summary>
+        /// <response code="200">获取成功，返回模块列表。</response>
+        /// <response code="500">服务器内部错误</response>
+        [HttpGet("~/api/modules")]
+        [Authorize(Policy = "app_privileges.read")]
+        public async Task<ActionResult<string[]>> GetModules() {
+            try {
+                var modules = await service.GetModulesAsync();
+                return modules.ToArray();
+            }
+            catch (Exception ex) {
+                logger.Error($"Can not get all modules.", ex);
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }

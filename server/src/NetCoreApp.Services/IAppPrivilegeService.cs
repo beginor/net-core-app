@@ -15,7 +15,10 @@ namespace Beginor.NetCoreApp.Services {
         );
 
         /// <summary>同步必须的权限</summary>
-        Task SyncRequired(IEnumerable<string> names);
+        Task SyncRequiredAsync(IEnumerable<string> names);
+
+        /// <summary>返回权限表的所有模块</summary>
+        Task<IList<string>> GetModulesAsync();
 
     }
 

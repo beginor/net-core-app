@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Beginor.AppFx.Repository.Hibernate;
@@ -17,6 +18,17 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             using (var session = OpenSession()) {
                 var exists = await session.Query<AppPrivilege>().AnyAsync(p => p.Name == name);
                 return exists;
+            }
+        }
+
+        /// <summary>返回权限表的所有模块</summary>
+        public async Task<IList<string>> GetModulesAsync() {
+            using (var session = OpenSession()) {
+                var modules = await session.Query<AppPrivilege>()
+                    .Select(p => p.Module)
+                    .Distinct()
+                    .ToListAsync();
+                return modules;
             }
         }
 

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UiService } from './common/services/ui.service';
 
 @Component({
     selector: 'app-root',
@@ -8,5 +9,10 @@ import { Component } from '@angular/core';
 export class AppComponent {
 
     public collapsed = true;
+
+    constructor(
+        public ui: UiService
+    ) {
+    }
 
 }
