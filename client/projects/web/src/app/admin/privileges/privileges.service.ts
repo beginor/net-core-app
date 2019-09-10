@@ -2,6 +2,8 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
+import { UiService} from 'projects/web/src/app/common';
+
 /** 系统权限 服务 */
 @Injectable({
     providedIn: 'root'
@@ -10,19 +12,22 @@ export class AppPrivilegeService {
 
     public searchModel: AppPrivilegeSearchModel = {
         skip: 0,
-        take: 10
+        take: 10,
+        module: ''
     };
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<AppPrivilegeModel[]>([]);
+    public modules = new BehaviorSubject<string[]>([]);
 
     private baseUrl = `${this.apiRoot}/app-privileges`;
 
     constructor(
         private http: HttpClient,
-        @Inject('apiRoot') private apiRoot: string
+        @Inject('apiRoot') private apiRoot: string,
+        private ui: UiService
     ) { }
 
-    /** 搜索 系统权限 */
+    /** 搜索系统权限 */
     public async search(): Promise<void> {
         let params = new HttpParams();
         for (const key in this.searchModel) {
@@ -31,31 +36,57 @@ export class AppPrivilegeService {
                 params = params.set(key, val);
             }
         }
-        const result = await this.http.get<AppPrivilegeResultModel>(
-            this.baseUrl,
-            {
-                params: params
-            }
-        ).toPromise();
-        this.total.next(result.total);
-        this.data.next(result.data);
+        try {
+            const result = await this.http.get<AppPrivilegeResultModel>(
+                this.baseUrl,
+                { params: params }
+            ).toPromise();
+            this.total.next(result.total);
+            this.data.next(result.data);
+        }
+        catch (ex) {
+            console.error(ex.toString());
+            this.ui.showAlert({ type: 'danger', message: '加载系统权限数据出错!'});
+        }
+    }
+
+    public async onPageChange(p: number): Promise<void> {
+        this.searchModel.skip = (p - 1) * this.searchModel.take;
+        await this.search();
+    }
+
+    public async onPageSizeChange(): Promise<void> {
+        this.searchModel.skip = 0;
+        await this.search();
     }
 
     /** 创建 系统权限 */
     public async create(model: AppPrivilegeModel): Promise<AppPrivilegeModel> {
-        const result = await this.http.post<AppPrivilegeModel>(
-            this.baseUrl,
-            model
-        ).toPromise();
-        return result;
+        try {
+            const result = await this.http.post<AppPrivilegeModel>(
+                this.baseUrl,
+                model
+            ).toPromise();
+            return result;
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '创建系统权限出错!'});
+            return null;
+        }
     }
 
     /** 获取指定的 系统权限 */
     public async getById(id: string): Promise<AppPrivilegeModel> {
-        const result = await this.http.get<AppPrivilegeModel>(
-            `${this.baseUrl}/${id}`
-        ).toPromise();
-        return result;
+        try {
+            const result = await this.http.get<AppPrivilegeModel>(
+                `${this.baseUrl}/${id}`
+            ).toPromise();
+            return result;
+        }
+        catch (ex) {
+            return null;
+        }
     }
 
     /** 删除 系统权限 */
@@ -75,6 +106,21 @@ export class AppPrivilegeService {
             model
         ).toPromise();
         return result;
+    }
+
+    /** 获取模块名称 */
+    public async getModules(): Promise<void> {
+        try {
+            const modules = await this.http.get<string[]>(
+                `${this.apiRoot}/modules`
+            ).toPromise();
+            this.modules.next(modules);
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '加载模块列表出错!'});
+            this.modules.next([]);
+        }
     }
 
 }
@@ -99,6 +145,8 @@ export interface AppPrivilegeSearchModel {
     skip?: number;
     /** 取多少条记录 */
     take?: number;
+    /** 模块 */
+    module?: string;
 }
 
 /** 系统权限 搜索结果 */

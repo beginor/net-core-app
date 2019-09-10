@@ -15,31 +15,49 @@
         <form class="p-2 bg-light">
           <div class="form-row">
             <div class="col-6">
-              <div class="row no-gutters">
-                <label for="pageSize" class="col-1 col-form-label col-form-label-sm">
+              <div class="row no-gutters align-items-center">
+                <label for="pageSize" class="col-auto col-form-label col-form-label-sm">
                   显示：
                 </label>
-                <div class="col-1">
+                <div class="col-auto">
                   <select id="pageSize" name="pageSize"
                     class="form-control form-control-sm"
                     [(ngModel)]="vm.searchModel.take"
-                    (change)="onPageSizeChange($event)">
+                    (change)="vm.onPageSizeChange()">
                     <option [value]="10">10</option>
                     <option [value]="25">25</option>
                     <option [value]="50">50</option>
                     <option [value]="100">100</option>
                   </select>
                 </div>
-                <div class="col-2 text-muted px-2 py-1">条记录</div>
+                <div class="col-auto text-muted px-2 py-1">条记录</div>
               </div>
             </div>
             <div class="col-6">
               <div class="row no-gutters">
-                <div class="col-6">
-                  <span class="text-muted">其它工具栏</span>
+                <div class="col">
+                  <!-- <span class="text-muted">其它工具栏</span> -->
                 </div>
-                <div class="col-6">
-                  <span class="text-muted">其它工具栏</span>
+                <div class="col">
+                  <!-- <span class="text-muted">其它工具栏</span> -->
+                </div>
+                <div class="col">
+                  <div class="row no-gutters">
+                    <label class="col-auto col-form-label col-form-label-sm">
+                      模块：
+                    </label>
+                    <div class="col">
+                      <select id="module" name="module"
+                        class="form-control form-control-sm"
+                        [(ngModel)]="vm.searchModel.module"
+                        (change)="vm.search()">
+                        <option value="">全部</option>
+                        <option *ngFor="let m of (vm.modules | async)" [value]="m">
+                          {{m}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -49,7 +67,7 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-center text-nowrap text-muted border-left-0">#</th>
+                <th scope="col" class="text-center text-nowrap text-muted">#</th>
                 <th scope="col" class="text-center text-nowrap text-muted">权限模块</th>
                 <th scope="col" class="text-center text-nowrap text-muted">权限名称</th>
                 <th scope="col" class="text-center text-nowrap text-muted">权限描述</th>
@@ -62,7 +80,7 @@
                 <td class="text-left">{{item.module}}</td>
                 <td class="text-left">{{item.name}}</td>
                 <td class="text-left">{{item.description}}</td>
-                <td class="text-left">{{item.isRequired}}</td>
+                <td class="text-center" [class.text-danger]="item.isRequired">{{item.isRequired ? '是' : '否'}}</td>
               </tr>
             </tbody>
           </table>
@@ -70,8 +88,11 @@
         <div class="card-footer">
           <div *ngIf="(vm.data | async) as data" class="row no-gutters">
             <div class="col-6 d-flex align-items-center">
-              <div class="text-muted">
-                正在显示 {{vm.total | async}} 条记录中的第 {{vm.searchModel.skip + 1}} 至 {{vm.searchModel.skip + data.length}} 条
+              <div [class]="data.length > 0 ? 'text-muted' : 'text-warning'">
+                <ng-container *ngIf="data.length > 0;else emptyTpl">
+                  显示 {{vm.total | async}} 条记录中的第 {{vm.searchModel.skip + 1}} 至 {{vm.searchModel.skip + data.length}} 条
+                </ng-container>
+                <ng-template #emptyTpl>无数据！</ng-template>
               </div>
             </div>
             <div class="col-6">
@@ -85,7 +106,7 @@
                 [rotate]="true"
                 [boundaryLinks]="true"
                 [ellipses]="true"
-                (pageChange)="onPageChange($event)">
+                (pageChange)="vm.onPageChange($event)">
               </ngb-pagination>
             </div>
           </div>

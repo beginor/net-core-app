@@ -1,0 +1,113 @@
+Author: Beginor
+Module: NetCoreApp
+DataSource:
+  Name: DbTable
+  Parameters:
+    DbName: test_db
+    DbProvider: PostgreSql
+    ConnectionString: server=127.0.0.1;port=5432;database=net_core_app;user id=postgres;password=1a2b3c4D;
+    DbSchema: public
+Language: TypeScript
+TemplateEngine:
+  Name: Razor
+  Root: Contributions/Angular
+Output:
+  Type: File
+  Mode: Incre # Incre 增量创建，如果存在则忽略； Full 全量创建，如果存在则重新创建
+  Path: ./projects/web/src/app/admin
+NamingConverter:
+  Table:
+    Tokenizer:
+      Type: Default
+      Parameters:
+        IgnorePrefix: 'app_'
+        Delimiter: '_'
+    Converter:
+      Type: StrikeThrough
+      Parameters: { }
+  View:
+    Tokenizer:
+      Type: Default
+      Parameters:
+        IgnorePrefix: 'V_'
+        Delimiter: '_'
+    Converter:
+      Type: StrikeThrough
+  Column:
+    Tokenizer:
+      Type: Default
+      Parameters:
+        Delimiter: '_'
+    Converter:
+      Type: Camel
+TableFilter:
+  IgnoreTables:
+    - app_roles
+    - app_users
+    - aspnet_role_claims
+    - aspnet_roles
+    - aspnet_user_claims
+    - aspnet_user_logins
+    - aspnet_user_roles
+    - aspnet_user_tokens
+    - aspnet_users
+  IncludeTables:
+    - app_privileges
+  IgnoreNoPKTable: true
+  IgnoreView: true
+
+Build:
+  Service:
+    Type: Table
+    Module: Data
+    TemplateEngine:
+      Path: Service.cshtml
+    Output:
+      Path: '{{Items.CurrentTable.ConvertedName}}'
+      Name: '{{Items.CurrentTable.ConvertedName}}.service'
+      Extension: '.ts'
+  ServiceSpec:
+    Type: Table
+    Module: Data
+    TemplateEngine:
+      Path: Service.Spec.cshtml
+    Output:
+      Path: '{{Items.CurrentTable.ConvertedName}}'
+      Name: '{{Items.CurrentTable.ConvertedName}}.service.spec'
+      Extension: '.ts'
+  ListComponent:
+    Type: Table
+    Module: Data
+    TemplateEngine:
+      Path: ListComponent.cshtml
+    Output:
+      Path: '{{Items.CurrentTable.ConvertedName}}/list'
+      Name: 'list.component'
+      Extension: '.ts'
+  ListComponentSpec:
+    Type: Table
+    Module: Data
+    TemplateEngine:
+      Path: ListComponent.Spec.cshtml
+    Output:
+      Path: '{{Items.CurrentTable.ConvertedName}}/list'
+      Name: 'list.component.spec'
+      Extension: '.ts'
+  ListComponentScss:
+    Type: Table
+    Module: Data
+    TemplateEngine:
+      Path: ListComponent.Scss.cshtml
+    Output:
+      Path: '{{Items.CurrentTable.ConvertedName}}/list'
+      Name: 'list.component'
+      Extension: '.scss'
+  ListComponentHtml:
+    Type: Table
+    Module: Data
+    TemplateEngine:
+      Path: ListComponent.Html.cshtml
+    Output:
+      Path: '{{Items.CurrentTable.ConvertedName}}/list'
+      Name: 'list.component'
+      Extension: '.html'
