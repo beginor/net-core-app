@@ -5,6 +5,7 @@ import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PrivilegesRoutingModule } from './privileges-routing.module';
 import { ListComponent } from './list/list.component';
+import { AppCommonModule } from '../../common';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { ListComponent } from './list/list.component';
         CommonModule,
         FormsModule,
         NgbPaginationModule,
+        AppCommonModule,
         PrivilegesRoutingModule
     ]
 })

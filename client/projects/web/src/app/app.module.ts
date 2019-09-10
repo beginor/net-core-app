@@ -8,7 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ApiInterceptor } from 'services';
 
-import { AppCommonModule } from './common/app-common.module';
+import { AppCommonModule } from './common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
