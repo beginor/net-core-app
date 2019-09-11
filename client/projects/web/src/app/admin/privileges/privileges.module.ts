@@ -7,7 +7,6 @@ import { PrivilegesRoutingModule } from './privileges-routing.module';
 import { ListComponent } from './list/list.component';
 import { AppCommonModule } from '../../common';
 
-
 @NgModule({
     declarations: [
         ListComponent
