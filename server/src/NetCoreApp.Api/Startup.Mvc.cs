@@ -19,11 +19,9 @@ namespace Beginor.NetCoreApp.Api {
                     options.LowercaseUrls = true;
                 })
                 .AddMvc(options => {
-                    if (env.IsProduction()) {
-                        options.Filters.Add(
-                            new AutoValidateAntiforgeryTokenAttribute()
-                        );
-                    }
+                    options.Filters.Add(
+                        new AutoValidateAntiforgeryTokenAttribute()
+                    );
                 })
                 .ConfigureApplicationPartManager(manager => {
                     manager.ApplicationParts.Clear();
