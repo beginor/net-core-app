@@ -88,6 +88,9 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             if (context.User.Identity.IsAuthenticated) {
                 log.UserName = context.User.Identity.Name;
             }
+            else {
+                log.UserName = "anonymous";
+            }
             log.StartAt = DateTime.Now;
             var stopwatch = new Stopwatch();
             stopwatch.Start();
