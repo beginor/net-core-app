@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { XsrfGuard, AuthGuard } from 'services';
+import { AuthGuard } from 'services';
 
 import { environment } from '../environments/environment';
 
@@ -10,25 +10,25 @@ const routes: Routes = [
     {
         path: 'home',
         loadChildren: './home/home.module#HomeModule',
-        canLoad: [XsrfGuard]
+        canLoad: []
     },
     {
         path: 'about',
         loadChildren: './about/about.module#AboutModule',
-        canLoad: [XsrfGuard, AuthGuard]
+        canLoad: [AuthGuard]
     },
     {
         path: 'admin',
         // tslint:disable-next-line: max-line-length
         loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
-        canLoad: [XsrfGuard, AuthGuard],
+        canLoad: [AuthGuard],
         canActivate: [AuthGuard]
     },
     {
         path: 'login',
         // tslint:disable-next-line: max-line-length
         loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
-        canLoad: [XsrfGuard]
+        canLoad: []
     }
 ];
 
