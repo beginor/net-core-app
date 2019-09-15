@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { AccountService } from 'services';
 
 @Component({
     selector: 'app-nav-bar',
@@ -9,9 +12,18 @@ export class NavBarComponent implements OnInit {
 
     public collapsed = true;
 
-    constructor() { }
+    constructor(
+        private router: Router,
+        public account: AccountService
+    ) { }
 
     public ngOnInit(): void {
+    }
+
+    public async logout(e: Event): Promise<void> {
+        e.preventDefault();
+        await this.account.logout();
+        await this.router.navigateByUrl('/');
     }
 
 }

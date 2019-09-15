@@ -9,8 +9,8 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="navbar-collapse" [class.collapse]="collapsed"
-    [class.d-flex]="!collapsed">
-    <ul class="navbar-nav">
+    [class.d-flex]="!collapsed" *ngIf="acctSvc.info | async as info">
+    <ul *ngIf="!!info.id" class="navbar-nav modules mt-2 mt-lg-0 mr-auto">
       <li class="nav-item" routerLinkActive="active">
         <a class="nav-link" routerLink="/home">首页</a>
       </li>
@@ -20,6 +20,23 @@
       <li class="nav-item" routerLinkActive="active">
         <a class="nav-link" routerLink="/about">关于</a>
       </li>
+    </ul>
+    <ul class="navbar-nav mt-2 mt-lg-0 ml-auto">
+      <li *ngIf="!info.id;else userNavTpl" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/login">登录</a>
+      </li>
+      <ng-template #userNavTpl>
+        <li class="nav-item" routerLinkActive="active"
+          ngbDropdown>
+          <a class="nav-link user-info-action" ngbDropdownToggle id="userDropDown"
+            role="button">
+            {{info.userName}}
+          </a>
+          <div ngbDropdownMenu aria-labelledby="userDropDown" class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="#" (click)="logout($event)">注销</a>
+          </div>
+        </li>
+      </ng-template>
     </ul>
   </div>
 </nav>

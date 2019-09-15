@@ -10,12 +10,16 @@
       text-shadow: 0 0 1px $light;
     }
 
-    .navbar-nav {
+    .navbar-nav.modules {
 
       .nav-item.active {
         border-bottom: .25rem solid $navbar-dark-active-color;
         margin-bottom: -0.5rem;
       }
+    }
+
+    .user-info-action {
+      cursor: pointer;
     }
   }
 
