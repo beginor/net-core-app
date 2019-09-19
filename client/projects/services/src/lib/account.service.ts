@@ -3,7 +3,7 @@ import { Injectable, Inject } from '@angular/core';
 
 import { BehaviorSubject, Subscription, interval } from 'rxjs';
 
-import { XsrfGuard } from './xsrf.service';
+import { XsrfGuard } from './xsrf.guard';
 
 @Injectable({
     providedIn: 'root'
