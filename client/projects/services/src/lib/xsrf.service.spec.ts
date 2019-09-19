@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { XsrfService } from './xsrf.service';
+import { XsrfGuard } from './xsrf.service';
 
-describe('XsrfService', () => {
+describe('XsrfGuard', () => {
     beforeEach(() => TestBed.configureTestingModule({}));
 
     it('should be created', () => {
-        const service: XsrfService = TestBed.get(XsrfService);
+        const service: XsrfGuard = TestBed.get(XsrfGuard);
         expect(service).toBeTruthy();
     });
 });

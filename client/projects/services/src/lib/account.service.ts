@@ -3,7 +3,7 @@ import { Injectable, Inject } from '@angular/core';
 
 import { BehaviorSubject, Subscription, interval } from 'rxjs';
 
-import { XsrfService } from './xsrf.service';
+import { XsrfGuard } from './xsrf.service';
 
 @Injectable({
     providedIn: 'root'
@@ -16,9 +16,9 @@ export class AccountService {
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
-        private xsrf: XsrfService
+        private xsrf: XsrfGuard
     ) {
-        this.interval$ = interval(1000 * 60).subscribe(
+        this.interval$ = interval(1000 * 60 * 5).subscribe(
             () => this.getInfo()
         );
     }
@@ -39,14 +39,12 @@ export class AccountService {
     }
 
     public async login(model: LoginModel): Promise<void> {
-        await this.xsrf.refresh();
         const url = this.apiRoot + '/account';
         await this.http.post<any>(url, model).toPromise();
     }
 
     public async logout(): Promise<void> {
         const url = this.apiRoot + '/account';
-        await this.xsrf.refresh();
         await this.http.delete(url).toPromise();
         this.info.next({});
     }

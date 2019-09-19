@@ -9,7 +9,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="navbar-collapse" [class.collapse]="collapsed"
-    [class.d-flex]="!collapsed" *ngIf="acctSvc.info | async as info">
+    [class.d-flex]="!collapsed" *ngIf="account.info | async as info">
     <ul *ngIf="!!info.id" class="navbar-nav modules mt-2 mt-lg-0 mr-auto">
       <li class="nav-item" routerLinkActive="active">
         <a class="nav-link" routerLink="/home">首页</a>
