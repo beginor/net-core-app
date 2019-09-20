@@ -18,6 +18,7 @@ namespace Beginor.NetCoreApp.Api {
             IApplicationBuilder app,
             IHostingEnvironment env
         ) {
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseMiddleware<AuditMiddleware>();
         }
     }
