@@ -85,12 +85,8 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
                 RequestPath = context.Request.Path,
                 RequestMethod = context.Request.Method
             };
-            if (context.User.Identity.IsAuthenticated) {
-                log.UserName = context.User.Identity.Name;
-            }
-            else {
-                log.UserName = "anonymous";
-            }
+            var identity = context.User.Identity;
+            log.UserName = identity.IsAuthenticated ? identity.Name : "anonymous";
             log.StartAt = DateTime.Now;
             var stopwatch = new Stopwatch();
             stopwatch.Start();
