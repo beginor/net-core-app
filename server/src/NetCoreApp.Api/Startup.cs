@@ -38,10 +38,10 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureIdentityServices(services, env);
             ConfigureAuthenticationServices(services, env);
             ConfigureCookiePolicyServices(services, env);
-            ConfigureSwaggerServices(services, env);
             ConfigureCorsServices(services, env);
-            ConfigureStaticFilesServices(services, env);
             ConfigureMiddlewareServices(services, env);
+            ConfigureSwaggerServices(services, env);
+            ConfigureStaticFilesServices(services, env);
             ConfigureMvcServices(services, env);
             ConfigureAppServices(services, env);
             ConfigureAutoMapperServices(services, env);
@@ -54,27 +54,15 @@ namespace Beginor.NetCoreApp.Api {
             IApplicationBuilder app
         ) {
             logger.Debug("Start configure app.");
-            if (env.IsDevelopment()) {
-                app.Use(async (ctx, next) => {
-                    try {
-                        await next.Invoke();
-                    }
-                    catch (Exception ex) {
-                        var msg = ex.ToString();
-                        ctx.Response.StatusCode = 500;
-                        await ctx.Response.WriteAsync(msg);
-                    }
-                });
-            }
             ConfigureHibernate(app, env);
             ConfigurePathBase(app, env);
             ConfigureIdentity(app, env);
             ConfigureAuthentication(app, env);
             ConfigureCookiePolicy(app, env);
-            ConfigureSwagger(app, env);
             ConfigureCors(app, env);
-            ConfigureStaticFiles(app, env);
             ConfigureMiddleware(app, env);
+            ConfigureSwagger(app, env);
+            ConfigureStaticFiles(app, env);
             ConfigureMvc(app, env);
             ConfigureApp(app, env);
             ConfigureAutoMapper(app, env);
