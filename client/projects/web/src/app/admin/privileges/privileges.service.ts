@@ -18,6 +18,7 @@ export class AppPrivilegeService {
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<AppPrivilegeModel[]>([]);
     public modules = new BehaviorSubject<string[]>([]);
+    public loading: boolean;
 
     private baseUrl = `${this.apiRoot}/app-privileges`;
 
@@ -36,6 +37,7 @@ export class AppPrivilegeService {
                 params = params.set(key, val);
             }
         }
+        this.loading = true;
         try {
             const result = await this.http.get<AppPrivilegeResultModel>(
                 this.baseUrl,
@@ -46,7 +48,12 @@ export class AppPrivilegeService {
         }
         catch (ex) {
             console.error(ex.toString());
+            this.total.next(0);
+            this.data.next([]);
             this.ui.showAlert({ type: 'danger', message: '加载系统权限数据出错!'});
+        }
+        finally {
+            this.loading = false;
         }
     }
 

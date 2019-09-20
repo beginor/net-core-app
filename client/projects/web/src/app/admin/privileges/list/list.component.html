@@ -31,6 +31,11 @@
                   </select>
                 </div>
                 <div class="col-auto text-muted px-2 py-1">条记录</div>
+                <div class="col-auto text-muted px-2">
+                  <ng-container *ngIf="vm.loading">
+                    <i class="fa fa-spin fa-spinner"></i> 加载中...
+                  </ng-container>
+                </div>
               </div>
             </div>
             <div class="col-6">

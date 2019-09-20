@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject } from 'rxjs';
 
+import { UiService} from 'projects/web/src/app/common';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -15,12 +17,14 @@ export class AuditLogsService {
     public searchDate: NgbDate;
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<AuditLogModel[]>([]);
+    public loading = false;
 
     private baseUrl = `${this.apiRoot}/app-audit-logs`;
 
     constructor(
         private http: HttpClient,
-        @Inject('apiRoot') private apiRoot: string
+        @Inject('apiRoot') private apiRoot: string,
+        private ui: UiService
     ) {
         const today = new Date();
         this.searchDate = new NgbDate(
@@ -40,14 +44,27 @@ export class AuditLogsService {
                 params = params.set(key, val);
             }
         }
-        const result = await this.http.get<AuditLogResultModel>(
-            this.baseUrl,
-            {
-                params: params
-            }
-        ).toPromise();
-        this.total.next(result.total);
-        this.data.next(result.data);
+        this.loading = true;
+        try {
+            const result = await this.http.get<AuditLogResultModel>(
+                this.baseUrl,
+                {
+                    params: params
+                }
+            ).toPromise();
+            this.total.next(result.total);
+            this.data.next(result.data);
+            this.loading = false;
+        }
+        catch (ex) {
+            console.error(ex.toString());
+            this.total.next(0);
+            this.data.next([]);
+            this.ui.showAlert({ type: 'danger', message: '加载审计日志数据出错!'});
+        }
+        finally {
+            this.loading = false;
+        }
     }
 
     public async create(model: AuditLogModel): Promise<AuditLogModel> {
@@ -56,19 +73,6 @@ export class AuditLogsService {
             model
         ).toPromise();
         return result;
-    }
-
-    public async getById(id: string): Promise<AuditLogModel> {
-        const result = await this.http.get<AuditLogModel>(
-            `${this.baseUrl}/${id}`
-        ).toPromise();
-        return result;
-    }
-
-    public async delete(id: string): Promise<void> {
-        await this.http.delete(
-            `${this.baseUrl}/${id}`
-        ).toPromise();
     }
 
     public async update(
