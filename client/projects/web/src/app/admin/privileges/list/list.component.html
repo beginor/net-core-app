@@ -9,8 +9,13 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between">
           <h5 class="card-title mb-0">系统权限</h5>
+          <div>
+            <button type="button" class="btn btn-sm btn-outline-primary">
+              <i class="fa fa-plus"></i> 新建系统权限
+            </button>
+          </div>
         </div>
         <form class="p-2 bg-light">
           <div class="form-row">
@@ -77,6 +82,7 @@
                 <th scope="col" class="text-center text-nowrap text-muted">权限名称</th>
                 <th scope="col" class="text-center text-nowrap text-muted">权限描述</th>
                 <th scope="col" class="text-center text-nowrap text-muted">是否必须</th>
+                <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">
@@ -86,6 +92,19 @@
                 <td class="text-left">{{item.name}}</td>
                 <td class="text-left">{{item.description}}</td>
                 <td class="text-center" [class.text-danger]="item.isRequired">{{item.isRequired ? '是' : '否'}}</td>
+                <td class="text-center">
+                  <div class="btn-group btn-group-sm">
+                    <a class="btn btn-link btn-outline-secondary" ngbTooltip="详情" placement="top" [openDelay]="300">
+                      <i class="fa fa-list-alt"></i>
+                    </a>
+                    <a class="btn btn-link btn-outline-secondary" ngbTooltip="编辑" placement="top" [openDelay]="300">
+                      <i class="fa fa-edit"></i>
+                    </a>
+                    <a class="btn btn-link btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300">
+                      <i class="fa fa-trash-alt"></i>
+                    </a>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>

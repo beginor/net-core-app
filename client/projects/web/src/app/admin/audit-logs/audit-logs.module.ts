@@ -10,7 +10,6 @@ import {
 import { AuditLogsRoutingModule } from './audit-logs-routing.module';
 import { ListComponent } from './list/list.component';
 
-
 @NgModule({
     declarations: [ListComponent],
     imports: [

@@ -1,20 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+    NgbPaginationModule, NgbTooltipModule
+} from '@ng-bootstrap/ng-bootstrap';
 
+import { AppCommonModule } from '../../common';
 import { PrivilegesRoutingModule } from './privileges-routing.module';
 import { ListComponent } from './list/list.component';
-import { AppCommonModule } from '../../common';
+import { DetailComponent } from './detail/detail.component';
 
 @NgModule({
     declarations: [
-        ListComponent
+        ListComponent,
+        DetailComponent
     ],
     imports: [
         CommonModule,
         FormsModule,
         NgbPaginationModule,
+        NgbTooltipModule,
         AppCommonModule,
         PrivilegesRoutingModule
     ]
