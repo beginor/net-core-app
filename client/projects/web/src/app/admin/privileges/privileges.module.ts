@@ -18,6 +18,7 @@ import { DetailComponent } from './detail/detail.component';
     imports: [
         CommonModule,
         FormsModule,
+        // BrowserAnimationsModule,
         NgbPaginationModule,
         NgbTooltipModule,
         AppCommonModule,
