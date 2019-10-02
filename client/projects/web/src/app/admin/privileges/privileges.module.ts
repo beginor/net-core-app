@@ -5,6 +5,8 @@ import {
     NgbPaginationModule, NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap';
 
+import { ServicesModule } from 'services';
+
 import { AppCommonModule } from '../../common';
 import { PrivilegesRoutingModule } from './privileges-routing.module';
 import { ListComponent } from './list/list.component';
@@ -18,9 +20,9 @@ import { DetailComponent } from './detail/detail.component';
     imports: [
         CommonModule,
         FormsModule,
-        // BrowserAnimationsModule,
         NgbPaginationModule,
         NgbTooltipModule,
+        ServicesModule,
         AppCommonModule,
         PrivilegesRoutingModule
     ]

@@ -16,6 +16,10 @@
               (click)="showDetail('0', true)">
               <i class="fa fa-plus"></i> 新建系统权限
             </button>
+            <button type="button" class="btn btn-outline-secondary"
+              (click)="vm.search()">
+              <i class="fa fa-sync"></i> 刷新
+            </button>
           </div>
         </div>
         <form class="p-2 bg-light">
@@ -139,9 +143,9 @@
           </div>
         </div>
       </div>
-      <div class="detail-container">
-        <router-outlet></router-outlet>
-      </div>
     </div>
+  </div>
+  <div class="detail-container">
+    <router-outlet></router-outlet>
   </div>
 </div>

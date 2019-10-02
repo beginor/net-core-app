@@ -14,8 +14,9 @@
 
   .detail-container {
     position: absolute;
-    top: 0;
+    top: 56px;
     right: 0;
+    height: calc(100vh - 56px);
     bottom: 0;
     z-index: 1;
   }

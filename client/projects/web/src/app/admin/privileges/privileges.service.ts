@@ -50,7 +50,7 @@ export class AppPrivilegeService {
             console.error(ex.toString());
             this.total.next(0);
             this.data.next([]);
-            this.ui.showAlert({ type: 'danger', message: '加载系统权限数据出错!'});
+            this.ui.showAlert({ type: 'danger', message: '加载系统权限数据出错！' });
         }
         finally {
             this.loading = false;
@@ -78,7 +78,7 @@ export class AppPrivilegeService {
         }
         catch (ex) {
             console.error(ex);
-            this.ui.showAlert({ type: 'danger', message: '创建系统权限出错!'});
+            this.ui.showAlert({ type: 'danger', message: '创建系统权限出错！' });
             return null;
         }
     }
@@ -92,15 +92,24 @@ export class AppPrivilegeService {
             return result;
         }
         catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '加载系统权限数据出错！' });
             return null;
         }
     }
 
     /** 删除 系统权限 */
     public async delete(id: string): Promise<void> {
-        await this.http.delete(
-            `${this.baseUrl}/${id}`
-        ).toPromise();
+        try {
+            await this.http.delete(
+                `${this.baseUrl}/${id}`
+            ).toPromise();
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '删除系统权限出错！' });
+            return null;
+        }
     }
 
     /** 更新 系统权限 */
@@ -108,11 +117,18 @@ export class AppPrivilegeService {
         id: string,
         model: AppPrivilegeModel
     ): Promise<AppPrivilegeModel> {
-        const result = await this.http.put<AppPrivilegeModel>(
-            `${this.baseUrl}/${id}`,
-            model
-        ).toPromise();
-        return result;
+        try {
+            const result = await this.http.put<AppPrivilegeModel>(
+                `${this.baseUrl}/${id}`,
+                model
+            ).toPromise();
+            return result;
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '更新系统权限出错！' });
+            return null;
+        }
     }
 
     /** 获取模块名称 */

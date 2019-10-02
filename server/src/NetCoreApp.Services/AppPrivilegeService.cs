@@ -45,7 +45,8 @@ namespace Beginor.NetCoreApp.Services {
                     if (!string.IsNullOrEmpty(model.Module)) {
                         query = query.Where(p => p.Module == model.Module);
                     }
-                    return query.Skip(model.Skip).Take(model.Take);
+                    return query.OrderByDescending(p => p.Id)
+                        .Skip(model.Skip).Take(model.Take);
                 }
             );
             return new PaginatedResponseModel<AppPrivilegeModel> {

@@ -5,7 +5,7 @@ import {
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { slideInRight, slideOutRight } from '../../../common';
-import { AppPrivilegeModel } from '../privileges.service';
+import { AppPrivilegeModel, AppPrivilegeService } from '../privileges.service';
 
 @Component({
     selector: 'app-privilege-detail',
@@ -25,9 +25,13 @@ export class DetailComponent implements OnInit {
     public editable: boolean;
     public model: AppPrivilegeModel = {};
 
+    private id: string;
+    private reloadList = false;
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        public vm: AppPrivilegeService
     ) {
         const id = route.snapshot.params.id;
         const editable = route.snapshot.params.editable;
@@ -43,19 +47,37 @@ export class DetailComponent implements OnInit {
             this.title = '查看系统权限';
             this.editable = false;
         }
+        this.id = id;
     }
 
-    public ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
+        if (this.id !== '0') {
+            this.model = await this.vm.getById(this.id);
+        }
     }
 
-    public onAnimationEvent(e: AnimationEvent): void {
+    public async onAnimationEvent(e: AnimationEvent): Promise<void> {
         if (e.phaseName === 'done' && e.toState === 'void') {
-            this.router.navigate(['../'], { relativeTo: this.route });
+            await this.router.navigate(['../'], { relativeTo: this.route });
+            if (this.reloadList) {
+                this.vm.search();
+            }
         }
     }
 
     public goBack(): void {
         this.animation = 'void';
+    }
+
+    public async save(): Promise<void> {
+        if (this.id !== '0') {
+            await this.vm.update(this.id, this.model);
+        }
+        else {
+            await this.vm.create(this.model);
+        }
+        this.reloadList = true;
+        this.goBack();
     }
 
 }
