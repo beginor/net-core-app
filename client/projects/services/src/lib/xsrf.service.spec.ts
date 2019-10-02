@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { XsrfService } from './xsrf.guard';
+import { XsrfService } from './xsrf.service';
 
 describe('XsrfService', () => {
     beforeEach(() => TestBed.configureTestingModule({}));

@@ -1,6 +1,5 @@
 import { Directive, OnInit, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { XsrfGuard } from 'services/services';
+import { XsrfService } from './xsrf.service';
 
 @Directive({
     // tslint:disable-next-line: directive-selector
@@ -9,7 +8,7 @@ import { XsrfGuard } from 'services/services';
 export class XsrfTokenDirective implements OnInit {
 
     constructor(
-        private xsrf: XsrfGuard
+        private xsrf: XsrfService
     ) { }
 
     public async ngOnInit(): Promise<void> {

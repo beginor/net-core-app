@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AccountService, XsrfGuard } from 'services';
+import { AccountService, XsrfService } from 'services';
 
 @Component({
     selector: 'app-nav-bar',
@@ -15,7 +15,7 @@ export class NavBarComponent implements OnInit {
     constructor(
         private router: Router,
         public account: AccountService,
-        private xsrf: XsrfGuard
+        private xsrf: XsrfService
     ) { }
 
     public ngOnInit(): void {

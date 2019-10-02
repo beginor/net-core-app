@@ -6,13 +6,19 @@ import { HttpClient } from '@angular/common/http';
 })
 export class XsrfService {
 
+    private url: string;
+
     constructor(
         private http: HttpClient,
-        @Inject('apiRoot') private apiRoot: string
-    ) { }
+        @Inject('apiRoot') apiRoot: string
+    ) {
+        this.url = `${apiRoot}/security/xsrf-token`;
+    }
 
     public async refresh(): Promise<void> {
-        const url = this.apiRoot + '/security/xsrf-token';
-        await this.http.get(url).toPromise();
+        await this.http.get(
+            this.url,
+            { responseType: 'text', observe: 'response' }
+        ).toPromise();
     }
 }
