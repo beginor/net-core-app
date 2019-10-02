@@ -3,8 +3,6 @@ import { Injectable, Inject } from '@angular/core';
 
 import { BehaviorSubject, Subscription, interval } from 'rxjs';
 
-import { XsrfGuard } from './xsrf.guard';
-
 @Injectable({
     providedIn: 'root'
 })
@@ -15,8 +13,7 @@ export class AccountService {
 
     constructor(
         private http: HttpClient,
-        @Inject('apiRoot') private apiRoot: string,
-        private xsrf: XsrfGuard
+        @Inject('apiRoot') private apiRoot: string
     ) {
         this.interval$ = interval(1000 * 60 * 5).subscribe(
             () => this.getInfo()

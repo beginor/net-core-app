@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col col-login mx-auto">
-      <form class="card" #loginForm="ngForm" (submit)="login()" method="post">
+      <form class="card" #loginForm="ngForm" xsrf-token (submit)="login()" method="post">
         <div class="card-body p-5">
           <div class="card-title text-secondary">
             登录您的账户
