@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import {
     CanLoad, CanActivate, Route, UrlSegment, Router, ActivatedRouteSnapshot,
-    RouterStateSnapshot
+    RouterStateSnapshot, NavigationCancel
 } from '@angular/router';
+
+import { first } from 'rxjs/operators';
 
 import { AccountService } from './account.service';
 
@@ -20,14 +22,15 @@ export class AuthGuard implements CanLoad, CanActivate {
         route: Route,
         segments: UrlSegment[]
     ): Promise<boolean> {
+        this.router.events.pipe(first(_ => _ instanceof NavigationCancel))
+            .subscribe((event: NavigationCancel) => {
+                this.redirectToLogin(event.url);
+            });
         try {
             const info = await this.svc.getInfo();
-            return !!info;
+            return !!info.id;
         }
         catch (ex) {
-            this.router.navigate(
-                ['/login', { returnUrl: route.path }]
-            );
             console.error(ex);
             return false;
         }
@@ -44,6 +47,12 @@ export class AuthGuard implements CanLoad, CanActivate {
                 }
             );
         });
+    }
+
+    private redirectToLogin(returnUrl?: string): void {
+        this.router.navigate(
+            ['/login', { returnUrl }]
+        );
     }
 
 }
