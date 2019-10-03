@@ -107,7 +107,8 @@
                       (click)="showDetail(item.id, true)">
                       <i class="fa fa-edit"></i>
                     </button>
-                    <button class="btn btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300">
+                    <button class="btn btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300"
+                      (click)="delete(item.id)">
                       <i class="fa fa-trash-alt"></i>
                     </button>
                   </div>

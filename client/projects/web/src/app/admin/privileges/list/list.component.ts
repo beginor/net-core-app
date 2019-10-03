@@ -31,4 +31,11 @@ export class ListComponent implements OnInit {
         );
     }
 
+    public async delete(id: string): Promise<void> {
+        const deleted = await this.vm.delete(id);
+        if (deleted) {
+            this.vm.search();
+        }
+    }
+
 }

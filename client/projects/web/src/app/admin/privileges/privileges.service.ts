@@ -99,16 +99,21 @@ export class AppPrivilegeService {
     }
 
     /** 删除 系统权限 */
-    public async delete(id: string): Promise<void> {
+    public async delete(id: string): Promise<boolean> {
+        const confirm = await this.ui.showConfirm('确认删除么？');
+        if (!confirm) {
+            return false;
+        }
         try {
             await this.http.delete(
                 `${this.baseUrl}/${id}`
             ).toPromise();
+            return true;
         }
         catch (ex) {
             console.error(ex);
             this.ui.showAlert({ type: 'danger', message: '删除系统权限出错！' });
-            return null;
+            return false;
         }
     }
 
