@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
+import { ConfirmComponent } from '../confirm/confirm.component';
 
 @Injectable({
     providedIn: 'root'
@@ -7,7 +10,9 @@ export class UiService {
 
     public alerts: Alert[] = [];
 
-    constructor() { }
+    constructor(
+        private modal: NgbModal
+    ) { }
 
     public showAlert(alert: Alert): void {
         this.alerts.push(alert);
@@ -19,6 +24,18 @@ export class UiService {
 
     public clearAlerts(): void {
         this.alerts = Array.from([]);
+    }
+
+    public showConfirm(message: string): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            const ref = this.modal.open(
+                ConfirmComponent,
+                { size: 'sm', centered: true }
+            );
+            ref.componentInstance.message = message;
+            ref.result.then(_ => resolve(true))
+                .catch(_ => resolve(false));
+        });
     }
 }
 
