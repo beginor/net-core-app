@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AntiforgeryService } from './xsrf.service';
+import { AntiforgeryService } from './antiforgery.service';
 
 describe('AntiforgeryService', () => {
     beforeEach(() => TestBed.configureTestingModule({}));

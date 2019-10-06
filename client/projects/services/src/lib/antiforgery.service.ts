@@ -12,7 +12,7 @@ export class AntiforgeryService {
         private http: HttpClient,
         @Inject('apiRoot') apiRoot: string
     ) {
-        this.url = `${apiRoot}/security/xsrf-token`;
+        this.url = `${apiRoot}/security/antiforgery`;
     }
 
     public async refresh(): Promise<void> {

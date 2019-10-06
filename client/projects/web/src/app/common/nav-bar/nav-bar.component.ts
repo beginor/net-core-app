@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AccountService, XsrfService } from 'services';
+import { AccountService, AntiforgeryService } from 'services';
 
 @Component({
     selector: 'app-nav-bar',
@@ -15,7 +15,7 @@ export class NavBarComponent implements OnInit {
     constructor(
         private router: Router,
         public account: AccountService,
-        private xsrf: XsrfService
+        private antiforgery: AntiforgeryService
     ) { }
 
     public ngOnInit(): void {
@@ -23,7 +23,7 @@ export class NavBarComponent implements OnInit {
 
     public async logout(e: Event): Promise<void> {
         e.preventDefault();
-        await this.xsrf.refresh();
+        await this.antiforgery.refresh();
         await this.account.logout();
         await this.router.navigateByUrl('/');
     }

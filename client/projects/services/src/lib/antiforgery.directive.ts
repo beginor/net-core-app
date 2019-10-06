@@ -1,5 +1,5 @@
 import { Directive, OnInit, Inject, Input } from '@angular/core';
-import { AntiforgeryService } from './xsrf.service';
+import { AntiforgeryService } from './antiforgery.service';
 
 @Directive({
     // tslint:disable-next-line: directive-selector
@@ -11,14 +11,14 @@ export class AntiforgeryDirective implements OnInit {
     public enabled: boolean;
 
     constructor(
-        private xsrf: AntiforgeryService
+        private antiforgery: AntiforgeryService
     ) { }
 
     public ngOnInit(): void {
         if (!this.enabled) {
             return;
         }
-        this.xsrf.refresh();
+        this.antiforgery.refresh();
     }
 
 }

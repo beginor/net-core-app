@@ -37,7 +37,8 @@ export class LoginComponent implements OnInit {
         }
         catch (ex) {
             console.error(ex);
-            this.message.next(ex.error);
+            const message = typeof ex.error === 'string' ? ex.error : '无法登录！';
+            this.message.next(message);
         }
         finally {
             this.loading = false;
