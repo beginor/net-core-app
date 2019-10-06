@@ -12,7 +12,7 @@ namespace Beginor.NetCoreApp.Api.Authorization {
 
         public override Task<AuthorizationPolicy> GetPolicyAsync(string policyName) {
             var policy = new AuthorizationPolicyBuilder();
-            policy.RequireClaim("AppPrivilege", policyName);
+            policy.RequireClaim(Consts.PrivilegeClaimType, policyName);
             return Task.FromResult(policy.Build());
         }
 
