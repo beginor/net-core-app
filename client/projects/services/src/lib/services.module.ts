@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { XsrfTokenDirective } from './xsrf-token.directive';
+import { AntiforgeryDirective } from './antiforgery.directive';
 
 
 @NgModule({
     declarations: [
-        XsrfTokenDirective
+        AntiforgeryDirective
     ],
     imports: [
         HttpClientModule
     ],
     exports: [
-        XsrfTokenDirective
+        AntiforgeryDirective
     ]
 })
 export class ServicesModule { }

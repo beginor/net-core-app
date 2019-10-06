@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
     providedIn: 'root'
 })
-export class XsrfService {
+export class AntiforgeryService {
 
     private url: string;
 

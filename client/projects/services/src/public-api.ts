@@ -6,4 +6,4 @@ export * from './lib/xsrf.service';
 export * from './lib/auth.guard';
 export * from './lib/api.interceptor';
 export * from './lib/account.service';
-export * from './lib/xsrf-token.directive';
+export * from './lib/antiforgery.directive';

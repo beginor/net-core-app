@@ -1,4 +1,4 @@
-<form class="card detail" xsrf-token [@animation]="animation"
+<form class="card detail" antiforgery [@animation]="animation"
   (@animation.done)="onAnimationEvent($event)" #detailForm="ngForm">
   <div class="card-header d-flex justify-content-between align-content-center">
     <h5 class="card-title mb-0">{{title}}</h5>

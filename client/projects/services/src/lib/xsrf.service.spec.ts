@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { XsrfService } from './xsrf.service';
+import { AntiforgeryService } from './xsrf.service';
 
-describe('XsrfService', () => {
+describe('AntiforgeryService', () => {
     beforeEach(() => TestBed.configureTestingModule({}));
 
     it('should be created', () => {
-        const service: XsrfService = TestBed.get(XsrfService);
+        const service: AntiforgeryService = TestBed.get(AntiforgeryService);
         expect(service).toBeTruthy();
     });
 });

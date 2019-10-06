@@ -1,18 +1,24 @@
-import { Directive, OnInit, Inject } from '@angular/core';
-import { XsrfService } from './xsrf.service';
+import { Directive, OnInit, Inject, Input } from '@angular/core';
+import { AntiforgeryService } from './xsrf.service';
 
 @Directive({
     // tslint:disable-next-line: directive-selector
-    selector: '[xsrf-token]'
+    selector: '[antiforgery]'
 })
-export class XsrfTokenDirective implements OnInit {
+export class AntiforgeryDirective implements OnInit {
+
+    @Input('antiforgery')
+    public enabled: boolean;
 
     constructor(
-        private xsrf: XsrfService
+        private xsrf: AntiforgeryService
     ) { }
 
-    public async ngOnInit(): Promise<void> {
-        await this.xsrf.refresh();
+    public ngOnInit(): void {
+        if (!this.enabled) {
+            return;
+        }
+        this.xsrf.refresh();
     }
 
 }

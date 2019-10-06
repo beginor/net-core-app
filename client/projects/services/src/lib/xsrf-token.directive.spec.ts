@@ -1,8 +1,8 @@
-import { XsrfTokenDirective } from './xsrf-token.directive';
+import { AntiforgeryDirective } from './antiforgery.directive';
 
-describe('XsrfTokenDirective', () => {
+describe('AntiforgeryDirective', () => {
     it('should create an instance', () => {
-        const directive = new XsrfTokenDirective(null);
+        const directive = new AntiforgeryDirective(null);
         expect(directive).toBeTruthy();
     });
 });
