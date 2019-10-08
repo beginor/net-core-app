@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AppPrivilegeService } from '../privileges.service';
-import {
-    trigger, transition, animate, keyframes, style
-} from '@angular/animations';
 
 @Component({
     selector: 'app-privilege-list',
@@ -19,16 +16,20 @@ export class ListComponent implements OnInit {
         public vm: AppPrivilegeService
     ) { }
 
-    public async ngOnInit(): Promise<void> {
-        await this.vm.getModules();
-        await this.vm.search();
+    public ngOnInit(): void {
+        this.loadData();
     }
 
-    public async showDetail(id: string, editable: boolean): Promise<void> {
-        await this.router.navigate(
+    public showDetail(id: string, editable: boolean): void {
+        this.router.navigate(
             ['./', id, { editable: editable }],
             { relativeTo: this.route, skipLocationChange: true }
         );
+    }
+
+    public async loadData(): Promise<void> {
+        await this.vm.getModules();
+        await this.vm.search();
     }
 
     public async delete(id: string): Promise<void> {
