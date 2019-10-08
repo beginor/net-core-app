@@ -7,3 +7,4 @@ export * from './lib/auth.guard';
 export * from './lib/api.interceptor';
 export * from './lib/account.service';
 export * from './lib/antiforgery.directive';
+export * from './lib/animations';

@@ -4,7 +4,7 @@ import {
 } from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { slideInRight, slideOutRight } from '../../../common';
+import { slideInRight, slideOutRight } from 'services';
 import { AppPrivilegeModel, AppPrivilegeService } from '../privileges.service';
 
 @Component({
