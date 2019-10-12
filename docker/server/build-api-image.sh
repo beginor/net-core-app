@@ -4,7 +4,7 @@ cd ../../server/src/NetCoreApp.Api/
 rm -rf bin
 dotnet publish -c Release
 # Move publish output to docker folder
-mv bin/Release/netcoreapp2.2/publish/ ../../../docker/server/dist
+mv bin/Release/netcoreapp3.0/publish/ ../../../docker/server/dist
 rm -rf bin
 cd ../../../docker/server
 # modify config file to run in stagging server;
