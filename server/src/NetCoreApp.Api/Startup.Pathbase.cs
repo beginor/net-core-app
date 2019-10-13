@@ -10,14 +10,14 @@ namespace Beginor.NetCoreApp.Api {
 
         private void ConfigurePathBaseServices(
             IServiceCollection services,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             // do nothing now.
         }
 
         private void ConfigurePathBase(
             IApplicationBuilder app,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             var pathbase = GetAppPathbase();
             if (string.IsNullOrEmpty(pathbase)) {

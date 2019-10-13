@@ -2,8 +2,8 @@ using System;
 using System.Threading.Tasks;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
-using Beginor.NetCoreApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,15 +18,15 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
         );
 
-        private IAppAuditLogService service;
+        private IAppAuditLogRepository repository;
 
-        public AppAuditLogController(IAppAuditLogService service) {
-            this.service = service;
+        public AppAuditLogController(IAppAuditLogRepository repository) {
+            this.repository = repository;
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                service = null;
+                repository = null;
             }
             base.Dispose(disposing);
         }
@@ -40,7 +40,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppAuditLogModel model
         ) {
             try {
-                await service.CreateAsync(model);
+                await repository.SaveAsync(model);
                 return model;
             }
             catch (Exception ex) {
@@ -58,7 +58,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromQuery]AppAuditLogSearchModel model
         ) {
             try {
-                var result = await service.SearchAsync(model);
+                var result = await repository.SearchAsync(model);
                 return result;
             }
             catch (Exception ex) {
@@ -75,9 +75,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
         [Authorize(Policy = "app_audit_logs.read")]
-        public async Task<ActionResult<AppAuditLogModel>> GetById(string id) {
+        public async Task<ActionResult<AppAuditLogModel>> GetById(long id) {
             try {
-                var result = await service.GetByIdAsync(id);
+                var result = await repository.GetByIdAsync(id);
                 if (result == null) {
                     return NotFound();
                 }

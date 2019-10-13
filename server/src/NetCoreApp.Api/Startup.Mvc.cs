@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Beginor.NetCoreApp.Api {
@@ -12,13 +10,9 @@ namespace Beginor.NetCoreApp.Api {
 
         private void ConfigureMvcServices(
             IServiceCollection services,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
-            services
-                .AddRouting(options => {
-                    options.LowercaseUrls = true;
-                })
-                .AddMvc(options => {
+            services.AddControllers(options => {
                     options.Filters.Add(
                         new AutoValidateAntiforgeryTokenAttribute()
                     );
@@ -30,23 +24,21 @@ namespace Beginor.NetCoreApp.Api {
                     );
                 })
                 .AddControllersAsServices()
-                .ConfigureApiBehaviorOptions(opts => {
-                    opts.SuppressConsumesConstraintForFormFileParameters = false;
-                    opts.SuppressInferBindingSourcesForParameters = false;
-                    opts.SuppressModelStateInvalidFilter = false;
+                .ConfigureApiBehaviorOptions(options => {
+                    options.SuppressConsumesConstraintForFormFileParameters = false;
+                    options.SuppressInferBindingSourcesForParameters = false;
+                    options.SuppressModelStateInvalidFilter = false;
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddNewtonsoftJson();
         }
 
         private void ConfigureMvc(
             IApplicationBuilder app,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
-            app.UseEndpointRouting().UseMvc(routes => {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}"
-                );
+            app.UseEndpoints(routes => {
+                routes.MapControllers();
             });
         }
     }

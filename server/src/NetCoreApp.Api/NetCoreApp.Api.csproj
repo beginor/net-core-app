@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NetCoreApp.Data\NetCoreApp.Data.csproj" />
     <ProjectReference Include="..\NetCoreApp.Models\NetCoreApp.Models.csproj" />
-    <ProjectReference Include="..\NetCoreApp.Services\NetCoreApp.Services.csproj" />
   </ItemGroup>
 
 </Project>

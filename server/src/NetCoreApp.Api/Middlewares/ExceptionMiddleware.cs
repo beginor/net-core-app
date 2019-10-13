@@ -3,13 +3,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 
 namespace Beginor.NetCoreApp.Api.Middlewares {
 
     public class ExceptionMiddleware {
 
         private readonly RequestDelegate next;
-        private readonly IHostingEnvironment env;
+        private readonly IWebHostEnvironment env;
 
         private readonly log4net.ILog logger = log4net.LogManager.GetLogger(
             System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
@@ -17,7 +18,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
 
         public ExceptionMiddleware(
             RequestDelegate next,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             this.next = next ?? throw new ArgumentNullException(nameof(next));
             this.env = env ?? throw new ArgumentNullException(nameof(env));

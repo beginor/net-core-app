@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
+using Beginor.NetCoreApp.Models;
 using NHibernate;
 using NHibernate.NetCore;
 using NUnit.Framework;
@@ -19,25 +20,18 @@ namespace Beginor.NetCoreApp.Test.Data {
 
         [Test]
         public async Task _02_CanDoSoftDelete() {
-            var entity = new AppNavItem {
+            var entity = new AppNavItemModel {
                 Title = "Test Item",
                 Tooltip = "Test Nav item",
                 Icon = null,
                 Url = "/test",
-                ParentId = 0,
-                Sequence = 0,
-                Creator = new AppUser {
-                    Id = "1546069735288020001"
-                },
-                CreatedAt = DateTime.Now,
-                Updater = new AppUser {
-                    Id = "1546069735288020001",
-                }
+                ParentId = "0",
+                Sequence = 0
             };
             await Target.SaveAsync(entity);
-            Assert.Greater(entity.Id, 0);
-            await Target.DeleteAsync(entity.Id);
-            entity = await Target.GetByIdAsync(entity.Id);
+            Assert.IsNotEmpty(entity.Id);
+            await Target.DeleteAsync(long.Parse(entity.Id));
+            entity = await Target.GetByIdAsync(long.Parse(entity.Id));
             Assert.IsNull(entity);
         }
 

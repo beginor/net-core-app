@@ -9,20 +9,20 @@ namespace Beginor.NetCoreApp.Api {
 
         private static void ConfigureAutoMapperServices(
             IServiceCollection services,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             var mapperConfig = new MapperConfiguration(configure => {
                 configure.AddMaps(
-                    "Beginor.NetCoreApp.Services"
+                    "Beginor.NetCoreApp.Data"
                 );
             });
             var mapper = mapperConfig.CreateMapper();
-            services.AddSingleton<IMapper>(mapper);
+            services.AddSingleton(mapper);
         }
 
         private static void ConfigureAutoMapper(
             IApplicationBuilder app,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             // do nothing now.
         }

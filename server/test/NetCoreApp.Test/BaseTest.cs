@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using NUnit.Framework;
 
 namespace Beginor.NetCoreApp.Test {
@@ -25,7 +26,7 @@ namespace Beginor.NetCoreApp.Test {
                     Path.Combine(baseDir, "appsettings.Development.json")
                 )
                 .Build();
-            IHostingEnvironment env = new TestHostingEnvironment();
+            IWebHostEnvironment env = new TestHostingEnvironment();
             var services = new ServiceCollection();
             var startup = new Startup(config, env);
             services.AddLogging(logging => {
@@ -45,7 +46,7 @@ namespace Beginor.NetCoreApp.Test {
 
     }
 
-    public class TestHostingEnvironment : IHostingEnvironment {
+    public class TestHostingEnvironment : IWebHostEnvironment {
 
         public string EnvironmentName { get; set; }
 

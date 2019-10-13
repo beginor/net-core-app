@@ -2,8 +2,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using Beginor.AppFx.DependencyInjection;
-using Beginor.NetCoreApp.Data.Repositories;
-using Beginor.NetCoreApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +12,7 @@ namespace Beginor.NetCoreApp.Api {
 
         private static void ConfigureAppServices(
             IServiceCollection services,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
             services.AddServiceWithDefaultImplements(
@@ -22,16 +20,11 @@ namespace Beginor.NetCoreApp.Api {
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
-            services.AddServiceWithDefaultImplements(
-                Assembly.LoadFrom(Path.Combine(baseDir, "Beginor.NetCoreApp.Services.dll")),
-                t => t.Name.EndsWith("Service"),
-                ServiceLifetime.Scoped
-            );
         }
 
         private static void ConfigureApp(
             IApplicationBuilder app,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             // do nothing now.
         }

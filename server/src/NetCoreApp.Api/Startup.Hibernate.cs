@@ -2,6 +2,7 @@ using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NHibernate.AspNetCore.Identity;
 using NHibernate.Cfg;
 using NHibernate.NetCore;
@@ -12,7 +13,7 @@ namespace Beginor.NetCoreApp.Api {
 
         private void ConfigureHibernateServices(
             IServiceCollection services,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             var cfg = new Configuration();
             var configFile = Path.Combine(
@@ -35,7 +36,7 @@ namespace Beginor.NetCoreApp.Api {
 
         private void ConfigureHibernate(
             IApplicationBuilder app,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             // do nothing know
         }

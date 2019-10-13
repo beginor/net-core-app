@@ -10,7 +10,7 @@ namespace Beginor.NetCoreApp.Api {
 
         private void ConfigureCookiePolicyServices(
             IServiceCollection services,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             services.Configure<CookiePolicyOptions>(opts => {
                 opts.CheckConsentNeeded = context => true;
@@ -24,7 +24,7 @@ namespace Beginor.NetCoreApp.Api {
 
         private void ConfigureCookiePolicy(
             IApplicationBuilder app,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             app.UseCookiePolicy();
         }

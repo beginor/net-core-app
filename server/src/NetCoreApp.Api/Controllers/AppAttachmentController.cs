@@ -1,11 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using Beginor.AppFx.Api;
-using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Models;
-using Beginor.NetCoreApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Beginor.AppFx.Api;
+using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Data.Repositories;
+using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
@@ -18,15 +18,15 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
         );
 
-        private IAppAttachmentService service;
+        private IAppAttachmentRepository repository;
 
-        public AppAttachmentController(IAppAttachmentService service) {
-            this.service = service;
+        public AppAttachmentController(IAppAttachmentRepository repository) {
+            this.repository = repository;
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                service = null;
+                repository = null;
             }
             base.Dispose(disposing);
         }
@@ -40,7 +40,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppAttachmentModel model
         ) {
             try {
-                await service.CreateAsync(model);
+                await repository.SaveAsync(model);
                 return model;
             }
             catch (Exception ex) {
@@ -55,9 +55,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
         [Authorize(Policy = "app_attachments.delete")]
-        public async Task<ActionResult> Delete(string id) {
+        public async Task<ActionResult> Delete(long id) {
             try {
-                await service.DeleteAsync(id);
+                await repository.DeleteAsync(id);
                 return NoContent();
             }
             catch (Exception ex) {
@@ -75,7 +75,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromQuery]AppAttachmentSearchModel model
         ) {
             try {
-                var result = await service.SearchAsync(model);
+                var result = await repository.SearchAsync(model);
                 return result;
             }
             catch (Exception ex) {
@@ -92,9 +92,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
         [Authorize(Policy = "app_attachments.read")]
-        public async Task<ActionResult<AppAttachmentModel>> GetById(string id) {
+        public async Task<ActionResult<AppAttachmentModel>> GetById(long id) {
             try {
-                var result = await service.GetByIdAsync(id);
+                var result = await repository.GetByIdAsync(id);
                 if (result == null) {
                     return NotFound();
                 }
@@ -115,15 +115,16 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [HttpPut("{id:long}")]
         [Authorize(Policy = "app_attachments.update")]
         public async Task<ActionResult<AppAttachmentModel>> Update(
-            [FromRoute]string id,
+            [FromRoute]long id,
             [FromBody]AppAttachmentModel model
         ) {
             try {
-                var modelInDb = await service.GetByIdAsync(id);
+                var modelInDb = await repository.GetByIdAsync(id);
                 if (modelInDb == null) {
                     return NotFound();
                 }
-                await service.UpdateAsync(id, model);
+                model.Id = id.ToString();
+                await repository.UpdateAsync(model);
                 return model;
             }
             catch (Exception ex) {

@@ -33,7 +33,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         public RolesController(
             RoleManager<AppRole> roleMgr,
             UserManager<AppUser> userMgr,
-            AutoMapper.IMapper mapper
+            IMapper mapper
         ) {
             this.roleMgr = roleMgr;
             this.userMgr = userMgr;

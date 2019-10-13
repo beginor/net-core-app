@@ -17,13 +17,6 @@ namespace Beginor.NetCoreApp.Test.Data {
             Assert.IsNotNull(Target);
         }
 
-        [Test]
-        [TestCase("app_roles.read")]
-        public async Task _02_CanQueryExistAsync(string name) {
-            var exists = await Target.ExistsAsync(name);
-            Assert.True(exists);
-        }
-
     }
 
 }

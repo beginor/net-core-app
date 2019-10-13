@@ -6,20 +6,22 @@ namespace Beginor.NetCoreApp.Api {
 
     partial class Startup {
 
-        private void ConfigureStaticFilesServices(
+        private void ConfigureRoutingServices(
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
-            // do nothing now!
+            services.AddRouting(options => {
+                options.LowercaseUrls = true;
+            });
         }
 
-        private void ConfigureStaticFiles(
+        private void ConfigureRouting(
             IApplicationBuilder app,
             IWebHostEnvironment env
         ) {
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
+            app.UseRouting();
         }
 
     }
+
 }

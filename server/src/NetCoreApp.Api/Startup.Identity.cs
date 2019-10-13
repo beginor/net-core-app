@@ -12,7 +12,7 @@ namespace Beginor.NetCoreApp.Api {
 
         private void ConfigureIdentityServices(
             IServiceCollection services,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             var identitySection = config.GetSection("identityOptions");
             var identitySettings = identitySection.Get<IdentityOptions>();
@@ -38,7 +38,7 @@ namespace Beginor.NetCoreApp.Api {
 
         private void ConfigureIdentity(
             IApplicationBuilder app,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             // do nothing now
         }

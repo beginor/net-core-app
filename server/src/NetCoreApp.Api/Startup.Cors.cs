@@ -12,7 +12,7 @@ namespace Beginor.NetCoreApp.Api {
 
         private void ConfigureCorsServices(
             IServiceCollection services,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             services.AddCors(options => {
                 var section = config.GetSection("corsPolicy");
@@ -23,7 +23,7 @@ namespace Beginor.NetCoreApp.Api {
 
         private void ConfigureCors(
             IApplicationBuilder app,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             app.UseCors(CorsPolicyName);
         }

@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
+using Beginor.NetCoreApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -81,7 +81,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
         }
 
         public async Task InvokeAsync(HttpContext context) {
-            var log = new AppAuditLog {
+            var log = new AppAuditLogModel {
                 RequestPath = context.Request.Path,
                 RequestMethod = context.Request.Method
             };

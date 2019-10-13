@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
-using Beginor.NetCoreApp.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
@@ -17,15 +17,15 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
         );
 
-        private IAppNavItemService service;
+        private IAppNavItemRepository repository;
 
-        public AppNavItemController(IAppNavItemService service) {
-            this.service = service;
+        public AppNavItemController(IAppNavItemRepository repository) {
+            this.repository = repository;
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                service = null;
+                repository = null;
             }
             base.Dispose(disposing);
         }
@@ -38,7 +38,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppNavItemModel model
         ) {
             try {
-                await service.CreateAsync(model);
+                await repository.SaveAsync(model);
                 return model;
             }
             catch (Exception ex) {
@@ -52,9 +52,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
-        public async Task<ActionResult> Delete(string id) {
+        public async Task<ActionResult> Delete(long id) {
             try {
-                await service.DeleteAsync(id);
+                await repository.DeleteAsync(id);
                 return NoContent();
             }
             catch (Exception ex) {
@@ -71,11 +71,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromQuery]AppNavItemSearchModel model
         ) {
             try {
-                var result = await service.SearchAsync(model);
+                var result = await repository.SearchAsync(model);
                 return result;
             }
             catch (Exception ex) {
-                logger.Error("Can not get all app_nav_itemss.", ex);
+                logger.Error("Can not get all app_nav_items.", ex);
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -87,9 +87,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404"> 导航节点（菜单） 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        public async Task<ActionResult<AppNavItemModel>> GetById(string id) {
+        public async Task<ActionResult<AppNavItemModel>> GetById(long id) {
             try {
-                var result = await service.GetByIdAsync(id);
+                var result = await repository.GetByIdAsync(id);
                 if (result == null) {
                     return NotFound();
                 }
@@ -109,15 +109,16 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
         public async Task<ActionResult<AppNavItemModel>> Update(
-            [FromRoute]string id,
+            [FromRoute]long id,
             [FromBody]AppNavItemModel model
         ) {
             try {
-                var modelInDb = await service.GetByIdAsync(id);
+                var modelInDb = await repository.GetByIdAsync(id);
                 if (modelInDb == null) {
                     return NotFound();
                 }
-                await service.UpdateAsync(id, model);
+                model.Id = id.ToString();
+                await repository.UpdateAsync(model);
                 return model;
             }
             catch (Exception ex) {

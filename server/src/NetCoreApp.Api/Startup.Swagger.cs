@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 
 namespace Beginor.NetCoreApp.Api {
 
@@ -12,11 +12,11 @@ namespace Beginor.NetCoreApp.Api {
 
         private void ConfigureSwaggerServices(
             IServiceCollection services,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             logger.Debug("Start add swagger related services...");
             services.AddSwaggerGen(opt => {
-                opt.SwaggerDoc("v1", new Info {
+                opt.SwaggerDoc("NetCoreApp API v1.0.0", new OpenApiInfo {
                     Title = "NetCoreApp API Help",
                     Version = "1.0.0"
                 });
@@ -39,16 +39,15 @@ namespace Beginor.NetCoreApp.Api {
 
         private void ConfigureSwagger(
             IApplicationBuilder app,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
-            app.UseSwagger();
-            app.UseSwaggerUI(c => {
-                // c.RoutePrefix = pathbase;
-
-                c.SwaggerEndpoint(
+            app.UseSwagger().UseSwaggerUI(options => {
+                // options.RoutePrefix = pathbase;
+                options.SwaggerEndpoint(
                     GetAppPathbase() + "/swagger/v1/swagger.json",
-                    "NetCoreApp API V1"
+                    "NetCoreApp API v1.0.0"
                 );
+                options.DocumentTitle = "NetCoreApp API v1.0.0";
             });
         }
 

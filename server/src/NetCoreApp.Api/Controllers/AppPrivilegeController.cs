@@ -4,8 +4,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
-using Beginor.NetCoreApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,9 +20,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
         );
 
-        private IAppPrivilegeService service;
+        private IAppPrivilegeRepository service;
 
-        public AppPrivilegeController(IAppPrivilegeService service) {
+        public AppPrivilegeController(IAppPrivilegeRepository service) {
             this.service = service;
         }
 
@@ -42,7 +42,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppPrivilegeModel model
         ) {
             try {
-                await service.CreateAsync(model);
+                await service.SaveAsync(model);
                 return model;
             }
             catch (Exception ex) {
@@ -59,7 +59,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [Authorize(Policy = "app_privileges.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
-                await service.DeleteAsync(id.ToString());
+                await service.DeleteAsync(id);
                 return NoContent();
             }
             catch (Exception ex) {
@@ -96,7 +96,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [Authorize(Policy = "app_privileges.read")]
         public async Task<ActionResult<AppPrivilegeModel>> GetById(long id) {
             try {
-                var result = await service.GetByIdAsync(id.ToString());
+                var result = await service.GetByIdAsync(id);
                 if (result == null) {
                     return NotFound();
                 }
@@ -121,11 +121,12 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppPrivilegeModel model
         ) {
             try {
-                var modelInDb = await service.GetByIdAsync(id.ToString());
+                var modelInDb = await service.GetByIdAsync(id);
                 if (modelInDb == null) {
                     return NotFound();
                 }
-                await service.UpdateAsync(id.ToString(), model);
+                model.Id = id.ToString();
+                await service.UpdateAsync(model);
                 return model;
             }
             catch (Exception ex) {

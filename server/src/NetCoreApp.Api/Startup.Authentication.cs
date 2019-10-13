@@ -13,7 +13,7 @@ namespace Beginor.NetCoreApp.Api {
 
         private void ConfigureAuthenticationServices(
             IServiceCollection services,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             var section = config.GetSection("cookieAuthOptions");
             var settings = section.Get<CookieAuthenticationOptions>();
@@ -25,29 +25,16 @@ namespace Beginor.NetCoreApp.Api {
                 .ConfigureExternalCookie(options => {
                     options.SlidingExpiration = settings.SlidingExpiration;
                     options.ExpireTimeSpan = settings.ExpireTimeSpan;
-                })
-                .Configure<CookieAuthenticationOptions>(
-                    IdentityConstants.TwoFactorRememberMeScheme,
-                    options => {
-                        options.SlidingExpiration = settings.SlidingExpiration;
-                        options.ExpireTimeSpan = settings.ExpireTimeSpan;
-                    }
-                )
-                .Configure<CookieAuthenticationOptions>(
-                    IdentityConstants.TwoFactorUserIdScheme,
-                    options => {
-                        options.SlidingExpiration = settings.SlidingExpiration;
-                        options.ExpireTimeSpan = settings.ExpireTimeSpan;
-                    }
-                );
+                });
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
         }
 
         private void ConfigureAuthentication(
             IApplicationBuilder app,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             app.UseAuthentication();
+            app.UseAuthorization();
         }
 
     }

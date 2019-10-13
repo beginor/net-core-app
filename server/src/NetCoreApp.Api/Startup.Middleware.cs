@@ -9,14 +9,14 @@ namespace Beginor.NetCoreApp.Api {
 
         private void ConfigureMiddlewareServices(
             IServiceCollection services,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             // do nothing now.
         }
 
         private void ConfigureMiddleware(
             IApplicationBuilder app,
-            IHostingEnvironment env
+            IWebHostEnvironment env
         ) {
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseMiddleware<AuditMiddleware>();
