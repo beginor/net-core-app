@@ -22,7 +22,6 @@
     <ProjectReference Include="..\..\src\NetCoreApp.Api\NetCoreApp.Api.csproj" />
     <ProjectReference Include="..\..\src\NetCoreApp.Data\NetCoreApp.Data.csproj" />
     <ProjectReference Include="..\..\src\NetCoreApp.Models\NetCoreApp.Models.csproj" />
-    <ProjectReference Include="..\..\src\NetCoreApp.Services\NetCoreApp.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
