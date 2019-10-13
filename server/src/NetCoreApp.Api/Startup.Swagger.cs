@@ -16,7 +16,7 @@ namespace Beginor.NetCoreApp.Api {
         ) {
             logger.Debug("Start add swagger related services...");
             services.AddSwaggerGen(opt => {
-                opt.SwaggerDoc("NetCoreApp API v1.0.0", new OpenApiInfo {
+                opt.SwaggerDoc("v1", new OpenApiInfo {
                     Title = "NetCoreApp API Help",
                     Version = "1.0.0"
                 });

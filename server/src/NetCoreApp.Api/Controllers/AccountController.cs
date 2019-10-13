@@ -134,6 +134,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("")]
         [ProducesResponseType(204)]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> SignOut() {
             try {
                 await signinMgr.SignOutAsync();

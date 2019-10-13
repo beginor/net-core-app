@@ -15,6 +15,7 @@ namespace Beginor.NetCoreApp.Api {
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
+            // authentication;
             var section = config.GetSection("cookieAuthOptions");
             var settings = section.Get<CookieAuthenticationOptions>();
             services
@@ -26,6 +27,7 @@ namespace Beginor.NetCoreApp.Api {
                     options.SlidingExpiration = settings.SlidingExpiration;
                     options.ExpireTimeSpan = settings.ExpireTimeSpan;
                 });
+            // authorization;
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
         }
 

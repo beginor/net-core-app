@@ -13,9 +13,7 @@ namespace Beginor.NetCoreApp.Api {
             IWebHostEnvironment env
         ) {
             services.AddControllers(options => {
-                    options.Filters.Add(
-                        new AutoValidateAntiforgeryTokenAttribute()
-                    );
+                    // options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();        
                 })
                 .ConfigureApplicationPartManager(manager => {
                     manager.ApplicationParts.Clear();

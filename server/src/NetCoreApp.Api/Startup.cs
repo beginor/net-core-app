@@ -38,17 +38,17 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureAutoMapperServices(services, env);
             ConfigureAppServices(services, env);
             ConfigureIdentityServices(services, env);
+            // cookie policy, cors, auth;
+            ConfigureCookiePolicyServices(services, env);
+            ConfigureCorsServices(services, env);
+            ConfigureAuthenticationServices(services, env);
             // web related.
             ConfigureMiddlewareServices(services, env);
             ConfigurePathBaseServices(services, env);
             ConfigureStaticFilesServices(services, env);
             ConfigureSwaggerServices(services, env);
-            // routing , cookie policy, cors, auth;
+            // routing and mvc
             ConfigureRoutingServices(services, env);
-            ConfigureCookiePolicyServices(services, env);
-            ConfigureCorsServices(services, env);
-            ConfigureAuthenticationServices(services, env);
-            // mvc is last;
             ConfigureMvcServices(services, env);
             logger.Debug("Configure services completed!");
         }
@@ -64,17 +64,17 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureAutoMapper(app, env);
             ConfigureApp(app, env);
             ConfigureIdentity(app, env);
+            // cookie policy, cors, auth;
+            ConfigureCookiePolicy(app, env);
+            ConfigureCors(app, env);
+            ConfigureAuthentication(app, env);
             // web related.
             ConfigureMiddleware(app, env);
             ConfigurePathBase(app, env);
             ConfigureStaticFiles(app, env);
             ConfigureSwagger(app, env);
-            // routing , cookie policy, cors, auth;
+            // routing and mvc
             ConfigureRouting(app, env);
-            ConfigureCookiePolicy(app, env);
-            ConfigureCors(app, env);
-            ConfigureAuthentication(app, env);
-            // mvc is last;
             ConfigureMvc(app, env);
             logger.Debug("Configure app completed.");
         }

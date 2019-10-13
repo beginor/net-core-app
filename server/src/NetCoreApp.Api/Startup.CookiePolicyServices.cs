@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -19,6 +18,7 @@ namespace Beginor.NetCoreApp.Api {
             services.AddAntiforgery(options => {
                 options.Cookie.SameSite = SameSiteMode.Lax;
                 options.HeaderName = "X-XSRF-TOKEN";
+                options.SuppressXFrameOptionsHeader = true;
             });
         }
 
