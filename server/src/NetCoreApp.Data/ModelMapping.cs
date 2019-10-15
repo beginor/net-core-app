@@ -19,6 +19,14 @@ namespace Beginor.NetCoreApp.Data {
             CreateMap<AppRole, StringIdNameEntity>().ReverseMap();
             // 添加其它的映射
             CreateMap<AppAttachment, AppAttachmentModel>()
+                .ForMember(
+                    dest => dest.CreatorId,
+                    map => map.MapFrom(src => src.Creator.Id)
+                )
+                .ForMember(
+                    dest => dest.CreatorName,
+                    map => map.MapFrom(src => src.Creator.UserName)
+                )
                 .ReverseMap()
                 .ForMember(dest => dest.Id, map => map.Ignore());
             CreateMap<AppNavItem, AppNavItemModel>()
