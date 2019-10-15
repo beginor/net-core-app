@@ -25,7 +25,7 @@ namespace Beginor.NetCoreApp.Api {
             }
             app.UsePathBase(new PathString(pathbase));
             var message = "Hosting pathbase: " + pathbase;
-            Console.WriteLine(message);
+            logger.Info(message);
         }
 
     }
