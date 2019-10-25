@@ -4,7 +4,7 @@ import {
 } from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { slideInRight, slideOutRight } from 'services';
+import { slideInRight, slideOutRight, AccountService } from 'services';
 import { AppPrivilegeModel, AppPrivilegeService } from '../privileges.service';
 
 @Component({
@@ -31,6 +31,7 @@ export class DetailComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        public account: AccountService,
         public vm: AppPrivilegeService
     ) {
         const id = route.snapshot.params.id;

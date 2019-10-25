@@ -1,9 +1,11 @@
-<form class="card detail" [antiforgery]="editable" [@animation]="animation"
+<form *ngIf="(account.info | async) as info" class="card detail"
+  [antiforgery]="editable" [@animation]="animation"
   (@animation.done)="onAnimationEvent($event)" #detailForm="ngForm">
   <div class="card-header d-flex justify-content-between align-content-center">
     <h5 class="card-title mb-0">{{title}}</h5>
     <div class="btn-group btn-group-sm">
-      <button *ngIf="editable" type="button" class="btn btn-sm btn-outline-primary"
+      <button *ngIf="info.privileges['app_privileges.update'] && editable"
+        type="button" class="btn btn-sm btn-outline-primary"
         (click)="save()" [disabled]="!detailForm.valid">
         <i class="fa fa-check"></i> 保存
       </button>
@@ -53,8 +55,9 @@
       </div>
     </div>
   </div>
-  <div *ngIf="editable" class="card-footer d-flex justify-content-between">
-    <button type="button" class="btn btn-sm btn-outline-primary"
+  <div *ngIf="info.privileges['app_privileges.update'] && editable" class="card-footer d-flex justify-content-between">
+    <button
+      type="button" class="btn btn-sm btn-outline-primary"
       (click)="save()" [disabled]="!detailForm.valid">
       <i class="fa fa-check"></i> 保存
     </button>

@@ -8,11 +8,12 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
-      <div class="card">
+      <div *ngIf="(account.info | async) as info" class="card">
         <div class="card-header d-flex justify-content-between">
           <h5 class="card-title mb-0">系统权限</h5>
           <div class="btn-group btn-group-sm">
-            <button type="button" class="btn btn-outline-primary"
+            <button *ngIf="info.privileges['app_privileges.create']"
+              type="button" class="btn btn-outline-primary"
               (click)="showDetail('0', true)">
               <i class="fa fa-plus"></i> 新建系统权限
             </button>
@@ -99,15 +100,20 @@
                 <td class="text-center" [class.text-danger]="item.isRequired">{{item.isRequired ? '是' : '否'}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-secondary" ngbTooltip="详情" placement="top" [openDelay]="300"
+                    <button *ngIf="info.privileges['app_privileges.read']"
+                      class="btn btn-outline-secondary" ngbTooltip="详情"
+                      placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, false)">
                       <i class="fa fa-list-alt"></i>
                     </button>
-                    <button class="btn btn-outline-secondary" ngbTooltip="编辑" placement="top" [openDelay]="300"
+                    <button *ngIf="info.privileges['app_privileges.update']"
+                      class="btn btn-outline-secondary" ngbTooltip="编辑"
+                      placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, true)">
                       <i class="fa fa-edit"></i>
                     </button>
-                    <button class="btn btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300"
+                    <button *ngIf="info.privileges['app_privileges.delete']"
+                      class="btn btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300"
                       (click)="delete(item.id)">
                       <i class="fa fa-trash-alt"></i>
                     </button>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { AccountService } from 'services';
 import { AppPrivilegeService } from '../privileges.service';
 
 @Component({
@@ -13,6 +14,7 @@ export class ListComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        public account: AccountService,
         public vm: AppPrivilegeService
     ) { }
 
