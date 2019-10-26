@@ -21,7 +21,7 @@
         placeholder="请输入角色名称 ..." [(ngModel)]="model.name"
         [class.is-invalid]="!(name.valid || name.pristine)"
         [class.is-valid]="name.valid"
-        required #name="ngModel" [disabled]="!editable"
+        required #name="ngModel" [disabled]="!editable || !!id"
       />
     </div>
     <div class="form-group" [class.is-valid]="description.valid"
