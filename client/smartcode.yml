@@ -42,7 +42,7 @@ NamingConverter:
       Type: Camel
 TableFilter:
   IgnoreTables:
-    - app_roles
+#    - app_roles
     - app_users
     - aspnet_role_claims
     - aspnet_roles
@@ -53,10 +53,29 @@ TableFilter:
     - aspnet_users
   IncludeTables:
     - app_privileges
+    - app_roles
   IgnoreNoPKTable: true
   IgnoreView: true
 
 Build:
+  Module:
+    Type: Table
+    Module: Data
+    TemplateEngine:
+      Path: Module.cshtml
+    Output:
+      Path: '{{Items.CurrentTable.ConvertedName}}'
+      Name: '{{Items.CurrentTable.ConvertedName}}.module'
+      Extension: '.ts'
+  ModuleRouting:
+    Type: Table
+    Module: Data
+    TemplateEngine:
+      Path: Module.Routing.cshtml
+    Output:
+      Path: '{{Items.CurrentTable.ConvertedName}}'
+      Name: '{{Items.CurrentTable.ConvertedName}}-routing.module'
+      Extension: '.ts'
   Service:
     Type: Table
     Module: Data
@@ -110,4 +129,40 @@ Build:
     Output:
       Path: '{{Items.CurrentTable.ConvertedName}}/list'
       Name: 'list.component'
+      Extension: '.html'
+  DetailComponent:
+    Type: Table
+    Module: Data
+    TemplateEngine:
+      Path: DetailComponent.cshtml
+    Output:
+      Path: '{{Items.CurrentTable.ConvertedName}}/detail'
+      Name: 'detail.component'
+      Extension: '.ts'
+  DetailComponentSpec:
+    Type: Table
+    Module: Data
+    TemplateEngine:
+      Path: DetailComponent.Spec.cshtml
+    Output:
+      Path: '{{Items.CurrentTable.ConvertedName}}/detail'
+      Name: 'detail.component.spec'
+      Extension: '.ts'
+  DetailComponentScss:
+    Type: Table
+    Module: Data
+    TemplateEngine:
+      Path: DetailComponent.Scss.cshtml
+    Output:
+      Path: '{{Items.CurrentTable.ConvertedName}}/detail'
+      Name: 'detail.component'
+      Extension: '.scss'
+  DetailComponentHtml:
+    Type: Table
+    Module: Data
+    TemplateEngine:
+      Path: DetailComponent.Html.cshtml
+    Output:
+      Path: '{{Items.CurrentTable.ConvertedName}}/detail'
+      Name: 'detail.component'
       Extension: '.html'

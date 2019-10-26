@@ -14,10 +14,16 @@ namespace Beginor.NetCoreApp.Models {
         /// <summary>角色描述</summary>
         public string Description { get; set; }
 
+        /// <summary>是否默认角色</summary>
+        public bool IsDefault { get; set; }
+
+        /// <summary>用户数</summary>
+        public int UserCount { get; set; }
+
     }
 
     /// <summary>角色搜索参数</summary>
-    public class RoleSearchRequestModel : PaginatedRequestModel {
+    public class AppRoleSearchModel : PaginatedRequestModel {
 
         /// <summary>角色名称</summary>
         public string Name { get; set; }

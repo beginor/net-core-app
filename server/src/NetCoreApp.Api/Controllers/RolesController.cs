@@ -8,6 +8,7 @@ using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Api.Authorization;
 using Beginor.NetCoreApp.Data.Entities;
+using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -28,15 +29,18 @@ namespace Beginor.NetCoreApp.Api.Controllers {
 
         private RoleManager<AppRole> roleMgr;
         private UserManager<AppUser> userMgr;
+        private IIdentityRepository identityRepo;
         private IMapper mapper;
 
         public RolesController(
             RoleManager<AppRole> roleMgr,
             UserManager<AppUser> userMgr,
+            IIdentityRepository identityRepo,
             IMapper mapper
         ) {
             this.roleMgr = roleMgr;
             this.userMgr = userMgr;
+            this.identityRepo = identityRepo;
             this.mapper = mapper;
         }
 
@@ -44,6 +48,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             if (disposing) {
                 roleMgr = null;
                 userMgr = null;
+                identityRepo = null;
                 mapper = null;
             }
             base.Dispose(disposing);
@@ -107,21 +112,15 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [HttpGet("")]
         [Authorize(Policy = "app_roles.read")]
         public async Task<ActionResult<PaginatedResponseModel<AppRoleModel>>> GetAll(
-            [FromQuery]RoleSearchRequestModel model
+            [FromQuery]AppRoleSearchModel model
         ) {
             try {
-                var query = roleMgr.Roles;
-                if (model.Name.IsNotNullOrEmpty()) {
-                    query = query.Where(r => r.Name.Contains(model.Name));
-                }
-                var total = await query.LongCountAsync();
-                var roles = await query.ToListAsync();
-                var models = mapper.Map<IList<AppRoleModel>>(roles);
+                var data = await identityRepo.SearchAsync(model);
                 var result = new PaginatedResponseModel<AppRoleModel> {
                     Skip = model.Skip,
                     Take = model.Take,
-                    Total = total,
-                    Data = models
+                    Total = data.Count,
+                    Data = data
                 };
                 return result;
             }

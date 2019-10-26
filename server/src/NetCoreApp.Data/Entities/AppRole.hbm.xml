@@ -8,6 +8,7 @@
   <joined-subclass name="AppRole" extends="NHibernate.AspNetCore.Identity.IdentityRole,NHibernate.AspNetCore.Identity" table="app_roles" schema="public">
     <key column="id" />
     <property name="Description" column="description" type="string" length="256" />
+    <property name="IsDefault" column="is_default" type="bool" />
   </joined-subclass>
 
 </hibernate-mapping>

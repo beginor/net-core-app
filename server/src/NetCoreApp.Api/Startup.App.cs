@@ -27,6 +27,7 @@ namespace Beginor.NetCoreApp.Api {
             IWebHostEnvironment env
         ) {
             // do nothing now.
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
         }
     }
 

@@ -7,6 +7,8 @@ namespace Beginor.NetCoreApp.Data.Entities {
 
         public virtual string Description { get; set; }
 
+        public virtual bool IsDefault { get; set; }
+
     }
 
 }

@@ -1,1 +1,59 @@
-<p>detail works!</p>
+<form class="card detail" [antiforgery]="editable" [@animation]="animation"
+  (@animation.done)="onAnimationEvent($event)" #detailForm="ngForm">
+  <div class="card-header d-flex justify-content-between align-content-center">
+    <h5 class="card-title mb-0">{{title}}</h5>
+    <div class="btn-group btn-group-sm">
+      <button *ngIf="editable" type="button" class="btn btn-sm btn-outline-primary"
+        (click)="save()" [disabled]="!detailForm.valid">
+        <i class="fa fa-check"></i> 保存
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"
+        (click)="goBack()">
+        <i class="fa fa-times"></i> 取消
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-group" [class.is-valid]="name.valid"
+      [class.is-invalid]="!(name.valid || name.pristine)">
+      <label class="form-label text-muted" for="name">角色名称</label>
+      <input class="form-control" type="text" id="name" name="name"
+        placeholder="请输入角色名称 ..." [(ngModel)]="model.name"
+        [class.is-invalid]="!(name.valid || name.pristine)"
+        [class.is-valid]="name.valid"
+        required #name="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="description.valid"
+      [class.is-invalid]="!(description.valid || description.pristine)">
+      <label class="form-label text-muted" for="description">角色描述</label>
+      <input class="form-control" type="text" id="description" name="description"
+        placeholder="请输入角色描述 ..." [(ngModel)]="model.description"
+        [class.is-invalid]="!(description.valid || description.pristine)"
+        [class.is-valid]="description.valid"
+        required #description="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group">
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input"
+          id="isDefault" name="isDefault"
+          [(ngModel)]="model.isDefault" [disabled]="!editable">
+        <label class="custom-control-label text-muted"
+          for="isDefault">
+          是否默认
+        </label>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="editable" class="card-footer d-flex justify-content-between">
+    <button type="button" class="btn btn-sm btn-outline-primary"
+      (click)="save()" [disabled]="!detailForm.valid">
+      <i class="fa fa-check"></i> 保存
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary"
+      (click)="goBack()">
+      <i class="fa fa-times"></i> 取消
+    </button>
+  </div>
+</form>
