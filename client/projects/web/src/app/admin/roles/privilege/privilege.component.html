@@ -1,1 +1,28 @@
-<div class="divrivileges">privilege works!</div>
+<form class="card privileges" [@animation]="animation"
+  (@animation.done)="onAnimationEvent($event)" #privilegeForm="ngForm">
+  <div class="card-header d-flex justify-content-between align-content-center">
+    <h5 class="card-title mb-0">{{title}}</h5>
+    <div class="btn-group btn-group-sm">
+      <button type="button" class="btn btn-sm btn-outline-primary"
+        [disabled]="!privilegeForm.valid">
+        <i class="fa fa-check"></i> 保存
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"
+        (click)="goBack()">
+        <i class="fa fa-times"></i> 取消
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+  </div>
+  <div class="card-footer d-flex justify-content-between">
+    <button type="button" class="btn btn-sm btn-outline-primary"
+      [disabled]="!privilegeForm.valid">
+      <i class="fa fa-check"></i> 保存
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary"
+      (click)="goBack()">
+      <i class="fa fa-times"></i> 取消
+    </button>
+  </div>
+</form>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from 'services';
-import { RoleService } from '../roles.service';
+import { RoleService, AppRoleModel } from '../roles.service';
 
 @Component({
     selector: 'app-role-list',
@@ -33,16 +33,16 @@ export class ListComponent implements OnInit {
         );
     }
 
-    public showUsers(id: string): void {
+    public showUsers(role: AppRoleModel): void {
         this.router.navigate(
-            ['./', id, 'users'],
+            ['./', role.id, 'users', { desc: role.description }],
             { relativeTo: this.route, skipLocationChange: true }
         );
     }
 
-    public showPrivileges(id: string): void {
+    public showPrivileges(role: AppRoleModel): void {
         this.router.navigate(
-            ['./', id, 'privileges'],
+            ['./', role.id, 'privileges', { desc: role.description }],
             { relativeTo: this.route, skipLocationChange: true }
         );
     }

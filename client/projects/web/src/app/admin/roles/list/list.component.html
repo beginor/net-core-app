@@ -80,16 +80,16 @@
                       <i class="fa fa-edit"></i>
                     </button>
                     <button *ngIf="info.privileges['app_roles.delete']"
-                      class="btn btn-outline-secondary" ngbTooltip="角色用户"
-                      placement="top" [openDelay]="300" (click)="showUsers(item.id)"
-                      [disabled]="item.userCount > 0">
-                      <i class="fa fa-users"></i>
+                      class="btn btn-outline-secondary" ngbTooltip="角色权限"
+                      placement="top" [openDelay]="300"
+                      (click)="showPrivileges(item)">
+                      <i class="fa fa-shield-alt"></i>
                     </button>
                     <button *ngIf="info.privileges['app_roles.delete']"
-                      class="btn btn-outline-secondary" ngbTooltip="角色权限"
-                      placement="top" [openDelay]="300" (click)="showPrivileges(item.id)"
-                      [disabled]="item.userCount > 0">
-                      <i class="fa fa-shield-alt"></i>
+                      class="btn btn-outline-secondary" ngbTooltip="角色用户"
+                      placement="top" [openDelay]="300"
+                      (click)="showUsers(item)">
+                      <i class="fa fa-users"></i>
                     </button>
                     <button *ngIf="info.privileges['app_roles.delete']"
                       class="btn btn-outline-secondary" ngbTooltip="删除"
