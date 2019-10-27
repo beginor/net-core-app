@@ -33,6 +33,20 @@ export class ListComponent implements OnInit {
         );
     }
 
+    public showUsers(id: string): void {
+        this.router.navigate(
+            ['./', id, 'users'],
+            { relativeTo: this.route, skipLocationChange: true }
+        );
+    }
+
+    public showPrivileges(id: string): void {
+        this.router.navigate(
+            ['./', id, 'privileges'],
+            { relativeTo: this.route, skipLocationChange: true }
+        );
+    }
+
     public async delete(id: string): Promise<void> {
         const deleted = await this.vm.delete(id);
         if (deleted) {
