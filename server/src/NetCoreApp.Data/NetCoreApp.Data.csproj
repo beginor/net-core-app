@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.0.0" />
     <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="NHibernate" Version="5.2.6" />
-    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="3.0.0" />
+    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="3.0.1" />
     <PackageReference Include="NHibernate.Extensions.NpgSql" Version="3.0.0" />
   </ItemGroup>
 

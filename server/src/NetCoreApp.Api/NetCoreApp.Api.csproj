@@ -17,7 +17,7 @@
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
     <PackageReference Include="NHibernate" Version="5.2.6" />
-    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="3.0.0" />
+    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="3.0.1" />
     <PackageReference Include="NHibernate.Extensions.NpgSql" Version="3.0.0" />
     <PackageReference Include="NHibernate.NetCore" Version="3.0.0" />
     <PackageReference Include="Npgsql" Version="4.1.1" />
