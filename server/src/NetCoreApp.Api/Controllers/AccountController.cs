@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Api.Authorization;
+using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 using Microsoft.AspNetCore.Identity;

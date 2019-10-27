@@ -7,7 +7,9 @@ using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using NHibernate;
+using NHibernate.AspNetCore.Identity;
 using NHibernate.Linq;
+using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 
@@ -49,7 +51,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
                 return modules;
             }
         }
-        
+
         /// <summary>同步必须的权限</summary>
         public async Task SyncRequiredAsync(IEnumerable<string> names) {
             using (var session = OpenSession()) {
@@ -75,16 +77,31 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             CancellationToken token = new CancellationToken()
         ) {
             using (var session = OpenSession()) {
-                var entity = await session.LoadAsync<AppPrivilege>(id, token);
-                if (entity == null) {
-                    return;
+                var tx = session.BeginTransaction();
+                try {
+                    var entity = await session.LoadAsync<AppPrivilege>(id, token);
+                    if (entity == null) {
+                        return;
+                    }
+                    if (entity.IsRequired) {
+                        throw new InvalidOperationException("无法删除必须的权限！");
+                    }
+                    await session.DeleteAsync(entity, token);
+                    // delete privileges in role claims;
+                    var claims = await session.Query<IdentityRoleClaim>()
+                        .Where(c => c.ClaimValue == entity.Name && c.ClaimType == Consts.PrivilegeClaimType)
+                        .ToListAsync();
+                    foreach (var claim in claims) {
+                        await session.DeleteAsync(claim, token);
+                    }
+                    await session.FlushAsync(token);
+                    session.Clear();
+                    await tx.CommitAsync();
                 }
-                if (entity.IsRequired) {
-                    throw new InvalidOperationException("无法删除必须的权限！");
+                catch (Exception) {
+                    tx.Rollback();
+                    throw;
                 }
-                await session.DeleteAsync(entity, token);
-                await session.FlushAsync(token);
-                session.Clear();
             }
         }
 

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\NetCoreApp.Api\NetCoreApp.Api.csproj" />
+    <ProjectReference Include="..\..\src\NetCoreApp.Common\NetCoreApp.Common.csproj" />
     <ProjectReference Include="..\..\src\NetCoreApp.Data\NetCoreApp.Data.csproj" />
     <ProjectReference Include="..\..\src\NetCoreApp.Models\NetCoreApp.Models.csproj" />
   </ItemGroup>

@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using Beginor.NetCoreApp.Common;
 
 namespace Beginor.NetCoreApp.Api.Authorization {
 
@@ -16,10 +17,6 @@ namespace Beginor.NetCoreApp.Api.Authorization {
             return Task.FromResult(policy.Build());
         }
 
-    }
-
-    public static class Consts {
-        public static readonly string PrivilegeClaimType = "AppPrivilege";
     }
 
 }

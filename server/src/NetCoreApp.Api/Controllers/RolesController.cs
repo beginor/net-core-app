@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Api.Authorization;
+using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NHibernate.AspNetCore.Identity;
-using NHibernate.Linq;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 

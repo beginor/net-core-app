@@ -20,15 +20,15 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
         );
 
-        private IAppPrivilegeRepository service;
+        private IAppPrivilegeRepository repo;
 
-        public AppPrivilegeController(IAppPrivilegeRepository service) {
-            this.service = service;
+        public AppPrivilegeController(IAppPrivilegeRepository repo) {
+            this.repo = repo;
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                service = null;
+                repo = null;
             }
             base.Dispose(disposing);
         }
@@ -42,7 +42,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppPrivilegeModel model
         ) {
             try {
-                await service.SaveAsync(model);
+                await repo.SaveAsync(model);
                 return model;
             }
             catch (Exception ex) {
@@ -59,7 +59,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [Authorize(Policy = "app_privileges.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
-                await service.DeleteAsync(id);
+                await repo.DeleteAsync(id);
                 return NoContent();
             }
             catch (Exception ex) {
@@ -77,7 +77,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromQuery]AppPrivilegeSearchModel model
         ) {
             try {
-                var result = await service.SearchAsync(model);
+                var result = await repo.SearchAsync(model);
                 return result;
             }
             catch (Exception ex) {
@@ -96,7 +96,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [Authorize(Policy = "app_privileges.read")]
         public async Task<ActionResult<AppPrivilegeModel>> GetById(long id) {
             try {
-                var result = await service.GetByIdAsync(id);
+                var result = await repo.GetByIdAsync(id);
                 if (result == null) {
                     return NotFound();
                 }
@@ -121,12 +121,12 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppPrivilegeModel model
         ) {
             try {
-                var modelInDb = await service.GetByIdAsync(id);
+                var modelInDb = await repo.GetByIdAsync(id);
                 if (modelInDb == null) {
                     return NotFound();
                 }
                 model.Id = id.ToString();
-                await service.UpdateAsync(model);
+                await repo.UpdateAsync(model);
                 return model;
             }
             catch (Exception ex) {
@@ -148,7 +148,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Instance))
                     .SelectMany(m => m.GetCustomAttributes<AuthorizeAttribute>(false))
                     .Select(attr => attr.Policy);
-                await service.SyncRequiredAsync(policies);
+                await repo.SyncRequiredAsync(policies);
                 return Ok();
             }
             catch (Exception ex) {
@@ -164,7 +164,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [Authorize(Policy = "app_privileges.read")]
         public async Task<ActionResult<string[]>> GetModules() {
             try {
-                var modules = await service.GetModulesAsync();
+                var modules = await repo.GetModulesAsync();
                 return modules.ToArray();
             }
             catch (Exception ex) {
