@@ -34,7 +34,9 @@ export class AppPrivilegeService {
         for (const key in this.searchModel) {
             if (this.searchModel.hasOwnProperty(key)) {
                 const val = this.searchModel[key];
-                params = params.set(key, val);
+                if (!!val) {
+                    params = params.set(key, val);
+                }
             }
         }
         this.loading = true;

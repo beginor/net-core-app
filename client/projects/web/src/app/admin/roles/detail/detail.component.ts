@@ -5,7 +5,7 @@ import {
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { slideInRight, slideOutRight } from 'services';
-import { RoleService, AppRoleModel } from '../roles.service';
+import { RolesService, AppRoleModel } from '../roles.service';
 
 @Component({
     selector: 'app-role-detail',
@@ -31,7 +31,7 @@ export class DetailComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        public vm: RoleService
+        public vm: RolesService
     ) {
         const id = route.snapshot.params.id;
         const editable = route.snapshot.params.editable;

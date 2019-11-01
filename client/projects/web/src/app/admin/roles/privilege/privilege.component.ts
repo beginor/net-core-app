@@ -5,6 +5,7 @@ import {
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { slideInRight, slideOutRight } from 'services';
+import { RolesService } from '../roles.service';
 
 @Component({
     selector: 'app-role-privilege',
@@ -26,7 +27,8 @@ export class PrivilegeComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        public vm: RolesService
     ) {
         const id = route.snapshot.params.id;
         const desc = route.snapshot.params.desc;
@@ -35,6 +37,8 @@ export class PrivilegeComponent implements OnInit {
     }
 
     public ngOnInit(): void {
+        this.vm.getPrivilegesForRole(this.id);
+        this.vm.getAllPrivileges();
     }
 
     public async onAnimationEvent(e: AnimationEvent): Promise<void> {
@@ -45,6 +49,14 @@ export class PrivilegeComponent implements OnInit {
 
     public goBack(): void {
         this.animation = 'void';
+    }
+
+    public async togglePrivilege(e: Event): Promise<void> {
+        e.preventDefault();
+        e.stopPropagation();
+        const checkbox = e.target as HTMLInputElement;
+        const privilege = checkbox.value;
+        await this.vm.toggleRolePrivilege(this.id, privilege);
     }
 
 }

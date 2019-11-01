@@ -2,13 +2,17 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
-import { UiService} from 'projects/web/src/app/common';
+import { UiService } from 'projects/web/src/app/common';
+
+import {
+    AppPrivilegeService, AppPrivilegeModel
+} from '../privileges/privileges.service';
 
 /** 角色服务 */
 @Injectable({
     providedIn: 'root'
 })
-export class RoleService {
+export class RolesService {
 
     public searchModel: AppRoleSearchModel = {
         skip: 0,
@@ -17,14 +21,32 @@ export class RoleService {
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<AppRoleModel[]>([]);
     public loading: boolean;
+    public privileges: ModulePrivileges[] = [];
+    public rolePrivileges: { [key: string]: boolean } = {};
 
     private baseUrl = `${this.apiRoot}/roles`;
+    private privilegeService: AppPrivilegeService;
 
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService
-    ) { }
+    ) {
+        this.privilegeService = new AppPrivilegeService(http, apiRoot, ui);
+        this.privilegeService.data.subscribe(data => {
+            this.privileges = [];
+            for (const privilege of data) {
+                let mp = this.privileges.find(
+                    m => m.module === privilege.module
+                );
+                if (!mp) {
+                    mp = { module: privilege.module, privileges: [] };
+                    this.privileges.push(mp);
+                }
+                mp.privileges.push(privilege);
+            }
+        });
+    }
 
     /** 搜索角色 */
     public async search(): Promise<void> {
@@ -138,6 +160,72 @@ export class RoleService {
         }
     }
 
+    public async getAllPrivileges(): Promise<void> {
+        try {
+            if (this.privileges.length > 0) {
+                return;
+            }
+            this.privilegeService.searchModel.skip = 0;
+            this.privilegeService.searchModel.take = 999;
+            this.privilegeService.searchModel.module = '';
+            await this.privilegeService.search();
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '获取全部权限出错！' });
+        }
+    }
+
+    public async getPrivilegesForRole(roleId: string): Promise<void> {
+        try {
+            this.rolePrivileges = {};
+            const url = `${this.baseUrl}/${roleId}/privileges`;
+            const privileges = await this.http.get<string[]>(url).toPromise();
+            for (const p of privileges) {
+                this.rolePrivileges[p] = true;
+            }
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '获取角色权限出错！' });
+        }
+    }
+
+    public cleanUp(): void {
+        this.privileges = [];
+    }
+
+    public async toggleRolePrivilege(
+        roleId: string,
+        privilege: string
+    ): Promise<void> {
+        const url = `${this.baseUrl}/${roleId}/privileges/${privilege}`;
+        if (!!this.rolePrivileges[privilege]) {
+            try {
+                // remove privilege from role;
+                await this.http.delete(url).toPromise();
+                this.rolePrivileges[privilege] = false;
+            }
+            catch (ex) {
+                console.error(ex);
+                this.ui.showAlert({ type: 'danger', message: '删除角色权限失败！' });
+                this.rolePrivileges[privilege] = true;
+            }
+        }
+        else {
+            try {
+                // add privilege to role;
+                await this.http.post(url, null).toPromise();
+                this.rolePrivileges[privilege] = true;
+            }
+            catch (ex) {
+                console.error(ex);
+                this.ui.showAlert({ type: 'danger', message: '添加角色权限失败！' });
+                this.rolePrivileges[privilege] = false;
+            }
+        }
+    }
+
 }
 
 /** 角色 */
@@ -171,4 +259,9 @@ export interface AppRoleResultModel {
     total?: number;
     /** 数据列表 */
     data?: AppRoleModel[];
+}
+
+export interface ModulePrivileges {
+    module: string;
+    privileges: AppPrivilegeModel[];
 }

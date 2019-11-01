@@ -1,25 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from 'services';
-import { RoleService, AppRoleModel } from '../roles.service';
+import { RolesService, AppRoleModel } from '../roles.service';
 
 @Component({
     selector: 'app-role-list',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss']
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, OnDestroy {
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         public account: AccountService,
-        public vm: RoleService
+        public vm: RolesService
     ) { }
 
     public ngOnInit(): void {
         this.loadData();
+    }
+
+    public ngOnDestroy(): void {
+        this.vm.cleanUp();
     }
 
     public async loadData(): Promise<void> {
