@@ -1,17 +1,29 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import {
+    NgbPaginationModule, NgbTooltipModule
+} from '@ng-bootstrap/ng-bootstrap';
 
+import { ServicesModule } from 'services';
+
+import { AppCommonModule } from '../../common';
 import { UsersRoutingModule } from './users-routing.module';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
 
 
 @NgModule({
-  declarations: [ListComponent, DetailComponent],
+  declarations: [
+      ListComponent,
+      DetailComponent
+    ],
   imports: [
     CommonModule,
-    HttpClientModule,
+    FormsModule,
+    NgbPaginationModule,
+    NgbTooltipModule,
+    AppCommonModule,
     UsersRoutingModule
   ]
 })

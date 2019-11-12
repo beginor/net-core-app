@@ -1,20 +1,62 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { UsersService } from '../users.service';
+import { AccountService } from 'services';
+
+import { UsersService, UserModel } from '../users.service';
 
 @Component({
     selector: 'app-admin-users-list',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss']
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, OnDestroy {
 
     constructor(
+        private router: Router,
+        private route: ActivatedRoute,
+        public account: AccountService,
         public vm: UsersService
     ) { }
 
-    public async ngOnInit(): Promise<void> {
+    public ngOnInit(): void {
+        this.loadData();
+    }
+
+    public ngOnDestroy(): void {
+        // this.vm.cleanUp();
+    }
+
+    public async loadData(): Promise<void> {
         await this.vm.search();
+    }
+
+    public showDetail(id: string, editable: boolean): void {
+        this.router.navigate(
+            ['./', id, { editable: editable }],
+            { relativeTo: this.route, skipLocationChange: true }
+        );
+    }
+
+    // public showUsers(role: UserModel): void {
+    //     this.router.navigate(
+    //         ['./', role.id, 'users', { desc: role.description }],
+    //         { relativeTo: this.route, skipLocationChange: true }
+    //     );
+    // }
+
+    // public showPrivileges(role: UserModel): void {
+    //     this.router.navigate(
+    //         ['./', role.id, 'privileges', { desc: role.description }],
+    //         { relativeTo: this.route, skipLocationChange: true }
+    //     );
+    // }
+
+    public async delete(id: string): Promise<void> {
+        // const deleted = await this.vm.delete(id);
+        // if (deleted) {
+        //     this.vm.search();
+        // }
     }
 
 }

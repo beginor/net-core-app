@@ -1,6 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
+
+import { UiService } from 'projects/web/src/app/common';
 
 @Injectable({
     providedIn: 'root'
@@ -10,20 +12,125 @@ export class UsersService {
     public searchModel: UserSearchModel = { skip: 0, take: 10 };
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<UserModel[]>([]);
+    public loading: boolean;
 
     private baseUrl = this.apiRoot + '/users';
 
     constructor(
         private http: HttpClient,
-        @Inject('apiRoot') private apiRoot: string
+        @Inject('apiRoot') private apiRoot: string,
+        private ui: UiService
     ) {}
 
     public async search(): Promise<void> {
-        const result = await this.http.get<UserSearchResult>(
-            this.baseUrl
-        ).toPromise();
-        this.total.next(result.total);
-        this.data.next(result.data);
+        let params = new HttpParams();
+        for (const key in this.searchModel) {
+            if (this.searchModel.hasOwnProperty(key)) {
+                const val = this.searchModel[key];
+                params = params.set(key, val);
+            }
+        }
+        this.loading = true;
+        try {
+            const result = await this.http.get<UserSearchResult>(
+                this.baseUrl,
+                {
+                    params: params
+                }
+            ).toPromise();
+            this.total.next(result.total);
+            this.data.next(result.data);
+        }
+        catch (ex) {
+            console.error(ex.toString());
+            this.total.next(0);
+            this.data.next([]);
+            this.ui.showAlert({ type: 'danger', message: '加载用户数据出错!'});
+        }
+        finally {
+            this.loading = false;
+        }
+    }
+
+    /** 更改页码分页查询 */
+    public async onPageChange(p: number): Promise<void> {
+        this.searchModel.skip = (p - 1) * this.searchModel.take;
+        await this.search();
+    }
+
+    /** 更改分页大小 */
+    public async onPageSizeChange(): Promise<void> {
+        this.searchModel.skip = 0;
+        await this.search();
+    }
+
+    /** 创建用户 */
+    public async create(model: UserModel): Promise<UserModel> {
+        try {
+            const result = await this.http.post<UserModel>(
+                this.baseUrl,
+                model
+            ).toPromise();
+            return result;
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '创建用户出错！' });
+            return null;
+        }
+    }
+
+    /** 获取指定的用户 */
+    public async getById(id: string): Promise<UserModel> {
+        try {
+            const result = await this.http.get<UserModel>(
+                `${this.baseUrl}/${id}`
+            ).toPromise();
+            return result;
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '获取指定的用户出错！' });
+            return null;
+        }
+    }
+
+    /** 删除用户 */
+    public async delete(id: string): Promise<boolean> {
+        const confirm = await this.ui.showConfirm('确认删除么？');
+        if (!confirm) {
+            return false;
+        }
+        try {
+            await this.http.delete(
+                `${this.baseUrl}/${id}`
+            ).toPromise();
+            return true;
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '删除用户出错！' });
+            return false;
+        }
+    }
+
+    /** 更新用户 */
+    public async update(
+        id: string,
+        model: UserModel
+    ): Promise<UserModel> {
+        try {
+            const result = await this.http.put<UserModel>(
+                `${this.baseUrl}/${id}`,
+                model
+            ).toPromise();
+            return result;
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '更新用户出错！' });
+            return null;
+        }
     }
 
 }

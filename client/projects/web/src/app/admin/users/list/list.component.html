@@ -7,35 +7,87 @@
 </nav>
 <div class="container-fluid">
   <div class="row">
-    <table class="mx-3 table table-sm table-striped table-bordered table-hover">
+
+    <div class="col-12">
+      <div class="card" *ngIf="(account.info | async) as info">
+        <div class="card-header d-flex justify-content-between">
+            <h5 class="card-title mb-0">用户</h5>
+            <div class="btn-group btn-group-sm">
+              <button *ngIf="info.privileges['app_users.create']" type="button" class="btn btn-outline-primary"
+                (click)="showDetail('0', true)">
+                <i class="fa fa-plus"></i> 新建用户
+              </button>
+              <button type="button" class="btn btn-outline-secondary"
+                (click)="loadData()">
+                <i class="fa fa-sync"></i> 刷新
+              </button>
+            </div>
+        </div>
+        <form class="p-2 bg-light">
+          <div class="form-row">
+            <div class="col-6">
+              <div class="row no-gutters align-items-center">
+                <label for="pageSize" class="col-auto col-form-label col-form-label-sm">
+                  显示：
+                </label>
+                <div class="col-auto">
+                  <select id="pageSize" name="pageSize"
+                    class="form-control form-control-sm"
+                    [(ngModel)]="vm.searchModel.take"
+                    (change)="vm.onPageSizeChange()">
+                    <option [value]="10">10</option>
+                    <option [value]="25">25</option>
+                    <option [value]="50">50</option>
+                    <option [value]="100">100</option>
+                  </select>
+                </div>
+                <div class="col-auto text-muted px-2 py-1">条记录</div>
+                <div class="col-auto text-muted px-2">
+                  <ng-container *ngIf="vm.loading">
+                    <i class="fa fa-spin fa-spinner"></i> 加载中...
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="row no-gutters">
+                <div class="col-6">
+                  <!-- <span class="text-muted">其它工具栏</span> -->
+                </div>
+                <div class="col-6">
+                  <!-- <span class="text-muted">其它工具栏</span> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <table class="mx-3 table table-striped table-bordered table-hover">
       <thead>
         <tr>
           <th scope="col" class="text-center">#</th>
-          <th scope="col" class="text-center">姓氏</th>
           <th scope="col" class="text-center">名称</th>
           <th scope="col" class="text-center">用户名</th>
           <th scope="col" class="text-center">邮箱</th>
-          <th scope="col" class="text-center">电话</th>
-          <th scope="col" class="text-center">是否锁定</th>
           <th scope="col" class="text-center">创建时间</th>
           <th scope="col" class="text-center">最近登录</th>
-          <th scope="col" class="text-center">登录次数</th>
         </tr>
       </thead>
       <tbody *ngIf="(vm.data | async) as data">
         <tr *ngFor="let item of data; let i = index;">
           <th scope="row" class="text-right">{{i + 1}}</th>
-          <td class="text-center">{{item.sn}}</td>
-          <td class="text-center">{{item.givenName}}</td>
+          <td class="text-center">{{ item.sn + '' + item.givenName}}</td>
           <td class="text-center">{{item.userName}}</td>
           <td class="text-center" [ngClass]="{ 'text-success': item.emailConfirmed, 'text-warning': !item.emailConfirmed }">{{item.email}}</td>
-          <td class="text-center">{{item.phoneNumber}}</td>
-          <td class="text-center"></td>
           <td class="text-center">{{item.createTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
           <td class="text-center">{{item.lastLogin | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-          <td class="text-right">{{item.loginCount}}</td>
         </tr>
       </tbody>
     </table>
+  </div>
+  <div class="detail-container">
+    <router-outlet></router-outlet>
   </div>
 </div>
