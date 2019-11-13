@@ -15,7 +15,7 @@ namespace Beginor.NetCoreApp.Api {
             IWebHostEnvironment env
         ) {
             services.AddCors(options => {
-                var section = config.GetSection("corsPolicy");
+                var section = config.GetSection("cors");
                 var settings = section.Get<CorsPolicy>();
                 options.AddPolicy(CorsPolicyName, settings);
             });

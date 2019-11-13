@@ -14,7 +14,7 @@ namespace Beginor.NetCoreApp.Api {
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
-            var identitySection = config.GetSection("identityOptions");
+            var identitySection = config.GetSection("identity");
             var identitySettings = identitySection.Get<IdentityOptions>();
             services
                 .AddIdentity<AppUser, AppRole>(options => {

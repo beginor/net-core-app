@@ -1,11 +1,13 @@
-using Beginor.NetCoreApp.Api.Authorization;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using System;
+using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Beginor.NetCoreApp.Api.Authorization;
 
 namespace Beginor.NetCoreApp.Api {
 
@@ -15,17 +17,20 @@ namespace Beginor.NetCoreApp.Api {
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
-            // authentication;
-            var section = config.GetSection("cookieAuthOptions");
-            var settings = section.Get<CookieAuthenticationOptions>();
-            services
-                .ConfigureApplicationCookie(options => {
-                    options.SlidingExpiration = settings.SlidingExpiration;
-                    options.ExpireTimeSpan = settings.ExpireTimeSpan;
-                })
-                .ConfigureExternalCookie(options => {
-                    options.SlidingExpiration = settings.SlidingExpiration;
-                    options.ExpireTimeSpan = settings.ExpireTimeSpan;
+            var jwt = config.GetSection("jwt").Get<Jwt>();
+            services.AddSingleton(jwt);
+            services.AddAuthentication(x => {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x => {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(jwt.SecretKey),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
                 });
             // authorization;
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
@@ -39,6 +44,19 @@ namespace Beginor.NetCoreApp.Api {
             app.UseAuthorization();
         }
 
+    }
+
+    public class Jwt {
+        public string Secret { get; set; }
+        public TimeSpan ExpireTimeSpan { get; set; }
+        public byte[] SecretKey {
+            get {
+                if (string.IsNullOrEmpty(Secret)) {
+                    throw new InvalidOperationException("Secret is empty!");
+                }
+                return Encoding.ASCII.GetBytes(Secret);
+            }
+        }
     }
 
 }

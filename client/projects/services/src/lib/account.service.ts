@@ -9,6 +9,8 @@ import { BehaviorSubject, Subscription, interval } from 'rxjs';
 export class AccountService {
 
     public info = new BehaviorSubject<AccountInfo>({});
+    public token: string;
+
     private interval$: Subscription;
 
     constructor(
@@ -37,7 +39,8 @@ export class AccountService {
 
     public async login(model: LoginModel): Promise<void> {
         const url = this.apiRoot + '/account';
-        await this.http.post<any>(url, model).toPromise();
+        this.token = await this.http.post(url, model, { responseType: 'text' })
+            .toPromise();
     }
 
     public async logout(): Promise<void> {

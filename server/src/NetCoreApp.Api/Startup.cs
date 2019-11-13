@@ -40,6 +40,7 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureIdentityServices(services, env);
             // cookie policy, cors, auth;
             ConfigureCookiePolicyServices(services, env);
+
             ConfigureCorsServices(services, env);
             ConfigureAuthenticationServices(services, env);
             // web related.

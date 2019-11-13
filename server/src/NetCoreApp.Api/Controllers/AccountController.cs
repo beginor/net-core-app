@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -9,6 +11,7 @@ using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
@@ -22,20 +25,24 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         );
 
         private UserManager<AppUser> userMgr;
-        private SignInManager<AppUser> signinMgr;
+        private RoleManager<AppRole> roleMgr;
+        private Jwt jwt;
 
         public AccountController(
             UserManager<AppUser> userMgr,
-            SignInManager<AppUser> signinMgr
+            RoleManager<AppRole> roleMgr,
+            Jwt jwt
         ) {
             this.userMgr = userMgr;
-            this.signinMgr = signinMgr;
+            this.roleMgr = roleMgr;
+            this.jwt = jwt;
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 userMgr = null;
-                signinMgr = null;
+                roleMgr = null;
+                jwt = null;
             }
             base.Dispose(disposing);
         }
@@ -61,6 +68,19 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 };
                 var roles = await userMgr.GetRolesAsync(appUser);
                 model.Roles = roles.ToDictionary(r => r, r => true);
+                model.Privileges = new Dictionary<string, bool>();
+                foreach (var roleName in roles) {
+                    var role = await roleMgr.FindByNameAsync(roleName);
+                    var roleClaims = await roleMgr.GetClaimsAsync(role);
+                    var privileges = roleClaims.Where(
+                        claim => claim.Type == Consts.PrivilegeClaimType
+                    ).Select(claim => claim.Value);
+                    foreach (var privilege in privileges) {
+                        if (!model.Privileges.ContainsKey(privilege)) {
+                            model.Privileges.Add(privilege, true);
+                        }
+                    }
+                }
                 var surname = User.Claims.FirstOrDefault(
                     c => c.Type == ClaimTypes.Surname
                 );
@@ -73,10 +93,6 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (givenName != null) {
                     model.GivenName = givenName.Value;
                 }
-                model.Privileges = User.Claims
-                    .Where(c => c.Type == Consts.PrivilegeClaimType)
-                    .Select(c => c.Value)
-                    .ToDictionary(p => p, p => true);
                 return model;
             }
             catch (Exception ex) {
@@ -117,11 +133,29 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                         $"输入的密码不正确， 请重试！"
                     );
                 }
-                await signinMgr.SignInAsync(user, model.IsPersistent);
+                // await signinMgr.SignInAsync(user, model.IsPersistent);
+                var handler = new JwtSecurityTokenHandler();
+                var identity = new ClaimsIdentity();
+                identity.AddClaim(
+                    new Claim(ClaimTypes.NameIdentifier, user.Id)
+                );
+                identity.AddClaim(
+                    new Claim(ClaimTypes.Name, user.UserName)
+                );
+                var desc = new SecurityTokenDescriptor {
+                    Subject = identity,
+                    Expires = DateTime.UtcNow.Add(jwt.ExpireTimeSpan),
+                    SigningCredentials = new SigningCredentials(
+                        new SymmetricSecurityKey(jwt.SecretKey),
+                        SecurityAlgorithms.HmacSha256Signature
+                    )
+                };
+                var token = handler.CreateToken(desc);
+                var result = handler.WriteToken(token);
                 user.LastLogin = DateTime.Now;
                 user.LoginCount += 1;
                 await userMgr.UpdateAsync(user);
-                return Ok();
+                return Ok(result);
             }
             catch (Exception ex) {
                 logger.Error($"Can not signin user.", ex);
@@ -137,7 +171,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SignOut() {
             try {
-                await signinMgr.SignOutAsync();
+                // await signinMgr.SignOutAsync();
                 return NoContent();
             }
             catch (Exception ex) {

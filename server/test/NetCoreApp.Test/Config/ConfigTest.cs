@@ -1,4 +1,5 @@
 using System;
+using Beginor.NetCoreApp.Api;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -15,18 +16,16 @@ namespace Beginor.NetCoreApp.Test.Config {
         }
 
         [Test]
-        public void _02_CanGetValue() {
-            var allowedHosts = Target.GetValue<string>("AllowedHosts");
-            var allowedHosts2 = Target.GetValue<string>("allowedHosts");
-            Assert.AreEqual(allowedHosts, allowedHosts2);
-            Assert.IsNotEmpty(allowedHosts);
-            Console.WriteLine($"allowedHosts: {allowedHosts}");
-            Console.WriteLine($"allowedHosts2: {allowedHosts2}");
+        public void _02_CanGetJwtOptions() {
+            var setting = Target.GetSection("jwt");
+            Assert.IsNotNull(setting);
+            var jwt = setting.Get<Jwt>();
+            Assert.IsNotEmpty(jwt.Secret);
         }
 
         [Test]
         public void _03_CanResolveOptions() {
-            var section = Target.GetSection("IdentityOptions");
+            var section = Target.GetSection("identity");
             var options = section.Get<IdentityOptions>();
             // Test Config Options
             Assert.IsNotNull(options);
@@ -39,7 +38,7 @@ namespace Beginor.NetCoreApp.Test.Config {
 
         [Test]
         public void _04_CanResolveCorsPolicy() {
-            var section = Target.GetSection("corsPolicy");
+            var section = Target.GetSection("cors");
             var policy = section.Get<CorsPolicy>();
             Assert.IsFalse(policy.AllowAnyOrigin);
             Assert.IsTrue(policy.AllowAnyHeader);
