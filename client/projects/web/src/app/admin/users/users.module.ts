@@ -24,6 +24,7 @@ import { DetailComponent } from './detail/detail.component';
     NgbPaginationModule,
     NgbTooltipModule,
     AppCommonModule,
+    ServicesModule,
     UsersRoutingModule
   ]
 })

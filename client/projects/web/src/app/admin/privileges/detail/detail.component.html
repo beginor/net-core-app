@@ -1,6 +1,6 @@
 <form *ngIf="(account.info | async) as info" class="card detail"
-  [antiforgery]="editable" [@animation]="animation"
-  (@animation.done)="onAnimationEvent($event)" #detailForm="ngForm">
+  [antiforgery]="editable" #detailForm="ngForm" [@animation]="animation"
+  (@animation.done)="onAnimationEvent($event)" >
   <div class="card-header d-flex justify-content-between align-content-center">
     <h5 class="card-title mb-0">{{title}}</h5>
     <div class="btn-group btn-group-sm">

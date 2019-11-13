@@ -1,3 +1,32 @@
-<form class="card detail">
-  <p>detail works!</p>
+<form class="card detail" *ngIf="(account.info | async) as info"
+  [antiforgery]="editable" #detailForm="ngForm" [@animation]="animation"
+  (@animation.done)="onAnimationEvent($event)">
+  <div class="card-header d-flex justify-content-between align-content-center">
+    <h5 class="card-title mb-0">{{title}}</h5>
+    <div class="btn-group btn-group-sm">
+      <button *ngIf="info.privileges['app_users.update'] && editable"
+        type="button" class="btn btn-sm btn-outline-primary"
+        (click)="save()" [disabled]="!detailForm.valid">
+        <i class="fa fa-check"></i> 保存
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"
+        (click)="goBack()">
+        <i class="fa fa-times"></i> 取消
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <p>detail works!</p>
+  </div>
+  <div *ngIf="info.privileges['app_users.update'] && editable" class="card-footer d-flex justify-content-between">
+    <button
+      type="button" class="btn btn-sm btn-outline-primary"
+      (click)="save()" [disabled]="!detailForm.valid">
+      <i class="fa fa-check"></i> 保存
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary"
+      (click)="goBack()">
+      <i class="fa fa-times"></i> 取消
+    </button>
+  </div>
 </form>

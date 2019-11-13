@@ -61,31 +61,54 @@
             </div>
           </div>
         </form>
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead>
+              <tr>
+                <th scope="col" class="text-right">#</th>
+                <th scope="col" class="text-left">用户名</th>
+                <th scope="col" class="text-center">电话</th>
+                <th scope="col" class="text-center">创建时间</th>
+                <th scope="col" class="text-center">最近登录</th>
+                <th scope="col" class="text-center">登录次数</th>
+                <th scope="col" class="text-center text-nowrap text-muted">操作</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="(vm.data | async) as data">
+              <tr *ngFor="let item of data; let i = index;">
+                <th scope="row" class="text-right">{{i + 1}}</th>
+                <td class="text-left">{{item.userName}}</td>
+                <td class="text-center">{{item.phoneNumber}}</td>
+                <td class="text-center">{{item.createTime | date:'yyyy-MM-dd'}}</td>
+                <td class="text-center">{{item.lastLogin | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                <td class="text-right">{{item.loginCount}}</td>
+                <td class="text-center">
+                  <div class="btn-group btn-group-sm">
+                    <button *ngIf="info.privileges['app_privileges.read']"
+                      class="btn btn-outline-secondary" ngbTooltip="详情"
+                      placement="top" [openDelay]="300"
+                      (click)="showDetail(item.id, false)">
+                      <i class="fa fa-list-alt"></i>
+                    </button>
+                    <button *ngIf="info.privileges['app_privileges.update']"
+                      class="btn btn-outline-secondary" ngbTooltip="编辑"
+                      placement="top" [openDelay]="300"
+                      (click)="showDetail(item.id, true)">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                    <button *ngIf="info.privileges['app_privileges.delete']"
+                      class="btn btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300"
+                      (click)="delete(item.id)">
+                      <i class="fa fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-
-    <table class="mx-3 table table-striped table-bordered table-hover">
-      <thead>
-        <tr>
-          <th scope="col" class="text-center">#</th>
-          <th scope="col" class="text-center">名称</th>
-          <th scope="col" class="text-center">用户名</th>
-          <th scope="col" class="text-center">邮箱</th>
-          <th scope="col" class="text-center">创建时间</th>
-          <th scope="col" class="text-center">最近登录</th>
-        </tr>
-      </thead>
-      <tbody *ngIf="(vm.data | async) as data">
-        <tr *ngFor="let item of data; let i = index;">
-          <th scope="row" class="text-right">{{i + 1}}</th>
-          <td class="text-center">{{ item.sn + '' + item.givenName}}</td>
-          <td class="text-center">{{item.userName}}</td>
-          <td class="text-center" [ngClass]="{ 'text-success': item.emailConfirmed, 'text-warning': !item.emailConfirmed }">{{item.email}}</td>
-          <td class="text-center">{{item.createTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-          <td class="text-center">{{item.lastLogin | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-        </tr>
-      </tbody>
-    </table>
   </div>
   <div class="detail-container">
     <router-outlet></router-outlet>
