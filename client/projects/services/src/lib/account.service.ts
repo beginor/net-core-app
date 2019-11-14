@@ -35,6 +35,7 @@ export class AccountService {
             return info;
         }
         catch (ex) {
+            localStorage.removeItem(`Bearer:${this.apiRoot}`);
             throw new Error('Can not get account info!');
         }
     }

@@ -163,23 +163,6 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
         }
 
-        /// <summary>注销</summary>
-        /// <response code="204">注销成功</response>
-        /// <response code="500">服务器内部错误</response>
-        [HttpDelete("")]
-        [ProducesResponseType(204)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SignOut() {
-            try {
-                // await signinMgr.SignOutAsync();
-                return NoContent();
-            }
-            catch (Exception ex) {
-                logger.Error($"Can not sign out user.", ex);
-                return this.InternalServerError(ex.GetOriginalMessage());
-            }
-        }
-
     }
 
 }

@@ -38,9 +38,7 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureAutoMapperServices(services, env);
             ConfigureAppServices(services, env);
             ConfigureIdentityServices(services, env);
-            // cookie policy, cors, auth;
-            ConfigureCookiePolicyServices(services, env);
-
+            // cors auth
             ConfigureCorsServices(services, env);
             ConfigureAuthenticationServices(services, env);
             // web related.
@@ -65,8 +63,7 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureAutoMapper(app, env);
             ConfigureApp(app, env);
             ConfigureIdentity(app, env);
-            // cookie policy, cors, auth;
-            ConfigureCookiePolicy(app, env);
+            // cors, auth;
             ConfigureCors(app, env);
             ConfigureAuthentication(app, env);
             // web related.
