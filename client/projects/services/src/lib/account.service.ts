@@ -9,7 +9,9 @@ import { BehaviorSubject, Subscription, interval } from 'rxjs';
 export class AccountService {
 
     public info = new BehaviorSubject<AccountInfo>({});
-    public token: string;
+    public get token(): string {
+        return localStorage.getItem(`Bearer:${this.apiRoot}`);
+    }
 
     private interval$: Subscription;
 
@@ -39,13 +41,13 @@ export class AccountService {
 
     public async login(model: LoginModel): Promise<void> {
         const url = this.apiRoot + '/account';
-        this.token = await this.http.post(url, model, { responseType: 'text' })
+        const token = await this.http.post(url, model, { responseType: 'text' })
             .toPromise();
+        localStorage.setItem(`Bearer:${this.apiRoot}`, token);
     }
 
-    public async logout(): Promise<void> {
-        const url = this.apiRoot + '/account';
-        await this.http.delete(url).toPromise();
+    public logout(): void {
+        localStorage.removeItem(`Bearer:${this.apiRoot}`);
         this.info.next({});
     }
 
