@@ -24,8 +24,8 @@ export class DetailComponent implements OnInit {
     public title: string;
     public editable: boolean;
     public model: AppRoleModel = {};
+    public id: string;
 
-    private id: string;
     private reloadList = false;
 
     constructor(
