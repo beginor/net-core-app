@@ -19,11 +19,11 @@
       "dom"
     ],
     "paths": {
-      "services": [
-        "dist/services"
+      "app-shared": [
+        "dist/app-shared"
       ],
-      "services/*": [
-        "dist/services/*"
+      "app-shared/*": [
+        "dist/app-shared/*"
       ]
     }
   },

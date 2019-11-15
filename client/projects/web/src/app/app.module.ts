@@ -6,7 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { ServicesModule, ApiInterceptor } from 'services';
+import { AppSharedModule, ApiInterceptor } from 'app-shared';
 
 import { AppCommonModule } from './common';
 import { AppRoutingModule } from './app-routing.module';
@@ -24,7 +24,7 @@ import { environment } from '../environments/environment';
         FormsModule,
         HttpClientModule,
         NgbModule,
-        ServicesModule,
+        AppSharedModule,
         AppCommonModule,
         AppRoutingModule
     ],

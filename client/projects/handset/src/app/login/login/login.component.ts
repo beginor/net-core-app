@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
-import { AccountService, LoginModel } from 'services';
+import { AccountService, LoginModel } from 'app-shared';
 
 @Component({
     selector: 'app-login',

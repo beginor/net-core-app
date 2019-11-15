@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { ServicesModule } from 'services';
+import { AppSharedModule } from 'app-shared';
 
 import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './login/login.component';
@@ -16,7 +16,7 @@ import { LoginComponent } from './login/login.component';
         CommonModule,
         FormsModule,
         NgbAlertModule,
-        ServicesModule,
+        AppSharedModule,
         LoginRoutingModule
     ]
 })

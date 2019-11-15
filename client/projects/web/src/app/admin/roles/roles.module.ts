@@ -5,7 +5,7 @@ import {
     NgbPaginationModule, NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap';
 
-import { ServicesModule } from 'services';
+import { AppSharedModule } from 'app-shared';
 
 import { AppCommonModule } from 'projects/web/src/app/common';
 import { RolesRoutingModule } from './roles-routing.module';
@@ -26,7 +26,7 @@ import { UserComponent } from './user/user.component';
         FormsModule,
         NgbPaginationModule,
         NgbTooltipModule,
-        ServicesModule,
+        AppSharedModule,
         AppCommonModule,
         RolesRoutingModule
     ]

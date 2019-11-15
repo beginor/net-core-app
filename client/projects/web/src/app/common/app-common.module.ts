@@ -5,7 +5,7 @@ import {
     NgbAlertModule, NgbDropdownModule, NgbModalModule
 } from '@ng-bootstrap/ng-bootstrap';
 
-import { ServicesModule } from 'services';
+import { AppSharedModule } from 'app-shared';
 
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { ConfirmComponent } from './confirm/confirm.component';
@@ -21,7 +21,7 @@ import { ConfirmComponent } from './confirm/confirm.component';
         NgbAlertModule,
         NgbDropdownModule,
         NgbModalModule,
-        ServicesModule
+        AppSharedModule
     ],
     exports: [
         NavBarComponent

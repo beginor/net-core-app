@@ -4,7 +4,7 @@ import {
 } from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { slideInRight, slideOutRight } from 'services';
+import { slideInRight, slideOutRight } from 'app-shared';
 import { RolesService, AppRoleModel } from '../roles.service';
 
 @Component({

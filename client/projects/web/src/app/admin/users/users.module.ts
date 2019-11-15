@@ -5,7 +5,7 @@ import {
     NgbPaginationModule, NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap';
 
-import { ServicesModule } from 'services';
+import { AppSharedModule } from 'app-shared';
 
 import { AppCommonModule } from '../../common';
 import { UsersRoutingModule } from './users-routing.module';
@@ -24,7 +24,7 @@ import { DetailComponent } from './detail/detail.component';
     NgbPaginationModule,
     NgbTooltipModule,
     AppCommonModule,
-    ServicesModule,
+    AppSharedModule,
     UsersRoutingModule
   ]
 })

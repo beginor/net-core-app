@@ -235,33 +235,33 @@
         }
       }
     },
-    "services": {
+    "app-shared": {
       "projectType": "library",
-      "root": "projects/services",
-      "sourceRoot": "projects/services/src",
+      "root": "projects/app-shared",
+      "sourceRoot": "projects/app-shared/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/services/tsconfig.lib.json",
-            "project": "projects/services/ng-package.json"
+            "tsConfig": "projects/app-shared/tsconfig.lib.json",
+            "project": "projects/app-shared/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/services/src/test.ts",
-            "tsConfig": "projects/services/tsconfig.spec.json",
-            "karmaConfig": "projects/services/karma.conf.js"
+            "main": "projects/app-shared/src/test.ts",
+            "tsConfig": "projects/app-shared/tsconfig.spec.json",
+            "karmaConfig": "projects/app-shared/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/services/tsconfig.lib.json",
-              "projects/services/tsconfig.spec.json"
+              "projects/app-shared/tsconfig.lib.json",
+              "projects/app-shared/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

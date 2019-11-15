@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AccountService, LoginModel } from 'services';
+import { AccountService, LoginModel } from 'app-shared';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 

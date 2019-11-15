@@ -11,4 +11,4 @@ import { HttpClientModule } from '@angular/common/http';
     exports: [
     ]
 })
-export class ServicesModule { }
+export class AppSharedModule { }

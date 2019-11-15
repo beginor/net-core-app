@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { environment } from '../environments/environment';
 
-import { AuthGuard } from 'services';
+import { AuthGuard } from 'app-shared';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { AccountService } from 'services';
+import { AccountService } from 'app-shared';
 import { UiService } from './common/services/ui.service';
 
 @Component({
