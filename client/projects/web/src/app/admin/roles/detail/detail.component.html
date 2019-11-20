@@ -16,17 +16,17 @@
   <div class="card-body">
     <div class="form-group" [class.is-valid]="name.valid"
       [class.is-invalid]="!(name.valid || name.pristine)">
-      <label class="form-label text-muted" for="name">角色名称</label>
+      <label class="form-label text-muted" for="name">角色名称 <i class="text-danger">*</i></label>
       <input class="form-control" type="text" id="name" name="name"
         placeholder="请输入角色名称 ..." [(ngModel)]="model.name"
         [class.is-invalid]="!(name.valid || name.pristine)"
         [class.is-valid]="name.valid"
-        required #name="ngModel" [disabled]="!editable || !!id"
+        required #name="ngModel" [disabled]="!editable || id !=='0'"
       />
     </div>
     <div class="form-group" [class.is-valid]="description.valid"
       [class.is-invalid]="!(description.valid || description.pristine)">
-      <label class="form-label text-muted" for="description">角色描述</label>
+      <label class="form-label text-muted" for="description">角色描述 <i class="text-danger">*</i></label>
       <input class="form-control" type="text" id="description" name="description"
         placeholder="请输入角色描述 ..." [(ngModel)]="model.description"
         [class.is-invalid]="!(description.valid || description.pristine)"

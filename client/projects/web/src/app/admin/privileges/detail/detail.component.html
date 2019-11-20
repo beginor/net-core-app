@@ -17,7 +17,7 @@
   <div class="card-body">
     <div class="form-group" [class.is-valid]="module.valid"
       [class.is-invalid]="!(module.valid || module.pristine)">
-      <label class="form-label text-muted" for="module">权限模块</label>
+      <label class="form-label text-muted" for="module">权限模块 <i class="text-danger">*</i></label>
       <input class="form-control" type="text" id="module" name="module"
         placeholder="请输入权限模块 ..." [(ngModel)]="model.module"
         [class.is-invalid]="!(module.valid || module.pristine)"
@@ -26,7 +26,7 @@
     </div>
     <div class="form-group" [class.is-valid]="name.valid"
       [class.is-invalid]="!(name.valid || name.pristine)">
-      <label class="form-label text-muted" for="name">权限名称</label>
+      <label class="form-label text-muted" for="name">权限名称 <i class="text-danger">*</i></label>
       <input class="form-control" type="text" id="name" name="name"
         placeholder="请输入权限名称 ..." [(ngModel)]="model.name"
         [class.is-invalid]="!(name.valid || name.pristine)"
@@ -35,7 +35,7 @@
     </div>
     <div class="form-group" [class.is-valid]="description.valid"
       [class.is-invalid]="!(description.valid || description.pristine)">
-      <label class="form-label text-muted" for="description">权限描述</label>
+      <label class="form-label text-muted" for="description">权限描述 <i class="text-danger">*</i></label>
       <input class="form-control" type="text" id="description" name="description"
         placeholder="请输入权限描述 ..." [(ngModel)]="model.description"
         [class.is-invalid]="!(description.valid || description.pristine)"
