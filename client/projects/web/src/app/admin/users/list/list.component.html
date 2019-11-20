@@ -56,7 +56,21 @@
                   <!-- <span class="text-muted">其它工具栏</span> -->
                 </div>
                 <div class="col-6">
-                  <!-- <span class="text-muted">其它工具栏</span> -->
+                  <div class="input-group input-group-sm">
+                    <input class="form-control" name="userName" type="text"
+                      placeholder="按名称、电子邮件或用户名搜索"
+                      [(ngModel)]="vm.searchModel.userName"
+                      (keyup.enter)="vm.search()" />
+                    <div class="input-group-append">
+                      <button class="btn btn-sm btn-outline-secondary" type="button" *ngIf="vm.searchModel.userName"
+                        (click)="vm.searchModel.userName = ''">
+                        <i class="fa fa-times"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-secondary" type="button" (click)="vm.search()">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
