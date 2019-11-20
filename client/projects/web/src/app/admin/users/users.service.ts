@@ -163,6 +163,16 @@ export interface UserModel {
     lastLogin?: string;
     /** 登录次数 */
     loginCount?: number;
+    /** 姓氏 */
+    surname?: string;
+    /** 名称 */
+    givenName?: string;
+    /** 出生日期 */
+    dateOfBirth?: string;
+    /** 性别 */
+    gender?: string;
+    /** 家庭地址 */
+    streetAddress?: string;
 }
 
 /** 用户搜索参数 */

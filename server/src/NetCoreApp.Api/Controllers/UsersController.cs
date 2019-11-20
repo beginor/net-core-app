@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Data;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -65,8 +67,10 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (user != null) {
                     return BadRequest($"User with {model.Email} exists!");
                 }
-                user = mapper.Map<AppUser>(model);
+                user = new AppUser();
+                var claims = user.UpdateFromUserModel(mapper, model);
                 var result = await userMgr.CreateAsync(user);
+                await AddOrReplaceClaims(user, claims);
                 if (result.Succeeded) {
                     mapper.Map(user, model);
                     return model;
@@ -119,7 +123,12 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 }
                 var total = await query.LongCountAsync();
                 var data = await query.ToListAsync();
-                var models = mapper.Map<IList<AppUserModel>>(data);
+                var models = new List<AppUserModel>();
+                foreach (var user in data) {
+                    var claims = await userMgr.GetClaimsAsync(user);
+                    var userModel = user.ToUserModel(mapper, claims);
+                    models.Add(userModel);
+                }
                 var result = new PaginatedResponseModel<AppUserModel> {
                     Skip = model.Skip,
                     Take = model.Take,
@@ -146,7 +155,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (user == null) {
                     return NotFound();
                 }
-                var model = mapper.Map<AppUserModel>(user);
+                var claims = await userMgr.GetClaimsAsync(user);
+                var model = user.ToUserModel(mapper, claims);
                 return model;
             }
             catch (Exception ex) {
@@ -171,7 +181,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (user == null) {
                     return NotFound();
                 }
-                mapper.Map(model, user);
+                var claims = user.UpdateFromUserModel(mapper, model);
+                await AddOrReplaceClaims(user, claims);
                 var result = await userMgr.UpdateAsync(user);
                 if (result.Succeeded) {
                     mapper.Map(user, model);
@@ -182,6 +193,19 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             catch (Exception ex) {
                 logger.Error($"Can not update user with id {id}", ex);
                 return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        private async Task AddOrReplaceClaims(AppUser user, IList<Claim> claims) {
+            var userClaims = await userMgr.GetClaimsAsync(user);
+            foreach (var claim in claims) {
+                var userClaim = userClaims.FirstOrDefault(c => c.Type == claim.Type);
+                if (userClaim == null) {
+                    await userMgr.AddClaimAsync(user, claim);
+                }
+                else {
+                    await userMgr.ReplaceClaimAsync(user, userClaim, claim);
+                }
             }
         }
 

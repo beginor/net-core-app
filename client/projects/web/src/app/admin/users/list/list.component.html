@@ -77,7 +77,7 @@
             <tbody *ngIf="(vm.data | async) as data">
               <tr *ngFor="let item of data; let i = index;">
                 <th scope="row" class="text-right">{{i + 1}}</th>
-                <td class="text-left">{{item.userName}}</td>
+                <td class="text-left">{{getFullname(item)}}</td>
                 <td class="text-center">{{item.phoneNumber}}</td>
                 <td class="text-center">{{item.createTime | date:'yyyy-MM-dd'}}</td>
                 <td class="text-center">{{item.lastLogin | date:'yyyy-MM-dd HH:mm:ss'}}</td>

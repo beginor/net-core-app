@@ -59,4 +59,22 @@ export class ListComponent implements OnInit, OnDestroy {
         }
     }
 
+    public getFullname(user: UserModel): string {
+        const fullname = [];
+        if (!!user.surname) {
+            fullname.push(user.surname);
+        }
+        if (!!user.givenName) {
+            fullname.push(user.givenName);
+        }
+        if (fullname.length > 0) {
+            fullname.push('(');
+        }
+        fullname.push(user.userName);
+        if (fullname.length > 1) {
+            fullname.push(')');
+        }
+        return fullname.join('');
+    }
+
 }

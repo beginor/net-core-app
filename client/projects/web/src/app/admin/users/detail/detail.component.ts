@@ -3,6 +3,7 @@ import {
     trigger, transition, useAnimation, AnimationEvent
 } from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import { UserModel, UsersService} from '../users.service';
@@ -23,7 +24,8 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title: string;
     public editable: boolean;
-    public model: UserModel = {};
+    public model: UserModel = { lockoutEnabled: true, gender: '保密' };
+    public dob = { year: 1970, month: 1, day: 1 };
 
     private id: string;
     private reloadList = false;
@@ -54,6 +56,14 @@ export class DetailComponent implements OnInit {
     public async ngOnInit(): Promise<void> {
         if (this.id !== '0') {
             this.model = await this.vm.getById(this.id);
+            if (!!this.model.dateOfBirth) {
+                const dob = this.model.dateOfBirth.split('-');
+                this.dob = {
+                    year: parseInt(dob[0], 10),
+                    month: parseInt(dob[1], 10),
+                    day: parseInt(dob[2], 10)
+                };
+            }
         }
     }
 
@@ -71,6 +81,8 @@ export class DetailComponent implements OnInit {
     }
 
     public async save(): Promise<void> {
+        const dob = `${this.dob.year}-${this.dob.month}-${this.dob.day}`;
+        this.model.dateOfBirth = dob;
         if (this.id !== '0') {
             await this.vm.update(this.id, this.model);
         }

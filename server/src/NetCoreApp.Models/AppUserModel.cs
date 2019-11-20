@@ -33,6 +33,16 @@ namespace Beginor.NetCoreApp.Models {
         public DateTime? LastLogin { get; set; }
         /// <summary>登录次数</summary>
         public int LoginCount { get; set; }
+        /// <summary>姓氏</summary>
+        public string Surname { get; set; }
+        /// <summary>名称</summary>
+        public string GivenName { get; set; }
+        /// <summary>出生日期</summary>
+        public string DateOfBirth { get; set; }
+        /// <summary>性别</summary>
+        public string Gender { get; set; }
+        /// <summary>家庭住址</summary>
+        public string StreetAddress { get; set; }
     }
 
     /// <summary>用户搜索参数</summary>
