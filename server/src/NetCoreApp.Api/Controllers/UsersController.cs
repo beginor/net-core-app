@@ -122,7 +122,10 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     query = query.Where(u => u.UserName.Contains(model.UserName));
                 }
                 var total = await query.LongCountAsync();
-                var data = await query.ToListAsync();
+                var data = await query
+                    .OrderByDescending(u => u.CreateTime)
+                    .Skip(model.Skip).Take(model.Take)
+                    .ToListAsync();
                 var models = new List<AppUserModel>();
                 foreach (var user in data) {
                     var claims = await userMgr.GetClaimsAsync(user);

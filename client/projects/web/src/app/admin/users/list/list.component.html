@@ -35,6 +35,7 @@
                     class="form-control form-control-sm"
                     [(ngModel)]="vm.searchModel.take"
                     (change)="vm.onPageSizeChange()">
+                    <option [value]="5">5</option>
                     <option [value]="10">10</option>
                     <option [value]="25">25</option>
                     <option [value]="50">50</option>
@@ -106,6 +107,32 @@
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="card-footer">
+          <div *ngIf="(vm.data | async) as data" class="row no-gutters">
+            <div class="col-6 d-flex align-items-center">
+              <div [class]="data.length > 0 ? 'text-muted' : 'text-warning'">
+                <ng-container *ngIf="data.length > 0;else emptyTpl">
+                  显示 {{vm.total | async}} 条记录中的第 {{vm.searchModel.skip + 1}} 至 {{vm.searchModel.skip + data.length}} 条
+                </ng-container>
+                <ng-template #emptyTpl>无数据！</ng-template>
+              </div>
+            </div>
+            <div class="col-6">
+              <ngb-pagination class="d-flex justify-content-end"
+                *ngIf="(vm.total | async) > data.length"
+                size="sm"
+                [collectionSize]="vm.total | async"
+                [page]="(vm.searchModel.skip / vm.searchModel.take) + 1"
+                [pageSize]="vm.searchModel.take"
+                [maxSize]="5"
+                [rotate]="true"
+                [boundaryLinks]="true"
+                [ellipses]="true"
+                (pageChange)="vm.onPageChange($event)">
+              </ngb-pagination>
+            </div>
+          </div>
         </div>
       </div>
     </div>
