@@ -62,43 +62,50 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (appUser == null) {
                     return NotFound();
                 }
-                var model = new AccountInfoModel {
-                    Id = appUser.Id,
-                    UserName = appUser.UserName
-                };
-                var roles = await userMgr.GetRolesAsync(appUser);
-                model.Roles = roles.ToDictionary(r => r, r => true);
-                model.Privileges = new Dictionary<string, bool>();
-                foreach (var roleName in roles) {
-                    var role = await roleMgr.FindByNameAsync(roleName);
-                    var roleClaims = await roleMgr.GetClaimsAsync(role);
-                    var privileges = roleClaims.Where(
-                        claim => claim.Type == Consts.PrivilegeClaimType
-                    ).Select(claim => claim.Value);
-                    foreach (var privilege in privileges) {
-                        if (!model.Privileges.ContainsKey(privilege)) {
-                            model.Privileges.Add(privilege, true);
-                        }
-                    }
-                }
-                var surname = User.Claims.FirstOrDefault(
-                    c => c.Type == ClaimTypes.Surname
-                );
-                if (surname != null) {
-                    model.Surname = surname.Value;
-                }
-                var givenName = User.Claims.FirstOrDefault(
-                    c => c.Type == ClaimTypes.GivenName
-                );
-                if (givenName != null) {
-                    model.GivenName = givenName.Value;
-                }
-                return model;
+                var accountInfo = await CreateAccountInfoModelAsync(appUser);
+                return accountInfo;
             }
             catch (Exception ex) {
                 logger.Error($"Can not get user account info.", ex);
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
+        }
+
+        private async Task<AccountInfoModel> CreateAccountInfoModelAsync(AppUser user) {
+            var accountInfo = new AccountInfoModel {
+                Id = user.Id,
+                UserName = user.UserName
+            };
+            var roles = await userMgr.GetRolesAsync(user);
+            accountInfo.Roles = roles.ToDictionary(r => r, r => true);
+            accountInfo.Privileges = new Dictionary<string, bool>();
+            foreach (var roleName in roles) {
+                var role = await roleMgr.FindByNameAsync(roleName);
+                var roleClaims = await roleMgr.GetClaimsAsync(role);
+                var privileges = roleClaims.Where(
+                    claim => claim.Type == Consts.PrivilegeClaimType
+                ).Select(claim => claim.Value);
+                foreach (var privilege in privileges) {
+                    if (!accountInfo.Privileges.ContainsKey(privilege)) {
+                        accountInfo.Privileges.Add(privilege, true);
+                    }
+                }
+            }
+            var claims = await userMgr.GetClaimsAsync(user);
+            var surname = claims.FirstOrDefault(
+                c => c.Type == ClaimTypes.Surname
+            );
+            if (surname != null) {
+                accountInfo.Surname = surname.Value;
+            }
+            var givenName = claims.FirstOrDefault(
+                c => c.Type == ClaimTypes.GivenName
+            );
+            if (givenName != null) {
+                accountInfo.GivenName = givenName.Value;
+            }
+            accountInfo.Token = CreateJwtToken(user);
+            return accountInfo;
         }
 
         /// <summary>用户登录</summary>
@@ -137,16 +144,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 user.LastLogin = DateTime.Now;
                 user.LoginCount += 1;
                 await userMgr.UpdateAsync(user);
-                // create a identity;
-                var identity = new ClaimsIdentity();
-                identity.AddClaim(
-                    new Claim(ClaimTypes.NameIdentifier, user.Id)
-                );
-                identity.AddClaim(
-                    new Claim(ClaimTypes.Name, user.UserName)
-                );
                 // create a jwt token;
-                var result = CreateJwtToken(identity);
+                var result = CreateJwtToken(user);
                 return Ok(result);
             }
             catch (Exception ex) {
@@ -155,9 +154,17 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
         }
 
-        private string CreateJwtToken(ClaimsIdentity identity) {
+        private string CreateJwtToken(AppUser user) {
+            // create a identity;
+            var identity = new ClaimsIdentity();
+            identity.AddClaim(
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
+            );
+            identity.AddClaim(
+                new Claim(ClaimTypes.Name, user.UserName)
+            );
             var handler = new JwtSecurityTokenHandler();
-            var desc = new SecurityTokenDescriptor {
+            var descriptor = new SecurityTokenDescriptor {
                 Subject = identity,
                 Expires = DateTime.UtcNow.Add(jwt.ExpireTimeSpan),
                 SigningCredentials = new SigningCredentials(
@@ -165,7 +172,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     SecurityAlgorithms.HmacSha256Signature
                 )
             };
-            var securityToken = handler.CreateToken(desc);
+            var securityToken = handler.CreateToken(descriptor);
             var jwtToken = handler.WriteToken(securityToken);
             return jwtToken;
         }

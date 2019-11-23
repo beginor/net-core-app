@@ -37,6 +37,8 @@ namespace Beginor.NetCoreApp.Models {
 
         /// <summary>权限</summary>
         public IDictionary<string, bool> Privileges { get; set; }
+        /// <summary>JwtToken</summary>
+        public string Token { get; set; }
 
     }
 

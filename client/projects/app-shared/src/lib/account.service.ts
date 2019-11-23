@@ -28,6 +28,10 @@ export class AccountService {
         try {
             const url = this.apiRoot + '/account/info';
             const info = await this.http.get<AccountInfo>(url).toPromise();
+            if (!!info.token) {
+                this.setToken(info.token);
+                delete info.token;
+            }
             const currInfo = this.info.getValue();
             if (currInfo.id !== info.id) {
                 this.info.next(info);
@@ -44,12 +48,20 @@ export class AccountService {
         const url = this.apiRoot + '/account';
         const token = await this.http.post(url, model, { responseType: 'text' })
             .toPromise();
-        localStorage.setItem(`Bearer:${this.apiRoot}`, token);
+        this.setToken(token);
     }
 
     public logout(): void {
-        localStorage.removeItem(`Bearer:${this.apiRoot}`);
+        this.removeToken();
         this.info.next({});
+    }
+
+    private setToken(token: string): void {
+        localStorage.setItem(`Bearer:${this.apiRoot}`, token);
+    }
+
+    private removeToken(): void {
+        localStorage.removeItem(`Bearer:${this.apiRoot}`);
     }
 
 }
@@ -61,6 +73,7 @@ export interface AccountInfo {
     surename?: string;
     roles?: { [key: string]: boolean };
     privileges?: { [key: string]: boolean };
+    token?: string;
 }
 
 export interface LoginModel {
