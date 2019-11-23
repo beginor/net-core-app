@@ -133,8 +133,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                         $"输入的密码不正确， 请重试！"
                     );
                 }
-                // await signinMgr.SignInAsync(user, model.IsPersistent);
-                var handler = new JwtSecurityTokenHandler();
+                // update user last login and login count;
+                user.LastLogin = DateTime.Now;
+                user.LoginCount += 1;
+                await userMgr.UpdateAsync(user);
+                // create a identity;
                 var identity = new ClaimsIdentity();
                 identity.AddClaim(
                     new Claim(ClaimTypes.NameIdentifier, user.Id)
@@ -142,25 +145,29 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 identity.AddClaim(
                     new Claim(ClaimTypes.Name, user.UserName)
                 );
-                var desc = new SecurityTokenDescriptor {
-                    Subject = identity,
-                    Expires = DateTime.UtcNow.Add(jwt.ExpireTimeSpan),
-                    SigningCredentials = new SigningCredentials(
-                        new SymmetricSecurityKey(jwt.SecretKey),
-                        SecurityAlgorithms.HmacSha256Signature
-                    )
-                };
-                var token = handler.CreateToken(desc);
-                var result = handler.WriteToken(token);
-                user.LastLogin = DateTime.Now;
-                user.LoginCount += 1;
-                await userMgr.UpdateAsync(user);
+                // create a jwt token;
+                var result = CreateJwtToken(identity);
                 return Ok(result);
             }
             catch (Exception ex) {
                 logger.Error($"Can not signin user.", ex);
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
+        }
+
+        private string CreateJwtToken(ClaimsIdentity identity) {
+            var handler = new JwtSecurityTokenHandler();
+            var desc = new SecurityTokenDescriptor {
+                Subject = identity,
+                Expires = DateTime.UtcNow.Add(jwt.ExpireTimeSpan),
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(jwt.SecretKey),
+                    SecurityAlgorithms.HmacSha256Signature
+                )
+            };
+            var securityToken = handler.CreateToken(desc);
+            var jwtToken = handler.WriteToken(securityToken);
+            return jwtToken;
         }
 
     }
