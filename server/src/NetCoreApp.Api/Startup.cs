@@ -40,7 +40,6 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureIdentityServices(services, env);
             // cors auth
             ConfigureCorsServices(services, env);
-            ConfigureAuthenticationServices(services, env);
             // web related.
             ConfigureMiddlewareServices(services, env);
             ConfigurePathBaseServices(services, env);
@@ -48,6 +47,7 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureSwaggerServices(services, env);
             // routing and mvc
             ConfigureRoutingServices(services, env);
+            ConfigureAuthenticationServices(services, env);
             ConfigureMvcServices(services, env);
             logger.Debug("Configure services completed!");
         }
@@ -65,7 +65,6 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureIdentity(app, env);
             // cors, auth;
             ConfigureCors(app, env);
-            ConfigureAuthentication(app, env);
             // web related.
             ConfigureMiddleware(app, env);
             ConfigurePathBase(app, env);
@@ -73,6 +72,7 @@ namespace Beginor.NetCoreApp.Api {
             ConfigureSwagger(app, env);
             // routing and mvc
             ConfigureRouting(app, env);
+            ConfigureAuthentication(app, env);
             ConfigureMvc(app, env);
             logger.Debug("Configure app completed.");
         }

@@ -63,6 +63,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     return NotFound();
                 }
                 var accountInfo = await CreateAccountInfoModelAsync(appUser);
+                // accountInfo.Token = CreateJwtToken(User.Identity as ClaimsIdentity);
+                var identity = await CreateIdentityAsync(appUser);
+                accountInfo.Token = CreateJwtToken(identity);
                 return accountInfo;
             }
             catch (Exception ex) {
@@ -104,7 +107,6 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             if (givenName != null) {
                 accountInfo.GivenName = givenName.Value;
             }
-            accountInfo.Token = CreateJwtToken(user);
             return accountInfo;
         }
 
@@ -144,8 +146,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 user.LastLogin = DateTime.Now;
                 user.LoginCount += 1;
                 await userMgr.UpdateAsync(user);
+                var identity = await CreateIdentityAsync(user);
                 // create a jwt token;
-                var result = CreateJwtToken(user);
+                var result = CreateJwtToken(identity);
                 return Ok(result);
             }
             catch (Exception ex) {
@@ -154,15 +157,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
         }
 
-        private string CreateJwtToken(AppUser user) {
-            // create a identity;
-            var identity = new ClaimsIdentity();
-            identity.AddClaim(
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
-            );
-            identity.AddClaim(
-                new Claim(ClaimTypes.Name, user.UserName)
-            );
+        private string CreateJwtToken(ClaimsIdentity identity) {
             var handler = new JwtSecurityTokenHandler();
             var descriptor = new SecurityTokenDescriptor {
                 Subject = identity,
@@ -175,6 +170,36 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             var securityToken = handler.CreateToken(descriptor);
             var jwtToken = handler.WriteToken(securityToken);
             return jwtToken;
+        }
+
+        private async Task<ClaimsIdentity> CreateIdentityAsync(AppUser user) {
+            // create a identity;
+            var identity = new ClaimsIdentity();
+            identity.AddClaim(
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
+            );
+            identity.AddClaim(
+                new Claim(ClaimTypes.Name, user.UserName)
+            );
+            var roles = await userMgr.GetRolesAsync(user);
+            identity.AddClaim(
+                new Claim(ClaimTypes.Role, string.Join(',', roles))
+            );
+            foreach (var roleName in roles) {
+                var role = await roleMgr.FindByNameAsync(roleName);
+                var roleClaims = await roleMgr.GetClaimsAsync(role);
+                var privileges = roleClaims.Where(
+                    claim => claim.Type == Consts.PrivilegeClaimType
+                ).Select(claim => claim.Value);
+                foreach (var privilege in privileges) {
+                    if (!identity.Claims.Any(c => c.Type == Consts.PrivilegeClaimType && c.Value == privilege)) {
+                        identity.AddClaim(
+                            new Claim(Consts.PrivilegeClaimType, privilege)
+                        );
+                    }
+                }
+            }
+            return identity;
         }
 
     }
