@@ -124,6 +124,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 // update user last login and login count;
                 user.LastLogin = DateTime.Now;
                 user.LoginCount += 1;
+                user.AccessFailedCount = 0;
                 await userMgr.UpdateAsync(user);
                 var identity = await CreateIdentityAsync(user);
                 // create a jwt token;
