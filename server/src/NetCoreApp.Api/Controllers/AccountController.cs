@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -62,11 +61,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (appUser == null) {
                     return NotFound();
                 }
-                var accountInfo = await CreateAccountInfoModelAsync(appUser);
-                // accountInfo.Token = CreateJwtToken(User.Identity as ClaimsIdentity);
+                // var identity = User.Identity as ClaimsIdentity;
                 var identity = await CreateIdentityAsync(appUser);
-                accountInfo.Token = CreateJwtToken(identity);
-                return accountInfo;
+                var info = CreateAccountInfoModel(identity);
+                info.Token = CreateJwtToken(identity);
+                return info;
             }
             catch (Exception ex) {
                 logger.Error($"Can not get user account info.", ex);
@@ -74,40 +73,20 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
         }
 
-        private async Task<AccountInfoModel> CreateAccountInfoModelAsync(AppUser user) {
-            var accountInfo = new AccountInfoModel {
-                Id = user.Id,
-                UserName = user.UserName
+        private AccountInfoModel CreateAccountInfoModel(ClaimsIdentity user) {
+            var info = new AccountInfoModel {
+                Id = user.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value,
+                UserName = user.Claims.First(c => c.Type == ClaimTypes.Name).Value,
+                Surname = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value,
+                GivenName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value,
+                Roles = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value?.Split(",")?.ToDictionary(r => r, r => true),
+                Privileges = user.Claims
+                    .Where(c => c.Type == Consts.PrivilegeClaimType)
+                    .Select(c => c.Value)
+                    .Distinct()
+                    .ToDictionary(p => p, p => true)
             };
-            var roles = await userMgr.GetRolesAsync(user);
-            accountInfo.Roles = roles.ToDictionary(r => r, r => true);
-            accountInfo.Privileges = new Dictionary<string, bool>();
-            foreach (var roleName in roles) {
-                var role = await roleMgr.FindByNameAsync(roleName);
-                var roleClaims = await roleMgr.GetClaimsAsync(role);
-                var privileges = roleClaims.Where(
-                    claim => claim.Type == Consts.PrivilegeClaimType
-                ).Select(claim => claim.Value);
-                foreach (var privilege in privileges) {
-                    if (!accountInfo.Privileges.ContainsKey(privilege)) {
-                        accountInfo.Privileges.Add(privilege, true);
-                    }
-                }
-            }
-            var claims = await userMgr.GetClaimsAsync(user);
-            var surname = claims.FirstOrDefault(
-                c => c.Type == ClaimTypes.Surname
-            );
-            if (surname != null) {
-                accountInfo.Surname = surname.Value;
-            }
-            var givenName = claims.FirstOrDefault(
-                c => c.Type == ClaimTypes.GivenName
-            );
-            if (givenName != null) {
-                accountInfo.GivenName = givenName.Value;
-            }
-            return accountInfo;
+            return info;
         }
 
         /// <summary>用户登录</summary>
@@ -181,21 +160,21 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             identity.AddClaim(
                 new Claim(ClaimTypes.Name, user.UserName)
             );
+            // user claims;
+            var userClaims = await userMgr.GetClaimsAsync(user);
+            identity.AddClaims(userClaims);
+            // role as claim;
             var roles = await userMgr.GetRolesAsync(user);
             identity.AddClaim(
                 new Claim(ClaimTypes.Role, string.Join(',', roles))
             );
+            // role claims;
             foreach (var roleName in roles) {
                 var role = await roleMgr.FindByNameAsync(roleName);
                 var roleClaims = await roleMgr.GetClaimsAsync(role);
-                var privileges = roleClaims.Where(
-                    claim => claim.Type == Consts.PrivilegeClaimType
-                ).Select(claim => claim.Value);
-                foreach (var privilege in privileges) {
-                    if (!identity.Claims.Any(c => c.Type == Consts.PrivilegeClaimType && c.Value == privilege)) {
-                        identity.AddClaim(
-                            new Claim(Consts.PrivilegeClaimType, privilege)
-                        );
+                foreach (var roleClaim in roleClaims) {
+                    if (!identity.Claims.Any(c => c.Type == roleClaim.Type && c.Value == roleClaim.Value)) {
+                        identity.AddClaim(roleClaim);
                     }
                 }
             }
