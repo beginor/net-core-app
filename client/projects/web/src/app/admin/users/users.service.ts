@@ -9,10 +9,20 @@ import { UiService } from 'projects/web/src/app/common';
 })
 export class UsersService {
 
-    public searchModel: UserSearchModel = { skip: 0, take: 10 };
+    public searchModel: UserSearchModel = {
+        skip: 0, take: 10, filter: '', sortBy: ''
+    };
+
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<UserModel[]>([]);
     public loading: boolean;
+    public sortMethods = [
+        { value: 'CreateTime:DESC', text: '最近创建' },
+        { value: 'CreateTime:ASC', text: '最早创建' },
+        { value: 'LastLogin:DESC', text: '最近登录' },
+        { value: 'LoginCount:DESC', text: '登录次数' },
+        { value: 'UserName:ASC', text: '用户名' }
+    ];
 
     private baseUrl = this.apiRoot + '/users';
 
@@ -20,7 +30,9 @@ export class UsersService {
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService
-    ) {}
+    ) {
+        this.searchModel.sortBy = this.sortMethods[0].value;
+    }
 
     public async search(): Promise<void> {
         let params = new HttpParams();
@@ -183,6 +195,10 @@ export interface UserSearchModel {
     take?: number;
     /** 用户名 */
     userName?: string;
+    /** 过滤条件 */
+    filter?: string;
+    /** 排序 */
+    sortBy?: string;
 }
 
 /** 用户搜索结果 */

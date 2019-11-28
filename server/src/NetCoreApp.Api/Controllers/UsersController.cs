@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
@@ -122,9 +123,12 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     query = query.Where(u => u.UserName.Contains(model.UserName));
                 }
                 var total = await query.LongCountAsync();
+                var sortInfo = model.SortBy.Split(':', StringSplitOptions.RemoveEmptyEntries);
                 var data = await query
-                    .OrderByDescending(u => u.CreateTime)
-                    .Skip(model.Skip).Take(model.Take)
+                    .OrderBy(sortInfo[0], sortInfo[1].Equals("ASC", StringComparison.OrdinalIgnoreCase))
+                    // .OrderBy(x => x.CreateTime)
+                    .Skip(model.Skip)
+                    .Take(model.Take)
                     .ToListAsync();
                 var models = new List<AppUserModel>();
                 foreach (var user in data) {

@@ -52,24 +52,51 @@
             </div>
             <div class="col-6">
               <div class="row no-gutters">
-                <div class="col-6">
-                  <!-- <span class="text-muted">其它工具栏</span> -->
+                <div class="col-5 align-self-center">
+                  <!--
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="filter" id="filter-all"
+                      value="" [(ngModel)]="vm.searchModel.filter"/>
+                    <label class="form-check-label" for="filter-all">全部</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="filter" id="filter-admin"
+                      value="admin" [(ngModel)]="vm.searchModel.filter"/>
+                    <label class="form-check-label" for="filter-admin">管理员</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="filter" id="filter-locked"
+                      value="locked" [(ngModel)]="vm.searchModel.filter"/>
+                    <label class="form-check-label" for="filter-locked">已锁定</label>
+                  </div>
+                  -->
                 </div>
-                <div class="col-6">
+                <div class="col">
                   <div class="input-group input-group-sm">
                     <input class="form-control" name="userName" type="text"
-                      placeholder="按名称、电子邮件或用户名搜索"
+                      placeholder="按用户名搜索"
                       [(ngModel)]="vm.searchModel.userName"
                       (keyup.enter)="vm.search()" />
                     <div class="input-group-append">
                       <button class="btn btn-sm btn-outline-secondary" type="button" *ngIf="vm.searchModel.userName"
-                        (click)="vm.searchModel.userName = ''">
+                        (click)="cleanSearch()">
                         <i class="fa fa-times"></i>
                       </button>
-                      <button class="btn btn-sm btn-outline-secondary" type="button" (click)="vm.search()">
-                        <i class="fa fa-search"></i>
-                      </button>
                     </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="input-group input-group-sm ml-2">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">排序：</div>
+                    </div>
+                    <select class="form-control" name="sortBy" [(ngModel)]="vm.searchModel.sortBy"
+                      (change)="vm.search()">
+                      <option *ngFor="let sm of vm.sortMethods"
+                        [value]="sm.value">
+                        {{sm.text}}
+                      </option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -94,7 +121,7 @@
                 <th scope="row" class="text-right">{{i + 1}}</th>
                 <td class="text-left">{{getFullname(item)}}</td>
                 <td class="text-center">{{item.phoneNumber}}</td>
-                <td class="text-center">{{item.createTime | date:'yyyy-MM-dd'}}</td>
+                <td class="text-center">{{item.createTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                 <td class="text-center">{{item.lastLogin | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                 <td class="text-right">{{item.loginCount}}</td>
                 <td class="text-center">

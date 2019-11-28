@@ -77,4 +77,9 @@ export class ListComponent implements OnInit, OnDestroy {
         return fullname.join('');
     }
 
+    public cleanSearch(): void {
+        this.vm.searchModel.userName = '';
+        this.vm.search();
+    }
+
 }
