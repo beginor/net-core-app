@@ -145,6 +145,23 @@ export class UsersService {
         }
     }
 
+    public async unlockUser(id: string): Promise<boolean> {
+        const confirmed = await this.ui.showConfirm('确认解锁该用户么？');
+        if (!confirmed) {
+            return false;
+        }
+        try {
+            const url = `${this.baseUrl}/${id}/unlock`;
+            await this.http.put<any>(url, null).toPromise();
+            this.search();
+            return true;
+        }
+        catch (ex) {
+            console.log(ex);
+            this.ui.showAlert({ type: 'danger', message: '解锁用户失败！'});
+        }
+    }
+
 }
 
 /**

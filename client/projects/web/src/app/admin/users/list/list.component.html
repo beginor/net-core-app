@@ -112,14 +112,19 @@
                 <th scope="col" class="text-center">电话</th>
                 <th scope="col" class="text-center">创建时间</th>
                 <th scope="col" class="text-center">最近登录</th>
-                <th scope="col" class="text-center">登录次数</th>
+                <th scope="col" class="text-right">登录次数</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">
               <tr *ngFor="let item of data; let i = index;">
                 <th scope="row" class="text-right">{{i + 1}}</th>
-                <td class="text-left">{{getFullname(item)}}</td>
+                <td class="text-left">
+                  {{getFullname(item)}}
+                  <i class="text-danger fa fa-user-lock" style="cursor: pointer;"
+                    *ngIf="isLockout(item)" ngbTooltip="该用户已经被锁定，点击进行解锁！"
+                    (click)="vm.unlockUser(item.id)"></i>
+                </td>
                 <td class="text-center">{{item.phoneNumber}}</td>
                 <td class="text-center">{{item.createTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                 <td class="text-center">{{item.lastLogin | date:'yyyy-MM-dd HH:mm:ss'}}</td>

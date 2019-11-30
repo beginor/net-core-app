@@ -82,4 +82,17 @@ export class ListComponent implements OnInit, OnDestroy {
         this.vm.search();
     }
 
+    public isLockout(user: UserModel): boolean {
+        if (!user.lockoutEnabled) {
+            return false;
+        }
+        if (!user.lockoutEnd) {
+            return false;
+        }
+        else {
+            const lockoutEnd = new Date(user.lockoutEnd);
+            return lockoutEnd > new Date();
+        }
+    }
+
 }
