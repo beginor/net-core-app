@@ -122,8 +122,7 @@
                 <td class="text-left">
                   {{getFullname(item)}}
                   <i class="text-danger fa fa-user-lock" style="cursor: pointer;"
-                    *ngIf="isLockout(item)" ngbTooltip="该用户已经被锁定，点击进行解锁！"
-                    (click)="vm.unlockUser(item.id)"></i>
+                    *ngIf="isLockout(item)" ngbTooltip="该用户已经被锁定！"></i>
                 </td>
                 <td class="text-center">{{item.phoneNumber}}</td>
                 <td class="text-center">{{item.createTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
@@ -131,23 +130,56 @@
                 <td class="text-right">{{item.loginCount}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
-                    <button *ngIf="info.privileges['app_privileges.read']"
-                      class="btn btn-outline-secondary" ngbTooltip="详情"
-                      placement="top" [openDelay]="300"
+                    <button class="btn btn-outline-secondary" type="button"
+                      *ngIf="info.privileges['app_users.read']"
+                      ngbTooltip="详情" placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, false)">
-                      <i class="fa fa-list-alt"></i>
+                      <i class="fa fa-id-card"></i>
                     </button>
-                    <button *ngIf="info.privileges['app_privileges.update']"
-                      class="btn btn-outline-secondary" ngbTooltip="编辑"
-                      placement="top" [openDelay]="300"
-                      (click)="showDetail(item.id, true)">
-                      <i class="fa fa-edit"></i>
-                    </button>
-                    <button *ngIf="info.privileges['app_privileges.delete']"
-                      class="btn btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300"
-                      (click)="delete(item.id)">
-                      <i class="fa fa-trash-alt"></i>
-                    </button>
+                    <div class="btn-group btn-group-sm" *ngIf="canViewGears(item)"
+                      ngbDropdown container="body">
+                      <button class="btn btn-outline-secondary" type="button"
+                        ngbTooltip="用户操作" placement="top" container="body" [openDelay]="300"
+                        ngbDropdownToggle>
+                        <i class="fa fa-users-cog"></i>
+                      </button>
+                      <div class="dropdown-menu" ngbDropdownMenu>
+                        <button class="text-muted" type="button" ngbDropdownItem
+                          *ngIf="info.privileges['app_users.update']"
+                          (click)="showDetail(item.id, true)">
+                          <i class="fa fa-user-edit"></i> 编辑
+                        </button>
+                        <ng-container *ngIf="isLockout(item);else lockTpl">
+                          <button class="text-muted" type="button" ngbDropdownItem
+                            *ngIf="info.privileges['app_users.unlock']"
+                            (click)="vm.unlockUser(item.id)">
+                            <i class="fa fa-unlock-alt"></i> 解锁
+                          </button>
+                        </ng-container>
+                        <ng-template #lockTpl>
+                          <button class="text-muted" type="button" ngbDropdownItem
+                            *ngIf="info.privileges['app_users.lock']"
+                            (click)="delete(item.id)">
+                            <i class="fa fa-user-lock"></i> 锁定
+                          </button>
+                        </ng-template>
+                        <button class="text-muted" type="button" ngbDropdownItem
+                          *ngIf="info.privileges['app_users.reset_pass']"
+                          (click)="delete(item.id)">
+                          <i class="fa fa-user-secret"></i> 重置密码
+                        </button>
+                        <button class="text-muted" type="button" ngbDropdownItem
+                          *ngIf="info.privileges['app_users.read_user_roles']"
+                          (click)="delete(item.id)">
+                          <i class="fa fa-user-tag"></i> 角色
+                        </button>
+                        <button class="text-muted" type="button" ngbDropdownItem
+                          *ngIf="info.privileges['app_users.delete']"
+                          (click)="delete(item.id)">
+                          <i class="fa fa-user-times"></i> 删除
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </td>
               </tr>

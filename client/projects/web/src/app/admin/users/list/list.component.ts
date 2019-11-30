@@ -95,4 +95,14 @@ export class ListComponent implements OnInit, OnDestroy {
         }
     }
 
+    public canViewGears(): boolean {
+        const p = this.account.info.getValue().privileges;
+        if (!p) {
+            return false;
+        }
+        return p['app_users.update'] || p['app_users.delete']
+            || p['app_users.reset_pass'] || p['app_users.lock']
+            || p['app_users.unlock'] || p['app_users.read_user_roles'];
+    }
+
 }
