@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NHibernate.AspNetCore.Identity;
 using NHibernate.Linq;
+using NHibernate.NetCore;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
@@ -123,10 +124,17 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     query = query.Where(u => u.UserName.Contains(model.UserName));
                 }
                 var total = await query.LongCountAsync();
-                var sortInfo = model.SortBy.Split(':', StringSplitOptions.RemoveEmptyEntries);
+                var sortInfo = model.SortBy.Split(
+                    ':',
+                    StringSplitOptions.RemoveEmptyEntries
+                );
+                var propertyName = sortInfo[0];
+                var isAsc = sortInfo[1].Equals(
+                    "ASC",
+                    StringComparison.OrdinalIgnoreCase
+                );
                 var data = await query
-                    .OrderBy(sortInfo[0], sortInfo[1].Equals("ASC", StringComparison.OrdinalIgnoreCase))
-                    // .OrderBy(x => x.CreateTime)
+                    .AddOrderBy(sortInfo[0], isAsc)
                     .Skip(model.Skip)
                     .Take(model.Take)
                     .ToListAsync();
@@ -305,7 +313,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 // await manager.SetLockoutEnabledAsync(user, false);
                 await userMgr.SetLockoutEndDateAsync(
                     user,
-                    DateTimeOffset.Now.AddDays(-1)
+                    null
                 );
                 await userMgr.ResetAccessFailedCountAsync(user);
                 return Ok();
