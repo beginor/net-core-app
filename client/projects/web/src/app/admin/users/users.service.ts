@@ -162,12 +162,26 @@ export class UsersService {
         }
     }
 
+    public async lockUser(id: string, lockoutEnd: string): Promise<void> {
+        try {
+            const url = `${this.baseUrl}/${id}/lock/${lockoutEnd}`;
+            await this.http.put<any>(url, null).toPromise();
+            await this.search();
+        }
+        catch (ex) {
+            console.log(ex);
+            this.ui.showAlert({ type: 'danger', message: '锁定用户失败！'});
+        }
+    }
+
 }
 
 /**
  * 应用程序用户模型
  */
 export interface UserModel {
+    /** 用户ID */
+    id?: string;
     /** 用户名 */
     userName?: string;
     /** 电子邮箱地址 */
