@@ -285,7 +285,10 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (lockEndTime < DateTime.Now) {
                     return BadRequest($"Cannot be less than the current time");
                 }
-                var offset = new DateTimeOffset(lockEndTime);
+                var offset = new DateTimeOffset(
+                    lockEndTime,
+                    TimeZoneInfo.Local.GetUtcOffset(lockEndTime)
+                );
                 await userMgr.SetLockoutEndDateAsync(user, offset);
                 return Ok();
             }
