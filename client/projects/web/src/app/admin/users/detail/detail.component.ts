@@ -3,7 +3,6 @@ import {
     trigger, transition, useAnimation, AnimationEvent
 } from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import { UserModel, UsersService} from '../users.service';

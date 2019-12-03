@@ -38,19 +38,12 @@ export class ListComponent implements OnInit, OnDestroy {
         );
     }
 
-    // public showUsers(role: UserModel): void {
-    //     this.router.navigate(
-    //         ['./', role.id, 'users', { desc: role.description }],
-    //         { relativeTo: this.route, skipLocationChange: true }
-    //     );
-    // }
-
-    // public showPrivileges(role: UserModel): void {
-    //     this.router.navigate(
-    //         ['./', role.id, 'privileges', { desc: role.description }],
-    //         { relativeTo: this.route, skipLocationChange: true }
-    //     );
-    // }
+    public navigateTo(user: UserModel, page: string): void {
+        this.router.navigate(
+            ['./', user.id, page, { fullname: this.getFullname(user) }],
+            { relativeTo: this.route, skipLocationChange: true }
+        );
+    }
 
     public async delete(id: string): Promise<void> {
         const deleted = await this.vm.delete(id);

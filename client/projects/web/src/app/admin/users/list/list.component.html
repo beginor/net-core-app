@@ -159,18 +159,18 @@
                         <ng-template #lockTpl>
                           <button class="text-muted" type="button" ngbDropdownItem
                             *ngIf="info.privileges['app_users.lock']"
-                            (click)="delete(item.id)">
+                            (click)="navigateTo(item, 'lock')">
                             <i class="fa fa-user-lock"></i> 锁定
                           </button>
                         </ng-template>
                         <button class="text-muted" type="button" ngbDropdownItem
                           *ngIf="info.privileges['app_users.reset_pass']"
-                          (click)="delete(item.id)">
+                          (click)="navigateTo(item, 'password')">
                           <i class="fa fa-user-secret"></i> 重置密码
                         </button>
                         <button class="text-muted" type="button" ngbDropdownItem
                           *ngIf="info.privileges['app_users.read_user_roles']"
-                          (click)="delete(item.id)">
+                          (click)="navigateTo(item, 'roles')">
                           <i class="fa fa-user-tag"></i> 角色
                         </button>
                         <button class="text-muted" type="button" ngbDropdownItem

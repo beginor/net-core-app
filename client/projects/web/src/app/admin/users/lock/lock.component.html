@@ -1,0 +1,38 @@
+<form class="card detail" *ngIf="(account.info | async) as info"
+  [formGroup]="lockForm" (ngSubmit)="save()"
+  [@animation]="animation" (@animation.done)="onAnimationEvent($event)">
+  <div class="card-header d-flex justify-content-between align-content-center">
+    <h5 class="card-title mb-0">{{title}}</h5>
+    <div class="btn-group btn-group-sm">
+      <button class="btn btn-outline-primary" type="button"
+        *ngIf="info.privileges['app_users.reset_pass']"
+        [disabled]="!lockForm.valid" (click)="save()">
+        <i class="fa fa-check"></i> 保存
+      </button>
+      <button class="btn btn-outline-secondary" type="button"
+        (click)="goBack()">
+        <i class="fa fa-times"></i> 取消
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-group" [class.is-valid]="lockoutEnd.valid"
+      [class.is-invalid]="!(lockoutEnd.valid || lockoutEnd.pristine)">
+      <label class="form-label text-muted" for="lockoutEnd">锁定至 <i class="text-danger">*</i></label>
+      <div class="input-group">
+        <input class="form-control" type="text" id="lockoutEnd"
+          placeholder="请选择锁定截止时间 ..." formControlName="lockoutEnd"
+          [class.is-invalid]="!(lockoutEnd.valid || lockoutEnd.pristine)"
+          [class.is-valid]="lockoutEnd.valid"
+          ngbDatepicker container="body" #le="ngbDatepicker" [minDate]="calendar.getToday()"
+          required />
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button"
+            (click)="le.toggle()">
+            <i class="fa fa-calendar-alt"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
