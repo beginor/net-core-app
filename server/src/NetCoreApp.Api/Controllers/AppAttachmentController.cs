@@ -35,7 +35,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">创建 附件表 成功</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
-        [Authorize(Policy = "app_attachments.create")]
+        [Authorize("app_attachments.create")]
         public async Task<ActionResult<AppAttachmentModel>> Create(
             [FromBody]AppAttachmentModel model
         ) {
@@ -54,7 +54,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
-        [Authorize(Policy = "app_attachments.delete")]
+        [Authorize("app_attachments.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
                 await repository.DeleteAsync(id);
@@ -70,7 +70,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">成功, 分页返回结果</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("")]
-        [Authorize(Policy = "app_attachments.read")]
+        [Authorize("app_attachments.read")]
         public async Task<ActionResult<PaginatedResponseModel<AppAttachmentModel>>> GetAll(
             [FromQuery]AppAttachmentSearchModel model
         ) {
@@ -91,7 +91,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404"> 附件表 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize(Policy = "app_attachments.read")]
+        [Authorize("app_attachments.read")]
         public async Task<ActionResult<AppAttachmentModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);
@@ -113,7 +113,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404"> 附件表 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
-        [Authorize(Policy = "app_attachments.update")]
+        [Authorize("app_attachments.update")]
         public async Task<ActionResult<AppAttachmentModel>> Update(
             [FromRoute]long id,
             [FromBody]AppAttachmentModel model

@@ -56,7 +56,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="400">创建用户出错</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
-        [Authorize(Policy = "app_users.create")]
+        [Authorize("app_users.create")]
         public async Task<ActionResult<AppUserModel>> Create(
             [FromBody]AppUserModel model
         ) {
@@ -91,7 +91,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
-        [Authorize(Policy = "app_users.delete")]
+        [Authorize("app_users.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
                 var user = await userMgr.FindByIdAsync(id.ToString());
@@ -114,7 +114,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">获取成功并返回用户列表。</response>
         /// <response code="500">服务器内部错误。</response>
         [HttpGet("")]
-        [Authorize(Policy = "app_users.read")]
+        [Authorize("app_users.read")]
         public async Task<ActionResult<PaginatedResponseModel<AppUserModel>>> GetAll(
             [FromQuery]UserSearchRequestModel model
         ) {
@@ -163,7 +163,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">获取用户成功，返回用户信息。</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize(Policy = "app_users.read")]
+        [Authorize("app_users.read")]
         public async Task<ActionResult<AppUserModel>> GetById(long id) {
             try {
                 var user = await userMgr.FindByIdAsync(id.ToString());
@@ -186,7 +186,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">指定的用户不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
-        [Authorize(Policy = "app_users.update")]
+        [Authorize("app_users.update")]
         public async Task<ActionResult<AppUserModel>> Update(
             [FromRoute]long id,
             [FromBody]AppUserModel model
@@ -235,7 +235,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误。</response>
         // POST api/users/{id:long}/reset-pass
         [HttpPut("{id:long}/reset-pass")]
-        [Authorize(Policy = "app_users.reset_pass")]
+        [Authorize("app_users.reset_pass")]
         public async Task<ActionResult> ResetPassword(
             [FromRoute]long id,
             [FromBody]ResetPasswordModel model
@@ -272,7 +272,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="400">时间小于当前时间出错并返回信息。</response>
         /// <response code="500">服务器内部错误。</response>
         [HttpPut, Route("{id:long}/lock/{lockEndTime:datetime}")]
-        [Authorize(Policy = "app_users.lock")]
+        [Authorize("app_users.lock")]
         public async Task<ActionResult> LockUser(
             long id,
             DateTime lockEndTime
@@ -306,7 +306,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">用户不存在。</response>
         /// <response code="500">服务器内部错误。</response>
         [HttpPut("{id:long}/unlock")]
-        [Authorize(Policy = "app_users.unlock")]
+        [Authorize("app_users.unlock")]
         public async Task<ActionResult> Unlock(long id) {
             try {
                 var user = await userMgr.FindByIdAsync(id.ToString());
@@ -335,7 +335,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">用户不存在。</response>
         /// <response code="500">服务器内部错误。</response>
         [HttpGet("{id:long}/roles")]
-        [Authorize(Policy = "app_users.read_user_roles")]
+        [Authorize("app_users.read_user_roles")]
         public async Task<ActionResult<IList<AppRoleModel>>> GetUserRoles(
             long id
         ) {
@@ -366,7 +366,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">用户或角色不存在。</response>
         /// <response code="500">服务器内部错误。</response>
         [HttpPut("{id:long}/{roleName}")]
-        [Authorize(Policy = "app_users.add_role_to_user")]
+        [Authorize("app_users.add_role_to_user")]
         public async Task<ActionResult> AddUserToRole(
             [FromRoute]long id,
             [FromRoute]string roleName
@@ -402,7 +402,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="400">删除用户角色出错。</response>
         /// <response code="500">服务器内部错误。</response>
         [HttpDelete("{id:long}/{roleName}")]
-        [Authorize(Policy = "app_users.remove_role_from_user")]
+        [Authorize("app_users.remove_role_from_user")]
         public async Task<ActionResult> RemoveUserFromRole(
             long id,
             string roleName

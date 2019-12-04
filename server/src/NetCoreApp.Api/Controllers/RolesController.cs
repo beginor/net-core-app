@@ -58,7 +58,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="400">创建角色失败并返回错误信息</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
-        [Authorize(Policy = "app_roles.create")]
+        [Authorize("app_roles.create")]
         public async Task<ActionResult<AppRoleModel>> Create(
             [FromBody]AppRoleModel model
         ) {
@@ -86,7 +86,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
-        [Authorize(Policy = "app_roles.delete")]
+        [Authorize("app_roles.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
                 var role = await roleMgr.FindByIdAsync(id.ToString());
@@ -109,7 +109,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">获取成功并返回角色列表。</response>
         /// <response code="500">服务器内部错误。</response>
         [HttpGet("")]
-        [Authorize(Policy = "app_roles.read")]
+        [Authorize("app_roles.read")]
         public async Task<ActionResult<PaginatedResponseModel<AppRoleModel>>> GetAll(
             [FromQuery]AppRoleSearchModel model
         ) {
@@ -134,7 +134,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">获取角色成功，返回角色信息。</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize(Policy = "app_roles.read")]
+        [Authorize("app_roles.read")]
         public async Task<ActionResult<AppRoleModel>> GetById(
             long id
         ) {
@@ -158,7 +158,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">指定的角色不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
-        [Authorize(Policy = "app_roles.update")]
+        [Authorize("app_roles.update")]
         public async Task<ActionResult<AppRoleModel>> Update(
             [FromRoute]long id,
             [FromBody]AppRoleModel model
@@ -187,7 +187,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">指定的角色不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}/users")]
-        [Authorize(Policy = "app_roles.read_user_toles")]
+        [Authorize("app_roles.read_user_toles")]
         public async Task<ActionResult<IList<AppUserModel>>> GetUsersInRole(
             long id
         ) {
@@ -211,7 +211,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">指定的角色不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}/privileges")]
-        [Authorize(Policy = "app_roles.read_role_privileges")]
+        [Authorize("app_roles.read_role_privileges")]
         public async Task<ActionResult<IList<string>>> GetPrivilegesInRole(
             long id
         ) {
@@ -237,7 +237,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">指定的角色不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("{id:long}/privileges/{privilege}")]
-        [Authorize(Policy = "app_roles.add_privilege_to_role")]
+        [Authorize("app_roles.add_privilege_to_role")]
         public async Task<ActionResult> AddPrivilegeToRole(
             long id,
             string privilege
@@ -264,7 +264,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">指定的角色不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id:long}/privileges/{privilege}")]
-        [Authorize(Policy = "app_roles.remove_privilige_from_role")]
+        [Authorize("app_roles.remove_privilige_from_role")]
         [ProducesResponseType(204)]
         public async Task<ActionResult> RemovePrivilegeFromRole(
             long id,
