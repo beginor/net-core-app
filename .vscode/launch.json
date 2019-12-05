@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet:build",
-      "program": "${workspaceFolder}/server/src/NetCoreApp.Api/bin/Debug/netcoreapp3.0/Beginor.NetCoreApp.Api.dll",
+      "program": "${workspaceFolder}/server/src/NetCoreApp.Api/bin/Debug/netcoreapp3.1/Beginor.NetCoreApp.Api.dll",
       "args": [],
       "cwd": "${workspaceFolder}/server/src/NetCoreApp.Api",
       "stopAtEntry": false,
