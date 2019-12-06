@@ -126,7 +126,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     return NotFound();
                 }
                 model.Id = id.ToString();
-                await repo.UpdateAsync(model);
+                await repo.UpdateAsync(id, model);
                 return model;
             }
             catch (Exception ex) {
