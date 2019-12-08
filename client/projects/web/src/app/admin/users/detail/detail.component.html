@@ -155,13 +155,13 @@
       </div>
     </div>
   </div>
-  <div *ngIf="info.privileges['app_users.update'] && editable" class="card-footer d-flex justify-content-between">
-    <button
-      type="button" class="btn btn-sm btn-outline-primary"
+  <div class="card-footer d-flex justify-content-between"
+    *ngIf="info.privileges['app_users.update'] && editable">
+    <button class="btn btn-sm btn-outline-primary" type="button"
       (click)="save()" [disabled]="!detailForm.valid">
       <i class="fa fa-check"></i> 保存
     </button>
-    <button type="button" class="btn btn-sm btn-outline-secondary"
+    <button class="btn btn-sm btn-outline-secondary" type="button"
       (click)="goBack()">
       <i class="fa fa-times"></i> 取消
     </button>

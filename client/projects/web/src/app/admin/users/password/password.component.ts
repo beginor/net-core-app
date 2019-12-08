@@ -3,7 +3,7 @@ import {
     trigger, transition, useAnimation, AnimationEvent
 } from '@angular/animations';
 import {
-    FormGroup, FormBuilder, FormControl, Validators
+    FormGroup, FormControl, Validators
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -58,11 +58,11 @@ export class PasswordComponent implements OnInit {
         this.form = new FormGroup({
             password: new FormControl(
                 { value: '', disabled: !this.editable },
-                [Validators.required, Validators.minLength(8)]
+                [ Validators.required, Validators.minLength(8) ]
             ),
             confirmPassword: new FormControl(
                 { value: '', disabled: !this.editable },
-                [Validators.required, confirmTo('password')]
+                [ Validators.required, confirmTo('password') ]
             )
         });
     }
