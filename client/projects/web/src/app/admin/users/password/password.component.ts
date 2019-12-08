@@ -2,10 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import {
     trigger, transition, useAnimation, AnimationEvent
 } from '@angular/animations';
+import {
+    FormGroup, FormBuilder, FormControl, Validators
+} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { slideInRight, slideOutRight, AccountService } from 'app-shared';
-import { UserModel, UsersService } from '../users.service';
+import {
+    slideInRight, slideOutRight, AccountService, confirmTo
+} from 'app-shared';
+import { UsersService } from '../users.service';
 
 @Component({
     selector: 'app-password',
@@ -23,13 +28,44 @@ export class PasswordComponent implements OnInit {
     public animation = '';
     public title: string;
     public editable: boolean;
+    public form: FormGroup;
+
+    public get password(): FormControl {
+        return this.form.get('password') as FormControl;
+    }
+
+    public get confirmPassword(): FormControl {
+        return this.form.get('confirmPassword') as FormControl;
+    }
+
+    private userId: string;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         public account: AccountService,
         public vm: UsersService
-    ) { }
+    ) {
+        this.userId = route.snapshot.params.id;
+        const fullname = route.snapshot.params.fullname;
+        if (!!fullname) {
+            this.title = `重置 ${fullname} 的密码`;
+        }
+        else {
+            this.title = '重置密码';
+        }
+        this.editable = true;
+        this.form = new FormGroup({
+            password: new FormControl(
+                { value: '', disabled: !this.editable },
+                [Validators.required, Validators.minLength(8)]
+            ),
+            confirmPassword: new FormControl(
+                { value: '', disabled: !this.editable },
+                [Validators.required, confirmTo('password')]
+            )
+        });
+    }
 
     public ngOnInit(): void {
     }
@@ -37,14 +73,16 @@ export class PasswordComponent implements OnInit {
     public async onAnimationEvent(e: AnimationEvent): Promise<void> {
         if (e.phaseName === 'done' && e.toState === 'void') {
             await this.router.navigate(['../..'], { relativeTo: this.route });
-            // if (this.reloadList) {
-            //     this.vm.search();
-            // }
         }
     }
 
     public goBack(): void {
         this.animation = 'void';
+    }
+
+    public async save(): Promise<void> {
+        await this.vm.resetPass(this.userId, this.form.value);
+        this.goBack();
     }
 
 }

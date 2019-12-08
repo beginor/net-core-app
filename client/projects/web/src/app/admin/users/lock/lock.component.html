@@ -5,7 +5,7 @@
     <h5 class="card-title mb-0">{{title}}</h5>
     <div class="btn-group btn-group-sm">
       <button class="btn btn-outline-primary" type="button"
-        *ngIf="info.privileges['app_users.reset_pass']"
+        *ngIf="info.privileges['app_users.lock']"
         [disabled]="!lockForm.valid" (click)="save()">
         <i class="fa fa-check"></i> 保存
       </button>

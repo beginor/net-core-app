@@ -174,6 +174,24 @@ export class UsersService {
         }
     }
 
+    public async resetPass(
+        id: string,
+        model: ResetPasswordModel
+    ): Promise<void> {
+        const confirmed = await this.ui.showConfirm('确认重置该用户的密码么？');
+        if (!confirmed) {
+            return;
+        }
+        try {
+            const url = `${this.baseUrl}/${id}/reset-pass`;
+            await this.http.put<any>(url, model).toPromise();
+        }
+        catch (ex) {
+            console.log(ex);
+            this.ui.showAlert({ type: 'danger', message: '重置用户密码失败！'});
+        }
+    }
+
 }
 
 /**
@@ -242,4 +260,11 @@ export interface UserSearchResult {
     skip?: number;
     /** 请求取多少条记录 */
     take?: number;
+}
+
+export interface ResetPasswordModel {
+    /**
+     * 密码
+     */
+    password: string;
 }
