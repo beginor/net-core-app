@@ -44,11 +44,8 @@ export class LockComponent implements OnInit {
         public account: AccountService,
         public vm: UsersService
     ) {
-        this.title = '锁定用户';
-        const fullname = route.snapshot.params.fullname;
-        if (!!fullname) {
-            this.title += ' ' + fullname;
-        }
+        const fullname = route.snapshot.params.fullname || '用户';
+        this.title = `锁定 ${fullname}`;
         this.editable = true;
         this.userId = route.snapshot.params.id;
         //

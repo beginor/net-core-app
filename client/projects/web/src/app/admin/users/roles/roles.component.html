@@ -1,16 +1,40 @@
-<form class="card detail" *ngIf="(account.info | async) as info"
-  #detailForm="ngForm"
+<div class="card detail" *ngIf="(account.info | async) as info"
   [@animation]="animation" (@animation.done)="onAnimationEvent($event)">
   <div class="card-header d-flex justify-content-between align-content-center">
     <h5 class="card-title mb-0">{{title}}</h5>
     <div class="btn-group btn-group-sm">
-      <button type="button" class="btn btn-sm btn-outline-secondary"
+      <button class="btn btn-sm btn-outline-primary" type="button"
+        (click)="save()">
+        <i class="fa fa-check"></i> 确定
+      </button>
+      <button class="btn btn-sm btn-outline-secondary" type="button"
         (click)="goBack()">
         <i class="fa fa-times"></i> 取消
       </button>
     </div>
   </div>
   <div class="card-body">
-    <p>roles works!</p>
+    <div class="row">
+      <div class="col-auto" *ngFor="let r of vm.roles | async">
+        <div class="form-group" >
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" [id]="r.id" [name]="r.name"
+              [checked]="isChecked(r.name)" (change)="toggleUserRole($event, r.name)" />
+            <label class="form-check-label" [for]="r.id">{{r.description || r.name}}</label>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</form>
+  <div class="card-footer d-flex justify-content-between"
+    *ngIf="info.privileges['app_users.update'] && editable">
+    <button class="btn btn-sm btn-outline-primary" type="button"
+      (click)="save()">
+      <i class="fa fa-check"></i> 保存
+    </button>
+    <button class="btn btn-sm btn-outline-secondary" type="button"
+      (click)="goBack()">
+      <i class="fa fa-times"></i> 取消
+    </button>
+  </div>
+</div>

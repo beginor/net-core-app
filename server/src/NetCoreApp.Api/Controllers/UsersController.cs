@@ -358,33 +358,35 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         }
 
         /// <summary>
-        /// 添加用户权限
+        /// 添加用户角色
         /// </summary>
         /// <param name="id">用户id</param>
-        /// <param name="roleName">角色名称</param>
-        /// <response code="200">添加用户权限用户成功。</response>
+        /// <param name="roleNames">角色名称列表，多个之间用`,`分割</param>
+        /// <response code="200">添加用户角色用户成功。</response>
         /// <response code="404">用户或角色不存在。</response>
         /// <response code="500">服务器内部错误。</response>
-        [HttpPut("{id:long}/{roleName}")]
+        [HttpPut("{id:long}/{roleNames}")]
         [Authorize("app_users.add_role_to_user")]
         public async Task<ActionResult> AddUserToRole(
             [FromRoute]long id,
-            [FromRoute]string roleName
+            [FromRoute]string roleNames
         ) {
             try {
                 var user = await userMgr.FindByIdAsync(id.ToString());
                 if (user == null) {
                     return NotFound();
                 }
-                var role = await roleMgr.FindByNameAsync(roleName);
-                if (role == null) {
-                    return NotFound();
+                var arr = roleNames.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                foreach (var role in arr) {
+                    var exists = await roleMgr.RoleExistsAsync(role);
+                    if (exists) {
+                        var isInRole = await userMgr.IsInRoleAsync(user, role);
+                        if (!isInRole) {
+                            await userMgr.AddToRoleAsync(user, role);
+                        }
+                    }
                 }
-                var result = await userMgr.AddToRoleAsync(user, role.Name);
-                if (result.Succeeded) {
-                    return Ok();
-                }
-                return BadRequest(result.GetErrorsString());
+                return Ok();
             }
             catch (Exception ex) {
                 logger.Error($"Failed to add user permissions", ex);
@@ -393,38 +395,34 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         }
 
         /// <summary>
-        /// 删除用户权限
+        /// 删除用户角色
         /// </summary>
         /// <param name="id">用户id</param>
-        /// <param name="roleName">角色名称</param>
-        /// <response code="204">删除用户权限成功。</response>
+        /// <param name="roleNames">角色名称，多个之间用`,`分割</param>
+        /// <response code="204">删除用户角色成功。</response>
         /// <response code="404">用户或角色不存在。</response>
         /// <response code="400">删除用户角色出错。</response>
         /// <response code="500">服务器内部错误。</response>
-        [HttpDelete("{id:long}/{roleName}")]
+        [HttpDelete("{id:long}/{roleNames}")]
+        [ProducesResponseType(204)]
         [Authorize("app_users.remove_role_from_user")]
         public async Task<ActionResult> RemoveUserFromRole(
             long id,
-            string roleName
+            string roleNames
         ) {
             try {
                 var user = await userMgr.FindByIdAsync(id.ToString());
                 if (user == null) {
                     return NotFound();
                 }
-                var role = await roleMgr.FindByNameAsync(roleName);
-                if (role == null) {
-                    return NotFound();
+                var arr = roleNames.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                foreach (var role in arr) {
+                    var isInRole = await userMgr.IsInRoleAsync(user, role);
+                    if (isInRole) {
+                        await userMgr.RemoveFromRoleAsync(user, role);
+                    }
                 }
-                var isInRole = await userMgr.IsInRoleAsync(user, role.Name);
-                if (!isInRole) {
-                    return NoContent();
-                }
-                var result = await userMgr.RemoveFromRoleAsync(user, role.Name);
-                if (result.Succeeded) {
-                    return NoContent();
-                }
-                return BadRequest(result.GetErrorsString());
+                return NoContent();
             }
             catch (Exception ex) {
                 logger.Error($"Failed to delete user permissions", ex);

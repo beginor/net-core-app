@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
+import { RolesService, AppRoleModel } from '../roles/roles.service';
 
 @Injectable({
     providedIn: 'root'
@@ -23,8 +24,10 @@ export class UsersService {
         { value: 'LoginCount:DESC', text: '登录次数' },
         { value: 'UserName:ASC', text: '用户名' }
     ];
+    public roles = new BehaviorSubject<AppRoleModel[]>([]);
 
     private baseUrl = this.apiRoot + '/users';
+    private rolesSvc: RolesService;
 
     constructor(
         private http: HttpClient,
@@ -32,6 +35,10 @@ export class UsersService {
         private ui: UiService
     ) {
         this.searchModel.sortBy = this.sortMethods[0].value;
+        this.rolesSvc = new RolesService(http, apiRoot, ui);
+        this.rolesSvc.data.subscribe(data => {
+            this.roles.next(data);
+        });
     }
 
     public async search(): Promise<void> {
@@ -157,7 +164,7 @@ export class UsersService {
             return true;
         }
         catch (ex) {
-            console.log(ex);
+            console.error(ex);
             this.ui.showAlert({ type: 'danger', message: '解锁用户失败！'});
         }
     }
@@ -169,7 +176,7 @@ export class UsersService {
             await this.search();
         }
         catch (ex) {
-            console.log(ex);
+            console.error(ex);
             this.ui.showAlert({ type: 'danger', message: '锁定用户失败！'});
         }
     }
@@ -187,8 +194,57 @@ export class UsersService {
             await this.http.put<any>(url, model).toPromise();
         }
         catch (ex) {
-            console.log(ex);
+            console.error(ex);
             this.ui.showAlert({ type: 'danger', message: '重置用户密码失败！'});
+        }
+    }
+
+    /** 获取全部角色 */
+    public async getRoles(): Promise<void> {
+        try {
+            this.rolesSvc.searchModel.skip = 0;
+            this.rolesSvc.searchModel.take = 999;
+            await this.rolesSvc.search();
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '获取全部角色失败！' });
+        }
+    }
+
+    /* 获取用户角色 */
+    public async getUserRoles(userId: string): Promise<string[]> {
+        try {
+            const url = `${this.baseUrl}/${userId}/roles`;
+            const roles = await this.http.get<AppRoleModel[]>(url).toPromise();
+            return roles.map(r => r.name);
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '获取用户角色失败！' });
+        }
+    }
+
+    public async saveUserRoles(
+        userId: string,
+        toAdd: string[],
+        toDelete: string[]
+    ): Promise<void> {
+        try {
+            if (toAdd.length > 0) {
+                const rolesToAdd = toAdd.join(',');
+                const addUrl = `${this.baseUrl}/${userId}/${rolesToAdd}`;
+                await this.http.put(addUrl, null).toPromise();
+            }
+            if (toDelete.length > 0) {
+                const rolesToDelete = toDelete.join(',');
+                const delUrl = `${this.baseUrl}/${userId}/${rolesToDelete}`;
+                await this.http.delete(delUrl).toPromise();
+            }
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '保存用户角色失败！' });
         }
     }
 
