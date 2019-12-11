@@ -119,11 +119,18 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromQuery]UserSearchRequestModel model
         ) {
             try {
-                var query = userMgr.Users;
+                IQueryable<AppUser> query;
+                if (string.IsNullOrEmpty(model.RoleName)) {
+                    query = userMgr.Users;
+                }
+                else {
+                    var usersInRole = await userMgr.GetUsersInRoleAsync(model.RoleName);
+                    query = usersInRole.AsQueryable();
+                }
                 if (model.UserName.IsNotNullOrEmpty()) {
                     query = query.Where(u => u.UserName.Contains(model.UserName));
                 }
-                var total = await query.LongCountAsync();
+                var total = query.LongCount();
                 var sortInfo = model.SortBy.Split(
                     ':',
                     StringSplitOptions.RemoveEmptyEntries
@@ -133,11 +140,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     "ASC",
                     StringComparison.OrdinalIgnoreCase
                 );
-                var data = await query
+                var data = query
                     .AddOrderBy(sortInfo[0], isAsc)
                     .Skip(model.Skip)
                     .Take(model.Take)
-                    .ToListAsync();
+                    .ToList();
                 var models = new List<AppUserModel>();
                 foreach (var user in data) {
                     var claims = await userMgr.GetClaimsAsync(user);

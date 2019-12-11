@@ -28,6 +28,7 @@ export class ListComponent implements OnInit, OnDestroy {
     }
 
     public async loadData(): Promise<void> {
+        await this.vm.getRoles();
         await this.vm.search();
     }
 
@@ -70,8 +71,14 @@ export class ListComponent implements OnInit, OnDestroy {
         return fullname.join('');
     }
 
-    public cleanSearch(): void {
+    public cleanUserSearch(): void {
         this.vm.searchModel.userName = '';
+        this.vm.searchModel.skip = 0;
+        this.vm.search();
+    }
+
+    public searchByRole(): void {
+        this.vm.searchModel.skip = 0;
         this.vm.search();
     }
 

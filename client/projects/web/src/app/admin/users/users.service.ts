@@ -11,7 +11,7 @@ import { RolesService, AppRoleModel } from '../roles/roles.service';
 export class UsersService {
 
     public searchModel: UserSearchModel = {
-        skip: 0, take: 10, filter: '', sortBy: ''
+        skip: 0, take: 10, filter: '', sortBy: '', roleName: ''
     };
 
     public total = new BehaviorSubject<number>(0);
@@ -304,6 +304,8 @@ export interface UserSearchModel {
     filter?: string;
     /** 排序 */
     sortBy?: string;
+    /** 角色名称 */
+    roleName?: string;
 }
 
 /** 用户搜索结果 */
@@ -319,8 +321,8 @@ export interface UserSearchResult {
 }
 
 export interface ResetPasswordModel {
-    /**
-     * 密码
-     */
+    /** 密码 */
     password: string;
+    /** 确认密码 */
+    confirmPassword: string;
 }

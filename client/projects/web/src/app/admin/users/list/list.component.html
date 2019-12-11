@@ -52,24 +52,15 @@
             </div>
             <div class="col-6">
               <div class="row no-gutters">
-                <div class="col-5 align-self-center">
-                  <!--
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="filter" id="filter-all"
-                      value="" [(ngModel)]="vm.searchModel.filter"/>
-                    <label class="form-check-label" for="filter-all">全部</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="filter" id="filter-admin"
-                      value="admin" [(ngModel)]="vm.searchModel.filter"/>
-                    <label class="form-check-label" for="filter-admin">管理员</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="filter" id="filter-locked"
-                      value="locked" [(ngModel)]="vm.searchModel.filter"/>
-                    <label class="form-check-label" for="filter-locked">已锁定</label>
-                  </div>
-                  -->
+                <div class="col-4"></div>
+                <div class="col">
+                  <select class="form-control form-control-sm" name="roleName"
+                    [(ngModel)]="vm.searchModel.roleName" (change)="searchByRole()">
+                    <option value="">全部用户</option>
+                    <option *ngFor="let r of vm.roles | async" [value]="r.name">
+                      {{r.description || r.name}}
+                    </option>
+                  </select>
                 </div>
                 <div class="col">
                   <div class="input-group input-group-sm">
@@ -78,8 +69,8 @@
                       [(ngModel)]="vm.searchModel.userName"
                       (keyup.enter)="vm.search()" />
                     <div class="input-group-append">
-                      <button class="btn btn-sm btn-outline-secondary" type="button" *ngIf="vm.searchModel.userName"
-                        (click)="cleanSearch()">
+                      <button class="btn btn-sm btn-outline-secondary" type="button"
+                        *ngIf="vm.searchModel.userName" (click)="cleanUserSearch()">
                         <i class="fa fa-times"></i>
                       </button>
                     </div>
@@ -92,8 +83,7 @@
                     </div>
                     <select class="form-control" name="sortBy" [(ngModel)]="vm.searchModel.sortBy"
                       (change)="vm.search()">
-                      <option *ngFor="let sm of vm.sortMethods"
-                        [value]="sm.value">
+                      <option *ngFor="let sm of vm.sortMethods" [value]="sm.value">
                         {{sm.text}}
                       </option>
                     </select>

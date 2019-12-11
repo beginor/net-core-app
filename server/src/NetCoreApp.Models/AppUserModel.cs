@@ -52,6 +52,8 @@ namespace Beginor.NetCoreApp.Models {
         public string UserName { get; set; }
         /// <summary>排序方式</summary>
         public string SortBy { get; set; }
+        /// <summary>角色名称</summary>
+        public string RoleName { get; set; }
     }
 
     /// <summary>
