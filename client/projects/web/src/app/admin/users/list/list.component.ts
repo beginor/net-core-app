@@ -17,7 +17,15 @@ export class ListComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         public account: AccountService,
         public vm: UsersService
-    ) { }
+    ) {
+        const roleName = route.snapshot.params.roleName;
+        if (!!roleName) {
+            vm.searchModel.roleName = roleName;
+        }
+        else {
+            vm.searchModel.roleName = '';
+        }
+    }
 
     public ngOnInit(): void {
         this.loadData();
@@ -103,6 +111,13 @@ export class ListComponent implements OnInit, OnDestroy {
         return p['app_users.update'] || p['app_users.delete']
             || p['app_users.reset_pass'] || p['app_users.lock']
             || p['app_users.unlock'] || p['app_users.read_user_roles'];
+    }
+
+    public getUserCount(): number {
+        const usersCount = this.vm.roles.getValue()
+            .map(r => r.userCount || 0)
+            .reduce((prev, curr) => prev + curr, 0);
+        return usersCount;
     }
 
 }

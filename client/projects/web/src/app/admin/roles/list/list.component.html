@@ -64,7 +64,7 @@
                 <td class="text-left">{{item.name}}</td>
                 <td class="text-left">{{item.description}}</td>
                 <td class="text-center">{{item.isDefault ? '是' : '否'}}</td>
-                <td class="text-right">{{item.userCount}}</td>
+                <td class="text-right"><a [routerLink]="['../../users', {roleName: item.name}]">{{item.userCount}}</a></td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
                     <button *ngIf="info.privileges['app_roles.read']"

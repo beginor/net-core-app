@@ -12,14 +12,12 @@ import { RolesRoutingModule } from './roles-routing.module';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
 import { PrivilegeComponent } from './privilege/privilege.component';
-import { UserComponent } from './user/user.component';
 
 @NgModule({
     declarations: [
         ListComponent,
         DetailComponent,
-        PrivilegeComponent,
-        UserComponent
+        PrivilegeComponent
     ],
     imports: [
         CommonModule,

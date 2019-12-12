@@ -56,9 +56,9 @@
                 <div class="col">
                   <select class="form-control form-control-sm" name="roleName"
                     [(ngModel)]="vm.searchModel.roleName" (change)="searchByRole()">
-                    <option value="">全部用户</option>
+                    <option value="">全部用户 ({{ getUserCount() }})</option>
                     <option *ngFor="let r of vm.roles | async" [value]="r.name">
-                      {{r.description || r.name}}
+                      {{r.description || r.name}} ({{r.userCount}})
                     </option>
                   </select>
                 </div>
