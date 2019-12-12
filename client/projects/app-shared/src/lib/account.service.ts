@@ -9,8 +9,13 @@ import { BehaviorSubject, Subscription, interval } from 'rxjs';
 export class AccountService {
 
     public info = new BehaviorSubject<AccountInfo>({});
+
     public get token(): string {
-        return localStorage.getItem(`Bearer:${this.apiRoot}`);
+        return localStorage.getItem(this.tokenKey);
+    }
+
+    private get tokenKey(): string {
+        return `Bearer:${this.apiRoot}`;
     }
 
     private interval$: Subscription;
@@ -29,7 +34,7 @@ export class AccountService {
             const url = this.apiRoot + '/account/info';
             const info = await this.http.get<AccountInfo>(url).toPromise();
             if (!!info.token) {
-                this.setToken(info.token);
+                this.saveToken(info.token);
                 delete info.token;
             }
             const currInfo = this.info.getValue();
@@ -39,7 +44,7 @@ export class AccountService {
             return info;
         }
         catch (ex) {
-            localStorage.removeItem(`Bearer:${this.apiRoot}`);
+            localStorage.removeItem(this.tokenKey);
             throw new Error('Can not get account info!');
         }
     }
@@ -48,7 +53,7 @@ export class AccountService {
         const url = this.apiRoot + '/account';
         const token = await this.http.post(url, model, { responseType: 'text' })
             .toPromise();
-        this.setToken(token);
+        this.saveToken(token);
     }
 
     public logout(): void {
@@ -56,12 +61,12 @@ export class AccountService {
         this.info.next({});
     }
 
-    private setToken(token: string): void {
-        localStorage.setItem(`Bearer:${this.apiRoot}`, token);
+    private saveToken(token: string): void {
+        localStorage.setItem(this.tokenKey, token);
     }
 
     private removeToken(): void {
-        localStorage.removeItem(`Bearer:${this.apiRoot}`);
+        localStorage.removeItem(this.tokenKey);
     }
 
 }
