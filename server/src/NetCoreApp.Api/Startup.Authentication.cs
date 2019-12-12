@@ -23,15 +23,15 @@ namespace Beginor.NetCoreApp.Api {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x => {
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(jwt.SecretKey),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(jwt.SecretKey),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
             // authorization;
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
         }
