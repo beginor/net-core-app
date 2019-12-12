@@ -10,6 +10,8 @@ export class AccountService {
 
     public info = new BehaviorSubject<AccountInfo>({});
 
+    public fullName = new BehaviorSubject<string>('匿名用户');
+
     public get token(): string {
         return localStorage.getItem(this.tokenKey);
     }
@@ -40,6 +42,17 @@ export class AccountService {
             const currInfo = this.info.getValue();
             if (currInfo.id !== info.id) {
                 this.info.next(info);
+                const fullname = [];
+                if (!!info.surname) {
+                    fullname.push(info.surname);
+                }
+                if (!!info.givenName) {
+                    fullname.push(info.givenName);
+                }
+                if (fullname.length === 0) {
+                    fullname.push(info.userName);
+                }
+                this.fullName.next(fullname.join(''));
             }
             return info;
         }
@@ -75,7 +88,7 @@ export interface AccountInfo {
     id?: string;
     userName?: string;
     givenName?: string;
-    surename?: string;
+    surname?: string;
     roles?: { [key: string]: boolean };
     privileges?: { [key: string]: boolean };
     token?: string;
