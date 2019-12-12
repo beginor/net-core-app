@@ -1,7 +1,7 @@
 <app-nav-bar></app-nav-bar>
 <div class="app-main">
   <div class="error-container mt-5" *ngIf="ui.alerts.length > 0">
-    <ngb-alert *ngFor="let alt of ui.alerts" [type]="alt.type"
+    <ngb-alert class="shadow" *ngFor="let alt of ui.alerts" [type]="alt.type"
       (close)="ui.closeAlert(alt)">
       {{ alt.message }}
     </ngb-alert>
