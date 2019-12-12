@@ -79,7 +79,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 UserName = user.Claims.First(c => c.Type == ClaimTypes.Name).Value,
                 Surname = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value,
                 GivenName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value,
-                Roles = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value?.Split(",")?.ToDictionary(r => r, r => true),
+                Roles = user.Claims
+                    .Where(c => c.Type == ClaimTypes.Role)
+                    .Select(c => c.Value)
+                    .Distinct()
+                    .ToDictionary(r => r, r => true),
                 Privileges = user.Claims
                     .Where(c => c.Type == Consts.PrivilegeClaimType)
                     .Select(c => c.Value)
@@ -166,11 +170,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             identity.AddClaims(userClaims);
             // role as claim;
             var roles = await userMgr.GetRolesAsync(user);
-            identity.AddClaim(
-                new Claim(ClaimTypes.Role, string.Join(',', roles))
-            );
-            // role claims;
+            // add role and role claims;
             foreach (var roleName in roles) {
+                identity.AddClaim(new Claim(ClaimTypes.Role, roleName));
                 var role = await roleMgr.FindByNameAsync(roleName);
                 var roleClaims = await roleMgr.GetClaimsAsync(role);
                 foreach (var roleClaim in roleClaims) {
