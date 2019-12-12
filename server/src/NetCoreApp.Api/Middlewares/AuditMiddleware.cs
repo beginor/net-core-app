@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Threading.Tasks;
-using Beginor.NetCoreApp.Data.Repositories;
-using Beginor.NetCoreApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -11,6 +11,10 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Net.Http.Headers;
+using Beginor.NetCoreApp.Data.Repositories;
+using Beginor.NetCoreApp.Models;
+using System.Security.Claims;
 
 namespace Beginor.NetCoreApp.Api.Middlewares {
 
@@ -85,8 +89,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
                 RequestPath = context.Request.Path,
                 RequestMethod = context.Request.Method
             };
-            var identity = context.User.Identity;
-            log.UserName = identity.IsAuthenticated ? identity.Name : "anonymous";
+            log.UserName = GetUserName(context);
             log.StartAt = DateTime.Now;
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -108,6 +111,32 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             }
         }
 
+        private string GetUserName(HttpContext context) {
+            var username = "anonymous";
+            var request = context.Request;
+            string authorization = request.Headers[HeaderNames.Authorization];
+            if (string.IsNullOrEmpty(authorization)) {
+                return username;
+            }
+            if (!authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase)) {
+                return username;
+            }
+            var token = authorization.Substring("Bearer ".Length).Trim();
+            if (string.IsNullOrEmpty(token)) {
+                return username;
+            }
+            var handler = new JwtSecurityTokenHandler();
+            if (handler.CanReadToken(token)) {
+                var jst = handler.ReadJwtToken(token);
+                var claim = jst.Claims.FirstOrDefault(
+                    c => c.Type == "unique_name" || c.Type == ClaimTypes.Name
+                );
+                if (claim != null) {
+                    username = claim.Value;
+                }
+            }
+            return username;
+        }
     }
 
 }

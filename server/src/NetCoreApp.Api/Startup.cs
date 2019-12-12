@@ -41,11 +41,11 @@ namespace Beginor.NetCoreApp.Api {
             // cors auth
             ConfigureCorsServices(services, env);
             // web related.
-            ConfigureMiddlewareServices(services, env);
             ConfigurePathBaseServices(services, env);
             ConfigureStaticFilesServices(services, env);
             ConfigureSwaggerServices(services, env);
             // routing and mvc
+            ConfigureMiddlewareServices(services, env);
             ConfigureRoutingServices(services, env);
             ConfigureAuthenticationServices(services, env);
             ConfigureMvcServices(services, env);
@@ -66,11 +66,11 @@ namespace Beginor.NetCoreApp.Api {
             // cors, auth;
             ConfigureCors(app, env);
             // web related.
-            ConfigureMiddleware(app, env);
             ConfigurePathBase(app, env);
             ConfigureStaticFiles(app, env);
             ConfigureSwagger(app, env);
             // routing and mvc
+            ConfigureMiddleware(app, env);
             ConfigureRouting(app, env);
             ConfigureAuthentication(app, env);
             ConfigureMvc(app, env);
