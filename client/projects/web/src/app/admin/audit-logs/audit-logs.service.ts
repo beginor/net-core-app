@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject } from 'rxjs';
 
-import { UiService} from 'projects/web/src/app/common';
+import { UiService } from 'projects/web/src/app/common';
 
 @Injectable({
     providedIn: 'root'

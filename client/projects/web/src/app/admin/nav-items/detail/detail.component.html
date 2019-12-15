@@ -1,0 +1,152 @@
+<form *ngIf="(account.info | async) as info" class="card detail"
+  [@animation]="animation"
+  (@animation.done)="onAnimationEvent($event)" #detailForm="ngForm">
+  <div class="card-header d-flex justify-content-between align-content-center">
+    <h5 class="card-title mb-0">{{title}}</h5>
+    <div class="btn-group btn-group-sm">
+      <button *ngIf="info.privileges['app_privileges.update'] && editable"
+        type="button" class="btn btn-sm btn-outline-primary"
+        (click)="save()" [disabled]="!detailForm.valid">
+        <i class="fa fa-check"></i> 保存
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"
+        (click)="goBack()">
+        <i class="fa fa-times"></i> 取消
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-group" [class.is-valid]="id.valid"
+      [class.is-invalid]="!(id.valid || id.pristine)">
+      <label class="form-label text-muted" for="id">节点ID  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="id" name="id"
+        placeholder="请输入节点ID ..." [(ngModel)]="model.id"
+        [class.is-invalid]="!(id.valid || id.pristine)"
+        [class.is-valid]="id.valid"
+        required #id="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="parentId.valid"
+      [class.is-invalid]="!(parentId.valid || parentId.pristine)">
+      <label class="form-label text-muted" for="parentId">parent_id, int8 </label>
+      <input class="form-control" type="text" id="parentId" name="parentId"
+        placeholder="请输入parent_id, int8 ..." [(ngModel)]="model.parentId"
+        [class.is-invalid]="!(parentId.valid || parentId.pristine)"
+        [class.is-valid]="parentId.valid"
+        required #parentId="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="title.valid"
+      [class.is-invalid]="!(title.valid || title.pristine)">
+      <label class="form-label text-muted" for="title">标题  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="title" name="title"
+        placeholder="请输入标题 ..." [(ngModel)]="model.title"
+        [class.is-invalid]="!(title.valid || title.pristine)"
+        [class.is-valid]="title.valid"
+        required #title="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="tooltip.valid"
+      [class.is-invalid]="!(tooltip.valid || tooltip.pristine)">
+      <label class="form-label text-muted" for="tooltip">提示文字 </label>
+      <input class="form-control" type="text" id="tooltip" name="tooltip"
+        placeholder="请输入提示文字 ..." [(ngModel)]="model.tooltip"
+        [class.is-invalid]="!(tooltip.valid || tooltip.pristine)"
+        [class.is-valid]="tooltip.valid"
+        required #tooltip="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="icon.valid"
+      [class.is-invalid]="!(icon.valid || icon.pristine)">
+      <label class="form-label text-muted" for="icon">图标 </label>
+      <input class="form-control" type="text" id="icon" name="icon"
+        placeholder="请输入图标 ..." [(ngModel)]="model.icon"
+        [class.is-invalid]="!(icon.valid || icon.pristine)"
+        [class.is-valid]="icon.valid"
+        required #icon="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="url.valid"
+      [class.is-invalid]="!(url.valid || url.pristine)">
+      <label class="form-label text-muted" for="url">导航地址 </label>
+      <input class="form-control" type="text" id="url" name="url"
+        placeholder="请输入导航地址 ..." [(ngModel)]="model.url"
+        [class.is-invalid]="!(url.valid || url.pristine)"
+        [class.is-valid]="url.valid"
+        required #url="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="sequence.valid"
+      [class.is-invalid]="!(sequence.valid || sequence.pristine)">
+      <label class="form-label text-muted" for="sequence">顺序 </label>
+      <input class="form-control" type="text" id="sequence" name="sequence"
+        placeholder="请输入顺序 ..." [(ngModel)]="model.sequence"
+        [class.is-invalid]="!(sequence.valid || sequence.pristine)"
+        [class.is-valid]="sequence.valid"
+        required #sequence="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="creatorId.valid"
+      [class.is-invalid]="!(creatorId.valid || creatorId.pristine)">
+      <label class="form-label text-muted" for="creatorId">创建者ID  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="creatorId" name="creatorId"
+        placeholder="请输入创建者ID ..." [(ngModel)]="model.creatorId"
+        [class.is-invalid]="!(creatorId.valid || creatorId.pristine)"
+        [class.is-valid]="creatorId.valid"
+        required #creatorId="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="createdAt.valid"
+      [class.is-invalid]="!(createdAt.valid || createdAt.pristine)">
+      <label class="form-label text-muted" for="createdAt">创建时间  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="createdAt" name="createdAt"
+        placeholder="请输入创建时间 ..." [(ngModel)]="model.createdAt"
+        [class.is-invalid]="!(createdAt.valid || createdAt.pristine)"
+        [class.is-valid]="createdAt.valid"
+        required #createdAt="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="updaterId.valid"
+      [class.is-invalid]="!(updaterId.valid || updaterId.pristine)">
+      <label class="form-label text-muted" for="updaterId">更新者ID  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="updaterId" name="updaterId"
+        placeholder="请输入更新者ID ..." [(ngModel)]="model.updaterId"
+        [class.is-invalid]="!(updaterId.valid || updaterId.pristine)"
+        [class.is-valid]="updaterId.valid"
+        required #updaterId="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="updateAt.valid"
+      [class.is-invalid]="!(updateAt.valid || updateAt.pristine)">
+      <label class="form-label text-muted" for="updateAt">更新时间  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="updateAt" name="updateAt"
+        placeholder="请输入更新时间 ..." [(ngModel)]="model.updateAt"
+        [class.is-invalid]="!(updateAt.valid || updateAt.pristine)"
+        [class.is-valid]="updateAt.valid"
+        required #updateAt="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group">
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input"
+          id="isDeleted" name="isDeleted"
+          [(ngModel)]="model.isDeleted" [disabled]="!editable">
+        <label class="custom-control-label text-muted"
+          for="isDeleted">
+          是否删除
+        </label>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="info.privileges['app_privileges.update'] && editable"
+    class="card-footer d-flex justify-content-between">
+    <button type="button" class="btn btn-sm btn-outline-primary"
+      (click)="save()" [disabled]="!detailForm.valid">
+      <i class="fa fa-check"></i> 保存
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary"
+      (click)="goBack()">
+      <i class="fa fa-times"></i> 取消
+    </button>
+  </div>
+</form>

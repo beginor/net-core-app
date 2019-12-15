@@ -9,23 +9,28 @@ const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent },
     {
         path: 'users',
-        // tslint:disable-next-line: max-line-length
-        loadChildren: () => import('./users/users.module').then(m => m.UsersModule)
+        loadChildren: () => import('./users/users.module')
+            .then(m => m.UsersModule)
     },
     {
         path: 'roles',
-        // tslint:disable-next-line: max-line-length
-        loadChildren: () => import('./roles/roles.module').then(m => m.RolesModule)
+        loadChildren: () => import('./roles/roles.module')
+            .then(m => m.RolesModule)
     },
     {
         path: 'privileges',
-        // tslint:disable-next-line: max-line-length
-        loadChildren: () => import('./privileges/privileges.module').then(m => m.PrivilegesModule)
+        loadChildren: () => import('./privileges/privileges.module')
+            .then(m => m.PrivilegesModule)
     },
     {
         path: 'audit-logs',
-        // tslint:disable-next-line: max-line-length
-        loadChildren: () => import('./audit-logs/audit-logs.module').then(m => m.AuditLogsModule)
+        loadChildren: () => import('./audit-logs/audit-logs.module')
+            .then(m => m.AuditLogsModule)
+    },
+    {
+        path: 'nav-items',
+        loadChildren: () => import('./nav-items/nav-items.module')
+            .then(m => m.NavItemsModule)
     }
 ];
 

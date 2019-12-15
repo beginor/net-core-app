@@ -42,7 +42,7 @@ NamingConverter:
       Type: Camel
 TableFilter:
   IgnoreTables:
-#    - app_roles
+    - app_roles
     - app_users
     - aspnet_role_claims
     - aspnet_roles
@@ -52,8 +52,7 @@ TableFilter:
     - aspnet_user_tokens
     - aspnet_users
   IncludeTables:
-    - app_privileges
-    - app_roles
+    - app_nav_items
   IgnoreNoPKTable: true
   IgnoreView: true
 
