@@ -4,24 +4,29 @@
 :host {
   background-color: $light;
   display: flex;
-  flex-direction: column;
-  border-right: $border-width solid $border-color !important;
-  // min-width: 50px;
 
-  .sidebar-body {
+  .sidebar {
     flex: 1;
-    overflow: auto;
-  }
-
-  .sidebar-toggler {
-    cursor: pointer;
-    height: 48px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    border-right: $border-width solid $border-color !important;
+    width: 220px;
 
-    .collapse-text {
-      white-space: nowrap;
-      overflow: hidden;
+    .sidebar-body {
+      flex: 1;
+      overflow: auto;
+    }
+
+    .sidebar-toggler {
+      cursor: pointer;
+      height: 48px;
+      display: flex;
+      align-items: center;
+
+      .collapse-text {
+        white-space: nowrap;
+        overflow: hidden;
+      }
     }
   }
 }

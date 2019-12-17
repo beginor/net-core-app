@@ -1,9 +1,20 @@
+import {
+    trigger, animate, style, state, transition
+} from '@angular/animations';
 import { Component, OnInit, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'app-nav-sidebar',
     templateUrl: './nav-sidebar.component.html',
-    styleUrls: ['./nav-sidebar.component.scss']
+    styleUrls: ['./nav-sidebar.component.scss'],
+    animations: [
+        trigger('status', [
+            state('expanded', style({ width: '220px' })),
+            state('collapsed', style({ width: '48px' })),
+            transition('expanded => collapsed', animate('.3s')),
+            transition('collapsed => expanded', animate('.3s'))
+        ])
+    ]
 })
 export class NavSidebarComponent implements OnInit {
 

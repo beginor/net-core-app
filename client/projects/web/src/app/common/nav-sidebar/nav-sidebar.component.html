@@ -1,7 +1,9 @@
-<div class="sidebar-header"></div>
-<div class="sidebar-body">
-</div>
-<div class="sidebar-toggler border-top p-1" (click)="toggle()" title="侧边栏开关">
-  <i [class]="getToggleIconClass()"></i>
-  <span class="collapse-text ml-1" *ngIf="!this.collapsed">收起侧边栏</span>
+<div class="sidebar" [@status]="status">
+  <div class="sidebar-header"></div>
+  <div class="sidebar-body">
+  </div>
+  <div class="sidebar-toggler border-top p-1" (click)="toggle()" title="侧边栏开关">
+    <i [class]="getToggleIconClass()"></i>
+    <span class="collapse-text ml-1" *ngIf="!this.collapsed">收起侧边栏</span>
+  </div>
 </div>
