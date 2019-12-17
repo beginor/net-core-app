@@ -9,11 +9,13 @@ import { AppSharedModule } from 'app-shared';
 
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { ConfirmComponent } from './confirm/confirm.component';
+import { NavSidebarComponent } from './nav-sidebar/nav-sidebar.component';
 
 @NgModule({
     declarations: [
         NavBarComponent,
-        ConfirmComponent
+        ConfirmComponent,
+        NavSidebarComponent
     ],
     imports: [
         CommonModule,
@@ -24,7 +26,8 @@ import { ConfirmComponent } from './confirm/confirm.component';
         AppSharedModule
     ],
     exports: [
-        NavBarComponent
+        NavBarComponent,
+        NavSidebarComponent
     ],
     entryComponents: [
         ConfirmComponent

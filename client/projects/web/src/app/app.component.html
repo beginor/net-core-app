@@ -1,10 +1,13 @@
 <app-nav-bar></app-nav-bar>
-<div class="app-main">
+<div class="app-main d-flex">
   <div class="error-container mt-5" *ngIf="ui.alerts.length > 0">
     <ngb-alert class="shadow" *ngFor="let alt of ui.alerts" [type]="alt.type"
       (close)="ui.closeAlert(alt)">
       {{ alt.message }}
     </ngb-alert>
   </div>
-  <router-outlet></router-outlet>
+  <app-nav-sidebar class="sidebar" [@status]="sidebarStatus" (onToggle)="onSidebarToggle($event)"></app-nav-sidebar>
+  <div class="router-main flex-grow-1">
+    <router-outlet></router-outlet>
+  </div>
 </div>

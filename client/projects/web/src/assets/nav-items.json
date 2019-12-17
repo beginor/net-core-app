@@ -11,6 +11,10 @@
       "title": "管理",
       "children": [
         {
+          "route": "/admin/nav-items",
+          "title": "导航菜单"
+        },
+        {
           "route": "/admin/users",
           "title": "用户管理"
         },
