@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import {
-    NgbAlertModule, NgbDropdownModule, NgbModalModule
+    NgbAlertModule, NgbDropdownModule, NgbModalModule, NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppSharedModule } from 'app-shared';
@@ -23,6 +23,7 @@ import { NavSidebarComponent } from './nav-sidebar/nav-sidebar.component';
         NgbAlertModule,
         NgbDropdownModule,
         NgbModalModule,
+        NgbTooltipModule,
         AppSharedModule
     ],
     exports: [
