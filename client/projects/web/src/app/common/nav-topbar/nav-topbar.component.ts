@@ -4,11 +4,11 @@ import { Router } from '@angular/router';
 import { AccountService } from 'app-shared';
 
 @Component({
-    selector: 'app-nav-bar',
-    templateUrl: './nav-bar.component.html',
-    styleUrls: ['./nav-bar.component.scss']
+    selector: 'app-nav-topbar',
+    templateUrl: './nav-topbar.component.html',
+    styleUrls: ['./nav-topbar.component.scss']
 })
-export class NavBarComponent implements OnInit {
+export class NavTopBarComponent implements OnInit {
 
     public collapsed = true;
 
