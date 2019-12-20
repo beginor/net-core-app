@@ -7,16 +7,21 @@ import zhExtra from '@angular/common/locales/extra/zh-Hans';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-if (environment.production) {
-    enableProdMode();
+declare function isSupportedBrowser(): boolean;
+
+if (isSupportedBrowser()) {
+    if (environment.production) {
+        enableProdMode();
+    }
+
+    registerLocaleData(zh, 'zh-Hans', zhExtra);
+
+    platformBrowserDynamic().bootstrapModule(AppModule)
+        .then(() => {
+            // console.log('app bootstrap');
+        })
+        .catch(err => {
+            console.error(err);
+        });
 }
 
-registerLocaleData(zh, 'zh-Hans', zhExtra);
-
-platformBrowserDynamic().bootstrapModule(AppModule)
-    .then(() => {
-        // console.log('app bootstrap');
-    })
-    .catch(err => {
-        console.error(err);
-    });

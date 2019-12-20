@@ -15,8 +15,8 @@
 
 <body>
 
-  <app-root class="app-root">
-    <div class="loading-indicator">
+  <app-root id="app-root">
+    <div id="loading-indicator">
       <i class="fas fa-spinner fa-spin"></i> 加载中 ...
     </div>
   </app-root>
@@ -38,13 +38,12 @@
     document.getElementById('unsupported').remove();
   }
   else {
-    const appRoot = document.getElementsByClassName('app-root')[0];
-    appRoot.style.display = 'none';
-    const unsupported = document.getElementById('unsupported');
-    unsupported.style.display = 'block';
+    document.getElementById('app-root').style.display = 'none';
+    document.getElementById('loading-indicator').style.display = 'none';
+    document.getElementById('unsupported').style.display = 'block';
   }
   function isSupportedBrowser() {
-    const ua = navigator.userAgent;
+    var ua = navigator.userAgent;
     // Internet Explorer ;
     if (ua.indexOf(' Trident/') > -1) {
       return false;
