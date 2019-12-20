@@ -7,13 +7,13 @@ import {
 
 import { AppSharedModule } from 'app-shared';
 
-import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { NavTopBarComponent } from './nav-topbar/nav-topbar.component';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { NavSidebarComponent } from './nav-sidebar/nav-sidebar.component';
 
 @NgModule({
     declarations: [
-        NavBarComponent,
+        NavTopBarComponent,
         ConfirmComponent,
         NavSidebarComponent
     ],
@@ -27,7 +27,7 @@ import { NavSidebarComponent } from './nav-sidebar/nav-sidebar.component';
         AppSharedModule
     ],
     exports: [
-        NavBarComponent,
+        NavTopBarComponent,
         NavSidebarComponent
     ],
     entryComponents: [

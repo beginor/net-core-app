@@ -1,6 +1,7 @@
-<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-  <a class="navbar-brand" routerLink="/">
-    <i class="fab fa-angular"></i> .Net Core App
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark"
+  *ngIf="navigation.root | async as root">
+  <a class="navbar-brand" [routerLink]="root.url">
+    <i [class]="root.icon"></i> {{root.title}}
   </a>
   <button class="navbar-toggler" type="button" (click)="collapsed = !collapsed"
     aria-controls="navbarToggleContent"
@@ -11,7 +12,7 @@
   <div class="navbar-collapse" [class.collapse]="collapsed"
     [class.d-flex]="!collapsed" *ngIf="account.info | async as info">
     <ul *ngIf="!!info.id" class="navbar-nav modules mt-2 mt-lg-0 mr-auto">
-      <li class="nav-item" routerLinkActive="active">
+      <!-- <li class="nav-item" routerLinkActive="active">
         <a class="nav-link" routerLink="/home">首页</a>
       </li>
       <li class="nav-item" routerLinkActive="active">
@@ -19,7 +20,12 @@
       </li>
       <li class="nav-item" routerLinkActive="active">
         <a class="nav-link" routerLink="/about">关于</a>
-      </li>
+      </li> -->
+      <ng-container *ngIf="navigation.topbarNodes | async as nodes">
+        <li class="nav-item" routerLinkActive="active" *ngFor="let item of nodes">
+          <a class="nav-link" [routerLink]="item.url">{{item.title}}</a>
+        </li>
+      </ng-container>
     </ul>
     <ul class="navbar-nav mt-2 mt-lg-0 ml-auto">
       <li *ngIf="!info.id;else userNavTpl" class="nav-item" routerLinkActive="active">

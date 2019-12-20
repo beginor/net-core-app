@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AccountService } from 'app-shared';
+import { NavigationService } from '../services/navigation.service';
 
 @Component({
     selector: 'app-nav-topbar',
@@ -14,7 +15,8 @@ export class NavTopBarComponent implements OnInit {
 
     constructor(
         private router: Router,
-        public account: AccountService
+        public account: AccountService,
+        public navigation: NavigationService
     ) { }
 
     public ngOnInit(): void {

@@ -1,39 +1,40 @@
 {
-  "route": "/",
+  "url": "/",
   "title": ".NET Core App",
+  "icon": "fab fa-angular",
   "children": [
     {
-      "route": "/home",
+      "url": "/home",
       "title": "首页"
     },
     {
-      "route": "/admin",
+      "url": "/admin",
       "title": "管理",
       "children": [
         {
-          "route": "/admin/nav-items",
+          "url": "/admin/nav-items",
           "title": "导航菜单"
         },
         {
-          "route": "/admin/users",
+          "url": "/admin/users",
           "title": "用户管理"
         },
         {
-          "route": "/admin/roles",
+          "url": "/admin/roles",
           "title": "角色管理"
         },
         {
-          "route": "/admin/privileges",
+          "url": "/admin/privileges",
           "title": "权限管理"
         },
         {
-          "route": "/admin/audit-logs",
+          "url": "/admin/audit-logs",
           "title": "审计日志"
         }
       ]
     },
     {
-      "route": "/about",
+      "url": "/about",
       "title": "关于"
     }
   ]
