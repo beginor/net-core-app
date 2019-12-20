@@ -12,13 +12,13 @@ html {
 body {
   @extend html;
 
-  .app-root {
+  #app-root {
     display: block;
     @include full-width-height();
     @include no-margin-padding();
     padding: 54px 0 0 0;
 
-    .loading-indicator {
+    #loading-indicator {
       position: fixed;
       left: 50%;
       top: 50%;
