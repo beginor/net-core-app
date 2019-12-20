@@ -26,7 +26,7 @@
         "ASPNETCORE_PATHBASE": "/net-core-app",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:5000;https://localhost:5001"
+      "applicationUrl": "http://+:5000;https://+:5001"
     }
   }
 }
