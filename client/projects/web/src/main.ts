@@ -24,4 +24,3 @@ if (isSupportedBrowser()) {
             console.error(err);
         });
 }
-
