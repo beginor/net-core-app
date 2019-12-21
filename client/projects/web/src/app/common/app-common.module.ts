@@ -10,12 +10,14 @@ import { AppSharedModule } from 'app-shared';
 import { NavTopBarComponent } from './nav-topbar/nav-topbar.component';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { NavSidebarComponent } from './nav-sidebar/nav-sidebar.component';
+import { NavItemComponent } from './nav-item/nav-item.component';
 
 @NgModule({
     declarations: [
         NavTopBarComponent,
         ConfirmComponent,
-        NavSidebarComponent
+        NavSidebarComponent,
+        NavItemComponent
     ],
     imports: [
         CommonModule,

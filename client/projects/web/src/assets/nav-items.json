@@ -13,23 +13,28 @@
       "children": [
         {
           "url": "/admin/nav-items",
-          "title": "导航菜单"
+          "title": "导航菜单",
+          "icon": "fas fa-compass"
         },
         {
           "url": "/admin/users",
-          "title": "用户管理"
+          "title": "用户管理",
+          "icon": "fas fa-users"
         },
         {
           "url": "/admin/roles",
-          "title": "角色管理"
+          "title": "角色管理",
+          "icon": "fas fa-user-tag"
         },
         {
           "url": "/admin/privileges",
-          "title": "权限管理"
+          "title": "权限管理",
+          "icon": "fas fa-user-shield"
         },
         {
           "url": "/admin/audit-logs",
-          "title": "审计日志"
+          "title": "审计日志",
+          "icon": "fas fa-list"
         }
       ]
     },

@@ -1,6 +1,5 @@
 @import "../../../variables";
 
-
 :host {
   background-color: $light;
   display: flex;
@@ -11,6 +10,10 @@
     flex-direction: column;
     border-right: $border-width solid $border-color !important;
     width: 220px;
+
+    .sidebar-header {
+      height: 60px;
+    }
 
     .sidebar-body {
       flex: 1;

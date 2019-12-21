@@ -1,7 +1,9 @@
 import {
-    trigger, animate, style, state, transition
+    trigger, animate, style, state, transition, AnimationEvent
 } from '@angular/animations';
 import { Component, OnInit, EventEmitter } from '@angular/core';
+
+import { NavigationService } from '../services/navigation.service';
 
 @Component({
     selector: 'app-nav-sidebar',
@@ -19,12 +21,12 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 export class NavSidebarComponent implements OnInit {
 
     public status = 'expanded';
-    public get collapsed(): boolean {
-        return this.status === 'collapsed';
-    }
+    public collapsed = false;
     public onToggle = new EventEmitter<boolean>(true);
 
-    constructor() { }
+    constructor(
+        public navigation: NavigationService
+    ) { }
 
     public ngOnInit(): void {
     }
@@ -36,13 +38,25 @@ export class NavSidebarComponent implements OnInit {
         else {
             this.status = 'collapsed';
         }
-        this.onToggle.next(this.status === 'collapsed');
+        // this.onToggle.next(this.status === 'collapsed');
     }
 
     public getToggleIconClass(): string {
         let cls = 'ml-2 fa fa-fw fa-angle-double-';
         cls += (this.collapsed ? 'right' : 'left');
         return cls;
+    }
+
+    public onAnimationStart(e: AnimationEvent): void {
+        if (e.toState === 'collapsed') {
+            this.collapsed = true;
+        }
+    }
+
+    public onAnimationDone(e: AnimationEvent): void {
+        if (e.toState === 'expanded') {
+            this.collapsed = false;
+        }
     }
 
 }

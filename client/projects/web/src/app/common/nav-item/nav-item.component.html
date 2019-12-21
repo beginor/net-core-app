@@ -1,0 +1,4 @@
+<a class="nav-link p-1" [ngClass]="classes" [routerLink]="node.url" routerLinkActive="active">
+  <i [class]="iconClasses"></i>
+  <span class="ml-1" *ngIf="!collapsed">{{node.title}}</span>
+</a>

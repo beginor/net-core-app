@@ -11,21 +11,11 @@
   </button>
   <div class="navbar-collapse" [class.collapse]="collapsed"
     [class.d-flex]="!collapsed" *ngIf="account.info | async as info">
-    <ul *ngIf="!!info.id" class="navbar-nav modules mt-2 mt-lg-0 mr-auto">
-      <!-- <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/home">首页</a>
+    <ul class="navbar-nav modules mt-2 mt-lg-0 mr-auto"
+    *ngIf="navigation.topbarNodes | async as nodes">
+      <li class="nav-item" routerLinkActive="active" *ngFor="let item of nodes">
+        <a class="nav-link" [routerLink]="item.url">{{item.title}}</a>
       </li>
-      <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/admin">管理</a>
-      </li>
-      <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/about">关于</a>
-      </li> -->
-      <ng-container *ngIf="navigation.topbarNodes | async as nodes">
-        <li class="nav-item" routerLinkActive="active" *ngFor="let item of nodes">
-          <a class="nav-link" [routerLink]="item.url">{{item.title}}</a>
-        </li>
-      </ng-container>
     </ul>
     <ul class="navbar-nav mt-2 mt-lg-0 ml-auto">
       <li *ngIf="!info.id;else userNavTpl" class="nav-item" routerLinkActive="active">

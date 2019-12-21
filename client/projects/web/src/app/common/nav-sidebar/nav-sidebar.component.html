@@ -1,12 +1,17 @@
-<div class="sidebar" [@status]="status">
-  <div class="sidebar-header"></div>
+<div class="sidebar" *ngIf="navigation.sidebarNodes | async as nodes"
+  [@status]="status" (@status.done)="onAnimationDone($event)"
+  (@status.start)="onAnimationStart($event)">
+  <!-- <div class="sidebar-header"></div> -->
   <div class="sidebar-body">
+    <app-nav-item *ngFor="let node of navigation.sidebarNodes | async as nodes"
+      [node]="node" [collapsed]="collapsed">
+    </app-nav-item>
   </div>
   <ng-template #expandTpl>打开侧边栏</ng-template>
   <div class="sidebar-toggler border-top p-1" (click)="toggle()"
     [ngbTooltip]="collapsed ? expandTpl : null" openDelay="500" placement="right"
     container="body">
     <i [class]="getToggleIconClass()"></i>
-    <span class="collapse-text ml-1" *ngIf="!this.collapsed">收起侧边栏</span>
+    <span class="collapse-text ml-1" *ngIf="!collapsed">收起侧边栏</span>
   </div>
 </div>
