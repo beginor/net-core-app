@@ -14,7 +14,7 @@ create table public.app_audit_logs
     controller_name character varying(64) collate pg_catalog."default",
     action_name character varying(64) collate pg_catalog."default",
     description character varying(256) collate pg_catalog."default",
-    constraint app_audit_logs_pkey primary key (id)
+    constraint pk_app_audit_logs primary key (start_at, user_name, request_path, request_method)
 )
 with (
     oids = false
@@ -55,3 +55,11 @@ comment on column public.app_audit_logs.action_name
 
 comment on column public.app_audit_logs.description
     is '描述';
+
+
+-- TimescaleDB hyper table def;
+
+-- select create_hypertable('public.app_audit_logs', 'start_at');
+-- select add_dimension('public.app_audit_logs', 'user_name', number_partitions => 4);
+-- select add_dimension('public.app_audit_logs', 'request_path', number_partitions => 4);
+-- select add_dimension('public.app_audit_logs', 'request_method', number_partitions => 4);
