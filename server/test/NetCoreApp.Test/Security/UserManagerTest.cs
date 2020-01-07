@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Beginor.NetCoreApp.Data.Entities;
 using Microsoft.AspNetCore.Identity;
+using Beginor.NetCoreApp.Data.Entities;
 using NUnit.Framework;
 using NHibernate.Linq;
 
