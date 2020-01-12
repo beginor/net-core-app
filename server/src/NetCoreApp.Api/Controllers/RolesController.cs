@@ -187,7 +187,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">指定的角色不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}/users")]
-        [Authorize("app_roles.read_user_toles")]
+        [Authorize("app_roles.read_users_in_role")]
         public async Task<ActionResult<IList<AppUserModel>>> GetUsersInRole(
             long id
         ) {
