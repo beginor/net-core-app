@@ -47,7 +47,8 @@
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1",
     "bootstrap": "^4.4.1",
-    "@ng-bootstrap/ng-bootstrap": "^5.1.4",
+    "bootstrap-icons": "1.0.0-alpha2",
+    "@ng-bootstrap/ng-bootstrap": "^5.1.5",
     "@fortawesome/fontawesome-free": "^5.12.0",
     "@angular/cdk": "~8.2.3",
     "@angular/material": "~8.2.3",
@@ -55,9 +56,9 @@
     "material-design-icons": "^3.0.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.803.21",
-    "@angular-devkit/build-ng-packagr": "~0.803.21",
-    "@angular/cli": "~8.3.21",
+    "@angular-devkit/build-angular": "~0.803.22",
+    "@angular-devkit/build-ng-packagr": "~0.803.22",
+    "@angular/cli": "~8.3.22",
     "@angular/compiler-cli": "~8.2.14",
     "@angular/language-service": "~8.2.14",
     "@types/node": "~8.9.4",
