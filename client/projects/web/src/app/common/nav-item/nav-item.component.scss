@@ -1,33 +1,83 @@
 @import "../../../variables";
 
-.nav-link {
-  display: flex;
-  align-items: center;
-  color: $text-muted;
-  white-space: nowrap;
-  overflow: hidden;
-  height: 48px;
+:host {
+  display: block;
+  position: relative;
 
   &.active {
-    font-weight: $font-weight-bold;
-    background-color: $gray-200;
     box-shadow: inset 4px 0 0 $gray-600;
+    background-color: $gray-200;
   }
 
   &:hover {
-    background-color: $gray-200;
+    background-color: $gray-300;
+    .nav-link-subitems {
+      display: block;
+    }
   }
 
-  .nav-icon {
-    line-height: 24px;
-    width: 24px !important;
-    height: 24px !important;
-    text-align: center;
+  .nav-link-subitems {
+    display: none;
+    position: absolute;
+    left: 220px;
+    top: 0px;
+    list-style: none;
+    background-color: $light;
+    z-index: 2;
+    min-width: 150px;
+    box-shadow: 2px 1px 3px $gray-600;
+    border: 1px solid $gray-400;
+    border-left: 0;
+    border-radius: 0 3px 3px 0;
+
+    &.sidebar-collapsed {
+      left: 54px;
+    }
+
+    .nav-link {
+      height: 47px;
+    }
+
+    .divider {
+      height: 0;
+      margin: 0;
+      overflow: hidden;
+      border-top: 1px solid $gray-400;
+    }
+
   }
 
-  > span {
+  .nav-link {
+    display: flex;
+    align-items: center;
+    color: $text-muted;
     white-space: nowrap;
     overflow: hidden;
-  }
+    height: 48px;
+    margin-left: 0px;
+    padding-left: 4px;
 
+    &:hover {
+      background-color: $gray-300;
+    }
+
+    &.active {
+      font-weight: $font-weight-bold;
+      margin-left: 4px;
+      padding-left: 0px;
+    }
+
+    .nav-icon {
+      line-height: 24px;
+      width: 24px !important;
+      height: 24px !important;
+      text-align: center;
+    }
+
+    > span {
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+  }
 }

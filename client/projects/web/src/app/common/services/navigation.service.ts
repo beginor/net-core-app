@@ -36,6 +36,10 @@ export class NavigationService {
         });
     }
 
+    public isActiveNode(node: NavigationNode): boolean {
+        return this.location.path().includes(node.url);
+    }
+
     private setupNavigationNodes(rootNode: NavigationNode): void {
         this.root.next(rootNode);
         this.topbarNodes.next(rootNode.children);

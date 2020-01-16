@@ -1,4 +1,5 @@
 import { Component, OnChanges, Input } from '@angular/core';
+import { Location } from '@angular/common';
 
 import { NavigationNode } from '../services/navigation.service';
 
@@ -15,12 +16,18 @@ export class NavItemComponent implements OnChanges {
 
     public classes: { [index: string]: boolean };
     public iconClasses = 'nav-icon';
-    public nodeChildren: NavigationNode[];
+    public expanded = false;
+
+    constructor(
+        private location: Location
+    ) { }
 
     public ngOnChanges(): void {
-        this.nodeChildren = (this.node && this.node.children)
-            ? this.node.children.filter(n => !n.hidden) : [];
         this.setClasses();
+        const path = this.location.path(false);
+        if (path.startsWith(this.node.url)) {
+            this.expanded = true;
+        }
     }
 
     private setClasses(): void {
@@ -35,6 +42,12 @@ export class NavItemComponent implements OnChanges {
             iconClasses += (' ' + this.node.icon);
         }
         this.iconClasses = iconClasses;
+    }
+
+    public toggle($e: Event): void {
+        $e.preventDefault();
+        $e.stopPropagation();
+        this.expanded = !this.expanded;
     }
 
 }

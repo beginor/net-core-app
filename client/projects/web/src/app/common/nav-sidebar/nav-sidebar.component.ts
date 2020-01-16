@@ -12,7 +12,7 @@ import { NavigationService } from '../services/navigation.service';
     animations: [
         trigger('status', [
             state('expanded', style({ width: '220px' })),
-            state('collapsed', style({ width: '48px' })),
+            state('collapsed', style({ width: '53px' })),
             transition('expanded => collapsed', animate('.3s')),
             transition('collapsed => expanded', animate('.3s'))
         ])

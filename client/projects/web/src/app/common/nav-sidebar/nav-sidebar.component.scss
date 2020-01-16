@@ -3,33 +3,27 @@
 :host {
   background-color: $light;
   display: flex;
+  flex-direction: column;
+  border-right: $border-width solid $border-color !important;
+  // overflow: hidden;
 
-  .sidebar {
+  .sidebar-body {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    border-right: $border-width solid $border-color !important;
+    display: block;
+    // overflow-y: auto;
     width: 220px;
+  }
 
-    .sidebar-header {
-      height: 60px;
-    }
+  .sidebar-toggler {
+    cursor: pointer;
+    height: 48px;
+    display: flex;
+    align-items: center;
 
-    .sidebar-body {
-      flex: 1;
-      overflow: auto;
-    }
-
-    .sidebar-toggler {
-      cursor: pointer;
-      height: 48px;
-      display: flex;
-      align-items: center;
-
-      .collapse-text {
-        white-space: nowrap;
-        overflow: hidden;
-      }
+    .collapse-text {
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
+
 }

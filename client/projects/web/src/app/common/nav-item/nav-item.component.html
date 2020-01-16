@@ -1,4 +1,22 @@
-<a class="nav-link p-1" [ngClass]="classes" [routerLink]="node.url" routerLinkActive="active">
+<a class="nav-link" routerLinkActive="active" [routerLink]="node.url">
   <i [class]="iconClasses"></i>
   <span class="ml-1" *ngIf="!collapsed">{{node.title}}</span>
 </a>
+<ul class="nav-link-subitems pl-0 m-0" *ngIf="node.children || collapsed"
+  [class.sidebar-collapsed]="collapsed">
+  <ng-container *ngIf="collapsed">
+    <li>
+      <a class="nav-link header-link ml-0 pl-3" [routerLink]="node.url" routerLinkActive="active">
+        {{node.title}}
+      </a>
+    </li>
+  </ng-container>
+  <ng-container *ngIf="node.children">
+    <li class="divider" *ngIf="collapsed"></li>
+    <li *ngFor="let child of node.children">
+      <a class="nav-link ml-0 pl-3" [routerLink]="child.url" routerLinkActive="active">
+        {{child.title}}
+      </a>
+    </li>
+  </ng-container>
+</ul>
