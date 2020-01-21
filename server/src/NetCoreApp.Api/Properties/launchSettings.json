@@ -18,7 +18,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "NetCoreApp.Api": {
+    "Beginor.NetCoreApp.Api": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

@@ -11,19 +11,19 @@
 
   <ItemGroup>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
     <PackageReference Include="Beginor.AppFx.Api" Version="3.0.1" />
     <PackageReference Include="Beginor.AppFx.Core" Version="3.1.1" />
     <PackageReference Include="Beginor.AppFx.DependencyInjection" Version="3.0.1" />
     <PackageReference Include="Beginor.AppFx.Logging.Log4net" Version="3.0.1" />
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="NHibernate" Version="5.2.6" />
-    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="3.1.2" />
+    <PackageReference Include="NHibernate" Version="5.2.7" />
+    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="3.1.3" />
     <PackageReference Include="NHibernate.Extensions.NpgSql" Version="3.1.2" />
     <PackageReference Include="NHibernate.NetCore" Version="3.1.1" />
     <PackageReference Include="Npgsql" Version="4.1.2" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
