@@ -5,32 +5,32 @@ import { AuthGuard } from 'app-shared';
 
 import { environment } from '../environments/environment';
 
+// tslint:disable:max-line-length
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     {
         path: 'home',
-        loadChildren: './home/home.module#HomeModule',
+        loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
         canLoad: []
     },
     {
         path: 'about',
-        loadChildren: './about/about.module#AboutModule',
+        loadChildren: () => import('./about/about.module').then(m => m.AboutModule),
         canLoad: [AuthGuard]
     },
     {
         path: 'admin',
-        // tslint:disable-next-line: max-line-length
         loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
         canLoad: [AuthGuard],
         canActivate: [AuthGuard]
     },
     {
         path: 'login',
-        // tslint:disable-next-line: max-line-length
         loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
         canLoad: []
     }
 ];
+// tslint:enable:max-line-length
 
 @NgModule({
     imports: [

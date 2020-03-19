@@ -20,10 +20,8 @@
     ],
     "paths": {
       "app-shared": [
+        "dist/app-shared/app-shared",
         "dist/app-shared"
-      ],
-      "app-shared/*": [
-        "dist/app-shared/*"
       ]
     }
   },

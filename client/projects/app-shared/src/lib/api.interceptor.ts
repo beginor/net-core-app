@@ -1,10 +1,11 @@
-import { Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
     HttpInterceptor, HttpEvent, HttpRequest, HttpHandler
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AccountService } from './account.service';
 
+@Injectable({ providedIn: 'root' })
 export class ApiInterceptor implements HttpInterceptor {
 
     constructor(

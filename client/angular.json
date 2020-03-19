@@ -22,6 +22,7 @@
             "main": "projects/web/src/main.ts",
             "polyfills": "projects/web/src/polyfills.ts",
             "tsConfig": "projects/web/tsconfig.app.json",
+            "aot": true,
             "assets": [
               "projects/web/src/favicon.ico",
               "projects/web/src/assets"
@@ -143,6 +144,7 @@
             "main": "projects/handset/src/main.ts",
             "polyfills": "projects/handset/src/polyfills.ts",
             "tsConfig": "projects/handset/tsconfig.app.json",
+            "aot": true,
             "assets": [
               "projects/handset/src/favicon.ico",
               "projects/handset/src/assets"
@@ -251,6 +253,11 @@
           "options": {
             "tsConfig": "projects/app-shared/tsconfig.lib.json",
             "project": "projects/app-shared/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/app-shared/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
