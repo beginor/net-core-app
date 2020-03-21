@@ -19,12 +19,48 @@
         {
           "url": "/admin/users",
           "title": "用户管理",
-          "icon": "fas fa-users"
+          "icon": "fas fa-users",
+          "children": [
+            {
+              "url": "/admin/users/1583279806230020897",
+              "title": "用户管理1"
+            },
+            {
+              "url": "/admin/users/1583279740075020888",
+              "title": "用户管理2"
+            },
+            {
+              "url": "/admin/users/1583279685312020880",
+              "title": "用户管理3"
+            },
+            {
+              "url": "/admin/users/1583279635071020872",
+              "title": "用户管理4"
+            }
+          ]
         },
         {
           "url": "/admin/roles",
           "title": "角色管理",
-          "icon": "fas fa-user-tag"
+          "icon": "fas fa-user-tag",
+          "children": [
+            {
+              "url": "/admin/roles/1567065492324020250",
+              "title": "角色管理1"
+            },
+            {
+              "url": "/admin/roles/1567065492324020250",
+              "title": "角色管理2"
+            },
+            {
+              "url": "/admin/roles/1567065492324020250",
+              "title": "角色管理3"
+            },
+            {
+              "url": "/admin/roles/1567065492324020250",
+              "title": "角色管理4"
+            }
+          ]
         },
         {
           "url": "/admin/privileges",
