@@ -1,4 +1,4 @@
-import { Component, OnChanges, Input } from '@angular/core';
+import { Component, OnChanges, Input, HostBinding } from '@angular/core';
 import { Location } from '@angular/common';
 
 import { NavigationNode } from '../services/navigation.service';
@@ -12,7 +12,10 @@ export class NavItemComponent implements OnChanges {
 
     @Input() public level = 1;
     @Input() public node: NavigationNode;
-    @Input() public collapsed = true;
+    @Input() public sidebarCollapsed = true;
+    @HostBinding('class.active') public get active(): boolean {
+        return this.isActive();
+    }
 
     public classes: { [index: string]: boolean };
     public iconClasses = 'nav-icon';
@@ -24,10 +27,11 @@ export class NavItemComponent implements OnChanges {
 
     public ngOnChanges(): void {
         this.setClasses();
+    }
+
+    private isActive(): boolean {
         const path = this.location.path(false);
-        if (path.startsWith(this.node.url)) {
-            this.expanded = true;
-        }
+        return path.startsWith(this.node.url);
     }
 
     private setClasses(): void {
@@ -42,12 +46,6 @@ export class NavItemComponent implements OnChanges {
             iconClasses += (' ' + this.node.icon);
         }
         this.iconClasses = iconClasses;
-    }
-
-    public toggle($e: Event): void {
-        $e.preventDefault();
-        $e.stopPropagation();
-        this.expanded = !this.expanded;
     }
 
 }

@@ -7,35 +7,42 @@
   &.active {
     box-shadow: inset 4px 0 0 $gray-600;
     background-color: $gray-200;
+
+    .nav-link-subitems:not(.sidebar-collapsed) {
+      position: relative;
+      display: block;
+      left: 0;
+      box-shadow: none;
+      border: none;
+      margin-left: 4px;
+    }
   }
 
   &:hover {
     background-color: $gray-300;
     .nav-link-subitems {
       display: block;
+      box-shadow: 2px 1px 3px $gray-600;
+      border: 1px solid $gray-400;
+      border-left: 0;
+      border-radius: 0 3px 3px 0;
+      left: 220px;
     }
   }
 
   .nav-link-subitems {
     display: none;
     position: absolute;
-    left: 220px;
     top: 0px;
     list-style: none;
     background-color: $light;
     z-index: 2;
     min-width: 150px;
-    box-shadow: 2px 1px 3px $gray-600;
-    border: 1px solid $gray-400;
-    border-left: 0;
-    border-radius: 0 3px 3px 0;
+    padding-left: 0;
+    margin: 0;
 
     &.sidebar-collapsed {
       left: 54px;
-    }
-
-    .nav-link {
-      height: 47px;
     }
 
     .divider {
@@ -79,5 +86,25 @@
       overflow: hidden;
     }
 
+  }
+
+  .nav-sublink {
+    display: flex;
+    align-items: center;
+    color: $text-muted;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 47px;
+    margin-left: 0;
+    padding-left: 2rem;
+    text-decoration: none;
+
+    &:hover {
+      background-color: $gray-400;
+    }
+    &.active {
+      font-weight: $font-weight-bold;
+      background-color: $gray-400;
+    }
   }
 }

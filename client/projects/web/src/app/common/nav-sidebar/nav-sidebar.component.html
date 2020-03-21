@@ -3,7 +3,7 @@
     [@status]="status" (@status.done)="onAnimationDone($event)"
     (@status.start)="onAnimationStart($event)">
     <app-nav-item *ngFor="let node of nodes" [node]="node"
-      [collapsed]="collapsed" [class.active]="navigation.isActiveNode(node)">
+      [sidebarCollapsed]="collapsed">
     </app-nav-item>
   </div>
   <div class="sidebar-toggler border-top p-1" (click)="toggle()"
@@ -12,5 +12,5 @@
     <i [class]="getToggleIconClass()"></i>
     <span class="collapse-text ml-1" *ngIf="!collapsed">收起侧边栏</span>
   </div>
+  <ng-template #expandTpl>打开侧边栏</ng-template>
 </ng-container>
-<ng-template #expandTpl>打开侧边栏</ng-template>
