@@ -70,7 +70,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
                 };
             }
         }
-        
+
         public async Task CreateAsync(AppNavItemModel model, string userName) {
             // Check parameters;
             Argument.NotNull(model, nameof(model));
@@ -87,7 +87,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
                 entity.CreatedAt = DateTime.Now;
                 // Assign updater;
                 entity.Updater = user;
-                entity.UpdateAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
                 // Ensure not deleted.
                 entity.IsDeleted = false;
                 await session.SaveAsync(entity);
@@ -119,7 +119,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
                 entity.Id = id;
                 entity.Updater = await session.Query<AppUser>()
                     .FirstAsync(u => u.UserName == userName);
-                entity.UpdateAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
                 await session.UpdateAsync(entity);
                 await session.FlushAsync();
                 session.Clear();

@@ -1,10 +1,12 @@
 using System.IO;
+using Beginor.NetCoreApp.Data.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NHibernate.AspNetCore.Identity;
 using NHibernate.Cfg;
+using NHibernate.Mapping.Attributes;
 using NHibernate.NetCore;
 
 namespace Beginor.NetCoreApp.Api {
@@ -31,6 +33,11 @@ namespace Beginor.NetCoreApp.Api {
                 isNotProd.ToString()
             );
             cfg.AddIdentityMappingsForPostgres();
+            HbmSerializer.Default.Validate = true;
+            var stream = HbmSerializer.Default.Serialize(typeof(AppUser).Assembly);
+            using var reader = new StreamReader(stream);
+            var xml = reader.ReadToEnd();
+            cfg.AddXml(xml);
             services.AddHibernate(cfg);
         }
 

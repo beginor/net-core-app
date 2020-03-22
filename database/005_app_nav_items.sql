@@ -14,7 +14,7 @@ create table public.app_nav_items
     creator_id character varying(32) collate pg_catalog."default" not null,
     created_at timestamp without time zone not null,
     updater_id character varying(32) collate pg_catalog."default" not null,
-    update_at timestamp without time zone not null,
+    updated_at timestamp without time zone not null,
     is_deleted boolean not null,
     constraint pk_app_nav_items primary key (id),
     constraint fk_app_nav_items_creator foreign key (creator_id)
@@ -57,7 +57,7 @@ comment on column public.app_nav_items.created_at
 comment on column public.app_nav_items.updater_id
     is '更新者id';
 
-comment on column public.app_nav_items.update_at
+comment on column public.app_nav_items.updated_at
     is '更新时间';
 
 comment on column public.app_nav_items.is_deleted
