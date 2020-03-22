@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
@@ -34,6 +35,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">创建 导航节点（菜单） 成功</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
+        [Authorize("app_nav_items.create")]
         public async Task<ActionResult<AppNavItemModel>> Create(
             [FromBody]AppNavItemModel model
         ) {
@@ -52,6 +54,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
+        [Authorize("app_nav_items.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
                 await repository.DeleteAsync(id);
@@ -67,6 +70,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">成功, 分页返回结果</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("")]
+        [Authorize("app_nav_items.read")]
         public async Task<ActionResult<PaginatedResponseModel<AppNavItemModel>>> GetAll(
             [FromQuery]AppNavItemSearchModel model
         ) {
@@ -87,6 +91,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404"> 导航节点（菜单） 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
+        [Authorize("app_nav_items.read")]
         public async Task<ActionResult<AppNavItemModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);
@@ -108,6 +113,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404"> 导航节点（菜单） 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
+        [Authorize("app_nav_items.update")]
         public async Task<ActionResult<AppNavItemModel>> Update(
             [FromRoute]long id,
             [FromBody]AppNavItemModel model
