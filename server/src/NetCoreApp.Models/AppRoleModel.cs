@@ -17,6 +17,9 @@ namespace Beginor.NetCoreApp.Models {
         /// <summary>是否默认角色</summary>
         public bool IsDefault { get; set; }
 
+        /// <summary>是否匿名角色</summary>
+        public bool IsAnonymous { get; set; }
+
         /// <summary>用户数</summary>
         public int UserCount { get; set; }
 

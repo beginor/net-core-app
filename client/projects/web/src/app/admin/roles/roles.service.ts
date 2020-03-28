@@ -238,6 +238,9 @@ export interface AppRoleModel {
     description?: string;
     /** 是否默认 */
     isDefault?: boolean;
+    /** 是否匿名 */
+    isAnonymous?: boolean;
+    /** 用户数量 */
     userCount?: number;
 }
 

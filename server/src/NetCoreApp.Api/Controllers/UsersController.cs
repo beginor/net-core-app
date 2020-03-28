@@ -72,6 +72,12 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 user = new AppUser();
                 var claims = user.UpdateFromUserModel(mapper, model);
                 var result = await userMgr.CreateAsync(user);
+                // add default roles to new created user;
+                var defaultRoles = await roleMgr.Roles
+                    .Where(r => r.IsDefault == true)
+                    .Select(r => r.Name)
+                    .ToListAsync();
+                await userMgr.AddToRolesAsync(user, defaultRoles);
                 await AddOrReplaceClaims(user, claims);
                 if (result.Succeeded) {
                     mapper.Map(user, model);

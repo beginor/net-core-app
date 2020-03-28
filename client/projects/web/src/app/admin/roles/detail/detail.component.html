@@ -34,15 +34,32 @@
         required #description="ngModel" [disabled]="!editable"
       />
     </div>
-    <div class="form-group">
-      <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input"
-          id="isDefault" name="isDefault"
-          [(ngModel)]="model.isDefault" [disabled]="!editable">
-        <label class="custom-control-label text-muted"
-          for="isDefault">
-          是否默认
-        </label>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input"
+              id="isDefault" name="isDefault"
+              [(ngModel)]="model.isDefault" [disabled]="!editable">
+            <label class="custom-control-label text-muted"
+              for="isDefault">
+              是否默认
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input"
+              id="isAnonymous" name="isAnonymous"
+              [(ngModel)]="model.isAnonymous" [disabled]="!editable">
+            <label class="custom-control-label text-muted"
+              for="isAnonymous">
+              是否匿名
+            </label>
+          </div>
+        </div>
       </div>
     </div>
   </div>

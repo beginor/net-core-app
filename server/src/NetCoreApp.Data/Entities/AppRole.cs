@@ -14,6 +14,9 @@ namespace Beginor.NetCoreApp.Data.Entities {
         [Property(Column = "is_default", Type = "bool", NotNull = true)]
         public virtual bool IsDefault { get; set; }
 
+        [Property(Column = "is_anonymous", Type = "bool", NotNull = true)]
+        public virtual bool IsAnonymous { get; set; }
+
     }
 
 }
