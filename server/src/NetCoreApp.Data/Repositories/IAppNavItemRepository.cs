@@ -11,10 +11,12 @@ namespace Beginor.NetCoreApp.Data.Repositories {
         Task<PaginatedResponseModel<AppNavItemModel>> SearchAsync(
             AppNavItemSearchModel model
         );
-        
+
         Task CreateAsync(AppNavItemModel model, string userName);
 
         Task UpdateAsync(long id, AppNavItemModel model, string userName);
+
+        Task<MenuNodeModel> GetMenuAsync(string[] roles);
 
     }
 

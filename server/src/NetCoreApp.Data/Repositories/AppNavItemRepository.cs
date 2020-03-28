@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
-using Microsoft.AspNetCore.Identity;
+using Dapper;
 using NHibernate;
 using NHibernate.Linq;
 using Beginor.NetCoreApp.Data.Entities;
@@ -124,6 +125,54 @@ namespace Beginor.NetCoreApp.Data.Repositories {
                 await session.FlushAsync();
                 session.Clear();
             }
+        }
+
+        public async Task<MenuNodeModel> GetMenuAsync(string[] roles) {
+            if (roles == null) {
+                throw new ArgumentNullException("roles can not be null.");
+            }
+            using var session = OpenSession();
+            var conn = session.Connection;
+            var sql = @"
+                with recursive cte as (
+                    select p.id, p.parent_id, p.title, p.tooltip, p.icon, p.url, p.sequence, p.roles
+                    from public.app_nav_items p
+                    where p.id = 0
+                    union all
+                    select c.id, c.parent_id, c.title, c.tooltip, c.icon, c.url, c.sequence, c.roles
+                    from public.app_nav_items c
+                    inner join cte on cte.id = c.parent_id
+                    where c.roles && @roles::character varying[]
+                )
+                select * from cte;
+            ";
+            var navItems = await conn.QueryAsync<AppNavItem>(sql, new { roles });
+            var rootNavItem = navItems.First(n => n.Id == 0);
+            var model = new MenuNodeModel {
+                Title = rootNavItem.Title,
+                Url = rootNavItem.Url,
+                Icon = rootNavItem.Icon,
+                Tooltip = rootNavItem.Tooltip,
+                Children = FindChildrenRecursive(0, navItems)
+            };
+            return model;
+        }
+
+        private MenuNodeModel[] FindChildrenRecursive(long id, IEnumerable<AppNavItem> items) {
+            var childCount = items.Count(i => i.ParentId == id);
+            if (childCount == 0) {
+                return null;
+            }
+            var children = items.Where(i => i.ParentId == id)
+                .OrderBy(i => i.Sequence)
+                .Select(i => new MenuNodeModel {
+                    Title = i.Title,
+                    Url = i.Url,
+                    Icon = i.Icon,
+                    Tooltip = i.Tooltip,
+                    Children = FindChildrenRecursive(i.Id, items)
+                });
+            return children.ToArray();
         }
 
     }

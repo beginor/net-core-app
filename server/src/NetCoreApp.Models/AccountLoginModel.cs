@@ -39,7 +39,22 @@ namespace Beginor.NetCoreApp.Models {
         public IDictionary<string, bool> Privileges { get; set; }
         /// <summary>JwtToken</summary>
         public string Token { get; set; }
+        /// <summary>用户看到的菜单项目</summary>
+        public MenuNodeModel Menu { get; set; }
+    }
 
+    /// <summary>用户看到的菜单项</summary>
+    public class MenuNodeModel {
+        /// <summary>菜单地址 Url</summary>
+        public string Url { get; set; }
+        /// <summary>菜单标题</summary>
+        public string Title { get; set; }
+        /// <summary>菜单图标</summary>
+        public string Icon { get; set; }
+        /// <summary>菜单提示文字</summary>
+        public string Tooltip { get; set; }
+        /// <summary>自菜单项</summary>
+        public MenuNodeModel[] Children { get; set; }
     }
 
 }

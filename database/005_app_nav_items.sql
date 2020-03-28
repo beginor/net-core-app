@@ -16,6 +16,7 @@ create table public.app_nav_items
     updater_id character varying(32) collate pg_catalog."default" not null,
     updated_at timestamp without time zone not null,
     is_deleted boolean not null,
+    roles character varying(64)[],
     constraint pk_app_nav_items primary key (id),
     constraint fk_app_nav_items_creator foreign key (creator_id)
         references public.app_users (id) match simple
@@ -69,3 +70,5 @@ comment on column public.app_nav_items.sequence
 comment on column public.app_nav_items.icon
     is '图标';
 
+comment on column public.app_nav_items.roles
+    is '能看到该菜单项的角色';

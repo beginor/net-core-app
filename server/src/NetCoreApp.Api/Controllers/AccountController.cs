@@ -7,6 +7,7 @@ using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
+using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,15 +27,18 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         private UserManager<AppUser> userMgr;
         private RoleManager<AppRole> roleMgr;
         private Jwt jwt;
+        private IAppNavItemRepository navRepo;
 
         public AccountController(
             UserManager<AppUser> userMgr,
             RoleManager<AppRole> roleMgr,
-            Jwt jwt
+            Jwt jwt,
+            IAppNavItemRepository navRepo
         ) {
             this.userMgr = userMgr;
             this.roleMgr = roleMgr;
             this.jwt = jwt;
+            this.navRepo = navRepo;
         }
 
         protected override void Dispose(bool disposing) {
@@ -42,6 +46,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 userMgr = null;
                 roleMgr = null;
                 jwt = null;
+                navRepo = null;
             }
             base.Dispose(disposing);
         }
@@ -52,6 +57,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404">用户不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("info")]
+        [ResponseCache(NoStore = true, Duration = 0)]
         public async Task<ActionResult<AccountInfoModel>> GetInfo() {
             try {
                 if (!User.Identity.IsAuthenticated) {
@@ -65,6 +71,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 var identity = await CreateIdentityAsync(appUser);
                 var info = CreateAccountInfoModel(identity);
                 info.Token = CreateJwtToken(identity);
+                info.Menu = await navRepo.GetMenuAsync(new string[] {"anonymous"});
                 return info;
             }
             catch (Exception ex) {
