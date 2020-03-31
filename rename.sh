@@ -56,9 +56,9 @@ find . -name '*.bak' -delete
 git add *
 git commit -m "Rename client app"
 # 修改服务端相关文件
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./server/src/NetCoreApp.Api/Properties/launchSettings.json
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./server/src/NetCoreApp.Api/Properties/launchSettings.json
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./server/src/NetCoreApp.Api/Startup.Swagger.cs
+sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./server/src/NetCoreApp.Entry/Properties/launchSettings.json
+sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./server/src/NetCoreApp.Entry/Properties/launchSettings.json
+sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./server/src/NetCoreApp.Entry/Startup.Swagger.cs
 grep Beginor.NetCoreApp -rl server --include *.cs | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp -rl server --include *.hbm.xml | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp -rl server --include *.config | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
@@ -77,6 +77,8 @@ find . -name '*.bak' -delete
 git add *
 git commit -m "Rename server app"
 # 移动文件至新的目录
+git mv server/src/NetCoreApp.Entry/NetCoreApp.Entry.csproj server/src/NetCoreApp.Entry/${PROJ_NAME}.Entry.csproj
+git mv server/src/NetCoreApp.Entry server/src/${PROJ_NAME}.Entry
 git mv server/src/NetCoreApp.Api/NetCoreApp.Api.csproj server/src/NetCoreApp.Api/${PROJ_NAME}.Api.csproj
 git mv server/src/NetCoreApp.Api server/src/${PROJ_NAME}.Api
 git mv server/src/NetCoreApp.Data/NetCoreApp.Data.csproj server/src/NetCoreApp.Data/${PROJ_NAME}.Data.csproj
