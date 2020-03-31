@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 
-namespace Beginor.NetCoreApp.Test.Config {
+namespace Beginor.NetCoreApp.Test {
 
     [TestFixture]
     public class ConfigTest : BaseTest<IConfiguration> {

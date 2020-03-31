@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using Beginor.AppFx.Logging.Log4net;
-using Beginor.NetCoreApp.Api;
+using Beginor.NetCoreApp.Entry;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

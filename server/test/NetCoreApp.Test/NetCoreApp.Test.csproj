@@ -27,22 +27,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\src\NetCoreApp.Api\hibernate.config">
-      <Link>hibernate.config</Link>
+    <None Include="..\..\src\NetCoreApp.Entry\config\hibernate.config">
+      <Link>config\hibernate.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\src\NetCoreApp.Api\log.config">
-      <Link>log.config</Link>
+    <None Include="..\..\src\NetCoreApp.Entry\config\log.config">
+      <Link>config\log.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\src\NetCoreApp.Api\appsettings.json">
-      <Link>appsettings.json</Link>
+    <None Include="..\..\src\NetCoreApp.Entry\config\appsettings.json">
+      <Link>config\appsettings.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\src\NetCoreApp.Api\appsettings.Development.json">
-      <Link>appsettings.Development.json</Link>
+    <None Include="..\..\src\NetCoreApp.Entry\config\appsettings.Development.json">
+      <Link>config\appsettings.Development.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Config" />
   </ItemGroup>
 
 </Project>
