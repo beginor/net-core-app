@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Beginor.NetCoreApp.Api.Authorization;
+using Beginor.NetCoreApp.Common;
 
 namespace Beginor.NetCoreApp.Api {
 
@@ -44,19 +45,6 @@ namespace Beginor.NetCoreApp.Api {
             app.UseAuthorization();
         }
 
-    }
-
-    public class Jwt {
-        public string Secret { get; set; }
-        public TimeSpan ExpireTimeSpan { get; set; }
-        public byte[] SecretKey {
-            get {
-                if (string.IsNullOrEmpty(Secret)) {
-                    throw new InvalidOperationException("Secret is empty!");
-                }
-                return Encoding.ASCII.GetBytes(Secret);
-            }
-        }
     }
 
 }

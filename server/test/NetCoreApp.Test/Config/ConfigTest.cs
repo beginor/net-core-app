@@ -1,5 +1,6 @@
 using System;
 using Beginor.NetCoreApp.Api;
+using Beginor.NetCoreApp.Common;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
