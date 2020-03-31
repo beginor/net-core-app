@@ -21,11 +21,11 @@ namespace Beginor.NetCoreApp.Entry {
                     config.SetBasePath(Directory.GetCurrentDirectory());
                     var env = hostContext.HostingEnvironment;
                     config.AddJsonFile(
-                        Path.Combine(Directory.GetCurrentDirectory(), "config", "appsettings.json"),
+                        Path.Combine("config", "appsettings.json"),
                         true,
                         true
                     ).AddJsonFile(
-                        Path.Combine(Directory.GetCurrentDirectory(), "config", $"appsettings.{env.EnvironmentName}.json"),
+                        Path.Combine("config", $"appsettings.{env.EnvironmentName}.json"),
                         true,
                         true
                     );
@@ -36,11 +36,7 @@ namespace Beginor.NetCoreApp.Entry {
                 })
                 .ConfigureLogging(logging => {
                     logging.ClearProviders();
-                    var path = Path.Combine(
-                        Directory.GetCurrentDirectory(),
-                        "config",
-                        "log.config"
-                    );
+                    var path = Path.Combine("config", "log.config");
                     logging.AddLog4net(path);
                 })
                 .ConfigureWebHostDefaults(webHost => {
