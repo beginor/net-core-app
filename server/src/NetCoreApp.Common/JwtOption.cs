@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Beginor.NetCoreApp.Common {
 
-    public class Jwt {
+    public class JwtOption {
         public string Secret { get; set; }
         public TimeSpan ExpireTimeSpan { get; set; }
         public byte[] SecretKey {

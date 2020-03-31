@@ -20,7 +20,7 @@ namespace Beginor.NetCoreApp.Test {
         public void _02_CanGetJwtOptions() {
             var setting = Target.GetSection("jwt");
             Assert.IsNotNull(setting);
-            var jwt = setting.Get<Jwt>();
+            var jwt = setting.Get<JwtOption>();
             Assert.IsNotEmpty(jwt.Secret);
         }
 

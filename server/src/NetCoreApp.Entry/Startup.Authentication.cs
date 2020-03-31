@@ -1,5 +1,3 @@
-using System;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -18,7 +16,7 @@ namespace Beginor.NetCoreApp.Entry {
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
-            var jwt = config.GetSection("jwt").Get<Jwt>();
+            var jwt = config.GetSection("jwt").Get<JwtOption>();
             services.AddSingleton(jwt);
             services.AddAuthentication(x => {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
