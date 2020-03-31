@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SysEnvironment = System.Environment;
 
-namespace Beginor.NetCoreApp.Api {
+namespace Beginor.NetCoreApp.Entry {
 
     public partial class Startup {
 

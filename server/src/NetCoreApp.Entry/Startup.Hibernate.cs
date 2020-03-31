@@ -9,7 +9,7 @@ using NHibernate.Cfg;
 using NHibernate.Mapping.Attributes;
 using NHibernate.NetCore;
 
-namespace Beginor.NetCoreApp.Api {
+namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 
@@ -20,6 +20,7 @@ namespace Beginor.NetCoreApp.Api {
             var cfg = new Configuration();
             var configFile = Path.Combine(
                 Directory.GetCurrentDirectory(),
+                "config",
                 "hibernate.config"
             );
             cfg.Configure(configFile);

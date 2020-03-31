@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Beginor.NetCoreApp.Api {
+namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 

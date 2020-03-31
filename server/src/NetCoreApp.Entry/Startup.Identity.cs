@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate.AspNetCore.Identity;
 
-namespace Beginor.NetCoreApp.Api {
+namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 

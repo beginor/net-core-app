@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
+using Beginor.NetCoreApp.Api.Controllers;
 
-namespace Beginor.NetCoreApp.Api {
+namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 
@@ -16,7 +17,7 @@ namespace Beginor.NetCoreApp.Api {
                 .ConfigureApplicationPartManager(manager => {
                     manager.ApplicationParts.Clear();
                     manager.ApplicationParts.Add(
-                        new AssemblyPart(typeof(Startup).Assembly)
+                        new AssemblyPart(typeof(AccountController).Assembly)
                     );
                 })
                 .AddControllersAsServices()

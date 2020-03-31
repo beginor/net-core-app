@@ -10,7 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Beginor.NetCoreApp.Api.Authorization;
 using Beginor.NetCoreApp.Common;
 
-namespace Beginor.NetCoreApp.Api {
+namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 
