@@ -156,16 +156,6 @@ export interface NavItemModel {
     url?: string;
     /** 顺序 */
     sequence?: number;
-    /** 创建者ID */
-    creatorId?: string;
-    /** 创建时间 */
-    createdAt?: string;
-    /** 更新者ID */
-    updaterId?: string;
-    /** 更新时间 */
-    updateAt?: string;
-    /** 是否删除 */
-    isDeleted?: boolean;
 }
 
 /** 导航节点（菜单） 搜索参数 */
