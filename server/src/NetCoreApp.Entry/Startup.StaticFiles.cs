@@ -11,18 +11,20 @@ namespace Beginor.NetCoreApp.Entry {
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
-            // do nothing now!
+#if DEBUG
             services.AddDirectoryBrowser();
+#endif
         }
 
-        [System.Diagnostics.Conditional("DEBUG")]
         private void ConfigureStaticFiles(
             IApplicationBuilder app,
             IWebHostEnvironment env
         ) {
             app.UseDefaultFiles();
             app.UseStaticFiles();
+#if DEBUG
             app.UseDirectoryBrowser();
+#endif
         }
 
     }
