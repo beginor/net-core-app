@@ -21,7 +21,7 @@ import { NavItemsService, NavItemModel } from '../nav-items.service';
 export class DetailComponent implements OnInit {
 
     public animation = '';
-    public title: string;
+    public formTitle: string;
     public editable: boolean;
     public model: NavItemModel = {};
 
@@ -37,15 +37,15 @@ export class DetailComponent implements OnInit {
         const id = route.snapshot.params.id;
         const editable = route.snapshot.params.editable;
         if (id === '0') {
-            this.title = '新建导航节点（菜单）';
+            this.formTitle = '新建菜单项';
             this.editable = true;
         }
         else if (editable === 'true') {
-            this.title = '编辑导航节点（菜单）';
+            this.formTitle = '编辑菜单项';
             this.editable = true;
         }
         else {
-            this.title = '查看导航节点（菜单）';
+            this.formTitle = '查看菜单项';
             this.editable = false;
         }
         this.id = id;
