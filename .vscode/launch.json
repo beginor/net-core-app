@@ -6,9 +6,9 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet:build",
-      "program": "${workspaceFolder}/server/src/NetCoreApp.Api/bin/Debug/netcoreapp3.1/Beginor.NetCoreApp.Api.dll",
+      "program": "${workspaceFolder}/server/src/NetCoreApp.Entry/bin/Debug/netcoreapp3.1/NetCoreApp.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/server/src/NetCoreApp.Api",
+      "cwd": "${workspaceFolder}/server/src/NetCoreApp.Entry",
       "stopAtEntry": false,
       "launchBrowser": {
         "enabled": false,
@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "sourceFileMap": {
-        "/Views": "${workspaceFolder}/server/src/NetCoreApp.Api/Views"
+        "/Views": "${workspaceFolder}/server/src/NetCoreApp.Entry/Views"
       }
     },
     {
