@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
