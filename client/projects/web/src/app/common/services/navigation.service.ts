@@ -11,7 +11,9 @@ import { AccountService } from 'app-shared';
 })
 export class NavigationService {
 
-    public root = new BehaviorSubject<NavigationNode>({ title: '' });
+    public root = new BehaviorSubject<NavigationNode>(
+        { title: '', children: [] }
+    );
     public topbarNodes = new BehaviorSubject<NavigationNode[]>([]);
     public sidebarNodes = new BehaviorSubject<NavigationNode[]>([]);
 
