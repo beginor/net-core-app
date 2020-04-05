@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -12,6 +13,7 @@ using Beginor.NetCoreApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using NHibernate.Linq;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
@@ -26,13 +28,13 @@ namespace Beginor.NetCoreApp.Api.Controllers {
 
         private UserManager<AppUser> userMgr;
         private RoleManager<AppRole> roleMgr;
-        private Jwt jwt;
+        private JwtOption jwt;
         private IAppNavItemRepository navRepo;
 
         public AccountController(
             UserManager<AppUser> userMgr,
             RoleManager<AppRole> roleMgr,
-            Jwt jwt,
+            JwtOption jwt,
             IAppNavItemRepository navRepo
         ) {
             this.userMgr = userMgr;
@@ -61,7 +63,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         public async Task<ActionResult<AccountInfoModel>> GetInfo() {
             try {
                 if (!User.Identity.IsAuthenticated) {
-                    return Forbid();
+                    var anonymousModel = await CreateAnonymousInfoModel();
+                    return anonymousModel;
                 }
                 var appUser = await userMgr.FindByNameAsync(User.Identity.Name);
                 if (appUser == null) {
@@ -71,33 +74,12 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 var identity = await CreateIdentityAsync(appUser);
                 var info = CreateAccountInfoModel(identity);
                 info.Token = CreateJwtToken(identity);
-                info.Menu = await navRepo.GetMenuAsync(new string[] {"anonymous"});
                 return info;
             }
             catch (Exception ex) {
                 logger.Error($"Can not get user account info.", ex);
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
-        }
-
-        private AccountInfoModel CreateAccountInfoModel(ClaimsIdentity user) {
-            var info = new AccountInfoModel {
-                Id = user.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value,
-                UserName = user.Claims.First(c => c.Type == ClaimTypes.Name).Value,
-                Surname = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value,
-                GivenName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value,
-                Roles = user.Claims
-                    .Where(c => c.Type == ClaimTypes.Role)
-                    .Select(c => c.Value)
-                    .Distinct()
-                    .ToDictionary(r => r, r => true),
-                Privileges = user.Claims
-                    .Where(c => c.Type == Consts.PrivilegeClaimType)
-                    .Select(c => c.Value)
-                    .Distinct()
-                    .ToDictionary(p => p, p => true)
-            };
-            return info;
         }
 
         /// <summary>用户登录</summary>
@@ -148,6 +130,44 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
         }
 
+        [HttpGet("menu")]
+        [ResponseCache(NoStore = true, Duration = 0)]
+        public async Task<MenuNodeModel> GetMenuAsync() {
+            IList<string> roles;
+            if (!User.Identity.IsAuthenticated) {
+                roles = roleMgr.Roles
+                    .Where(role => role.IsAnonymous == true)
+                    .Select(role => role.Name)
+                    .ToList();
+            }
+            else {
+                var user = await userMgr.FindByNameAsync(User.Identity.Name);
+                roles = await userMgr.GetRolesAsync(user);
+            }
+            var menuModel = await navRepo.GetMenuAsync(roles.ToArray());
+            return menuModel;
+        }
+
+        private AccountInfoModel CreateAccountInfoModel(ClaimsIdentity user) {
+            var info = new AccountInfoModel {
+                Id = user.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value,
+                UserName = user.Claims.First(c => c.Type == ClaimTypes.Name).Value,
+                Surname = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value,
+                GivenName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value,
+                Roles = user.Claims
+                    .Where(c => c.Type == ClaimTypes.Role)
+                    .Select(c => c.Value)
+                    .Distinct()
+                    .ToDictionary(r => r, r => true),
+                Privileges = user.Claims
+                    .Where(c => c.Type == Consts.PrivilegeClaimType)
+                    .Select(c => c.Value)
+                    .Distinct()
+                    .ToDictionary(p => p, p => true)
+            };
+            return info;
+        }
+
         private string CreateJwtToken(ClaimsIdentity identity) {
             var handler = new JwtSecurityTokenHandler();
             var descriptor = new SecurityTokenDescriptor {
@@ -191,6 +211,32 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             return identity;
         }
 
+        private async Task<AccountInfoModel> CreateAnonymousInfoModel() {
+            var infoModel = new AccountInfoModel {
+                Surname = "匿名",
+                GivenName = "用户",
+                UserName = "anonymous"
+            };
+            var roles = await roleMgr.Roles
+                .Where(r => r.IsAnonymous == true)
+                .ToListAsync();
+            infoModel.Roles = new Dictionary<string, bool>();
+            foreach (var role in roles) {
+                infoModel.Roles[role.Name] = true;
+            }
+            infoModel.Privileges = new Dictionary<string, bool>();
+            foreach (var role in roles) {
+                var claims = await roleMgr.GetClaimsAsync(role);
+                var privileges = claims
+                    .Where(c => c.Type == Consts.PrivilegeClaimType)
+                    .Select(c => c.Value)
+                    .ToList();
+                foreach (var privilege in privileges) {
+                    infoModel.Privileges[privilege] = true;
+                }
+            }
+            return infoModel;
+        }
     }
 
 }

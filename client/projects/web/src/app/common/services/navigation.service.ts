@@ -19,9 +19,11 @@ export class NavigationService {
     constructor(
         private http: HttpClient,
         private title: Title,
-        private location: Location
+        private location: Location,
+        @Inject('apiRoot') private apiRoot: string,
     ) {
-        this.http.get<NavigationNode>('./assets/nav-items.json')
+        const url = `${this.apiRoot}/account/menu`;
+        this.http.get<NavigationNode>(url)
             .toPromise()
             .then(node => {
                 this.setupNavigationNodes(node);
