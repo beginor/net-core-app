@@ -213,6 +213,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
 
         private async Task<AccountInfoModel> CreateAnonymousInfoModel() {
             var infoModel = new AccountInfoModel {
+                Id = string.Empty,
                 Surname = "匿名",
                 GivenName = "用户",
                 UserName = "anonymous"

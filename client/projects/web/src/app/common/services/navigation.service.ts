@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
 
 import { BehaviorSubject } from 'rxjs';
+import { AccountService } from 'app-shared';
 
 @Injectable({
     providedIn: 'root'
@@ -20,10 +21,22 @@ export class NavigationService {
         private http: HttpClient,
         private title: Title,
         private location: Location,
+        private account: AccountService,
         @Inject('apiRoot') private apiRoot: string,
     ) {
-        const url = `${this.apiRoot}/account/menu`;
-        this.http.get<NavigationNode>(url)
+        // this.loadAccountMenu();
+        this.currentUrl = location.path();
+        this.location.onUrlChange(() => {
+            this.updateSidebarNodes();
+        });
+        account.info.subscribe(() => {
+            this.loadAccountMenu();
+        });
+    }
+
+    private loadAccountMenu(): void {
+        const menuUrl = `${this.apiRoot}/account/menu`;
+        this.http.get<NavigationNode>(menuUrl)
             .toPromise()
             .then(node => {
                 this.setupNavigationNodes(node);
@@ -32,10 +45,6 @@ export class NavigationService {
             .catch(ex => {
                 console.error(ex);
             });
-        this.currentUrl = location.path();
-        this.location.onUrlChange(url => {
-            this.updateSidebarNodes();
-        });
     }
 
     public isActiveNode(node: NavigationNode): boolean {
