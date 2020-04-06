@@ -16,6 +16,7 @@ export class NavigationService {
     );
     public topbarNodes = new BehaviorSubject<NavigationNode[]>([]);
     public sidebarNodes = new BehaviorSubject<NavigationNode[]>([]);
+    public initialized: boolean;
 
     private currentUrl: string;
 
@@ -26,7 +27,6 @@ export class NavigationService {
         private account: AccountService,
         @Inject('apiRoot') private apiRoot: string,
     ) {
-        // this.loadAccountMenu();
         this.currentUrl = location.path();
         this.location.onUrlChange(() => {
             this.updateSidebarNodes();
@@ -43,6 +43,9 @@ export class NavigationService {
             .then(node => {
                 this.setupNavigationNodes(node);
                 this.updateTitle(node.title);
+                if (!this.initialized) {
+                    this.initialized = true;
+                }
             })
             .catch(ex => {
                 console.error(ex);
