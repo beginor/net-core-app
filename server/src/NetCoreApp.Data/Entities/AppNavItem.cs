@@ -1,5 +1,6 @@
 using System;
 using Beginor.AppFx.Core;
+using NHibernate.Extensions.NpgSql;
 using NHibernate.Mapping.Attributes;
 
 namespace Beginor.NetCoreApp.Data.Entities {
@@ -14,7 +15,6 @@ namespace Beginor.NetCoreApp.Data.Entities {
             get { return base.Id; }
             set { base.Id = value; }
         }
-
         /// <summary>父节点ID</summary>
         [Property(Name = "ParentId", Column = "parent_id", Type = "long", NotNull = true)]
         public virtual long? ParentId { get; set; }
@@ -48,7 +48,8 @@ namespace Beginor.NetCoreApp.Data.Entities {
         /// <summary>是否删除</summary>
         [Property(Name = "IsDeleted", Column = "is_deleted", Type = "bool", NotNull = true)]
         public virtual bool IsDeleted { get; set; }
-
+        [Property(Name = "Roles", Column = "roles", TypeType = typeof(StringArrayType), NotNull = false)]
+        public virtual string[] Roles { get; set; }
     }
 
 }
