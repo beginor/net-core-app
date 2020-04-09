@@ -54,6 +54,7 @@
                 <th scope="col" class="text-left text-nowrap text-muted">名称</th>
                 <th scope="col" class="text-left text-nowrap text-muted">描述</th>
                 <th scope="col" class="text-center text-nowrap text-muted">是否默认</th>
+                <th scope="col" class="text-center text-nowrap text-muted">是否匿名</th>
                 <th scope="col" class="text-right text-nowrap text-muted">用户数</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
@@ -64,6 +65,7 @@
                 <td class="text-left">{{item.name}}</td>
                 <td class="text-left">{{item.description}}</td>
                 <td class="text-center">{{item.isDefault ? '是' : '否'}}</td>
+                <td class="text-center">{{item.isAnonymous ? '是' : '否'}}</td>
                 <td class="text-right"><a [routerLink]="['../../users', {roleName: item.name}]">{{item.userCount}}</a></td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">

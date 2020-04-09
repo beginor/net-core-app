@@ -6,7 +6,7 @@ using NHibernate.Mapping.Attributes;
 namespace Beginor.NetCoreApp.Data.Entities {
 
     /// <summary>导航节点（菜单）</summary>
-    [Class(Schema = "public", Table = "app_nav_items")]
+    [Class(Schema = "public", Table = "app_nav_items", Where = "is_deleted = false")]
     public partial class AppNavItem : BaseEntity<long> {
 
         /// <summary>导航节点（菜单）ID</summary>

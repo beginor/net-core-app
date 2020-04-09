@@ -142,7 +142,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
                     select c.id, c.parent_id, c.title, c.tooltip, c.icon, c.url, c.sequence, c.roles, c.target
                     from public.app_nav_items c
                     inner join cte on cte.id = c.parent_id
-                    where c.roles && @roles::character varying[]
+                    where c.is_deleted = false and c.roles && @roles::character varying[]
                 )
                 select * from cte;
             ";
