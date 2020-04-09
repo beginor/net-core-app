@@ -72,7 +72,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             }
         }
 
-        public async Task CreateAsync(AppNavItemModel model, string userName) {
+        public async Task SaveAsync(AppNavItemModel model, string userName) {
             // Check parameters;
             Argument.NotNull(model, nameof(model));
             Argument.NotNullOrEmpty(userName, nameof(userName));

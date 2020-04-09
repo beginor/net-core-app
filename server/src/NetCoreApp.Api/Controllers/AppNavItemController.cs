@@ -40,7 +40,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppNavItemModel model
         ) {
             try {
-                await repository.SaveAsync(model);
+                await repository.SaveAsync(model, User.Identity.Name);
                 return model;
             }
             catch (Exception ex) {
@@ -124,7 +124,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     return NotFound();
                 }
                 model.Id = id.ToString();
-                await repository.UpdateAsync(id, model);
+                await repository.UpdateAsync(id, model, User.Identity.Name);
                 return model;
             }
             catch (Exception ex) {
