@@ -36,24 +36,18 @@ export class NavigationService {
         });
     }
 
-    private loadAccountMenu(): void {
-        const menuUrl = `${this.apiRoot}/account/menu`;
-        this.http.get<NavigationNode>(menuUrl)
-            .toPromise()
-            .then(node => {
-                this.setupNavigationNodes(node);
-                this.updateTitle(node.title);
-                if (!this.initialized) {
-                    this.initialized = true;
-                }
-            })
-            .catch(ex => {
-                console.error(ex);
-            });
-    }
-
     public isActiveNode(node: NavigationNode): boolean {
         return this.location.path().includes(node.url);
+    }
+
+    public isRouterLink(node: NavigationNode): boolean {
+        if (node.url.startsWith('https://') || node.url.startsWith('http://')) {
+            return false;
+        }
+        if (!!node.target) {
+            return false;
+        }
+        return true;
     }
 
     private setupNavigationNodes(rootNode: NavigationNode): void {
@@ -92,6 +86,22 @@ export class NavigationService {
 
     private updateTitle(title: string): void {
         this.title.setTitle(title);
+    }
+
+    private loadAccountMenu(): void {
+        const menuUrl = `${this.apiRoot}/account/menu`;
+        this.http.get<NavigationNode>(menuUrl)
+            .toPromise()
+            .then(node => {
+                this.setupNavigationNodes(node);
+                this.updateTitle(node.title);
+                if (!this.initialized) {
+                    this.initialized = true;
+                }
+            })
+            .catch(ex => {
+                console.error(ex);
+            });
     }
 
 }

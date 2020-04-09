@@ -1,7 +1,7 @@
 import { Component, OnChanges, Input, HostBinding } from '@angular/core';
 import { Location } from '@angular/common';
 
-import { NavigationNode } from '../services/navigation.service';
+import { NavigationNode, NavigationService } from '../services/navigation.service';
 
 @Component({
     selector: 'app-nav-item',
@@ -22,6 +22,7 @@ export class NavItemComponent implements OnChanges {
     public expanded = false;
 
     constructor(
+        public navigation: NavigationService,
         private location: Location
     ) { }
 

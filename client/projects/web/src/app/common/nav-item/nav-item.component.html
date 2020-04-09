@@ -1,15 +1,25 @@
-<a class="nav-link" routerLinkActive="active" [routerLink]="node.url">
+<a class="nav-link" *ngIf="navigation.isRouterLink(node);else httpLinkTpl" routerLinkActive="active" [routerLink]="node.url">
   <i [class]="iconClasses"></i>
   <span class="ml-1" *ngIf="!sidebarCollapsed">{{node.title}}</span>
 </a>
+<ng-template #httpLinkTpl>
+  <a class="nav-link" [href]="node.url" [target]="node.target">
+    <i [class]="iconClasses"></i>
+    <span class="ml-1" *ngIf="!sidebarCollapsed">{{node.title}}</span>
+  </a>
+</ng-template>
 
 <ul class="nav-link-subitems" *ngIf="node.children || sidebarCollapsed"
   [class.sidebar-collapsed]="sidebarCollapsed">
   <ng-container *ngIf="sidebarCollapsed">
     <li>
-      <a class="nav-sublink" [routerLink]="node.url" routerLinkActive="active">
+      <a class="nav-sublink" *ngIf="navigation.isRouterLink(node);else httpLinkPopupTpl"
+        [routerLink]="node.url" routerLinkActive="active">
         {{node.title}}
       </a>
+      <template #httpLinkPopupTpl>
+        <a class="nav-sublink" [href]="node.url" [target]="node.target">{{node.title}}</a>
+      </template>
     </li>
   </ng-container>
   <ng-container *ngIf="node.children">
