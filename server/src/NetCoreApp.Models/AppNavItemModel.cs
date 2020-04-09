@@ -22,6 +22,8 @@ namespace Beginor.NetCoreApp.Models {
         public float? Sequence { get; set; }
         /// <summary>角色</summary>
         public string[] Roles { get; set; }
+        /// <summary>导航目标</summary>
+        public virtual string Target { get; set; }
     }
 
     /// <summary>导航节点（菜单）搜索参数</summary>

@@ -48,8 +48,12 @@ namespace Beginor.NetCoreApp.Data.Entities {
         /// <summary>是否删除</summary>
         [Property(Name = "IsDeleted", Column = "is_deleted", Type = "bool", NotNull = true)]
         public virtual bool IsDeleted { get; set; }
+        /// <summary>菜单项的角色</summary>
         [Property(Name = "Roles", Column = "roles", TypeType = typeof(StringArrayType), NotNull = false)]
         public virtual string[] Roles { get; set; }
+        /// <summary>导航目标窗口</summary>
+        [Property(Name = "Target", Column = "target", Type = "string", NotNull = false, Length = 16)]
+        public virtual string Target { get; set; }
     }
 
 }

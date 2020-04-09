@@ -102,5 +102,6 @@ export interface NavigationNode {
     tooltip?: string;
     hidden?: boolean;
     icon?: string;
+    target?: string;
     children?: NavigationNode[];
 }

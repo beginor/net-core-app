@@ -17,6 +17,7 @@ create table public.app_nav_items
     updated_at timestamp without time zone not null,
     is_deleted boolean not null,
     roles character varying(64)[],
+    target character varying(16);
     constraint pk_app_nav_items primary key (id),
     constraint fk_app_nav_items_creator foreign key (creator_id)
         references public.app_users (id) match simple
@@ -72,3 +73,6 @@ comment on column public.app_nav_items.icon
 
 comment on column public.app_nav_items.roles
     is '能看到该菜单项的角色';
+
+comment on column public.app_nav_items.target
+    is '导航目标';

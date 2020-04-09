@@ -156,6 +156,10 @@ export interface NavItemModel {
     url?: string;
     /** 顺序 */
     sequence?: number;
+    /** 角色 */
+    roles?: string[];
+    /** 导航目标 */
+    target?: string;
 }
 
 /** 导航节点（菜单） 搜索参数 */

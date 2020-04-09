@@ -135,11 +135,11 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             var conn = session.Connection;
             var sql = @"
                 with recursive cte as (
-                    select p.id, p.parent_id, p.title, p.tooltip, p.icon, p.url, p.sequence, p.roles
+                    select p.id, p.parent_id, p.title, p.tooltip, p.icon, p.url, p.sequence, p.roles, p.target
                     from public.app_nav_items p
                     where p.id = 0
                     union all
-                    select c.id, c.parent_id, c.title, c.tooltip, c.icon, c.url, c.sequence, c.roles
+                    select c.id, c.parent_id, c.title, c.tooltip, c.icon, c.url, c.sequence, c.roles, c.target
                     from public.app_nav_items c
                     inner join cte on cte.id = c.parent_id
                     where c.roles && @roles::character varying[]
@@ -159,18 +159,19 @@ namespace Beginor.NetCoreApp.Data.Repositories {
         }
 
         private MenuNodeModel[] FindChildrenRecursive(long id, IEnumerable<AppNavItem> items) {
-            var childCount = items.Count(i => i.ParentId == id);
+            var childCount = items.Count(item => item.ParentId == id);
             if (childCount == 0) {
                 return null;
             }
-            var children = items.Where(i => i.ParentId == id)
-                .OrderBy(i => i.Sequence)
-                .Select(i => new MenuNodeModel {
-                    Title = i.Title,
-                    Url = i.Url,
-                    Icon = i.Icon,
-                    Tooltip = i.Tooltip,
-                    Children = FindChildrenRecursive(i.Id, items)
+            var children = items.Where(item => item.ParentId == id)
+                .OrderBy(item => item.Sequence)
+                .Select(item => new MenuNodeModel {
+                    Title = item.Title,
+                    Url = item.Url,
+                    Icon = item.Icon,
+                    Tooltip = item.Tooltip,
+                    Target = item.Target,
+                    Children = FindChildrenRecursive(item.Id, items)
                 });
             return children.ToArray();
         }

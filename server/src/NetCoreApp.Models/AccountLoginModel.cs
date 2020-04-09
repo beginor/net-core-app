@@ -53,6 +53,8 @@ namespace Beginor.NetCoreApp.Models {
         public string Tooltip { get; set; }
         /// <summary>自菜单项</summary>
         public MenuNodeModel[] Children { get; set; }
+        /// <summary>目标窗口</summary>
+        public string Target { get; set; }
     }
 
 }
