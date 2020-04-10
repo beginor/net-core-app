@@ -16,65 +16,87 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="form-group" [class.is-valid]="parentId.valid"
-      [class.is-invalid]="!(parentId.valid || parentId.pristine)">
-      <label class="form-label text-muted" for="parentId">父节点 <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="parentId" name="parentId"
-        placeholder="请输入父节点 ..." [(ngModel)]="model.parentId"
-        [class.is-invalid]="!(parentId.valid || parentId.pristine)"
-        [class.is-valid]="parentId.valid"
-        required #parentId="ngModel" [disabled]="!editable"
-      />
+    <div class="row">
+      <div class="col">
+        <div class="form-group" [class.is-valid]="parentId.valid"
+          [class.is-invalid]="!(parentId.valid || parentId.pristine)">
+          <label class="form-label text-muted" for="parentId">父节点 <i class="text-danger">*</i> </label>
+          <input class="form-control" type="text" id="parentId" name="parentId"
+            placeholder="请输入父节点 ..." [(ngModel)]="model.parentId"
+            [class.is-invalid]="!(parentId.valid || parentId.pristine)"
+            [class.is-valid]="parentId.valid"
+            required #parentId="ngModel" [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group" [class.is-valid]="title.valid"
+          [class.is-invalid]="!(title.valid || title.pristine)">
+          <label class="form-label text-muted" for="title">标题 <i class="text-danger">*</i> </label>
+          <input class="form-control" type="text" id="title" name="title"
+            placeholder="请输入标题 ..." [(ngModel)]="model.title"
+            [class.is-invalid]="!(title.valid || title.pristine)"
+            [class.is-valid]="title.valid"
+            required #title="ngModel" [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group" [class.is-valid]="sequence.valid"
+          [class.is-invalid]="!(sequence.valid || sequence.pristine)">
+          <label class="form-label text-muted" for="sequence">顺序 <i class="text-danger">*</i></label>
+          <input class="form-control" type="text" id="sequence" name="sequence"
+            placeholder="请输入顺序 ..." [(ngModel)]="model.sequence"
+            [class.is-invalid]="!(sequence.valid || sequence.pristine)"
+            [class.is-valid]="sequence.valid"
+            required #sequence="ngModel" [disabled]="!editable"
+          />
+        </div>
+      </div>
     </div>
-    <div class="form-group" [class.is-valid]="title.valid"
-      [class.is-invalid]="!(title.valid || title.pristine)">
-      <label class="form-label text-muted" for="title">标题 <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="title" name="title"
-        placeholder="请输入标题 ..." [(ngModel)]="model.title"
-        [class.is-invalid]="!(title.valid || title.pristine)"
-        [class.is-valid]="title.valid"
-        required #title="ngModel" [disabled]="!editable"
-      />
+    <div class="row">
+      <div class="col-4">
+        <div class="form-group" [class.is-valid]="url.valid"
+          [class.is-invalid]="!(url.valid || url.pristine)">
+          <label class="form-label text-muted" for="target">导航窗口 <i class="text-danger">*</i> </label>
+          <select class="form-control" id="target" name="target"
+            [(ngModel)]="model.target" [disabled]="!editable">
+            <option *ngFor="let _t of targets" [value]="_t.value">{{_t.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-8">
+        <div class="form-group" [class.is-valid]="url.valid"
+          [class.is-invalid]="!(url.valid || url.pristine)">
+          <label class="form-label text-muted" for="url">导航地址 <i class="text-danger">*</i> </label>
+          <input class="form-control" type="text" id="url" name="url"
+            placeholder="请输入导航地址 ..." [(ngModel)]="model.url"
+            [class.is-invalid]="!(url.valid || url.pristine)"
+            [class.is-valid]="url.valid"
+            required #url="ngModel" [disabled]="!editable"
+          />
+        </div>
+      </div>
     </div>
-    <div class="form-group" [class.is-valid]="tooltip.valid"
-      [class.is-invalid]="!(tooltip.valid || tooltip.pristine)">
-      <label class="form-label text-muted" for="tooltip">提示文字 </label>
-      <input class="form-control" type="text" id="tooltip" name="tooltip"
-        placeholder="请输入提示文字 ..." [(ngModel)]="model.tooltip"
-        [class.is-invalid]="!(tooltip.valid || tooltip.pristine)"
-        [class.is-valid]="tooltip.valid"
-        required #tooltip="ngModel" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group" [class.is-valid]="icon.valid"
-      [class.is-invalid]="!(icon.valid || icon.pristine)">
-      <label class="form-label text-muted" for="icon">图标 </label>
-      <input class="form-control" type="text" id="icon" name="icon"
-        placeholder="请输入图标 ..." [(ngModel)]="model.icon"
-        [class.is-invalid]="!(icon.valid || icon.pristine)"
-        [class.is-valid]="icon.valid"
-        required #icon="ngModel" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group" [class.is-valid]="url.valid"
-      [class.is-invalid]="!(url.valid || url.pristine)">
-      <label class="form-label text-muted" for="url">导航地址 </label>
-      <input class="form-control" type="text" id="url" name="url"
-        placeholder="请输入导航地址 ..." [(ngModel)]="model.url"
-        [class.is-invalid]="!(url.valid || url.pristine)"
-        [class.is-valid]="url.valid"
-        required #url="ngModel" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group" [class.is-valid]="sequence.valid"
-      [class.is-invalid]="!(sequence.valid || sequence.pristine)">
-      <label class="form-label text-muted" for="sequence">顺序 </label>
-      <input class="form-control" type="text" id="sequence" name="sequence"
-        placeholder="请输入顺序 ..." [(ngModel)]="model.sequence"
-        [class.is-invalid]="!(sequence.valid || sequence.pristine)"
-        [class.is-valid]="sequence.valid"
-        required #sequence="ngModel" [disabled]="!editable"
-      />
+    <div class="row">
+      <div class="col-4">
+        <div class="form-group">
+          <label class="form-label text-muted" for="icon">图标 </label>
+          <input class="form-control" type="text" id="icon" name="icon"
+            placeholder="请输入图标 ..." [(ngModel)]="model.icon"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col-8">
+        <div class="form-group">
+          <label class="form-label text-muted" for="tooltip">提示文字 </label>
+          <input class="form-control" type="text" id="tooltip" name="tooltip"
+            placeholder="请输入提示文字 ..." [(ngModel)]="model.tooltip"
+            #tooltip="ngModel" [disabled]="!editable"
+          />
+        </div>
+      </div>
     </div>
   </div>
   <div *ngIf="info.privileges['app_privileges.update'] && editable"

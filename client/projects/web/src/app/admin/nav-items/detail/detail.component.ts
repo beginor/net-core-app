@@ -23,7 +23,12 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public formTitle: string;
     public editable: boolean;
-    public model: NavItemModel = {};
+    public targets = [
+        { name: '当前窗口', value: '' },
+        { name: '新窗口', value: '_blank' },
+        { name: '内嵌窗口', value: '_iframe' }
+    ];
+    public model: NavItemModel = { target: '' };
 
     private id: string;
     private reloadList = false;
