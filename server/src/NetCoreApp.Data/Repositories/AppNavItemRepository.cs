@@ -137,7 +137,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
                 with recursive cte as (
                     select p.id, p.parent_id, p.title, p.tooltip, p.icon, p.url, p.sequence, p.roles, p.target
                     from public.app_nav_items p
-                    where p.id = 0
+                    where p.id = 1
                     union all
                     select c.id, c.parent_id, c.title, c.tooltip, c.icon, c.url, c.sequence, c.roles, c.target
                     from public.app_nav_items c
@@ -147,13 +147,13 @@ namespace Beginor.NetCoreApp.Data.Repositories {
                 select * from cte;
             ";
             var navItems = await conn.QueryAsync<AppNavItem>(sql, new { roles });
-            var rootNavItem = navItems.First(n => n.Id == 0);
+            var rootNavItem = navItems.First(n => n.Id == 1);
             var model = new MenuNodeModel {
                 Title = rootNavItem.Title,
                 Url = rootNavItem.Url,
                 Icon = rootNavItem.Icon,
                 Tooltip = rootNavItem.Tooltip,
-                Children = FindChildrenRecursive(0, navItems)
+                Children = FindChildrenRecursive(rootNavItem.Id, navItems)
             };
             return model;
         }
