@@ -9,8 +9,14 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between">
           <h5 class="card-title mb-0">审计日志</h5>
+          <div class="btn-group btn-group-sm">
+            <button type="button" class="btn btn-outline-secondary"
+              (click)="this.vm.search()">
+              <i class="fa fa-sync"></i> 刷新
+            </button>
+          </div>
         </div>
         <form class="p-2 bg-light">
           <div class="form-row">
