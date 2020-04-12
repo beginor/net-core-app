@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
-import { UiService } from 'projects/web/src/app/common';
+import { UiService, NavigationNode } from 'projects/web/src/app/common';
 import { RolesService, AppRoleModel } from '../roles/roles.service';
 
 /** 导航节点（菜单）服务 */
@@ -158,6 +158,48 @@ export class NavItemsService {
         }
     }
 
+    public async getMenuOptions(): Promise<MenuOption[]> {
+        const options: MenuOption[] = [];
+        try {
+            const menuUrl = `${this.apiRoot}/account/menu`;
+            const rootNode = await this.http.get<NavigationNode>(menuUrl)
+                .toPromise();
+            const option = { level: 0, id: rootNode.id, title: rootNode.title };
+            options.push(option);
+            this.pushChildrenRecursively(
+                options,
+                option.level + 1,
+                rootNode.children
+            );
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '获取全部菜单出错！' });
+        }
+        return options;
+    }
+
+    private pushChildrenRecursively(
+        options: MenuOption[],
+        level: number,
+        nodes: NavigationNode[]
+    ): void {
+        for (const node of nodes) {
+            const prefix = [];
+            for (let i = 0; i < level; i++) {
+                prefix.push('-');
+            }
+            prefix.push(' ');
+            prefix.push(node.title);
+            options.push(
+                { level: level, id: node.id, title: prefix.join('') }
+            );
+            if (!!node.children && node.children.length > 0) {
+                this.pushChildrenRecursively(options, level + 1, node.children);
+            }
+        }
+    }
+
 }
 
 /** 导航节点（菜单） */
@@ -200,4 +242,10 @@ export interface AppNavItemResultModel {
     total?: number;
     /** 数据列表 */
     data?: NavItemModel[];
+}
+
+export interface MenuOption {
+    id?: string;
+    title?: string;
+    level?: number;
 }

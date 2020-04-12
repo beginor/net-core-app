@@ -18,15 +18,12 @@
   <div class="card-body">
     <div class="row">
       <div class="col">
-        <div class="form-group" [class.is-valid]="parentId.valid"
-          [class.is-invalid]="!(parentId.valid || parentId.pristine)">
+        <div class="form-group">
           <label class="form-label text-muted" for="parentId">父节点 <i class="text-danger">*</i> </label>
-          <input class="form-control" type="text" id="parentId" name="parentId"
-            placeholder="请输入父节点 ..." [(ngModel)]="model.parentId"
-            [class.is-invalid]="!(parentId.valid || parentId.pristine)"
-            [class.is-valid]="parentId.valid"
-            required #parentId="ngModel" [disabled]="!editable"
-          />
+          <select class="form-control" id="parentId" name="parentId" required
+            [(ngModel)]="model.parentId" [disabled]="!editable">
+            <option *ngFor="let p of parents" [value]="p.id">{{p.title}}</option>
+          </select>
         </div>
       </div>
       <div class="col">

@@ -107,7 +107,8 @@ export class NavigationService {
 }
 
 export interface NavigationNode {
-    title: string;
+    id?: string;
+    title?: string;
     url?: string;
     tooltip?: string;
     hidden?: boolean;

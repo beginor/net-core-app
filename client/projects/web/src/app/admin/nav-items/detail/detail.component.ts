@@ -5,8 +5,9 @@ import {
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
-import { NavItemsService, NavItemModel } from '../nav-items.service';
-import { RolesService, AppRoleModel } from '../../roles/roles.service';
+import {
+    NavItemsService, NavItemModel, MenuOption
+} from '../nav-items.service';
 
 @Component({
     selector: 'app-nav-item-detail',
@@ -31,6 +32,7 @@ export class DetailComponent implements OnInit {
     ];
     public model: NavItemModel = { target: '', roles: [] };
     public selectedRoles: string[] = [];
+    public parents: MenuOption[] = [];
 
     private id: string;
     private reloadList = false;
@@ -60,6 +62,7 @@ export class DetailComponent implements OnInit {
 
     public async ngOnInit(): Promise<void> {
         await this.vm.getAllRoles();
+        this.parents = await this.vm.getMenuOptions();
         if (this.id !== '0') {
             this.model = await this.vm.getById(this.id);
             this.selectedRoles = this.model.roles ?? [];

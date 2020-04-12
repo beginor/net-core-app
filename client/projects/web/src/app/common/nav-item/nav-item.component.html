@@ -9,7 +9,7 @@
   </a>
 </ng-template>
 
-<ul class="nav-link-subitems" *ngIf="node.children || sidebarCollapsed"
+<ul class="nav-link-subitems" *ngIf="(node.children && node.children.length > 0) || sidebarCollapsed"
   [class.sidebar-collapsed]="sidebarCollapsed">
   <ng-container *ngIf="sidebarCollapsed">
     <li>
