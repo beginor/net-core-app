@@ -149,6 +149,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             var navItems = await conn.QueryAsync<AppNavItem>(sql, new { roles });
             var rootNavItem = navItems.First(n => n.Id == 1);
             var model = new MenuNodeModel {
+                Id = rootNavItem.Id.ToString(),
                 Title = rootNavItem.Title,
                 Url = rootNavItem.Url,
                 Icon = rootNavItem.Icon,
@@ -166,6 +167,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             var children = items.Where(item => item.ParentId == id)
                 .OrderBy(item => item.Sequence)
                 .Select(item => new MenuNodeModel {
+                    Id = item.Id.ToString(),
                     Title = item.Title,
                     Url = item.Url,
                     Icon = item.Icon,

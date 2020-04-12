@@ -43,6 +43,8 @@ namespace Beginor.NetCoreApp.Models {
 
     /// <summary>用户看到的菜单项</summary>
     public class MenuNodeModel {
+        /// <summary>菜单ID</summary>
+        public string Id { get; set; }
         /// <summary>菜单地址 Url</summary>
         public string Url { get; set; }
         /// <summary>菜单标题</summary>
