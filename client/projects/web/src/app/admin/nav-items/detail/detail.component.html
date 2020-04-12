@@ -98,6 +98,18 @@
         </div>
       </div>
     </div>
+    <!-- <hr /> -->
+    <div class="form-group">
+      <label class="form-label text-muted">菜单角色</label>
+      <div class="form-text">
+        <div class="custom-control custom-switch custom-control-inline" *ngFor="let role of vm.roles">
+          <input class="custom-control-input" type="checkbox" [id]="role.id"
+            [name]="role.name" [disabled]="!editable" [value]="role.name"
+            [checked]="isRoleChecked(role.name)" (change)="toggleCheckedRole(role.name)" />
+          <label class="custom-control-label text-muted" [for]="role.id">{{role.description}}</label>
+        </div>
+      </div>
+    </div>
   </div>
   <div *ngIf="info.privileges['app_privileges.update'] && editable"
     class="card-footer d-flex justify-content-between">

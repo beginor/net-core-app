@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
+import { RolesService, AppRoleModel } from '../roles/roles.service';
 
 /** 导航节点（菜单）服务 */
 @Injectable({
@@ -17,14 +18,21 @@ export class NavItemsService {
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<NavItemModel[]>([]);
     public loading: boolean;
+    public roles: AppRoleModel[];
 
     private baseUrl = `${this.apiRoot}/app-nav-items`;
+    private rolesSvc: RolesService;
 
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService
-    ) { }
+    ) {
+        this.rolesSvc = new RolesService(http, apiRoot, ui);
+        this.rolesSvc.data.subscribe(data => {
+            this.roles = data;
+        });
+    }
 
     /** 搜索导航节点（菜单） */
     public async search(): Promise<void> {
@@ -135,6 +143,18 @@ export class NavItemsService {
             console.error(ex);
             this.ui.showAlert({ type: 'danger', message: '更新导航节点（菜单）出错！' });
             return null;
+        }
+    }
+
+    public async getAllRoles(): Promise<void> {
+        try {
+            this.rolesSvc.searchModel.skip = 0;
+            this.rolesSvc.searchModel.take = 999;
+            await this.rolesSvc.search();
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert({ type: 'danger', message: '获取全部角色出错！' });
         }
     }
 

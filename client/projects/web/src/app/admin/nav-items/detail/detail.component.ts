@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import { NavItemsService, NavItemModel } from '../nav-items.service';
+import { RolesService, AppRoleModel } from '../../roles/roles.service';
 
 @Component({
     selector: 'app-nav-item-detail',
@@ -28,7 +29,8 @@ export class DetailComponent implements OnInit {
         { name: '新窗口', value: '_blank' },
         { name: '内嵌窗口', value: '_iframe' }
     ];
-    public model: NavItemModel = { target: '' };
+    public model: NavItemModel = { target: '', roles: [] };
+    public selectedRoles: string[] = [];
 
     private id: string;
     private reloadList = false;
@@ -57,8 +59,10 @@ export class DetailComponent implements OnInit {
     }
 
     public async ngOnInit(): Promise<void> {
+        await this.vm.getAllRoles();
         if (this.id !== '0') {
             this.model = await this.vm.getById(this.id);
+            this.selectedRoles = this.model.roles ?? [];
         }
     }
 
@@ -84,6 +88,20 @@ export class DetailComponent implements OnInit {
         }
         this.reloadList = true;
         this.goBack();
+    }
+
+    public isRoleChecked(role: string): boolean {
+        return this.model.roles.indexOf(role) > -1;
+    }
+
+    public toggleCheckedRole(role: string): void {
+        const idx = this.model.roles.indexOf(role);
+        if (idx > -1) {
+            this.model.roles.splice(idx, 1);
+        }
+        else {
+            this.model.roles.push(role);
+        }
     }
 
 }
