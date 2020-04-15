@@ -40,6 +40,9 @@ namespace Beginor.NetCoreApp.Entry {
                     logging.AddLog4net(path);
                 })
                 .ConfigureWebHostDefaults(webHost => {
+                    webHost.UseKestrel(kestrel => {
+                        kestrel.AddServerHeader = false;
+                    });
                     #if DEBUG
                     webHost.UseWebRoot("../../../client/dist/");
                     #endif
