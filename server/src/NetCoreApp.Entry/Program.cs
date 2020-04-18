@@ -5,7 +5,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Logging.Log4net;
 
-
 namespace Beginor.NetCoreApp.Entry {
 
     public class Program {
@@ -20,15 +19,9 @@ namespace Beginor.NetCoreApp.Entry {
                 .ConfigureAppConfiguration((hostContext, config) => {
                     config.SetBasePath(Directory.GetCurrentDirectory());
                     var env = hostContext.HostingEnvironment;
-                    config.AddJsonFile(
-                        Path.Combine("config", "appsettings.json"),
-                        true,
-                        true
-                    ).AddJsonFile(
-                        Path.Combine("config", $"appsettings.{env.EnvironmentName}.json"),
-                        true,
-                        true
-                    );
+                    config
+                        .AddJsonFile(Path.Combine("config", "appsettings.json"), true, true)
+                        .AddJsonFile(Path.Combine("config", $"appsettings.{env.EnvironmentName}.json"), true, true);
                     config.AddEnvironmentVariables();
                     if (args != null) {
                         config.AddCommandLine(args);
