@@ -1,23 +1,24 @@
+using System;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 
-        private static readonly string CorsPolicyName = "defaultCorsPolicy";
-
         private void ConfigureCorsServices(
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
-            services.AddCors(options => {
-                var section = config.GetSection("cors");
-                var settings = section.Get<CorsPolicy>();
-                options.AddPolicy(CorsPolicyName, settings);
+            var corsPolicy = config.GetSection("corsPolicy").Get<CorsPolicy>();
+            // Referer
+            services.AddCors(corsOptions => {
+                corsOptions.AddDefaultPolicy(corsPolicy);
             });
         }
 
@@ -25,7 +26,7 @@ namespace Beginor.NetCoreApp.Entry {
             IApplicationBuilder app,
             IWebHostEnvironment env
         ) {
-            app.UseCors(CorsPolicyName);
+            app.UseCors();
         }
 
     }
