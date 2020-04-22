@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -11,10 +12,11 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
-using System.Security.Claims;
 
 namespace Beginor.NetCoreApp.Api.Middlewares {
 
@@ -24,20 +26,23 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
         private IActionDescriptorCollectionProvider provider;
         private IActionSelector selector;
         private IServiceProvider serviceProvider;
+        private ILogger<AuditMiddleware> logger;
 
         public AuditMiddleware(
             RequestDelegate next,
             IActionDescriptorCollectionProvider provider,
             IActionSelector selector,
-            IServiceProvider serviceProvider
+            IServiceProvider serviceProvider,
+            ILogger<AuditMiddleware> logger
         ) {
             this.next = next;
             this.provider = provider;
             this.selector = selector;
             this.serviceProvider = serviceProvider;
+            this.logger = logger;
         }
 
-        public ActionDescriptor GetMatchingAction(string path, string httpMethod) {
+        private ActionDescriptor GetMatchingAction(string path, string httpMethod) {
             var actionDescriptors = provider.ActionDescriptors.Items;
             // match by route template
             var matchingDescriptors = new List<ActionDescriptor>();
@@ -62,7 +67,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
         }
 
 
-        public bool MatchesTemplate(string routeTemplate, string requestPath) {
+        private bool MatchesTemplate(string routeTemplate, string requestPath) {
             var template = TemplateParser.Parse(routeTemplate);
             var matcher = new TemplateMatcher(
                 template,
@@ -84,31 +89,27 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             return result;
         }
 
-        public async Task InvokeAsync(HttpContext context) {
+        public Task InvokeAsync(HttpContext context) {
             var log = new AppAuditLogModel {
                 RequestPath = context.Request.Path,
-                RequestMethod = context.Request.Method
+                RequestMethod = context.Request.Method,
+                UserName = GetUserName(context),
+                StartAt = DateTime.Now
             };
-            log.UserName = GetUserName(context);
-            log.StartAt = DateTime.Now;
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            await next.Invoke(context);
-            stopwatch.Stop();
-            log.Duration = stopwatch.ElapsedMilliseconds;
-            log.ResponseCode = context.Response.StatusCode;
-            var action = GetMatchingAction(
-                log.RequestPath,
-                log.RequestMethod
-            ) as ControllerActionDescriptor;
-            if (action != null) {
-                log.ControllerName = action.ControllerTypeInfo.Name;
-                log.ActionName = action.MethodInfo.Name;
-            }
-            using (var scope = serviceProvider.CreateScope()) {
+            return next.Invoke(context).ContinueWith(t => {
+                stopwatch.Stop();
+                log.Duration = stopwatch.ElapsedMilliseconds;
+                log.ResponseCode = context.Response.StatusCode;
+                if (GetMatchingAction(log.RequestPath, log.RequestMethod) is ControllerActionDescriptor action) {
+                    log.ControllerName = action.ControllerTypeInfo.Name;
+                    log.ActionName = action.MethodInfo.Name;
+                }
+                using var scope = serviceProvider.CreateScope();
                 var repo = scope.ServiceProvider.GetService<IAppAuditLogRepository>();
-                await repo.SaveAsync(log);
-            }
+                return repo.SaveAsync(log);
+            });
         }
 
         private string GetUserName(HttpContext context) {
