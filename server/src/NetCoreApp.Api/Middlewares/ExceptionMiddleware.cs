@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Beginor.NetCoreApp.Api.Middlewares {
 
@@ -12,27 +13,27 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
         private readonly RequestDelegate next;
         private readonly IWebHostEnvironment env;
 
-        private readonly log4net.ILog logger = log4net.LogManager.GetLogger(
-            System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
-        );
+        private readonly ILogger<ExceptionMiddleware> logger;
 
         public ExceptionMiddleware(
             RequestDelegate next,
-            IWebHostEnvironment env
+            IWebHostEnvironment env,
+            ILogger<ExceptionMiddleware> logger
         ) {
             this.next = next ?? throw new ArgumentNullException(nameof(next));
             this.env = env ?? throw new ArgumentNullException(nameof(env));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task InvokeAsync(HttpContext context) {
+        public Task InvokeAsync(HttpContext context) {
             try {
-                await this.next.Invoke(context);
+                return next(context);
             }
             catch (Exception ex) {
                 var message = $"Unhandled Exception with {context.Request.Method} {context.Request.Path} .";
-                logger.Error(message, ex);
+                logger.LogError(ex, message);
                 context.Response.StatusCode = 500;
-                await context.Response.WriteAsync(
+                return context.Response.WriteAsync(
                     env.IsDevelopment() ? ex.ToString() : message,
                     Encoding.UTF8
                 );

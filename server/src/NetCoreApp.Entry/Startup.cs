@@ -38,7 +38,7 @@ namespace Beginor.NetCoreApp.Entry {
             ConfigureAutoMapperServices(services, env);
             ConfigureAppServices(services, env);
             ConfigureIdentityServices(services, env);
-            // cors auth
+            // cors
             ConfigureCorsServices(services, env);
             // web related.
             ConfigurePathBaseServices(services, env);

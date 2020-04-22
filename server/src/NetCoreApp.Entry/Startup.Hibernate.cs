@@ -33,7 +33,7 @@ namespace Beginor.NetCoreApp.Entry {
                 Environment.FormatSql,
                 isNotProd.ToString()
             );
-            cfg.AddIdentityMappingsForPostgres();
+            cfg.AddIdentityMappings();
             HbmSerializer.Default.Validate = true;
             var stream = HbmSerializer.Default.Serialize(typeof(AppUser).Assembly);
             using var reader = new StreamReader(stream);
