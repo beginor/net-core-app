@@ -7,22 +7,19 @@ namespace Beginor.NetCoreApp.Models {
     /// <summary>审计日志模型</summary>
     public partial class AppAuditLogModel : StringEntity {
 
+        /// <summary>客户端 IP 地址</summary>
+        public string Ip { get; set; }
         /// <summary>请求路径</summary>
-        [Required(ErrorMessage = "请求路径 必须填写！")]
         public string RequestPath { get; set; }
         /// <summary>请求方法</summary>
-        [Required(ErrorMessage = "请求方法 必须填写！")]
         public string RequestMethod { get; set; }
         /// <summary>用户名</summary>
         public string UserName { get; set; }
         /// <summary>开始时间</summary>
-        [Required(ErrorMessage = "开始时间 必须填写！")]
         public DateTime StartAt { get; set; }
         /// <summary>耗时(毫秒)</summary>
-        [Required(ErrorMessage = "耗时(毫秒) 必须填写！")]
         public long Duration { get; set; }
         /// <summary>响应状态码</summary>
-        [Required(ErrorMessage = "响应状态码 必须填写！")]
         public int ResponseCode { get; set; }
         /// <summary>控制器名称</summary>
         public string ControllerName { get; set; }

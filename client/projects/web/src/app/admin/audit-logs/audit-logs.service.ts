@@ -91,6 +91,8 @@ export class AuditLogsService {
 export interface AuditLogModel {
     /** 审计日志 ID */
     id?: string;
+    /** 客户端 IP 地址 */
+    ip?: string;
     /** 请求路径 */
     requestPath?: string;
     /** 请求方法 */

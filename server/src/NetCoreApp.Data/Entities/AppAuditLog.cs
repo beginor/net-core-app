@@ -12,6 +12,10 @@ namespace Beginor.NetCoreApp.Data.Entities {
         [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]
         public override long Id { get { return base.Id; } set { base.Id = value; } }
 
+        /// <summary>客户端 IP 地址</summary>
+        [Property(Name = "Ip", Column = "ip", Type = "string", NotNull = false, Length = 64)]
+        public virtual string Ip { get; set; }
+
         /// <summary>请求路径</summary>
         [Property(Name = "RequestPath", Column = "request_path", Type = "string", NotNull = true, Length = 256)]
         public virtual string RequestPath { get; set; }

@@ -89,27 +89,31 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             return result;
         }
 
-        public Task InvokeAsync(HttpContext context) {
+        public async Task InvokeAsync(HttpContext context) {
             var log = new AppAuditLogModel {
                 RequestPath = context.Request.Path,
                 RequestMethod = context.Request.Method,
                 UserName = GetUserName(context),
                 StartAt = DateTime.Now
             };
+            var ip = context.Request.HttpContext.Connection.RemoteIpAddress.ToString();
+            if (context.Request.Headers.TryGetValue("X-Real-IP", out var realIp)) {
+                ip = realIp.ToString();
+            }
+            log.Ip = ip;
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            return next.Invoke(context).ContinueWith(t => {
-                stopwatch.Stop();
-                log.Duration = stopwatch.ElapsedMilliseconds;
-                log.ResponseCode = context.Response.StatusCode;
-                if (GetMatchingAction(log.RequestPath, log.RequestMethod) is ControllerActionDescriptor action) {
-                    log.ControllerName = action.ControllerTypeInfo.Name;
-                    log.ActionName = action.MethodInfo.Name;
-                }
-                using var scope = serviceProvider.CreateScope();
-                var repo = scope.ServiceProvider.GetService<IAppAuditLogRepository>();
-                return repo.SaveAsync(log);
-            });
+            await next.Invoke(context);
+            stopwatch.Stop();
+            log.Duration = stopwatch.ElapsedMilliseconds;
+            log.ResponseCode = context.Response.StatusCode;
+            if (GetMatchingAction(log.RequestPath, log.RequestMethod) is ControllerActionDescriptor action) {
+                log.ControllerName = action.ControllerTypeInfo.Name;
+                log.ActionName = action.MethodInfo.Name;
+            }
+            // using var scope = serviceProvider.CreateScope();
+            var repo = context.RequestServices.GetService<IAppAuditLogRepository>();
+            await repo.SaveAsync(log);
         }
 
         private string GetUserName(HttpContext context) {
