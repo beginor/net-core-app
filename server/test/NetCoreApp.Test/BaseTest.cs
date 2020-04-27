@@ -20,6 +20,7 @@ namespace Beginor.NetCoreApp.Test {
                 return;
             }
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            baseDir = Path.Combine(baseDir, "config");
             var config = new ConfigurationBuilder()
                 .AddJsonFile(Path.Combine(baseDir, "appsettings.json"))
                 .AddJsonFile(

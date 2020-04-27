@@ -57,7 +57,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
         public IList<string> Origions { get; set; }
     }
 
-    public static class ServiceCollectionExtensions {
+    public static class RefererFilteringExtensions {
 
         public static IServiceCollection AddRefererFiltering(
             this IServiceCollection services,
@@ -68,18 +68,13 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             if (options.Origions == null) {
                 options.Origions = new [] { "*" };
             }
-            services.AddSingleton(options);
-            return services;
+            return services.AddSingleton(options);
         }
-    }
-
-    public static class ApplicationBuilderExtensions {
 
         public static IApplicationBuilder UseRefererFiltering(
             this IApplicationBuilder app
         ) {
-            app.UseMiddleware<RefererFilteringMiddleware>();
-            return app;
+            return app.UseMiddleware<RefererFilteringMiddleware>();
         }
     }
 

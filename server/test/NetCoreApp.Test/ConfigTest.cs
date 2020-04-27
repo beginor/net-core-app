@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Beginor.NetCoreApp.Api;
+using Beginor.NetCoreApp.Api.Middlewares;
 using Beginor.NetCoreApp.Common;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
@@ -45,6 +47,14 @@ namespace Beginor.NetCoreApp.Test {
             Assert.IsTrue(policy.AllowAnyHeader);
             Assert.IsTrue(policy.AllowAnyMethod);
             Assert.IsTrue(policy.SupportsCredentials);
+        }
+
+        [Test]
+        public void _05_CanResolveSpaFailback() {
+            var section = Target.GetSection("spaFailback");
+            var spaFailback = section.Get<SpaFailbackOptions>();
+            Assert.IsNotNull(spaFailback);
+            Console.WriteLine(spaFailback.Failbacks.Count);
         }
 
     }
