@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Beginor.NetCoreApp.Api.Middlewares;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace Beginor.NetCoreApp.Entry {
 
@@ -17,6 +18,7 @@ namespace Beginor.NetCoreApp.Entry {
                 var section = config.GetSection("spaFailback");
                 section.Bind(options);
             });
+            services.AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>();
 #if DEBUG
             services.AddDirectoryBrowser();
 #endif
@@ -27,6 +29,7 @@ namespace Beginor.NetCoreApp.Entry {
             IWebHostEnvironment env
         ) {
             app.UseDefaultFiles();
+            app.UseGzipStatic();
             app.UseSpaFailback();
             app.UseStaticFiles();
 #if DEBUG
