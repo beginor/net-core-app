@@ -9,7 +9,6 @@ namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 
-        [System.Diagnostics.Conditional("DEBUG")]
         private void ConfigureStaticFilesServices(
             IServiceCollection services,
             IWebHostEnvironment env

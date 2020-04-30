@@ -35,11 +35,11 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             IServiceProvider serviceProvider,
             ILogger<AuditMiddleware> logger
         ) {
-            this.next = next;
-            this.provider = provider;
-            this.selector = selector;
-            this.serviceProvider = serviceProvider;
-            this.logger = logger;
+            this.next = next ?? throw new ArgumentNullException(nameof(next));
+            this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            this.selector = selector ?? throw new ArgumentNullException(nameof(selector));
+            this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         private ActionDescriptor GetMatchingAction(string path, string httpMethod) {

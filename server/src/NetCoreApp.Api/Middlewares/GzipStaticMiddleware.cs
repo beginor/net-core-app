@@ -23,10 +23,10 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             IContentTypeProvider contentTypeProvider,
             ILogger<GzipStaticMiddleware> logger
         ) {
-            this.next = next;
-            this.env = env;
-            this.contentTypeProvider = contentTypeProvider;
-            this.logger = logger;
+            this.next = next ?? throw new ArgumentNullException(nameof(next));
+            this.env = env ?? throw new ArgumentNullException(nameof(env));
+            this.contentTypeProvider = contentTypeProvider ?? throw new ArgumentNullException(nameof(contentTypeProvider));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task InvokeAsync(HttpContext context) {

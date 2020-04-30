@@ -42,6 +42,7 @@ namespace Beginor.NetCoreApp.Entry {
             ConfigureCorsServices(services, env);
             // web related.
             ConfigurePathBaseServices(services, env);
+            ConfigureCustomHeaderServices(services, env);
             ConfigureStaticFilesServices(services, env);
             ConfigureSwaggerServices(services, env);
             // routing and mvc
@@ -67,6 +68,7 @@ namespace Beginor.NetCoreApp.Entry {
             ConfigureCors(app, env);
             // web related.
             ConfigurePathBase(app, env);
+            ConfigureCustomHeader(app, env);
             ConfigureStaticFiles(app, env);
             ConfigureSwagger(app, env);
             // routing and mvc
