@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
-using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 
@@ -89,31 +88,41 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             return result;
         }
 
-        public async Task InvokeAsync(HttpContext context) {
-            var log = new AppAuditLogModel {
+        public Task InvokeAsync(HttpContext context) {
+            var auditLog = new AppAuditLogModel {
                 RequestPath = context.Request.Path,
                 RequestMethod = context.Request.Method,
                 UserName = GetUserName(context),
                 StartAt = DateTime.Now
             };
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             var ip = context.Request.HttpContext.Connection.RemoteIpAddress.ToString();
             if (context.Request.Headers.TryGetValue("X-Real-IP", out var realIp)) {
                 ip = realIp.ToString();
             }
-            log.Ip = ip;
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            await next.Invoke(context);
-            stopwatch.Stop();
-            log.Duration = stopwatch.ElapsedMilliseconds;
-            log.ResponseCode = context.Response.StatusCode;
-            if (GetMatchingAction(log.RequestPath, log.RequestMethod) is ControllerActionDescriptor action) {
-                log.ControllerName = action.ControllerTypeInfo.Name;
-                log.ActionName = action.MethodInfo.Name;
-            }
-            // using var scope = serviceProvider.CreateScope();
-            var repo = context.RequestServices.GetService<IAppAuditLogRepository>();
-            await repo.SaveAsync(log);
+            auditLog.Ip = ip;
+            context.Response.OnStarting(state => {
+                var ctx = (HttpContext)state;
+                stopwatch.Stop();
+                auditLog.Duration = stopwatch.ElapsedMilliseconds;
+                ctx.Response.Headers.Add(
+                    "X-Response-Time-Milliseconds",
+                    auditLog.Duration.ToString()
+                );
+                auditLog.ResponseCode = context.Response.StatusCode;
+                if (GetMatchingAction(auditLog.RequestPath, auditLog.RequestMethod) is ControllerActionDescriptor action) {
+                    auditLog.ControllerName = action.ControllerTypeInfo.Name;
+                    auditLog.ActionName = action.MethodInfo.Name;
+                }
+                Task.Run(() => {
+                    // using var scope = serviceProvider.CreateScope();
+                    var repo = context.RequestServices.GetService<IAppAuditLogRepository>();
+                    return repo.SaveAsync(auditLog);
+                });
+                return Task.CompletedTask;
+            }, context);
+            return next.Invoke(context);
         }
 
         private string GetUserName(HttpContext context) {
