@@ -57,6 +57,14 @@ namespace Beginor.NetCoreApp.Test {
             Console.WriteLine(spaFailback.Failbacks.Count);
         }
 
+        [Test]
+        public void _06_CanResolveCustomHeader() {
+            var section = Target.GetSection("customHeader");
+            var options = section.Get<CustomHeaderOptions>();
+            Assert.IsNotNull(options.Headers);
+            Assert.Greater(options.Headers.Keys.Count, 0);
+        }
+
     }
 
 }
