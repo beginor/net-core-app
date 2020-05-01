@@ -6,7 +6,8 @@
   "scripts": {
     "clean": "rm -rf dist coverage",
     "ng": "ng",
-    "build": "ng build app-shared && npm run build-web && npm run build-handset",
+    "build": "npm run build-shared && npm run build-web && npm run build-handset",
+    "build-shared": "ng build app-shared",
     "build-web": "ng build web --prod --base-href=/net-core-app/web/",
     "build-handset": "ng build handset --prod --base-href=/net-core-app/handset/",
     "watch-web": "ng build web --watch --base-href=/net-core-app/web/",

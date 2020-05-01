@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
@@ -26,9 +26,12 @@ export class NavItemsService {
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
-        private ui: UiService
+        private uiService: UiService,
+        private errorHandler: ErrorHandler
     ) {
-        this.rolesSvc = new RolesService(http, apiRoot, ui);
+        this.rolesSvc = new RolesService(
+            http, apiRoot, uiService, errorHandler
+        );
         this.rolesSvc.data.subscribe(data => {
             this.roles = data;
         });
@@ -55,10 +58,10 @@ export class NavItemsService {
             this.data.next(result.data);
         }
         catch (ex) {
-            console.error(ex.toString());
+            this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
-            this.ui.showAlert({ type: 'danger', message: '加载导航节点（菜单）数据出错!'});
+            this.uiService.showAlert({ type: 'danger', message: '加载导航节点（菜单）数据出错!'});
         }
         finally {
             this.loading = false;
@@ -87,8 +90,8 @@ export class NavItemsService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
-            this.ui.showAlert({ type: 'danger', message: '创建导航节点（菜单）出错！' });
+            this.errorHandler.handleError(ex);
+            this.uiService.showAlert({ type: 'danger', message: '创建导航节点（菜单）出错！' });
             return null;
         }
     }
@@ -102,15 +105,15 @@ export class NavItemsService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
-            this.ui.showAlert({ type: 'danger', message: '获取指定的导航节点（菜单）出错！' });
+            this.errorHandler.handleError(ex);
+            this.uiService.showAlert({ type: 'danger', message: '获取指定的导航节点（菜单）出错！' });
             return null;
         }
     }
 
     /** 删除导航节点（菜单） */
     public async delete(id: string): Promise<boolean> {
-        const confirm = await this.ui.showConfirm('确认删除么？');
+        const confirm = await this.uiService.showConfirm('确认删除么？');
         if (!confirm) {
             return false;
         }
@@ -121,8 +124,8 @@ export class NavItemsService {
             return true;
         }
         catch (ex) {
-            console.error(ex);
-            this.ui.showAlert({ type: 'danger', message: '删除导航节点（菜单）出错！' });
+            this.errorHandler.handleError(ex);
+            this.uiService.showAlert({ type: 'danger', message: '删除导航节点（菜单）出错！' });
             return false;
         }
     }
@@ -140,8 +143,8 @@ export class NavItemsService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
-            this.ui.showAlert({ type: 'danger', message: '更新导航节点（菜单）出错！' });
+            this.errorHandler.handleError(ex);
+            this.uiService.showAlert({ type: 'danger', message: '更新导航节点（菜单）出错！' });
             return null;
         }
     }
@@ -153,8 +156,8 @@ export class NavItemsService {
             await this.rolesSvc.search();
         }
         catch (ex) {
-            console.error(ex);
-            this.ui.showAlert({ type: 'danger', message: '获取全部角色出错！' });
+            this.errorHandler.handleError(ex);
+            this.uiService.showAlert({ type: 'danger', message: '获取全部角色出错！' });
         }
     }
 
@@ -173,8 +176,8 @@ export class NavItemsService {
             );
         }
         catch (ex) {
-            console.error(ex);
-            this.ui.showAlert({ type: 'danger', message: '获取全部菜单出错！' });
+            this.errorHandler.handleError(ex);
+            this.uiService.showAlert({ type: 'danger', message: '获取全部菜单出错！' });
         }
         return options;
     }

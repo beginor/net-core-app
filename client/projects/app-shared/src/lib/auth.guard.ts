@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ErrorHandler } from '@angular/core';
 import {
     CanLoad, CanActivate, Route, UrlSegment, Router, ActivatedRouteSnapshot,
     RouterStateSnapshot, NavigationCancel
@@ -15,7 +15,8 @@ export class AuthGuard implements CanLoad, CanActivate {
 
     constructor(
         private router: Router,
-        private svc: AccountService
+        private accountSvc: AccountService,
+        private errorHandler: ErrorHandler
     ) { }
 
     public async canLoad(
@@ -27,11 +28,11 @@ export class AuthGuard implements CanLoad, CanActivate {
                 this.redirectToLogin(event.url);
             });
         try {
-            const info = await this.svc.getInfo();
+            const info = await this.accountSvc.getInfo();
             return !!info.id;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             return false;
         }
     }
@@ -41,7 +42,7 @@ export class AuthGuard implements CanLoad, CanActivate {
         state: RouterStateSnapshot
     ): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            this.svc.info.subscribe(
+            this.accountSvc.info.subscribe(
                 info => {
                     resolve(!!info.id);
                 }

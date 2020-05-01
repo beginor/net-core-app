@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { AppSharedModule, ApiInterceptor } from 'app-shared';
+import { AppSharedModule, ApiInterceptor, HttpErrorHandler } from 'app-shared';
 
 import { AppCommonModule } from './common';
 import { AppRoutingModule } from './app-routing.module';
@@ -43,6 +43,10 @@ import { environment } from '../environments/environment';
             useFactory: () => {
                 return environment.apiRoot;
             }
+        },
+        {
+            provide: ErrorHandler,
+            useClass: HttpErrorHandler
         }
     ],
     bootstrap: [AppComponent]

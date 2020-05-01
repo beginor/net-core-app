@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject } from 'rxjs';
@@ -24,7 +24,8 @@ export class AuditLogsService {
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
-        private ui: UiService
+        private ui: UiService,
+        private errorHandler: ErrorHandler
     ) {
         const today = new Date();
         this.searchDate = new NgbDate(
@@ -57,7 +58,7 @@ export class AuditLogsService {
             this.loading = false;
         }
         catch (ex) {
-            console.error(ex.toString());
+            this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
             this.ui.showAlert({ type: 'danger', message: '加载审计日志数据出错!'});

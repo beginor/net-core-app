@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
@@ -26,6 +26,7 @@ export class NavigationService {
         private location: Location,
         private account: AccountService,
         @Inject('apiRoot') private apiRoot: string,
+        private errorHandler: ErrorHandler
     ) {
         this.currentUrl = location.path();
         this.location.onUrlChange(() => {
@@ -100,7 +101,7 @@ export class NavigationService {
                 }
             })
             .catch(ex => {
-                console.error(ex);
+                this.errorHandler.handleError(ex);
             });
     }
 

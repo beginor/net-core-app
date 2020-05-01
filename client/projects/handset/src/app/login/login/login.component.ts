@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ErrorHandler } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -18,7 +18,8 @@ export class LoginComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private snackBar: MatSnackBar,
-        private accountSvc: AccountService
+        private accountSvc: AccountService,
+        private errorHandler: ErrorHandler
     ) { }
 
     public ngOnInit(): void {
@@ -39,7 +40,7 @@ export class LoginComponent implements OnInit {
             );
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.snackBar.open(ex.error, '确定', { duration: 3000 });
         }
         finally {

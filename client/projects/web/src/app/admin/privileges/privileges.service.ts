@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
@@ -25,7 +25,8 @@ export class AppPrivilegeService {
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
-        private ui: UiService
+        private ui: UiService,
+        private errorHandler: ErrorHandler
     ) { }
 
     /** 搜索系统权限 */
@@ -49,7 +50,7 @@ export class AppPrivilegeService {
             this.data.next(result.data);
         }
         catch (ex) {
-            console.error(ex.toString());
+            this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
             this.ui.showAlert({ type: 'danger', message: '加载系统权限数据出错！' });
@@ -79,7 +80,7 @@ export class AppPrivilegeService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '创建系统权限出错！' });
             return null;
         }
@@ -94,7 +95,7 @@ export class AppPrivilegeService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '加载系统权限数据出错！' });
             return null;
         }
@@ -113,7 +114,7 @@ export class AppPrivilegeService {
             return true;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '删除系统权限出错！' });
             return false;
         }
@@ -132,7 +133,7 @@ export class AppPrivilegeService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '更新系统权限出错！' });
             return null;
         }
@@ -147,7 +148,7 @@ export class AppPrivilegeService {
             this.modules.next(modules);
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '加载模块列表出错!'});
             this.modules.next([]);
         }

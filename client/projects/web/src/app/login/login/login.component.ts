@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ErrorHandler } from '@angular/core';
 
 import { AccountService, LoginModel } from 'app-shared';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -18,7 +18,8 @@ export class LoginComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private acntSvc: AccountService
+        private acntSvc: AccountService,
+        private errorHandler: ErrorHandler
     ) { }
 
     public ngOnInit(): void {
@@ -36,7 +37,7 @@ export class LoginComponent implements OnInit {
             );
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             const message = typeof ex.error === 'string' ? ex.error : '无法登录！';
             this.message.next(message);
         }

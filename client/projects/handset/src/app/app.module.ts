@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppSharedModule, ApiInterceptor } from 'app-shared';
+import { AppSharedModule, ApiInterceptor, HttpErrorHandler } from 'app-shared';
 
 import { MatModule } from './mat/mat.module';
 import { AppRoutingModule } from './app-routing.module';
@@ -44,6 +44,10 @@ import { environment } from '../environments/environment';
                 }
                 return url;
             }
+        },
+        {
+            provide: ErrorHandler,
+            useClass: HttpErrorHandler
         }
     ],
     bootstrap: [AppComponent]

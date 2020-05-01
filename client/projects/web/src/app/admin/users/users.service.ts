@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
@@ -32,10 +32,11 @@ export class UsersService {
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
-        private ui: UiService
+        private ui: UiService,
+        private errorHandler: ErrorHandler
     ) {
         this.searchModel.sortBy = this.sortMethods[0].value;
-        this.rolesSvc = new RolesService(http, apiRoot, ui);
+        this.rolesSvc = new RolesService(http, apiRoot, ui, errorHandler);
         this.rolesSvc.data.subscribe(data => {
             this.roles.next(data);
         });
@@ -61,7 +62,7 @@ export class UsersService {
             this.data.next(result.data);
         }
         catch (ex) {
-            console.error(ex.toString());
+            this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
             this.ui.showAlert({ type: 'danger', message: '加载用户数据出错!'});
@@ -93,7 +94,7 @@ export class UsersService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '创建用户出错！' });
             return null;
         }
@@ -108,7 +109,7 @@ export class UsersService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '获取指定的用户出错！' });
             return null;
         }
@@ -127,7 +128,7 @@ export class UsersService {
             return true;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '删除用户出错！' });
             return false;
         }
@@ -146,7 +147,7 @@ export class UsersService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '更新用户出错！' });
             return null;
         }
@@ -164,7 +165,7 @@ export class UsersService {
             return true;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '解锁用户失败！'});
         }
     }
@@ -176,7 +177,7 @@ export class UsersService {
             await this.search();
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '锁定用户失败！'});
         }
     }
@@ -194,7 +195,7 @@ export class UsersService {
             await this.http.put<any>(url, model).toPromise();
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '重置用户密码失败！'});
         }
     }
@@ -207,7 +208,7 @@ export class UsersService {
             await this.rolesSvc.search();
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '获取全部角色失败！' });
         }
     }
@@ -220,7 +221,7 @@ export class UsersService {
             return roles.map(r => r.name);
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '获取用户角色失败！' });
         }
     }
@@ -243,7 +244,7 @@ export class UsersService {
             }
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '保存用户角色失败！' });
         }
     }
