@@ -8,9 +8,7 @@ import { first } from 'rxjs/operators';
 
 import { AccountService } from './account.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanLoad, CanActivate {
 
     constructor(

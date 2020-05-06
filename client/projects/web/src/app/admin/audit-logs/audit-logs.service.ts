@@ -19,7 +19,7 @@ export class AuditLogsService {
     public data = new BehaviorSubject<AuditLogModel[]>([]);
     public loading = false;
 
-    private baseUrl = `${this.apiRoot}/app-audit-logs`;
+    private baseUrl = `${this.apiRoot}/audit-logs`;
 
     constructor(
         private http: HttpClient,

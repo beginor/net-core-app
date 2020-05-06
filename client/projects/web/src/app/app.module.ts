@@ -40,9 +40,11 @@ import { environment } from '../environments/environment';
         },
         {
             provide: 'apiRoot',
-            useFactory: () => {
-                return environment.apiRoot;
-            }
+            useFactory: () => environment.apiRoot
+        },
+        {
+            provide: 'isProduction',
+            useFactory: () => environment.production
         },
         {
             provide: ErrorHandler,

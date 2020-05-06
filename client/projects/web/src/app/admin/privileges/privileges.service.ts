@@ -20,7 +20,7 @@ export class AppPrivilegeService {
     public modules = new BehaviorSubject<string[]>([]);
     public loading: boolean;
 
-    private baseUrl = `${this.apiRoot}/app-privileges`;
+    private baseUrl = `${this.apiRoot}/privileges`;
 
     constructor(
         private http: HttpClient,

@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Beginor.NetCoreApp.Api.Controllers {
 
     /// <summary>系统权限服务接口</summary>
-    [Route("api/app-privileges")]
+    [Route("api/privileges")]
     [ApiController]
     public class AppPrivilegeController : Controller {
 

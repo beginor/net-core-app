@@ -38,6 +38,9 @@ namespace Beginor.NetCoreApp.Data {
             CreateMap<AppAuditLog, AppAuditLogModel>()
                 .ReverseMap()
                 .ForMember(dest => dest.Id, map => map.Ignore());
+            CreateMap<AppClientError, AppClientErrorModel>()
+                .ReverseMap()
+                .ForMember(dest => dest.Id, map => map.Ignore());
         }
 
     }

@@ -8,7 +8,9 @@ import { BehaviorSubject, Subscription, interval } from 'rxjs';
 })
 export class AccountService {
 
-    public info = new BehaviorSubject<AccountInfo>({ id: '' });
+    public info = new BehaviorSubject<AccountInfo>(
+        { id: '', userName: 'anonymous' }
+    );
 
     public fullName = new BehaviorSubject<string>('匿名用户');
 

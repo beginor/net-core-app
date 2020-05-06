@@ -3,9 +3,7 @@ import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AccountService } from './account.service';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class HttpErrorHandler implements ErrorHandler {
 
     private url: string;
@@ -13,10 +11,11 @@ export class HttpErrorHandler implements ErrorHandler {
     constructor(
         private location: Location,
         private http: HttpClient,
-        @Inject('apiRoot') apiRoot: string,
+        @Inject('apiRoot') private apiRoot: string,
+        @Inject('isProduction') private isProduction: boolean,
         private account: AccountService
     ) {
-        this.url = `${apiRoot}/client-error`;
+        this.url = `${apiRoot}/client-errors`;
     }
 
     public handleError(error: any): void {
@@ -27,9 +26,14 @@ export class HttpErrorHandler implements ErrorHandler {
             path: this.location.path(),
             message: JSON.stringify(error)
         };
-        this.http.post(this.url, err).toPromise().catch(ex => {
-            console.error('Can not send error to server. ', err);
-        });
+        if (this.isProduction) {
+            this.http.post(this.url, err).toPromise().catch(ex => {
+                console.error('Can not send error to server. ', err);
+            });
+        }
+        else {
+            console.error(error);
+        }
     }
 
 }

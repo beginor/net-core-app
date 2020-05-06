@@ -37,13 +37,11 @@ import { environment } from '../environments/environment';
         },
         {
             provide: 'apiRoot',
-            useFactory: () => {
-                let url = environment.apiRoot;
-                if (url.startsWith('/')) {
-                    url = `${location.protocol}//${location.host}${url}`;
-                }
-                return url;
-            }
+            useFactory: () => environment.apiRoot
+        },
+        {
+            provide: 'isProduction',
+            useFactory: () => environment.production
         },
         {
             provide: ErrorHandler,

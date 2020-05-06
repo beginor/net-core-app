@@ -20,7 +20,7 @@ export class NavItemsService {
     public loading: boolean;
     public roles: AppRoleModel[];
 
-    private baseUrl = `${this.apiRoot}/app-nav-items`;
+    private baseUrl = `${this.apiRoot}/nav-items`;
     private rolesSvc: RolesService;
 
     constructor(

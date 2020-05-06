@@ -5,7 +5,7 @@ import {
 import { Observable } from 'rxjs';
 import { AccountService } from './account.service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ApiInterceptor implements HttpInterceptor {
 
     constructor(

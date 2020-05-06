@@ -10,7 +10,7 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Api.Controllers {
 
     /// <summary>导航节点（菜单）服务接口</summary>
-    [Route("api/app-nav-items")]
+    [Route("api/nav-items")]
     [ApiController]
     public class AppNavItemController : Controller {
 
