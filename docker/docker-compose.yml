@@ -1,22 +1,12 @@
 version: "3"
 services:
-  net-core-app-nginx:
-    image: beginor/net-core-app/nginx
-    hostname: net-core-app-nginx
-    ports:
-      - 4200:80
-    volumes:
-      - ./nginx/log:/var/log/nginx
-    restart: unless-stopped
-    depends_on:
-      - net-core-app-api
-  net-core-app-api:
-    image: beginor/net-core-app/api
-    hostname: net-core-app-api
+  net-core-app:
+    image: beginor/net-core-app
+    hostname: net-core-app
     ports:
       - 5000:80
     volumes:
-      - ./api/log:/net-core-app/api/log
+      - ./log:/net-core-app/log
     environment:
       ASPNETCORE_ENVIRONMENT: Development
     restart: unless-stopped

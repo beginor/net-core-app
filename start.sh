@@ -5,4 +5,4 @@ if ! [ -x "$(command -v concurrently)" ]; then
 fi
 
 concurrently "cd client && npm run start" \
-  "cd server/src/NetCoreApp.Api && dotnet watch run"
+  "cd server/src/NetCoreApp.Entry && dotnet watch run"

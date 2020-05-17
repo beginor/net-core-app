@@ -9,30 +9,19 @@ CONTEXT_ROOT=tpl-app
 # 新的服务端项目前缀（公司名称+项目名称, 特殊符号需要用 \ 进行转义）
 SERVER_PREFIX="${COMPANY_NAME}.${PROJ_NAME}"
 # 修改 Docker 编译/部署文件
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/client/build-nginx-image.sh
-sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/client/build-nginx-image.sh
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/client/default.conf
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/client/deploy-nginx-image.sh
-sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/client/deploy-nginx-image.sh
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/client/Dockerfile
-sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/client/Dockerfile
+sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/build-docker-image.sh
+sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/build-docker-image.sh
+sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./docker/build-docker-image.sh
 
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/server/build-api-image.sh
-sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/server/build-api-image.sh
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./docker/server/build-api-image.sh
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/server/deploy-api-image.sh
-sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/server/deploy-api-image.sh
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/server/Dockerfile
-sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/server/Dockerfile
-sed -i.bak "s/Beginor/${COMPANY_NAME}/g" ./docker/server/Dockerfile
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./docker/server/Dockerfile
+sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/deploy-docker-image.sh
+sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/deploy-docker-image.sh
 
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/build-docker-images.sh
-sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/build-docker-images.sh
+sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/Dockerfile
+sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./docker/Dockerfile
+
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/docker-compose.yml
 sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/docker-compose.yml
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/deploy-images.sh
-sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/deploy-images.sh
+
 # 删除备份文件
 find . -name '*.bak' -delete
 # 提交一下 Docker 文件
