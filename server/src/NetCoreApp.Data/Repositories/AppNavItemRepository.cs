@@ -21,10 +21,10 @@ namespace Beginor.NetCoreApp.Data.Repositories {
         private UserManager<AppUser> userManager;
 
         public AppNavItemRepository(
-            ISessionFactory sessionFactory,
+            ISession session,
             IMapper mapper,
             UserManager<AppUser> userManager
-        ) : base(sessionFactory, mapper) {
+        ) : base(session, mapper) {
             this.userManager = userManager;
         }
 
@@ -41,35 +41,31 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             long id,
             CancellationToken token = default(CancellationToken)
         ) {
-            using (var session = SessionFactory.OpenSession()) {
-                var entity = await session.GetAsync<AppNavItem>(id);
-                if (entity == null) {
-                    return;
-                }
-                entity.IsDeleted = true;
-                await session.UpdateAsync(entity);
-                await session.FlushAsync();
-                session.Clear();
+            var entity = await Session.GetAsync<AppNavItem>(id, token);
+            if (entity == null) {
+                return;
             }
+            entity.IsDeleted = true;
+            await Session.UpdateAsync(entity, token);
+            await Session.FlushAsync(token);
+            Session.Clear();
         }
 
         public async Task<PaginatedResponseModel<AppNavItemModel>> SearchAsync(
             AppNavItemSearchModel model
         ) {
-            using (var session = OpenSession()) {
-                var query = session.Query<AppNavItem>();
-                // todo: add custom query here;
-                var total = await query.LongCountAsync();
-                var data = await query.OrderByDescending(e => e.Id)
-                    .Skip(model.Skip).Take(model.Take)
-                    .ToListAsync();
-                return new PaginatedResponseModel<AppNavItemModel> {
-                    Total = total,
-                    Data = Mapper.Map<IList<AppNavItemModel>>(data),
-                    Skip = model.Skip,
-                    Take = model.Take
-                };
-            }
+            var query = Session.Query<AppNavItem>();
+            // todo: add custom query here;
+            var total = await query.LongCountAsync();
+            var data = await query.OrderByDescending(e => e.Id)
+                .Skip(model.Skip).Take(model.Take)
+                .ToListAsync();
+            return new PaginatedResponseModel<AppNavItemModel> {
+                Total = total,
+                Data = Mapper.Map<IList<AppNavItemModel>>(data),
+                Skip = model.Skip,
+                Take = model.Take
+            };
         }
 
         public async Task SaveAsync(AppNavItemModel model, string userName) {
@@ -78,23 +74,21 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             Argument.NotNullOrEmpty(userName, nameof(userName));
             // Map to entity;
             var entity = Mapper.Map<AppNavItem>(model);
-            using (var session = OpenSession()) {
-                var user = await session.Query<AppUser>()
-                    .FirstOrDefaultAsync(
-                        u => u.UserName == userName
-                    );
-                // Assign creator;
-                entity.Creator = user;
-                entity.CreatedAt = DateTime.Now;
-                // Assign updater;
-                entity.Updater = user;
-                entity.UpdatedAt = DateTime.Now;
-                // Ensure not deleted.
-                entity.IsDeleted = false;
-                await session.SaveAsync(entity);
-                await session.FlushAsync();
-                session.Clear();
-            }
+            var user = await Session.Query<AppUser>()
+                .FirstOrDefaultAsync(
+                    u => u.UserName == userName
+                );
+            // Assign creator;
+            entity.Creator = user;
+            entity.CreatedAt = DateTime.Now;
+            // Assign updater;
+            entity.Updater = user;
+            entity.UpdatedAt = DateTime.Now;
+            // Ensure not deleted.
+            entity.IsDeleted = false;
+            await Session.SaveAsync(entity);
+            await Session.FlushAsync();
+            Session.Clear();
             Mapper.Map(entity, model);
         }
 
@@ -109,30 +103,27 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             }
             Argument.NotNull(model, nameof(model));
             Argument.NotNullOrEmpty(userName, nameof(userName));
-            using (var session = OpenSession()) {
-                var entity = await session.LoadAsync<AppNavItem>(id);
-                if (entity == null) {
-                    throw new InvalidOperationException(
-                        $"导航节点 {id} 不存在！"
-                    );
-                }
-                Mapper.Map(model, entity);
-                entity.Id = id;
-                entity.Updater = await session.Query<AppUser>()
-                    .FirstAsync(u => u.UserName == userName);
-                entity.UpdatedAt = DateTime.Now;
-                await session.UpdateAsync(entity);
-                await session.FlushAsync();
-                session.Clear();
+            var entity = await Session.LoadAsync<AppNavItem>(id);
+            if (entity == null) {
+                throw new InvalidOperationException(
+                    $"导航节点 {id} 不存在！"
+                );
             }
+            Mapper.Map(model, entity);
+            entity.Id = id;
+            entity.Updater = await Session.Query<AppUser>()
+                .FirstAsync(u => u.UserName == userName);
+            entity.UpdatedAt = DateTime.Now;
+            await Session.UpdateAsync(entity);
+            await Session.FlushAsync();
+            Session.Clear();
         }
 
         public async Task<MenuNodeModel> GetMenuAsync(string[] roles) {
             if (roles == null) {
                 throw new ArgumentNullException("roles can not be null.");
             }
-            using var session = OpenSession();
-            var conn = session.Connection;
+            var conn = Session.Connection;
             var sql = @"
                 with recursive cte as (
                     select p.id, p.parent_id, p.title, p.tooltip, p.icon, p.url, p.sequence, p.roles, p.target
