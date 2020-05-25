@@ -88,7 +88,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             return result;
         }
 
-        public Task InvokeAsync(HttpContext context) {
+        public async Task InvokeAsync(HttpContext context) {
             var auditLog = new AppAuditLogModel {
                 RequestPath = context.Request.Path,
                 RequestMethod = context.Request.Method,
@@ -105,24 +105,17 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             context.Response.OnStarting(state => {
                 var ctx = (HttpContext)state;
                 stopwatch.Stop();
-                auditLog.Duration = stopwatch.ElapsedMilliseconds;
                 ctx.Response.Headers.Add(
                     "X-Response-Time-Milliseconds",
-                    auditLog.Duration.ToString()
+                    stopwatch.ElapsedMilliseconds.ToString()
                 );
-                auditLog.ResponseCode = context.Response.StatusCode;
-                if (GetMatchingAction(auditLog.RequestPath, auditLog.RequestMethod) is ControllerActionDescriptor action) {
-                    auditLog.ControllerName = action.ControllerTypeInfo.Name;
-                    auditLog.ActionName = action.MethodInfo.Name;
-                }
-                Task.Run(() => {
-                    // using var scope = serviceProvider.CreateScope();
-                    var repo = context.RequestServices.GetService<IAppAuditLogRepository>();
-                    return repo.SaveAsync(auditLog);
-                });
+                stopwatch.Start();
                 return Task.CompletedTask;
             }, context);
-            return next.Invoke(context);
+            await next.Invoke(context);
+            auditLog.Duration = stopwatch.ElapsedMilliseconds;
+            var repo = context.RequestServices.GetService<IAppAuditLogRepository>();
+            await repo.SaveAsync(auditLog);
         }
 
         private string GetUserName(HttpContext context) {
