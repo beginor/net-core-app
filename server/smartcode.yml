@@ -3,7 +3,7 @@ Module: NetCoreApp
 DataSource:
   Name: DbTable
   Parameters:
-    DbName: test_db
+    DbName: net_core_app
     DbProvider: PostgreSql
     ConnectionString: server=127.0.0.1;port=5432;database=net_core_app;user id=postgres;password=1a2b3c4D;
     DbSchema: public
@@ -13,6 +13,7 @@ TemplateEngine:
   Root: Contributions/NHibernate
 Output:
   Type: File
+  Mode: Full # Incre 增量创建，如果存在则忽略； Full 全量创建，如果存在则重新创建
   Path: ./src
 NamingConverter:
   Table:
@@ -50,6 +51,8 @@ TableFilter:
     - aspnet_user_roles
     - aspnet_user_tokens
     - aspnet_users
+  IncludeTables:
+    - app_client_errors
   IgnoreNoPKTable: true
   IgnoreView: true
 
@@ -63,15 +66,6 @@ Build:
       Path: '{{Project.Module}}.{{Build.Module}}/Entities'
       Name: '{{Items.CurrentTable.ConvertedName}}'
       Extension: '.cs'
-  Hbm:
-    Type: Table
-    Module: Data
-    TemplateEngine:
-      Path: Hbm.cshtml
-    Output:
-      Path: '{{Project.Module}}.{{Build.Module}}/Entities'
-      Name: '{{Items.CurrentTable.ConvertedName}}'
-      Extension: '.hbm.xml'
   IRepository:
     Type: Table
     Module: Data
@@ -90,66 +84,39 @@ Build:
       Path: '{{Project.Module}}.{{Build.Module}}/Repositories'
       Name: '{{Items.CurrentTable.ConvertedName}}Repository'
       Extension: '.cs'
-  Model:
-    Type: Table
-    Module: Models
-    TemplateEngine:
-      Path: Model.cshtml
-    Output:
-      Path: '{{Project.Module}}.{{Build.Module}}'
-      Name: '{{Items.CurrentTable.ConvertedName}}Model'
-      Extension: '.cs'
-  IService:
-    Type: Table
-    Module: Services
-    TemplateEngine:
-      Path: IService.cshtml
-    Output:
-      Path: '{{Project.Module}}.{{Build.Module}}'
-      Name: 'I{{Items.CurrentTable.ConvertedName}}Service'
-      Extension: '.cs'
-  Service:
-    Type: Table
-    Module: Services
-    TemplateEngine:
-      Path: Service.cshtml
-    Output:
-      Path: '{{Project.Module}}.{{Build.Module}}'
-      Name: '{{Items.CurrentTable.ConvertedName}}Service'
-      Extension: '.cs'
-  Api:
-    Type: Table
-    Module: Api
-    TemplateEngine:
-      Path: Api.cshtml
-    Output:
-      Path: '{{Project.Module}}.{{Build.Module}}/Controllers'
-      Name: '{{Items.CurrentTable.ConvertedName}}Controller'
-      Extension: '.cs'
-  RepositoryTest:
-    Type: Table
-    Module: Test
-    TemplateEngine:
-      Path: RepositoryTest.cshtml
-    Output:
-      Path: '../test/{{Project.Module}}.{{Build.Module}}/Data'
-      Name: '{{Items.CurrentTable.ConvertedName}}RepositoryTest'
-      Extension: '.cs'
-  ServiceTest:
-    Type: Table
-    Module: Test
-    TemplateEngine:
-      Path: ServiceTest.cshtml
-    Output:
-      Path: '../test/{{Project.Module}}.{{Build.Module}}/Services'
-      Name: '{{Items.CurrentTable.ConvertedName}}ServiceTest'
-      Extension: '.cs'
-  ApiTest:
-    Type: Table
-    Module: Test
-    TemplateEngine:
-      Path: ApiTest.cshtml
-    Output:
-      Path: '../test/{{Project.Module}}.{{Build.Module}}/Api'
-      Name: '{{Items.CurrentTable.ConvertedName}}ControllerTest'
-      Extension: '.cs'
+  # Model:
+  #   Type: Table
+  #   Module: Models
+  #   TemplateEngine:
+  #     Path: Model.cshtml
+  #   Output:
+  #     Path: '{{Project.Module}}.{{Build.Module}}'
+  #     Name: '{{Items.CurrentTable.ConvertedName}}Model'
+  #     Extension: '.cs'
+  # Api:
+  #   Type: Table
+  #   Module: Api
+  #   TemplateEngine:
+  #     Path: Api.cshtml
+  #   Output:
+  #     Path: '{{Project.Module}}.{{Build.Module}}/Controllers'
+  #     Name: '{{Items.CurrentTable.ConvertedName}}Controller'
+  #     Extension: '.cs'
+  # RepositoryTest:
+  #   Type: Table
+  #   Module: Test
+  #   TemplateEngine:
+  #     Path: RepositoryTest.cshtml
+  #   Output:
+  #     Path: '../test/{{Project.Module}}.{{Build.Module}}/Data'
+  #     Name: '{{Items.CurrentTable.ConvertedName}}RepositoryTest'
+  #     Extension: '.cs'
+  # ApiTest:
+  #   Type: Table
+  #   Module: Test
+  #   TemplateEngine:
+  #     Path: ApiTest.cshtml
+  #   Output:
+  #     Path: '../test/{{Project.Module}}.{{Build.Module}}/Api'
+  #     Name: '{{Items.CurrentTable.ConvertedName}}ControllerTest'
+  #     Extension: '.cs'
