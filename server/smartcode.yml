@@ -13,7 +13,7 @@ TemplateEngine:
   Root: Contributions/NHibernate
 Output:
   Type: File
-  Mode: Full # Incre 增量创建，如果存在则忽略； Full 全量创建，如果存在则重新创建
+  Mode: Incre # Incre 增量创建，如果存在则忽略； Full 全量创建，如果存在则重新创建
   Path: ./src
 NamingConverter:
   Table:
@@ -51,8 +51,8 @@ TableFilter:
     - aspnet_user_roles
     - aspnet_user_tokens
     - aspnet_users
-  IncludeTables:
     - app_client_errors
+  # IncludeTables:
   IgnoreNoPKTable: true
   IgnoreView: true
 
@@ -102,21 +102,21 @@ Build:
       Path: '../test/{{Project.Module}}.{{Build.Module}}/Data'
       Name: '{{Items.CurrentTable.ConvertedName}}RepositoryTest'
       Extension: '.cs'
-  # Api:
-  #   Type: Table
-  #   Module: Api
-  #   TemplateEngine:
-  #     Path: Api.cshtml
-  #   Output:
-  #     Path: '{{Project.Module}}.{{Build.Module}}/Controllers'
-  #     Name: '{{Items.CurrentTable.ConvertedName}}Controller'
-  #     Extension: '.cs'
-  # ApiTest:
-  #   Type: Table
-  #   Module: Test
-  #   TemplateEngine:
-  #     Path: ApiTest.cshtml
-  #   Output:
-  #     Path: '../test/{{Project.Module}}.{{Build.Module}}/Api'
-  #     Name: '{{Items.CurrentTable.ConvertedName}}ControllerTest'
-  #     Extension: '.cs'
+  Api:
+    Type: Table
+    Module: Api
+    TemplateEngine:
+      Path: Api.cshtml
+    Output:
+      Path: '{{Project.Module}}.{{Build.Module}}/Controllers'
+      Name: '{{Items.CurrentTable.ConvertedName}}Controller'
+      Extension: '.cs'
+  ApiTest:
+    Type: Table
+    Module: Test
+    TemplateEngine:
+      Path: ApiTest.cshtml
+    Output:
+      Path: '../test/{{Project.Module}}.{{Build.Module}}/Api'
+      Name: '{{Items.CurrentTable.ConvertedName}}ControllerTest'
+      Extension: '.cs'
