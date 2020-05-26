@@ -66,6 +66,15 @@ Build:
       Path: '{{Project.Module}}.{{Build.Module}}/Entities'
       Name: '{{Items.CurrentTable.ConvertedName}}'
       Extension: '.cs'
+  Model:
+    Type: Table
+    Module: Models
+    TemplateEngine:
+      Path: Model.cshtml
+    Output:
+      Path: '{{Project.Module}}.{{Build.Module}}'
+      Name: '{{Items.CurrentTable.ConvertedName}}Model'
+      Extension: '.cs'
   IRepository:
     Type: Table
     Module: Data
@@ -84,15 +93,15 @@ Build:
       Path: '{{Project.Module}}.{{Build.Module}}/Repositories'
       Name: '{{Items.CurrentTable.ConvertedName}}Repository'
       Extension: '.cs'
-  # Model:
-  #   Type: Table
-  #   Module: Models
-  #   TemplateEngine:
-  #     Path: Model.cshtml
-  #   Output:
-  #     Path: '{{Project.Module}}.{{Build.Module}}'
-  #     Name: '{{Items.CurrentTable.ConvertedName}}Model'
-  #     Extension: '.cs'
+  RepositoryTest:
+    Type: Table
+    Module: Test
+    TemplateEngine:
+      Path: RepositoryTest.cshtml
+    Output:
+      Path: '../test/{{Project.Module}}.{{Build.Module}}/Data'
+      Name: '{{Items.CurrentTable.ConvertedName}}RepositoryTest'
+      Extension: '.cs'
   # Api:
   #   Type: Table
   #   Module: Api
@@ -101,15 +110,6 @@ Build:
   #   Output:
   #     Path: '{{Project.Module}}.{{Build.Module}}/Controllers'
   #     Name: '{{Items.CurrentTable.ConvertedName}}Controller'
-  #     Extension: '.cs'
-  # RepositoryTest:
-  #   Type: Table
-  #   Module: Test
-  #   TemplateEngine:
-  #     Path: RepositoryTest.cshtml
-  #   Output:
-  #     Path: '../test/{{Project.Module}}.{{Build.Module}}/Data'
-  #     Name: '{{Items.CurrentTable.ConvertedName}}RepositoryTest'
   #     Extension: '.cs'
   # ApiTest:
   #   Type: Table
