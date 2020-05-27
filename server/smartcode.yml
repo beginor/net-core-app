@@ -53,6 +53,7 @@ TableFilter:
     - aspnet_users
     - app_client_errors
   # IncludeTables:
+  #  - app_client_errors
   IgnoreNoPKTable: true
   IgnoreView: true
 
