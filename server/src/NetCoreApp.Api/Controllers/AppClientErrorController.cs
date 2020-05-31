@@ -1,5 +1,4 @@
 using System;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,20 +16,20 @@ namespace Beginor.NetCoreApp.Api.Controllers {
     public class AppClientErrorController : Controller {
 
         private ILogger<AppClientErrorController> logger;
-        private IAppClientErrorRepository repo;
+        private IAppClientErrorRepository repository;
 
         public AppClientErrorController(
             ILogger<AppClientErrorController> logger,
-            IAppClientErrorRepository repo
+            IAppClientErrorRepository repository
         ) {
-            this.logger = logger;
-            this.repo = repo;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 logger = null;
-                repo = null;
+                repository = null;
             }
             base.Dispose(disposing);
         }
@@ -44,11 +43,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppClientErrorModel model
         ) {
             try {
-                await repo.SaveAsync(model);
+                await repository.SaveAsync(model);
                 return model;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not save {JsonSerializer.Serialize(model)} into client_errors");
+                logger.LogError(ex, $"Can not save {model.ToJson()} to app_client_errors.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -61,11 +60,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [Authorize("app_client_errors.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
-                await repo.DeleteAsync(id);
+                await repository.DeleteAsync(id);
                 return NoContent();
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not delete {id} from client_errors.");
+                logger.LogError(ex, $"Can not delete app_client_errors by id {id} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -74,16 +73,16 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">成功, 分页返回结果</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("")]
-        [Authorize("client_errors.read")]
+        [Authorize("app_client_errors.read")]
         public async Task<ActionResult<PaginatedResponseModel<AppClientErrorModel>>> GetAll(
             [FromQuery]AppClientErrorSearchModel model
         ) {
             try {
-                var result = await repo.SearchAsync(model);
+                var result = await repository.SearchAsync(model);
                 return result;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not search client_errors with {JsonSerializer.Serialize(model)} .");
+                logger.LogError(ex, $"Can not search app_client_errors with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -95,17 +94,17 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404"> 程序客户端错误记录 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("client_errors.read")]
+        [Authorize("app_client_errors.read")]
         public async Task<ActionResult<AppClientErrorModel>> GetById(long id) {
             try {
-                var result = await repo.GetByIdAsync(id);
+                var result = await repository.GetByIdAsync(id);
                 if (result == null) {
                     return NotFound();
                 }
                 return result;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not get client_errors by id {id}.");
+                logger.LogError(ex, $"Can not get app_client_errors by id {id}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -117,21 +116,21 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404"> 程序客户端错误记录 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
-        [Authorize("client_errors.update")]
+        [Authorize("app_client_errors.update")]
         public async Task<ActionResult<AppClientErrorModel>> Update(
             [FromRoute]long id,
             [FromBody]AppClientErrorModel model
         ) {
             try {
-                var modelInDb = await repo.GetByIdAsync(id);
+                var modelInDb = await repository.GetByIdAsync(id);
                 if (modelInDb == null) {
                     return NotFound();
                 }
-                await repo.UpdateAsync(id, model);
+                await repository.UpdateAsync(id, model);
                 return model;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not update client_errors by {id} with {JsonSerializer.Serialize(model)}.");
+                logger.LogError(ex, $"Can not update app_client_errors by id {id} with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
