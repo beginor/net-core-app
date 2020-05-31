@@ -19,12 +19,8 @@ namespace Beginor.NetCoreApp.Entry {
         );
 
         public Startup(IConfiguration config, IWebHostEnvironment env) {
-            this.config = config ?? throw new ArgumentNullException(
-                nameof(config)
-            );
-            this.env = env ?? throw new ArgumentNullException(
-                nameof(env)
-            );
+            this.config = config ?? throw new ArgumentNullException(nameof(config));
+            this.env = env ?? throw new ArgumentNullException(nameof(env));
         }
 
         // This method gets called by the runtime. Use this method to add

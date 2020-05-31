@@ -4,16 +4,17 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using NHibernate.Linq;
 using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using NHibernate.Linq;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
@@ -22,29 +23,29 @@ namespace Beginor.NetCoreApp.Api.Controllers {
     [ApiController]
     public class AccountController : Controller {
 
-        log4net.ILog logger = log4net.LogManager.GetLogger(
-            System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
-        );
-
+        private ILogger<AccountController> logger;
         private UserManager<AppUser> userMgr;
         private RoleManager<AppRole> roleMgr;
         private JwtOption jwt;
         private IAppNavItemRepository navRepo;
 
         public AccountController(
+            ILogger<AccountController> logger,
             UserManager<AppUser> userMgr,
             RoleManager<AppRole> roleMgr,
             JwtOption jwt,
             IAppNavItemRepository navRepo
         ) {
-            this.userMgr = userMgr;
-            this.roleMgr = roleMgr;
-            this.jwt = jwt;
-            this.navRepo = navRepo;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
+            this.roleMgr = roleMgr ?? throw new ArgumentNullException(nameof(roleMgr));
+            this.jwt = jwt ?? throw new ArgumentNullException(nameof(jwt));
+            this.navRepo = navRepo ?? throw new ArgumentNullException(nameof(navRepo));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
+                logger = null;
                 userMgr = null;
                 roleMgr = null;
                 jwt = null;
@@ -77,7 +78,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return info;
             }
             catch (Exception ex) {
-                logger.Error($"Can not get user account info.", ex);
+                logger.LogError(ex, $"Can not get user account info.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -125,7 +126,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return Ok(result);
             }
             catch (Exception ex) {
-                logger.Error($"Can not signin user.", ex);
+                logger.LogError(ex, $"Can not signin user {model.ToJson()}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -133,19 +134,25 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [HttpGet("menu")]
         [ResponseCache(NoStore = true, Duration = 0)]
         public async Task<MenuNodeModel> GetMenuAsync() {
-            IList<string> roles;
-            if (!User.Identity.IsAuthenticated) {
-                roles = roleMgr.Roles
-                    .Where(role => role.IsAnonymous == true)
-                    .Select(role => role.Name)
-                    .ToList();
+            try {
+                IList<string> roles;
+                if (!User.Identity.IsAuthenticated) {
+                    roles = roleMgr.Roles
+                        .Where(role => role.IsAnonymous == true)
+                        .Select(role => role.Name)
+                        .ToList();
+                }
+                else {
+                    var user = await userMgr.FindByNameAsync(User.Identity.Name);
+                    roles = await userMgr.GetRolesAsync(user);
+                }
+                var menuModel = await navRepo.GetMenuAsync(roles.ToArray());
+                return menuModel;
             }
-            else {
-                var user = await userMgr.FindByNameAsync(User.Identity.Name);
-                roles = await userMgr.GetRolesAsync(user);
+            catch (Exception ex) {
+                logger.LogError(ex, "Can not get menu!");
+                return new MenuNodeModel();
             }
-            var menuModel = await navRepo.GetMenuAsync(roles.ToArray());
-            return menuModel;
         }
 
         private AccountInfoModel CreateAccountInfoModel(ClaimsIdentity user) {

@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Repositories;
@@ -14,18 +15,20 @@ namespace Beginor.NetCoreApp.Api.Controllers {
     [ApiController]
     public class AppAttachmentController : Controller {
 
-        log4net.ILog logger = log4net.LogManager.GetLogger(
-            System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
-        );
-
+        private ILogger<AppAttachmentController> logger;
         private IAppAttachmentRepository repository;
 
-        public AppAttachmentController(IAppAttachmentRepository repository) {
-            this.repository = repository;
+        public AppAttachmentController(
+            ILogger<AppAttachmentController> logger,
+            IAppAttachmentRepository repository
+        ) {
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
+                logger = null;
                 repository = null;
             }
             base.Dispose(disposing);
@@ -44,7 +47,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return model;
             }
             catch (Exception ex) {
-                logger.Error("Can not create app_attachments.", ex);
+                logger.LogError(ex, $"Can not save {model.ToJson()} to app_attachments.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -61,7 +64,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return NoContent();
             }
             catch (Exception ex) {
-                logger.Error("Can not delete app_attachments.", ex);
+                logger.LogError(ex, $"Can not delete app_attachments by id {id}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -79,7 +82,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return result;
             }
             catch (Exception ex) {
-                logger.Error("Can not get all app_attachmentss.", ex);
+                logger.LogError(ex, $"Can not search app_attachments with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -101,7 +104,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return result;
             }
             catch (Exception ex) {
-                logger.Error($"Can not get app_attachments with {id}.", ex);
+                logger.LogError(ex, $"Can not get app_attachments by id {id}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -128,7 +131,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return model;
             }
             catch (Exception ex) {
-                logger.Error($"Can not update app_attachments with {id}.", ex);
+                logger.LogError(ex, $"Can not update app_attachments by {id} with {model.ToJson()}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }

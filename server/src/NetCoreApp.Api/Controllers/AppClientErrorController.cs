@@ -1,7 +1,9 @@
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Models;
@@ -14,18 +16,20 @@ namespace Beginor.NetCoreApp.Api.Controllers {
     [Route("api/client-errors")]
     public class AppClientErrorController : Controller {
 
-        log4net.ILog logger = log4net.LogManager.GetLogger(
-            System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
-        );
-
+        private ILogger<AppClientErrorController> logger;
         private IAppClientErrorRepository repo;
 
-        public AppClientErrorController(IAppClientErrorRepository repo) {
+        public AppClientErrorController(
+            ILogger<AppClientErrorController> logger,
+            IAppClientErrorRepository repo
+        ) {
+            this.logger = logger;
             this.repo = repo;
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
+                logger = null;
                 repo = null;
             }
             base.Dispose(disposing);
@@ -44,7 +48,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return model;
             }
             catch (Exception ex) {
-                logger.Error("Can not create client_errors.", ex);
+                logger.LogError(ex, $"Can not save {JsonSerializer.Serialize(model)} into client_errors");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -61,7 +65,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return NoContent();
             }
             catch (Exception ex) {
-                logger.Error("Can not delete client_errors.", ex);
+                logger.LogError(ex, $"Can not delete {id} from client_errors.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -79,7 +83,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return result;
             }
             catch (Exception ex) {
-                logger.Error("Can not get all client_errors .", ex);
+                logger.LogError(ex, $"Can not search client_errors with {JsonSerializer.Serialize(model)} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -101,7 +105,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return result;
             }
             catch (Exception ex) {
-                logger.Error($"Can not get client_errors with {id}.", ex);
+                logger.LogError(ex, $"Can not get client_errors by id {id}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -127,7 +131,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return model;
             }
             catch (Exception ex) {
-                logger.Error($"Can not update client_errors with {id}.", ex);
+                logger.LogError(ex, $"Can not update client_errors by {id} with {JsonSerializer.Serialize(model)}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }

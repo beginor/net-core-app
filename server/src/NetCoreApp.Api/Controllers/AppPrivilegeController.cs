@@ -2,12 +2,13 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
@@ -16,19 +17,21 @@ namespace Beginor.NetCoreApp.Api.Controllers {
     [ApiController]
     public class AppPrivilegeController : Controller {
 
-        log4net.ILog logger = log4net.LogManager.GetLogger(
-            System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
-        );
+        private ILogger<AppPrivilegeController> logger;
+        private IAppPrivilegeRepository repository;
 
-        private IAppPrivilegeRepository repo;
-
-        public AppPrivilegeController(IAppPrivilegeRepository repo) {
-            this.repo = repo;
+        public AppPrivilegeController(
+            ILogger<AppPrivilegeController> logger,
+            IAppPrivilegeRepository repository
+        ) {
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                repo = null;
+                logger = null;
+                repository = null;
             }
             base.Dispose(disposing);
         }
@@ -42,11 +45,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppPrivilegeModel model
         ) {
             try {
-                await repo.SaveAsync(model);
+                await repository.SaveAsync(model);
                 return model;
             }
             catch (Exception ex) {
-                logger.Error("Can not create app_privileges.", ex);
+                logger.LogError(ex, $"Can not save {model.ToJson()} to app_privileges.", ex);
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -59,11 +62,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [Authorize("app_privileges.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
-                await repo.DeleteAsync(id);
+                await repository.DeleteAsync(id);
                 return NoContent();
             }
             catch (Exception ex) {
-                logger.Error("Can not delete app_privileges.", ex);
+                logger.LogError(ex, $"Can not delete app_privileges by id {id}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -77,11 +80,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromQuery]AppPrivilegeSearchModel model
         ) {
             try {
-                var result = await repo.SearchAsync(model);
+                var result = await repository.SearchAsync(model);
                 return result;
             }
             catch (Exception ex) {
-                logger.Error("Can not get all app_privileges .", ex);
+                logger.LogError(ex, $"Can not search app_privileges with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -96,14 +99,14 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [Authorize("app_privileges.read")]
         public async Task<ActionResult<AppPrivilegeModel>> GetById(long id) {
             try {
-                var result = await repo.GetByIdAsync(id);
+                var result = await repository.GetByIdAsync(id);
                 if (result == null) {
                     return NotFound();
                 }
                 return result;
             }
             catch (Exception ex) {
-                logger.Error($"Can not get app_privileges with {id}.", ex);
+                logger.LogError(ex, $"Can not get app_privileges by id {id}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -121,16 +124,16 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppPrivilegeModel model
         ) {
             try {
-                var modelInDb = await repo.GetByIdAsync(id);
+                var modelInDb = await repository.GetByIdAsync(id);
                 if (modelInDb == null) {
                     return NotFound();
                 }
                 model.Id = id.ToString();
-                await repo.UpdateAsync(id, model);
+                await repository.UpdateAsync(id, model);
                 return model;
             }
             catch (Exception ex) {
-                logger.Error($"Can not update app_privileges with {id}.", ex);
+                logger.LogError(ex, $"Can not update app_privileges by {id} with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -148,11 +151,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Instance))
                     .SelectMany(m => m.GetCustomAttributes<AuthorizeAttribute>(false))
                     .Select(attr => attr.Policy);
-                await repo.SyncRequiredAsync(policies);
+                await repository.SyncRequiredAsync(policies);
                 return Ok();
             }
             catch (Exception ex) {
-                logger.Error($"Can not sync required app_privileges.", ex);
+                logger.LogError(ex, $"Can not sync required app_privileges.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -164,11 +167,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [Authorize("app_privileges.read")]
         public async Task<ActionResult<string[]>> GetModules() {
             try {
-                var modules = await repo.GetModulesAsync();
+                var modules = await repository.GetModulesAsync();
                 return modules.ToArray();
             }
             catch (Exception ex) {
-                logger.Error($"Can not get all modules.", ex);
+                logger.LogError(ex, $"Can not get all modules.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }

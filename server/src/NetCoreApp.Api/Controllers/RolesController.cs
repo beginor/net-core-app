@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using NHibernate.AspNetCore.Identity;
 using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using NHibernate.AspNetCore.Identity;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
@@ -22,29 +23,29 @@ namespace Beginor.NetCoreApp.Api.Controllers {
     [ApiController]
     public class RolesController : Controller {
 
-        log4net.ILog logger = log4net.LogManager.GetLogger(
-            System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
-        );
-
+        private ILogger<RolesController> logger;
         private RoleManager<AppRole> roleMgr;
         private UserManager<AppUser> userMgr;
         private IIdentityRepository identityRepo;
         private IMapper mapper;
 
         public RolesController(
+            ILogger<RolesController> logger,
             RoleManager<AppRole> roleMgr,
             UserManager<AppUser> userMgr,
             IIdentityRepository identityRepo,
             IMapper mapper
         ) {
-            this.roleMgr = roleMgr;
-            this.userMgr = userMgr;
-            this.identityRepo = identityRepo;
-            this.mapper = mapper;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.roleMgr = roleMgr ?? throw new ArgumentNullException(nameof(roleMgr));
+            this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
+            this.identityRepo = identityRepo ?? throw new ArgumentNullException(nameof(identityRepo));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
+                logger = null;
                 roleMgr = null;
                 userMgr = null;
                 identityRepo = null;
@@ -75,7 +76,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return BadRequest(result.GetErrorsString());
             }
             catch (Exception ex) {
-                logger.Error($"Can not create role", ex);
+                logger.LogError(ex, $"Can not create role with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -100,7 +101,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return BadRequest(result.GetErrorsString());
             }
             catch (Exception ex) {
-                logger.Error($"Can not delete role", ex);
+                logger.LogError(ex, $"Can not delete role by id {id}");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -124,7 +125,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return result;
             }
             catch (Exception ex) {
-                logger.Error("Can not get all roles!", ex);
+                logger.LogError(ex, $"Can not search roles with {model.ToJson()}");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -147,7 +148,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return model;
             }
             catch (Exception ex) {
-                logger.Error($"Can not get role by id {id}", ex);
+                logger.LogError(ex, $"Can not get role by id {id}");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -177,7 +178,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return BadRequest(result.GetErrorsString());
             }
             catch (Exception ex) {
-                logger.Error($"Can not update role", ex);
+                logger.LogError(ex, $"Can not update role by id {id} with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -201,7 +202,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return models.ToList();
             }
             catch (Exception ex) {
-                logger.Error($"Can not get users in role", ex);
+                logger.LogError(ex, $"Can not get users in role {id}");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -227,7 +228,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return privileges;
             }
             catch (Exception ex) {
-                logger.Error($"Can not get privileges in role", ex);
+                logger.LogError(ex, $"Can not get privileges in role {id} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -254,7 +255,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return Ok();
             }
             catch (Exception ex) {
-                logger.Error($"Can not add privilege to role", ex);
+                logger.LogError(ex, $"Can not add privilege {privilege} to role {id} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -283,7 +284,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return NoContent();
             }
             catch (Exception ex) {
-                logger.Error($"Can not remove privilege from role", ex);
+                logger.LogError(ex, $"Can not remove privilege {privilege} from role {id}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }

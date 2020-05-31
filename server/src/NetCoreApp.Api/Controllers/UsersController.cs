@@ -4,17 +4,18 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
-using Beginor.AppFx.Api;
-using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Data;
-using Beginor.NetCoreApp.Data.Entities;
-using Beginor.NetCoreApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Beginor.AppFx.Api;
+using Beginor.AppFx.Core;
 using NHibernate.AspNetCore.Identity;
 using NHibernate.Linq;
 using NHibernate.NetCore;
+using Beginor.NetCoreApp.Data;
+using Beginor.NetCoreApp.Data.Entities;
+using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
@@ -23,26 +24,26 @@ namespace Beginor.NetCoreApp.Api.Controllers {
     [ApiController]
     public class UsersController : Controller {
 
-        log4net.ILog logger = log4net.LogManager.GetLogger(
-            System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
-        );
-
+        private ILogger<UsersController> logger;
         private UserManager<AppUser> userMgr;
         private RoleManager<AppRole> roleMgr;
         private IMapper mapper;
 
         public UsersController(
+            ILogger<UsersController> logger,
             UserManager<AppUser> userMgr,
             RoleManager<AppRole> roleMgr,
             IMapper mapper
         ) {
-            this.userMgr = userMgr;
-            this.roleMgr = roleMgr;
-            this.mapper = mapper;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
+            this.roleMgr = roleMgr ?? throw new ArgumentNullException(nameof(roleMgr));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
+                logger = null;
                 userMgr = null;
                 roleMgr = null;
                 mapper = null;
@@ -85,7 +86,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return BadRequest(result.GetErrorsString());
             }
             catch (Exception ex) {
-                logger.Error($"Can not create user", ex);
+                logger.LogError(ex, $"Can not create user with {model.ToJson()}");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -110,7 +111,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return BadRequest(result.GetErrorsString());
             }
             catch (Exception ex) {
-                logger.Error($"Can not delete user", ex);
+                logger.LogError(ex, $"Can not delete user by id {id} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -165,7 +166,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return result;
             }
             catch (Exception ex) {
-                logger.Error($"Can not get all user", ex);
+                logger.LogError(ex, $"Can not search user with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -187,7 +188,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return model;
             }
             catch (Exception ex) {
-                logger.Error($"Can not get user with id {id}", ex);
+                logger.LogError(ex, $"Can not get user with id {id}");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -218,7 +219,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return BadRequest(result.GetErrorsString());
             }
             catch (Exception ex) {
-                logger.Error($"Can not update user with id {id}", ex);
+                logger.LogError(ex, $"Can not update user by id {id} with {model.ToJson()}");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -269,8 +270,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return BadRequest(result.GetErrorsString());
             }
             catch (Exception ex) {
-                logger.Error($"Can not reset password", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                logger.LogError(ex, $"Can not reset password for user {id} with {model.ToJson()}");
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
@@ -305,8 +306,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return Ok();
             }
             catch (Exception ex) {
-                logger.Error($"Can not Lock user s", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                logger.LogError(ex, $"Can not Lock user by id {id} to {lockEndTime}");
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
@@ -334,8 +335,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return Ok();
             }
             catch (Exception ex) {
-                logger.Error($"Can not unlock", ex);
-                return StatusCode(500, ex.GetOriginalMessage());
+                logger.LogError(ex, $"Can not unlock user by id {id}");
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
@@ -364,7 +365,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return model.ToList();
             }
             catch (Exception ex) {
-                logger.Error($"Can not User Role", ex);
+                logger.LogError(ex, $"Can not get roles for user {id} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -401,7 +402,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return Ok();
             }
             catch (Exception ex) {
-                logger.Error($"Failed to add user permissions", ex);
+                logger.LogError(ex, $"Can not add user {id} to role {roleNames}", ex);
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -437,7 +438,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return NoContent();
             }
             catch (Exception ex) {
-                logger.Error($"Failed to delete user permissions", ex);
+                logger.LogError(ex, $"Can not remove user {id} from role {roleNames} .", ex);
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
