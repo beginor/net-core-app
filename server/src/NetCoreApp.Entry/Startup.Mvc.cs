@@ -26,8 +26,7 @@ namespace Beginor.NetCoreApp.Entry {
                     options.SuppressInferBindingSourcesForParameters = false;
                     options.SuppressModelStateInvalidFilter = false;
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                .AddNewtonsoftJson();
+                .SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
         private void ConfigureMvc(
