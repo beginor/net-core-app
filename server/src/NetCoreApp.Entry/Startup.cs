@@ -28,7 +28,7 @@ namespace Beginor.NetCoreApp.Entry {
         public void ConfigureServices(
             IServiceCollection services
         ) {
-            logger.Debug("Start configure services ...");
+            logger.Info("Start configure services ...");
             // app related.
             ConfigureHibernateServices(services, env);
             ConfigureAutoMapperServices(services, env);
@@ -46,7 +46,7 @@ namespace Beginor.NetCoreApp.Entry {
             ConfigureRoutingServices(services, env);
             ConfigureAuthenticationServices(services, env);
             ConfigureMvcServices(services, env);
-            logger.Debug("Configure services completed!");
+            logger.Info("Configure services completed!");
         }
 
         // This method gets called by the runtime. Use this method to configure
@@ -54,7 +54,7 @@ namespace Beginor.NetCoreApp.Entry {
         public void Configure(
             IApplicationBuilder app
         ) {
-            logger.Debug("Start configure app.");
+            logger.Info("Start configure app.");
             // app related.
             ConfigureHibernate(app, env);
             ConfigureAutoMapper(app, env);
@@ -72,7 +72,7 @@ namespace Beginor.NetCoreApp.Entry {
             ConfigureRouting(app, env);
             ConfigureAuthentication(app, env);
             ConfigureMvc(app, env);
-            logger.Debug("Configure app completed.");
+            logger.Info("Configure app completed.");
         }
 
         private string GetAppPathbase() {
