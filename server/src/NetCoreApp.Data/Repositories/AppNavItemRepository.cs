@@ -121,7 +121,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
 
         public async Task<MenuNodeModel> GetMenuAsync(string[] roles) {
             if (roles == null) {
-                throw new ArgumentNullException("roles can not be null.");
+                throw new ArgumentNullException(nameof(roles), "roles can not be null.");
             }
             var conn = Session.Connection;
             var sql = @"
