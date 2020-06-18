@@ -53,7 +53,7 @@
       "problemMatcher": ["$msCompile"],
       "group": { "kind": "build", "isDefault": true },
       "options": {
-        "cwd": "${workspaceRoot}/server/src/NetCoreApp.Entry"
+        "cwd": "${workspaceRoot}/server/src/GisHub.Entry"
       }
     },
     {
@@ -63,7 +63,7 @@
       "args": ["run"],
       "problemMatcher": ["$msCompile"],
       "options": {
-        "cwd": "${workspaceRoot}/server/src/NetCoreApp.Entry"
+        "cwd": "${workspaceRoot}/server/src/GisHub.Entry"
       }
     },
     {
@@ -73,7 +73,7 @@
       "args": ["watch", "run"],
       "problemMatcher": ["$msCompile"],
       "options": {
-        "cwd": "${workspaceRoot}/server/src/NetCoreApp.Entry"
+        "cwd": "${workspaceRoot}/server/src/GisHub.Entry"
       }
     },
     {
@@ -83,7 +83,7 @@
       "args": ["test"],
       "problemMatcher": ["$msCompile"],
       "options": {
-        "cwd": "${workspaceRoot}/server/test/NetCoreApp.Test"
+        "cwd": "${workspaceRoot}/server/test/GisHub.Test"
       }
     }
   ]

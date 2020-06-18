@@ -1,7 +1,7 @@
 #!/bin/bash -e
 rm -rf dist
 # Build server api image
-dotnet publish -c Release -o ./dist ../server/src/NetCoreApp.Entry/NetCoreApp.Entry.csproj
+dotnet publish -c Release -o ./dist ../server/src/GisHub.Entry/GisHub.Entry.csproj
 # modify config file to run in stagging server;
 sed -i.bak "s/ref=\"ConsoleAppender\"/ref=\"RollingFileAppender\"/g" dist/config/log.config
 sed -i.bak "s/DEBUG/ERROR/g" dist/config/log.config
@@ -21,5 +21,5 @@ cd ../docker
 cp -r ../client/dist dist/wwwroot
 rm -rf dist/wwwroot/app-shared
 # Build docker image
-docker build --no-cache --rm -t beginor/net-core-app .
+docker build --no-cache --rm -t beginor/gishub .
 rm -rf dist

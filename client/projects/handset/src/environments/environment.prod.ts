@@ -1,4 +1,4 @@
 export const environment = {
-    apiRoot: '/net-core-app/api',
+    apiRoot: '/gishub/api',
     production: true
 };

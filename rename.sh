@@ -1,11 +1,11 @@
 #!/bin/bash -e
 
 # 公司名称
-COMPANY_NAME=MyCompany
+COMPANY_NAME=Beginor
 # 服务端项目名称
-PROJ_NAME=TplApp
+PROJ_NAME=GisHub
 # 部署虚拟目录
-CONTEXT_ROOT=tpl-app
+CONTEXT_ROOT=gishub
 # 新的服务端项目前缀（公司名称+项目名称, 特殊符号需要用 \ 进行转义）
 SERVER_PREFIX="${COMPANY_NAME}.${PROJ_NAME}"
 # 修改 Docker 编译/部署文件

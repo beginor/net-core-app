@@ -1,6 +1,6 @@
 import { HomePage } from './home.po';
 
-describe('net-core-app Home', () => {
+describe('gishub Home', () => {
 
     let page: HomePage;
 

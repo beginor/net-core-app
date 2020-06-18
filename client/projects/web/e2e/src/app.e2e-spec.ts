@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('net-core-app App', () => {
+describe('gishub App', () => {
 
     let page: AppPage;
 

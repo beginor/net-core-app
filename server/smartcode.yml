@@ -1,5 +1,5 @@
 Author: Beginor
-Module: NetCoreApp
+Module: GisHub
 DataSource:
   Name: DbTable
   Parameters:

@@ -1,12 +1,12 @@
 version: "3"
 services:
-  net-core-app:
-    image: beginor/net-core-app
-    hostname: net-core-app
+  gishub:
+    image: beginor/gishub
+    hostname: gishub
     ports:
       - 5000:80
     volumes:
-      - ./log:/net-core-app/log
+      - ./log:/gishub/log
     environment:
       ASPNETCORE_ENVIRONMENT: Development
     restart: unless-stopped

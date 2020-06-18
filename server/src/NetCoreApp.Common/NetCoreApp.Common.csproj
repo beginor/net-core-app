@@ -1,9 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyName>Beginor.NetCoreApp.Common</AssemblyName>
-    <RootNamespace>Beginor.NetCoreApp.Common</RootNamespace>
-  </PropertyGroup>
-
-</Project>

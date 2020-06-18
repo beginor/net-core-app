@@ -4,7 +4,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    apiRoot: '/net-core-app/api',
+    apiRoot: '/gishub/api',
     production: false
 };
 
