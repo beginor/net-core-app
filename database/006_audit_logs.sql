@@ -14,6 +14,7 @@ create table public.app_audit_logs
     controller_name character varying(64) collate pg_catalog."default",
     action_name character varying(64) collate pg_catalog."default",
     description character varying(256) collate pg_catalog."default",
+    ip character varying(64) collate pg_catalog."default",
     constraint pk_app_audit_logs primary key (start_at, user_name, request_path, request_method)
 )
 with (
@@ -55,7 +56,8 @@ comment on column public.app_audit_logs.action_name
 
 comment on column public.app_audit_logs.description
     is '描述';
-
+comment on column public.app_audit_logs.ip
+    is '客户端 IP 地址';
 
 -- TimescaleDB hyper table def;
 

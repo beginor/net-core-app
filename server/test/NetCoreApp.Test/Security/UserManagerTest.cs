@@ -21,33 +21,6 @@ namespace Beginor.NetCoreApp.Test.Security {
             Assert.IsNotNull(users);
         }
 
-        [Test]
-        public async Task _03_CanCreateAdminAsync() {
-            var exists = await Target.FindByNameAsync("admin");
-            if (exists == null) {
-                // create admin user;
-                var user = new AppUser {
-                    UserName = "admin",
-                    Email = "admin@local.com",
-                    EmailConfirmed = true,
-                    PhoneNumber = "02088888888",
-                    PhoneNumberConfirmed = true,
-                    LockoutEnabled = false
-                };
-                await Target.CreateAsync(user);
-                Assert.IsNotNull(user.Id);
-                // add password;
-                var result = await Target.AddPasswordAsync(user, "1qaz@WSX");
-                Assert.IsTrue(result.Succeeded);
-                // add to administrators;
-                var roleName = "administrators";
-                if (!await Target.IsInRoleAsync(user, roleName)) {
-                    var result2 = await Target.AddToRoleAsync(user, roleName);
-                    Assert.IsTrue(result2.Succeeded);
-                }
-            }
-        }
-
     }
 
 }

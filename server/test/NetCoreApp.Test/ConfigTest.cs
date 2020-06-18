@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
-using Beginor.NetCoreApp.Api;
-using Beginor.NetCoreApp.Api.Middlewares;
-using Beginor.NetCoreApp.Common;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
+using Beginor.NetCoreApp.Api.Middlewares;
+using Beginor.NetCoreApp.Common;
 
 namespace Beginor.NetCoreApp.Test {
 

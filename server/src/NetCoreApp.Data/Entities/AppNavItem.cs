@@ -16,7 +16,7 @@ namespace Beginor.NetCoreApp.Data.Entities {
             set { base.Id = value; }
         }
         /// <summary>父节点ID</summary>
-        [Property(Name = "ParentId", Column = "parent_id", Type = "long", NotNull = true)]
+        [Property(Name = "ParentId", Column = "parent_id", Type = "long", NotNull = false)]
         public virtual long? ParentId { get; set; }
         /// <summary>标题</summary>
         [Property(Name = "Title", Column = "title", Type = "string", NotNull = true, Length = 16)]
