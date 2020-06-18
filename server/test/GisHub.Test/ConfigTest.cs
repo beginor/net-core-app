@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
-using Beginor.GisHub.Api;
-using Beginor.GisHub.Api.Middlewares;
-using Beginor.GisHub.Common;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
+using Beginor.GisHub.Api.Middlewares;
+using Beginor.GisHub.Common;
 
 namespace Beginor.GisHub.Test {
 

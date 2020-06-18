@@ -128,7 +128,7 @@ namespace Beginor.GisHub.Data.Repositories {
                 with recursive cte as (
                     select p.id, p.parent_id, p.title, p.tooltip, p.icon, p.url, p.sequence, p.roles, p.target
                     from public.app_nav_items p
-                    where p.id = 1
+                    where p.parent_id is null and p.is_deleted = false
                     union all
                     select c.id, c.parent_id, c.title, c.tooltip, c.icon, c.url, c.sequence, c.roles, c.target
                     from public.app_nav_items c
@@ -138,7 +138,7 @@ namespace Beginor.GisHub.Data.Repositories {
                 select * from cte;
             ";
             var navItems = await conn.QueryAsync<AppNavItem>(sql, new { roles });
-            var rootNavItem = navItems.First(n => n.Id == 1);
+            var rootNavItem = navItems.OrderBy(n => n.Id).First(n => n.ParentId == null);
             var model = new MenuNodeModel {
                 Id = rootNavItem.Id.ToString(),
                 Title = rootNavItem.Title,

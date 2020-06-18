@@ -1,12 +1,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Beginor.GisHub.Data.Entities;
+using NUnit.Framework;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Models;
-using NHibernate;
-using NHibernate.NetCore;
-using NUnit.Framework;
 
 namespace Beginor.GisHub.Test.Data {
 
