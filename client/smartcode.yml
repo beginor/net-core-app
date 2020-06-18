@@ -5,7 +5,7 @@ DataSource:
   Parameters:
     DbName: test_db
     DbProvider: PostgreSql
-    ConnectionString: server=127.0.0.1;port=5432;database=net_core_app;user id=postgres;password=1a2b3c4D;
+    ConnectionString: server=127.0.0.1;port=5432;database=gishub;user id=postgres;password=1a2b3c4D;
     DbSchema: public
 Language: TypeScript
 TemplateEngine:
