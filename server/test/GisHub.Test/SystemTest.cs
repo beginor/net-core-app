@@ -3,14 +3,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using Beginor.NetCoreApp.Common;
-using Beginor.NetCoreApp.Api.Controllers;
-using Beginor.NetCoreApp.Data.Entities;
-using Beginor.NetCoreApp.Data.Repositories;
-using Beginor.NetCoreApp.Models;
+using Beginor.GisHub.Common;
+using Beginor.GisHub.Api.Controllers;
+using Beginor.GisHub.Data.Entities;
+using Beginor.GisHub.Data.Repositories;
+using Beginor.GisHub.Models;
 
-
-namespace Beginor.NetCoreApp.Test {
+namespace Beginor.GisHub.Test {
 
     [TestFixture]
     public class SystemTest : BaseTest {
