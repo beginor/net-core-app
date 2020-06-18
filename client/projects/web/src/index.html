@@ -27,7 +27,7 @@
       <p>检测到不支持的浏览器或者浏览器模式， 请按照下面的步骤操作重试：</p>
       <ul>
         <li><span class="text-success">推荐</span>使用最新版谷歌 Chrome 浏览器访问， <a class="alert-link" target="_blank" href="https://google.cn/chrome/">下载地址</a>；</li>
-        <li><span class="text-success">推荐</span>使用最新版微软 EDGE 浏览器访问， <a class="alert-link" target="_blank" href="https://www.microsoftedgeinsider.com/zh-cn/">下载地址</a>；</li>
+        <li><span class="text-success">推荐</span>使用最新版微软 EDGE 浏览器访问， <a class="alert-link" target="_blank" href="https://www.microsoft.com/zh-cn/edge/">下载地址</a>；</li>
         <li>如果您使用搜狗、 QQ、 360等其它浏览器， 请手工切换至 <a class="alert-link" target="_blank" href="https://www.baidu.com/s?wd=如何切换极速模式">极速模式</a>；</li>
       </ul>
     </div>
@@ -44,15 +44,8 @@
   }
   function isSupportedBrowser() {
     var ua = navigator.userAgent;
-    // Internet Explorer ;
-    if (ua.indexOf(' Trident/') > -1) {
-      return false;
-    }
-    // Old Edge;
-    if (ua.indexOf(' Edge/') > -1) {
-      return false;
-    }
-    return true;
+    // 必须有 userAgent ， 并且 （必须支持 WebKit ， 并且不能是旧版的 Microsoft Edge）
+    return !!ua && (ua.indexOf('WebKit/') > -1 && ua.indexOf(' Edge/') < 0);
   }
   </script>
 

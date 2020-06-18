@@ -35,6 +35,7 @@ sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/handset/src/envi
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/handset/src/environments/environment.prod.ts
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./client/smartcode.yml
 sed -i.bak "s/Beginor/${COMPANY_NAME}/g" ./client/smartcode.yml
+sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./start.sh
 # 删除备份文件
 find . -name '*.bak' -delete
 # 提交一下客户端文件
@@ -48,6 +49,7 @@ grep Beginor.NetCoreApp -rl server --include *.hbm.xml | xargs sed -i.bak "s/Beg
 grep Beginor.NetCoreApp -rl server --include *.config | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp -rl server --include *.csproj | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp -rl server --include *.config | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./server/src/NetCoreApp.Entry/Startup.Swagger.cs
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./server/test/NetCoreApp.Test/NetCoreApp.Test.csproj
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./.gitlab-ci.yml
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./.vscode/launch.json
