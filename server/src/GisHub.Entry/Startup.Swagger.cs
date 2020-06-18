@@ -17,7 +17,7 @@ namespace Beginor.GisHub.Entry {
             logger.Debug("Start add swagger related services...");
             services.AddSwaggerGen(opt => {
                 opt.SwaggerDoc("v1", new OpenApiInfo {
-                    Title = "NetCoreApp API Help",
+                    Title = "GisHub API Help",
                     Version = "1.0.0"
                 });
                 var dir = new DirectoryInfo(
@@ -45,9 +45,9 @@ namespace Beginor.GisHub.Entry {
                 // options.RoutePrefix = pathbase;
                 options.SwaggerEndpoint(
                     GetAppPathbase() + "/swagger/v1/swagger.json",
-                    "NetCoreApp API v1.0.0"
+                    "GisHub API v1.0.0"
                 );
-                options.DocumentTitle = "NetCoreApp API v1.0.0";
+                options.DocumentTitle = "GisHub API v1.0.0";
             });
         }
 
