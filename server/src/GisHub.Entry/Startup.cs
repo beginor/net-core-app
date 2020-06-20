@@ -39,6 +39,7 @@ namespace Beginor.GisHub.Entry {
             // web related.
             ConfigurePathBaseServices(services, env);
             ConfigureCustomHeaderServices(services, env);
+            ConfigureSlpkServices(services, env);
             ConfigureStaticFilesServices(services, env);
             ConfigureSwaggerServices(services, env);
             // routing and mvc
@@ -65,6 +66,7 @@ namespace Beginor.GisHub.Entry {
             // web related.
             ConfigurePathBase(app, env);
             ConfigureCustomHeader(app, env);
+            ConfigureSlpk(app, env);
             ConfigureStaticFiles(app, env);
             ConfigureSwagger(app, env);
             // routing and mvc

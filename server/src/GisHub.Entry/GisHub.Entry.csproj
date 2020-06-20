@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GisHub.Api\GisHub.Api.csproj" />
+    <ProjectReference Include="..\GisHub.Slpk\GisHub.Slpk.csproj" />
   </ItemGroup>
 
 </Project>
