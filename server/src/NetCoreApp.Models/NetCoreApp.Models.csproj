@@ -5,6 +5,7 @@
     <AssemblyName>Beginor.NetCoreApp.Models</AssemblyName>
     <RootNamespace>Beginor.NetCoreApp.Models</RootNamespace>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Beginor.NetCoreApp.Data</AssemblyName>
     <RootNamespace>Beginor.NetCoreApp.Data</RootNamespace>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

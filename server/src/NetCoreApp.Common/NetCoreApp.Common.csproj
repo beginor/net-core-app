@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Beginor.NetCoreApp.Common</AssemblyName>
     <RootNamespace>Beginor.NetCoreApp.Common</RootNamespace>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
 </Project>
