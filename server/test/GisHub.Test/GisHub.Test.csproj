@@ -5,6 +5,7 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>Beginor.GisHub.Test</AssemblyName>
     <RootNamespace>Beginor.GisHub.Test</RootNamespace>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -6,6 +6,7 @@
     <AssemblyName>GisHub</AssemblyName>
     <RootNamespace>Beginor.GisHub.Entry</RootNamespace>
     <NoWarn>$(NoWarn);1591</NoWarn>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

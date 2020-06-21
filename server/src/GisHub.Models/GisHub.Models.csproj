@@ -5,6 +5,7 @@
     <AssemblyName>Beginor.GisHub.Models</AssemblyName>
     <RootNamespace>Beginor.GisHub.Models</RootNamespace>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
