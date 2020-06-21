@@ -34,6 +34,7 @@
     <ProjectReference Include="..\GisHub.Common\GisHub.Common.csproj" />
     <ProjectReference Include="..\GisHub.Data\GisHub.Data.csproj" />
     <ProjectReference Include="..\GisHub.Models\GisHub.Models.csproj" />
+    <ProjectReference Include="..\GisHub.TileMap\GisHub.TileMap.csproj" />
   </ItemGroup>
 
 </Project>
