@@ -85,6 +85,16 @@
       "options": {
         "cwd": "${workspaceRoot}/server/test/GisHub.Test"
       }
+    },
+    {
+      "label": "dotnet:build:SlpkExtractor",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["build"],
+      "problemMatcher": ["$msCompile"],
+      "options": {
+        "cwd": "${workspaceFolder}/server/test/GisHub.SlpkExtractor"
+      }
     }
   ]
 }
