@@ -5,12 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Beginor.GisHub.TileMap;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Microsoft.Net.Http.Headers;
 
-namespace Beginor.GisHub.Api.Controllers {
+namespace Beginor.GisHub.TileMap.Api {
 
     /// <summary>切片地图 API</summary>
     [ApiController]
