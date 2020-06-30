@@ -1,19 +1,21 @@
 using System;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using Microsoft.Net.Http.Headers;
+using Beginor.GisHub.TileMap.Data;
+using Beginor.GisHub.TileMap.Models;
 
 namespace Beginor.GisHub.TileMap.Api {
 
-    /// <summary>切片地图 API</summary>
+    /// <summary>切片地图 服务接口</summary>
     [ApiController]
-    [Route("rest/services/tilemap")]
+    [Route("api/tile-maps")]
     public class TileMapController : Controller {
 
         private ILogger<TileMapController> logger;
@@ -28,30 +30,120 @@ namespace Beginor.GisHub.TileMap.Api {
         }
 
         protected override void Dispose(bool disposing) {
-            logger = null;
-            repository = null;
+            if (disposing) {
+                logger = null;
+                repository = null;
+            }
+            base.Dispose(disposing);
         }
 
-        /// <summary>获取全部切片地图名称</summary>
-        [HttpGet("")]
-        [Authorize("tile_maps.read_tile_list")]
-        public IActionResult GetAll() {
+        /// <summary> 创建 切片地图 </summary>
+        /// <response code="200">创建 切片地图 成功</response>
+        /// <response code="500">服务器内部错误</response>
+        [HttpPost("")]
+        [Authorize("tile_maps.create")]
+        public async Task<ActionResult<TileMapModel>> Create(
+            [FromBody]TileMapModel model
+        ) {
             try {
-                var tileNames = repository.GetAllTileMapNames();
-                return Ok(tileNames);
+                await repository.SaveAsync(model);
+                return model;
             }
             catch (Exception ex) {
-                logger.LogError(ex, "Can not get all tile map names!");
+                logger.LogError(ex, $"Can not save {model.ToJson()} to tile_maps.");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>删除 切片地图 </summary>
+        /// <response code="204">删除 切片地图 成功</response>
+        /// <response code="500">服务器内部错误</response>
+        [HttpDelete("{id:long}")]
+        [ProducesResponseType(204)]
+        [Authorize("tile_maps.delete")]
+        public async Task<ActionResult> Delete(long id) {
+            try {
+                await repository.DeleteAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not delete tile_maps by id {id} .");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>搜索 切片地图 ， 分页返回结果</summary>
+        /// <response code="200">成功, 分页返回结果</response>
+        /// <response code="500">服务器内部错误</response>
+        [HttpGet("")]
+        [Authorize("tile_maps.read")]
+        public async Task<ActionResult<PaginatedResponseModel<TileMapModel>>> GetAll(
+            [FromQuery]TileMapSearchModel model
+        ) {
+            try {
+                var result = await repository.SearchAsync(model);
+                return result;
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not search tile_maps with {model.ToJson()} .");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>
+        /// 获取指定的 切片地图
+        /// </summary>
+        /// <response code="200">返回 切片地图 信息</response>
+        /// <response code="404"> 切片地图 不存在</response>
+        /// <response code="500">服务器内部错误</response>
+        [HttpGet("{id:long}")]
+        [Authorize("tile_maps.read")]
+        public async Task<ActionResult<TileMapModel>> GetById(long id) {
+            try {
+                var result = await repository.GetByIdAsync(id);
+                if (result == null) {
+                    return NotFound();
+                }
+                return result;
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not get tile_maps by id {id}.");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>
+        /// 更新 切片地图
+        /// </summary>
+        /// <response code="200">更新成功，返回 切片地图 信息</response>
+        /// <response code="404"> 切片地图 不存在</response>
+        /// <response code="500">服务器内部错误</response>
+        [HttpPut("{id:long}")]
+        [Authorize("tile_maps.update")]
+        public async Task<ActionResult<TileMapModel>> Update(
+            [FromRoute]long id,
+            [FromBody]TileMapModel model
+        ) {
+            try {
+                var modelInDb = await repository.GetByIdAsync(id);
+                if (modelInDb == null) {
+                    return NotFound();
+                }
+                await repository.UpdateAsync(id, model);
+                return model;
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not update tile_maps by id {id} with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
         /// <summary>读取切片服务信息</summary>
-        [HttpGet("{tileName}/MapServer")]
-        [Authorize("tile_maps.read_tile_info")]
-        public IActionResult GetTileMapInfo(string tileName) {
+        [HttpGet("rest/services/tilemap/{tileName}/MapServer")]
+        [Authorize("tile_maps.read_tile_content")]
+        public async Task<ActionResult> GetTileMapInfo(string tileName) {
             try {
-                var tileMapInfo  = repository.GetTileMapInfo(tileName);
+                var tileMapInfo  = await repository.GetTileMapInfoAsync(tileName);
                 var text = tileMapInfo.ToString();
                 var hasCallback = Request.Query.TryGetValue("callback", out var callback);
                 if (hasCallback) {
@@ -65,11 +157,11 @@ namespace Beginor.GisHub.TileMap.Api {
             }
         }
 
-        [HttpGet("{tileName}/MapServer/tile/{level:int}/{row:int}/{col:int}")]
-        [Authorize("tile_maps.read_tile")]
+        [HttpGet("rest/services/tilemap/{tileName}/MapServer/tile/{level:int}/{row:int}/{col:int}")]
+        [Authorize("tile_maps.read_tile_content")]
         public async Task<IActionResult> GetTile(string tileName, int level, int row, int col) {
             try {
-                var modifiedTime = repository.GetTileModifiedTime(tileName, level, row, col);
+                var modifiedTime = await repository.GetTileModifiedTimeAsync(tileName, level, row, col);
                 if (!modifiedTime.HasValue) {
                     return NotFound();
                 }

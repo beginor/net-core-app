@@ -5,56 +5,69 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
 using Beginor.AppFx.Core;
+using Beginor.AppFx.Repository.Hibernate;
+using NHibernate;
+using NHibernate.Linq;
+using Beginor.GisHub.TileMap.Models;
 
-namespace Beginor.GisHub.TileMap {
+namespace Beginor.GisHub.TileMap.Data {
 
-    public class TileMapRepository: Disposable, ITileMapRepository {
+    /// <summary>切片地图仓储实现</summary>
+    public partial class TileMapRepository : HibernateRepository<TileMapEntity, TileMapModel, long>, ITileMapRepository {
 
         private ILogger<TileMapRepository> logger;
-        private TileMapOptions options;
 
-        public TileMapRepository(ILogger<TileMapRepository> logger, TileMapOptions options) {
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.options = options ?? throw new ArgumentNullException(nameof(options));
+        public TileMapRepository(ISession session, IMapper mapper) : base(session, mapper) { }
+
+        /// <summary>搜索 切片地图 ，返回分页结果。</summary>
+        public async Task<PaginatedResponseModel<TileMapModel>> SearchAsync(
+            TileMapSearchModel model
+        ) {
+            var query = Session.Query<TileMapEntity>();
+            // todo: 添加自定义查询；
+            var total = await query.LongCountAsync();
+            var data = await query.OrderByDescending(e => e.Id)
+                .Skip(model.Skip).Take(model.Take)
+                .ToListAsync();
+            return new PaginatedResponseModel<TileMapModel> {
+                Total = total,
+                Data = Mapper.Map<IList<TileMapModel>>(data),
+                Skip = model.Skip,
+                Take = model.Take
+            };
         }
 
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                logger = null;
-                options = null;
-            }
-        }
-
-        public IList<string> GetAllTileMapNames() {
-            var folderInfo = new DirectoryInfo(options.CacheFolder);
-            var subDirs = folderInfo.EnumerateDirectories()
-                .Where(dir => !dir.Name.StartsWith(".", StringComparison.Ordinal))
-                .Select(dir => dir.Name)
-                .ToList();
-            return subDirs;
-        }
-
-        public async Task<TileContent> GetTileContentAsync(string tileName, int level, int row, int col) {
-            var tilePath = GetTilePath(tileName);
+        public async Task<TileContentModel> GetTileContentAsync(string tileName, int level, int row, int col) {
+            var tilePath = await GetTilePathAsync(tileName);
             if (tilePath.IsNullOrEmpty()) {
-                return TileContent.Empty;
+                return TileContentModel.Empty;
             }
             var content = await ReadTileContentAsync(tilePath, level, row, col);
             return content;
         }
 
-        public JsonElement GetTileMapInfo(string tileName) {
+        private async Task<TileMapEntity> GetTileMapByNameAsync(string name) {
+            var entity = await Session.Query<TileMapEntity>().FirstOrDefaultAsync(e => e.Name == name);
+            if (entity == null) {
+                throw new TileNotFoundException($"Tilemap {name} doesn't exists in database.");
+            }
+            return entity;
+        }
+
+        public async Task<JsonElement> GetTileMapInfoAsync(string tileName) {
             Argument.NotNullOrEmpty(tileName, nameof(tileName));
-            var text = File.ReadAllText(options.MapInfoTemplateFile)
+            var entity = await GetTileMapByNameAsync(tileName);
+            var text = File.ReadAllText(entity.MapTileInfoPath)
                 .Replace("#name#", tileName)
                 .Replace("#description#", $"{tileName} Tile Server")
                 .Replace("#copyright#", $"{tileName} Tile Server by GisHub");
             return JsonDocument.Parse(text).RootElement;
         }
 
-        public DateTimeOffset? GetTileModifiedTime(string tileName, int level, int row, int col) {
-            var tilePath = GetTilePath(tileName);
+        public async Task<DateTimeOffset?> GetTileModifiedTimeAsync(string tileName, int level, int row, int col) {
+            var tilePath = await GetTilePathAsync(tileName);
             if (tilePath.IsNullOrEmpty()) {
                 return null;
             }
@@ -68,19 +81,20 @@ namespace Beginor.GisHub.TileMap {
             return new DateTimeOffset(lastWriteTime);
         }
 
-        private string GetTilePath(string tileName) {
-            var tilePath = Path.Combine(options.CacheFolder, tileName, "Layers", "_alllayers");
+        private async Task<string> GetTilePathAsync(string tileName) {
+            var entity = await GetTileMapByNameAsync(tileName);
+            var tilePath = Path.Combine(entity.CacheDirectory, tileName, "Layers", "_alllayers");
             if (Directory.Exists(tilePath)) {
                 return tilePath;
             }
-            tilePath = Path.Combine(options.CacheFolder, "BaseMap_" + tileName, "Layers", "_alllayers");
+            tilePath = Path.Combine(entity.CacheDirectory, "BaseMap_" + tileName, "Layers", "_alllayers");
             if (Directory.Exists(tilePath)) {
                 return tilePath;
             }
             return string.Empty;
         }
 
-        private static async Task<TileContent> ReadTileContentAsync(string tilePath, int level, int row, int col) {
+        private static async Task<TileContentModel> ReadTileContentAsync(string tilePath, int level, int row, int col) {
             var bundleContent = await ReadTileContentFromBundleAsync(tilePath, level, row, col);
             if (bundleContent.Content.Length > 0) {
                 return bundleContent;
@@ -89,10 +103,10 @@ namespace Beginor.GisHub.TileMap {
             if (fileContent.Content.Length > 0) {
                 return bundleContent;
             }
-            return TileContent.Empty;
+            return TileContentModel.Empty;
         }
 
-        private static async Task<TileContent> ReadTileContentFromFileAsync(string tilePath, int level, int row, int col) {
+        private static async Task<TileContentModel> ReadTileContentFromFileAsync(string tilePath, int level, int row, int col) {
             // var tileFileName = string.Format("{0}\\L{1:D2}\\R{2:X8}\\C{3:X8}", tilePath, lev, r, c);
             var filePath = Path.Combine(tilePath, level.ToString("D2"), row.ToString("X8"), col.ToString("X8"));
             if (File.Exists(filePath + ".png")) {
@@ -102,21 +116,21 @@ namespace Beginor.GisHub.TileMap {
                 filePath = filePath + ".jpg";
             }
             else {
-                return TileContent.Empty;
+                return TileContentModel.Empty;
             }
             using var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             var length = (int)fs.Length;
             var buffer = new byte[length];
             await fs.ReadAsync(buffer, 0, length);
             fs.Close();
-            return new TileContent {
+            return new TileContentModel {
                 Content = buffer,
                 ContentType = filePath.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ? "image/png" : "image/jpeg"
             };
         }
-        
-        private static async Task<TileContent> ReadTileContentFromBundleAsync(string tilePath, int level, int row, int col) {
-            var content = new TileContent();
+
+        private static async Task<TileContentModel> ReadTileContentFromBundleAsync(string tilePath, int level, int row, int col) {
+            var content = new TileContentModel();
             var rowGroup = GetGroupIndex(row);
             var colGroup = GetGroupIndex(col);
             // try get from bundle
@@ -124,7 +138,7 @@ namespace Beginor.GisHub.TileMap {
             var bundlePath = GetBundlePath(tilePath, level, rowGroup, colGroup);
             var index = 128 * (row - rowGroup) + (col - colGroup);
             if (string.IsNullOrEmpty(bundlePath) || !File.Exists(bundlePath)) {
-                return TileContent.Empty;
+                return TileContentModel.Empty;
             }
             using var fs = new FileStream(bundlePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             fs.Seek(64 + 8 * index, SeekOrigin.Begin);
@@ -167,6 +181,7 @@ namespace Beginor.GisHub.TileMap {
         private static int GetGroupIndex(int x) {
             return 128 * (x / 128);
         }
+
 
     }
 
