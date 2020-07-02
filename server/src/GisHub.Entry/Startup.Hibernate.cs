@@ -1,5 +1,5 @@
 using System.IO;
-using Beginor.GisHub.Data.Entities;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,11 +34,8 @@ namespace Beginor.GisHub.Entry {
                 isNotProd.ToString()
             );
             cfg.AddIdentityMappings();
-            HbmSerializer.Default.Validate = true;
-            var stream = HbmSerializer.Default.Serialize(typeof(AppUser).Assembly);
-            using var reader = new StreamReader(stream);
-            var xml = reader.ReadToEnd();
-            cfg.AddXml(xml);
+            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Data.Entities.AppUser).Assembly);
+            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Slpk.Data.SlpkEntity).Assembly);
             services.AddHibernate(cfg);
         }
 
@@ -47,6 +44,19 @@ namespace Beginor.GisHub.Entry {
             IWebHostEnvironment env
         ) {
             // do nothing know
+        }
+
+    }
+
+    public static class ConfigurationExtensions {
+
+        public static Configuration AddAttributeMappingAssembly(this Configuration cfg, Assembly assembly) {
+            HbmSerializer.Default.Validate = true;
+            var stream = HbmSerializer.Default.Serialize(assembly);
+            using var reader = new StreamReader(stream);
+            var xml = reader.ReadToEnd();
+            cfg.AddXml(xml);
+            return cfg;
         }
 
     }

@@ -19,6 +19,9 @@ namespace Beginor.GisHub.Entry {
                     manager.ApplicationParts.Add(
                         new AssemblyPart(typeof(AccountController).Assembly)
                     );
+                    manager.ApplicationParts.Add(
+                        new AssemblyPart(typeof(Beginor.GisHub.Slpk.Api.SlpkController).Assembly)
+                    );
                 })
                 .AddControllersAsServices()
                 .ConfigureApiBehaviorOptions(options => {

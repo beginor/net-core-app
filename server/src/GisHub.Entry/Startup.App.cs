@@ -20,6 +20,11 @@ namespace Beginor.GisHub.Entry {
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
+            services.AddServiceWithDefaultImplements(
+                Assembly.LoadFrom(Path.Combine(baseDir, "Beginor.GisHub.Slpk.dll")),
+                t => t.Name.EndsWith("Repository"),
+                ServiceLifetime.Scoped
+            );
         }
 
         private static void ConfigureApp(

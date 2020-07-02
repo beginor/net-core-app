@@ -52,8 +52,9 @@ TableFilter:
     - aspnet_user_tokens
     - aspnet_users
     - app_client_errors
-  # IncludeTables:
-  #  - app_client_errors
+  IncludeTables:
+   - slpks
+   - tile_maps
   IgnoreNoPKTable: true
   IgnoreView: true
 
