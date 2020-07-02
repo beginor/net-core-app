@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
-using Beginor.NetCoreApp.Api.Controllers;
 
 namespace Beginor.NetCoreApp.Entry {
 
@@ -17,7 +16,7 @@ namespace Beginor.NetCoreApp.Entry {
                 .ConfigureApplicationPartManager(manager => {
                     manager.ApplicationParts.Clear();
                     manager.ApplicationParts.Add(
-                        new AssemblyPart(typeof(AccountController).Assembly)
+                        new AssemblyPart(typeof(Beginor.NetCoreApp.Api.Controllers.AccountController).Assembly)
                     );
                 })
                 .AddControllersAsServices()
