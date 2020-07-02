@@ -1,5 +1,5 @@
 using System.IO;
-using Beginor.NetCoreApp.Data.Entities;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,11 +34,7 @@ namespace Beginor.NetCoreApp.Entry {
                 isNotProd.ToString()
             );
             cfg.AddIdentityMappings();
-            HbmSerializer.Default.Validate = true;
-            var stream = HbmSerializer.Default.Serialize(typeof(AppUser).Assembly);
-            using var reader = new StreamReader(stream);
-            var xml = reader.ReadToEnd();
-            cfg.AddXml(xml);
+            cfg.AddAttributeMappingAssembly(typeof(Beginor.NetCoreApp.Data.Entities.AppUser).Assembly);
             services.AddHibernate(cfg);
         }
 
@@ -47,6 +43,19 @@ namespace Beginor.NetCoreApp.Entry {
             IWebHostEnvironment env
         ) {
             // do nothing know
+        }
+
+    }
+
+    public static class ConfigurationExtensions {
+
+        public static Configuration AddAttributeMappingAssembly(this Configuration cfg, Assembly assembly) {
+            HbmSerializer.Default.Validate = true;
+            var stream = HbmSerializer.Default.Serialize(assembly);
+            using var reader = new StreamReader(stream);
+            var xml = reader.ReadToEnd();
+            cfg.AddXml(xml);
+            return cfg;
         }
 
     }
