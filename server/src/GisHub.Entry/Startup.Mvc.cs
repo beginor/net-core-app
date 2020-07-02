@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
-using Beginor.GisHub.Api.Controllers;
 
 namespace Beginor.GisHub.Entry {
 
@@ -17,7 +16,7 @@ namespace Beginor.GisHub.Entry {
                 .ConfigureApplicationPartManager(manager => {
                     manager.ApplicationParts.Clear();
                     manager.ApplicationParts.Add(
-                        new AssemblyPart(typeof(AccountController).Assembly)
+                        new AssemblyPart(typeof(Beginor.GisHub.Api.Controllers.AccountController).Assembly)
                     );
                     manager.ApplicationParts.Add(
                         new AssemblyPart(typeof(Beginor.GisHub.Slpk.Api.SlpkController).Assembly)
