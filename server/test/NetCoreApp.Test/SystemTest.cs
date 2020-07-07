@@ -20,9 +20,11 @@ namespace Beginor.NetCoreApp.Test {
             Assert.Greater(privilegeCount, 0);
             var adminRoleName = "administrators";
             await CreateAdminRoleAsync(adminRoleName, "系统管理员");
+            var anonymousRoleName = "anonymous";
+            await CreateAnonymousRoleAsync(anonymousRoleName, "匿名用户");
             var adminUserName = "admin";
             var adminUserId = await CreateAdminUserAsync(adminUserName, "1qaz@WSX", adminRoleName);
-            await CreateSystemMenuAsync(adminUserName, adminRoleName);
+            await CreateSystemMenuAsync(adminUserName, adminRoleName, anonymousRoleName);
         }
 
         private async Task<long> SyncSyncRequiredPrivilegesAsync() {
@@ -55,6 +57,20 @@ namespace Beginor.NetCoreApp.Test {
             }
         }
 
+        private async Task CreateAnonymousRoleAsync(string roleName, string description) {
+            var manager = ServiceProvider.GetService<RoleManager<AppRole>>();
+            var roleExists = await manager.RoleExistsAsync(roleName);
+            if (!roleExists) {
+                var role = new AppRole {
+                    Name = roleName,
+                    Description = description,
+                    IsAnonymous = true
+                };
+                await manager.CreateAsync(role);
+                Assert.IsNotEmpty(role.Id);
+            }
+        }
+
         private async Task<string> CreateAdminUserAsync(string username, string password, string roleName) {
             var manager = ServiceProvider.GetService<UserManager<AppUser>>();
             var user = await manager.FindByNameAsync(username);
@@ -82,18 +98,18 @@ namespace Beginor.NetCoreApp.Test {
             return user.Id;
         }
 
-        private async Task CreateSystemMenuAsync(string userName, string roleName) {
+        private async Task CreateSystemMenuAsync(string userName, string adminRoleName, string anonymousRoleName) {
             var repo = ServiceProvider.GetService<IAppNavItemRepository>();
             if (await repo.CountAllAsync() > 0) {
                 return;
             }
-            // 跟应用
+            // 根应用
             var rootNavItem = new AppNavItemModel {
                 Title = ".NET Core App",
                 Icon = "fab fa-angular",
                 Url = "/",
                 Sequence = 0,
-                Roles = new [] { roleName }
+                Roles = new [] { adminRoleName, anonymousRoleName }
             };
             await repo.SaveAsync(rootNavItem, userName);
             Assert.IsNotEmpty(rootNavItem.Id);
@@ -103,7 +119,7 @@ namespace Beginor.NetCoreApp.Test {
                 Title = "首页",
                 Url = "/home",
                 Sequence = 1,
-                Roles = new [] { roleName }
+                Roles = new [] { adminRoleName, anonymousRoleName }
             };
             await repo.SaveAsync(homeItem, userName);
             Assert.IsNotEmpty(homeItem.Id);
@@ -113,7 +129,7 @@ namespace Beginor.NetCoreApp.Test {
                 Title = "管理",
                 Url = "/admin",
                 Sequence = 2,
-                Roles = new [] { roleName }
+                Roles = new [] { adminRoleName }
             };
             await repo.SaveAsync(adminItem, userName);
             Assert.IsNotEmpty(adminItem.Id);
@@ -123,7 +139,7 @@ namespace Beginor.NetCoreApp.Test {
                 Title = "关于",
                 Url = "/about",
                 Sequence = 3,
-                Roles = new [] { roleName }
+                Roles = new [] { adminRoleName, anonymousRoleName }
             };
             await repo.SaveAsync(aboutItem, userName);
             Assert.IsNotEmpty(aboutItem.Id);
@@ -134,7 +150,7 @@ namespace Beginor.NetCoreApp.Test {
                 Icon = "fas fa-compass",
                 Url = "/admin/nav-items",
                 Sequence = 1,
-                Roles = new [] { roleName }
+                Roles = new [] { adminRoleName }
             };
             await repo.SaveAsync(menuManageItem, userName);
             Assert.IsNotEmpty(menuManageItem.Id);
@@ -145,7 +161,7 @@ namespace Beginor.NetCoreApp.Test {
                 Icon = "fas fa-users",
                 Url = "/admin/users",
                 Sequence = 2,
-                Roles = new [] { roleName }
+                Roles = new [] { adminRoleName }
             };
             await repo.SaveAsync(userManageItem, userName);
             Assert.IsNotEmpty(userManageItem.Id);
@@ -156,7 +172,7 @@ namespace Beginor.NetCoreApp.Test {
                 Icon = "fas fa-users-tag",
                 Url = "/admin/roles",
                 Sequence = 3,
-                Roles = new [] { roleName }
+                Roles = new [] { adminRoleName }
             };
             await repo.SaveAsync(roleManageItem, userName);
             Assert.IsNotEmpty(roleManageItem.Id);
@@ -167,7 +183,7 @@ namespace Beginor.NetCoreApp.Test {
                 Icon = "fas fa-user-shield",
                 Url = "/admin/privileges",
                 Sequence = 4,
-                Roles = new [] { roleName }
+                Roles = new [] { adminRoleName }
             };
             await repo.SaveAsync(privilegesManageItem, userName);
             Assert.IsNotEmpty(privilegesManageItem.Id);
@@ -178,7 +194,7 @@ namespace Beginor.NetCoreApp.Test {
                 Icon = "fas fa-list",
                 Url = "/admin/audit-logs",
                 Sequence = 5,
-                Roles = new [] { roleName }
+                Roles = new [] { adminRoleName }
             };
             await repo.SaveAsync(auditLogsItem, userName);
             Assert.IsNotEmpty(auditLogsItem.Id);
