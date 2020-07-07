@@ -169,7 +169,7 @@ namespace Beginor.NetCoreApp.Test {
             var roleManageItem = new AppNavItemModel {
                 ParentId = adminItem.Id,
                 Title = "角色管理",
-                Icon = "fas fa-users-tag",
+                Icon = "fas fa-user-tag",
                 Url = "/admin/roles",
                 Sequence = 3,
                 Roles = new [] { adminRoleName }
