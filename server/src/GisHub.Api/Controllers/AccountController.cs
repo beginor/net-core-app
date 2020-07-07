@@ -63,9 +63,11 @@ namespace Beginor.GisHub.Api.Controllers {
         [ResponseCache(NoStore = true, Duration = 0)]
         public async Task<ActionResult<AccountInfoModel>> GetInfo() {
             try {
-                if (!User.Identity.IsAuthenticated) {
-                    var anonymousModel = await CreateAnonymousInfoModel();
-                    return anonymousModel;
+                if (!User.Identity.IsAuthenticated || User.HasClaim(ClaimTypes.NameIdentifier, string.Empty)) {
+                    var anonymousIdentity = await CreateAnonymousIdentity();
+                    var anonymousInfo = CreateAccountInfoModel(anonymousIdentity);
+                    anonymousInfo.Token = CreateJwtToken(anonymousIdentity);
+                    return anonymousInfo;
                 }
                 var appUser = await userMgr.FindByNameAsync(User.Identity.Name);
                 if (appUser == null) {
@@ -218,32 +220,36 @@ namespace Beginor.GisHub.Api.Controllers {
             return identity;
         }
 
-        private async Task<AccountInfoModel> CreateAnonymousInfoModel() {
-            var infoModel = new AccountInfoModel {
-                Id = string.Empty,
-                Surname = "匿名",
-                GivenName = "用户",
-                UserName = "anonymous"
-            };
+        private async Task<ClaimsIdentity> CreateAnonymousIdentity() {
+            var identity = new ClaimsIdentity();
+            identity.AddClaim(
+                new Claim(ClaimTypes.NameIdentifier, string.Empty)
+            );
+            identity.AddClaim(
+                new Claim(ClaimTypes.Name, "anonymous")
+            );
+            identity.AddClaim(
+                new Claim(ClaimTypes.Surname, "匿名")
+            );
+            identity.AddClaim(
+                new Claim(ClaimTypes.GivenName, "用户")
+            );
+            // role as claim;
             var roles = await roleMgr.Roles
                 .Where(r => r.IsAnonymous == true)
                 .ToListAsync();
-            infoModel.Roles = new Dictionary<string, bool>();
+            // add role and role claims;
             foreach (var role in roles) {
-                infoModel.Roles[role.Name] = true;
-            }
-            infoModel.Privileges = new Dictionary<string, bool>();
-            foreach (var role in roles) {
-                var claims = await roleMgr.GetClaimsAsync(role);
-                var privileges = claims
-                    .Where(c => c.Type == Consts.PrivilegeClaimType)
-                    .Select(c => c.Value)
-                    .ToList();
-                foreach (var privilege in privileges) {
-                    infoModel.Privileges[privilege] = true;
+                identity.AddClaim(new Claim(ClaimTypes.Role, role.Name));
+                // var role = await roleMgr.FindByNameAsync(roleName);
+                var roleClaims = await roleMgr.GetClaimsAsync(role);
+                foreach (var roleClaim in roleClaims) {
+                    if (!identity.Claims.Any(c => c.Type == roleClaim.Type && c.Value == roleClaim.Value)) {
+                        identity.AddClaim(roleClaim);
+                    }
                 }
             }
-            return infoModel;
+            return identity;
         }
     }
 
