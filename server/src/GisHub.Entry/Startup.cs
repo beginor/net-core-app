@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SysEnvironment = System.Environment;
 
 namespace Beginor.GisHub.Entry {
@@ -61,6 +62,9 @@ namespace Beginor.GisHub.Entry {
             ConfigureAutoMapper(app, env);
             ConfigureApp(app, env);
             ConfigureIdentity(app, env);
+            if (env.IsDevelopment()) {
+                app.UseDeveloperExceptionPage();
+            }
             // cors, auth;
             ConfigureCors(app, env);
             // web related.

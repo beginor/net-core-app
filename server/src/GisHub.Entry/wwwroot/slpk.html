@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ArcGIS Javascript API Test</title>
+    <style>html,body,#viewDiv { padding: 0; margin: 0; height: 100%; width: 100%; overflow: hidden; }</style>
+    <link rel="stylesheet" href="http://localhost/arcgis-js-api/library/4.15/esri/themes/light/main.css" />
+    <script>window.dojoConfig = { locale: 'zh-cn', async: true };</script>
+    <script src="http://localhost/arcgis-js-api/library/4.15/init.js"></script>
+    <script>
+    require(['esri/Map', 'esri/views/SceneView', 'esri/layers/IntegratedMeshLayer'], function (Map, SceneView, IntegratedMeshLayer) {
+        var map = new Map({
+            basemap: 'satellite',
+            ground: 'world-elevation'
+        });
+        var view = new SceneView({
+            container: 'viewDiv', // Reference to the scene div created in step 5
+            map: map, // Reference to the map object created before the scene
+            zoom: 7, // Sets zoom level based on level of detail (LOD)
+            center: [113, 22] // Sets center point of view using longitude,latitude
+        });
+        view.when().then(() => {
+            if (!location.search) {
+                return;
+            }
+            var queryString = location.search.substring(1);
+            var queryParts = queryString.split('&');
+            var dict = { };
+            for (var i = 0; i < queryParts.length; i++) {
+                var pair = queryParts[i].split('=');
+                dict[pair[0]] = pair[1];
+            }
+            var layer = dict.layer;
+            if (!layer) {
+                return;
+            }
+            layer = decodeURIComponent(dict.layer);
+            var meshLayer = new IntegratedMeshLayer({
+                url: 'https://it.gdeei.cn/slpk/' + layer + '/'
+            });
+            meshLayer.load().then(async () => {
+                view.map.add(meshLayer);
+                view.goTo(meshLayer.fullExtent);
+            });
+        });
+    });
+    </script>
+</head>
+
+<body>
+    <div id="viewDiv"></div>
+</body>
+
+</html>

@@ -29,7 +29,7 @@ namespace Beginor.GisHub.Slpk.Data {
         public virtual double Elevation { get; set; }
 
         /// <summary>标签/别名</summary>
-        [Property(Name = "Tags", Column = "tags", Type = "string[]", NotNull = false)]
+        [Property(Name = "Tags", Column = "tags", TypeType = typeof(NHibernate.Extensions.NpgSql.StringArrayType), NotNull = false)]
         public virtual string[] Tags { get; set; }
 
         /// <summary>创建者id</summary>
