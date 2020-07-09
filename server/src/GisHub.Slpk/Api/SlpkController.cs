@@ -21,7 +21,8 @@ namespace Beginor.GisHub.Slpk.Api {
             ILogger<SlpkController> logger,
             ISlpkRepository repository
         ) {
-            this.logger = logger;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         protected override void Dispose(bool disposing) {
