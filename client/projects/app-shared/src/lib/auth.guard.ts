@@ -21,9 +21,10 @@ export class AuthGuard implements CanLoad, CanActivate {
         route: Route,
         segments: UrlSegment[]
     ): Promise<boolean> {
-        this.router.events.pipe(first(_ => _ instanceof NavigationCancel))
-            .subscribe((event: NavigationCancel) => {
-                this.redirectToLogin(event.url);
+        this.router.events.pipe(first(evt => evt instanceof NavigationCancel))
+            .subscribe(e => {
+                const nc = e as NavigationCancel;
+                this.redirectToLogin(nc.url);
             });
         try {
             const info = await this.accountSvc.getInfo();

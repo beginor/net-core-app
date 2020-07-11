@@ -11,7 +11,7 @@ export function confirmTo(
         const form = control.root;
         const target = form.get(targetField);
         if (!target) {
-            return;
+            return null;
         }
         if (target.value !== control.value) {
             return { confirmTo: true };

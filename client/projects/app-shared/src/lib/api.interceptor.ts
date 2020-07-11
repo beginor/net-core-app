@@ -13,12 +13,13 @@ export class ApiInterceptor implements HttpInterceptor {
         private account: AccountService
     ) { }
 
+    // tslint:disable: no-any
     public intercept(
         req: HttpRequest<any>,
         next: HttpHandler
     ): Observable<HttpEvent<any>> {
         if (req.url.startsWith(this.apiRoot)) {
-            const setHeaders = {
+            const setHeaders: { [key: string]: string } = {
                 'X-Requested-With': 'XMLHttpRequest'
             };
             if (!!this.account.token) {
@@ -31,5 +32,6 @@ export class ApiInterceptor implements HttpInterceptor {
         }
         return next.handle(req);
     }
+    // tslint:enable: no-any
 
 }
