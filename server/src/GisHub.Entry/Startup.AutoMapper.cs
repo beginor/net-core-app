@@ -13,7 +13,8 @@ namespace Beginor.GisHub.Entry {
         ) {
             var mapperConfig = new MapperConfiguration(configure => {
                 configure.AddMaps(
-                    "Beginor.GisHub.Data"
+                    "Beginor.GisHub.Data",
+                    "Beginor.GisHub.Slpk"
                 );
             });
             var mapper = mapperConfig.CreateMapper();

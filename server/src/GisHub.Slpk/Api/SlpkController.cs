@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -130,6 +131,21 @@ namespace Beginor.GisHub.Slpk.Api {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not update slpks by id {id} with {model.ToJson()} .");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>获取 slpk 场景列表</summary>
+        [HttpGet("~/rest/services/slpks")]
+        [Authorize("slpks.read_slpk_scene")]
+        public async Task<ActionResult> GetSlpkList() {
+            try {
+                var models = await repository.GetAllAsync();
+                var slpks = models.Select(m => new { m.Id, m.Tags, m.Longitude, m.Latitude, m.Elevation } );
+                return Ok(slpks);
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not get slpk scene list .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
