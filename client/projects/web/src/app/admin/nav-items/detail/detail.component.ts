@@ -64,7 +64,10 @@ export class DetailComponent implements OnInit {
         await this.vm.getAllRoles();
         this.parents = await this.vm.getMenuOptions();
         if (this.id !== '0') {
-            this.model = await this.vm.getById(this.id);
+            const model = await this.vm.getById(this.id);
+            if (!!model) {
+                this.model = model;
+            }
             this.selectedRoles = this.model.roles ?? [];
         }
     }
@@ -94,10 +97,16 @@ export class DetailComponent implements OnInit {
     }
 
     public isRoleChecked(role: string): boolean {
+        if (!this.model.roles) {
+            return false;
+        }
         return this.model.roles.indexOf(role) > -1;
     }
 
     public toggleCheckedRole(role: string): void {
+        if (!this.model.roles) {
+            return;
+        }
         const idx = this.model.roles.indexOf(role);
         if (idx > -1) {
             this.model.roles.splice(idx, 1);

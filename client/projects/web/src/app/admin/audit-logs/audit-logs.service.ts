@@ -18,6 +18,7 @@ export class AuditLogsService {
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<AuditLogModel[]>([]);
     public loading = false;
+    public showPagination = false;
 
     private baseUrl = `${this.apiRoot}/audit-logs`;
 
@@ -42,7 +43,7 @@ export class AuditLogsService {
         for (const key in this.searchModel) {
             if (this.searchModel.hasOwnProperty(key)) {
                 const val = this.searchModel[key];
-                params = params.set(key, val);
+                params = params.set(key, val as string);
             }
         }
         this.loading = true;
@@ -53,8 +54,11 @@ export class AuditLogsService {
                     params: params
                 }
             ).toPromise();
-            this.total.next(result.total);
-            this.data.next(result.data);
+            const total = result.total ?? 0;
+            const data = result.data ?? [];
+            this.total.next(total);
+            this.data.next(data);
+            this.showPagination = total > data.length;
             this.loading = false;
         }
         catch (ex) {
@@ -116,10 +120,11 @@ export interface AuditLogModel {
 
 /** 审计日志搜索参数 */
 export interface AuditLogSearchModel {
+    [key: string]: undefined | number | string;
     /** 跳过的记录数 */
-    skip?: number;
+    skip: number;
     /** 取多少条记录 */
-    take?: number;
+    take: number;
     /** 用户名 */
     userName?: string;
     /** 请求日期，精确到日 */

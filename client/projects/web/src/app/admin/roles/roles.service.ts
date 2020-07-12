@@ -20,7 +20,8 @@ export class RolesService {
     };
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<AppRoleModel[]>([]);
-    public loading: boolean;
+    public loading = false;
+    public showPagination = false;
     public privileges: ModulePrivileges[] = [];
     public rolePrivileges: { [key: string]: boolean } = {};
 
@@ -46,7 +47,7 @@ export class RolesService {
                     m => m.module === privilege.module
                 );
                 if (!mp) {
-                    mp = { module: privilege.module, privileges: [] };
+                    mp = { module: privilege.module ?? '', privileges: [] };
                     this.privileges.push(mp);
                 }
                 mp.privileges.push(privilege);
@@ -60,7 +61,7 @@ export class RolesService {
         for (const key in this.searchModel) {
             if (this.searchModel.hasOwnProperty(key)) {
                 const val = this.searchModel[key];
-                params = params.set(key, val);
+                params = params.set(key, val as string);
             }
         }
         this.loading = true;
@@ -71,8 +72,11 @@ export class RolesService {
                     params: params
                 }
             ).toPromise();
-            this.total.next(result.total);
-            this.data.next(result.data);
+            const total = result.total ?? 0;
+            const data = result.data ?? [];
+            this.total.next(total);
+            this.data.next(data);
+            this.showPagination = total > data.length;
         }
         catch (ex) {
             this.errorHandler.handleError(ex.toString());
@@ -98,7 +102,9 @@ export class RolesService {
     }
 
     /** 创建角色 */
-    public async create(model: AppRoleModel): Promise<AppRoleModel> {
+    public async create(
+        model: AppRoleModel
+    ): Promise<AppRoleModel | undefined> {
         try {
             const result = await this.http.post<AppRoleModel>(
                 this.baseUrl,
@@ -109,12 +115,12 @@ export class RolesService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '创建角色出错！' });
-            return null;
+            return;
         }
     }
 
     /** 获取指定的角色 */
-    public async getById(id: string): Promise<AppRoleModel> {
+    public async getById(id: string): Promise<AppRoleModel | undefined> {
         try {
             const result = await this.http.get<AppRoleModel>(
                 `${this.baseUrl}/${id}`
@@ -124,7 +130,7 @@ export class RolesService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '获取指定的角色出错！' });
-            return null;
+            return;
         }
     }
 
@@ -151,7 +157,7 @@ export class RolesService {
     public async update(
         id: string,
         model: AppRoleModel
-    ): Promise<AppRoleModel> {
+    ): Promise<AppRoleModel | undefined> {
         try {
             const result = await this.http.put<AppRoleModel>(
                 `${this.baseUrl}/${id}`,
@@ -162,7 +168,7 @@ export class RolesService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '更新角色出错！' });
-            return null;
+            return;
         }
     }
 
@@ -239,7 +245,7 @@ export interface AppRoleModel {
     /** 角色标识 */
     id?: string;
     /** 角色名称 */
-    name?: string;
+    name: string;
     /** 角色描述 */
     description?: string;
     /** 是否默认 */
@@ -252,10 +258,11 @@ export interface AppRoleModel {
 
 /** 角色 搜索参数 */
 export interface AppRoleSearchModel {
+    [key: string]: undefined | number | string;
     /** 跳过的记录数 */
-    skip?: number;
+    skip: number;
     /** 取多少条记录 */
-    take?: number;
+    take: number;
 }
 
 /** 角色 搜索结果 */

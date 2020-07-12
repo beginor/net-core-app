@@ -18,7 +18,8 @@ export class AppPrivilegeService {
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<AppPrivilegeModel[]>([]);
     public modules = new BehaviorSubject<string[]>([]);
-    public loading: boolean;
+    public loading = false;
+    public showPagination = false;
 
     private baseUrl = `${this.apiRoot}/privileges`;
 
@@ -36,7 +37,7 @@ export class AppPrivilegeService {
             if (this.searchModel.hasOwnProperty(key)) {
                 const val = this.searchModel[key];
                 if (!!val) {
-                    params = params.set(key, val);
+                    params = params.set(key, val as string);
                 }
             }
         }
@@ -46,8 +47,11 @@ export class AppPrivilegeService {
                 this.baseUrl,
                 { params: params }
             ).toPromise();
-            this.total.next(result.total);
-            this.data.next(result.data);
+            const total = result.total ?? 0;
+            const data = result.data ?? [];
+            this.total.next(total);
+            this.data.next(data);
+            this.showPagination = total > data.length;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
@@ -71,7 +75,9 @@ export class AppPrivilegeService {
     }
 
     /** 创建 系统权限 */
-    public async create(model: AppPrivilegeModel): Promise<AppPrivilegeModel> {
+    public async create(
+        model: AppPrivilegeModel
+    ): Promise<AppPrivilegeModel | undefined> {
         try {
             const result = await this.http.post<AppPrivilegeModel>(
                 this.baseUrl,
@@ -82,12 +88,12 @@ export class AppPrivilegeService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '创建系统权限出错！' });
-            return null;
+            return;
         }
     }
 
     /** 获取指定的 系统权限 */
-    public async getById(id: string): Promise<AppPrivilegeModel> {
+    public async getById(id: string): Promise<AppPrivilegeModel | undefined> {
         try {
             const result = await this.http.get<AppPrivilegeModel>(
                 `${this.baseUrl}/${id}`
@@ -97,7 +103,7 @@ export class AppPrivilegeService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '加载系统权限数据出错！' });
-            return null;
+            return;
         }
     }
 
@@ -124,7 +130,7 @@ export class AppPrivilegeService {
     public async update(
         id: string,
         model: AppPrivilegeModel
-    ): Promise<AppPrivilegeModel> {
+    ): Promise<AppPrivilegeModel | undefined> {
         try {
             const result = await this.http.put<AppPrivilegeModel>(
                 `${this.baseUrl}/${id}`,
@@ -135,7 +141,7 @@ export class AppPrivilegeService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '更新系统权限出错！' });
-            return null;
+            return;
         }
     }
 
@@ -172,10 +178,11 @@ export interface AppPrivilegeModel {
 
 /** 系统权限 搜索参数 */
 export interface AppPrivilegeSearchModel {
+    [key: string]: undefined | number | string;
     /** 跳过的记录数 */
-    skip?: number;
+    skip: number;
     /** 取多少条记录 */
-    take?: number;
+    take: number;
     /** 模块 */
     module?: string;
 }
