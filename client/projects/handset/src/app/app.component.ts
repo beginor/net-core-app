@@ -13,7 +13,7 @@ import { UiService } from './services/ui.service';
 export class AppComponent implements AfterViewInit {
 
     @ViewChild(MatDrawer, { static: true })
-    public drawer: MatDrawer;
+    public drawer!: MatDrawer;
 
     constructor(
         private ui: UiService

@@ -14,9 +14,10 @@ export class NavigationService {
     public root = new BehaviorSubject<NavigationNode>(
         { title: '', children: [] }
     );
-    public topbarNodes = new BehaviorSubject<NavigationNode[]>([]);
-    public sidebarNodes = new BehaviorSubject<NavigationNode[]>([]);
-    public initialized: boolean;
+    public topbarNodes = new BehaviorSubject<NavigationNode[] | undefined>([]);
+    public sidebarNodes = new BehaviorSubject<NavigationNode[] | undefined>([]);
+    public initialized = false;
+    public showSidebar = false;
 
     private currentUrl: string;
 
@@ -38,10 +39,13 @@ export class NavigationService {
     }
 
     public isActiveNode(node: NavigationNode): boolean {
-        return this.location.path().includes(node.url);
+        return this.location.path().includes(node.url as string);
     }
 
     public isRouterLink(node: NavigationNode): boolean {
+        if (!node.url) {
+            return false;
+        }
         if (node.url.startsWith('https://') || node.url.startsWith('http://')) {
             return false;
         }
@@ -54,9 +58,11 @@ export class NavigationService {
     private setupNavigationNodes(rootNode: NavigationNode): void {
         this.root.next(rootNode);
         this.topbarNodes.next(rootNode.children);
-        this.sidebarNodes.next(
-            this.findSidebarNavigationNodes(rootNode.children)
-        );
+        if (!!rootNode.children) {
+            this.sidebarNodes.next(
+                this.findSidebarNavigationNodes(rootNode.children)
+            );
+        }
     }
 
     private updateSidebarNodes(): void {
@@ -65,10 +71,16 @@ export class NavigationService {
             return;
         }
         const path = this.location.path();
-        for (const node of rootNode.children) {
-            if (path.startsWith(node.url)) {
-                this.sidebarNodes.next(node.children);
-                break;
+        if (rootNode.children) {
+            for (const node of rootNode.children) {
+                if (!node.url) {
+                    continue;
+                }
+                if (path.startsWith(node.url)) {
+                    this.sidebarNodes.next(node.children);
+                    this.showSidebar = !!node.children && node.children.length > 0;
+                    break;
+                }
             }
         }
         this.currentUrl = path;
@@ -79,10 +91,13 @@ export class NavigationService {
     ): NavigationNode[] {
         const path = this.location.path(false);
         for (const child of topNodes) {
-            if (path.startsWith(child.url)) {
-                return child.children;
+            if (!!child.url && path.startsWith(child.url)) {
+                if (!!child.children) {
+                    return child.children;
+                }
             }
         }
+        return [];
     }
 
     private updateTitle(title: string): void {
@@ -95,7 +110,7 @@ export class NavigationService {
             .toPromise()
             .then(node => {
                 this.setupNavigationNodes(node);
-                this.updateTitle(node.title);
+                this.updateTitle(node.title as string);
                 if (!this.initialized) {
                     this.initialized = true;
                 }

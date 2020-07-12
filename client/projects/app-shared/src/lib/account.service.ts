@@ -15,7 +15,7 @@ export class AccountService {
     public fullName = new BehaviorSubject<string>('匿名用户');
 
     public get token(): string {
-        return localStorage.getItem(this.tokenKey);
+        return localStorage.getItem(this.tokenKey) as string;
     }
 
     private get tokenKey(): string {

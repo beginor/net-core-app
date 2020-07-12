@@ -17,8 +17,9 @@ export class NavItemsService {
     };
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<NavItemModel[]>([]);
-    public loading: boolean;
-    public roles: AppRoleModel[];
+    public loading = false;
+    public showPagination = false;
+    public roles: AppRoleModel[] = [];
 
     private baseUrl = `${this.apiRoot}/nav-items`;
     private rolesSvc: RolesService;
@@ -43,7 +44,7 @@ export class NavItemsService {
         for (const key in this.searchModel) {
             if (this.searchModel.hasOwnProperty(key)) {
                 const val = this.searchModel[key];
-                params = params.set(key, val);
+                params = params.set(key, val as string);
             }
         }
         this.loading = true;
@@ -54,8 +55,11 @@ export class NavItemsService {
                     params: params
                 }
             ).toPromise();
-            this.total.next(result.total);
-            this.data.next(result.data);
+            const total = result.total ?? 0;
+            const data = result.data ?? [];
+            this.total.next(total);
+            this.data.next(data);
+            this.showPagination = total > data.length;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
@@ -81,7 +85,9 @@ export class NavItemsService {
     }
 
     /** 创建导航节点（菜单） */
-    public async create(model: NavItemModel): Promise<NavItemModel> {
+    public async create(
+        model: NavItemModel
+    ): Promise<NavItemModel | undefined> {
         try {
             const result = await this.http.post<NavItemModel>(
                 this.baseUrl,
@@ -91,13 +97,15 @@ export class NavItemsService {
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.uiService.showAlert({ type: 'danger', message: '创建导航节点（菜单）出错！' });
-            return null;
+            this.uiService.showAlert(
+                { type: 'danger', message: '创建导航节点（菜单）出错！' }
+            );
+            return;
         }
     }
 
     /** 获取指定的导航节点（菜单） */
-    public async getById(id: string): Promise<NavItemModel> {
+    public async getById(id: string): Promise<NavItemModel | undefined> {
         try {
             const result = await this.http.get<NavItemModel>(
                 `${this.baseUrl}/${id}`
@@ -106,8 +114,10 @@ export class NavItemsService {
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.uiService.showAlert({ type: 'danger', message: '获取指定的导航节点（菜单）出错！' });
-            return null;
+            this.uiService.showAlert(
+                { type: 'danger', message: '获取指定的导航节点（菜单）出错！' }
+            );
+            return;
         }
     }
 
@@ -125,7 +135,9 @@ export class NavItemsService {
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.uiService.showAlert({ type: 'danger', message: '删除导航节点（菜单）出错！' });
+            this.uiService.showAlert(
+                { type: 'danger', message: '删除导航节点（菜单）出错！' }
+            );
             return false;
         }
     }
@@ -134,7 +146,7 @@ export class NavItemsService {
     public async update(
         id: string,
         model: NavItemModel
-    ): Promise<NavItemModel> {
+    ): Promise<NavItemModel | undefined> {
         try {
             const result = await this.http.put<NavItemModel>(
                 `${this.baseUrl}/${id}`,
@@ -144,8 +156,10 @@ export class NavItemsService {
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.uiService.showAlert({ type: 'danger', message: '更新导航节点（菜单）出错！' });
-            return null;
+            this.uiService.showAlert(
+                { type: 'danger', message: '更新导航节点（菜单）出错！' }
+            );
+            return;
         }
     }
 
@@ -172,7 +186,7 @@ export class NavItemsService {
             this.pushChildrenRecursively(
                 options,
                 option.level + 1,
-                rootNode.children
+                rootNode.children ?? []
             );
         }
         catch (ex) {
@@ -229,10 +243,11 @@ export interface NavItemModel {
 
 /** 导航节点（菜单） 搜索参数 */
 export interface AppNavItemSearchModel {
+    [key: string]: undefined | number | string;
     /** 跳过的记录数 */
-    skip?: number;
+    skip: number;
     /** 取多少条记录 */
-    take?: number;
+    take: number;
 }
 
 /** 导航节点（菜单） 搜索结果 */

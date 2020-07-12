@@ -138,7 +138,7 @@ namespace Beginor.GisHub.Api.Controllers {
         public async Task<MenuNodeModel> GetMenuAsync() {
             try {
                 IList<string> roles;
-                if (!User.Identity.IsAuthenticated) {
+                if (!User.Identity.IsAuthenticated || User.HasClaim(ClaimTypes.NameIdentifier, string.Empty)) {
                     roles = roleMgr.Roles
                         .Where(role => role.IsAnonymous == true)
                         .Select(role => role.Name)

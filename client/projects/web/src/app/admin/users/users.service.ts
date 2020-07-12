@@ -16,7 +16,8 @@ export class UsersService {
 
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<UserModel[]>([]);
-    public loading: boolean;
+    public loading = false;
+    public showPagination = false;
     public sortMethods = [
         { value: 'CreateTime:DESC', text: '最近创建' },
         { value: 'CreateTime:ASC', text: '最早创建' },
@@ -47,7 +48,7 @@ export class UsersService {
         for (const key in this.searchModel) {
             if (this.searchModel.hasOwnProperty(key)) {
                 const val = this.searchModel[key];
-                params = params.set(key, val);
+                params = params.set(key, val as string);
             }
         }
         this.loading = true;
@@ -58,8 +59,11 @@ export class UsersService {
                     params: params
                 }
             ).toPromise();
-            this.total.next(result.total);
-            this.data.next(result.data);
+            const total = result.total ?? 0;
+            const data = result.data ?? [];
+            this.total.next(total);
+            this.data.next(data);
+            this.showPagination = total > data.length;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
@@ -85,7 +89,9 @@ export class UsersService {
     }
 
     /** 创建用户 */
-    public async create(model: UserModel): Promise<UserModel> {
+    public async create(
+        model: UserModel
+    ): Promise<UserModel | undefined> {
         try {
             const result = await this.http.post<UserModel>(
                 this.baseUrl,
@@ -96,12 +102,12 @@ export class UsersService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '创建用户出错！' });
-            return null;
+            return;
         }
     }
 
     /** 获取指定的用户 */
-    public async getById(id: string): Promise<UserModel> {
+    public async getById(id: string): Promise<UserModel | undefined> {
         try {
             const result = await this.http.get<UserModel>(
                 `${this.baseUrl}/${id}`
@@ -111,7 +117,7 @@ export class UsersService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '获取指定的用户出错！' });
-            return null;
+            return;
         }
     }
 
@@ -138,7 +144,7 @@ export class UsersService {
     public async update(
         id: string,
         model: UserModel
-    ): Promise<UserModel> {
+    ): Promise<UserModel | undefined> {
         try {
             const result = await this.http.put<UserModel>(
                 `${this.baseUrl}/${id}`,
@@ -149,7 +155,7 @@ export class UsersService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '更新用户出错！' });
-            return null;
+            return;
         }
     }
 
@@ -160,43 +166,48 @@ export class UsersService {
         }
         try {
             const url = `${this.baseUrl}/${id}/unlock`;
-            await this.http.put<any>(url, null).toPromise();
+            await this.http.put<null>(url, null).toPromise();
             this.search();
             return true;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '解锁用户失败！'});
+            return false;
         }
     }
 
-    public async lockUser(id: string, lockoutEnd: string): Promise<void> {
+    public async lockUser(id: string, lockoutEnd: string): Promise<boolean> {
         try {
             const url = `${this.baseUrl}/${id}/lock/${lockoutEnd}`;
-            await this.http.put<any>(url, null).toPromise();
+            await this.http.put<null>(url, null).toPromise();
             await this.search();
+            return true;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '锁定用户失败！'});
+            return false;
         }
     }
 
     public async resetPass(
         id: string,
         model: ResetPasswordModel
-    ): Promise<void> {
+    ): Promise<boolean> {
         const confirmed = await this.ui.showConfirm('确认重置该用户的密码么？');
         if (!confirmed) {
-            return;
+            return false;
         }
         try {
             const url = `${this.baseUrl}/${id}/reset-pass`;
-            await this.http.put<any>(url, model).toPromise();
+            await this.http.put<ResetPasswordModel>(url, model).toPromise();
+            return true;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '重置用户密码失败！'});
+            return false;
         }
     }
 
@@ -223,6 +234,7 @@ export class UsersService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '获取用户角色失败！' });
+            return [];
         }
     }
 
@@ -295,10 +307,11 @@ export interface UserModel {
 
 /** 用户搜索参数 */
 export interface UserSearchModel {
+    [key: string]: undefined | number | string;
     /** 跳过的记录数 */
-    skip?: number;
+    skip: number;
     /** 取多少条记录 */
-    take?: number;
+    take: number;
     /** 用户名 */
     userName?: string;
     /** 过滤条件 */

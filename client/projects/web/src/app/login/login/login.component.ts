@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
 
     public model: LoginModel = {};
     public loading = false;
-    public message = new Subject<string>();
+    public message = new Subject<string | undefined>();
 
     constructor(
         private router: Router,
@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
     }
 
     public clearMessage(): void {
-        this.message.next(null);
+        this.message.next();
     }
 
 }

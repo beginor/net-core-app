@@ -1,7 +1,7 @@
 <mat-list>
   <mat-list-item>
     <img mat-list-avatar src="./assets/user.png" />
-    <span mat-line [matMenuTriggerFor]="userMenu">{{(accountSvc.info | async).userName}}</span>
+    <span mat-line [matMenuTriggerFor]="userMenu">{{(accountSvc.info | async)?.userName}}</span>
     <button mat-icon-button (click)="toggleDrawer()">
       <mat-icon>chevron_left</mat-icon>
     </button>

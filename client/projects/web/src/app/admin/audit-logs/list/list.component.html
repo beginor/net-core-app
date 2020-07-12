@@ -130,8 +130,8 @@
               </div>
             </div>
             <div class="col-6">
-              <ngb-pagination class="d-flex justify-content-end"
-                *ngIf="(vm.total | async) > data.length"
+              <ngb-pagination *ngIf="vm.showPagination"
+                class="d-flex justify-content-end"
                 size="sm"
                 [collectionSize]="vm.total | async"
                 [page]="(vm.searchModel.skip / vm.searchModel.take) + 1"

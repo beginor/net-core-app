@@ -1,32 +1,35 @@
+/*
+  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
+  It is not intended to be used to perform a compilation.
+
+  To learn more about this file see: https://angular.io/config/solution-tsconfig.
+*/
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "paths": {
-      "app-shared": [
-        "dist/app-shared/app-shared",
-        "dist/app-shared"
-      ]
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/app-shared/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/app-shared/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/handset/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/handset/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/handset/e2e/tsconfig.json"
+    },
+    {
+      "path": "./projects/web/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/web/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/web/e2e/tsconfig.json"
     }
-  },
-  "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
-  }
+]
 }

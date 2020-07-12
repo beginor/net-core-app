@@ -23,7 +23,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title: string;
     public editable: boolean;
-    public model: AppRoleModel = {};
+    public model: AppRoleModel = { name: '' };
     public id: string;
 
     private reloadList = false;
@@ -52,7 +52,10 @@ export class DetailComponent implements OnInit {
 
     public async ngOnInit(): Promise<void> {
         if (this.id !== '0') {
-            this.model = await this.vm.getById(this.id);
+            const model = await this.vm.getById(this.id);
+            if (!!model) {
+                this.model = model;
+            }
         }
     }
 
