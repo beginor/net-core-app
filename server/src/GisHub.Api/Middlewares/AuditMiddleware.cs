@@ -41,6 +41,40 @@ namespace Beginor.GisHub.Api.Middlewares {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+        public async Task InvokeAsync(HttpContext context) {
+            if (context.Request.Headers.ContainsKey("X-Skip-Audit-Log")) {
+                await next.Invoke(context);
+                return;
+            }
+            var auditLog = new AppAuditLogModel {
+                RequestPath = context.Request.Path,
+                RequestMethod = context.Request.Method,
+                UserName = GetUserName(context),
+                StartAt = DateTime.Now
+            };
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var ip = context.Request.HttpContext.Connection.RemoteIpAddress.ToString();
+            if (context.Request.Headers.TryGetValue("X-Real-IP", out var realIp)) {
+                ip = realIp.ToString();
+            }
+            auditLog.Ip = ip;
+            context.Response.OnStarting(state => {
+                var ctx = (HttpContext)state;
+                stopwatch.Stop();
+                ctx.Response.Headers.Add(
+                    "X-Response-Time-Milliseconds",
+                    stopwatch.ElapsedMilliseconds.ToString()
+                );
+                stopwatch.Start();
+                return Task.CompletedTask;
+            }, context);
+            await next.Invoke(context);
+            auditLog.Duration = stopwatch.ElapsedMilliseconds;
+            var repo = context.RequestServices.GetService<IAppAuditLogRepository>();
+            await repo.SaveAsync(auditLog);
+        }
+
         private ActionDescriptor GetMatchingAction(string path, string httpMethod) {
             var actionDescriptors = provider.ActionDescriptors.Items;
             // match by route template
@@ -86,36 +120,6 @@ namespace Beginor.GisHub.Api.Middlewares {
                 }
             }
             return result;
-        }
-
-        public async Task InvokeAsync(HttpContext context) {
-            var auditLog = new AppAuditLogModel {
-                RequestPath = context.Request.Path,
-                RequestMethod = context.Request.Method,
-                UserName = GetUserName(context),
-                StartAt = DateTime.Now
-            };
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            var ip = context.Request.HttpContext.Connection.RemoteIpAddress.ToString();
-            if (context.Request.Headers.TryGetValue("X-Real-IP", out var realIp)) {
-                ip = realIp.ToString();
-            }
-            auditLog.Ip = ip;
-            context.Response.OnStarting(state => {
-                var ctx = (HttpContext)state;
-                stopwatch.Stop();
-                ctx.Response.Headers.Add(
-                    "X-Response-Time-Milliseconds",
-                    stopwatch.ElapsedMilliseconds.ToString()
-                );
-                stopwatch.Start();
-                return Task.CompletedTask;
-            }, context);
-            await next.Invoke(context);
-            auditLog.Duration = stopwatch.ElapsedMilliseconds;
-            var repo = context.RequestServices.GetService<IAppAuditLogRepository>();
-            await repo.SaveAsync(auditLog);
         }
 
         private string GetUserName(HttpContext context) {

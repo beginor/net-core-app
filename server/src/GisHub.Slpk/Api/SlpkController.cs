@@ -1,11 +1,15 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.StaticFiles;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Api;
+using Beginor.GisHub.Slpk.Cache;
 using Beginor.GisHub.Slpk.Data;
 using Beginor.GisHub.Slpk.Models;
 
@@ -17,19 +21,27 @@ namespace Beginor.GisHub.Slpk.Api {
 
         private ILogger<SlpkController> logger;
         private ISlpkRepository repository;
+        private IContentTypeProvider provider;
+        private SlpkCache cache;
 
         public SlpkController(
             ILogger<SlpkController> logger,
-            ISlpkRepository repository
+            ISlpkRepository repository,
+            IContentTypeProvider provider,
+            SlpkCache cache
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 logger = null;
                 repository = null;
+                provider = null;
+                cache = null;
             }
             base.Dispose(disposing);
         }
@@ -154,42 +166,161 @@ namespace Beginor.GisHub.Slpk.Api {
         [HttpGet("~/rest/services/slpks/{id:long}/SceneServer")]
         [Authorize("slpks.read_slpk_scene")]
         public async Task<ActionResult> GetSlpkInfo(long id) {
-            throw new NotImplementedException();
+            try {
+                var directory = await GetSlpkDirectoryAsync(id);
+                if (string.IsNullOrEmpty(directory)) {
+                    return NotFound();
+                }
+                var filePath = Path.Combine(directory, "3dSceneLayer.json");
+                var result = ProcessFile(filePath);
+                return result;
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not get slpk {id} info!");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
         }
 
         /// <summary>获取 slpk 场景节点信息</summary>
         [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/nodes/{node}")]
         [Authorize("slpks.read_slpk_scene")]
-        public async Task<ActionResult> GetNodeIndex(string node) {
-            throw new NotImplementedException();
+        public async Task<ActionResult> GetNodeIndex(long id, string node) {
+            try {
+                var directory = await GetSlpkDirectoryAsync(id);
+                if (string.IsNullOrEmpty(directory)) {
+                    return NotFound();
+                }
+                var filePath = Path.Combine(directory, "nodes", node, "3dNodeIndexDocument.json");
+                var result = ProcessFile(filePath);
+                return result;
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not get slpk {id} node {node} index!");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
         }
 
         /// <summary>获取 slpk 场景节点要素</summary>
         [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/nodes/{node}/features/{feature}")]
         [Authorize("slpks.read_slpk_scene")]
         public async Task<ActionResult> GetNodeFeature(long id, string node, string feature) {
-            throw new NotImplementedException();
+            try {
+                var directory = await GetSlpkDirectoryAsync(id);
+                if (string.IsNullOrEmpty(directory)) {
+                    return NotFound();
+                }
+                var filePath = Path.Combine(directory, "nodes", node, "features", feature + ".json");
+                var result = ProcessFile(filePath);
+                return result;
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not get slpk {id} node {node} feature {feature}!");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
         }
 
         /// <summary>获取 slpk 场景节点坐标</summary>
         [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/nodes/{node}/geometries/{geometry}")]
         [Authorize("slpks.read_slpk_scene")]
         public async Task<ActionResult> GetNodeGeometry(long id, string node, string geometry) {
-            throw new NotImplementedException();
+            try {
+                var directory = await GetSlpkDirectoryAsync(id);
+                if (string.IsNullOrEmpty(directory)) {
+                    return NotFound();
+                }
+                var filePath = Path.Combine(directory, "nodes", node, "geometries", geometry + ".bin");
+                var result = ProcessFile(filePath);
+                return result;
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not get slpk {id} node {node} geometries {geometry}!");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
         }
 
         /// <summary>获取 slpk 场景节点共享资源</summary>
-        [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/nodes/{node}/shared/{resource}")]
+        [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/nodes/{node}/shared")]
         [Authorize("slpks.read_slpk_scene")]
-        public async Task<ActionResult> GetNodeShared(long id, string node, string resource) {
-            throw new NotImplementedException();
+        public async Task<ActionResult> GetNodeShared(long id, string node) {
+            try {
+                var directory = await GetSlpkDirectoryAsync(id);
+                if (string.IsNullOrEmpty(directory)) {
+                    return NotFound();
+                }
+                var filePath = Path.Combine(directory, "nodes", node, "shared", "sharedResource.json");
+                var result = ProcessFile(filePath);
+                return result;
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not get slpk {id} node {node} sharedResource.json!");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
         }
 
         /// <summary>获取 slpk 场景节点贴图</summary>
         [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/nodes/{node}/textures/{texture}")]
         [Authorize("slpks.read_slpk_scene")]
         public async Task<ActionResult> GetNodeTexture(long id, string node, string texture) {
-            throw new NotImplementedException();
+            try {
+                var directory = await GetSlpkDirectoryAsync(id);
+                if (string.IsNullOrEmpty(directory)) {
+                    return NotFound();
+                }
+                var filePath = Path.Combine(directory, "nodes", node, "textures", texture + ".bin");
+                var result = ProcessFile(filePath);
+                return result;
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not get slpk {id} node {node} textures {texture}!");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        private async Task<string> GetSlpkDirectoryAsync(long id) {
+            if (cache.TryGetValue(id, out var item)) {
+                return item.Directory;
+            }
+            else {
+                var model = await repository.GetByIdAsync(id);
+                var directory = string.Empty;
+                if (model != null) {
+                    directory = model.Directory;
+                }
+                cache.TryAdd(id, new SlpkCacheItem { Id = id, Directory = directory });
+                return directory;
+            }
+        }
+
+        private ActionResult ProcessFile(string filePath) {
+            var fileExists = System.IO.File.Exists(filePath);
+            if (!fileExists) {
+                filePath = filePath + ".gz";
+                fileExists = System.IO.File.Exists(filePath);
+            }
+            if (!fileExists) {
+                return NotFound();
+            }
+            var fileInfo = new FileInfo(filePath);
+            var fileTime = fileInfo.LastWriteTimeUtc.ToFileTime().ToString("x");
+            var etag = Request.Headers["If-None-Match"].ToString();
+            if (fileTime.Equals(etag, StringComparison.OrdinalIgnoreCase)) {
+                return StatusCode(StatusCodes.Status304NotModified);
+            }
+            Response.Headers["Cache-Control"] = "no-cache";
+            Response.Headers["ETag"] = fileTime;
+            var fileName = fileInfo.Name;
+            string contentType = string.Empty;
+            if (fileName.EndsWith(".gz")) {
+                Response.Headers["Content-Encoding"] = "gzip";
+                provider.TryGetContentType(
+                    fileName.Substring(0, fileName.Length - 3),
+                    out contentType
+                );
+            }
+            else {
+                provider.TryGetContentType(fileName, out contentType);
+            }
+            return File(fileInfo.OpenRead(), contentType);
         }
 
     }

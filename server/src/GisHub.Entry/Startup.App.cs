@@ -25,6 +25,7 @@ namespace Beginor.GisHub.Entry {
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
+            services.AddSingleton<Beginor.GisHub.Slpk.Cache.SlpkCache>();
         }
 
         private static void ConfigureApp(
