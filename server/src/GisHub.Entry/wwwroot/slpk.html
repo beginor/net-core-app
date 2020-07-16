@@ -2,56 +2,84 @@
 <html lang="zh-cn">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ArcGIS Javascript API Test</title>
-    <style>html,body,#viewDiv { padding: 0; margin: 0; height: 100%; width: 100%; overflow: hidden; }</style>
-    <link rel="stylesheet" href="http://localhost/arcgis-js-api/library/4.15/esri/themes/light/main.css" />
-    <script>window.dojoConfig = { locale: 'zh-cn', async: true };</script>
-    <script src="http://localhost/arcgis-js-api/library/4.15/init.js"></script>
-    <script>
-    require(['esri/Map', 'esri/views/SceneView', 'esri/layers/IntegratedMeshLayer'], function (Map, SceneView, IntegratedMeshLayer) {
-        var map = new Map({
-            basemap: 'satellite',
-            ground: 'world-elevation'
-        });
-        var view = new SceneView({
-            container: 'viewDiv', // Reference to the scene div created in step 5
-            map: map, // Reference to the map object created before the scene
-            zoom: 7, // Sets zoom level based on level of detail (LOD)
-            center: [113, 22] // Sets center point of view using longitude,latitude
-        });
-        view.when().then(() => {
-            if (!location.search) {
-                return;
-            }
-            var queryString = location.search.substring(1);
-            var queryParts = queryString.split('&');
-            var dict = { };
-            for (var i = 0; i < queryParts.length; i++) {
-                var pair = queryParts[i].split('=');
-                dict[pair[0]] = pair[1];
-            }
-            var layer = dict.layer;
-            if (!layer) {
-                return;
-            }
-            layer = decodeURIComponent(dict.layer);
-            var meshLayer = new IntegratedMeshLayer({
-                url: 'https://it.gdeei.cn/slpk/' + layer + '/'
-            });
-            meshLayer.load().then(async () => {
-                view.map.add(meshLayer);
-                view.goTo(meshLayer.fullExtent);
-            });
-        });
-    });
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ArcGIS Javascript API Test</title>
+  <style>html,body,#viewDiv { padding: 0; margin: 0; height: 100%; width: 100%; overflow: hidden; }</style>
+  <link rel="stylesheet" href="https://app.gdeei.cn/arcgis-js-api/library/4.15/esri/themes/light/main.css" />
+  <script>
+  window.dojoConfig = { locale: 'zh-cn', async: true };
+  window.esriConfig = { locale: 'zh-cn' };
+  </script>
+  <script src="https://app.gdeei.cn/arcgis-js-api/library/4.15/init.js"></script>
 </head>
 
 <body>
-    <div id="viewDiv"></div>
+  <div id="viewDiv"></div>
+<script>
+require(['esri/config', 'esri/Map', 'esri/views/SceneView', 'esri/layers/IntegratedMeshLayer'], function (esriConfig, Map, SceneView, IntegratedMeshLayer) {
+  const headers = { 'X-Requested-With': 'XMLHttpRequest' };
+  const jwt = localStorage.getItem('Bearer:/gishub/api');
+  if (!!jwt) {
+    headers['Authorization'] = `Bearer ${jwt}`;
+  }
+  esriConfig.request.interceptors.push({
+    urls: /gishub/,
+    headers
+  });
+
+  const map = new Map({
+    basemap: 'satellite',
+    ground: 'world-elevation'
+  });
+  const view = new SceneView({
+    container: 'viewDiv', // Reference to the scene div created in step 5
+    map: map, // Reference to the map object created before the scene
+    zoom: 7, // Sets zoom level based on level of detail (LOD)
+    center: [113, 22] // Sets center point of view using longitude,latitude
+  });
+
+  function loadSceneFromQuery(view) {
+    const queryString = location.search.substring(1);
+    const queryParts = queryString.split('&');
+    const dict = { };
+    for (let i = 0; i < queryParts.length; i++) {
+      const pair = queryParts[i].split('=');
+      dict[pair[0]] = pair[1];
+    }
+    const layer = dict.layer;
+    if (!layer) {
+      return;
+    }
+    layer = decodeURIComponent(dict.layer);
+    const meshLayer = new IntegratedMeshLayer({
+      url: 'https://it.gdeei.cn/slpk/' + layer + '/'
+    });
+    meshLayer.load().then(async () => {
+      view.map.add(meshLayer);
+      view.goTo(meshLayer.fullExtent);
+    });
+  }
+
+  view.when().then(async () => {
+    // if (!!location.search) {
+    //   loadSceneFromQuery(view);
+    //   return;
+    // }
+    const res = await fetch('rest/services/slpks', { headers });
+    const json = await res.json();
+    const id = json[0].id;
+    const url = `rest/services/slpks/${id}/SceneServer`;
+    const meshLayer = new IntegratedMeshLayer({
+      url
+    });
+    await meshLayer.load();
+    view.goTo(meshLayer.fullExtent);
+    view.map.add(meshLayer);
+  });
+});
+</script>
 </body>
 
 </html>
