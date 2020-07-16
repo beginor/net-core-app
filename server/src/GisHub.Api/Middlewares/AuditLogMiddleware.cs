@@ -19,20 +19,20 @@ using Beginor.GisHub.Models;
 
 namespace Beginor.GisHub.Api.Middlewares {
 
-    public class AuditMiddleware {
+    public class AuditLogMiddleware {
 
         private readonly RequestDelegate next;
         private IActionDescriptorCollectionProvider provider;
         private IActionSelector selector;
         private IServiceProvider serviceProvider;
-        private ILogger<AuditMiddleware> logger;
+        private ILogger<AuditLogMiddleware> logger;
 
-        public AuditMiddleware(
+        public AuditLogMiddleware(
             RequestDelegate next,
             IActionDescriptorCollectionProvider provider,
             IActionSelector selector,
             IServiceProvider serviceProvider,
-            ILogger<AuditMiddleware> logger
+            ILogger<AuditLogMiddleware> logger
         ) {
             this.next = next ?? throw new ArgumentNullException(nameof(next));
             this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
@@ -99,7 +99,6 @@ namespace Beginor.GisHub.Api.Middlewares {
             );
         }
 
-
         private bool MatchesTemplate(string routeTemplate, string requestPath) {
             var template = TemplateParser.Parse(routeTemplate);
             var matcher = new TemplateMatcher(
@@ -120,6 +119,41 @@ namespace Beginor.GisHub.Api.Middlewares {
                 }
             }
             return result;
+        }
+
+        public async Task InvokeAsync(HttpContext context) {
+            var auditLog = new AppAuditLogModel {
+                RequestPath = context.Request.Path,
+                RequestMethod = context.Request.Method,
+                UserName = GetUserName(context),
+                StartAt = DateTime.Now
+            };
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var ip = context.Request.HttpContext.Connection.RemoteIpAddress.ToString();
+            if (context.Request.Headers.TryGetValue("X-Real-IP", out var realIp)) {
+                ip = realIp.ToString();
+            }
+            auditLog.Ip = ip;
+            await next.Invoke(context);
+            stopwatch.Stop();
+            auditLog.Duration = stopwatch.ElapsedMilliseconds;
+            SaveAuditLogInBackground(context.RequestServices, auditLog);
+        }
+
+        private void SaveAuditLogInBackground(
+            IServiceProvider serviceProvider,
+            AppAuditLogModel model
+        ) {
+            Task.Run(() => {
+                using var scope = serviceProvider.CreateScope();
+                var repo = scope.ServiceProvider.GetService<IAppAuditLogRepository>();
+                var task = repo.SaveAsync(model);
+                task.Wait();
+                if (task.IsFaulted) {
+                    logger.LogError(task.Exception, "Can not save audit log!");
+                }
+            });
         }
 
         private string GetUserName(HttpContext context) {
