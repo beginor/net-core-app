@@ -42,10 +42,6 @@ namespace Beginor.GisHub.Api.Middlewares {
         }
 
         public async Task InvokeAsync(HttpContext context) {
-            if (context.Request.Headers.ContainsKey("X-Skip-Audit-Log")) {
-                await next.Invoke(context);
-                return;
-            }
             var auditLog = new AppAuditLogModel {
                 RequestPath = context.Request.Path,
                 RequestMethod = context.Request.Method,
@@ -59,20 +55,25 @@ namespace Beginor.GisHub.Api.Middlewares {
                 ip = realIp.ToString();
             }
             auditLog.Ip = ip;
-            context.Response.OnStarting(state => {
-                var ctx = (HttpContext)state;
-                stopwatch.Stop();
-                ctx.Response.Headers.Add(
-                    "X-Response-Time-Milliseconds",
-                    stopwatch.ElapsedMilliseconds.ToString()
-                );
-                stopwatch.Start();
-                return Task.CompletedTask;
-            }, context);
             await next.Invoke(context);
+            stopwatch.Stop();
             auditLog.Duration = stopwatch.ElapsedMilliseconds;
-            var repo = context.RequestServices.GetService<IAppAuditLogRepository>();
-            await repo.SaveAsync(auditLog);
+            SaveAuditLogInBackground(context.RequestServices, auditLog);
+        }
+
+        private void SaveAuditLogInBackground(
+            IServiceProvider serviceProvider,
+            AppAuditLogModel model
+        ) {
+            Task.Run(() => {
+                using var scope = serviceProvider.CreateScope();
+                var repo = scope.ServiceProvider.GetService<IAppAuditLogRepository>();
+                var task = repo.SaveAsync(model);
+                task.Wait();
+                if (task.IsFaulted) {
+                    logger.LogError(task.Exception, "Can not save audit log!");
+                }
+            });
         }
 
         private ActionDescriptor GetMatchingAction(string path, string httpMethod) {
@@ -119,41 +120,6 @@ namespace Beginor.GisHub.Api.Middlewares {
                 }
             }
             return result;
-        }
-
-        public async Task InvokeAsync(HttpContext context) {
-            var auditLog = new AppAuditLogModel {
-                RequestPath = context.Request.Path,
-                RequestMethod = context.Request.Method,
-                UserName = GetUserName(context),
-                StartAt = DateTime.Now
-            };
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            var ip = context.Request.HttpContext.Connection.RemoteIpAddress.ToString();
-            if (context.Request.Headers.TryGetValue("X-Real-IP", out var realIp)) {
-                ip = realIp.ToString();
-            }
-            auditLog.Ip = ip;
-            await next.Invoke(context);
-            stopwatch.Stop();
-            auditLog.Duration = stopwatch.ElapsedMilliseconds;
-            SaveAuditLogInBackground(context.RequestServices, auditLog);
-        }
-
-        private void SaveAuditLogInBackground(
-            IServiceProvider serviceProvider,
-            AppAuditLogModel model
-        ) {
-            Task.Run(() => {
-                using var scope = serviceProvider.CreateScope();
-                var repo = scope.ServiceProvider.GetService<IAppAuditLogRepository>();
-                var task = repo.SaveAsync(model);
-                task.Wait();
-                if (task.IsFaulted) {
-                    logger.LogError(task.Exception, "Can not save audit log!");
-                }
-            });
         }
 
         private string GetUserName(HttpContext context) {
