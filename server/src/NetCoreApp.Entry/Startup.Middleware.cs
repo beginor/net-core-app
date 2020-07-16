@@ -19,7 +19,7 @@ namespace Beginor.NetCoreApp.Entry {
             IWebHostEnvironment env
         ) {
             app.UseMiddleware<ExceptionMiddleware>();
-            app.UseMiddleware<AuditMiddleware>();
+            app.UseMiddleware<AuditLogMiddleware>();
         }
     }
 }

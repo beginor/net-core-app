@@ -19,20 +19,20 @@ using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Api.Middlewares {
 
-    public class AuditMiddleware {
+    public class AuditLogMiddleware {
 
         private readonly RequestDelegate next;
         private IActionDescriptorCollectionProvider provider;
         private IActionSelector selector;
         private IServiceProvider serviceProvider;
-        private ILogger<AuditMiddleware> logger;
+        private ILogger<AuditLogMiddleware> logger;
 
-        public AuditMiddleware(
+        public AuditLogMiddleware(
             RequestDelegate next,
             IActionDescriptorCollectionProvider provider,
             IActionSelector selector,
             IServiceProvider serviceProvider,
-            ILogger<AuditMiddleware> logger
+            ILogger<AuditLogMiddleware> logger
         ) {
             this.next = next ?? throw new ArgumentNullException(nameof(next));
             this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
