@@ -65,7 +65,6 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             );
         }
 
-
         private bool MatchesTemplate(string routeTemplate, string requestPath) {
             var template = TemplateParser.Parse(routeTemplate);
             var matcher = new TemplateMatcher(
@@ -102,20 +101,25 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
                 ip = realIp.ToString();
             }
             auditLog.Ip = ip;
-            context.Response.OnStarting(state => {
-                var ctx = (HttpContext)state;
-                stopwatch.Stop();
-                ctx.Response.Headers.Add(
-                    "X-Response-Time-Milliseconds",
-                    stopwatch.ElapsedMilliseconds.ToString()
-                );
-                stopwatch.Start();
-                return Task.CompletedTask;
-            }, context);
             await next.Invoke(context);
+            stopwatch.Stop();
             auditLog.Duration = stopwatch.ElapsedMilliseconds;
-            var repo = context.RequestServices.GetService<IAppAuditLogRepository>();
-            await repo.SaveAsync(auditLog);
+            SaveAuditLogInBackground(context.RequestServices, auditLog);
+        }
+
+        private void SaveAuditLogInBackground(
+            IServiceProvider serviceProvider,
+            AppAuditLogModel model
+        ) {
+            Task.Run(() => {
+                using var scope = serviceProvider.CreateScope();
+                var repo = scope.ServiceProvider.GetService<IAppAuditLogRepository>();
+                var task = repo.SaveAsync(model);
+                task.Wait();
+                if (task.IsFaulted) {
+                    logger.LogError(task.Exception, "Can not save audit log!");
+                }
+            });
         }
 
         private string GetUserName(HttpContext context) {
