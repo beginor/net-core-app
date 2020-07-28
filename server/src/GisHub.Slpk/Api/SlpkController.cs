@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.StaticFiles;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Api;
-using Beginor.GisHub.Slpk.Cache;
 using Beginor.GisHub.Slpk.Data;
 using Beginor.GisHub.Slpk.Models;
 
@@ -22,18 +21,15 @@ namespace Beginor.GisHub.Slpk.Api {
         private ILogger<SlpkController> logger;
         private ISlpkRepository repository;
         private IContentTypeProvider provider;
-        private SlpkCache cache;
 
         public SlpkController(
             ILogger<SlpkController> logger,
             ISlpkRepository repository,
-            IContentTypeProvider provider,
-            SlpkCache cache
+            IContentTypeProvider provider
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
             this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
-            this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
         }
 
         protected override void Dispose(bool disposing) {
@@ -41,7 +37,6 @@ namespace Beginor.GisHub.Slpk.Api {
                 logger = null;
                 repository = null;
                 provider = null;
-                cache = null;
             }
             base.Dispose(disposing);
         }
@@ -167,7 +162,7 @@ namespace Beginor.GisHub.Slpk.Api {
         [Authorize("slpks.read_slpk_scene")]
         public async Task<ActionResult> GetSlpkInfo(long id) {
             try {
-                var directory = await GetSlpkDirectoryAsync(id);
+                var directory = await repository.GetSlpkDirectoryAsync(id);
                 if (string.IsNullOrEmpty(directory)) {
                     return NotFound();
                 }
@@ -186,7 +181,7 @@ namespace Beginor.GisHub.Slpk.Api {
         [Authorize("slpks.read_slpk_scene")]
         public async Task<ActionResult> GetNodeIndex(long id, string node) {
             try {
-                var directory = await GetSlpkDirectoryAsync(id);
+                var directory = await repository.GetSlpkDirectoryAsync(id);
                 if (string.IsNullOrEmpty(directory)) {
                     return NotFound();
                 }
@@ -205,7 +200,7 @@ namespace Beginor.GisHub.Slpk.Api {
         [Authorize("slpks.read_slpk_scene")]
         public async Task<ActionResult> GetNodeFeature(long id, string node, string feature) {
             try {
-                var directory = await GetSlpkDirectoryAsync(id);
+                var directory = await repository.GetSlpkDirectoryAsync(id);
                 if (string.IsNullOrEmpty(directory)) {
                     return NotFound();
                 }
@@ -224,7 +219,7 @@ namespace Beginor.GisHub.Slpk.Api {
         [Authorize("slpks.read_slpk_scene")]
         public async Task<ActionResult> GetNodeGeometry(long id, string node, string geometry) {
             try {
-                var directory = await GetSlpkDirectoryAsync(id);
+                var directory = await repository.GetSlpkDirectoryAsync(id);
                 if (string.IsNullOrEmpty(directory)) {
                     return NotFound();
                 }
@@ -243,7 +238,7 @@ namespace Beginor.GisHub.Slpk.Api {
         [Authorize("slpks.read_slpk_scene")]
         public async Task<ActionResult> GetNodeShared(long id, string node) {
             try {
-                var directory = await GetSlpkDirectoryAsync(id);
+                var directory = await repository.GetSlpkDirectoryAsync(id);
                 if (string.IsNullOrEmpty(directory)) {
                     return NotFound();
                 }
@@ -262,7 +257,7 @@ namespace Beginor.GisHub.Slpk.Api {
         [Authorize("slpks.read_slpk_scene")]
         public async Task<ActionResult> GetNodeTexture(long id, string node, string texture) {
             try {
-                var directory = await GetSlpkDirectoryAsync(id);
+                var directory = await repository.GetSlpkDirectoryAsync(id);
                 if (string.IsNullOrEmpty(directory)) {
                     return NotFound();
                 }
@@ -273,21 +268,6 @@ namespace Beginor.GisHub.Slpk.Api {
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get slpk {id} node {node} textures {texture}!");
                 return this.InternalServerError(ex.GetOriginalMessage());
-            }
-        }
-
-        private async Task<string> GetSlpkDirectoryAsync(long id) {
-            if (cache.TryGetValue(id, out var item)) {
-                return item.Directory;
-            }
-            else {
-                var model = await repository.GetByIdAsync(id);
-                var directory = string.Empty;
-                if (model != null) {
-                    directory = model.Directory;
-                }
-                cache.TryAdd(id, new SlpkCacheItem { Id = id, Directory = directory });
-                return directory;
             }
         }
 

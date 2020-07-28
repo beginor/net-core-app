@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Reflection;
 using Beginor.AppFx.DependencyInjection;
@@ -25,7 +26,7 @@ namespace Beginor.GisHub.Entry {
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
-            services.AddSingleton<Beginor.GisHub.Slpk.Cache.SlpkCache>();
+            services.AddSingleton<ConcurrentDictionary<long, Beginor.GisHub.Slpk.Data.SlpkCacheItem>>();
         }
 
         private static void ConfigureApp(

@@ -19,6 +19,8 @@ namespace Beginor.GisHub.Slpk.Data {
 
         Task DeleteAsync(long id, string userId, CancellationToken token = default);
 
+        Task<string> GetSlpkDirectoryAsync(long id);
+
     }
 
 }
