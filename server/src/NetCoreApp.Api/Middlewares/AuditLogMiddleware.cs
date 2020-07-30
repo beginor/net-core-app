@@ -41,6 +41,27 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+        public async Task InvokeAsync(HttpContext context) {
+            var auditLog = new AppAuditLogModel {
+                RequestPath = context.Request.Path,
+                RequestMethod = context.Request.Method,
+                UserName = GetUserName(context),
+                StartAt = DateTime.Now,
+
+            };
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var ip = context.Request.HttpContext.Connection.RemoteIpAddress.ToString();
+            if (context.Request.Headers.TryGetValue("X-Real-IP", out var realIp)) {
+                ip = realIp.ToString();
+            }
+            auditLog.Ip = ip;
+            await next.Invoke(context);
+            stopwatch.Stop();
+            auditLog.Duration = stopwatch.ElapsedMilliseconds;
+            SaveAuditLogInBackground(context.RequestServices, auditLog);
+        }
+
         private ActionDescriptor GetMatchingAction(string path, string httpMethod) {
             var actionDescriptors = provider.ActionDescriptors.Items;
             // match by route template
@@ -87,26 +108,6 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             return result;
         }
 
-        public async Task InvokeAsync(HttpContext context) {
-            var auditLog = new AppAuditLogModel {
-                RequestPath = context.Request.Path,
-                RequestMethod = context.Request.Method,
-                UserName = GetUserName(context),
-                StartAt = DateTime.Now
-            };
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            var ip = context.Request.HttpContext.Connection.RemoteIpAddress.ToString();
-            if (context.Request.Headers.TryGetValue("X-Real-IP", out var realIp)) {
-                ip = realIp.ToString();
-            }
-            auditLog.Ip = ip;
-            await next.Invoke(context);
-            stopwatch.Stop();
-            auditLog.Duration = stopwatch.ElapsedMilliseconds;
-            SaveAuditLogInBackground(context.RequestServices, auditLog);
-        }
-
         private void SaveAuditLogInBackground(
             IServiceProvider serviceProvider,
             AppAuditLogModel model
@@ -114,6 +115,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             Task.Run(() => {
                 using var scope = serviceProvider.CreateScope();
                 var repo = scope.ServiceProvider.GetService<IAppAuditLogRepository>();
+                var action = GetMatchingAction(model.RequestPath, model.RequestMethod);
                 var task = repo.SaveAsync(model);
                 task.Wait();
                 if (task.IsFaulted) {
