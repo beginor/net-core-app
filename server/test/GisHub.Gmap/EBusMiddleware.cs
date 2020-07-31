@@ -31,16 +31,9 @@ namespace Gmap {
             var reqMethod = req.Method;
             var queryString = req.QueryString;
             var servicePath = service.GetGatewayServiceUrl(reqPath);
-            if (queryString != null) {
-                servicePath += queryString.Value;
-            }
+            servicePath += queryString.Value;
             logger.LogInformation($"{reqMethod}: {servicePath}");
-            var yztReq = HttpWebRequest.CreateHttp(servicePath);
-            yztReq.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => {
-                return true;
-            };
-            yztReq.Method = reqMethod;
-            yztReq.AutomaticDecompression = DecompressionMethods.All;
+            var yztReq = service.CreateHttpRequest(servicePath, reqMethod);
             if (req.Headers.TryGetValue("Accept", out var acceptVal)) {
                 yztReq.Accept = acceptVal;
             }
@@ -53,10 +46,6 @@ namespace Gmap {
             if (req.Headers.TryGetValue("User-Agent", out var userAgentVal)) {
                 yztReq.Headers.Add("User-Agent", userAgentVal);
             }
-            var paasHeaders = service.ComputeSignatureHeaders();
-            foreach (var pair in paasHeaders) {
-                yztReq.Headers.Add(pair.Key, pair.Value);
-            }
             if (reqMethod.Equals("POST", StringComparison.OrdinalIgnoreCase)) {
                 var stream = await yztReq.GetRequestStreamAsync();
                 await req.Body.CopyToAsync(stream);
@@ -67,23 +56,24 @@ namespace Gmap {
                 res.StatusCode = (int)yztRes.StatusCode;
                 res.ContentType = yztRes.ContentType;
                 res.Headers.Add("Content-Encoding", yztRes.ContentEncoding);
-                if (yztRes.ContentType.Contains("text/xml", StringComparison.OrdinalIgnoreCase)
-                    && queryString != null
-                    && queryString.Value.Contains("GetCapabilities", StringComparison.OrdinalIgnoreCase)
-                ) {
-                    using var streamReader = new StreamReader(yztRes.GetResponseStream());
-                    var streamWriter = new StreamWriter(res.Body);
-                    var line = string.Empty;
-                    var replacement = req.Scheme + "://" + req.Host + req.PathBase;
-                    while ((line = await streamReader.ReadLineAsync()) != null) {
-                        line = service.ReplaceGatewayUrl(line, replacement);
-                        await streamWriter.WriteLineAsync(line);
+                var responseStream = yztRes.GetResponseStream();
+                if (responseStream != null) {
+                    if (yztRes.ContentType.Contains("text/xml", StringComparison.OrdinalIgnoreCase)
+                        && queryString.Value.Contains("GetCapabilities", StringComparison.OrdinalIgnoreCase)
+                    ) {
+                        using var streamReader = new StreamReader(responseStream);
+                        var streamWriter = new StreamWriter(res.Body);
+                        string line;
+                        var replacement = req.Scheme + "://" + req.Host + req.PathBase;
+                        while ((line = await streamReader.ReadLineAsync()) != null) {
+                            line = service.ReplaceGatewayUrl(line, replacement);
+                            await streamWriter.WriteLineAsync(line);
+                        }
+                        await streamWriter.FlushAsync();
                     }
-                    await streamWriter.FlushAsync();
-                }
-                else {
-                    await yztRes.GetResponseStream().CopyToAsync(res.Body, 1024);
-                    // await CopyStreamAsync(yztRes.GetResponseStream(), res.Body);
+                    else {
+                        await responseStream.CopyToAsync(res.Body, 1024);
+                    }
                 }
                 logger.LogInformation($"Success {reqMethod}: {servicePath}");
             }
@@ -96,7 +86,6 @@ namespace Gmap {
                     res.Headers.Add(key, errResponse.Headers.Get(key));
                 }
                 await errResponse.GetResponseStream().CopyToAsync(res.Body, 1024);
-                // await CopyStreamAsync(errResponse.GetResponseStream(), res.Body);
             }
             catch (Exception ex) {
                 res.StatusCode = 500;
@@ -105,15 +94,6 @@ namespace Gmap {
             finally {
                 await res.CompleteAsync();
             }
-        }
-
-        private static async Task CopyStreamAsync(Stream input, Stream output) {
-            byte[] buffer = new byte[1024];
-            var count = 0;
-            while ((count = await input.ReadAsync(buffer, 0, buffer.Length)) > 0) {
-                await output.WriteAsync(buffer, 0, count);
-            }
-            await output.FlushAsync();
         }
 
     }

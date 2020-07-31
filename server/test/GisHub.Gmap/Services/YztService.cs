@@ -37,6 +37,19 @@ namespace Gmap.Services {
             return options.GatewayUrl + path;
         }
 
+        public HttpWebRequest CreateHttpRequest(string url,  string method) {
+            var request = WebRequest.CreateHttp(url);
+            request.Method = method;
+            request.ServerCertificateValidationCallback = (s, cert, chain, sslErr) => true;
+            request.AutomaticDecompression = DecompressionMethods.All;
+            request.AllowAutoRedirect = false;
+            var headers = ComputeSignatureHeaders();
+            foreach (var pair in headers) {
+                request.Headers.Add(pair.Key, pair.Value);
+            }
+            return request;
+        }
+
         public string ReplaceGatewayUrl(string content, string replacement) {
             return content.Replace(options.GatewayUrl, replacement, StringComparison.OrdinalIgnoreCase);
         }
@@ -69,24 +82,18 @@ namespace Gmap.Services {
         public async Task GetTileContent(string tileName, Tile tile) {
             var template = GetGatewayServiceUrl(tileName);
             var url = string.Format(template, tile.Z, tile.Y, tile.X);
-            var request = WebRequest.CreateHttp(url);
-            request.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => {
-                return true;
-            };
-            request.Method = "GET";
-            request.AutomaticDecompression = DecompressionMethods.All;
-            var paasHeaders = ComputeSignatureHeaders();
-            foreach (var pair in paasHeaders) {
-                request.Headers.Add(pair.Key, pair.Value);
-            }
+            var request = CreateHttpRequest(url, "GET");
             try {
                 using var response = (HttpWebResponse) await request.GetResponseAsync();
                 if (response.ContentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase)) {
                     var stream = new MemoryStream();
-                    await response.GetResponseStream().CopyToAsync(stream);
-                    await stream.FlushAsync();
-                    tile.Content = stream.GetBuffer();
-                    tile.ContentType = response.ContentType;
+                    var responseStream = response.GetResponseStream();
+                    if (responseStream != null) {
+                        await responseStream.CopyToAsync(stream);
+                        await stream.FlushAsync();
+                        tile.Content = stream.GetBuffer();
+                        tile.ContentType = response.ContentType;
+                    }
                 }
             }
             catch (Exception ex) {

@@ -36,7 +36,7 @@ namespace Gmap.Utils {
                 return CropTile(tiles[0], extent);
             }
             var startTile = tiles[0];
-            var endTile = tiles[tiles.Count - 1];
+            var endTile = tiles[^1];
             var startX = startTile.X;
             var startY = startTile.Y;
             var endX = endTile.X;
