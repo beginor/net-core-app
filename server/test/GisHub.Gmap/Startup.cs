@@ -40,6 +40,7 @@ namespace Gmap {
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             app.UsePathBase("/gmap");
             app.UseStaticFiles();
+            app.UseCors();
             app.Map("/ebus", subApp => {
                 subApp.UseMiddleware<EBusMiddleware>();
             });
