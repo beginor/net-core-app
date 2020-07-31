@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>粤政图服务接入示范用例</title>
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+
+	<link href="./lib/mapbox/css/mapbox-gl.css" rel="stylesheet" type="text/css" />
+	<link href="./css/common.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="gmap"></div>
+	<div id="dialog" style="height:auto;width:350px;max-height:550px;">
+		<div class="dtitle">
+			<TABLE cellSpacing=0 cellPadding=0 width="100%">
+				<TR>
+					<TD style="color: #ffffff;font-weight: bold">地名地址查询</TD>
+					<TD style="text-align: right"> <img style="cursor:hand" onclick="slideToggleDialog('dialog')"
+							src="./img/closeD.png" /> </TD>
+				</TR>
+			</TABLE>
+		</div>
+
+		<div style="margin-left: 20px;margin-top: 10px;">
+			<span>查询方式：</span>
+			<select id="geoCodingType">
+				<option value="addrToLoc">正向匹配</option>
+				<option value="locToaddr">反向匹配</option>
+			</select>
+		</div>
+
+		<!-- 正向匹配 -->
+		<div class="geocodingDiv" id="addrToLocDiv" style="text-align:height:auto;width:350px;overflow:auto;max-height:500px;">
+			<br />
+			<TABLE align="center" cellSpacing="0" cellPadding="1" width="90%" style="line-height:1.5">
+				<TR>
+					<TD>本示例演示地址正向匹配，并且关联查询出该地址上的POI</TD>
+				</TR>
+				<TR>
+					<TD style="height: 30px;"> <input type="text" id="addrToLocQueryText" value="广东省人民政府" style="width:200px;" /> &nbsp;&nbsp;
+						<input type="button" value="查询" id="addrToLoc"/>
+					</TD>
+				</TR>
+				<TR>
+					<td style="height: 30px;">
+						<input type="checkbox" name="params" id="trd" style="vertical-align:middle" checked  />地址关联POI&nbsp;
+					</td>
+				</TR>
+				<TR>
+					<TD> <div id="addrToLocDIVresult"></div>
+					</TD>
+				</TR>
+			</TABLE>
+		</div>
+
+		<!-- 反向匹配 -->
+		<div class="geocodingDiv" id="locToaddrDiv" style="text-align:height:auto;width:350px;overflow:auto;max-height:500px;display:none">
+			<br />
+			<TABLE align="center" cellSpacing="0" cellPadding="1" width="90%" style="line-height:1.5">
+				<TR>
+					<TD>本示例演示根据坐标反向查询地名</TD>
+				</TR>
+				<TR>
+					<TD style="height: 30px;"> <input type="text" id="locToAddrQueryText" value="113.2612197650001,23.135719477000071"
+							style="width:220px;" /> &nbsp;&nbsp;
+						<input type="button" value="查询" id="locToAddr"/>
+					</TD>
+				</TR>
+				<TR>
+					<TD>
+						<div id="locToAddrDIVresult"></div>
+					</TD>
+				</TR>
+			</TABLE>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="./lib/jQuery/jquery-3.4.1.js"></script>
+<script type="text/javascript" src="./js/Tianditu.js"></script>
+<script type="text/javascript" src="./lib/mapbox/js/mapbox-gl.js"></script>
+<script type="text/javascript" src="./lib/GeoGlobeSDK/GeoGlobeJS.min.js"></script>
+<script type="text/javascript" src="./map/js/wmtsUtil.js"></script>
+<script type="text/javascript" src="./map/js/wfsUtil.js"></script>
+<script type="text/javascript" src="./map/js/geocodingUtil.js"></script>
+<script type="text/javascript" src="./map/js/mapView.js"></script>
+<script type="text/javascript" src="./map/js/index.js"></script>
+
+</html>

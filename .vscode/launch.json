@@ -7,7 +7,10 @@
       "request": "launch",
       "preLaunchTask": "dotnet:build:SlpkExtractor",
       "program": "${workspaceFolder}/server/test/GisHub.SlpkExtractor/bin/Debug/netcoreapp3.1/Beginor.GisHub.SlpkExtractor.dll",
-      "args": ["/Volumes/WD25A2/gis_data/SLPK/广雅中学.slpk", "/Users/zhang/Documents/GIS_Data/slpk"],
+      "args": [
+        "/Volumes/WD25A2/gis_data/SLPK/广雅中学.slpk",
+        "/Users/zhang/Documents/GIS_Data/slpk"
+      ],
       "cwd": "${workspaceFolder}/server/test/GisHub.SlpkExtractor",
       "stopAtEntry": false,
       "console": "internalConsole"
@@ -44,6 +47,28 @@
         "--incognito"
       ],
       "disableNetworkCache": true
+    },
+    {
+      "name": "Gmap",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "dotnet:build:Gmap",
+      "program": "${workspaceFolder}/server/test/GisHub.Gmap/bin/Debug/netcoreapp3.1/Gmap.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/server/test/GisHub.Gmap",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/server/test/GisHub.Gmap/Views"
+      }
+    },
+    {
+        "name": "Attach",
+        "type": "coreclr",
+        "request": "attach",
+        "processId": "${command:pickProcess}"
     }
   ]
 }

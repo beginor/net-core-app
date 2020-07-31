@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>粤政图地图服务加载</title>
+  <link rel="stylesheet" href="https://app.gdeei.cn/arcgis-js-api/library/4.15/esri/themes/light/main.css" />
+  <script src="https://app.gdeei.cn/arcgis-js-api/library/4.15/init.js"></script>
+  <style>
+    html, body, #map {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+  <script>
+    require(['esri/Map',
+      'esri/views/MapView',
+      'esri/layers/WebTileLayer',
+      'esri/layers/support/TileInfo',
+      'esri/geometry/SpatialReference',
+      'esri/geometry/Point',
+      'esri/layers/FeatureLayer',
+      'esri/views/SceneView',
+      'dojo/domReady!'
+    ], function (Map, MapView, WebTileLayer, TileInfo, SpatialReference, Point, FeatureLayer, SceneView) {
+      var tileInfo = new TileInfo({
+        dpi: 96,//解析度，即像素
+        // rows: 256,
+        // cols: 256,
+        size: [256, 256],
+        compressionQuality: 0,//压缩像素值
+        origin: { x: -180, y: 90 },
+        spatialReference: {
+          wkid: 4490
+        },
+        lods: [//定义平铺方案的细节级别数组
+          { level: 0, levelValue: 0, resolution: 1.4078288, scale: 591658710.909132 },
+          { level: 1, levelValue: 1, resolution: 0.7039144, scale: 295829355.454566 },
+          { level: 2, levelValue: 2, resolution: 0.3515625, scale: 147748796.52937502 },
+          { level: 3, levelValue: 3, resolution: 0.17578125, scale: 73874398.264687508 },
+          { level: 4, levelValue: 4, resolution: 0.087890625, scale: 36937199.132343754 },
+          { level: 5, levelValue: 5, resolution: 0.0439453125, scale: 18468599.566171877 },
+          { level: 6, levelValue: 6, resolution: 0.02197265625, scale: 9234299.7830859385 },
+          { level: 7, levelValue: 7, resolution: 0.010986328125, scale: 4617149.8915429693 },
+          { level: 8, levelValue: 8, resolution: 0.0054931640625, scale: 2308574.9457714846 },
+          { level: 9, levelValue: 9, resolution: 0.00274658203125, scale: 1154287.4728857423 },
+          { level: 10, levelValue: 10, resolution: 0.001373291015625, scale: 577143.73644287116 },
+          { level: 11, levelValue: 11, resolution: 0.0006866455078125, scale: 288571.86822143558 },
+          { level: 12, levelValue: 12, resolution: 0.00034332275390625, scale: 144285.93411071779 },
+          { level: 13, levelValue: 13, resolution: 0.000171661376953125, scale: 72142.967055358895 },
+          { level: 14, levelValue: 14, resolution: 8.58306884765625e-005, scale: 36071.483527679447 },
+          { level: 15, levelValue: 15, resolution: 4.291534423828125e-005, scale: 18035.741763839724 },
+          { level: 16, levelValue: 16, resolution: 2.1457672119140625e-005, scale: 9017.8708819198619 },
+          { level: 17, levelValue: 17, resolution: 1.0728836059570313e-005, scale: 4508.9354409599309 },
+          { level: 18, levelValue: 18, resolution: 5.3644180297851563e-006, scale: 2254.4677204799655 },
+          { level: 19, levelValue: 19, resolution: 2.68220901489257815e-006, scale: 1127.23386023998275 },
+          { level: 20, levelValue: 20, resolution: 1.341104507446289075e-006, scale: 563.616930119991375 }
+        ]
+      })
+      var hlfbLayer = new WebTileLayer('http://172.21.11.241:5800/gmap/ebus/zwdsj-dlk/geostar/GD_HLFB/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&TILEMATRIXSET=Matrix_SLT_HLFB_0&TILEMATRIX={level}&TILEROW={row}&TILECOL={col}&FORMAT=image/png', {
+        tileInfo: tileInfo,
+        spatialReference: {
+          wkid: 4490
+        },
+        fullExtent: {
+          spatialReference: { wkid: 4490 },
+          xmin: -180.0,
+          xmax: 180.0,
+          ymin: -90.0,
+          ymax: 90.0
+        },
+      });
+
+      var featureLayer = new FeatureLayer({
+        url: 'https://it.gdeei.cn/gisserver/rest/services/Features/%E8%A1%8C%E6%94%BF%E5%8C%BA%E5%88%92%E8%BE%B9%E7%BA%BF/MapServer/1',
+        spatialReference: {
+          wkid: 4490
+        }
+      });
+
+      var map = new Map({
+        spatialReference: {
+          wkid: 4490
+        },
+        basemap: {
+          baseLayers: [featureLayer, hlfbLayer]
+        }
+      });
+
+      var pt = new Point({
+        latitude: 23.150817871112068,
+        longitude: 113.28015136716937,
+        spatialReference: { wkid: 4490 }
+      });
+      var view = new MapView({
+        container: "map",
+        spatialReference: {
+          wkid: 4490
+        },
+        map: map,
+        // scale: 20000000,
+        zoom: 8,
+        center: pt,
+        constraints: {
+          minZoom: 1,
+          maxZoom: 20,
+        }
+      });
+      window.mapview = view;
+      window.Point = Point;
+    })
+  </script>
+</head>
+
+<body>
+  <div id="map"></div>
+</body>
+
+</html>

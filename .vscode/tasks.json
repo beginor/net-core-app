@@ -95,6 +95,16 @@
       "options": {
         "cwd": "${workspaceFolder}/server/test/GisHub.SlpkExtractor"
       }
+    },
+    {
+      "label": "dotnet:build:Gmap",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["build"],
+      "problemMatcher": ["$msCompile"],
+      "options": {
+        "cwd": "${workspaceFolder}/server/test/GisHub.Gmap"
+      }
     }
   ]
 }
