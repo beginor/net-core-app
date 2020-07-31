@@ -9,13 +9,12 @@ using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using NHibernate;
 using NHibernate.Linq;
-using Beginor.GisHub.Slpk.Data;
 using Beginor.GisHub.Slpk.Models;
 
 namespace Beginor.GisHub.Slpk.Data {
 
     /// <summary>slpk 航拍模型仓储实现</summary>
-    public partial class SlpkRepository : HibernateRepository<SlpkEntity, SlpkModel, long>, ISlpkRepository {
+    public class SlpkRepository : HibernateRepository<SlpkEntity, SlpkModel, long>, ISlpkRepository {
 
         private ConcurrentDictionary<long, SlpkCacheItem> cache;
 
@@ -59,7 +58,7 @@ namespace Beginor.GisHub.Slpk.Data {
             entity.UpdaterId = userId;
             await Session.SaveAsync(entity, token);
             await Session.FlushAsync(token);
-            cache.TryRemove(entity.Id, out var cacheItem);
+            cache.TryRemove(entity.Id, out _);
         }
 
         public async Task UpdateAsync(long id, SlpkModel model, string userId, CancellationToken token = default) {
@@ -75,7 +74,7 @@ namespace Beginor.GisHub.Slpk.Data {
             await Session.UpdateAsync(entity, token);
             await Session.FlushAsync(token);
             Mapper.Map(entity, model);
-            cache.TryRemove(id, out var cacheItem);
+            cache.TryRemove(id, out _);
         }
 
         public async Task DeleteAsync(long id, string userId, CancellationToken token = default) {
@@ -87,7 +86,7 @@ namespace Beginor.GisHub.Slpk.Data {
                 await Session.DeleteAsync(entity, token);
                 await Session.FlushAsync(token);
             }
-            cache.TryRemove(id, out var cacheItem);
+            cache.TryRemove(id, out _);
         }
 
         public async Task<string> GetSlpkDirectoryAsync(long id) {
