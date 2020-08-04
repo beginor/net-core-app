@@ -46,7 +46,7 @@ namespace Beginor.GisHub.Api.Middlewares {
                 RequestPath = context.Request.Path,
                 RequestMethod = context.Request.Method,
                 UserName = GetUserName(context),
-                StartAt = DateTime.Now,
+                StartAt = DateTime.Now
             };
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -59,6 +59,19 @@ namespace Beginor.GisHub.Api.Middlewares {
             stopwatch.Stop();
             auditLog.Duration = stopwatch.ElapsedMilliseconds;
             SaveAuditLogInBackground(auditLog);
+        }
+
+        private void SaveAuditLogInBackground(AppAuditLogModel model) {
+            Task.Run(() => {
+                using var scope = serviceProvider.CreateScope();
+                var repo = scope.ServiceProvider.GetService<IAppAuditLogRepository>();
+                var action = GetMatchingAction(model.RequestPath, model.RequestMethod);
+                var task = repo.SaveAsync(model);
+                task.Wait();
+                if (task.IsFaulted) {
+                    logger.LogError(task.Exception, "Can not save audit log!");
+                }
+            });
         }
 
         private ActionDescriptor GetMatchingAction(string path, string httpMethod) {
@@ -105,19 +118,6 @@ namespace Beginor.GisHub.Api.Middlewares {
                 }
             }
             return result;
-        }
-
-        private void SaveAuditLogInBackground(AppAuditLogModel model) {
-            Task.Run(() => {
-                using var scope = serviceProvider.CreateScope();
-                var repo = scope.ServiceProvider.GetService<IAppAuditLogRepository>();
-                var action = GetMatchingAction(model.RequestPath, model.RequestMethod);
-                var task = repo.SaveAsync(model);
-                task.Wait();
-                if (task.IsFaulted) {
-                    logger.LogError(task.Exception, "Can not save audit log!");
-                }
-            });
         }
 
         private string GetUserName(HttpContext context) {
