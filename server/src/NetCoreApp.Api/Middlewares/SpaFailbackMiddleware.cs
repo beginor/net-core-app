@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Beginor.NetCoreApp.Api.Middlewares {
 
@@ -16,18 +16,21 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
         private readonly RequestDelegate next;
         private readonly IWebHostEnvironment env;
         private readonly ILogger<SpaFailbackMiddleware> logger;
-        private readonly SpaFailbackOptions options;
+        private SpaFailbackOptions options;
 
         public SpaFailbackMiddleware(
             RequestDelegate next,
             IWebHostEnvironment env,
             ILogger<SpaFailbackMiddleware> logger,
-            SpaFailbackOptions options
+            IOptionsMonitor<SpaFailbackOptions> monitor
         ) {
             this.next = next ?? throw new ArgumentNullException(nameof(next));
             this.env = env ?? throw new ArgumentNullException(nameof(env));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.options = options ?? throw new ArgumentNullException(nameof(options));
+            this.options = monitor.CurrentValue ?? throw new ArgumentNullException(nameof(monitor));
+            monitor.OnChange(newVal => {
+                this.options = newVal;
+            });
         }
 
         public Task InvokeAsync(HttpContext context) {
@@ -58,19 +61,6 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
     }
 
     public static class SpaFailbackExtensions {
-
-        public static IServiceCollection AddSpaFailback(
-            this IServiceCollection services,
-            Action<SpaFailbackOptions> action
-        ) {
-            var options = new SpaFailbackOptions();
-            action(options);
-            if (options.Failbacks == null || options.Failbacks.Count == 0) {
-                throw new InvalidOperationException("SpaFailbacks is empty!");
-            }
-            services.AddSingleton(options);
-            return services;
-        }
 
         public static IApplicationBuilder UseSpaFailback(
             this IApplicationBuilder app
