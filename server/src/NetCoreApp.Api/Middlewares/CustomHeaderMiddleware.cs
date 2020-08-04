@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Beginor.NetCoreApp.Api.Middlewares {
 
     public class CustomHeaderMiddleware {
         private readonly RequestDelegate next;
-        private readonly CustomHeaderOptions options;
+        private CustomHeaderOptions options;
 
         public CustomHeaderMiddleware(
             RequestDelegate next,
-            CustomHeaderOptions options
+            IOptionsMonitor<CustomHeaderOptions> monitor
         ) {
             this.next = next ?? throw new ArgumentNullException(nameof(next));
-            this.options = options ?? throw new ArgumentNullException(nameof(options));
+            this.options = monitor.CurrentValue ?? throw new ArgumentNullException(nameof(monitor));
+            monitor.OnChange(newValue => options = newValue);
         }
 
         public Task InvokeAsync(HttpContext context) {
@@ -43,19 +44,6 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
     }
 
     public static class CustomHeaderExtensions {
-
-        public static IServiceCollection AddCustomHeader(
-            this IServiceCollection services,
-            Action<CustomHeaderOptions> action
-        ) {
-            var options = new CustomHeaderOptions();
-            action(options);
-            if (options.Headers == null || options.Headers.Count == 0) {
-                throw new InvalidOperationException("Custom Headers is empty!");
-            }
-            services.AddSingleton(options);
-            return services;
-        }
 
         public static IApplicationBuilder UseCustomHeader(
             this IApplicationBuilder app
