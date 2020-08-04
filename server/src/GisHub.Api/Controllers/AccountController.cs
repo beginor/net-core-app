@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
@@ -33,13 +34,13 @@ namespace Beginor.GisHub.Api.Controllers {
             ILogger<AccountController> logger,
             UserManager<AppUser> userMgr,
             RoleManager<AppRole> roleMgr,
-            JwtOption jwt,
+            IOptionsSnapshot<JwtOption> jwt,
             IAppNavItemRepository navRepo
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
             this.roleMgr = roleMgr ?? throw new ArgumentNullException(nameof(roleMgr));
-            this.jwt = jwt ?? throw new ArgumentNullException(nameof(jwt));
+            this.jwt = jwt.Value ?? throw new ArgumentNullException(nameof(jwt));
             this.navRepo = navRepo ?? throw new ArgumentNullException(nameof(navRepo));
         }
 

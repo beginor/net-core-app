@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Beginor.GisHub.Api.Middlewares;
 
@@ -12,10 +11,9 @@ namespace Beginor.GisHub.Entry {
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
-            services.AddCustomHeader(options => {
-                var section = config.GetSection("customHeader");
-                section.Bind(options);
-            });
+            services.Configure<CustomHeaderOptions>(
+                config.GetSection("customHeader")
+            );
         }
 
         private void ConfigureCustomHeader(

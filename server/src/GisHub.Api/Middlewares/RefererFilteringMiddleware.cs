@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Beginor.GisHub.Api.Middlewares {
 
@@ -16,22 +17,23 @@ namespace Beginor.GisHub.Api.Middlewares {
         private readonly RequestDelegate next;
         private readonly IWebHostEnvironment env;
         private readonly ILogger<RefererFilteringMiddleware> logger;
-        private readonly RefererFilteringOptions options;
+        private CorsPolicy policy;
 
         public RefererFilteringMiddleware(
             RequestDelegate next,
             IWebHostEnvironment env,
             ILogger<RefererFilteringMiddleware> logger,
-            RefererFilteringOptions options
+            IOptionsMonitor<CorsPolicy> monitor
         ) {
             this.next = next ?? throw new ArgumentNullException(nameof(next));
             this.env = env ?? throw new ArgumentNullException(nameof(env));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.options = options ?? throw new ArgumentNullException(nameof(options));
+            this.policy = monitor.CurrentValue ?? throw new ArgumentNullException(nameof(monitor));
+            monitor.OnChange(newVal => this.policy = newVal);
         }
 
         public Task InvokeAsync(HttpContext context) {
-            var origions = this.options.Origions;
+            var origions = this.policy.Origins;
             if (origions == null || origions.IndexOf("*") > -1) {
                 return next(context);
             }
@@ -52,30 +54,14 @@ namespace Beginor.GisHub.Api.Middlewares {
 
     }
 
-    public class RefererFilteringOptions {
-
-        public IList<string> Origions { get; set; }
-    }
-
     public static class RefererFilteringExtensions {
-
-        public static IServiceCollection AddRefererFiltering(
-            this IServiceCollection services,
-            Action<RefererFilteringOptions> action
-        ) {
-            var options = new RefererFilteringOptions();
-            action(options);
-            if (options.Origions == null) {
-                options.Origions = new [] { "*" };
-            }
-            return services.AddSingleton(options);
-        }
 
         public static IApplicationBuilder UseRefererFiltering(
             this IApplicationBuilder app
         ) {
             return app.UseMiddleware<RefererFilteringMiddleware>();
         }
+
     }
 
 }

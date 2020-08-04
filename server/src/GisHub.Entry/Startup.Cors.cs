@@ -1,11 +1,10 @@
-using System;
-using System.Linq;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Beginor.GisHub.Api.Cors;
 using Beginor.GisHub.Api.Middlewares;
 
 namespace Beginor.GisHub.Entry {
@@ -16,13 +15,12 @@ namespace Beginor.GisHub.Entry {
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
-            var corsPolicy = config.GetSection("corsPolicy").Get<CorsPolicy>();
-            // Referer
-            services.AddCors(corsOptions => {
-                corsOptions.AddDefaultPolicy(corsPolicy);
-            });
-            services.AddRefererFiltering(options => {
-                options.Origions = corsPolicy.Origins;
+            var section = config.GetSection("cors");
+            var corsPolicy = section.Get<CorsPolicy>();
+            services.Configure<CorsPolicy>(section);
+            services.AddScoped<ICorsPolicyProvider, CorsPolicyProvider>();
+            services.AddCors(options => {
+                options.AddDefaultPolicy(corsPolicy);
             });
         }
 
