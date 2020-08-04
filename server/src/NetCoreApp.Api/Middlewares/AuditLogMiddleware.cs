@@ -47,7 +47,6 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
                 RequestMethod = context.Request.Method,
                 UserName = GetUserName(context),
                 StartAt = DateTime.Now,
-
             };
             var stopwatch = new Stopwatch();
             stopwatch.Start();
