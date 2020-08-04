@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -26,12 +27,9 @@ namespace Gmap {
             var ebusOptions = config.GetSection("ebus").Get<EBusOptions>();
             services.AddSingleton(ebusOptions);
             services.AddSingleton<YztService>();
+            var corsPolicy = config.GetSection("cors").Get<CorsPolicy>();
             services.AddCors(cors => {
-                cors.AddDefaultPolicy(b => {
-                    b.AllowAnyOrigin()
-                     .AllowAnyHeader()
-                     .AllowAnyMethod();
-                });
+                cors.AddDefaultPolicy(corsPolicy);
             });
             services.AddControllers();
         }
