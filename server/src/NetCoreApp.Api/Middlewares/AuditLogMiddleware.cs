@@ -58,7 +58,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             await next.Invoke(context);
             stopwatch.Stop();
             auditLog.Duration = stopwatch.ElapsedMilliseconds;
-            SaveAuditLogInBackground(context.RequestServices, auditLog);
+            SaveAuditLogInBackground(auditLog);
         }
 
         private ActionDescriptor GetMatchingAction(string path, string httpMethod) {
@@ -107,10 +107,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             return result;
         }
 
-        private void SaveAuditLogInBackground(
-            IServiceProvider serviceProvider,
-            AppAuditLogModel model
-        ) {
+        private void SaveAuditLogInBackground(AppAuditLogModel model) {
             Task.Run(() => {
                 using var scope = serviceProvider.CreateScope();
                 var repo = scope.ServiceProvider.GetService<IAppAuditLogRepository>();
