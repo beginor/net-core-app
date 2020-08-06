@@ -1,8 +1,11 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Beginor.AppFx.Logging.Log4net;
 
 namespace Gmap {
 
@@ -22,9 +25,14 @@ namespace Gmap {
                     config.AddEnvironmentVariables();
                     config.AddCommandLine(args);
                 })
+                .ConfigureServices((context, services) => {
+                    services.Configure<KestrelServerOptions>(
+                        context.Configuration.GetSection("kestrel")
+                    );
+                })
                 .ConfigureLogging((context, logging) => {
                     logging.ClearProviders();
-                    logging.AddConsole();
+                    logging.AddLog4net(Path.Combine("config", "log.config"));
                 })
                 .ConfigureWebHostDefaults(app => {
                     app.UseStartup<Startup>();
