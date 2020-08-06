@@ -35,7 +35,7 @@
       // 图层对应的服务、切片集、图层、 样式需要去图层的 GetCapabilities 服务中查找
       function createYztLayer(service, tileMatrixSet, layer, style) {
         return new WebTileLayer({
-          urlTemplate: `http://172.21.11.241:5800/gmap/ebus/zwdsj-dlk/geostar/${service}/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=${layer}&STYLE=${style}'&TILEMATRIXSET=${tileMatrixSet}&TILEMATRIX={level}&TILEROW={row}&TILECOL={col}&FORMAT=image/png`,
+          urlTemplate: `http://172.21.68.126:5800/gmap/ebus/zwdsj-dlk/geostar/${service}/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=${layer}&STYLE=${style}'&TILEMATRIXSET=${tileMatrixSet}&TILEMATRIX={level}&TILEROW={row}&TILECOL={col}&FORMAT=image/png`,
           tileInfo: {
             dpi: 96,//解析度，即像素
             rows: 256,

@@ -10,15 +10,15 @@ require([
   'esri/geometry/SpatialReference',
   'esri/layers/support/TileInfo'
 ], function (Map, MapView, SceneView, WebTileLayer, TileLayer, WMTSLayer,FeatureLayer, BaseTileLayer, SpatialReference, TileInfo) {
-
+  var baseUrl = `${location.protocol}//${location.host}`;
   // 卫星图
   var satellite = new WebTileLayer({
-    urlTemplate: 'https://it.gdeei.cn/gmap/api/wmts/GDDOM/{level}/{row}/{col}',
+    urlTemplate: baseUrl + '/gmap/api/wmts/GDDOM/{level}/{row}/{col}',
     opacity: 1
   });
   // 注记
   var satelliteLabel = new WebTileLayer({
-    urlTemplate: 'https://it.gdeei.cn/gmap/api/wmts/DOMZJ_2000_2015/{level}/{row}/{col}',
+    urlTemplate: baseUrl + '/gmap/api/wmts/DOMZJ_2000_2015/{level}/{row}/{col}',
     opacity: 1
   });
 

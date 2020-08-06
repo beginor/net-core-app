@@ -3,17 +3,17 @@ var mapView = Window.mapView = {
 	map: null,
 
 	wmtslayersUrl: [
-		'http://172.21.11.241:5800/gmap/ebus/zwdsj-dlk/geostar/GD_HLFB/wmts'
-		// 'http://172.21.11.241:5800/gmap/ebus/zwdsj-dlk/geostar/GD_2018DLG/wmts',
-		// 'http://172.21.11.241:5800/gmap/ebus/zwdsj-dlk/geostar/GD_2018DLGZJ/wmts'
+		'http://172.21.68.126:5800/gmap/ebus/zwdsj-dlk/geostar/GD_HLFB/wmts'
+		// 'http://172.21.68.126:5800/gmap/ebus/zwdsj-dlk/geostar/GD_2018DLG/wmts',
+		// 'http://172.21.68.126:5800/gmap/ebus/zwdsj-dlk/geostar/GD_2018DLGZJ/wmts'
 	], //广东2018年7_17级矢量图，广东2018年7_17级矢量注记，示例使用，可替换为需要查看的地图服务地址
 
-	// wfslayerurl: 'http://172.21.11.241:5800/gmap/ebus/zwdsj-dlk/geostar/SLT_DXSZ/wfs', //广东矿产资源分布，示例使用，可替换为需要查看的要素服务地址，也可直接注释不加载显示要素服务
+	// wfslayerurl: 'http://172.21.68.126:5800/gmap/ebus/zwdsj-dlk/geostar/SLT_DXSZ/wfs', //广东矿产资源分布，示例使用，可替换为需要查看的要素服务地址，也可直接注释不加载显示要素服务
 
-	// wfslayerurl: 'http://172.21.11.241:5800/gmap/ebus/zwdsj-dlk/geostar/GDHP/wfs?output=json', //广东湖泊，示例使用，可替换为需要查看的要素服务地址，也可直接注释不加载显示要素服务
+	// wfslayerurl: 'http://172.21.68.126:5800/gmap/ebus/zwdsj-dlk/geostar/GDHP/wfs?output=json', //广东湖泊，示例使用，可替换为需要查看的要素服务地址，也可直接注释不加载显示要素服务
 
-	addrToLocGeocodingUrl: 'http://172.21.11.241:5800/gmap/ebus/zwdsj-dlk/geostar/GDS_DMDZ/geocoding', //广东地名地址查询服务，正向匹配使用
-	locToAddrGeocodingUrl: 'http://172.21.11.241:5800/gmap/ebus/zwdsj-dlk/geostar/GDS_DMDZ_esindex/geocoding', //广东坐标匹配查询服务，反向匹配使用
+	addrToLocGeocodingUrl: 'http://172.21.68.126:5800/gmap/ebus/zwdsj-dlk/geostar/GDS_DMDZ/geocoding', //广东地名地址查询服务，正向匹配使用
+	locToAddrGeocodingUrl: 'http://172.21.68.126:5800/gmap/ebus/zwdsj-dlk/geostar/GDS_DMDZ_esindex/geocoding', //广东坐标匹配查询服务，反向匹配使用
 
 	wmtsUtil: wmtsUtil(),
 	wfsUtil: wfsUtil(),

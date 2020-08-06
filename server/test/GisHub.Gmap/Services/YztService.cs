@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Gmap.Data;
 
 namespace Gmap.Services {
@@ -13,14 +14,15 @@ namespace Gmap.Services {
     public class YztService {
 
         private readonly ILogger<YztService> logger;
-        private readonly EBusOptions options;
+        private EBusOptions options;
 
         public YztService(
             ILogger<YztService> logger,
-            EBusOptions options
+            IOptionsMonitor<EBusOptions> monitor
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.options = options ?? throw new ArgumentNullException(nameof(options));
+            this.options = monitor.CurrentValue ?? throw new ArgumentNullException(nameof(monitor));
+            monitor.OnChange(newVal => options = newVal);
         }
 
         public string GetGatewayServiceUrl(string resource) {
