@@ -9,7 +9,7 @@ import { BehaviorSubject, Subscription, interval } from 'rxjs';
 export class AccountService {
 
     public info = new BehaviorSubject<AccountInfo>(
-        { id: '', userName: 'anonymous' }
+        { id: '', userName: 'anonymous', roles: { }, privileges: { } }
     );
 
     public fullName = new BehaviorSubject<string>('匿名用户');
@@ -73,7 +73,7 @@ export class AccountService {
 
     public logout(): void {
         this.removeToken();
-        this.info.next({});
+        this.info.next({ id: '', roles: {}, privileges: {} });
     }
 
     private saveToken(token: string): void {
@@ -87,12 +87,12 @@ export class AccountService {
 }
 
 export interface AccountInfo {
-    id?: string;
+    id: string;
     userName?: string;
     givenName?: string;
     surname?: string;
-    roles?: { [key: string]: boolean };
-    privileges?: { [key: string]: boolean };
+    roles: { [key: string]: boolean };
+    privileges: { [key: string]: boolean };
     token?: string;
 }
 
