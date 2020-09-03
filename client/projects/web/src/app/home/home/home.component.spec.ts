@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -8,10 +8,9 @@ describe('HomeComponent', () => {
 
     let fixture: ComponentFixture<HomeComponent>;
     let target: HomeComponent;
-    let targetEl: HTMLElement;
 
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
             imports: [
                 NoopAnimationsModule,
                 RouterTestingModule
@@ -20,30 +19,31 @@ describe('HomeComponent', () => {
                 HomeComponent
             ]
         }).compileComponents();
-        // create test target;
+    });
+
+    beforeEach(() => {
         fixture = TestBed.createComponent(HomeComponent);
         target = fixture.componentInstance;
-        targetEl = fixture.debugElement.nativeElement;
         fixture.detectChanges();
-    }));
+    });
 
-    it('should create HomeComponent', async(() => {
+    it('should create HomeComponent', () => {
         expect(target).toBeTruthy();
-    }));
+    });
 
-    it(`should has a button`, async(() => {
-        fixture.detectChanges();
+    it(`should has a button`, () => {
+        const targetEl = fixture.nativeElement;
         const btn = targetEl.querySelector('button.btn');
         expect(btn).toBeTruthy();
         expect(btn.textContent).toEqual('Hello, Angular !');
-    }));
+    });
 
-    it(`should change button content after click`, async(() => {
-        fixture.detectChanges();
+    it(`should change button content after click`, () => {
+        const targetEl = fixture.nativeElement;
         const btn = targetEl.querySelector('button.btn');
         btn.dispatchEvent(new Event('click'));
         fixture.detectChanges();
         expect(btn.textContent).toContain('You have clicked');
-    }));
+    });
 
 });
