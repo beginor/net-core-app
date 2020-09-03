@@ -20,16 +20,10 @@
       "path": "./projects/handset/tsconfig.spec.json"
     },
     {
-      "path": "./projects/handset/e2e/tsconfig.json"
-    },
-    {
       "path": "./projects/web/tsconfig.app.json"
     },
     {
       "path": "./projects/web/tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/web/e2e/tsconfig.json"
     }
-]
+  ]
 }
