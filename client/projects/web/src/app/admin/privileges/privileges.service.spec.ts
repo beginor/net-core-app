@@ -7,7 +7,7 @@ describe('AppPrivilegeService', () => {
     beforeEach(() => TestBed.configureTestingModule({}));
 
     it('should be created', () => {
-        const service: AppPrivilegeService = TestBed.get(AppPrivilegeService);
+        const service = TestBed.inject(AppPrivilegeService);
         expect(service).toBeTruthy();
     });
 

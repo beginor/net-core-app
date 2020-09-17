@@ -2,7 +2,7 @@ import { browser, by, element, promise } from 'protractor';
 
 export class HomePage {
 
-    public navigateTo(): promise.Promise<any> {
+    public navigateTo(): promise.Promise<void> {
         return browser.get('/home');
     }
 

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppCommonModule } from './common/app-common.module';
@@ -7,11 +7,10 @@ import { AppComponent } from './app.component';
 describe('AppComponent', () => {
 
     let fixture: ComponentFixture<AppComponent>;
-    let target: AppComponent;
-    let targetEl: HTMLElement;
+    let component: AppComponent;
 
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
             imports: [
                 RouterTestingModule,
                 AppCommonModule
@@ -20,18 +19,22 @@ describe('AppComponent', () => {
                 AppComponent
             ],
         }).compileComponents();
+    });
+
+    beforeEach(() => {
         fixture = TestBed.createComponent(AppComponent);
-        target = fixture.componentInstance;
-        targetEl = fixture.debugElement.nativeElement;
-    }));
+        component = fixture.componentInstance;
+    });
 
-    it('should create the app', async(() => {
-        expect(target).toBeTruthy();
-    }));
+    it('should create the app', () => {
+        expect(component).toBeTruthy();
+    });
 
-    it(`should has a navbar-brand 'Angular App Seed'`, async(() => {
-        expect(targetEl.querySelector('a.navbar-brand').textContent)
-            .toContain('Angular App Seed');
-    }));
+    it(`should has a navbar-brand 'Angular App Seed'`, () => {
+        const el = fixture.nativeElement;
+        expect(
+            el.querySelector('a.navbar-brand').textContent
+        ).toContain('Angular App Seed');
+    });
 
 });

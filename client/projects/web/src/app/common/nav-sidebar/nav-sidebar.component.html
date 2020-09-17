@@ -7,7 +7,7 @@
     </app-nav-item>
   </div>
   <div class="sidebar-toggler border-top p-1" (click)="toggle()"
-    [ngbTooltip]="collapsed ? expandTpl : null" openDelay="500" placement="right"
+    [ngbTooltip]="collapsed ? expandTpl : ''" [openDelay]="500" placement="right"
     container="body">
     <i [class]="getToggleIconClass()"></i>
     <span class="collapse-text ml-1" *ngIf="!collapsed">收起侧边栏</span>

@@ -7,7 +7,7 @@ describe('ApiInterceptor', () => {
 
     it('should be created', () => {
         const service: ApiInterceptor
-            = TestBed.get(ApiInterceptor);
+            = TestBed.inject(ApiInterceptor);
         expect(service).toBeTruthy();
     });
 });
