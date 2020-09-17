@@ -49,7 +49,7 @@ namespace Beginor.NetCoreApp.Test {
 
     public class TestHostingEnvironment : IWebHostEnvironment {
 
-        public string EnvironmentName { get; set; }
+        public string EnvironmentName { get; set; } = "Test";
 
         public string ApplicationName { get; set; }
 
@@ -71,6 +71,7 @@ namespace Beginor.NetCoreApp.Test {
             var target = new TestHostingEnvironment();
             Assert.IsFalse(target.IsProduction());
             Assert.IsFalse(target.IsDevelopment());
+            Assert.IsTrue(target.IsEnvironment("Test"));
         }
 
     }
