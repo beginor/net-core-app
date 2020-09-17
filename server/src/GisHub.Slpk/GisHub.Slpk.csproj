@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Beginor.GisHub.Slpk</AssemblyName>
     <RootNamespace>Beginor.GisHub.Slpk</RootNamespace>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
@@ -13,12 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="9.0.0" />
-    <PackageReference Include="Beginor.AppFx.Api" Version="3.1.0" />
-    <PackageReference Include="Beginor.AppFx.Core" Version="3.1.2" />
-    <PackageReference Include="Beginor.AppFx.Repository.Hibernate" Version="3.1.2" />
-    <PackageReference Include="NHibernate" Version="5.2.7" />
-    <PackageReference Include="NHibernate.Extensions.NpgSql" Version="3.1.4" />
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="Beginor.AppFx.Api" Version="5.0.0-rc.1" />
+    <PackageReference Include="Beginor.AppFx.Core" Version="5.0.0-rc.1" />
+    <PackageReference Include="Beginor.AppFx.Repository.Hibernate" Version="5.0.0-rc.1" />
+    <PackageReference Include="NHibernate" Version="5.3.3" />
+    <PackageReference Include="NHibernate.Extensions.NpgSql" Version="5.0.0-rc.1" />
     <PackageReference Include="NHibernate.Mapping.Attributes" Version="5.1.0" />
   </ItemGroup>
 
