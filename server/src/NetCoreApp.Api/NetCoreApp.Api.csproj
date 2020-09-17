@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <AssemblyName>Beginor.NetCoreApp.Api</AssemblyName>
     <RootNamespace>Beginor.NetCoreApp.Api</RootNamespace>
@@ -15,14 +15,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.7" />
-    <PackageReference Include="Beginor.AppFx.Api" Version="3.1.0" />
-    <PackageReference Include="Beginor.AppFx.Core" Version="3.1.2" />
-    <PackageReference Include="NHibernate" Version="5.3.2" />
-    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="3.1.9" />
-    <PackageReference Include="NHibernate.NetCore" Version="3.1.7" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.2-preview-10803222715" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0-rc.1.20451.17" />
+    <PackageReference Include="Beginor.AppFx.Api" Version="5.0.0-rc.1" />
+    <PackageReference Include="Beginor.AppFx.Core" Version="5.0.0-rc.1" />
+    <PackageReference Include="NHibernate" Version="5.3.3" />
+    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="5.0.0-rc.1" />
+    <PackageReference Include="NHibernate.NetCore" Version="5.0.0-rc.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.1" />
   </ItemGroup>
 
   <ItemGroup>
