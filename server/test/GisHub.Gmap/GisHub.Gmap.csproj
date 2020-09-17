@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Gmap</RootNamespace>
     <AssemblyName>gmap</AssemblyName>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'gmap' ">
