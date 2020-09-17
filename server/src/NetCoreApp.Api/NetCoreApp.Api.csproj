@@ -26,12 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="*.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\NetCoreApp.Common\NetCoreApp.Common.csproj" />
     <ProjectReference Include="..\NetCoreApp.Data\NetCoreApp.Data.csproj" />
     <ProjectReference Include="..\NetCoreApp.Models\NetCoreApp.Models.csproj" />
