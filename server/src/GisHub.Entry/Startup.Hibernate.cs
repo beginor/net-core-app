@@ -24,14 +24,14 @@ namespace Beginor.GisHub.Entry {
                 "hibernate.config"
             );
             cfg.Configure(configFile);
-            var isNotProd = !env.IsProduction();
+            var isTest = env.IsEnvironment("Test");
             cfg.SetProperty(
                 Environment.ShowSql,
-                isNotProd.ToString()
+                isTest.ToString()
             );
             cfg.SetProperty(
                 Environment.FormatSql,
-                isNotProd.ToString()
+                isTest.ToString()
             );
             cfg.AddIdentityMappings();
             cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Data.Entities.AppUser).Assembly);

@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <AssemblyName>Beginor.GisHub.Api</AssemblyName>
     <RootNamespace>Beginor.GisHub.Api</RootNamespace>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
@@ -23,12 +22,6 @@
     <PackageReference Include="NHibernate.AspNetCore.Identity" Version="5.0.0-rc.1" />
     <PackageReference Include="NHibernate.NetCore" Version="5.0.0-rc.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="*.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
