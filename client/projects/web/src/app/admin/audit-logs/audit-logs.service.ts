@@ -98,6 +98,8 @@ export interface AuditLogModel {
     id?: string;
     /** 客户端 IP 地址 */
     ip?: string;
+    /** 主机名 */
+    hostName?: string;
     /** 请求路径 */
     requestPath?: string;
     /** 请求方法 */

@@ -9,6 +9,8 @@ namespace Beginor.NetCoreApp.Models {
 
         /// <summary>客户端 IP 地址</summary>
         public string Ip { get; set; }
+        /// <summary>请求的主机名</summary>
+        public string HostName { get; set; }
         /// <summary>请求路径</summary>
         public string RequestPath { get; set; }
         /// <summary>请求方法</summary>
