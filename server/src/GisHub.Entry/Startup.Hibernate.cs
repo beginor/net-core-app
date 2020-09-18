@@ -36,6 +36,7 @@ namespace Beginor.GisHub.Entry {
             cfg.AddIdentityMappings();
             cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Data.Entities.AppUser).Assembly);
             cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Slpk.Data.SlpkEntity).Assembly);
+            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.TileMap.Data.TileMapEntity).Assembly);
             services.AddHibernate(cfg);
         }
 

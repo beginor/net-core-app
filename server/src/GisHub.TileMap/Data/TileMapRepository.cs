@@ -1,25 +1,32 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
+using Beginor.GisHub.TileMap.Models;
 using NHibernate;
 using NHibernate.Linq;
-using Beginor.GisHub.TileMap.Models;
 
 namespace Beginor.GisHub.TileMap.Data {
 
     /// <summary>切片地图仓储实现</summary>
     public partial class TileMapRepository : HibernateRepository<TileMapEntity, TileMapModel, long>, ITileMapRepository {
 
-        private ILogger<TileMapRepository> logger;
+        private ConcurrentDictionary<long, TileMapCacheItem> cache;
 
-        public TileMapRepository(ISession session, IMapper mapper) : base(session, mapper) { }
+        public TileMapRepository(
+            ISession session,
+            IMapper mapper,
+            ConcurrentDictionary<long, TileMapCacheItem> cache
+        ) : base(session, mapper) {
+            this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
+        }
 
         /// <summary>搜索 切片地图 ，返回分页结果。</summary>
         public async Task<PaginatedResponseModel<TileMapModel>> SearchAsync(
@@ -39,35 +46,112 @@ namespace Beginor.GisHub.TileMap.Data {
             };
         }
 
-        public async Task<TileContentModel> GetTileContentAsync(string tileName, int level, int row, int col) {
-            var tilePath = await GetTilePathAsync(tileName);
+        public async Task SaveAsync(
+            TileMapModel model,
+            string userId,
+            CancellationToken token = default
+        ) {
+            var entity = Mapper.Map<TileMapEntity>(model);
+            entity.CreatedAt = DateTime.Now;
+            entity.CreatorId = userId;
+            entity.UpdatedAt = DateTime.Now;
+            entity.UpdaterId = userId;
+            await Session.SaveAsync(entity, token);
+            await Session.FlushAsync(token);
+            cache.TryRemove(entity.Id, out _);
+        }
+
+        public async Task UpdateAsync(
+            long id,
+            TileMapModel model,
+            string userId,
+            CancellationToken token = default
+        ) {
+            var entity = await Session.LoadAsync<TileMapEntity>(id, token);
+            if (entity == null) {
+                throw new InvalidOperationException(
+                    $"{typeof(TileMapModel)} with id {id} is null!"
+                );
+            }
+            Mapper.Map(model, entity);
+            entity.UpdatedAt = DateTime.Now;
+            entity.UpdaterId = userId;
+            await Session.UpdateAsync(entity, token);
+            await Session.FlushAsync(token);
+            Mapper.Map(entity, model);
+            cache.TryRemove(id, out _);
+        }
+
+        public async Task DeleteAsync(
+            long id,
+            string userId,
+            CancellationToken token = default
+        ) {
+            var entity = await Session.GetAsync<TileMapEntity>(id, token);
+            if (entity != null) {
+                entity.UpdatedAt = DateTime.Now;
+                entity.UpdaterId = userId;
+                entity.IsDeleted = true;
+                await Session.DeleteAsync(entity, token);
+                await Session.FlushAsync(token);
+            }
+            cache.TryRemove(id, out _);
+        }
+
+        public async Task<TileContentModel> GetTileContentAsync(long id, int level, int row, int col) {
+            var tilePath = await GetTilePathAsync(id);
             if (tilePath.IsNullOrEmpty()) {
                 return TileContentModel.Empty;
             }
-            var content = await ReadTileContentAsync(tilePath, level, row, col);
-            return content;
+            var tc = await ReadTileContentAsync(tilePath, level, row, col);
+            if (cache.TryGetValue(id, out var ci)) {
+                if (!string.IsNullOrEmpty(ci.ContentType)) {
+                    tc.ContentType = ci.ContentType;
+                }
+            }
+            return tc;
         }
 
-        private async Task<TileMapEntity> GetTileMapByNameAsync(string name) {
-            var entity = await Session.Query<TileMapEntity>().FirstOrDefaultAsync(e => e.Name == name);
-            if (entity == null) {
-                throw new TileNotFoundException($"Tilemap {name} doesn't exists in database.");
+        private async Task<TileMapEntity> GetTileMapByIdAsync(long id) {
+            if (cache.TryGetValue(id, out var cacheItem)) {
+                return new TileMapEntity {
+                    Id = id,
+                    Name = cacheItem.Name,
+                    CacheDirectory = cacheItem.CacheDirectory,
+                    MapTileInfoPath = cacheItem.MapTileInfoPath,
+                    ContentType = cacheItem.ContentType
+                };
             }
+            var entity = await Session.Query<TileMapEntity>().FirstOrDefaultAsync(e => e.Id == id);
+            if (entity == null) {
+                throw new TileNotFoundException($"Tilemap {id} doesn't exists in database.");
+            }
+            cache.TryAdd(id, new TileMapCacheItem {
+                Name = entity.Name,
+                CacheDirectory = entity.CacheDirectory,
+                MapTileInfoPath = entity.MapTileInfoPath,
+                ContentType = entity.ContentType,
+                ModifiedTime = null
+            });
             return entity;
         }
 
-        public async Task<JsonElement> GetTileMapInfoAsync(string tileName) {
-            Argument.NotNullOrEmpty(tileName, nameof(tileName));
-            var entity = await GetTileMapByNameAsync(tileName);
+        public async Task<JsonElement> GetTileMapInfoAsync(long id) {
+            var entity = await GetTileMapByIdAsync(id);
             var text = File.ReadAllText(entity.MapTileInfoPath)
-                .Replace("#name#", tileName)
-                .Replace("#description#", $"{tileName} Tile Server")
-                .Replace("#copyright#", $"{tileName} Tile Server by GisHub");
+                .Replace("#name#", entity.Name)
+                .Replace("#description#", $"{entity.Name} Tile Server")
+                .Replace("#copyright#", $"{entity.Name} Tile Server by GisHub");
             return JsonDocument.Parse(text).RootElement;
         }
 
-        public async Task<DateTimeOffset?> GetTileModifiedTimeAsync(string tileName, int level, int row, int col) {
-            var tilePath = await GetTilePathAsync(tileName);
+        public async Task<DateTimeOffset?> GetTileModifiedTimeAsync(long id, int level, int row, int col) {
+            if (cache.TryGetValue(id, out var cacheItem)) {
+                if (cacheItem.ModifiedTime != null) {
+                    return cacheItem.ModifiedTime.Value;
+                }
+            }
+            var tilePath = await GetTilePathAsync(id);
             if (tilePath.IsNullOrEmpty()) {
                 return null;
             }
@@ -78,16 +162,16 @@ namespace Beginor.GisHub.TileMap.Data {
                 return null;
             }
             var lastWriteTime = File.GetLastWriteTime(bundlePath);
-            return new DateTimeOffset(lastWriteTime);
+            var offset = new DateTimeOffset(lastWriteTime);
+            if (cache.TryGetValue(id, out var ci)) {
+                ci.ModifiedTime = offset;
+            }
+            return offset;
         }
 
-        private async Task<string> GetTilePathAsync(string tileName) {
-            var entity = await GetTileMapByNameAsync(tileName);
-            var tilePath = Path.Combine(entity.CacheDirectory, tileName, "Layers", "_alllayers");
-            if (Directory.Exists(tilePath)) {
-                return tilePath;
-            }
-            tilePath = Path.Combine(entity.CacheDirectory, "BaseMap_" + tileName, "Layers", "_alllayers");
+        private async Task<string> GetTilePathAsync(long id) {
+            var entity = await GetTileMapByIdAsync(id);
+            var tilePath = Path.Combine(entity.CacheDirectory, "_alllayers");
             if (Directory.Exists(tilePath)) {
                 return tilePath;
             }

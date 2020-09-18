@@ -55,16 +55,14 @@
     "ymin": 2515486.5000948776,
     "xmax": 1.312110938151269E7,
     "ymax": 2944222.9239334883,
-    "spatialReference": { "wkid": 102100, "latestWkid": 3857
-    }
+    "spatialReference": { "wkid": 102100, "latestWkid": 3857 }
   },
   "fullExtent": {
     "xmin": 1.2206660013192886E7,
     "ymin": 2298488.6855241824,
     "xmax": 1.3059314325281058E7,
     "ymax": 2939741.6100689806,
-    "spatialReference": { "wkid": 102100, "latestWkid": 3857
-    }
+    "spatialReference": { "wkid": 102100, "latestWkid": 3857 }
   },
   "minScale": 1.47914381897889E8,
   "maxScale": 1128.497176,

@@ -138,12 +138,26 @@ namespace Beginor.GisHub.TileMap.Api {
             }
         }
 
-        /// <summary>读取切片服务信息</summary>
-        [HttpGet("rest/services/tilemap/{tileName}/MapServer")]
+        [HttpGet("~/rest/services/tile-maps")]
         [Authorize("tile_maps.read_tile_content")]
-        public async Task<ActionResult> GetTileMapInfo(string tileName) {
+        public async Task<ActionResult> GetTileMapList() {
             try {
-                var tileMapInfo  = await repository.GetTileMapInfoAsync(tileName);
+                var models = await repository.GetAllAsync();
+                var tiles = models.Select(m => new { m.Id, m.Name, m.ContentType });
+                return Ok(tiles);
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not get tilemap list!");
+                return this.InternalServerError(ex);
+            }
+        }
+
+        /// <summary>读取切片服务信息</summary>
+        [HttpGet("~/rest/services/tile-maps/{id}/MapServer")]
+        [Authorize("tile_maps.read_tile_content")]
+        public async Task<ActionResult> GetTileMapInfo(long id) {
+            try {
+                var tileMapInfo  = await repository.GetTileMapInfoAsync(id);
                 var text = tileMapInfo.ToString();
                 var hasCallback = Request.Query.TryGetValue("callback", out var callback);
                 if (hasCallback) {
@@ -152,16 +166,16 @@ namespace Beginor.GisHub.TileMap.Api {
                 return Content(text, hasCallback ? "text/javascript" : "application/json");
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not get tilemap info for {tileName}!");
+                logger.LogError(ex, $"Can not get tilemap info for {id}!");
                 return this.InternalServerError(ex);
             }
         }
 
-        [HttpGet("rest/services/tilemap/{tileName}/MapServer/tile/{level:int}/{row:int}/{col:int}")]
+        [HttpGet("~/rest/services/tile-maps/{id}/MapServer/tile/{level:int}/{row:int}/{col:int}")]
         [Authorize("tile_maps.read_tile_content")]
-        public async Task<IActionResult> GetTile(string tileName, int level, int row, int col) {
+        public async Task<IActionResult> GetTile(long id, int level, int row, int col) {
             try {
-                var modifiedTime = await repository.GetTileModifiedTimeAsync(tileName, level, row, col);
+                var modifiedTime = await repository.GetTileModifiedTimeAsync(id, level, row, col);
                 if (!modifiedTime.HasValue) {
                     return NotFound();
                 }
@@ -173,14 +187,16 @@ namespace Beginor.GisHub.TileMap.Api {
                 if (!string.IsNullOrEmpty(requestETag) && fileEtag.Equals(requestETag, StringComparison.OrdinalIgnoreCase)) {
                     return StatusCode(StatusCodes.Status304NotModified);
                 }
-                var content = await repository.GetTileContentAsync(tileName, level, row, col);
+                var content = await repository.GetTileContentAsync(id, level, row, col);
                 if (content.Content.Length == 0) {
                     return NotFound();
                 }
-                return File(content.Content, content.ContentType, modifiedTime, new EntityTagHeaderValue(fileEtag));
+                Response.Headers["Cache-Control"] = "no-cache";
+                Response.Headers["ETag"] = fileEtag;
+                return File(content.Content, content.ContentType);
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not get tile {tileName}:{level:int}/{row:int}/{col:int}!");
+                logger.LogError(ex, $"Can not get tile {id}:{level:int}/{row:int}/{col:int}!");
                 return this.InternalServerError(ex.Message);
             }
         }

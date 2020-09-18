@@ -14,7 +14,8 @@ namespace Beginor.GisHub.Entry {
             var mapperConfig = new MapperConfiguration(configure => {
                 configure.AddMaps(
                     "Beginor.GisHub.Data",
-                    "Beginor.GisHub.Slpk"
+                    "Beginor.GisHub.Slpk",
+                    "Beginor.GisHub.TileMap"
                 );
             });
             var mapper = mapperConfig.CreateMapper();

@@ -21,6 +21,9 @@ namespace Beginor.GisHub.Entry {
                     manager.ApplicationParts.Add(
                         new AssemblyPart(typeof(Beginor.GisHub.Slpk.Api.SlpkController).Assembly)
                     );
+                    manager.ApplicationParts.Add(
+                        new AssemblyPart(typeof(Beginor.GisHub.TileMap.Api.TileMapController).Assembly)
+                    );
                 })
                 .AddControllersAsServices()
                 .ConfigureApiBehaviorOptions(options => {

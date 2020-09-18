@@ -15,11 +15,11 @@ namespace Beginor.GisHub.TileMap.Data {
             TileMapSearchModel model
         );
 
-        Task<JsonElement> GetTileMapInfoAsync(string tileName);
+        Task<JsonElement> GetTileMapInfoAsync(long id);
 
-        Task<TileContentModel> GetTileContentAsync(string tileName, int level, int row, int col);
+        Task<TileContentModel> GetTileContentAsync(long id, int level, int row, int col);
 
-        Task<DateTimeOffset?> GetTileModifiedTimeAsync(string tileName, int level, int row, int col);
+        Task<DateTimeOffset?> GetTileModifiedTimeAsync(long id, int level, int row, int col);
 
     }
 

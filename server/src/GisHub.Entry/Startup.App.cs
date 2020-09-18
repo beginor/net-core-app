@@ -27,6 +27,12 @@ namespace Beginor.GisHub.Entry {
                 ServiceLifetime.Scoped
             );
             services.AddSingleton<ConcurrentDictionary<long, Beginor.GisHub.Slpk.Data.SlpkCacheItem>>();
+            services.AddServiceWithDefaultImplements(
+                Assembly.LoadFrom(Path.Combine(baseDir, "Beginor.GisHub.TileMap.dll")),
+                t => t.Name.EndsWith("Repository"),
+                ServiceLifetime.Scoped
+            );
+            services.AddSingleton<ConcurrentDictionary<long, Beginor.GisHub.TileMap.Data.TileMapCacheItem>>();
         }
 
         private static void ConfigureApp(
