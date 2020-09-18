@@ -43,10 +43,11 @@ namespace Beginor.GisHub.Api.Middlewares {
 
         public async Task InvokeAsync(HttpContext context) {
             var auditLog = new AppAuditLogModel {
+                HostName = context.Request.Host.Value,
                 RequestPath = context.Request.Path,
                 RequestMethod = context.Request.Method,
                 UserName = GetUserName(context),
-                StartAt = DateTime.Now
+                StartAt = DateTime.Now,
             };
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -58,6 +59,7 @@ namespace Beginor.GisHub.Api.Middlewares {
             await next.Invoke(context);
             stopwatch.Stop();
             auditLog.Duration = stopwatch.ElapsedMilliseconds;
+            auditLog.ResponseCode = context.Response.StatusCode;
             SaveAuditLogInBackground(auditLog);
         }
 

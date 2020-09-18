@@ -15,6 +15,9 @@ namespace Beginor.GisHub.Data.Entities {
         /// <summary>客户端 IP 地址</summary>
         [Property(Name = "Ip", Column = "ip", Type = "string", NotNull = false, Length = 64)]
         public virtual string Ip { get; set; }
+        /// <summary>请求的主机名</summary>
+        [Property(Name = "HostName", Column = "host_name", Type = "string", NotNull = true, Length = 32)]
+        public virtual string HostName { get; set; }
 
         /// <summary>请求路径</summary>
         [Property(Name = "RequestPath", Column = "request_path", Type = "string", NotNull = true, Length = 256)]

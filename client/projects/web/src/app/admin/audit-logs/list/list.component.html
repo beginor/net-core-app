@@ -91,6 +91,7 @@
               <tr>
                 <th scope="col" class="text-center text-nowrap text-muted border-left-0">#</th>
                 <th scope="col" class="text-center text-nowrap text-muted">IP地址</th>
+                <th scope="col" class="text-center text-nowrap text-muted">主机名</th>
                 <th scope="col" class="text-center text-nowrap text-muted">请求地址</th>
                 <th scope="col" class="text-center text-nowrap text-muted">请求方法</th>
                 <th scope="col" class="text-center text-nowrap text-muted">用户名</th>
@@ -106,6 +107,7 @@
               <tr *ngFor="let item of data; let i = index;">
                 <th scope="row" class="text-right text-muted">{{i+1+vm.searchModel.skip}}</th>
                 <td class="text-left">{{item.ip}}</td>
+                <td class="text-left">{{item.hostName}}</td>
                 <td class="text-left">{{item.requestPath}}</td>
                 <td [class]="getRequestMethodClasses(item.requestMethod)">{{item.requestMethod}}</td>
                 <td class="text-center">{{item.userName}}</td>

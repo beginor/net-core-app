@@ -59,6 +59,12 @@ comment on column public.app_audit_logs.description
 comment on column public.app_audit_logs.ip
     is '客户端 IP 地址';
 
+alter table public.app_audit_logs
+    add column host_name character varying(32);
+
+comment on column public.app_audit_logs.host_name
+    is '请求的主机名';
+
 -- TimescaleDB hyper table def;
 
 -- select create_hypertable('public.app_audit_logs', 'start_at');
