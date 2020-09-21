@@ -5,11 +5,11 @@ DataSource:
   Parameters:
     DbName: net_core_app
     DbProvider: PostgreSql
-    ConnectionString: server=127.0.0.1;port=5432;database=net_core_app;user id=postgres;password=1a2b3c4D;
+    ConnectionString: server=127.0.0.1;port=5432;database=net_core_app;user id=postgres;password=postgis_11;
     DbSchema: public
 Language: CSharp
 TemplateEngine:
-  Name: Razor
+  Name: RazorCore
   Root: Contributions/AppFx/NHibernate
 Output:
   Type: File
@@ -51,9 +51,8 @@ TableFilter:
     - aspnet_user_roles
     - aspnet_user_tokens
     - aspnet_users
-    - app_client_errors
-  # IncludeTables:
-  #  - app_client_errors
+  IncludeTables:
+   - app_client_errors
   IgnoreNoPKTable: true
   IgnoreView: true
 
