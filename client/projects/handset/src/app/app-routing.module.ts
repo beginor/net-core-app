@@ -29,7 +29,6 @@ const routes: Routes = [
     }
 ];
 // tslint:enable:max-line-length
-
 @NgModule({
     imports: [RouterModule.forRoot(routes, {
         useHash: false,
