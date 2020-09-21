@@ -5,7 +5,7 @@ DataSource:
   Parameters:
     DbName: gishub
     DbProvider: PostgreSql
-    ConnectionString: server=127.0.0.1;port=5432;database=gishub;user id=postgres;password=1a2b3c4D;
+    ConnectionString: server=127.0.0.1;port=5432;database=gishub;user id=postgres;password=postgis_11;
     DbSchema: public
 Language: CSharp
 TemplateEngine:
