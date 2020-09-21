@@ -1,0 +1,143 @@
+<form *ngIf="(account.info | async) as info" class="card detail"
+  [antiforgery]="editable" [@animation]="animation"
+  (@animation.done)="onAnimationEvent($event)" #detailForm="ngForm">
+  <div class="card-header d-flex justify-content-between align-content-center">
+    <h5 class="card-title mb-0">{{title}}</h5>
+    <div class="btn-group btn-group-sm">
+      <button *ngIf="info.privileges['app_privileges.update'] && editable"
+        type="button" class="btn btn-sm btn-outline-primary"
+        (click)="save()" [disabled]="!detailForm.valid">
+        <i class="fa fa-check"></i> 保存
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"
+        (click)="goBack()">
+        <i class="fa fa-times"></i> 取消
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-group" [class.is-valid]="id.valid"
+      [class.is-invalid]="!(id.valid || id.pristine)">
+      <label class="form-label text-muted" for="id">切片地图id  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="id" name="id"
+        placeholder="请输入切片地图id ..." [(ngModel)]="model.id"
+        [class.is-invalid]="!(id.valid || id.pristine)"
+        [class.is-valid]="id.valid"
+        required #id="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="name.valid"
+      [class.is-invalid]="!(name.valid || name.pristine)">
+      <label class="form-label text-muted" for="name">切片地图名称  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="name" name="name"
+        placeholder="请输入切片地图名称 ..." [(ngModel)]="model.name"
+        [class.is-invalid]="!(name.valid || name.pristine)"
+        [class.is-valid]="name.valid"
+        required #name="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="cacheDirectory.valid"
+      [class.is-invalid]="!(cacheDirectory.valid || cacheDirectory.pristine)">
+      <label class="form-label text-muted" for="cacheDirectory">缓存目录  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="cacheDirectory" name="cacheDirectory"
+        placeholder="请输入缓存目录 ..." [(ngModel)]="model.cacheDirectory"
+        [class.is-invalid]="!(cacheDirectory.valid || cacheDirectory.pristine)"
+        [class.is-valid]="cacheDirectory.valid"
+        required #cacheDirectory="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="mapTileInfoPath.valid"
+      [class.is-invalid]="!(mapTileInfoPath.valid || mapTileInfoPath.pristine)">
+      <label class="form-label text-muted" for="mapTileInfoPath">切片信息路径  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="mapTileInfoPath" name="mapTileInfoPath"
+        placeholder="请输入切片信息路径 ..." [(ngModel)]="model.mapTileInfoPath"
+        [class.is-invalid]="!(mapTileInfoPath.valid || mapTileInfoPath.pristine)"
+        [class.is-valid]="mapTileInfoPath.valid"
+        required #mapTileInfoPath="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="contentType.valid"
+      [class.is-invalid]="!(contentType.valid || contentType.pristine)">
+      <label class="form-label text-muted" for="contentType">内容类型  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="contentType" name="contentType"
+        placeholder="请输入内容类型 ..." [(ngModel)]="model.contentType"
+        [class.is-invalid]="!(contentType.valid || contentType.pristine)"
+        [class.is-valid]="contentType.valid"
+        required #contentType="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group">
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input"
+          id="isBundled" name="isBundled"
+          [(ngModel)]="model.isBundled" [disabled]="!editable">
+        <label class="custom-control-label text-muted"
+          for="isBundled">
+          是否为紧凑格式
+        </label>
+      </div>
+    </div>
+    <div class="form-group" [class.is-valid]="creatorId.valid"
+      [class.is-invalid]="!(creatorId.valid || creatorId.pristine)">
+      <label class="form-label text-muted" for="creatorId">创建者id  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="creatorId" name="creatorId"
+        placeholder="请输入创建者id ..." [(ngModel)]="model.creatorId"
+        [class.is-invalid]="!(creatorId.valid || creatorId.pristine)"
+        [class.is-valid]="creatorId.valid"
+        required #creatorId="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="createdAt.valid"
+      [class.is-invalid]="!(createdAt.valid || createdAt.pristine)">
+      <label class="form-label text-muted" for="createdAt">创建时间  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="createdAt" name="createdAt"
+        placeholder="请输入创建时间 ..." [(ngModel)]="model.createdAt"
+        [class.is-invalid]="!(createdAt.valid || createdAt.pristine)"
+        [class.is-valid]="createdAt.valid"
+        required #createdAt="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="updaterId.valid"
+      [class.is-invalid]="!(updaterId.valid || updaterId.pristine)">
+      <label class="form-label text-muted" for="updaterId">更新者id  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="updaterId" name="updaterId"
+        placeholder="请输入更新者id ..." [(ngModel)]="model.updaterId"
+        [class.is-invalid]="!(updaterId.valid || updaterId.pristine)"
+        [class.is-valid]="updaterId.valid"
+        required #updaterId="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="updatedAt.valid"
+      [class.is-invalid]="!(updatedAt.valid || updatedAt.pristine)">
+      <label class="form-label text-muted" for="updatedAt">更新时间  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="updatedAt" name="updatedAt"
+        placeholder="请输入更新时间 ..." [(ngModel)]="model.updatedAt"
+        [class.is-invalid]="!(updatedAt.valid || updatedAt.pristine)"
+        [class.is-valid]="updatedAt.valid"
+        required #updatedAt="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group">
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input"
+          id="isDeleted" name="isDeleted"
+          [(ngModel)]="model.isDeleted" [disabled]="!editable">
+        <label class="custom-control-label text-muted"
+          for="isDeleted">
+          是否删除
+        </label>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="info.privileges['app_privileges.update'] && editable"
+    class="card-footer d-flex justify-content-between">
+    <button type="button" class="btn btn-sm btn-outline-primary"
+      (click)="save()" [disabled]="!detailForm.valid">
+      <i class="fa fa-check"></i> 保存
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary"
+      (click)="goBack()">
+      <i class="fa fa-times"></i> 取消
+    </button>
+  </div>
+</form>

@@ -14,7 +14,7 @@ TemplateEngine:
 Output:
   Type: File
   Mode: Incre # Incre 增量创建，如果存在则忽略； Full 全量创建，如果存在则重新创建
-  Path: ./projects/web/src/app/admin
+  Path: ./projects/web/src/app/data
 NamingConverter:
   Table:
     Tokenizer:
@@ -52,7 +52,8 @@ TableFilter:
     - aspnet_user_tokens
     - aspnet_users
   IncludeTables:
-    - app_nav_items
+    - slpks
+    - tile_maps
   IgnoreNoPKTable: true
   IgnoreView: true
 

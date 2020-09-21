@@ -1,0 +1,18 @@
+:host {
+  display: block;
+  width: 40vw;
+  height: 100%;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  .detail {
+    height: 100%;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 4px 0px;
+    background-color: var(--light);
+
+    .card-body {
+      overflow-y: auto;
+    }
+  }
+}
