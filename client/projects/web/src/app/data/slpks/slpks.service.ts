@@ -32,7 +32,7 @@ export class SlpkService {
         let params = new HttpParams();
         for (const key in this.searchModel) {
             if (this.searchModel.hasOwnProperty(key)) {
-                const val = this.searchModel[key];
+                const val = this.searchModel[key] as string;
                 params = params.set(key, val);
             }
         }

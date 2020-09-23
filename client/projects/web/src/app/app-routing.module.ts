@@ -25,6 +25,12 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'data',
+        loadChildren: () => import('./data/data.module').then(m => m.DataModule),
+        canLoad: [AuthGuard],
+        canActivate: [AuthGuard]
+    },
+    {
         path: 'login',
         loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
         canLoad: []

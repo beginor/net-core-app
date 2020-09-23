@@ -4,7 +4,7 @@ import {
 } from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { slideInRight, slideOutRight, AccountService } from 'services';
+import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import { SlpkService, SlpkModel } from '../slpks.service';
 
 @Component({

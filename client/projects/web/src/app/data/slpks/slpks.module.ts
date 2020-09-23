@@ -5,7 +5,7 @@ import {
     NgbPaginationModule, NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap';
 
-import { ServicesModule } from 'services';
+import { AppSharedModule } from 'app-shared';
 
 import { AppCommonModule } from 'projects/web/src/app/common';
 import { SlpkRoutingModule } from './slpks-routing.module';
@@ -22,7 +22,7 @@ import { DetailComponent } from './detail/detail.component';
         FormsModule,
         NgbPaginationModule,
         NgbTooltipModule,
-        ServicesModule,
+        AppSharedModule,
         AppCommonModule,
         SlpkRoutingModule
     ]

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { AccountService } from 'services';
+import { AccountService } from 'app-shared';
 import { SlpkService } from '../slpks.service';
 
 @Component({
