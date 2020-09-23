@@ -9,7 +9,7 @@ DataSource:
     DbSchema: public
 Language: CSharp
 TemplateEngine:
-  Name: Razor
+  Name: RazorCore
   Root: Contributions/AppFx/NHibernate
 Output:
   Type: File

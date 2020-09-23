@@ -9,7 +9,7 @@ DataSource:
     DbSchema: public
 Language: TypeScript
 TemplateEngine:
-  Name: Razor
+  Name: RazorCore
   Root: Contributions/AppFx/Angular
 Output:
   Type: File
