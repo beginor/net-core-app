@@ -1,1 +1,29 @@
-<p>dashbord works!</p>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">首页</a></li>
+    <li class="breadcrumb-item active" aria-current="page">数据</li>
+  </ol>
+</nav>
+
+<div class="container-fluid">
+  <div class="row no-gutters">
+    <div class="col-md-6 col-lg-3">
+      <div class="card m-2">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a class="card-link" routerLink="../tile-maps">切片图层</a>
+          </h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <div class="card m-2">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a class="card-link" routerLink="../slpks">航拍模型</a>
+          </h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
