@@ -1,8 +1,8 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a routerLink="/">首页</a></li>
-    <li class="breadcrumb-item"><a routerLink="/">填写合适的面包屑</a></li>
-    <li class="breadcrumb-item active" aria-current="page">slpk 航拍模型</li>
+    <li class="breadcrumb-item"><a routerLink="/data">数据</a></li>
+    <li class="breadcrumb-item active" aria-current="page">航拍模型</li>
   </ol>
 </nav>
 <div class="container-fluid">
@@ -10,12 +10,12 @@
     <div class="col-12">
       <div class="card" *ngIf="(account.info | async) as info">
         <div class="card-header d-flex justify-content-between">
-          <h5 class="card-title mb-0">slpk 航拍模型</h5>
+          <h5 class="card-title mb-0">航拍模型</h5>
           <div class="btn-group btn-group-sm">
             <button *ngIf="info.privileges['slpks.create']"
               type="button" class="btn btn-outline-primary"
               (click)="showDetail('0', true)">
-              <i class="fa fa-plus"></i> 新建(slpk 航拍模型)
+              <i class="fa fa-plus"></i> 新建(航拍模型)
             </button>
             <button type="button" class="btn btn-outline-secondary"
               (click)="loadData()">
@@ -66,34 +66,22 @@
             <thead>
               <tr>
                 <th scope="col" class="text-center text-nowrap text-muted">#</th>
-                <th scope="col" class="text-center text-nowrap text-muted">航拍模型id</th>
                 <th scope="col" class="text-center text-nowrap text-muted">航拍模型目录</th>
                 <th scope="col" class="text-center text-nowrap text-muted">模型经度</th>
                 <th scope="col" class="text-center text-nowrap text-muted">模型纬度</th>
                 <th scope="col" class="text-center text-nowrap text-muted">模型海拔高度</th>
                 <th scope="col" class="text-center text-nowrap text-muted">标签/别名</th>
-                <th scope="col" class="text-center text-nowrap text-muted">创建者id</th>
-                <th scope="col" class="text-center text-nowrap text-muted">创建时间</th>
-                <th scope="col" class="text-center text-nowrap text-muted">更新者id</th>
-                <th scope="col" class="text-center text-nowrap text-muted">更新时间</th>
-                <th scope="col" class="text-center text-nowrap text-muted">是否删除</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">
               <tr *ngFor="let item of data; let i = index;">
                 <th scope="row" class="text-right text-muted">{{i+1+vm.searchModel.skip}}</th>
-                <td class='text-left'>{{item.id}}</td>
                 <td class='text-left'>{{item.directory}}</td>
                 <td class='text-right'>{{item.longitude}}</td>
                 <td class='text-right'>{{item.latitude}}</td>
                 <td class='text-right'>{{item.elevation}}</td>
                 <td class='text-left'>{{item.tags}}</td>
-                <td class='text-left'>{{item.creatorId}}</td>
-                <td class='text-left'>{{item.createdAt}}</td>
-                <td class='text-left'>{{item.updaterId}}</td>
-                <td class='text-left'>{{item.updatedAt}}</td>
-                <td class='text-left'>{{item.isDeleted}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
                     <button *ngIf="info.privileges['slpks.read']"

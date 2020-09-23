@@ -29,7 +29,7 @@ export class ListComponent implements OnInit {
     public showDetail(id: string, editable: boolean): void {
         this.router.navigate(
             ['./', id, { editable: editable }],
-            { relativeTo: this.route, skipLocationChange: true }
+            { relativeTo: this.route, skipLocationChange: false }
         );
     }
 
