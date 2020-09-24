@@ -22,6 +22,10 @@ namespace Beginor.GisHub.TileMap.Models {
         /// <summary>是否为紧凑格式</summary>
         [Required(ErrorMessage = "是否为紧凑格式 必须填写！")]
         public bool IsBundled { get; set; }
+        /// <summary>创建时间</summary>
+        public virtual DateTime CreatedAt { get; set; }
+        /// <summary>更新时间</summary>
+        public virtual DateTime UpdatedAt { get; set; }
 
     }
 

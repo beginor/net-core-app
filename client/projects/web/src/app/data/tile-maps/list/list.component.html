@@ -15,7 +15,7 @@
             <button *ngIf="info.privileges['tile_maps.create']"
               type="button" class="btn btn-outline-primary"
               (click)="showDetail('0', true)">
-              <i class="fa fa-plus"></i> 新建(切片地图)
+              <i class="fa fa-plus"></i> 新建切片地图
             </button>
             <button type="button" class="btn btn-outline-secondary"
               (click)="loadData()">
@@ -52,10 +52,21 @@
             <div class="col-6">
               <div class="row no-gutters">
                 <div class="col-6">
-                  <span class="text-muted">其它工具栏</span>
+                  <!-- <span class="text-muted">其它工具栏</span> -->
                 </div>
                 <div class="col-6">
-                  <span class="text-muted">其它工具栏</span>
+                  <div class="input-group input-group-sm">
+                    <input class="form-control" type="text" name="keywords"
+                      placeholder="按名称或目录搜索"
+                      [(ngModel)]="vm.searchModel.keywords"
+                      (keyup.enter)="vm.search()" />
+                    <div class="input-group-append">
+                      <button class="btn btn-sm btn-outline-secondary" type="button"
+                        *ngIf="vm.searchModel.keywords" (click)="resetSearch()">
+                        <i class="fa fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -66,34 +77,22 @@
             <thead>
               <tr>
                 <th scope="col" class="text-center text-nowrap text-muted">#</th>
-                <th scope="col" class="text-center text-nowrap text-muted">切片地图id</th>
-                <th scope="col" class="text-center text-nowrap text-muted">切片地图名称</th>
-                <th scope="col" class="text-center text-nowrap text-muted">缓存目录</th>
-                <th scope="col" class="text-center text-nowrap text-muted">切片信息路径</th>
-                <th scope="col" class="text-center text-nowrap text-muted">内容类型</th>
-                <th scope="col" class="text-center text-nowrap text-muted">是否为紧凑格式</th>
-                <th scope="col" class="text-center text-nowrap text-muted">创建者id</th>
+                <th scope="col" class="text-center text-nowrap text-muted">名称</th>
+                <th scope="col" class="text-left text-nowrap text-muted">缓存目录</th>
+                <th scope="col" class="text-center text-nowrap text-muted">紧凑格式</th>
                 <th scope="col" class="text-center text-nowrap text-muted">创建时间</th>
-                <th scope="col" class="text-center text-nowrap text-muted">更新者id</th>
                 <th scope="col" class="text-center text-nowrap text-muted">更新时间</th>
-                <th scope="col" class="text-center text-nowrap text-muted">是否删除</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">
               <tr *ngFor="let item of data; let i = index;">
                 <th scope="row" class="text-right text-muted">{{i+1+vm.searchModel.skip}}</th>
-                <td class='text-left'>{{item.id}}</td>
                 <td class='text-left'>{{item.name}}</td>
-                <td class='text-left'>{{item.cacheDirectory}}</td>
-                <td class='text-left'>{{item.mapTileInfoPath}}</td>
-                <td class='text-left'>{{item.contentType}}</td>
-                <td class='text-left'>{{item.isBundled}}</td>
-                <td class='text-left'>{{item.creatorId}}</td>
-                <td class='text-left'>{{item.createdAt}}</td>
-                <td class='text-left'>{{item.updaterId}}</td>
-                <td class='text-left'>{{item.updatedAt}}</td>
-                <td class='text-left'>{{item.isDeleted}}</td>
+                <td class='text-left' style="text-overflow: ellipsis;">{{item.cacheDirectory}}</td>
+                <td class='text-center'>{{!!item.isBundled ? '是' : '否'}}</td>
+                <td class='text-center'>{{item.createdAt | date:'yyyy-MM-dd'}}</td>
+                <td class='text-center'>{{item.updatedAt | date:'yyyy-MM-dd'}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
                     <button *ngIf="info.privileges['tile_maps.read']"

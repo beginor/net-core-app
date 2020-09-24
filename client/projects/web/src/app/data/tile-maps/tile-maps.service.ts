@@ -189,6 +189,7 @@ export interface TileMapSearchModel {
     skip: number;
     /** 取多少条记录 */
     take: number;
+    keywords?: string;
 }
 
 /** 切片地图 搜索结果 */
