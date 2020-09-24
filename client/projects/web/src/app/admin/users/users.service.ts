@@ -246,12 +246,12 @@ export class UsersService {
         try {
             if (toAdd.length > 0) {
                 const rolesToAdd = toAdd.join(',');
-                const addUrl = `${this.baseUrl}/${userId}/${rolesToAdd}`;
+                const addUrl = `${this.baseUrl}/${userId}/roles/${rolesToAdd}`;
                 await this.http.put(addUrl, null).toPromise();
             }
             if (toDelete.length > 0) {
                 const rolesToDelete = toDelete.join(',');
-                const delUrl = `${this.baseUrl}/${userId}/${rolesToDelete}`;
+                const delUrl = `${this.baseUrl}/${userId}/roles/${rolesToDelete}`;
                 await this.http.delete(delUrl).toPromise();
             }
         }
