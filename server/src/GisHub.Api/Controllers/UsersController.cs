@@ -378,7 +378,7 @@ namespace Beginor.GisHub.Api.Controllers {
         /// <response code="200">添加用户角色用户成功。</response>
         /// <response code="404">用户或角色不存在。</response>
         /// <response code="500">服务器内部错误。</response>
-        [HttpPut("{id:long}/{roleNames}")]
+        [HttpPut("{id:long}/roles/{roleNames}")]
         [Authorize("app_users.add_role_to_user")]
         public async Task<ActionResult> AddUserToRole(
             [FromRoute]long id,
@@ -416,7 +416,7 @@ namespace Beginor.GisHub.Api.Controllers {
         /// <response code="404">用户或角色不存在。</response>
         /// <response code="400">删除用户角色出错。</response>
         /// <response code="500">服务器内部错误。</response>
-        [HttpDelete("{id:long}/{roleNames}")]
+        [HttpDelete("{id:long}/roles/{roleNames}")]
         [ProducesResponseType(204)]
         [Authorize("app_users.remove_role_from_user")]
         public async Task<ActionResult> RemoveUserFromRole(
