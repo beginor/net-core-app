@@ -15,16 +15,6 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="form-group" [class.is-valid]="id.valid"
-      [class.is-invalid]="!(id.valid || id.pristine)">
-      <label class="form-label text-muted" for="id">切片地图id  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="id" name="id"
-        placeholder="请输入切片地图id ..." [(ngModel)]="model.id"
-        [class.is-invalid]="!(id.valid || id.pristine)"
-        [class.is-valid]="id.valid"
-        required #id="ngModel" [disabled]="!editable"
-      />
-    </div>
     <div class="form-group" [class.is-valid]="name.valid"
       [class.is-invalid]="!(name.valid || name.pristine)">
       <label class="form-label text-muted" for="name">切片地图名称  <i class="text-danger">*</i> </label>
@@ -72,59 +62,22 @@
           [(ngModel)]="model.isBundled" [disabled]="!editable">
         <label class="custom-control-label text-muted"
           for="isBundled">
-          是否为紧凑格式
+          紧凑格式
         </label>
       </div>
     </div>
-    <div class="form-group" [class.is-valid]="creatorId.valid"
-      [class.is-invalid]="!(creatorId.valid || creatorId.pristine)">
-      <label class="form-label text-muted" for="creatorId">创建者id  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="creatorId" name="creatorId"
-        placeholder="请输入创建者id ..." [(ngModel)]="model.creatorId"
-        [class.is-invalid]="!(creatorId.valid || creatorId.pristine)"
-        [class.is-valid]="creatorId.valid"
-        required #creatorId="ngModel" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group" [class.is-valid]="createdAt.valid"
-      [class.is-invalid]="!(createdAt.valid || createdAt.pristine)">
-      <label class="form-label text-muted" for="createdAt">创建时间  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="createdAt" name="createdAt"
-        placeholder="请输入创建时间 ..." [(ngModel)]="model.createdAt"
-        [class.is-invalid]="!(createdAt.valid || createdAt.pristine)"
-        [class.is-valid]="createdAt.valid"
-        required #createdAt="ngModel" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group" [class.is-valid]="updaterId.valid"
-      [class.is-invalid]="!(updaterId.valid || updaterId.pristine)">
-      <label class="form-label text-muted" for="updaterId">更新者id  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="updaterId" name="updaterId"
-        placeholder="请输入更新者id ..." [(ngModel)]="model.updaterId"
-        [class.is-invalid]="!(updaterId.valid || updaterId.pristine)"
-        [class.is-valid]="updaterId.valid"
-        required #updaterId="ngModel" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group" [class.is-valid]="updatedAt.valid"
-      [class.is-invalid]="!(updatedAt.valid || updatedAt.pristine)">
-      <label class="form-label text-muted" for="updatedAt">更新时间  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="updatedAt" name="updatedAt"
-        placeholder="请输入更新时间 ..." [(ngModel)]="model.updatedAt"
-        [class.is-invalid]="!(updatedAt.valid || updatedAt.pristine)"
-        [class.is-valid]="updatedAt.valid"
-        required #updatedAt="ngModel" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group">
-      <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input"
-          id="isDeleted" name="isDeleted"
-          [(ngModel)]="model.isDeleted" [disabled]="!editable">
-        <label class="custom-control-label text-muted"
-          for="isDeleted">
-          是否删除
-        </label>
+    <div *ngIf="!editable" class="form-row">
+      <div class="col">
+        <div class="form-group">
+          <label class="form-label text-muted">创建时间</label>
+          <div class="form-control-plaintext">{{model.createdAt | date:'yyyy-MM-dd hh:mm:ss'}}</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label class="form-label text-muted">更新时间</label>
+          <div class="form-control-plaintext">{{model.updatedAt | date:'yyyy-MM-dd hh:mm:ss'}}</div>
+        </div>
       </div>
     </div>
   </div>
