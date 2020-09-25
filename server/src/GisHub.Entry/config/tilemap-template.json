@@ -4,7 +4,6 @@
   "mapName": "#name#",
   "description": "#description#",
   "copyrightText": "#copyright#",
-  "supportsDynamicLayers": false,
   "layers": [
     {
       "id": 0,
@@ -16,24 +15,22 @@
       "maxScale": 0
     }
   ],
-  "tables": [],
   "spatialReference": { "wkid": 102100, "latestWkid": 3857 },
-  "singleFusedMapCache": true,
   "tileInfo": {
     "rows": 256,
     "cols": 256,
     "dpi": 96,
     "format": "PNG",
     "compressionQuality": 0,
-    "origin": { "x": -2.0037508342787E7, "y": 2.0037508342787E7 },
+    "origin": { "x": -20037508.342787, "y": 20037508.342787 },
     "spatialReference": { "wkid": 102100, "latestWkid": 3857 },
     "lods": [
-      { "level": 0, "resolution": 156543.03392800014, "scale": 5.91657527591555E8 },
-      { "level": 1, "resolution": 78271.51696399994, "scale": 2.95828763795777E8 },
-      { "level": 2, "resolution": 39135.75848200009, "scale": 1.47914381897889E8 },
-      { "level": 3, "resolution": 19567.87924099992, "scale": 7.3957190948944E7 },
-      { "level": 4, "resolution": 9783.93962049996, "scale": 3.6978595474472E7 },
-      { "level": 5, "resolution": 4891.96981024998, "scale": 1.8489297737236E7 },
+      { "level": 0, "resolution": 156543.03392800014, "scale": 591657527.591555 },
+      { "level": 1, "resolution": 78271.51696399994, "scale": 295828763.795777 },
+      { "level": 2, "resolution": 39135.75848200009, "scale": 147914381.897889 },
+      { "level": 3, "resolution": 19567.87924099992, "scale": 73957190.948944 },
+      { "level": 4, "resolution": 9783.93962049996, "scale": 36978595.474472 },
+      { "level": 5, "resolution": 4891.96981024998, "scale": 18489297.737236 },
       { "level": 6, "resolution": 2445.98490512499, "scale": 9244648.868618 },
       { "level": 7, "resolution": 1222.992452562495, "scale": 4622324.434309 },
       { "level": 8, "resolution": 611.4962262813797, "scale": 2311162.217155 },
@@ -51,38 +48,23 @@
     ]
   },
   "initialExtent": {
-    "xmin": 1.214486495696126E7,
+    "xmin": 12144864.95696126,
     "ymin": 2515486.5000948776,
-    "xmax": 1.312110938151269E7,
+    "xmax": 13121109.38151269,
     "ymax": 2944222.9239334883,
     "spatialReference": { "wkid": 102100, "latestWkid": 3857 }
   },
   "fullExtent": {
-    "xmin": 1.2206660013192886E7,
+    "xmin": 12206660.013192886,
     "ymin": 2298488.6855241824,
-    "xmax": 1.3059314325281058E7,
+    "xmax": 13059314.325281058,
     "ymax": 2939741.6100689806,
     "spatialReference": { "wkid": 102100, "latestWkid": 3857 }
   },
-  "minScale": 1.47914381897889E8,
+  "minScale": 147914381.897889,
   "maxScale": 1128.497176,
   "units": "esriMeters",
-  "supportedImageFormatTypes": "PNG32,PNG24,PNG,JPG,DIB,TIFF,EMF,PS,PDF,GIF,SVG,SVGZ,BMP",
-  "documentInfo": {
-    "Title": "",
-    "Author": "",
-    "Comments": "",
-    "Subject": "",
-    "Category": "",
-    "AntialiasingMode": "None",
-    "TextAntialiasingMode": "Force",
-    "Keywords": ""
-  },
-  "capabilities": "Map,Query,Data",
-  "supportedQueryFormats": "JSON, AMF",
-  "exportTilesAllowed": false,
-  "maxRecordCount": 1000,
-  "maxImageHeight": 4096,
-  "maxImageWidth": 4096,
-  "supportedExtensions": "KmlServer"
+  "supportedImageFormatTypes": "PNG32",
+  "capabilities": "Map",
+  "exportTilesAllowed": false
 }
