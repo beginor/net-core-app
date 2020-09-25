@@ -33,9 +33,12 @@ namespace Beginor.GisHub.TileMap.Data {
             TileMapSearchModel model
         ) {
             var query = Session.Query<TileMapEntity>();
-            // todo: 添加自定义查询；
+            if (model.Keywords.IsNotNullOrEmpty()) {
+                var keywords = model.Keywords.Trim();
+                query = query.Where(e => e.Name.Contains(keywords) || e.CacheDirectory.Contains(keywords));
+            }
             var total = await query.LongCountAsync();
-            var data = await query.OrderByDescending(e => e.Id)
+            var data = await query.OrderByDescending(e => e.UpdatedAt)
                 .Skip(model.Skip).Take(model.Take)
                 .ToListAsync();
             return new PaginatedResponseModel<TileMapModel> {
@@ -92,7 +95,7 @@ namespace Beginor.GisHub.TileMap.Data {
                 entity.UpdatedAt = DateTime.Now;
                 entity.UpdaterId = userId;
                 entity.IsDeleted = true;
-                await Session.DeleteAsync(entity, token);
+                await Session.UpdateAsync(entity, token);
                 await Session.FlushAsync(token);
             }
             cache.TryRemove(id, out _);

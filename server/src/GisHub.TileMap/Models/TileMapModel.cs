@@ -30,6 +30,9 @@ namespace Beginor.GisHub.TileMap.Models {
     }
 
     /// <summary>切片地图搜索参数</summary>
-    public partial class TileMapSearchModel : PaginatedRequestModel { }
+    public partial class TileMapSearchModel : PaginatedRequestModel {
+        /// <summary>关键字，搜索图层名称或切片路径</summary>
+        public string Keywords { get; set; }
+    }
 
 }

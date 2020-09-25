@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -60,7 +62,8 @@ namespace Beginor.GisHub.TileMap.Api {
         [Authorize("tile_maps.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
-                await repository.DeleteAsync(id);
+                var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                await repository.DeleteAsync(id, userId);
                 return NoContent();
             }
             catch (Exception ex) {
@@ -126,7 +129,8 @@ namespace Beginor.GisHub.TileMap.Api {
                 if (modelInDb == null) {
                     return NotFound();
                 }
-                await repository.UpdateAsync(id, model);
+                var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                await repository.UpdateAsync(id, model, userId);
                 return model;
             }
             catch (Exception ex) {

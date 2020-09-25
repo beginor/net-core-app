@@ -12,7 +12,8 @@ export class TileMapService {
 
     public searchModel: TileMapSearchModel = {
         skip: 0,
-        take: 10
+        take: 10,
+        keywords: ''
     };
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<TileMapModel[]>([]);
