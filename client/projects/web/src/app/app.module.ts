@@ -39,6 +39,10 @@ import { environment } from '../environments/environment';
             useValue: 'zh-Hans'
         },
         {
+            provide: 'webRoot',
+            useFactory: () => environment.webRoot
+        },
+        {
             provide: 'apiRoot',
             useFactory: () => environment.apiRoot
         },

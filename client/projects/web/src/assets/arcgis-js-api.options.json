@@ -1,0 +1,15 @@
+{
+  "url": "https://app.gdeei.cn/arcgis-js-api/library/4.16/init.js",
+  "css": "https://app.gdeei.cn/arcgis-js-api/library/4.16/esri/themes/light/main.css",
+  "dojoConfig": {
+    "locale": "zh-cn",
+    "async": true,
+    "packages": []
+  },
+  "esriConfig": {
+    "locale": "zh-cn",
+    "request": {
+      "interceptors": []
+    }
+  }
+}

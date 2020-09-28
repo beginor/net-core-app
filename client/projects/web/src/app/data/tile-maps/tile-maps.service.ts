@@ -155,6 +155,18 @@ export class TileMapService {
         }
     }
 
+    public getLayerUrl(id: string): string {
+        if (!id) {
+            return '';
+        }
+        let url = this.apiRoot.substring(0, this.apiRoot.length - 3);
+        if (url.startsWith('/')) {
+            url = `${location.protocol}//${location.host}${url}`;
+        }
+        url = `${url}rest/services/tile-maps/${id}/MapServer`;
+        return url;
+    }
+
 }
 
 /** 切片地图 */

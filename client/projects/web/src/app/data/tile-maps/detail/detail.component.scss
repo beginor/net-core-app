@@ -13,6 +13,12 @@
 
     .card-body {
       overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+
+      .tile-map-preview {
+        flex: 1;
+      }
     }
   }
 }

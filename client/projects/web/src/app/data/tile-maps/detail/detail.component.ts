@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {
+    Component, OnInit, OnDestroy, ViewChild, AfterViewInit, ElementRef
+} from '@angular/core';
 import {
     trigger, transition, useAnimation, AnimationEvent
 } from '@angular/animations';
@@ -6,6 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import { TileMapService, TileMapModel } from '../tile-maps.service';
+import { ArcGisService } from '../../arcgis.service';
 
 @Component({
     selector: 'app-tile-map-detail',
@@ -18,19 +21,23 @@ import { TileMapService, TileMapModel } from '../tile-maps.service';
         ])
     ]
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements AfterViewInit, OnInit, OnDestroy {
 
     public animation = '';
     public title = '';
     public editable = false;
     public model: TileMapModel = {};
+    @ViewChild('mapPreView', { static: false })
+    private mapElRef!: ElementRef<HTMLDivElement>;
 
     private id = '';
     private reloadList = false;
+    private mapview?: __esri.MapView;
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private arcgis: ArcGisService,
         public account: AccountService,
         public vm: TileMapService
     ) {
@@ -51,12 +58,33 @@ export class DetailComponent implements OnInit {
         this.id = id;
     }
 
+    public ngAfterViewInit(): void {
+        if (!this.mapElRef) {
+            return;
+        }
+        const url = this.getLayerUrl();
+        if (!url) {
+            return;
+        }
+        this.arcgis.loadJsApi().then(
+            () => this.arcgis.createLayerPreview(
+                this.mapElRef.nativeElement, url
+            )
+        ).then(mapview => this.mapview = mapview);
+    }
+
     public async ngOnInit(): Promise<void> {
         if (this.id !== '0') {
             const model = await this.vm.getById(this.id);
             if (!!model) {
                 this.model = model;
             }
+        }
+    }
+
+    public ngOnDestroy(): void {
+        if (!!this.mapview) {
+            this.mapview.destroy();
         }
     }
 
@@ -82,6 +110,13 @@ export class DetailComponent implements OnInit {
         }
         this.reloadList = true;
         this.goBack();
+    }
+
+    public getLayerUrl(): string {
+        if (!this.id) {
+            return '';
+        }
+        return this.vm.getLayerUrl(this.id);
     }
 
 }
