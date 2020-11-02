@@ -14,12 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.0.0" />
-    <PackageReference Include="Beginor.AppFx.Api" Version="5.0.0-rc.1" />
-    <PackageReference Include="Beginor.AppFx.Core" Version="5.0.0-rc.1" />
-    <PackageReference Include="Beginor.AppFx.Repository.Hibernate" Version="5.0.0-rc.1" />
-    <PackageReference Include="NHibernate" Version="5.3.3" />
-    <PackageReference Include="NHibernate.Extensions.NpgSql" Version="5.0.0-rc.1" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Beginor.AppFx.Api" Version="5.0.0-rc.2" />
+    <PackageReference Include="Beginor.AppFx.Core" Version="5.0.0-rc.2" />
+    <PackageReference Include="Beginor.AppFx.Repository.Hibernate" Version="5.0.0-rc.2" />
+    <PackageReference Include="NHibernate" Version="5.3.4" />
+    <PackageReference Include="NHibernate.Extensions.NpgSql" Version="5.0.0-rc.2" />
     <PackageReference Include="NHibernate.Mapping.Attributes" Version="5.1.0" />
   </ItemGroup>
 
