@@ -65,8 +65,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
 
         private void SaveAuditLogInBackground(AppAuditLogModel model) {
             Task.Run(() => {
-                using var scope = serviceProvider.CreateScope();
-                var repo = scope.ServiceProvider.GetService<IAppAuditLogRepository>();
+                var repo = serviceProvider.GetService<IAppAuditLogRepository>();
                 var action = GetMatchingAction(model.RequestPath, model.RequestMethod);
                 var task = repo.SaveAsync(model);
                 task.Wait();
