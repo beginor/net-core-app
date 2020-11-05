@@ -16,55 +16,53 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="form-group" [class.is-valid]="id.valid"
-      [class.is-invalid]="!(id.valid || id.pristine)">
-      <label class="form-label text-muted" for="id">航拍模型id  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="id" name="id"
-        placeholder="请输入航拍模型id ..." [(ngModel)]="model.id"
-        [class.is-invalid]="!(id.valid || id.pristine)"
-        [class.is-valid]="id.valid"
-        required #id="ngModel" [disabled]="!editable"
-      />
-    </div>
     <div class="form-group" [class.is-valid]="directory.valid"
       [class.is-invalid]="!(directory.valid || directory.pristine)">
-      <label class="form-label text-muted" for="directory">航拍模型目录  <i class="text-danger">*</i> </label>
+      <label class="form-label text-muted" for="directory">目录  <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="directory" name="directory"
-        placeholder="请输入航拍模型目录 ..." [(ngModel)]="model.directory"
+        placeholder="请输入模型所在目录 ..." [(ngModel)]="model.directory"
         [class.is-invalid]="!(directory.valid || directory.pristine)"
         [class.is-valid]="directory.valid"
         required #directory="ngModel" [disabled]="!editable"
       />
     </div>
-    <div class="form-group" [class.is-valid]="longitude.valid"
-      [class.is-invalid]="!(longitude.valid || longitude.pristine)">
-      <label class="form-label text-muted" for="longitude">模型经度  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="longitude" name="longitude"
-        placeholder="请输入模型经度 ..." [(ngModel)]="model.longitude"
-        [class.is-invalid]="!(longitude.valid || longitude.pristine)"
-        [class.is-valid]="longitude.valid"
-        required #longitude="ngModel" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group" [class.is-valid]="latitude.valid"
-      [class.is-invalid]="!(latitude.valid || latitude.pristine)">
-      <label class="form-label text-muted" for="latitude">模型纬度  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="latitude" name="latitude"
-        placeholder="请输入模型纬度 ..." [(ngModel)]="model.latitude"
-        [class.is-invalid]="!(latitude.valid || latitude.pristine)"
-        [class.is-valid]="latitude.valid"
-        required #latitude="ngModel" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group" [class.is-valid]="elevation.valid"
-      [class.is-invalid]="!(elevation.valid || elevation.pristine)">
-      <label class="form-label text-muted" for="elevation">模型海拔高度  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="elevation" name="elevation"
-        placeholder="请输入模型海拔高度 ..." [(ngModel)]="model.elevation"
-        [class.is-invalid]="!(elevation.valid || elevation.pristine)"
-        [class.is-valid]="elevation.valid"
-        required #elevation="ngModel" [disabled]="!editable"
-      />
+    <div class="row">
+      <div class="col">
+        <div class="form-group" [class.is-valid]="longitude.valid"
+          [class.is-invalid]="!(longitude.valid || longitude.pristine)">
+          <label class="form-label text-muted" for="longitude">模型经度  <i class="text-danger">*</i> </label>
+          <input class="form-control text-right" type="number" id="longitude" name="longitude"
+            placeholder="请输入模型经度 ..." [(ngModel)]="model.longitude"
+            [class.is-invalid]="!(longitude.valid || longitude.pristine)"
+            [class.is-valid]="longitude.valid"
+            required #longitude="ngModel" [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group" [class.is-valid]="latitude.valid"
+          [class.is-invalid]="!(latitude.valid || latitude.pristine)">
+          <label class="form-label text-muted" for="latitude">模型纬度  <i class="text-danger">*</i> </label>
+          <input class="form-control text-right" type="number" id="latitude" name="latitude"
+            placeholder="请输入模型纬度 ..." [(ngModel)]="model.latitude"
+            [class.is-invalid]="!(latitude.valid || latitude.pristine)"
+            [class.is-valid]="latitude.valid"
+            required #latitude="ngModel" [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group" [class.is-valid]="elevation.valid"
+          [class.is-invalid]="!(elevation.valid || elevation.pristine)">
+          <label class="form-label text-muted" for="elevation">模型海拔高度  <i class="text-danger">*</i> </label>
+          <input class="form-control text-right" type="number" step="1" id="elevation" name="elevation"
+            placeholder="请输入模型海拔高度 ..." [(ngModel)]="model.elevation"
+            [class.is-invalid]="!(elevation.valid || elevation.pristine)"
+            [class.is-valid]="elevation.valid"
+            required #elevation="ngModel" [disabled]="!editable"
+          />
+        </div>
+      </div>
     </div>
     <div class="form-group" [class.is-valid]="tags.valid"
       [class.is-invalid]="!(tags.valid || tags.pristine)">
@@ -75,57 +73,6 @@
         [class.is-valid]="tags.valid"
         required #tags="ngModel" [disabled]="!editable"
       />
-    </div>
-    <div class="form-group" [class.is-valid]="creatorId.valid"
-      [class.is-invalid]="!(creatorId.valid || creatorId.pristine)">
-      <label class="form-label text-muted" for="creatorId">创建者id  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="creatorId" name="creatorId"
-        placeholder="请输入创建者id ..." [(ngModel)]="model.creatorId"
-        [class.is-invalid]="!(creatorId.valid || creatorId.pristine)"
-        [class.is-valid]="creatorId.valid"
-        required #creatorId="ngModel" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group" [class.is-valid]="createdAt.valid"
-      [class.is-invalid]="!(createdAt.valid || createdAt.pristine)">
-      <label class="form-label text-muted" for="createdAt">创建时间  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="createdAt" name="createdAt"
-        placeholder="请输入创建时间 ..." [(ngModel)]="model.createdAt"
-        [class.is-invalid]="!(createdAt.valid || createdAt.pristine)"
-        [class.is-valid]="createdAt.valid"
-        required #createdAt="ngModel" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group" [class.is-valid]="updaterId.valid"
-      [class.is-invalid]="!(updaterId.valid || updaterId.pristine)">
-      <label class="form-label text-muted" for="updaterId">更新者id  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="updaterId" name="updaterId"
-        placeholder="请输入更新者id ..." [(ngModel)]="model.updaterId"
-        [class.is-invalid]="!(updaterId.valid || updaterId.pristine)"
-        [class.is-valid]="updaterId.valid"
-        required #updaterId="ngModel" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group" [class.is-valid]="updatedAt.valid"
-      [class.is-invalid]="!(updatedAt.valid || updatedAt.pristine)">
-      <label class="form-label text-muted" for="updatedAt">更新时间  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="updatedAt" name="updatedAt"
-        placeholder="请输入更新时间 ..." [(ngModel)]="model.updatedAt"
-        [class.is-invalid]="!(updatedAt.valid || updatedAt.pristine)"
-        [class.is-valid]="updatedAt.valid"
-        required #updatedAt="ngModel" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group">
-      <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input"
-          id="isDeleted" name="isDeleted"
-          [(ngModel)]="model.isDeleted" [disabled]="!editable">
-        <label class="custom-control-label text-muted"
-          for="isDeleted">
-          是否删除
-        </label>
-      </div>
     </div>
   </div>
   <div *ngIf="info.privileges['app_privileges.update'] && editable"
