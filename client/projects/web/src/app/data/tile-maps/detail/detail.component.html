@@ -81,10 +81,12 @@
         </div>
       </div>
     </div>
-    <div *ngIf="!editable" class="tile-map-preview border border-darken-1" #mapPreView></div>
-    <div class="row text-muted px-3" style="font-size: .6rem;">
-      服务地址：<a [href]="getLayerUrl()">{{getLayerUrl()}}</a>.
-    </div>
+    <ng-container *ngIf="!editable">
+      <div class="tile-map-preview border border-darken-1" #mapPreView></div>
+      <div class="row text-muted px-3" style="font-size: .6rem;">
+        服务地址：<a [href]="getLayerUrl()">{{getLayerUrl()}}</a>.
+      </div>
+    </ng-container>
   </div>
   <div *ngIf="info.privileges['tile_maps.update'] && editable"
     class="card-footer d-flex justify-content-between">
