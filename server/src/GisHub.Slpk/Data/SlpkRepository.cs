@@ -83,7 +83,7 @@ namespace Beginor.GisHub.Slpk.Data {
                 entity.UpdatedAt = DateTime.Now;
                 entity.UpdaterId = userId;
                 entity.IsDeleted = true;
-                await Session.DeleteAsync(entity, token);
+                await Session.UpdateAsync(entity, token);
                 await Session.FlushAsync(token);
             }
             cache.TryRemove(id, out _);
