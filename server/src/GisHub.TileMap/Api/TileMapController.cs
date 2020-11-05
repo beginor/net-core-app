@@ -45,7 +45,8 @@ namespace Beginor.GisHub.TileMap.Api {
             [FromBody]TileMapModel model
         ) {
             try {
-                await repository.SaveAsync(model);
+                var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                await repository.SaveAsync(model, userId);
                 return model;
             }
             catch (Exception ex) {
@@ -77,7 +78,7 @@ namespace Beginor.GisHub.TileMap.Api {
         /// <response code="500">服务器内部错误</response>
         [HttpGet("")]
         [Authorize("tile_maps.read")]
-        public async Task<ActionResult<PaginatedResponseModel<TileMapModel>>> GetAll(
+        public async Task<ActionResult<PaginatedResponseModel<TileMapModel>>> Search(
             [FromQuery]TileMapSearchModel model
         ) {
             try {
