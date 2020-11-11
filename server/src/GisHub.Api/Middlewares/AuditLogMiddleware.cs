@@ -60,19 +60,13 @@ namespace Beginor.GisHub.Api.Middlewares {
             stopwatch.Stop();
             auditLog.Duration = stopwatch.ElapsedMilliseconds;
             auditLog.ResponseCode = context.Response.StatusCode;
-            SaveAuditLogInBackground(auditLog);
-        }
-
-        private void SaveAuditLogInBackground(AppAuditLogModel model) {
-            Task.Run(() => {
-                var repo = serviceProvider.GetService<IAppAuditLogRepository>();
-                var action = GetMatchingAction(model.RequestPath, model.RequestMethod);
-                var task = repo.SaveAsync(model);
-                task.Wait();
-                if (task.IsFaulted) {
-                    logger.LogError(task.Exception, "Can not save audit log!");
-                }
-            });
+            var action = GetMatchingAction(auditLog.RequestPath, auditLog.RequestMethod) as ControllerActionDescriptor;
+            if (action != null) {
+                auditLog.ControllerName = action.ControllerName;
+                auditLog.ActionName = action.ActionName;
+            }
+            var repo = context.RequestServices.GetService<IAppAuditLogRepository>();
+            await repo.SaveAsync(auditLog).ConfigureAwait(false);
         }
 
         private ActionDescriptor GetMatchingAction(string path, string httpMethod) {
