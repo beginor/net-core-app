@@ -17,13 +17,6 @@ namespace Beginor.GisHub.Data.Repositories {
 
         public AppAuditLogRepository(ISession session, IMapper mapper) : base(session, mapper) { }
 
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                Session.Close();
-            }
-            base.Dispose(disposing);
-        }
-
         public async Task<PaginatedResponseModel<AppAuditLogModel>> SearchAsync(
             AppAuditLogSearchModel model
         ) {
