@@ -15,12 +15,12 @@
 
   <ItemGroup>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0-rc.2.*" />
-    <PackageReference Include="Beginor.AppFx.Api" Version="5.0.0-rc.2" />
-    <PackageReference Include="Beginor.AppFx.Core" Version="5.0.0-rc.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" />
+    <PackageReference Include="Beginor.AppFx.Api" Version="5.0.0" />
+    <PackageReference Include="Beginor.AppFx.Core" Version="5.0.0" />
     <PackageReference Include="NHibernate" Version="5.3.4" />
-    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="5.0.0-rc.2" />
-    <PackageReference Include="NHibernate.NetCore" Version="5.0.0-rc.2" />
+    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="5.0.0" />
+    <PackageReference Include="NHibernate.NetCore" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
