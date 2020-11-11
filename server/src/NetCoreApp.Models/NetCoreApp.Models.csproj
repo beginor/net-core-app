@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0-rc.2.*" />
-    <PackageReference Include="Beginor.AppFx.Core" Version="5.0.0-rc.2" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="Beginor.AppFx.Core" Version="5.0.0" />
   </ItemGroup>
 </Project>
