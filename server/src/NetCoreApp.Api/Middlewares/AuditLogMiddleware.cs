@@ -14,8 +14,7 @@ using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
-using Beginor.NetCoreApp.Data.Repositories;
-using Beginor.NetCoreApp.Models;
+using Beginor.NetCoreApp.Data.Entities;
 
 namespace Beginor.NetCoreApp.Api.Middlewares {
 
@@ -26,6 +25,8 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
         private IActionSelector selector;
         private IServiceProvider serviceProvider;
         private ILogger<AuditLogMiddleware> logger;
+        private IServiceScope scope;
+        private NHibernate.ISession session;
 
         public AuditLogMiddleware(
             RequestDelegate next,
@@ -39,10 +40,12 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             this.selector = selector ?? throw new ArgumentNullException(nameof(selector));
             this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.scope = serviceProvider.CreateScope();
+            this.session = this.scope.ServiceProvider.GetService<NHibernate.ISession>();
         }
 
         public async Task InvokeAsync(HttpContext context) {
-            var auditLog = new AppAuditLogModel {
+            var appLog = new AppAuditLog {
                 HostName = context.Request.Host.Value,
                 RequestPath = context.Request.Path,
                 RequestMethod = context.Request.Method,
@@ -55,18 +58,40 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             if (context.Request.Headers.TryGetValue("X-Real-IP", out var realIp)) {
                 ip = realIp.ToString();
             }
-            auditLog.Ip = ip;
+            appLog.Ip = ip;
             await next.Invoke(context);
             stopwatch.Stop();
-            auditLog.Duration = stopwatch.ElapsedMilliseconds;
-            auditLog.ResponseCode = context.Response.StatusCode;
-            var action = GetMatchingAction(auditLog.RequestPath, auditLog.RequestMethod) as ControllerActionDescriptor;
+            appLog.Duration = stopwatch.ElapsedMilliseconds;
+            appLog.ResponseCode = context.Response.StatusCode;
+            var action = GetMatchingAction(appLog.RequestPath, appLog.RequestMethod) as ControllerActionDescriptor;
             if (action != null) {
-                auditLog.ControllerName = action.ControllerName;
-                auditLog.ActionName = action.ActionName;
+                appLog.ControllerName = action.ControllerName;
+                appLog.ActionName = action.ActionName;
             }
-            var repo = context.RequestServices.GetService<IAppAuditLogRepository>();
-            await repo.SaveAsync(auditLog).ConfigureAwait(false);
+            // var repo = context.RequestServices.GetService<IAppAuditLogRepository>();
+            // stopwatch.Reset();
+            // stopwatch.Start();
+            // // repo.SaveAsync(auditLog).ContinueWith(t => {
+            // //     if (t.IsFaulted) {
+            // //         logger.LogError(t.Exception, "Can not save autit log!");
+            // //     }
+            // // });
+            // stopwatch.Stop();
+            // logger.LogError($"Save AuditLog use: {stopwatch.ElapsedMilliseconds}");
+            SaveAutitLogAsync(appLog);
+        }
+
+        private void SaveAutitLogAsync(AppAuditLog appAuditLog) {
+            Task.Run(() => {
+                try {
+                    session.Save(appAuditLog);
+                    session.Flush();
+                }
+                catch (Exception ex) {
+                    logger.LogError(ex, $"Can not save app audit log !");
+                    logger.LogError(ex.Message);
+                }
+            });
         }
 
         private ActionDescriptor GetMatchingAction(string path, string httpMethod) {
