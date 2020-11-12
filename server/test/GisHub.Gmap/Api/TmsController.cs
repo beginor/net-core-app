@@ -1,16 +1,21 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Gmap.Api {
 
     [Route("api/tms")]
     public class TmsController : Controller {
 
-        private string tms = "http://127.0.0.1:9080/geoserver/gwc/service/tms/1.0.0";
+        private string tms = "http://127.0.0.1:6180/geoserver/gwc/service/tms/1.0.0";
 
-        public TmsController() {
+        private ILogger<TmsController> logger;
+
+        public TmsController(ILogger<TmsController> logger) {
+            this.logger = logger;
         }
 
         [HttpGet("{tileName}/{z}/{x}/{y}")]
@@ -19,14 +24,27 @@ namespace Gmap.Api {
             var url = tms + $"/{tileName}/{z}/{x}/{iy}.pbf";
             var req = WebRequest.CreateHttp(url);
             req.Method = Request.Method;
-            var res = await req.GetResponseAsync() as HttpWebResponse;
-            if (res.StatusCode == HttpStatusCode.OK) {
-                var contentType = res.ContentType;
-                using var ms = new MemoryStream();
-                await res.GetResponseStream().CopyToAsync(ms);
-                return File(ms.GetBuffer(), contentType);
+            try {
+                var res = await req.GetResponseAsync() as HttpWebResponse;
+                if (res.StatusCode == HttpStatusCode.OK) {
+                    var contentType = res.ContentType;
+                    using var ms = new MemoryStream();
+                    await res.GetResponseStream().CopyToAsync(ms);
+                    return File(ms.GetBuffer(), contentType);
+                }
+                else {
+                    var reader = new StreamReader(res.GetResponseStream());
+                    var text = reader.ReadToEnd();
+                    logger.LogError(new Exception("Tile Error"), "Can not load tile.");
+                    logger.LogError(text);
+                    return NotFound();
+                }
             }
-            return NotFound();
+            catch (Exception ex) {
+                logger.LogError(new Exception("Tile Error"), "Can not load tile.");
+                logger.LogError(ex.ToString());
+                return NotFound();
+            }
         }
 
     }

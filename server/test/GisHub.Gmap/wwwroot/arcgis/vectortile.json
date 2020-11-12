@@ -1,0 +1,32 @@
+{
+  "version": 8,
+  "sprite": "https://app.gdeei.cn/arcgis-js-api/mapbox/sprites/satellite-streets/sprite",
+  "glyphs": "https://app.gdeei.cn/arcgis-js-api/mapbox/glyphs/{fontstack}/{range}.pbf",
+  "sources": {
+    "esri": {
+      "type": "vector",
+      "tiles": [
+        "BASE_URL/postgis:water_protect_area@EPSG:3857@pbf/{z}/{x}/{y}"
+      ],
+      "bounds": [ 109.503700256348, 20.1760597229004, 117.397438049316, 25.518253326416 ],
+      "minzoom": 6,
+      "maxzoom": 23,
+      "tileSize": 512
+    }
+  },
+  "layers": [
+    {
+      "id": "饮用水源保护区>一级保护区",
+      "source": "esri",
+      "source-layer": "water_protect_area",
+      "minzoom": 6,
+      "maxzoom": 23,
+      "type": "fill",
+      "paint": {
+        "fill-antialias": true,
+        "fill-color": "#38A800",
+        "fill-opacity": 1
+      }
+    }
+  ]
+}
