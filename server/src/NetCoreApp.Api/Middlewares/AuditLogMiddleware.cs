@@ -14,19 +14,22 @@ using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Entities;
 
 namespace Beginor.NetCoreApp.Api.Middlewares {
 
-    public class AuditLogMiddleware {
+    public class AuditLogMiddleware : Disposable {
 
         private readonly RequestDelegate next;
         private IActionDescriptorCollectionProvider provider;
         private IActionSelector selector;
         private IServiceProvider serviceProvider;
         private ILogger<AuditLogMiddleware> logger;
-        private IServiceScope scope;
         private NHibernate.ISession session;
+        private IServiceScope scope;
+        private ConcurrentQueue<AppAuditLog> logQueue = new ConcurrentQueue<AppAuditLog>();
+        private CancellationTokenSource cts;
 
         public AuditLogMiddleware(
             RequestDelegate next,
@@ -42,6 +45,22 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.scope = serviceProvider.CreateScope();
             this.session = this.scope.ServiceProvider.GetService<NHibernate.ISession>();
+            cts = new CancellationTokenSource();
+            ThreadPool.QueueUserWorkItem(StartSaveAuditLog, cts.Token, preferLocal: false);
+        }
+
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                this.cts.Cancel();
+                this.session.Dispose();
+                this.scope.Dispose();
+                this.next = null;
+                this.provider = null;
+                this.selector = null;
+                this.serviceProvider = null;
+                this.logger = null;
+            }
+            base.Dispose(disposing);
         }
 
         public async Task InvokeAsync(HttpContext context) {
@@ -68,30 +87,60 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
                 appLog.ControllerName = action.ControllerName;
                 appLog.ActionName = action.ActionName;
             }
-            // var repo = context.RequestServices.GetService<IAppAuditLogRepository>();
-            // stopwatch.Reset();
-            // stopwatch.Start();
-            // // repo.SaveAsync(auditLog).ContinueWith(t => {
-            // //     if (t.IsFaulted) {
-            // //         logger.LogError(t.Exception, "Can not save autit log!");
-            // //     }
-            // // });
-            // stopwatch.Stop();
-            // logger.LogError($"Save AuditLog use: {stopwatch.ElapsedMilliseconds}");
-            SaveAutitLogAsync(appLog);
+            this.logQueue.Enqueue(auditLog);
         }
 
-        private void SaveAutitLogAsync(AppAuditLog appAuditLog) {
-            Task.Run(() => {
-                try {
-                    session.Save(appAuditLog);
-                    session.Flush();
+        private void StartSaveAuditLog(CancellationToken token) {
+            const int batchSize = 128;
+            IList<AppAuditLog> logs = new List<AppAuditLog>(batchSize);
+            while (!token.IsCancellationRequested) {
+                if (logQueue.Count == 0) {
+                    logger.LogInformation("Audit log queue is empty, wait for 1 second to check again.");
+                    Thread.Sleep(1000);
+                    continue;
                 }
-                catch (Exception ex) {
-                    logger.LogError(ex, $"Can not save app audit log !");
-                    logger.LogError(ex.Message);
+                while (logQueue.TryDequeue(out var log)) {
+                    logs.Add(log);
+                    if (logs.Count == batchSize) {
+                        BatchSaveInTransaction(logs);
+                        logs.Clear();
+                    }
                 }
-            });
+                if (logs.Count > 0) {
+                    BatchSaveInTransaction(logs);
+                }
+                logs.Clear();
+            }
+            if (logs.Count > 0) {
+                logger.LogWarning($"Cancellation requested, {logs.Count} unsaved logs:");
+                foreach (var log in logs) {
+                    logger.LogWarning(log.ToJson());
+                }
+            }
+        }
+
+        private void BatchSaveInTransaction(IList<AppAuditLog> logs) {
+            logger.LogInformation($"Audit log queue size is {logQueue.Count} ");
+            logger.LogInformation($"Batch save {logs.Count} audit logs to db ...");
+            session.SetBatchSize(logs.Count);
+            NHibernate.ITransaction tx = null;
+            try {
+                tx = session.BeginTransaction();
+                foreach (var log in logs) {
+                    session.Save(log);
+                }
+                tx.Commit();
+                session.Flush();
+            }
+            catch (Exception ex) {
+                if (tx != null) {
+                    tx.Rollback();
+                }
+                logger.LogError(ex, "Can not save audit logs with transactions.");
+                foreach (var log in logs) {
+                    logger.LogError(log.ToJson());
+                }
+            }
         }
 
         private ActionDescriptor GetMatchingAction(string path, string httpMethod) {
