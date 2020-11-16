@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -24,7 +26,6 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
         private readonly RequestDelegate next;
         private IActionDescriptorCollectionProvider provider;
         private IActionSelector selector;
-        private IServiceProvider serviceProvider;
         private ILogger<AuditLogMiddleware> logger;
         private NHibernate.ISession session;
         private IServiceScope scope;
@@ -41,7 +42,9 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             this.next = next ?? throw new ArgumentNullException(nameof(next));
             this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
             this.selector = selector ?? throw new ArgumentNullException(nameof(selector));
-            this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            if (serviceProvider == null) {
+                throw new ArgumentNullException(nameof(serviceProvider));
+            }
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.scope = serviceProvider.CreateScope();
             this.session = this.scope.ServiceProvider.GetService<NHibernate.ISession>();
@@ -54,17 +57,17 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
                 this.cts.Cancel();
                 this.session.Dispose();
                 this.scope.Dispose();
-                this.next = null;
+                // this.next = null;
                 this.provider = null;
                 this.selector = null;
-                this.serviceProvider = null;
+                // this.serviceProvider = null;
                 this.logger = null;
             }
             base.Dispose(disposing);
         }
 
         public async Task InvokeAsync(HttpContext context) {
-            var appLog = new AppAuditLog {
+            var auditLog = new AppAuditLog {
                 HostName = context.Request.Host.Value,
                 RequestPath = context.Request.Path,
                 RequestMethod = context.Request.Method,
@@ -73,21 +76,23 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             };
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var ip = context.Request.HttpContext.Connection.RemoteIpAddress.ToString();
-            if (context.Request.Headers.TryGetValue("X-Real-IP", out var realIp)) {
-                ip = realIp.ToString();
+            if (context.Request.HttpContext.Connection.RemoteIpAddress != null) {
+                var ip = context.Request.HttpContext.Connection.RemoteIpAddress.ToString();
+                if (context.Request.Headers.TryGetValue("X-Real-IP", out var realIp)) {
+                    ip = realIp.ToString();
+                }
+                auditLog.Ip = ip;
             }
-            appLog.Ip = ip;
             await next.Invoke(context);
             stopwatch.Stop();
-            appLog.Duration = stopwatch.ElapsedMilliseconds;
-            appLog.ResponseCode = context.Response.StatusCode;
-            var action = GetMatchingAction(appLog.RequestPath, appLog.RequestMethod) as ControllerActionDescriptor;
+            auditLog.Duration = stopwatch.ElapsedMilliseconds;
+            auditLog.ResponseCode = context.Response.StatusCode;
+            var action = GetMatchingAction(auditLog.RequestPath, auditLog.RequestMethod) as ControllerActionDescriptor;
             if (action != null) {
-                appLog.ControllerName = action.ControllerName;
-                appLog.ActionName = action.ActionName;
+                auditLog.ControllerName = action.ControllerName;
+                auditLog.ActionName = action.ActionName;
             }
-            this.logQueue.Enqueue(auditLog);
+            logQueue.Enqueue(auditLog);
         }
 
         private void StartSaveAuditLog(CancellationToken token) {
@@ -133,9 +138,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
                 session.Flush();
             }
             catch (Exception ex) {
-                if (tx != null) {
-                    tx.Rollback();
-                }
+                tx?.Rollback();
                 logger.LogError(ex, "Can not save audit logs with transactions.");
                 foreach (var log in logs) {
                     logger.LogError(log.ToJson());
@@ -149,7 +152,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             var matchingDescriptors = new List<ActionDescriptor>();
             foreach (var actionDescriptor in actionDescriptors) {
                 var matchesRouteTemplate = MatchesTemplate(
-                    actionDescriptor.AttributeRouteInfo.Template,
+                    actionDescriptor.AttributeRouteInfo!.Template,
                     path
                 );
                 if (matchesRouteTemplate) {
@@ -183,7 +186,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             var result = new RouteValueDictionary();
             foreach (var parameter in parsedTemplate.Parameters) {
                 if (parameter.DefaultValue != null) {
-                    result.Add(parameter.Name, parameter.DefaultValue);
+                    result.Add(parameter.Name!, parameter.DefaultValue);
                 }
             }
             return result;
