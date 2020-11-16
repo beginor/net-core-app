@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Beginor.AppFx.DependencyInjection" Version="5.0.0" />
-    <PackageReference Include="Beginor.AppFx.Logging.Log4net" Version="5.0.0" />
+    <PackageReference Include="Beginor.AppFx.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Beginor.AppFx.Logging.Log4net" Version="5.0.1" />
     <PackageReference Include="NHibernate.NetCore" Version="5.0.0" />
   </ItemGroup>
 
