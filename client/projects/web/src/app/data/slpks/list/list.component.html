@@ -55,7 +55,18 @@
                   <!-- <span class="text-muted">其它工具栏</span> -->
                 </div>
                 <div class="col-6">
-                  <!-- <span class="text-muted">其它工具栏</span> -->
+                  <div class="input-group input-group-sm">
+                    <input class="form-control" type="text" name="keywords"
+                      placeholder="按名称或目录搜索"
+                      [(ngModel)]="vm.searchModel.keywords"
+                      (keyup.enter)="vm.search()" />
+                    <div class="input-group-append">
+                      <button class="btn btn-sm btn-outline-secondary" type="button"
+                        *ngIf="vm.searchModel.keywords" (click)="resetSearch()">
+                        <i class="fa fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

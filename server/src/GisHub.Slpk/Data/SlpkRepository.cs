@@ -2,11 +2,13 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
+using Dapper;
 using NHibernate;
 using NHibernate.Linq;
 using Beginor.GisHub.Slpk.Models;
@@ -37,6 +39,12 @@ namespace Beginor.GisHub.Slpk.Data {
             SlpkSearchModel model
         ) {
             var query = Session.Query<SlpkEntity>();
+            // var countSql = new StringBuilder();
+            // countSql.AppendLine("select count(*) from public.slpks ");
+            // countSql.AppendLine("where is_deleted = false ");
+            // if (model.Keywords.IsNotNullOrEmpty()) {
+            //     countSql.AppendLine(" and (directory like '%' + #Keywords + '%')");
+            // }
             // todo: 添加自定义查询；
             var total = await query.LongCountAsync();
             var data = await query.OrderByDescending(e => e.Id)

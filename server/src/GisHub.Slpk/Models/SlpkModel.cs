@@ -22,6 +22,8 @@ namespace Beginor.GisHub.Slpk.Models {
     }
 
     /// <summary>slpk 航拍模型搜索参数</summary>
-    public partial class SlpkSearchModel : PaginatedRequestModel { }
+    public partial class SlpkSearchModel : PaginatedRequestModel {
+        public string Keywords { get; set; }
+    }
 
 }

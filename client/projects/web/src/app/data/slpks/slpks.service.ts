@@ -170,16 +170,6 @@ export interface SlpkModel {
     elevation?: number;
     /** 标签/别名 */
     tags?: string[];
-    /** 创建者id */
-    creatorId?: string;
-    /** 创建时间 */
-    createdAt?: string;
-    /** 更新者id */
-    updaterId?: string;
-    /** 更新时间 */
-    updatedAt?: string;
-    /** 是否删除 */
-    isDeleted?: boolean;
 }
 
 /** slpk 航拍模型 搜索参数 */
@@ -189,6 +179,7 @@ export interface SlpkSearchModel {
     skip: number;
     /** 取多少条记录 */
     take: number;
+    keywords?: string;
 }
 
 /** slpk 航拍模型 搜索结果 */

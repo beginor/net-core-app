@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -14,18 +16,22 @@ using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
-using Beginor.GisHub.Data.Repositories;
-using Beginor.GisHub.Models;
+using Beginor.AppFx.Core;
+using Beginor.GisHub.Data.Entities;
 
 namespace Beginor.GisHub.Api.Middlewares {
 
-    public class AuditLogMiddleware {
+    public class AuditLogMiddleware : Disposable {
 
-        private readonly RequestDelegate next;
+        private RequestDelegate next;
         private IActionDescriptorCollectionProvider provider;
         private IActionSelector selector;
         private IServiceProvider serviceProvider;
         private ILogger<AuditLogMiddleware> logger;
+        private NHibernate.ISession session;
+        private IServiceScope scope;
+        private ConcurrentQueue<AppAuditLog> logQueue = new ConcurrentQueue<AppAuditLog>();
+        private CancellationTokenSource cts;
 
         public AuditLogMiddleware(
             RequestDelegate next,
@@ -39,10 +45,28 @@ namespace Beginor.GisHub.Api.Middlewares {
             this.selector = selector ?? throw new ArgumentNullException(nameof(selector));
             this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.scope = serviceProvider.CreateScope();
+            this.session = this.scope.ServiceProvider.GetService<NHibernate.ISession>();
+            cts = new CancellationTokenSource();
+            ThreadPool.QueueUserWorkItem(StartSaveAuditLog, cts.Token, preferLocal: false);
+        }
+
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                this.cts.Cancel();
+                this.session.Dispose();
+                this.scope.Dispose();
+                this.next = null;
+                this.provider = null;
+                this.selector = null;
+                this.serviceProvider = null;
+                this.logger = null;
+            }
+            base.Dispose(disposing);
         }
 
         public async Task InvokeAsync(HttpContext context) {
-            var auditLog = new AppAuditLogModel {
+            var auditLog = new AppAuditLog {
                 HostName = context.Request.Host.Value,
                 RequestPath = context.Request.Path,
                 RequestMethod = context.Request.Method,
@@ -65,8 +89,61 @@ namespace Beginor.GisHub.Api.Middlewares {
                 auditLog.ControllerName = action.ControllerName;
                 auditLog.ActionName = action.ActionName;
             }
-            var repo = context.RequestServices.GetService<IAppAuditLogRepository>();
-            await repo.SaveAsync(auditLog).ConfigureAwait(false);
+            this.logQueue.Enqueue(auditLog);
+        }
+
+        private void StartSaveAuditLog(CancellationToken token) {
+            Thread.Sleep(1000);
+            const int batchSize = 128;
+            IList<AppAuditLog> logs = new List<AppAuditLog>(batchSize);
+            while (!token.IsCancellationRequested) {
+                if (logQueue.Count == 0) {
+                    logger.LogInformation("Audit log queue is empty, wait for 1 second to check again.");
+                    Thread.Sleep(1000);
+                    continue;
+                }
+                while (logQueue.TryDequeue(out var log)) {
+                    logs.Add(log);
+                    if (logs.Count == batchSize) {
+                        BatchSaveInTransaction(logs);
+                        logs.Clear();
+                    }
+                }
+                if (logs.Count > 0) {
+                    BatchSaveInTransaction(logs);
+                }
+                logs.Clear();
+            }
+            if (logs.Count > 0) {
+                logger.LogWarning($"Cancellation requested, {logs.Count} unsaved logs:");
+                foreach (var log in logs) {
+                    logger.LogWarning(log.ToJson());
+                }
+            }
+        }
+
+        private void BatchSaveInTransaction(IList<AppAuditLog> logs) {
+            logger.LogInformation($"Audit log queue size is {logQueue.Count} ");
+            logger.LogInformation($"Batch save {logs.Count} audit logs to db .");
+            session.SetBatchSize(logs.Count);
+            NHibernate.ITransaction tx = null;
+            try {
+                tx = session.BeginTransaction();
+                foreach (var log in logs) {
+                    session.Save(log);
+                }
+                tx.Commit();
+                session.Flush();
+            }
+            catch (Exception ex) {
+                if (tx != null) {
+                    tx.Rollback();
+                }
+                logger.LogError(ex, "Can not save audit logs with transactions.");
+                foreach (var log in logs) {
+                    logger.LogError(log.ToJson());
+                }
+            }
         }
 
         private ActionDescriptor GetMatchingAction(string path, string httpMethod) {
