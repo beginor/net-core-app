@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -26,7 +27,6 @@ namespace Beginor.GisHub.Api.Middlewares {
         private RequestDelegate next;
         private IActionDescriptorCollectionProvider provider;
         private IActionSelector selector;
-        private IServiceProvider serviceProvider;
         private ILogger<AuditLogMiddleware> logger;
         private NHibernate.ISession session;
         private IServiceScope scope;
@@ -43,7 +43,9 @@ namespace Beginor.GisHub.Api.Middlewares {
             this.next = next ?? throw new ArgumentNullException(nameof(next));
             this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
             this.selector = selector ?? throw new ArgumentNullException(nameof(selector));
-            this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            if (serviceProvider == null) {
+                throw new ArgumentNullException(nameof(serviceProvider));
+            }
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.scope = serviceProvider.CreateScope();
             this.session = this.scope.ServiceProvider.GetService<NHibernate.ISession>();
@@ -56,10 +58,10 @@ namespace Beginor.GisHub.Api.Middlewares {
                 this.cts.Cancel();
                 this.session.Dispose();
                 this.scope.Dispose();
-                this.next = null;
+                // this.next = null;
                 this.provider = null;
                 this.selector = null;
-                this.serviceProvider = null;
+                // this.serviceProvider = null;
                 this.logger = null;
             }
             base.Dispose(disposing);
@@ -75,11 +77,13 @@ namespace Beginor.GisHub.Api.Middlewares {
             };
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var ip = context.Request.HttpContext.Connection.RemoteIpAddress.ToString();
-            if (context.Request.Headers.TryGetValue("X-Real-IP", out var realIp)) {
-                ip = realIp.ToString();
+            if (context.Request.HttpContext.Connection.RemoteIpAddress != null) {
+                var ip = context.Request.HttpContext.Connection.RemoteIpAddress.ToString();
+                if (context.Request.Headers.TryGetValue("X-Real-IP", out var realIp)) {
+                    ip = realIp.ToString();
+                }
+                auditLog.Ip = ip;
             }
-            auditLog.Ip = ip;
             await next.Invoke(context);
             stopwatch.Stop();
             auditLog.Duration = stopwatch.ElapsedMilliseconds;
@@ -89,11 +93,10 @@ namespace Beginor.GisHub.Api.Middlewares {
                 auditLog.ControllerName = action.ControllerName;
                 auditLog.ActionName = action.ActionName;
             }
-            this.logQueue.Enqueue(auditLog);
+            logQueue.Enqueue(auditLog);
         }
 
         private void StartSaveAuditLog(CancellationToken token) {
-            Thread.Sleep(1000);
             const int batchSize = 128;
             IList<AppAuditLog> logs = new List<AppAuditLog>(batchSize);
             while (!token.IsCancellationRequested) {
@@ -124,7 +127,7 @@ namespace Beginor.GisHub.Api.Middlewares {
 
         private void BatchSaveInTransaction(IList<AppAuditLog> logs) {
             logger.LogInformation($"Audit log queue size is {logQueue.Count} ");
-            logger.LogInformation($"Batch save {logs.Count} audit logs to db .");
+            logger.LogInformation($"Batch save {logs.Count} audit logs to db ...");
             session.SetBatchSize(logs.Count);
             NHibernate.ITransaction tx = null;
             try {
@@ -136,9 +139,7 @@ namespace Beginor.GisHub.Api.Middlewares {
                 session.Flush();
             }
             catch (Exception ex) {
-                if (tx != null) {
-                    tx.Rollback();
-                }
+                tx?.Rollback();
                 logger.LogError(ex, "Can not save audit logs with transactions.");
                 foreach (var log in logs) {
                     logger.LogError(log.ToJson());
@@ -152,7 +153,7 @@ namespace Beginor.GisHub.Api.Middlewares {
             var matchingDescriptors = new List<ActionDescriptor>();
             foreach (var actionDescriptor in actionDescriptors) {
                 var matchesRouteTemplate = MatchesTemplate(
-                    actionDescriptor.AttributeRouteInfo.Template,
+                    actionDescriptor.AttributeRouteInfo!.Template,
                     path
                 );
                 if (matchesRouteTemplate) {
@@ -186,7 +187,7 @@ namespace Beginor.GisHub.Api.Middlewares {
             var result = new RouteValueDictionary();
             foreach (var parameter in parsedTemplate.Parameters) {
                 if (parameter.DefaultValue != null) {
-                    result.Add(parameter.Name, parameter.DefaultValue);
+                    result.Add(parameter.Name!, parameter.DefaultValue);
                 }
             }
             return result;
