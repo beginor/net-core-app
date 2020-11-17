@@ -57,7 +57,7 @@
                 <div class="col-6">
                   <div class="input-group input-group-sm">
                     <input class="form-control" type="text" name="keywords"
-                      placeholder="按名称或目录搜索"
+                      placeholder="搜索目录或标签"
                       [(ngModel)]="vm.searchModel.keywords"
                       (keyup.enter)="vm.search()" />
                     <div class="input-group-append">
@@ -81,7 +81,7 @@
                 <th scope="col" class="text-center text-nowrap text-muted">经度</th>
                 <th scope="col" class="text-center text-nowrap text-muted">纬度</th>
                 <th scope="col" class="text-center text-nowrap text-muted">海拔高度</th>
-                <th scope="col" class="text-center text-nowrap text-muted">标签/别名</th>
+                <th scope="col" class="text-center text-nowrap text-muted">标签</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
