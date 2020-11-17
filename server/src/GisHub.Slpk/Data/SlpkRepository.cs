@@ -39,17 +39,21 @@ namespace Beginor.GisHub.Slpk.Data {
             SlpkSearchModel model
         ) {
             var query = Session.Query<SlpkEntity>();
-            // var countSql = new StringBuilder();
-            // countSql.AppendLine("select count(*) from public.slpks ");
-            // countSql.AppendLine("where is_deleted = false ");
-            // if (model.Keywords.IsNotNullOrEmpty()) {
-            //     countSql.AppendLine(" and (directory like '%' + #Keywords + '%')");
-            // }
-            // todo: 添加自定义查询；
-            var total = await query.LongCountAsync();
-            var data = await query.OrderByDescending(e => e.Id)
-                .Skip(model.Skip).Take(model.Take)
-                .ToListAsync();
+            var sql = new StringBuilder();
+            sql.AppendLine("from public.slpks ");
+            sql.AppendLine("where is_deleted = false ");
+            if (model.Keywords.IsNotNullOrEmpty()) {
+                sql.AppendLine(" and (directory like '%' || @Keywords || '%' or @Keywords = any(tags)) ");
+            }
+            var total = await Session.Connection.ExecuteScalarAsync<long>(
+                "select count(*) " + sql.ToString(),
+                model
+            );
+            sql.AppendLine("limit @Take offset @Skip ");
+            var data = await Session.Connection.QueryAsync<SlpkEntity>(
+                "select * " + sql.ToString(),
+                model
+            );
             return new PaginatedResponseModel<SlpkModel> {
                 Total = total,
                 Data = Mapper.Map<IList<SlpkModel>>(data),
