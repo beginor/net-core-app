@@ -9,7 +9,9 @@ namespace Beginor.NetCoreApp.Data.Entities {
     public partial class AppAuditLog : BaseEntity<long> {
 
         /// <summary>审计日志ID</summary>
-        [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]
+        [Id(Name = "Id", Column = "id", Type = "long")]
+        [Generator(position: 1, Class = "sequence")]
+        [Param(position:2, Name = "sequence", Content = "public.snow_flake_id_seq")]
         public override long Id { get { return base.Id; } set { base.Id = value; } }
 
         /// <summary>客户端 IP 地址</summary>
