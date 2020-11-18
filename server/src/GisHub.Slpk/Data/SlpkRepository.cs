@@ -49,7 +49,8 @@ namespace Beginor.GisHub.Slpk.Data {
                 "select count(*) " + sql.ToString(),
                 model
             );
-            sql.AppendLine("limit @Take offset @Skip ");
+            sql.AppendLine(" order by updated_at desc ");
+            sql.AppendLine(" limit @Take offset @Skip ");
             var data = await Session.Connection.QueryAsync<SlpkEntity>(
                 "select * " + sql.ToString(),
                 model
