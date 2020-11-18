@@ -31,7 +31,7 @@
         <div class="form-group" [class.is-valid]="longitude.valid"
           [class.is-invalid]="!(longitude.valid || longitude.pristine)">
           <label class="form-label text-muted" for="longitude">模型经度  <i class="text-danger">*</i> </label>
-          <input class="form-control text-right" type="number" id="longitude" name="longitude"
+          <input class="form-control text-right" type="number" step="0.1" id="longitude" name="longitude"
             placeholder="请输入模型经度 ..." [(ngModel)]="model.longitude"
             [class.is-invalid]="!(longitude.valid || longitude.pristine)"
             [class.is-valid]="longitude.valid"
@@ -43,7 +43,7 @@
         <div class="form-group" [class.is-valid]="latitude.valid"
           [class.is-invalid]="!(latitude.valid || latitude.pristine)">
           <label class="form-label text-muted" for="latitude">模型纬度  <i class="text-danger">*</i> </label>
-          <input class="form-control text-right" type="number" id="latitude" name="latitude"
+          <input class="form-control text-right" type="number" step="0.1" id="latitude" name="latitude"
             placeholder="请输入模型纬度 ..." [(ngModel)]="model.latitude"
             [class.is-invalid]="!(latitude.valid || latitude.pristine)"
             [class.is-valid]="latitude.valid"
@@ -55,7 +55,7 @@
         <div class="form-group" [class.is-valid]="elevation.valid"
           [class.is-invalid]="!(elevation.valid || elevation.pristine)">
           <label class="form-label text-muted" for="elevation">模型海拔高度  <i class="text-danger">*</i> </label>
-          <input class="form-control text-right" type="number" step="1" id="elevation" name="elevation"
+          <input class="form-control text-right" type="number" step="0.1" id="elevation" name="elevation"
             placeholder="请输入模型海拔高度 ..." [(ngModel)]="model.elevation"
             [class.is-invalid]="!(elevation.valid || elevation.pristine)"
             [class.is-valid]="elevation.valid"

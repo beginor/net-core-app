@@ -74,6 +74,10 @@ export class DetailComponent implements OnInit {
     }
 
     public async save(): Promise<void> {
+        if (typeof this.model.tags === 'string') {
+            const tags = this.model.tags as string;
+            this.model.tags = tags.split(',');
+        }
         if (this.id !== '0') {
             await this.vm.update(this.id, this.model);
         }
