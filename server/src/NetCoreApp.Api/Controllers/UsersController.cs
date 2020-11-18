@@ -12,7 +12,6 @@ using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using NHibernate.AspNetCore.Identity;
 using NHibernate.Linq;
-using NHibernate.NetCore;
 using Beginor.NetCoreApp.Data;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
