@@ -122,8 +122,8 @@ namespace Beginor.GisHub.Api.Controllers {
             [FromBody]AppClientErrorModel model
         ) {
             try {
-                var modelInDb = await repository.GetByIdAsync(id);
-                if (modelInDb == null) {
+                var exists = await repository.ExitsAsync(id);
+                if (!exists) {
                     return NotFound();
                 }
                 await repository.UpdateAsync(id, model);

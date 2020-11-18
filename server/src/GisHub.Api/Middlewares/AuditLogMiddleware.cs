@@ -128,20 +128,22 @@ namespace Beginor.GisHub.Api.Middlewares {
             logger.LogInformation($"Audit log queue size is {logQueue.Count} ");
             logger.LogInformation($"Batch save {logs.Count} audit logs to db ...");
             session.SetBatchSize(logs.Count);
-            NHibernate.ITransaction tx = null;
-            try {
-                tx = session.BeginTransaction();
-                foreach (var log in logs) {
-                    session.Save(log);
+            using (var tx = session.BeginTransaction()) {
+                try {
+                    session.SetBatchSize(logs.Count);
+                    foreach (var log in logs) {
+                        session.Save(log);
+                    }
+                    session.Flush();
+                    session.Clear();
+                    tx.Commit();
                 }
-                tx.Commit();
-                session.Flush();
-            }
-            catch (Exception ex) {
-                tx?.Rollback();
-                logger.LogError(ex, "Can not save audit logs with transactions.");
-                foreach (var log in logs) {
-                    logger.LogError(log.ToJson());
+                catch (Exception ex) {
+                    tx?.Rollback();
+                    logger.LogError(ex, "Can not save audit logs with transactions.");
+                    foreach (var log in logs) {
+                        logger.LogError(log.ToJson());
+                    }
                 }
             }
         }
