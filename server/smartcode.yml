@@ -53,9 +53,11 @@ TableFilter:
     - aspnet_users
     - app_client_errors
     - app_json_data
-  IncludeTables:
     - slpks
     - tile_maps
+  IncludeTables:
+    - connection_strings
+    - data_sources
   IgnoreNoPKTable: true
   IgnoreView: true
 
