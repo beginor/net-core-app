@@ -50,7 +50,7 @@ namespace Beginor.GisHub.Slpk.Api {
         ) {
             try {
                 var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                await repository.SaveAsync(model);
+                await repository.SaveAsync(model, userId);
                 return model;
             }
             catch (Exception ex) {
@@ -134,7 +134,8 @@ namespace Beginor.GisHub.Slpk.Api {
                 if (modelInDb == null) {
                     return NotFound();
                 }
-                await repository.UpdateAsync(id, model);
+                var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                await repository.UpdateAsync(id, model, userId);
                 return model;
             }
             catch (Exception ex) {
