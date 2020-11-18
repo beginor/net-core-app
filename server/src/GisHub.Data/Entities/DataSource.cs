@@ -5,7 +5,7 @@ using NHibernate.Mapping.Attributes;
 namespace Beginor.GisHub.Data.Entities {
 
     /// <summary>数据源（数据表或视图）</summary>
-    [Class(Schema = "public", Table = "data_sources")]
+    [Class(Schema = "public", Table = "data_sources", Where = "is_deleted = false")]
     public partial class DataSource : BaseEntity<long> {
 
         /// <summary>数据源id</summary>
@@ -17,8 +17,8 @@ namespace Beginor.GisHub.Data.Entities {
         public virtual string Name { get; set; }
 
         /// <summary>数据库连接串id</summary>
-        [Property(Name = "ConnectionStringId", Column = "connection_string_id", Type = "long", NotNull = true)]
-        public virtual long ConnectionStringId { get; set; }
+        [ManyToOne(Name = "ConnectionString", Column = "connection_string_id", ClassType = typeof(ConnectionString), NotFound = NotFoundMode.Ignore)]
+        public virtual ConnectionString ConnectionString { get; set; }
 
         /// <summary>数据表/视图架构</summary>
         [Property(Name = "Schema", Column = "schema", Type = "string", NotNull = false, Length = 16)]

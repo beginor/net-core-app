@@ -5,7 +5,7 @@ using NHibernate.Mapping.Attributes;
 namespace Beginor.GisHub.Data.Entities {
 
     /// <summary>数据库连接串</summary>
-    [Class(Schema = "public", Table = "connection_strings")]
+    [Class(Schema = "public", Table = "connection_strings", Where = "is_deleted = false")]
     public partial class ConnectionString : BaseEntity<long> {
 
         /// <summary>连接串ID</summary>
