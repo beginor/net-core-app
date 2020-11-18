@@ -51,8 +51,9 @@ TableFilter:
     - aspnet_user_roles
     - aspnet_user_tokens
     - aspnet_users
+    - app_client_errors
   IncludeTables:
-   - app_client_errors
+    - app_json_data
   IgnoreNoPKTable: true
   IgnoreView: true
 
