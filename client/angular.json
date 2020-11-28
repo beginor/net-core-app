@@ -28,14 +28,14 @@
               "projects/web/src/favicon.ico",
               "projects/web/src/assets",
               {
-                "input": "node_modules/bootstrap-icons",
+                "input": "node_modules/bootstrap-icons/icons",
                 "glob": "*.svg",
-                "output": "assets/icons"
+                "output": "assets/icons/bi"
               },
               {
-                "input": "node_modules/@fortawesome/fontawesome-free/sprites",
-                "glob": "*.svg",
-                "output": "assets/icons/fontawesome-free"
+                "input": "node_modules/@fortawesome/fontawesome-free/svgs",
+                "glob": "**/*.svg",
+                "output": "assets/icons/fa"
               }
             ],
             "styles": [

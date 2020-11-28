@@ -7,11 +7,11 @@
       <button class="btn btn-outline-primary" type="button"
         *ngIf="info.privileges['app_users.lock']"
         [disabled]="!lockForm.valid" (click)="save()">
-        <i class="fa fa-check"></i> 保存
+        <i svgIcon path="bi/check"></i> 保存
       </button>
       <button class="btn btn-outline-secondary" type="button"
         (click)="goBack()">
-        <i class="fa fa-times"></i> 取消
+        <i svgIcon path="bi/x"></i> 取消
       </button>
     </div>
   </div>
@@ -29,7 +29,7 @@
         <div class="input-group-append">
           <button class="btn btn-outline-secondary" type="button"
             (click)="le.toggle()">
-            <i class="fa fa-calendar-alt"></i>
+            <i svgIcon path="bi/calendar3"></i>
           </button>
         </div>
       </div>

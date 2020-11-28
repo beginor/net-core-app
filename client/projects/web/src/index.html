@@ -18,7 +18,7 @@
   <app-root id="app-root">
     <div id="loading-indicator">
       <svg class="bi bi-spin">
-        <use xlink:href="assets/icons/fontawesome-free/solid.svg#spinner"></use>
+        <use xlink:href="assets/icons/fa/solid/spinner.svg"></use>
       </svg>
       <i class="fas fa-spinner fa-spin"></i> 加载中 ...
     </div>
@@ -39,6 +39,7 @@
   <script type="text/javascript">
   if (isSupportedBrowser()) {
     document.getElementById('unsupported').remove();
+
   }
   else {
     document.getElementById('app-root').style.display = 'none';

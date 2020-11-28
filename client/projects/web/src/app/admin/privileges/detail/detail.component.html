@@ -6,11 +6,11 @@
       <button *ngIf="info.privileges['app_privileges.update'] && editable"
         type="button" class="btn btn-sm btn-outline-primary"
         (click)="save()" [disabled]="!detailForm.valid">
-        <i class="fa fa-check"></i> 保存
+        <i svgIcon path="bi/check"></i> 保存
       </button>
       <button type="button" class="btn btn-sm btn-outline-secondary"
         (click)="goBack()">
-        <i class="fa fa-times"></i> 取消
+        <i svgIcon path="bi/x"></i> 取消
       </button>
     </div>
   </div>
@@ -58,11 +58,11 @@
     <button
       type="button" class="btn btn-sm btn-outline-primary"
       (click)="save()" [disabled]="!detailForm.valid">
-      <i class="fa fa-check"></i> 保存
+      <i svgIcon path="bi/check"></i> 保存
     </button>
     <button type="button" class="btn btn-sm btn-outline-secondary"
       (click)="goBack()">
-      <i class="fa fa-times"></i> 取消
+      <i svgIcon path="bi/x"></i> 取消
     </button>
   </div>
 </form>

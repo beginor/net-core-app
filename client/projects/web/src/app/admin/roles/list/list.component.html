@@ -14,11 +14,11 @@
           <div class="btn-group btn-group-sm">
             <button *ngIf="info.privileges['app_roles.create']" type="button" class="btn btn-outline-primary"
               (click)="showDetail('0', true)">
-              <i class="fa fa-plus"></i> 新建角色
+              <i svgIcon path="bi/plus"></i> 新建角色
             </button>
             <button type="button" class="btn btn-outline-secondary"
               (click)="loadData()">
-              <i class="fa fa-sync"></i> 刷新
+              <i svgIcon path="bi/arrow-repeat"></i> 刷新
             </button>
           </div>
         </div>
@@ -29,7 +29,7 @@
                 <div class="col-auto text-muted px-2 py-1">全部角色， 共 {{vm.total | async}} 条记录</div>
                 <div class="col-auto text-muted px-2">
                   <ng-container *ngIf="vm.loading">
-                    <i class="fa fa-spin fa-spinner"></i> 加载中...
+                    <i svgIcon path="bi/arrow-repeat" iconClass="bi-spin"></i> 加载中...
                   </ng-container>
                 </div>
               </div>
@@ -73,33 +73,25 @@
                       class="btn btn-outline-secondary" ngbTooltip="详情"
                       placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, false)">
-                      <i class="fa fa-list-alt"></i>
+                      <i svgIcon path="bi/info-square"></i>
                     </button>
                     <button *ngIf="info.privileges['app_roles.update']"
                       class="btn btn-outline-secondary" ngbTooltip="编辑"
                       placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, true)">
-                      <i class="fa fa-edit"></i>
+                      <i svgIcon path="bi/pencil-square"></i>
                     </button>
                     <button *ngIf="info.privileges['app_roles.read_role_privileges']"
                       class="btn btn-outline-secondary" ngbTooltip="角色权限"
                       placement="top" [openDelay]="300"
                       (click)="showPrivileges(item)">
-                      <i class="fa fa-shield-alt"></i>
+                      <i svgIcon path="bi/shield-lock"></i>
                     </button>
-                    <!--
-                    <button *ngIf="info.privileges['app_roles.delete']"
-                      class="btn btn-outline-secondary" ngbTooltip="角色用户"
-                      placement="top" [openDelay]="300"
-                      (click)="showUsers(item)">
-                      <i class="fa fa-users"></i>
-                    </button>
-                    -->
                     <button *ngIf="info.privileges['app_roles.delete']"
                       class="btn btn-outline-secondary" ngbTooltip="删除"
                       placement="top" [openDelay]="300" (click)="delete(item.id)"
-                      [disabled]="item.userCount > 0">
-                      <i class="fa fa-trash-alt"></i>
+                      [disabled]="$any(item.userCount) > 0">
+                      <i svgIcon path="bi/trash"></i>
                     </button>
                   </div>
                 </td>

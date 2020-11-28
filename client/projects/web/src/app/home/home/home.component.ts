@@ -8,7 +8,9 @@ import { HomeService } from './home.service';
 })
 export class HomeComponent implements OnInit {
 
-    constructor(public vm: HomeService) { }
+    constructor(
+        public vm: HomeService,
+    ) { }
 
     public ngOnInit(): void { }
 

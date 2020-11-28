@@ -15,11 +15,11 @@
             <button *ngIf="info.privileges['app_privileges.create']"
               type="button" class="btn btn-outline-primary"
               (click)="showDetail('0', true)">
-              <i class="fa fa-plus"></i> 新建系统权限
+              <i svgIcon path="bi/plus"></i> 新建系统权限
             </button>
             <button type="button" class="btn btn-outline-secondary"
               (click)="loadData()">
-              <i class="fa fa-sync"></i> 刷新
+              <i svgIcon path="bi/arrow-repeat" iconClass="bi"></i> 刷新
             </button>
           </div>
         </div>
@@ -44,7 +44,7 @@
                 <div class="col-auto text-muted px-2 py-1">条记录</div>
                 <div class="col-auto text-muted px-2">
                   <ng-container *ngIf="vm.loading">
-                    <i class="fa fa-spin fa-spinner"></i> 加载中...
+                    <i svgIcon path="bi/arrow-repeat" iconClass="bi-spin"></i> 加载中...
                   </ng-container>
                 </div>
               </div>
@@ -104,18 +104,18 @@
                       class="btn btn-outline-secondary" ngbTooltip="详情"
                       placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, false)">
-                      <i class="fa fa-list-alt"></i>
+                      <i svgIcon path="bi/info-square"></i>
                     </button>
                     <button *ngIf="info.privileges['app_privileges.update']"
                       class="btn btn-outline-secondary" ngbTooltip="编辑"
                       placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, true)">
-                      <i class="fa fa-edit"></i>
+                      <i svgIcon path="bi/pencil-square"></i>
                     </button>
                     <button *ngIf="info.privileges['app_privileges.delete']"
                       class="btn btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300"
                       (click)="delete(item.id)">
-                      <i class="fa fa-trash-alt"></i>
+                      <i svgIcon path="bi/trash"></i>
                     </button>
                   </div>
                 </td>

@@ -14,11 +14,11 @@
             <div class="btn-group btn-group-sm">
               <button *ngIf="info.privileges['app_users.create']" type="button" class="btn btn-outline-primary"
                 (click)="showDetail('0', true)">
-                <i class="fa fa-plus"></i> 新建用户
+                <i svgIcon path="bi/plus"></i> 新建用户
               </button>
               <button type="button" class="btn btn-outline-secondary"
                 (click)="loadData()">
-                <i class="fa fa-sync"></i> 刷新
+                <i svgIcon path="bi/arrow-repeat" iconClass="bi"></i> 刷新
               </button>
             </div>
         </div>
@@ -44,14 +44,14 @@
                 <div class="col-auto text-muted px-2 py-1">条记录</div>
                 <div class="col-auto text-muted px-2">
                   <ng-container *ngIf="vm.loading">
-                    <i class="fa fa-spin fa-spinner"></i> 加载中...
+                    <i svgIcon path="bi/arrow-repeat" iconClass="bi-spin"></i> 加载中...
                   </ng-container>
                 </div>
               </div>
             </div>
             <div class="col-6">
               <div class="row no-gutters">
-                <div class="col-4"></div>
+                <div class="col-2"></div>
                 <div class="col">
                   <select class="form-control form-control-sm" name="roleName"
                     [(ngModel)]="vm.searchModel.roleName" (change)="searchByRole()">
@@ -70,7 +70,7 @@
                     <div class="input-group-append">
                       <button class="btn btn-sm btn-outline-secondary" type="button"
                         *ngIf="vm.searchModel.userName" (click)="cleanUserSearch()">
-                        <i class="fa fa-times"></i>
+                        <i svgIcon path="bi/x"></i>
                       </button>
                     </div>
                   </div>
@@ -110,7 +110,7 @@
                 <th scope="row" class="text-right">{{i + 1}}</th>
                 <td class="text-left">
                   {{getFullname(item)}}
-                  <i class="text-danger fa fa-user-lock" style="cursor: pointer;"
+                  <i class="text-danger" style="cursor: pointer;" svgIcon path="bi/lock-fill"
                     *ngIf="isLockout(item)" ngbTooltip="该用户已经被锁定！"></i>
                 </td>
                 <td class="text-center">{{item.phoneNumber}}</td>
@@ -123,49 +123,49 @@
                       *ngIf="info.privileges['app_users.read']"
                       ngbTooltip="详情" placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, false)">
-                      <i class="fa fa-id-card"></i>
+                      <i svgIcon path="bi/info-square"></i>
                     </button>
                     <div class="btn-group btn-group-sm" *ngIf="canViewGears()"
                       ngbDropdown container="body">
                       <button class="btn btn-outline-secondary" type="button"
                         ngbTooltip="用户操作" placement="top" container="body" [openDelay]="300"
                         ngbDropdownToggle>
-                        <i class="fa fa-users-cog"></i>
+                        <i svgIcon path="bi/three-dots"></i>
                       </button>
                       <div class="dropdown-menu" ngbDropdownMenu>
                         <button class="text-muted" type="button" ngbDropdownItem
                           *ngIf="info.privileges['app_users.update']"
                           (click)="showDetail(item.id, true)">
-                          <i class="fa fa-user-edit"></i> 编辑
+                          <i svgIcon path="bi/pencil-square"></i> 编辑
                         </button>
                         <ng-container *ngIf="isLockout(item);else lockTpl">
                           <button class="text-muted" type="button" ngbDropdownItem
                             *ngIf="info.privileges['app_users.unlock']"
                             (click)="vm.unlockUser(item.id)">
-                            <i class="fa fa-unlock-alt"></i> 解锁
+                            <i svgIcon path="bi/unlock"></i> 解锁
                           </button>
                         </ng-container>
                         <ng-template #lockTpl>
                           <button class="text-muted" type="button" ngbDropdownItem
                             *ngIf="info.privileges['app_users.lock']"
                             (click)="navigateTo(item, 'lock')">
-                            <i class="fa fa-user-lock"></i> 锁定
+                            <i svgIcon path="bi/lock"></i> 锁定
                           </button>
                         </ng-template>
                         <button class="text-muted" type="button" ngbDropdownItem
                           *ngIf="info.privileges['app_users.reset_pass']"
                           (click)="navigateTo(item, 'password')">
-                          <i class="fa fa-user-secret"></i> 重置密码
+                          <i svgIcon path="bi/key"></i> 重置密码
                         </button>
                         <button class="text-muted" type="button" ngbDropdownItem
                           *ngIf="info.privileges['app_users.read_user_roles']"
                           (click)="navigateTo(item, 'roles')">
-                          <i class="fa fa-user-tag"></i> 角色
+                          <i svgIcon path="bi/shield-check"></i> 角色
                         </button>
                         <button class="text-muted" type="button" ngbDropdownItem
                           *ngIf="info.privileges['app_users.delete']"
                           (click)="delete(item.id)">
-                          <i class="fa fa-user-times"></i> 删除
+                          <i svgIcon path="bi/trash"></i> 删除
                         </button>
                       </div>
                     </div>

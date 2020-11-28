@@ -6,11 +6,11 @@
       <button *ngIf="info.privileges['app_users.update'] && editable"
         type="button" class="btn btn-sm btn-outline-primary"
         (click)="save()" [disabled]="!detailForm.valid">
-        <i class="fa fa-check"></i> 保存
+        <i svgIcon path="bi/check"></i> 保存
       </button>
       <button type="button" class="btn btn-sm btn-outline-secondary"
         (click)="goBack()">
-        <i class="fa fa-times"></i> 取消
+        <i svgIcon path="bi/x"></i> 取消
       </button>
     </div>
   </div>
@@ -105,7 +105,7 @@
             <div class="input-group-append">
               <button class="btn btn-outline-secondary calendar"
                 (click)="dp.toggle()" [disabled]="!editable">
-                <i class="fa fa-calendar-alt"></i>
+                <i svgIcon path="bi/calendar3"></i>
               </button>
             </div>
           </div>
@@ -159,11 +159,11 @@
     *ngIf="info.privileges['app_users.update'] && editable">
     <button class="btn btn-sm btn-outline-primary" type="button"
       (click)="save()" [disabled]="!detailForm.valid">
-      <i class="fa fa-check"></i> 保存
+      <i svgIcon path="bi/check"></i> 保存
     </button>
     <button class="btn btn-sm btn-outline-secondary" type="button"
       (click)="goBack()">
-      <i class="fa fa-times"></i> 取消
+      <i svgIcon path="bi/x"></i> 取消
     </button>
   </div>
 </form>

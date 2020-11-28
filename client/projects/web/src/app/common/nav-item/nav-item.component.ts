@@ -39,14 +39,6 @@ export class NavItemComponent implements OnChanges {
         this.classes = {
             ['level-' + this.level]: true
         };
-        let iconClasses = 'nav-icon ml-2';
-        if (!this.node.icon) {
-            iconClasses += ' fas fa-info';
-        }
-        else {
-            iconClasses += (' ' + this.node.icon);
-        }
-        this.iconClasses = iconClasses;
     }
 
 }
