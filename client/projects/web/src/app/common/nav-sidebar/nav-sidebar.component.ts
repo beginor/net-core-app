@@ -41,12 +41,6 @@ export class NavSidebarComponent implements OnInit {
         // this.onToggle.next(this.status === 'collapsed');
     }
 
-    public getToggleIconClass(): string {
-        let cls = 'ml-2 fa fa-fw fa-angle-double-';
-        cls += (this.collapsed ? 'right' : 'left');
-        return cls;
-    }
-
     public onAnimationStart(e: AnimationEvent): void {
         if (e.toState === 'collapsed') {
             this.collapsed = true;

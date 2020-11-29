@@ -42,7 +42,7 @@
               class="btn btn-sm btn-outline-primary btn-block"
               type="button" (click)="login()">
               <ng-container *ngIf="loading; else loginTpl;">
-                <i class="fa fa-spinner fa-spin"></i> 登录中 ...
+                <svg-icon path="bi/arrow-repeat" iconClass="bi-spin"></svg-icon> 登录中 ...
               </ng-container>
               <ng-template #loginTpl>
                 登录
