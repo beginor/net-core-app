@@ -1,12 +1,16 @@
-import { Directive, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, AfterViewInit, Input } from '@angular/core';
 
 import { SvgIconService } from './svg-icon.service';
 
-@Directive({
-    // tslint:disable-next-line: directive-selector
-    selector: '[svgIcon]'
+@Component({
+    // tslint:disable-next-line: component-selector
+    selector: 'svg-icon',
+    template: ``,
+    styles: [`
+        /* :host { display: inline-block; } */
+    `]
 })
-export class SvgIconDirective implements OnInit {
+export class SvgIconComponent implements AfterViewInit {
 
     @Input() public path!: string;
     @Input() public size: string | undefined;
@@ -17,7 +21,7 @@ export class SvgIconDirective implements OnInit {
         private svg: SvgIconService
     ) { }
 
-    public async ngOnInit(): Promise<void> {
+    public async ngAfterViewInit(): Promise<void> {
         const xml = await this.svg.loadSvgFile(this.path);
         this.el.nativeElement.innerHTML = xml;
         const svg = this.el.nativeElement.firstChild as SVGElement;
@@ -34,5 +38,4 @@ export class SvgIconDirective implements OnInit {
         }
         svg.setAttribute('fill', 'currentColor');
     }
-
 }

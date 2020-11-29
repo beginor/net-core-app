@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { SvgIconDirective } from './svg-icon.directive';
+import { SvgIconComponent } from './svg-icon/svg-icon.component';
 
 
 @NgModule({
     declarations: [
-        SvgIconDirective
+        SvgIconComponent
     ],
     imports: [
         HttpClientModule
     ],
     exports: [
-        SvgIconDirective
+        SvgIconComponent
     ]
 })
 export class AppSharedModule { }
