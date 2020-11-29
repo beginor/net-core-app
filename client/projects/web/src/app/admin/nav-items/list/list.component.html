@@ -15,11 +15,11 @@
             <button *ngIf="info.privileges['app_nav_items.create']"
               type="button" class="btn btn-outline-primary"
               (click)="showDetail('0', true)">
-              <i svgIcon path="bi/plus"></i> 新建菜单项
+              <svg-icon path="bi/plus"></svg-icon> 新建菜单项
             </button>
             <button type="button" class="btn btn-outline-secondary"
               (click)="loadData()">
-              <i svgIcon path="bi/arrow-repeat"></i> 刷新
+              <svg-icon path="bi/arrow-repeat"></svg-icon> 刷新
             </button>
           </div>
         </div>
@@ -44,7 +44,7 @@
                 <div class="col-auto text-muted px-2 py-1">条记录</div>
                 <div class="col-auto text-muted px-2">
                   <ng-container *ngIf="vm.loading">
-                    <i svgIcon path="bi/arrow-repeat" iconClass="bi-spin"></i> 加载中...
+                    <svg-icon path="bi/arrow-repeat" iconClass="bi-spin"></svg-icon> 加载中...
                   </ng-container>
                 </div>
               </div>
@@ -79,7 +79,7 @@
                 <th scope="row" class="text-right text-muted">{{i+1+vm.searchModel.skip}}</th>
                 <td class='text-left'>{{item.title}}</td>
                 <td class='text-left'>{{item.tooltip}}</td>
-                <td class='text-left'><i *ngIf="item.icon" svgIcon iconClass="bi" [path]="item.icon"></i> {{item.icon}}</td>
+                <td class='text-left'><svg-icon *ngIf="item.icon" iconClass="bi" [path]="item.icon"></svg-icon> {{item.icon}}</td>
                 <td class='text-left'>{{item.url}}</td>
                 <td class='text-right'>{{item.sequence}}</td>
                 <td class="text-center">
@@ -87,17 +87,17 @@
                     <button *ngIf="info.privileges['app_nav_items.read']"
                       class="btn btn-outline-secondary" ngbTooltip="详情" placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, false)">
-                      <i svgIcon path="bi/info-square"></i>
+                      <svg-icon path="bi/info-square"></svg-icon>
                     </button>
                     <button *ngIf="info.privileges['app_nav_items.update']"
                       class="btn btn-outline-secondary" ngbTooltip="编辑" placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, true)">
-                      <i svgIcon path="bi/pencil-square"></i>
+                      <svg-icon path="bi/pencil-square"></svg-icon>
                     </button>
                     <button *ngIf="info.privileges['app_nav_items.delete']"
                         class="btn btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300"
                       (click)="delete(item.id)">
-                      <i svgIcon path="bi/trash"></i>
+                      <svg-icon path="bi/trash"></svg-icon>
                     </button>
                   </div>
                 </td>

@@ -14,7 +14,7 @@
           <div class="btn-group btn-group-sm">
             <button type="button" class="btn btn-outline-primary"
               (click)="this.vm.search()">
-              <i svgIcon path="bi/arrow-repeat" iconClass="bi"></i> 刷新
+              <svg-icon path="bi/arrow-repeat" iconClass="bi"></svg-icon> 刷新
             </button>
           </div>
         </div>
@@ -38,7 +38,7 @@
                 <div class="col-auto text-muted px-2">条记录</div>
                 <div class="col-auto text-muted px-2">
                   <ng-container *ngIf="vm.loading">
-                    <i svgIcon path="bi/arrow-repeat" iconClass="bi-spin"></i> 加载中...
+                    <svg-icon path="bi/arrow-repeat" iconClass="bi-spin"></svg-icon> 加载中...
                   </ng-container>
                 </div>
               </div>
@@ -60,7 +60,7 @@
                         <div class="input-group-append">
                           <button class="btn btn-outline-secondary" type="button"
                             (click)="d.toggle()">
-                            <i svgIcon path="bi/calendar3"></i>
+                            <svg-icon path="bi/calendar3"></svg-icon>
                           </button>
                         </div>
                       </div>
@@ -76,7 +76,7 @@
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary" type="button"
                         (click)="onUserNameChanged()">
-                        <i svgIcon path="bi/search"></i>
+                        <svg-icon path="bi/search"></svg-icon>
                       </button>
                     </div>
                   </div>

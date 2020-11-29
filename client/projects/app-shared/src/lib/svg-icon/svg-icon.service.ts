@@ -18,7 +18,7 @@ export class SvgIconService {
     }
 
     public loadSvgFile(path: string): Promise<string> {
-        const key = `svgIcon:${path}`;
+        const key = `svg-icon:${path}`;
         const loadedItem = sessionStorage.getItem(key);
         if (!!loadedItem) {
             return Promise.resolve(loadedItem);

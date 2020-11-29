@@ -1,10 +1,10 @@
 <a class="nav-link" *ngIf="navigation.isRouterLink(node);else httpLinkTpl" routerLinkActive="active" [routerLink]="node.url">
-  <i class="nav-icon ml-2" svgIcon [path]="node.icon"></i>
+  <svg-icon class="nav-icon ml-2" [path]="node.icon"></svg-icon>
   <span class="ml-1" *ngIf="!sidebarCollapsed">{{node.title}}</span>
 </a>
 <ng-template #httpLinkTpl>
   <a class="nav-link" [href]="node.url" [target]="node.target">
-    <i class="nav-icon ml-2" svgIcon [path]="node.icon"></i>
+    <svg-icon class="nav-icon ml-2" [path]="node.icon"></svg-icon>
     <span class="ml-1" *ngIf="!sidebarCollapsed">{{node.title}}</span>
   </a>
 </ng-template>
