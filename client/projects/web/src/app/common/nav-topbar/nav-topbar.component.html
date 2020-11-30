@@ -1,10 +1,7 @@
 <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark"
   *ngIf="navigation.root | async as root">
   <a class="navbar-brand" [routerLink]="root.url">
-    <!-- <img src="assets/logo.svg" class="d-inline-block align-top" width="30" height="30" [alt]="root.title" /> -->
-    <svg class="bi bi-lg" fill="currentColor">
-      <use xlink:href="assets/icons/bootstrap-icons.svg#app-indicator" />
-    </svg>
+    <svg-icon path="bi/app-indicator" iconClass="bi bi-lg"></svg-icon>
     {{root.title}}
   </a>
   <button class="navbar-toggler" type="button" (click)="collapsed = !collapsed"

@@ -4,7 +4,7 @@
 
 create table public.app_audit_logs
 (
-    id bigint not null default snow_flake_id(),
+    id bigint not null default nextval('public.snow_flake_id_seq'),
     request_path character varying (256) collate pg_catalog."default" not null,
     request_method character varying(8) collate pg_catalog."default" not null,
     user_name character varying(64) collate pg_catalog."default",
@@ -15,7 +15,7 @@ create table public.app_audit_logs
     action_name character varying(64) collate pg_catalog."default",
     description character varying(256) collate pg_catalog."default",
     ip character varying(64) collate pg_catalog."default",
-    constraint pk_app_audit_logs primary key (start_at, user_name, request_path, request_method)
+    constraint pk_app_audit_logs primary key (id)
 )
 with (
     oids = false

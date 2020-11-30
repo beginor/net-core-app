@@ -5,11 +5,11 @@
     <div class="btn-group btn-group-sm">
       <button class="btn btn-sm btn-outline-primary" type="button"
         (click)="save()">
-        <i class="fa fa-check"></i> 确定
+        <svg-icon path="bi/check"></svg-icon> 确定
       </button>
       <button class="btn btn-sm btn-outline-secondary" type="button"
         (click)="goBack()">
-        <i class="fa fa-times"></i> 取消
+        <svg-icon path="bi/x"></svg-icon> 取消
       </button>
     </div>
   </div>
@@ -30,11 +30,11 @@
     *ngIf="info.privileges['app_users.update'] && editable">
     <button class="btn btn-sm btn-outline-primary" type="button"
       (click)="save()">
-      <i class="fa fa-check"></i> 保存
+      <svg-icon path="bi/check"></svg-icon> 保存
     </button>
     <button class="btn btn-sm btn-outline-secondary" type="button"
       (click)="goBack()">
-      <i class="fa fa-times"></i> 取消
+      <svg-icon path="bi/x"></svg-icon> 取消
     </button>
   </div>
 </div>

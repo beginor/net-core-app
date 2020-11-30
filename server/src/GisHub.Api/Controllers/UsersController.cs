@@ -12,7 +12,6 @@ using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using NHibernate.AspNetCore.Identity;
 using NHibernate.Linq;
-using NHibernate.NetCore;
 using Beginor.GisHub.Data;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Models;

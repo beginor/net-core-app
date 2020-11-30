@@ -12,9 +12,9 @@
         <div class="card-header d-flex justify-content-between">
           <h5 class="card-title mb-0">审计日志</h5>
           <div class="btn-group btn-group-sm">
-            <button type="button" class="btn btn-outline-secondary"
+            <button type="button" class="btn btn-outline-primary"
               (click)="this.vm.search()">
-              <i class="fa fa-sync"></i> 刷新
+              <svg-icon path="bi/arrow-repeat"></svg-icon> 刷新
             </button>
           </div>
         </div>
@@ -38,7 +38,7 @@
                 <div class="col-auto text-muted px-2">条记录</div>
                 <div class="col-auto text-muted px-2">
                   <ng-container *ngIf="vm.loading">
-                    <i class="fa fa-spin fa-spinner"></i> 加载中...
+                    <svg-icon path="bi/arrow-repeat" iconClass="bi-spin"></svg-icon> 加载中...
                   </ng-container>
                 </div>
               </div>
@@ -60,7 +60,7 @@
                         <div class="input-group-append">
                           <button class="btn btn-outline-secondary" type="button"
                             (click)="d.toggle()">
-                            <i class="fa fa-calendar-day"></i>
+                            <svg-icon path="bi/calendar3"></svg-icon>
                           </button>
                         </div>
                       </div>
@@ -76,7 +76,7 @@
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary" type="button"
                         (click)="onUserNameChanged()">
-                        <i class="fa fa-search"></i>
+                        <svg-icon path="bi/search"></svg-icon>
                       </button>
                     </div>
                   </div>
