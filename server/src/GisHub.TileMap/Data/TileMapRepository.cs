@@ -174,11 +174,7 @@ namespace Beginor.GisHub.TileMap.Data {
 
         private async Task<string> GetTilePathAsync(long id) {
             var entity = await GetTileMapByIdAsync(id);
-            var tilePath = Path.Combine(entity.CacheDirectory, "_alllayers");
-            if (Directory.Exists(tilePath)) {
-                return tilePath;
-            }
-            return string.Empty;
+            return Directory.Exists(entity.CacheDirectory) ? entity.CacheDirectory : string.Empty;
         }
 
         private static async Task<TileContentModel> ReadTileContentAsync(string tilePath, int level, int row, int col) {
