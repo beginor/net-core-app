@@ -49,7 +49,7 @@ namespace Beginor.GisHub.Data.Entities {
         public virtual string DefaultOrder { get; set; }
 
         /// <summary>标签</summary>
-        [Property(Name = "Tags", Column = "tags", Type = "string[]", NotNull = false)]
+        [Property(Name = "Tags", Column = "tags", TypeType = typeof(NHibernate.Extensions.NpgSql.StringArrayType), NotNull = false)]
         public virtual string[] Tags { get; set; }
 
         /// <summary>是否删除</summary>
