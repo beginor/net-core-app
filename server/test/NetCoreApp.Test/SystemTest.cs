@@ -106,7 +106,7 @@ namespace Beginor.NetCoreApp.Test {
             // 根应用
             var rootNavItem = new AppNavItemModel {
                 Title = ".NET Core App",
-                Icon = "fab fa-angular",
+                Icon = "bi/app-indicator",
                 Url = "/",
                 Sequence = 0,
                 Roles = new [] { adminRoleName, anonymousRoleName }
@@ -147,7 +147,7 @@ namespace Beginor.NetCoreApp.Test {
             var menuManageItem = new AppNavItemModel {
                 ParentId = adminItem.Id,
                 Title = "导航菜单",
-                Icon = "fas fa-compass",
+                Icon = "bi/compass",
                 Url = "/admin/nav-items",
                 Sequence = 1,
                 Roles = new [] { adminRoleName }
@@ -158,7 +158,7 @@ namespace Beginor.NetCoreApp.Test {
             var userManageItem = new AppNavItemModel {
                 ParentId = adminItem.Id,
                 Title = "用户管理",
-                Icon = "fas fa-users",
+                Icon = "bi/person",
                 Url = "/admin/users",
                 Sequence = 2,
                 Roles = new [] { adminRoleName }
@@ -169,7 +169,7 @@ namespace Beginor.NetCoreApp.Test {
             var roleManageItem = new AppNavItemModel {
                 ParentId = adminItem.Id,
                 Title = "角色管理",
-                Icon = "fas fa-user-tag",
+                Icon = "bi/shield-lock",
                 Url = "/admin/roles",
                 Sequence = 3,
                 Roles = new [] { adminRoleName }
@@ -180,7 +180,7 @@ namespace Beginor.NetCoreApp.Test {
             var privilegesManageItem = new AppNavItemModel {
                 ParentId = adminItem.Id,
                 Title = "权限管理",
-                Icon = "fas fa-user-shield",
+                Icon = "bi/shield-shaded",
                 Url = "/admin/privileges",
                 Sequence = 4,
                 Roles = new [] { adminRoleName }
@@ -191,7 +191,7 @@ namespace Beginor.NetCoreApp.Test {
             var auditLogsItem = new AppNavItemModel {
                 ParentId = adminItem.Id,
                 Title = "审计日志",
-                Icon = "fas fa-list",
+                Icon = "bi/list-check",
                 Url = "/admin/audit-logs",
                 Sequence = 5,
                 Roles = new [] { adminRoleName }
