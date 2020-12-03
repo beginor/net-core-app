@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -29,8 +29,8 @@ namespace Beginor.GisHub.Api.Middlewares {
         private ILogger<AuditLogMiddleware> logger;
         private NHibernate.ISession session;
         private IServiceScope scope;
-        private ConcurrentQueue<AppAuditLog> logQueue = new ConcurrentQueue<AppAuditLog>();
         private CancellationTokenSource cts;
+        private Channel<AppAuditLog> channel = Channel.CreateUnbounded<AppAuditLog>();
 
         public AuditLogMiddleware(
             RequestDelegate next,
@@ -92,29 +92,28 @@ namespace Beginor.GisHub.Api.Middlewares {
                 auditLog.ControllerName = action.ControllerName;
                 auditLog.ActionName = action.ActionName;
             }
-            logQueue.Enqueue(auditLog);
+            if (!channel.Writer.TryWrite(auditLog)) {
+                logger.LogError("Can not write audit log to channel, unsabed log is: {0}", auditLog.ToJson());
+            }
         }
 
-        private void StartSaveAuditLog(CancellationToken token) {
+        private async void StartSaveAuditLog(CancellationToken token) {
             const int batchSize = 128;
             IList<AppAuditLog> logs = new List<AppAuditLog>(batchSize);
             while (!token.IsCancellationRequested) {
-                if (logQueue.Count == 0) {
-                    logger.LogInformation("Audit log queue is empty, wait for 1 second to check again.");
-                    Thread.Sleep(1000);
-                    continue;
-                }
-                while (logQueue.TryDequeue(out var log)) {
-                    logs.Add(log);
-                    if (logs.Count == batchSize) {
+                while (await channel.Reader.WaitToReadAsync()) {
+                    while (channel.Reader.TryRead(out var log)) {
+                        logs.Add(log);
+                        if (logs.Count == batchSize) {
+                            BatchSaveInTransaction(logs);
+                            logs.Clear();
+                        }
+                    }
+                    if (logs.Count > 0) {
                         BatchSaveInTransaction(logs);
                         logs.Clear();
                     }
                 }
-                if (logs.Count > 0) {
-                    BatchSaveInTransaction(logs);
-                }
-                logs.Clear();
             }
             if (logs.Count > 0) {
                 logger.LogWarning($"Cancellation requested, {logs.Count} unsaved logs:");
@@ -125,7 +124,6 @@ namespace Beginor.GisHub.Api.Middlewares {
         }
 
         private void BatchSaveInTransaction(IList<AppAuditLog> logs) {
-            logger.LogInformation($"Audit log queue size is {logQueue.Count} ");
             logger.LogInformation($"Batch save {logs.Count} audit logs to db ...");
             session.SetBatchSize(logs.Count);
             using (var tx = session.BeginTransaction()) {
