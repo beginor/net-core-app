@@ -7,6 +7,8 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <Import Project="../../package-references.props" />
+  <!--
   <ItemGroup>
     <PackageReference Include="Beginor.AppFx.Core" Version="5.0.2" />
     <PackageReference Include="Beginor.AppFx.Repository.Hibernate" Version="5.0.2" />
@@ -16,7 +18,7 @@
     <PackageReference Include="NHibernate.Extensions.NpgSql" Version="5.0.1" />
     <PackageReference Include="NHibernate.Mapping.Attributes" Version="5.1.0" />
   </ItemGroup>
-
+  -->
   <ItemGroup>
     <ProjectReference Include="..\NetCoreApp.Common\NetCoreApp.Common.csproj" />
     <ProjectReference Include="..\NetCoreApp.Models\NetCoreApp.Models.csproj" />

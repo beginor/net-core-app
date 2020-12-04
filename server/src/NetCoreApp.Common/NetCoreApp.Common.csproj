@@ -7,4 +7,6 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <Import Project="../../package-references.props" />
+
 </Project>
