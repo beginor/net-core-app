@@ -9,11 +9,14 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <Import Project="../../package-references.props" />
+  <!--
   <ItemGroup>
     <PackageReference Include="Beginor.AppFx.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="Beginor.AppFx.Logging.Log4net" Version="5.0.2" />
     <PackageReference Include="NHibernate.NetCore" Version="5.0.1" />
   </ItemGroup>
+  -->
 
   <ItemGroup>
     <Content Update="config/*">
