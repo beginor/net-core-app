@@ -16,13 +16,12 @@ namespace Beginor.GisHub.DataServices.Models {
         /// <summary>数据库类型（postgres、mssql、mysql、oracle、sqlite等）</summary>
         [Required(ErrorMessage = "数据库类型（postgres、mssql、mysql、oracle、sqlite等） 必须填写！")]
         public string DatabaseType { get; set; }
-        /// <summary>是否已删除（软删除）</summary>
-        [Required(ErrorMessage = "是否已删除（软删除） 必须填写！")]
-        public bool IsDeleted { get; set; }
 
     }
 
     /// <summary>数据库连接串搜索参数</summary>
-    public partial class ConnectionStringSearchModel : PaginatedRequestModel { }
+    public partial class ConnectionStringSearchModel : PaginatedRequestModel {
+        public string Keywords { get; set; }
+    }
 
 }

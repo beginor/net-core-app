@@ -11,6 +11,7 @@ import { UiService } from 'projects/web/src/app/common';
 export class ConnectionStringService {
 
     public searchModel: ConnectionStringSearchModel = {
+        keywords: '',
         skip: 0,
         take: 10
     };
@@ -166,13 +167,12 @@ export interface ConnectionStringModel {
     value?: string;
     /** 数据库类型（postgres、mssql、mysql、oracle、sqlite等） */
     databaseType?: string;
-    /** 是否已删除（软删除） */
-    isDeleted?: boolean;
 }
 
 /** 数据库连接串 搜索参数 */
 export interface ConnectionStringSearchModel {
     [key: string]: undefined | number | string;
+    keywords: string;
     /** 跳过的记录数 */
     skip: number;
     /** 取多少条记录 */
