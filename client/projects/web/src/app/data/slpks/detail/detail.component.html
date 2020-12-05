@@ -7,11 +7,11 @@
       <button *ngIf="info.privileges['app_privileges.update'] && editable"
         type="button" class="btn btn-sm btn-outline-primary"
         (click)="save()" [disabled]="!detailForm.valid">
-        <i class="fa fa-check"></i> 保存
+        <svg-icon path="bi/check"></svg-icon> 保存
       </button>
       <button type="button" class="btn btn-sm btn-outline-secondary"
         (click)="goBack()">
-        <i class="fa fa-times"></i> 取消
+        <svg-icon path="bi/x"></svg-icon> 取消
       </button>
     </div>
   </div>
@@ -79,11 +79,11 @@
     class="card-footer d-flex justify-content-between">
     <button type="button" class="btn btn-sm btn-outline-primary"
       (click)="save()" [disabled]="!detailForm.valid">
-      <i class="fa fa-check"></i> 保存
+      <svg-icon path="bi/check"></svg-icon> 保存
     </button>
     <button type="button" class="btn btn-sm btn-outline-secondary"
       (click)="goBack()">
-      <i class="fa fa-times"></i> 取消
+      <svg-icon path="bi/x"></svg-icon> 取消
     </button>
   </div>
 </form>
