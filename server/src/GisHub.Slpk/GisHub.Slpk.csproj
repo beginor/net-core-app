@@ -12,7 +12,8 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
+  <Import Project="../../package-references.props" />
+  <!--
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Beginor.AppFx.Api" Version="5.0.2" />
@@ -23,5 +24,5 @@
     <PackageReference Include="NHibernate.Extensions.NpgSql" Version="5.0.1" />
     <PackageReference Include="NHibernate.Mapping.Attributes" Version="5.1.0" />
   </ItemGroup>
-
+  -->
 </Project>
