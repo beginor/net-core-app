@@ -1,0 +1,151 @@
+<form class="card detail" *ngIf="(account.info | async) as info" #detailForm="ngForm"
+  [@animation]="animation" (@animation.done)="onAnimationEvent($event)">
+  <div class="card-header d-flex justify-content-between align-content-center">
+    <h5 class="card-title mb-0">{{title}}</h5>
+    <div class="btn-group btn-group-sm">
+      <button *ngIf="info.privileges['data_sources.update'] && editable"
+        type="button" class="btn btn-sm btn-outline-primary"
+        (click)="save()" [disabled]="!detailForm.valid">
+        <svg-icon path="bi/check"></svg-icon> 保存
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"
+        (click)="goBack()">
+        <svg-icon path="bi/x"></svg-icon> 取消
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-group" [class.is-valid]="id.valid"
+      [class.is-invalid]="!(id.valid || id.pristine)">
+      <label class="form-label text-muted" for="id">数据源id  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="id" name="id"
+        placeholder="请输入数据源id ..." [(ngModel)]="model.id"
+        [class.is-invalid]="!(id.valid || id.pristine)"
+        [class.is-valid]="id.valid"
+        required #id="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="name.valid"
+      [class.is-invalid]="!(name.valid || name.pristine)">
+      <label class="form-label text-muted" for="name">数据源名称  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="name" name="name"
+        placeholder="请输入数据源名称 ..." [(ngModel)]="model.name"
+        [class.is-invalid]="!(name.valid || name.pristine)"
+        [class.is-valid]="name.valid"
+        required #name="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="connectionStringId.valid"
+      [class.is-invalid]="!(connectionStringId.valid || connectionStringId.pristine)">
+      <label class="form-label text-muted" for="connectionStringId">数据库连接串id  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="connectionStringId" name="connectionStringId"
+        placeholder="请输入数据库连接串id ..." [(ngModel)]="model.connectionStringId"
+        [class.is-invalid]="!(connectionStringId.valid || connectionStringId.pristine)"
+        [class.is-valid]="connectionStringId.valid"
+        required #connectionStringId="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="schema.valid"
+      [class.is-invalid]="!(schema.valid || schema.pristine)">
+      <label class="form-label text-muted" for="schema">数据表/视图架构 </label>
+      <input class="form-control" type="text" id="schema" name="schema"
+        placeholder="请输入数据表/视图架构 ..." [(ngModel)]="model.schema"
+        [class.is-invalid]="!(schema.valid || schema.pristine)"
+        [class.is-valid]="schema.valid"
+        required #schema="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="tableName.valid"
+      [class.is-invalid]="!(tableName.valid || tableName.pristine)">
+      <label class="form-label text-muted" for="tableName">数据表/视图名称  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="tableName" name="tableName"
+        placeholder="请输入数据表/视图名称 ..." [(ngModel)]="model.tableName"
+        [class.is-invalid]="!(tableName.valid || tableName.pristine)"
+        [class.is-valid]="tableName.valid"
+        required #tableName="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="primaryKeyColumn.valid"
+      [class.is-invalid]="!(primaryKeyColumn.valid || primaryKeyColumn.pristine)">
+      <label class="form-label text-muted" for="primaryKeyColumn">主键列名称  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="primaryKeyColumn" name="primaryKeyColumn"
+        placeholder="请输入主键列名称 ..." [(ngModel)]="model.primaryKeyColumn"
+        [class.is-invalid]="!(primaryKeyColumn.valid || primaryKeyColumn.pristine)"
+        [class.is-valid]="primaryKeyColumn.valid"
+        required #primaryKeyColumn="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="displayColumn.valid"
+      [class.is-invalid]="!(displayColumn.valid || displayColumn.pristine)">
+      <label class="form-label text-muted" for="displayColumn">显示列名称， 查询时不指定字段则返回数据表的主键列和显示列。  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="displayColumn" name="displayColumn"
+        placeholder="请输入显示列名称， 查询时不指定字段则返回数据表的主键列和显示列。 ..." [(ngModel)]="model.displayColumn"
+        [class.is-invalid]="!(displayColumn.valid || displayColumn.pristine)"
+        [class.is-valid]="displayColumn.valid"
+        required #displayColumn="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="geometryColumn.valid"
+      [class.is-invalid]="!(geometryColumn.valid || geometryColumn.pristine)">
+      <label class="form-label text-muted" for="geometryColumn">空间列 </label>
+      <input class="form-control" type="text" id="geometryColumn" name="geometryColumn"
+        placeholder="请输入空间列 ..." [(ngModel)]="model.geometryColumn"
+        [class.is-invalid]="!(geometryColumn.valid || geometryColumn.pristine)"
+        [class.is-valid]="geometryColumn.valid"
+        required #geometryColumn="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="presetCriteria.valid"
+      [class.is-invalid]="!(presetCriteria.valid || presetCriteria.pristine)">
+      <label class="form-label text-muted" for="presetCriteria">预置过滤条件 </label>
+      <input class="form-control" type="text" id="presetCriteria" name="presetCriteria"
+        placeholder="请输入预置过滤条件 ..." [(ngModel)]="model.presetCriteria"
+        [class.is-invalid]="!(presetCriteria.valid || presetCriteria.pristine)"
+        [class.is-valid]="presetCriteria.valid"
+        required #presetCriteria="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="defaultOrder.valid"
+      [class.is-invalid]="!(defaultOrder.valid || defaultOrder.pristine)">
+      <label class="form-label text-muted" for="defaultOrder">默认排序 </label>
+      <input class="form-control" type="text" id="defaultOrder" name="defaultOrder"
+        placeholder="请输入默认排序 ..." [(ngModel)]="model.defaultOrder"
+        [class.is-invalid]="!(defaultOrder.valid || defaultOrder.pristine)"
+        [class.is-valid]="defaultOrder.valid"
+        required #defaultOrder="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group" [class.is-valid]="tags.valid"
+      [class.is-invalid]="!(tags.valid || tags.pristine)">
+      <label class="form-label text-muted" for="tags">标签 </label>
+      <input class="form-control" type="text" id="tags" name="tags"
+        placeholder="请输入标签 ..." [(ngModel)]="model.tags"
+        [class.is-invalid]="!(tags.valid || tags.pristine)"
+        [class.is-valid]="tags.valid"
+        required #tags="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group">
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input"
+          id="isDeleted" name="isDeleted"
+          [(ngModel)]="model.isDeleted" [disabled]="!editable">
+        <label class="custom-control-label text-muted"
+          for="isDeleted">
+          是否删除
+        </label>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="info.privileges['data_sources.update'] && editable"
+    class="card-footer d-flex justify-content-between">
+    <button type="button" class="btn btn-sm btn-outline-primary"
+      (click)="save()" [disabled]="!detailForm.valid">
+      <svg-icon path="bi/check"></svg-icon> 保存
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary"
+      (click)="goBack()">
+      <svg-icon path="bi/x"></svg-icon> 取消
+    </button>
+  </div>
+</form>

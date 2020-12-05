@@ -51,9 +51,11 @@ TableFilter:
     - aspnet_user_roles
     - aspnet_user_tokens
     - aspnet_users
-  IncludeTables:
     - slpks
     - tile_maps
+  IncludeTables:
+    - connection_strings
+    - data_sources
   IgnoreNoPKTable: true
   IgnoreView: true
 

@@ -14,6 +14,14 @@ const routes: Routes = [
     {
         path: 'tile-maps',
         loadChildren: () => import('./tile-maps/tile-maps.module').then(m => m.TileMapModule)
+    },
+    {
+        path: 'connection-strings',
+        loadChildren: () => import('./connection-strings/connection-strings.module').then(m => m.ConnectionStringModule)
+    },
+    {
+        path: 'data-sources',
+        loadChildren: () => import('./data-sources/data-sources.module').then(m => m.DataSourceModule)
     }
 ];
 // tslint:enable:max-line-length
