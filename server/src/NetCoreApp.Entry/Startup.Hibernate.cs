@@ -34,7 +34,7 @@ namespace Beginor.NetCoreApp.Entry {
                 isTest.ToString()
             );
             cfg.AddIdentityMappings();
-            cfg.AddAttributeMappingAssembly(typeof(Beginor.NetCoreApp.Data.Entities.AppUser).Assembly);
+            cfg.AddAttributeMappingAssembly(typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly);
             services.AddHibernate(cfg);
         }
 
