@@ -13,7 +13,7 @@ namespace Beginor.NetCoreApp.Entry {
         ) {
             var mapperConfig = new MapperConfiguration(configure => {
                 configure.AddMaps(
-                    "Beginor.NetCoreApp.Data"
+                    typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly
                 );
             });
             var mapper = mapperConfig.CreateMapper();

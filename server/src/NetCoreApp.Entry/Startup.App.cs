@@ -16,7 +16,7 @@ namespace Beginor.NetCoreApp.Entry {
         ) {
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
             services.AddServiceWithDefaultImplements(
-                Assembly.LoadFrom(Path.Combine(baseDir, "Beginor.NetCoreApp.Data.dll")),
+                typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly,
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
