@@ -1,4 +1,4 @@
-using Beginor.GisHub.Api.Controllers;
+using Beginor.GisHub.DataServices.Api;
 using NUnit.Framework;
 
 namespace Beginor.GisHub.Test.Api {

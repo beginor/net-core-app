@@ -2,7 +2,7 @@ using System;
 using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
 
-namespace Beginor.GisHub.Data.Entities {
+namespace Beginor.GisHub.DataServices.Data {
 
     /// <summary>数据库连接串</summary>
     [Class(Schema = "public", Table = "connection_strings", Where = "is_deleted = false")]

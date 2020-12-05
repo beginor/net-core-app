@@ -22,17 +22,22 @@ namespace Beginor.GisHub.Entry {
                 ServiceLifetime.Scoped
             );
             services.AddServiceWithDefaultImplements(
-                Assembly.LoadFrom(Path.Combine(baseDir, "Beginor.GisHub.Slpk.dll")),
+                typeof(Beginor.GisHub.Slpk.ModelMapping).Assembly,
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
             services.AddSingleton<ConcurrentDictionary<long, Beginor.GisHub.Slpk.Data.SlpkCacheItem>>();
             services.AddServiceWithDefaultImplements(
-                Assembly.LoadFrom(Path.Combine(baseDir, "Beginor.GisHub.TileMap.dll")),
+                typeof(Beginor.GisHub.TileMap.ModelMapping).Assembly,
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
             services.AddSingleton<ConcurrentDictionary<long, Beginor.GisHub.TileMap.Data.TileMapCacheItem>>();
+            services.AddServiceWithDefaultImplements(
+                typeof(Beginor.GisHub.DataServices.ModelMapping).Assembly,
+                t => t.Name.EndsWith("Repository"),
+                ServiceLifetime.Scoped
+            );
         }
 
         private static void ConfigureApp(

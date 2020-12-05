@@ -5,8 +5,8 @@ using NHibernate;
 using NHibernate.NetCore;
 using NUnit.Framework;
 using Beginor.GisHub.Data.Entities;
-using Beginor.GisHub.Data.Repositories;
-using Beginor.GisHub.Models;
+using Beginor.GisHub.DataServices.Data;
+using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.Test.Data {
 

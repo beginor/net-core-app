@@ -1,6 +1,7 @@
+using Beginor.GisHub.TileMap.Data;
 using Beginor.GisHub.TileMap.Models;
 
-namespace Beginor.GisHub.TileMap.Data {
+namespace Beginor.GisHub.TileMap {
 
     public class ModelMapping : AutoMapper.Profile {
 

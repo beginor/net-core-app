@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
-namespace Beginor.GisHub.Models {
+namespace Beginor.GisHub.DataServices.Models {
 
     /// <summary>数据源（数据表或视图）模型</summary>
     public partial class DataSourceModel : StringEntity {

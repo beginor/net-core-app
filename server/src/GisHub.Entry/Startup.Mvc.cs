@@ -19,10 +19,13 @@ namespace Beginor.GisHub.Entry {
                         new AssemblyPart(typeof(Beginor.GisHub.Api.Controllers.AccountController).Assembly)
                     );
                     manager.ApplicationParts.Add(
-                        new AssemblyPart(typeof(Beginor.GisHub.Slpk.Api.SlpkController).Assembly)
+                        new AssemblyPart(typeof(Beginor.GisHub.Slpk.ModelMapping).Assembly)
                     );
                     manager.ApplicationParts.Add(
-                        new AssemblyPart(typeof(Beginor.GisHub.TileMap.Api.TileMapController).Assembly)
+                        new AssemblyPart(typeof(Beginor.GisHub.TileMap.ModelMapping).Assembly)
+                    );
+                    manager.ApplicationParts.Add(
+                        new AssemblyPart(typeof(Beginor.GisHub.DataServices.ModelMapping).Assembly)
                     );
                 })
                 .AddControllersAsServices()

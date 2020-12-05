@@ -5,22 +5,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Beginor.GisHub.Models;
-using Beginor.GisHub.Data.Repositories;
+using Beginor.GisHub.DataServices.Models;
+using Beginor.GisHub.DataServices.Data;
 
-namespace Beginor.GisHub.Api.Controllers {
+namespace Beginor.GisHub.DataServices.Api {
 
-    /// <summary>数据源（数据表或视图） 服务接口</summary>
+    /// <summary>数据库连接串 服务接口</summary>
     [ApiController]
-    [Route("api/data-sources")]
-    public class DataSourceController : Controller {
+    [Route("api/connection-strings")]
+    public class ConnectionStringController : Controller {
 
-        private ILogger<DataSourceController> logger;
-        private IDataSourceRepository repository;
+        private ILogger<ConnectionStringController> logger;
+        private IConnectionStringRepository repository;
 
-        public DataSourceController(
-            ILogger<DataSourceController> logger,
-            IDataSourceRepository repository
+        public ConnectionStringController(
+            ILogger<ConnectionStringController> logger,
+            IConnectionStringRepository repository
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
@@ -34,68 +34,68 @@ namespace Beginor.GisHub.Api.Controllers {
             base.Dispose(disposing);
         }
 
-        /// <summary>搜索 数据源（数据表或视图） ， 分页返回结果</summary>
+        /// <summary>搜索 数据库连接串 ， 分页返回结果</summary>
         /// <response code="200">成功, 分页返回结果</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("")]
-        [Authorize("data_sources.read")]
-        public async Task<ActionResult<PaginatedResponseModel<DataSourceModel>>> Search(
-            [FromQuery]DataSourceSearchModel model
+        [Authorize("connection_strings.read")]
+        public async Task<ActionResult<PaginatedResponseModel<ConnectionStringModel>>> Search(
+            [FromQuery]ConnectionStringSearchModel model
         ) {
             try {
                 var result = await repository.SearchAsync(model);
                 return result;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not search data_sources with {model.ToJson()} .");
+                logger.LogError(ex, $"Can not search connection_strings with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
-        /// <summary> 创建 数据源（数据表或视图） </summary>
-        /// <response code="200">创建 数据源（数据表或视图） 成功</response>
+        /// <summary> 创建 数据库连接串 </summary>
+        /// <response code="200">创建 数据库连接串 成功</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
-        [Authorize("data_sources.create")]
-        public async Task<ActionResult<DataSourceModel>> Create(
-            [FromBody]DataSourceModel model
+        [Authorize("connection_strings.create")]
+        public async Task<ActionResult<ConnectionStringModel>> Create(
+            [FromBody]ConnectionStringModel model
         ) {
             try {
                 await repository.SaveAsync(model);
                 return model;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not save {model.ToJson()} to data_sources.");
+                logger.LogError(ex, $"Can not save {model.ToJson()} to connection_strings.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
-        /// <summary>删除 数据源（数据表或视图） </summary>
-        /// <response code="204">删除 数据源（数据表或视图） 成功</response>
+        /// <summary>删除 数据库连接串 </summary>
+        /// <response code="204">删除 数据库连接串 成功</response>
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
-        [Authorize("data_sources.delete")]
+        [Authorize("connection_strings.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
                 await repository.DeleteAsync(id);
                 return NoContent();
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not delete data_sources by id {id} .");
+                logger.LogError(ex, $"Can not delete connection_strings by id {id} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
         /// <summary>
-        /// 获取指定的 数据源（数据表或视图）
+        /// 获取指定的 数据库连接串
         /// </summary>
-        /// <response code="200">返回 数据源（数据表或视图） 信息</response>
-        /// <response code="404"> 数据源（数据表或视图） 不存在</response>
+        /// <response code="200">返回 数据库连接串 信息</response>
+        /// <response code="404"> 数据库连接串 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("data_sources.read")]
-        public async Task<ActionResult<DataSourceModel>> GetById(long id) {
+        [Authorize("connection_strings.read")]
+        public async Task<ActionResult<ConnectionStringModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);
                 if (result == null) {
@@ -104,22 +104,22 @@ namespace Beginor.GisHub.Api.Controllers {
                 return result;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not get data_sources by id {id}.");
+                logger.LogError(ex, $"Can not get connection_strings by id {id}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
         /// <summary>
-        /// 更新 数据源（数据表或视图）
+        /// 更新 数据库连接串
         /// </summary>
-        /// <response code="200">更新成功，返回 数据源（数据表或视图） 信息</response>
-        /// <response code="404"> 数据源（数据表或视图） 不存在</response>
+        /// <response code="200">更新成功，返回 数据库连接串 信息</response>
+        /// <response code="404"> 数据库连接串 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
-        [Authorize("data_sources.update")]
-        public async Task<ActionResult<DataSourceModel>> Update(
+        [Authorize("connection_strings.update")]
+        public async Task<ActionResult<ConnectionStringModel>> Update(
             [FromRoute]long id,
-            [FromBody]DataSourceModel model
+            [FromBody]ConnectionStringModel model
         ) {
             try {
                 var exists = await repository.ExitsAsync(id);
@@ -130,7 +130,7 @@ namespace Beginor.GisHub.Api.Controllers {
                 return model;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not update data_sources by id {id} with {model.ToJson()} .");
+                logger.LogError(ex, $"Can not update connection_strings by id {id} with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }

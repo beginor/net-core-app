@@ -7,10 +7,9 @@ using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using NHibernate;
 using NHibernate.Linq;
-using Beginor.GisHub.Data.Entities;
-using Beginor.GisHub.Models;
+using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.Data.Repositories {
+namespace Beginor.GisHub.DataServices.Data {
 
     /// <summary>数据源（数据表或视图）仓储实现</summary>
     public partial class DataSourceRepository : HibernateRepository<DataSource, DataSourceModel, long>, IDataSourceRepository {

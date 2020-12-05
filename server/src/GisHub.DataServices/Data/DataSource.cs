@@ -2,7 +2,7 @@ using System;
 using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
 
-namespace Beginor.GisHub.Data.Entities {
+namespace Beginor.GisHub.DataServices.Data {
 
     /// <summary>数据源（数据表或视图）</summary>
     [Class(Schema = "public", Table = "data_sources", Where = "is_deleted = false")]

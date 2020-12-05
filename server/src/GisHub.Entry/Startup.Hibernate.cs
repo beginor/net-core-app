@@ -34,9 +34,10 @@ namespace Beginor.GisHub.Entry {
                 isTest.ToString()
             );
             cfg.AddIdentityMappings();
-            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Data.Entities.AppUser).Assembly);
-            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Slpk.Data.SlpkEntity).Assembly);
-            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.TileMap.Data.TileMapEntity).Assembly);
+            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Data.ModelMapping).Assembly);
+            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Slpk.ModelMapping).Assembly);
+            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.TileMap.ModelMapping).Assembly);
+            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.DataServices.ModelMapping).Assembly);
             services.AddHibernate(cfg);
         }
 

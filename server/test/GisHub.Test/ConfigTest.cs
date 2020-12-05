@@ -44,7 +44,7 @@ namespace Beginor.GisHub.Test {
             Assert.IsFalse(policy.AllowAnyOrigin);
             Assert.IsTrue(policy.AllowAnyHeader);
             Assert.IsTrue(policy.AllowAnyMethod);
-            Assert.IsTrue(policy.SupportsCredentials);
+            Assert.IsFalse(policy.SupportsCredentials);
         }
 
         [Test]

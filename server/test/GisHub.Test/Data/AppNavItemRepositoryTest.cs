@@ -25,7 +25,7 @@ namespace Beginor.GisHub.Test.Data {
                 ParentId = "0",
                 Sequence = 0
             };
-            await Target.SaveAsync(entity);
+            await Target.SaveAsync(entity, "admin");
             Assert.IsNotEmpty(entity.Id);
             await Target.DeleteAsync(long.Parse(entity.Id));
             entity = await Target.GetByIdAsync(long.Parse(entity.Id));
