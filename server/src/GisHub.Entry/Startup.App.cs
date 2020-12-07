@@ -17,7 +17,7 @@ namespace Beginor.GisHub.Entry {
         ) {
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
             services.AddServiceWithDefaultImplements(
-                typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly,
+                typeof(Beginor.GisHub.Data.ModelMapping).Assembly,
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
