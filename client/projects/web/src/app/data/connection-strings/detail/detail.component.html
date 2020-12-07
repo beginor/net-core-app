@@ -15,16 +15,6 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="form-group" [class.is-valid]="id.valid"
-      [class.is-invalid]="!(id.valid || id.pristine)">
-      <label class="form-label text-muted" for="id">连接串ID  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="id" name="id"
-        placeholder="请输入连接串ID ..." [(ngModel)]="model.id"
-        [class.is-invalid]="!(id.valid || id.pristine)"
-        [class.is-valid]="id.valid"
-        required #id="ngModel" [disabled]="!editable"
-      />
-    </div>
     <div class="form-group" [class.is-valid]="name.valid"
       [class.is-invalid]="!(name.valid || name.pristine)">
       <label class="form-label text-muted" for="name">连接串名称  <i class="text-danger">*</i> </label>
@@ -35,36 +25,29 @@
         required #name="ngModel" [disabled]="!editable"
       />
     </div>
-    <div class="form-group" [class.is-valid]="value.valid"
-      [class.is-invalid]="!(value.valid || value.pristine)">
-      <label class="form-label text-muted" for="value">连接串值  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="value" name="value"
-        placeholder="请输入连接串值 ..." [(ngModel)]="model.value"
-        [class.is-invalid]="!(value.valid || value.pristine)"
-        [class.is-valid]="value.valid"
-        required #value="ngModel" [disabled]="!editable"
-      />
-    </div>
     <div class="form-group" [class.is-valid]="databaseType.valid"
       [class.is-invalid]="!(databaseType.valid || databaseType.pristine)">
-      <label class="form-label text-muted" for="databaseType">数据库类型（postgres、mssql、mysql、oracle、sqlite等）  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="databaseType" name="databaseType"
-        placeholder="请输入数据库类型（postgres、mssql、mysql、oracle、sqlite等） ..." [(ngModel)]="model.databaseType"
+      <label class="form-label text-muted" for="databaseType">数据库类型  <i class="text-danger">*</i> </label>
+      <select class="form-control" type="text" id="databaseType" name="databaseType" [(ngModel)]="model.databaseType"
         [class.is-invalid]="!(databaseType.valid || databaseType.pristine)"
         [class.is-valid]="databaseType.valid"
-        required #databaseType="ngModel" [disabled]="!editable"
-      />
+        required #databaseType="ngModel" [disabled]="!editable">
+        <option value="postgres">PostgreSQL</option>
+        <option value="mssql">Microsoft SQL Server</option>
+        <option value="mysql">MySQL / MariaDB</option>
+        <option value="oracle">Oracle</option>
+        <option value="sqlite">SQLite</option>
+      </select>
     </div>
-    <div class="form-group">
-      <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input"
-          id="isDeleted" name="isDeleted"
-          [(ngModel)]="model.isDeleted" [disabled]="!editable">
-        <label class="custom-control-label text-muted"
-          for="isDeleted">
-          是否已删除（软删除）
-        </label>
-      </div>
+    <div class="form-group" [class.is-valid]="connValue.valid"
+      [class.is-invalid]="!(connValue.valid || connValue.pristine)">
+      <label class="form-label text-muted" for="connValue">连接串值  <i class="text-danger">*</i> </label>
+      <textarea class="form-control" type="text" id="connValue" name="connValue" rows="4"
+        placeholder="请输入连接串内容 ..." [(ngModel)]="model.value"
+        [class.is-invalid]="!(connValue.valid || connValue.pristine)"
+        [class.is-valid]="connValue.valid"
+        required #connValue="ngModel" [disabled]="!editable"
+      ></textarea>
     </div>
   </div>
   <div *ngIf="info.privileges['connection_strings.update'] && editable"
