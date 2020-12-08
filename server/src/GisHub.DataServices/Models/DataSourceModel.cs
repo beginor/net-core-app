@@ -10,9 +10,9 @@ namespace Beginor.GisHub.DataServices.Models {
         /// <summary>数据源名称</summary>
         [Required(ErrorMessage = "数据源名称 必须填写！")]
         public string Name { get; set; }
-        /// <summary>数据库连接串id</summary>
-        [Required(ErrorMessage = "数据库连接串id 必须填写！")]
-        public string ConnectionStringId { get; set; }
+        /// <summary>数据库连接串</summary>
+        [Required(ErrorMessage = "数据库连接串 必须填写！")]
+        public StringIdNameEntity ConnectionString { get; set; }
         /// <summary>数据表/视图架构</summary>
         public string Schema { get; set; }
         /// <summary>数据表/视图名称</summary>
@@ -32,9 +32,6 @@ namespace Beginor.GisHub.DataServices.Models {
         public string DefaultOrder { get; set; }
         /// <summary>标签</summary>
         public string[] Tags { get; set; }
-        /// <summary>是否删除</summary>
-        [Required(ErrorMessage = "是否删除 必须填写！")]
-        public bool IsDeleted { get; set; }
 
     }
 

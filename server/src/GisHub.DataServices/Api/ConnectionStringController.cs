@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,6 +53,21 @@ namespace Beginor.GisHub.DataServices.Api {
             }
         }
 
+        [HttpGet("~/api/connection-strings-list")]
+        [Authorize("connection_strings.read")]
+        /// <summary>获取全部的数据库连接列表</summary>
+        public async Task<ActionResult<List<ConnectionStringModel>>> GetAllForDisplayAsync() {
+            try {
+                var result = await repository.GetAllForDisplayAsync();
+                return result;
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, "Can not get connection-strings-list .");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+
         /// <summary> 创建 数据库连接串 </summary>
         /// <response code="200">创建 数据库连接串 成功</response>
         /// <response code="500">服务器内部错误</response>
@@ -94,7 +110,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="404"> 数据库连接串 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("connection_strings.read")]
+        [Authorize("connection_strings.read_by_id")]
         public async Task<ActionResult<ConnectionStringModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);

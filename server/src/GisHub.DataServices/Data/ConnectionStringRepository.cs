@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -27,8 +28,17 @@ namespace Beginor.GisHub.DataServices.Data {
             }
             var total = await query.LongCountAsync();
             var data = await query.OrderByDescending(e => e.Id)
+                .Select(e => new ConnectionString {
+                    Id = e.Id,
+                    Name = e.Name,
+                    DatabaseType = e.DatabaseType,
+                    Value = e.Value
+                })
                 .Skip(model.Skip).Take(model.Take)
                 .ToListAsync();
+            foreach (var item in data) {
+               item.Value = item.Value.Aggregate(new StringBuilder(), (sb, c) => sb.Append("*")).ToString();
+            }
             return new PaginatedResponseModel<ConnectionStringModel> {
                 Total = total,
                 Data = Mapper.Map<IList<ConnectionStringModel>>(data),
@@ -44,6 +54,16 @@ namespace Beginor.GisHub.DataServices.Data {
                 await Session.SaveAsync(entity, token);
                 await Session.FlushAsync();
             }
+        }
+
+        public async Task<List<ConnectionStringModel>> GetAllForDisplayAsync() {
+            var data = await Session.Query<ConnectionString>()
+                .Select(e => new ConnectionString {
+                    Id = e.Id,
+                    Name = e.Name,
+                    DatabaseType = e.DatabaseType
+                }).ToListAsync();
+            return Mapper.Map<List<ConnectionStringModel>>(data);
         }
 
     }

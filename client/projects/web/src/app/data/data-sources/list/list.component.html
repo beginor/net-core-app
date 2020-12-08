@@ -1,8 +1,8 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a routerLink="/">首页</a></li>
-    <li class="breadcrumb-item"><a routerLink="/">填写合适的面包屑</a></li>
-    <li class="breadcrumb-item active" aria-current="page">数据源（数据表或视图）</li>
+    <li class="breadcrumb-item"><a routerLink="/data">数据</a></li>
+    <li class="breadcrumb-item active" aria-current="page">数据源</li>
   </ol>
 </nav>
 <div class="container-fluid">
@@ -10,12 +10,12 @@
     <div class="col-12">
       <div class="card" *ngIf="(account.info | async) as info">
         <div class="card-header d-flex justify-content-between">
-          <h5 class="card-title mb-0">数据源（数据表或视图）</h5>
+          <h5 class="card-title mb-0">数据源</h5>
           <div class="btn-group btn-group-sm">
             <button *ngIf="info.privileges['data_sources.create']"
               type="button" class="btn btn-outline-primary"
               (click)="showDetail('0', true)">
-              <svg-icon path="bi/plus"></svg-icon> 新建(数据源（数据表或视图）)
+              <svg-icon path="bi/plus"></svg-icon> 新建数据源
             </button>
             <button type="button" class="btn btn-outline-secondary"
               (click)="loadData()">
@@ -52,10 +52,10 @@
             <div class="col-6">
               <div class="row no-gutters">
                 <div class="col-6">
-                  <span class="text-muted">其它工具栏</span>
+                  <!-- <span class="text-muted">其它工具栏</span> -->
                 </div>
                 <div class="col-6">
-                  <span class="text-muted">其它工具栏</span>
+                  <!-- <span class="text-muted">其它工具栏</span> -->
                 </div>
               </div>
             </div>
@@ -66,36 +66,24 @@
             <thead>
               <tr>
                 <th scope="col" class="text-center text-nowrap text-muted">#</th>
-                <th scope="col" class="text-center text-nowrap text-muted">数据源id</th>
-                <th scope="col" class="text-center text-nowrap text-muted">数据源名称</th>
-                <th scope="col" class="text-center text-nowrap text-muted">数据库连接串id</th>
-                <th scope="col" class="text-center text-nowrap text-muted">数据表/视图架构</th>
-                <th scope="col" class="text-center text-nowrap text-muted">数据表/视图名称</th>
-                <th scope="col" class="text-center text-nowrap text-muted">主键列名称</th>
-                <th scope="col" class="text-center text-nowrap text-muted">显示列名称， 查询时不指定字段则返回数据表的主键列和显示列。</th>
-                <th scope="col" class="text-center text-nowrap text-muted">空间列</th>
-                <th scope="col" class="text-center text-nowrap text-muted">预置过滤条件</th>
-                <th scope="col" class="text-center text-nowrap text-muted">默认排序</th>
-                <th scope="col" class="text-center text-nowrap text-muted">标签</th>
-                <th scope="col" class="text-center text-nowrap text-muted">是否删除</th>
+                <th scope="col" class="text-center text-nowrap text-muted">名称</th>
+                <th scope="col" class="text-center text-nowrap text-muted">数据库</th>
+                <th scope="col" class="text-center text-nowrap text-muted">架构</th>
+                <th scope="col" class="text-center text-nowrap text-muted">数据表</th>
+                <th scope="col" class="text-center text-nowrap text-muted">主键</th>
+                <th scope="col" class="text-center text-nowrap text-muted">显示列</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">
               <tr *ngFor="let item of data; let i = index;">
                 <th scope="row" class="text-right text-muted">{{i+1+vm.searchModel.skip}}</th>
-                <td class='text-left'>{{item.id}}</td>
                 <td class='text-left'>{{item.name}}</td>
-                <td class='text-left'>{{item.connectionStringId}}</td>
+                <td class='text-left'>{{item.connectionString.name}}</td>
                 <td class='text-left'>{{item.schema}}</td>
                 <td class='text-left'>{{item.tableName}}</td>
                 <td class='text-left'>{{item.primaryKeyColumn}}</td>
                 <td class='text-left'>{{item.displayColumn}}</td>
-                <td class='text-left'>{{item.geometryColumn}}</td>
-                <td class='text-left'>{{item.presetCriteria}}</td>
-                <td class='text-left'>{{item.defaultOrder}}</td>
-                <td class='text-left'>{{item.tags}}</td>
-                <td class='text-left'>{{item.isDeleted}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
                     <button *ngIf="info.privileges['data_sources.read']"

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Beginor.AppFx.Core;
@@ -32,6 +33,15 @@ namespace Beginor.GisHub.DataServices.Data {
                 Skip = model.Skip,
                 Take = model.Take
             };
+        }
+
+        public override async Task DeleteAsync(long id, CancellationToken token = default) {
+            var entity = Session.Get<DataSource>(id);
+            if (entity != null) {
+                entity.IsDeleted = true;
+                await Session.SaveAsync(entity, token);
+                await Session.FlushAsync();
+            }
         }
 
     }

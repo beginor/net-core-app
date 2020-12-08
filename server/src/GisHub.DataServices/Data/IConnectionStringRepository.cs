@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Models;
@@ -11,6 +12,8 @@ namespace Beginor.GisHub.DataServices.Data {
         Task<PaginatedResponseModel<ConnectionStringModel>> SearchAsync(
             ConnectionStringSearchModel model
         );
+
+        Task<List<ConnectionStringModel>> GetAllForDisplayAsync();
 
     }
 
