@@ -64,15 +64,22 @@
         </div>
       </div>
     </div>
-    <div class="form-group" [class.is-valid]="tags.valid"
-      [class.is-invalid]="!(tags.valid || tags.pristine)">
+    <div class="form-group">
       <label class="form-label text-muted" for="tags">标签 </label>
-      <input class="form-control" type="text" id="tags" name="tags"
-        placeholder="请输入标签 ..." [(ngModel)]="model.tags"
-        [class.is-invalid]="!(tags.valid || tags.pristine)"
-        [class.is-valid]="tags.valid"
-        required #tags="ngModel" [disabled]="!editable"
-      />
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <button class="btn btn-outline-secondary" type="button"
+            *ngFor="let t of model.tags" ngbTooltip="点击删除这个标签" container="body"
+            [disabled]="!editable" (click)="delTag(t)">{{t}}</button>
+        </div>
+        <input class="form-control" type="text" id="newTag" name="newTag"
+          placeholder="请输入新标签 ..." *ngIf="editable" [(ngModel)]="newTag" />
+        <div class="input-group-append" *ngIf="!!newTag">
+          <button class="btn btn-outline-secondary" (click)="addNewTag()">
+            <svg-icon path="bi/plus"></svg-icon>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <div *ngIf="info.privileges['app_privileges.update'] && editable"

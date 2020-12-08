@@ -23,7 +23,8 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: SlpkModel = {};
+    public model: SlpkModel = { tags: [] };
+    public newTag = '';
 
     private id = '';
     private reloadList = false;
@@ -86,6 +87,25 @@ export class DetailComponent implements OnInit {
         }
         this.reloadList = true;
         this.goBack();
+    }
+
+    public addNewTag(): void {
+        if (!this.model.tags) {
+            this.model.tags = [];
+        }
+        const newTag = this.newTag.trim();
+        if (!!newTag && this.model.tags.indexOf(newTag) < 0) {
+            this.model.tags.push(newTag);
+            this.newTag = '';
+        }
+    }
+
+    public delTag(tag: string): void {
+        if (!this.model.tags) {
+            return;
+        }
+        const idx = this.model.tags.indexOf(tag);
+        this.model.tags?.splice(idx, 1);
     }
 
 }
