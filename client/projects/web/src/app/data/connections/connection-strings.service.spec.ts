@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ConnectionStringService } from './connection-strings.service';
+import { ConnectionService } from './connection-strings.service';
 
 describe('ConnectionStringService', () => {
 
     beforeEach(() => TestBed.configureTestingModule({}));
 
     it('should be created', () => {
-        const service: ConnectionStringService = TestBed.get(ConnectionStringService);
+        const service: ConnectionService = TestBed.inject(ConnectionService);
         expect(service).toBeTruthy();
     });
 

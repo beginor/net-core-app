@@ -3,10 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from 'app-shared';
 
-import { ConnectionStringService } from '../connection-strings.service';
+import { ConnectionService } from '../connection-strings.service';
 
 @Component({
-    selector: 'app-connection-string-list',
+    selector: 'app-connection-list',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss']
 })
@@ -16,7 +16,7 @@ export class ListComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         public account: AccountService,
-        public vm: ConnectionStringService
+        public vm: ConnectionService
     ) { }
 
     public ngOnInit(): void {

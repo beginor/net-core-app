@@ -8,7 +8,7 @@ import {
 import { AppSharedModule } from 'app-shared';
 
 import { AppCommonModule } from 'projects/web/src/app/common';
-import { ConnectionStringRoutingModule } from './connection-strings-routing.module';
+import { ConnectionRoutingModule } from './connection-strings-routing.module';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
 
@@ -24,7 +24,7 @@ import { DetailComponent } from './detail/detail.component';
         NgbTooltipModule,
         AppSharedModule,
         AppCommonModule,
-        ConnectionStringRoutingModule
+        ConnectionRoutingModule
     ]
 })
-export class ConnectionStringModule { }
+export class ConnectionModule { }

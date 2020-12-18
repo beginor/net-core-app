@@ -8,19 +8,19 @@ import { UiService } from 'projects/web/src/app/common';
 @Injectable({
     providedIn: 'root'
 })
-export class ConnectionStringService {
+export class ConnectionService {
 
-    public searchModel: ConnectionStringSearchModel = {
+    public searchModel: ConnectionSearchModel = {
         keywords: '',
         skip: 0,
         take: 10
     };
     public total = new BehaviorSubject<number>(0);
-    public data = new BehaviorSubject<ConnectionStringModel[]>([]);
+    public data = new BehaviorSubject<ConnectionModel[]>([]);
     public loading = false;
     public showPagination = false;
 
-    private baseUrl = `${this.apiRoot}/connection-strings`;
+    private baseUrl = `${this.apiRoot}/connections`;
 
     constructor(
         private http: HttpClient,
@@ -39,7 +39,7 @@ export class ConnectionStringService {
         }
         this.loading = true;
         try {
-            const result = await this.http.get<ConnectionStringResultModel>(
+            const result = await this.http.get<ConnectionResultModel>(
                 this.baseUrl,
                 {
                     params: params
@@ -65,10 +65,10 @@ export class ConnectionStringService {
     }
 
     /** 加载全部数据库连接 */
-    public async getAll(): Promise<ConnectionStringModel[]> {
+    public async getAll(): Promise<ConnectionModel[]> {
         try {
-            const result = await this.http.get<ConnectionStringModel[]>(
-                `${this.apiRoot}/connection-strings-list`
+            const result = await this.http.get<ConnectionModel[]>(
+                `${this.apiRoot}/connections-list`
             ).toPromise();
             return result;
         }
@@ -95,10 +95,10 @@ export class ConnectionStringService {
 
     /** 创建数据库连接 */
     public async create(
-        model: ConnectionStringModel
-    ): Promise<ConnectionStringModel | undefined> {
+        model: ConnectionModel
+    ): Promise<ConnectionModel | undefined> {
         try {
-            const result = await this.http.post<ConnectionStringModel>(
+            const result = await this.http.post<ConnectionModel>(
                 this.baseUrl,
                 model
             ).toPromise();
@@ -114,9 +114,9 @@ export class ConnectionStringService {
     }
 
     /** 获取指定的数据库连接 */
-    public async getById(id: string): Promise<ConnectionStringModel | undefined> {
+    public async getById(id: string): Promise<ConnectionModel | undefined> {
         try {
-            const result = await this.http.get<ConnectionStringModel>(
+            const result = await this.http.get<ConnectionModel>(
                 `${this.baseUrl}/${id}`
             ).toPromise();
             return result;
@@ -154,10 +154,10 @@ export class ConnectionStringService {
     /** 更新数据库连接 */
     public async update(
         id: string,
-        model: ConnectionStringModel
-    ): Promise<ConnectionStringModel | undefined> {
+        model: ConnectionModel
+    ): Promise<ConnectionModel | undefined> {
         try {
-            const result = await this.http.put<ConnectionStringModel>(
+            const result = await this.http.put<ConnectionModel>(
                 `${this.baseUrl}/${id}`,
                 model
             ).toPromise();
@@ -175,7 +175,7 @@ export class ConnectionStringService {
 }
 
 /** 数据库连接 */
-export interface ConnectionStringModel {
+export interface ConnectionModel {
     /** 连接ID */
     id?: string;
     /** 连接名称 */
@@ -187,7 +187,7 @@ export interface ConnectionStringModel {
 }
 
 /** 数据库连接 搜索参数 */
-export interface ConnectionStringSearchModel {
+export interface ConnectionSearchModel {
     [key: string]: undefined | number | string;
     keywords: string;
     /** 跳过的记录数 */
@@ -197,7 +197,7 @@ export interface ConnectionStringSearchModel {
 }
 
 /** 数据库连接 搜索结果 */
-export interface ConnectionStringResultModel {
+export interface ConnectionResultModel {
     /** 请求跳过的记录数 */
     skip?: number;
     /** 请求多少条记录 */
@@ -205,5 +205,5 @@ export interface ConnectionStringResultModel {
     /** 总记录数 */
     total?: number;
     /** 数据列表 */
-    data?: ConnectionStringModel[];
+    data?: ConnectionModel[];
 }

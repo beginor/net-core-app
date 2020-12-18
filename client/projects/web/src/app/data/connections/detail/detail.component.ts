@@ -6,10 +6,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
-import { ConnectionStringService, ConnectionStringModel } from '../connection-strings.service';
+import { ConnectionService, ConnectionModel } from '../connection-strings.service';
 
 @Component({
-    selector: 'app-connection-string-detail',
+    selector: 'app-connection-detail',
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.scss'],
     animations: [
@@ -24,7 +24,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: ConnectionStringModel = {};
+    public model: ConnectionModel = {};
 
     private id = '';
     private reloadList = false;
@@ -33,7 +33,7 @@ export class DetailComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         public account: AccountService,
-        public vm: ConnectionStringService
+        public vm: ConnectionService
     ) {
         const id = route.snapshot.params.id;
         const editable = route.snapshot.params.editable;
