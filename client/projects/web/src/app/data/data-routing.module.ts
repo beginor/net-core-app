@@ -17,7 +17,7 @@ const routes: Routes = [
     },
     {
         path: 'connections',
-        loadChildren: () => import('./connections/connection-strings.module').then(m => m.ConnectionModule)
+        loadChildren: () => import('./connections/connections.module').then(m => m.ConnectionModule)
     },
     {
         path: 'data-sources',

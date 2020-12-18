@@ -8,7 +8,7 @@ import {
 import { AppSharedModule } from 'app-shared';
 
 import { AppCommonModule } from 'projects/web/src/app/common';
-import { ConnectionRoutingModule } from './connection-strings-routing.module';
+import { ConnectionRoutingModule } from './connections-routing.module';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
 

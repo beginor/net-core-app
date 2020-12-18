@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from 'app-shared';
 
-import { ConnectionService } from '../connection-strings.service';
+import { ConnectionService } from '../connections.service';
 
 @Component({
     selector: 'app-connection-list',

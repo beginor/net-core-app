@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
-import { ConnectionService, ConnectionModel } from '../connection-strings.service';
+import { ConnectionService, ConnectionModel } from '../connections.service';
 
 @Component({
     selector: 'app-connection-detail',
