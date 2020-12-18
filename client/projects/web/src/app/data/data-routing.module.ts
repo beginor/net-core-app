@@ -21,7 +21,7 @@ const routes: Routes = [
     },
     {
         path: 'data-sources',
-        loadChildren: () => import('./datasources/data-sources.module').then(m => m.DataSourceModule)
+        loadChildren: () => import('./datasources/datasources.module').then(m => m.DataSourceModule)
     }
 ];
 // tslint:enable:max-line-length

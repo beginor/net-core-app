@@ -8,7 +8,7 @@ import {
 import { AppSharedModule } from 'app-shared';
 
 import { AppCommonModule } from 'projects/web/src/app/common';
-import { DataSourceRoutingModule } from './data-sources-routing.module';
+import { DataSourceRoutingModule } from './datasources-routing.module';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
 

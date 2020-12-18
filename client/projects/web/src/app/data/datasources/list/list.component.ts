@@ -3,10 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from 'app-shared';
 
-import { DataSourceService } from '../data-sources.service';
+import { DataSourceService } from '../datasources.service';
 
 @Component({
-    selector: 'app-data-source-list',
+    selector: 'app-datasource-list',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss']
 })

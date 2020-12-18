@@ -6,13 +6,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
-import { DataSourceService, DataSourceModel } from '../data-sources.service';
+import { DataSourceService, DataSourceModel } from '../datasources.service';
 import {
-    ConnectionStringService, ConnectionStringModel
-} from '../../connection-strings/connection-strings.service';
+    ConnectionService, ConnectionModel
+} from '../../connections/connections.service';
 
 @Component({
-    selector: 'app-data-source-detail',
+    selector: 'app-datasource-detail',
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.scss'],
     animations: [
@@ -28,8 +28,8 @@ export class DetailComponent implements OnInit {
     public title = '';
     public editable = false;
     public model: DataSourceModel = {};
-    public connStrs: ConnectionStringModel[] = [];
-    public connStr: ConnectionStringModel | undefined;
+    public connStrs: ConnectionModel[] = [];
+    public connStr: ConnectionModel | undefined;
 
     private id = '';
     private reloadList = false;
@@ -37,7 +37,7 @@ export class DetailComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private conn: ConnectionStringService,
+        private conn: ConnectionService,
         public account: AccountService,
         public vm: DataSourceService
     ) {
