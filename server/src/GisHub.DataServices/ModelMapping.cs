@@ -7,10 +7,10 @@ namespace Beginor.GisHub.DataServices {
     public class ModelMapping : AutoMapper.Profile {
 
         public ModelMapping() {
-            CreateMap<ConnectionString, ConnectionStringModel>()
+            CreateMap<Connection, ConnectionModel>()
                 .ReverseMap()
                 .ForMember(dest => dest.Id, map => map.Ignore());
-            CreateMap<ConnectionString, StringIdNameEntity>()
+            CreateMap<Connection, StringIdNameEntity>()
                 .ReverseMap();
             CreateMap<DataSource, DataSourceModel>()
                 .ReverseMap()

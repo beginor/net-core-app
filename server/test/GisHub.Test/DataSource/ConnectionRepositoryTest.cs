@@ -8,11 +8,11 @@ using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.Test.Data {
+namespace Beginor.GisHub.Test.DataSource {
 
     /// <summary>数据库连接串仓储测试</summary>
     [TestFixture]
-    public class ConnectionStringRepositoryTest : BaseTest<IConnectionStringRepository> {
+    public class ConnectionRepositoryTest : BaseTest<IConnectionRepository> {
 
         [Test]
         public void _01_CanResolveTarget() {

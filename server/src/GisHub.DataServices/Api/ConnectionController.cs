@@ -13,15 +13,15 @@ namespace Beginor.GisHub.DataServices.Api {
 
     /// <summary>数据库连接串 服务接口</summary>
     [ApiController]
-    [Route("api/connection-strings")]
-    public class ConnectionStringController : Controller {
+    [Route("api/connections")]
+    public class ConnectionController : Controller {
 
-        private ILogger<ConnectionStringController> logger;
-        private IConnectionStringRepository repository;
+        private ILogger<ConnectionController> logger;
+        private IConnectionRepository repository;
 
-        public ConnectionStringController(
-            ILogger<ConnectionStringController> logger,
-            IConnectionStringRepository repository
+        public ConnectionController(
+            ILogger<ConnectionController> logger,
+            IConnectionRepository repository
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
@@ -40,7 +40,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="500">服务器内部错误</response>
         [HttpGet("")]
         [Authorize("connection_strings.read")]
-        public async Task<ActionResult<PaginatedResponseModel<ConnectionStringModel>>> Search(
+        public async Task<ActionResult<PaginatedResponseModel<ConnectionModel>>> Search(
             [FromQuery]ConnectionStringSearchModel model
         ) {
             try {
@@ -56,7 +56,7 @@ namespace Beginor.GisHub.DataServices.Api {
         [HttpGet("~/api/connection-strings-list")]
         [Authorize("connection_strings.read")]
         /// <summary>获取全部的数据库连接列表</summary>
-        public async Task<ActionResult<List<ConnectionStringModel>>> GetAllForDisplayAsync() {
+        public async Task<ActionResult<List<ConnectionModel>>> GetAllForDisplayAsync() {
             try {
                 var result = await repository.GetAllForDisplayAsync();
                 return result;
@@ -73,8 +73,8 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
         [Authorize("connection_strings.create")]
-        public async Task<ActionResult<ConnectionStringModel>> Create(
-            [FromBody]ConnectionStringModel model
+        public async Task<ActionResult<ConnectionModel>> Create(
+            [FromBody]ConnectionModel model
         ) {
             try {
                 await repository.SaveAsync(model);
@@ -111,7 +111,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
         [Authorize("connection_strings.read_by_id")]
-        public async Task<ActionResult<ConnectionStringModel>> GetById(long id) {
+        public async Task<ActionResult<ConnectionModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);
                 if (result == null) {
@@ -133,9 +133,9 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
         [Authorize("connection_strings.update")]
-        public async Task<ActionResult<ConnectionStringModel>> Update(
+        public async Task<ActionResult<ConnectionModel>> Update(
             [FromRoute]long id,
-            [FromBody]ConnectionStringModel model
+            [FromBody]ConnectionModel model
         ) {
             try {
                 var exists = await repository.ExitsAsync(id);

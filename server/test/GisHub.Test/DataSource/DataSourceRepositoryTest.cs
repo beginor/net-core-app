@@ -9,7 +9,7 @@ using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.Test.Data {
+namespace Beginor.GisHub.Test.DataSource {
 
     /// <summary>数据源（数据表或视图）仓储测试</summary>
     [TestFixture]
@@ -33,19 +33,19 @@ namespace Beginor.GisHub.Test.Data {
 
         [Test]
         public void _03_CanMapDataSource() {
-            var entity = new DataSource {
+            var entity = new Beginor.GisHub.DataServices.Data.DataSource {
                 Id = 1,
-                ConnectionString = new ConnectionString {
+                Connection = new Connection {
                     Id = 2,
                     Name = "Test"
                 }
             };
             var mapper = ServiceProvider.GetService<AutoMapper.IMapper>();
             var model = mapper.Map<DataSourceModel>(entity);
-            Assert.AreEqual(entity.ConnectionString.Id.ToString(), model.ConnectionString.Id);
-            var entity2 = mapper.Map<DataSource>(model);
-            Assert.IsNotNull(entity2.ConnectionString);
-            Assert.AreEqual(entity2.ConnectionString.Id.ToString(), model.ConnectionString.Id);
+            Assert.AreEqual(entity.Connection.Id.ToString(), model.Connection.Id);
+            var entity2 = mapper.Map<Beginor.GisHub.DataServices.Data.DataSource>(model);
+            Assert.IsNotNull(entity2.Connection);
+            Assert.AreEqual(entity2.Connection.Id.ToString(), model.Connection.Id);
         }
 
     }

@@ -6,7 +6,7 @@ namespace Beginor.GisHub.DataServices.Data {
 
     /// <summary>数据库连接串</summary>
     [Class(Schema = "public", Table = "connections", Where = "is_deleted = false")]
-    public partial class ConnectionString : BaseEntity<long> {
+    public partial class Connection : BaseEntity<long> {
 
         /// <summary>连接串ID</summary>
         [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]

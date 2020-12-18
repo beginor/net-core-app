@@ -1,10 +1,10 @@
 using Beginor.GisHub.DataServices.Api;
 using NUnit.Framework;
 
-namespace Beginor.GisHub.Test.Api {
+namespace Beginor.GisHub.Test.DataSource {
 
     [TestFixture]
-    public class ConnectionStringControllerTest : BaseTest<ConnectionStringController> {
+    public class ConnectionControllerTest : BaseTest<ConnectionController> {
 
         [Test]
         public void _01_CanResolveTarget() {

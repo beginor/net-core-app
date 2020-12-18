@@ -12,7 +12,7 @@ namespace Beginor.GisHub.DataServices.Models {
         public string Name { get; set; }
         /// <summary>数据库连接串</summary>
         [Required(ErrorMessage = "数据库连接串 必须填写！")]
-        public StringIdNameEntity ConnectionString { get; set; }
+        public StringIdNameEntity Connection { get; set; }
         /// <summary>数据表/视图架构</summary>
         public string Schema { get; set; }
         /// <summary>数据表/视图名称</summary>
