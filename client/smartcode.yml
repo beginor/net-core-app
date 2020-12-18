@@ -54,7 +54,7 @@ TableFilter:
     - slpks
     - tile_maps
   IncludeTables:
-    - connection_strings
+    - connections
     - data_sources
   IgnoreNoPKTable: true
   IgnoreView: true

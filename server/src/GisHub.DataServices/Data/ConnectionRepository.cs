@@ -13,12 +13,12 @@ using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices.Data {
 
-    /// <summary>数据库连接串仓储实现</summary>
+    /// <summary>数据库连接仓储实现</summary>
     public partial class ConnectionRepository : HibernateRepository<Connection, ConnectionModel, long>, IConnectionRepository {
 
         public ConnectionRepository(ISession session, IMapper mapper) : base(session, mapper) { }
 
-        /// <summary>搜索 数据库连接串 ，返回分页结果。</summary>
+        /// <summary>搜索 数据库连接 ，返回分页结果。</summary>
         public async Task<PaginatedResponseModel<ConnectionModel>> SearchAsync(
             ConnectionStringSearchModel model
         ) {

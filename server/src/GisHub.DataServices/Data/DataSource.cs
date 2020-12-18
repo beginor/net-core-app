@@ -16,7 +16,7 @@ namespace Beginor.GisHub.DataServices.Data {
         [Property(Name = "Name", Column = "name", Type = "string", NotNull = true, Length = 32)]
         public virtual string Name { get; set; }
 
-        /// <summary>数据库连接串id</summary>
+        /// <summary>数据库连接id</summary>
         [ManyToOne(Name = "ConnectionString", Column = "connection_string_id", ClassType = typeof(Connection), NotFound = NotFoundMode.Ignore)]
         public virtual Connection Connection { get; set; }
 

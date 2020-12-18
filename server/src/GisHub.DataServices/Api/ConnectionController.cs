@@ -11,7 +11,7 @@ using Beginor.GisHub.DataServices.Data;
 
 namespace Beginor.GisHub.DataServices.Api {
 
-    /// <summary>数据库连接串 服务接口</summary>
+    /// <summary>数据库连接 服务</summary>
     [ApiController]
     [Route("api/connections")]
     public class ConnectionController : Controller {
@@ -35,11 +35,11 @@ namespace Beginor.GisHub.DataServices.Api {
             base.Dispose(disposing);
         }
 
-        /// <summary>搜索 数据库连接串 ， 分页返回结果</summary>
+        /// <summary>搜索 数据库连接 ， 分页返回结果</summary>
         /// <response code="200">成功, 分页返回结果</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("")]
-        [Authorize("connection_strings.read")]
+        [Authorize("connections.read")]
         public async Task<ActionResult<PaginatedResponseModel<ConnectionModel>>> Search(
             [FromQuery]ConnectionStringSearchModel model
         ) {
@@ -48,13 +48,13 @@ namespace Beginor.GisHub.DataServices.Api {
                 return result;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not search connection_strings with {model.ToJson()} .");
+                logger.LogError(ex, $"Can not search connections with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
-        [HttpGet("~/api/connection-strings-list")]
-        [Authorize("connection_strings.read")]
+        [HttpGet("~/api/connections-list")]
+        [Authorize("connections.read")]
         /// <summary>获取全部的数据库连接列表</summary>
         public async Task<ActionResult<List<ConnectionModel>>> GetAllForDisplayAsync() {
             try {
@@ -68,11 +68,11 @@ namespace Beginor.GisHub.DataServices.Api {
         }
 
 
-        /// <summary> 创建 数据库连接串 </summary>
-        /// <response code="200">创建 数据库连接串 成功</response>
+        /// <summary> 创建 数据库连接 </summary>
+        /// <response code="200">创建 数据库连接 成功</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
-        [Authorize("connection_strings.create")]
+        [Authorize("connections.create")]
         public async Task<ActionResult<ConnectionModel>> Create(
             [FromBody]ConnectionModel model
         ) {
@@ -81,36 +81,36 @@ namespace Beginor.GisHub.DataServices.Api {
                 return model;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not save {model.ToJson()} to connection_strings.");
+                logger.LogError(ex, $"Can not save {model.ToJson()} to connections.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
-        /// <summary>删除 数据库连接串 </summary>
-        /// <response code="204">删除 数据库连接串 成功</response>
+        /// <summary>删除 数据库连接 </summary>
+        /// <response code="204">删除 数据库连接 成功</response>
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
-        [Authorize("connection_strings.delete")]
+        [Authorize("connections.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
                 await repository.DeleteAsync(id);
                 return NoContent();
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not delete connection_strings by id {id} .");
+                logger.LogError(ex, $"Can not delete connections by id {id} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
         /// <summary>
-        /// 获取指定的 数据库连接串
+        /// 获取指定的 数据库连接
         /// </summary>
-        /// <response code="200">返回 数据库连接串 信息</response>
-        /// <response code="404"> 数据库连接串 不存在</response>
+        /// <response code="200">返回 数据库连接 信息</response>
+        /// <response code="404"> 数据库连接 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("connection_strings.read_by_id")]
+        [Authorize("connections.read_by_id")]
         public async Task<ActionResult<ConnectionModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);
@@ -120,19 +120,19 @@ namespace Beginor.GisHub.DataServices.Api {
                 return result;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not get connection_strings by id {id}.");
+                logger.LogError(ex, $"Can not get connections by id {id}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
         /// <summary>
-        /// 更新 数据库连接串
+        /// 更新 数据库连接
         /// </summary>
-        /// <response code="200">更新成功，返回 数据库连接串 信息</response>
-        /// <response code="404"> 数据库连接串 不存在</response>
+        /// <response code="200">更新成功，返回 数据库连接 信息</response>
+        /// <response code="404"> 数据库连接 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
-        [Authorize("connection_strings.update")]
+        [Authorize("connections.update")]
         public async Task<ActionResult<ConnectionModel>> Update(
             [FromRoute]long id,
             [FromBody]ConnectionModel model
@@ -146,7 +146,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 return model;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not update connection_strings by id {id} with {model.ToJson()} .");
+                logger.LogError(ex, $"Can not update connections by id {id} with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }

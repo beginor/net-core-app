@@ -10,7 +10,7 @@ using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.Test.DataSource {
 
-    /// <summary>数据库连接串仓储测试</summary>
+    /// <summary>数据库连接仓储测试</summary>
     [TestFixture]
     public class ConnectionRepositoryTest : BaseTest<IConnectionRepository> {
 

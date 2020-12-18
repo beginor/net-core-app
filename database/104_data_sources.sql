@@ -6,7 +6,7 @@ create table public.data_sources
 (
     id bigint not null default snow_flake_id(),
     name character varying(32) collate pg_catalog."default" not null,
-    connection_string_id bigint not null,
+    connection_id bigint not null,
     schema character varying(16) collate pg_catalog."default",
     table_name character varying(64) collate pg_catalog."default" not null,
     primary_key_column character varying(256) collate pg_catalog."default" not null,
@@ -17,7 +17,7 @@ create table public.data_sources
     tags character varying(16)[] collate pg_catalog."default",
     deleted boolean not null default false,
     constraint pk_data_sources primary key (id),
-    constraint fk_connection_string_id foreign key (connection_string_id)
+    constraint fk_data_sources_connection_id foreign key (connection_id)
         references public.data_sources (id) match simple
         on update cascade
         on delete cascade
@@ -39,8 +39,8 @@ comment on column public.data_sources.id
 comment on column public.data_sources.name
     is '数据源名称';
 
-comment on column public.data_sources.connection_string_id
-    is '数据库连接串id';
+comment on column public.data_sources.connection_id
+    is '数据库连接id';
 
 comment on column public.data_sources.schema
     is '数据表/视图架构';

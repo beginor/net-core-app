@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
 
-/** 数据库连接串服务 */
+/** 数据库连接服务 */
 @Injectable({
     providedIn: 'root'
 })
@@ -28,7 +28,7 @@ export class ConnectionStringService {
         private ui: UiService
     ) { }
 
-    /** 搜索数据库连接串 */
+    /** 搜索数据库连接 */
     public async search(): Promise<void> {
         let params = new HttpParams();
         for (const key in this.searchModel) {
@@ -56,7 +56,7 @@ export class ConnectionStringService {
             this.total.next(0);
             this.data.next([]);
             this.ui.showAlert(
-                { type: 'danger', message: '加载数据库连接串数据出错!'}
+                { type: 'danger', message: '加载数据库连接数据出错!'}
             );
         }
         finally {
@@ -64,7 +64,7 @@ export class ConnectionStringService {
         }
     }
 
-    /** 加载全部数据库连接串 */
+    /** 加载全部数据库连接 */
     public async getAll(): Promise<ConnectionStringModel[]> {
         try {
             const result = await this.http.get<ConnectionStringModel[]>(
@@ -75,7 +75,7 @@ export class ConnectionStringService {
         catch (ex) {
             console.error(ex.toString());
             this.ui.showAlert(
-                { type: 'danger', message: '加载全部数据库连接串出错！' }
+                { type: 'danger', message: '加载全部数据库连接出错！' }
             );
             return [];
         }
@@ -93,7 +93,7 @@ export class ConnectionStringService {
         await this.search();
     }
 
-    /** 创建数据库连接串 */
+    /** 创建数据库连接 */
     public async create(
         model: ConnectionStringModel
     ): Promise<ConnectionStringModel | undefined> {
@@ -107,13 +107,13 @@ export class ConnectionStringService {
         catch (ex) {
             console.error(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '创建数据库连接串出错！' }
+                { type: 'danger', message: '创建数据库连接出错！' }
             );
             return;
         }
     }
 
-    /** 获取指定的数据库连接串 */
+    /** 获取指定的数据库连接 */
     public async getById(id: string): Promise<ConnectionStringModel | undefined> {
         try {
             const result = await this.http.get<ConnectionStringModel>(
@@ -124,13 +124,13 @@ export class ConnectionStringService {
         catch (ex) {
             console.error(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '获取指定的数据库连接串出错！' }
+                { type: 'danger', message: '获取指定的数据库连接出错！' }
             );
             return;
         }
     }
 
-    /** 删除数据库连接串 */
+    /** 删除数据库连接 */
     public async delete(id: string): Promise<boolean> {
         const confirm = await this.ui.showConfirm('确认删除么？');
         if (!confirm) {
@@ -145,13 +145,13 @@ export class ConnectionStringService {
         catch (ex) {
             console.error(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '删除数据库连接串出错！' }
+                { type: 'danger', message: '删除数据库连接出错！' }
             );
             return false;
         }
     }
 
-    /** 更新数据库连接串 */
+    /** 更新数据库连接 */
     public async update(
         id: string,
         model: ConnectionStringModel
@@ -166,7 +166,7 @@ export class ConnectionStringService {
         catch (ex) {
             console.error(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '更新数据库连接串出错！' }
+                { type: 'danger', message: '更新数据库连接出错！' }
             );
             return;
         }
@@ -174,19 +174,19 @@ export class ConnectionStringService {
 
 }
 
-/** 数据库连接串 */
+/** 数据库连接 */
 export interface ConnectionStringModel {
-    /** 连接串ID */
+    /** 连接ID */
     id?: string;
-    /** 连接串名称 */
+    /** 连接名称 */
     name?: string;
-    /** 连接串值 */
+    /** 连接值 */
     value?: string;
     /** 数据库类型（postgres、mssql、mysql、oracle、sqlite等） */
     databaseType?: string;
 }
 
-/** 数据库连接串 搜索参数 */
+/** 数据库连接 搜索参数 */
 export interface ConnectionStringSearchModel {
     [key: string]: undefined | number | string;
     keywords: string;
@@ -196,7 +196,7 @@ export interface ConnectionStringSearchModel {
     take: number;
 }
 
-/** 数据库连接串 搜索结果 */
+/** 数据库连接 搜索结果 */
 export interface ConnectionStringResultModel {
     /** 请求跳过的记录数 */
     skip?: number;

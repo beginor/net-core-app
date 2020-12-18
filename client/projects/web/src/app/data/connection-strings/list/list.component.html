@@ -12,7 +12,7 @@
         <div class="card-header d-flex justify-content-between">
           <h5 class="card-title mb-0">数据库连</h5>
           <div class="btn-group btn-group-sm">
-            <button *ngIf="info.privileges['connection_strings.create']"
+            <button *ngIf="info.privileges['connections.create']"
               type="button" class="btn btn-outline-primary"
               (click)="showDetail('0', true)">
               <svg-icon path="bi/plus"></svg-icon> 新建数据库连
@@ -78,7 +78,7 @@
               <tr>
                 <th scope="col" class="text-center text-nowrap text-muted">#</th>
                 <th scope="col" class="text-center text-nowrap text-muted">连接名称</th>
-                <th scope="col" class="text-center text-nowrap text-muted">数据库连接串</th>
+                <th scope="col" class="text-center text-nowrap text-muted">数据库连接</th>
                 <th scope="col" class="text-center text-nowrap text-muted">数据库类型</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
@@ -91,17 +91,17 @@
                 <td class='text-left'>{{item.databaseType}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
-                    <button *ngIf="info.privileges['connection_strings.read_by_id']"
+                    <button *ngIf="info.privileges['connections.read_by_id']"
                       class="btn btn-outline-secondary" ngbTooltip="详情" placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, false)">
                       <svg-icon path="bi/info-square"></svg-icon>
                     </button>
-                    <button *ngIf="info.privileges['connection_strings.update']"
+                    <button *ngIf="info.privileges['connections.update']"
                       class="btn btn-outline-secondary" ngbTooltip="编辑" placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, true)">
                       <svg-icon path="bi/pencil-square"></svg-icon>
                     </button>
-                    <button *ngIf="info.privileges['connection_strings.delete']"
+                    <button *ngIf="info.privileges['connections.delete']"
                         class="btn btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300"
                       (click)="delete(item.id)">
                       <svg-icon path="bi/trash"></svg-icon>

@@ -161,7 +161,7 @@ export interface DataSourceModel {
     id?: string;
     /** 数据源名称 */
     name?: string;
-    /** 数据库连接串 */
+    /** 数据库连接 */
     connectionString?: { id?: string; name?: string };
     /** 数据表/视图架构 */
     schema?: string;
