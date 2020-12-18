@@ -64,6 +64,23 @@ export class ConnectionStringService {
         }
     }
 
+    /** 加载全部数据库连接串 */
+    public async getAll(): Promise<ConnectionStringModel[]> {
+        try {
+            const result = await this.http.get<ConnectionStringModel[]>(
+                `${this.apiRoot}/connection-strings-list`
+            ).toPromise();
+            return result;
+        }
+        catch (ex) {
+            console.error(ex.toString());
+            this.ui.showAlert(
+                { type: 'danger', message: '加载全部数据库连接串出错！' }
+            );
+            return [];
+        }
+    }
+
     /** 更改页码分页查询 */
     public async onPageChange(p: number): Promise<void> {
         this.searchModel.skip = (p - 1) * this.searchModel.take;

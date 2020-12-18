@@ -7,6 +7,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
 import { DataSourceService, DataSourceModel } from '../data-sources.service';
+import {
+    ConnectionStringService, ConnectionStringModel
+} from '../../connection-strings/connection-strings.service';
 
 @Component({
     selector: 'app-data-source-detail',
@@ -25,6 +28,8 @@ export class DetailComponent implements OnInit {
     public title = '';
     public editable = false;
     public model: DataSourceModel = {};
+    public connStrs: ConnectionStringModel[] = [];
+    public connStr: ConnectionStringModel | undefined;
 
     private id = '';
     private reloadList = false;
@@ -32,31 +37,36 @@ export class DetailComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private conn: ConnectionStringService,
         public account: AccountService,
         public vm: DataSourceService
     ) {
         const id = route.snapshot.params.id;
         const editable = route.snapshot.params.editable;
         if (id === '0') {
-            this.title = '新建数据源（数据表或视图）';
+            this.title = '新建数据源';
             this.editable = true;
         }
         else if (editable === 'true') {
-            this.title = '编辑数据源（数据表或视图）';
+            this.title = '编辑数据源';
             this.editable = true;
         }
         else {
-            this.title = '查看数据源（数据表或视图）';
+            this.title = '查看数据源';
             this.editable = false;
         }
         this.id = id;
     }
 
     public async ngOnInit(): Promise<void> {
+        this.connStrs = await this.conn.getAll();
         if (this.id !== '0') {
             const model = await this.vm.getById(this.id);
             if (!!model) {
                 this.model = model;
+                this.connStr = this.connStrs.find(
+                    cs => cs.id === model.connectionString?.id
+                );
             }
         }
     }

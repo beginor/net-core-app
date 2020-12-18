@@ -18,7 +18,6 @@ export class DataSourceService {
     public data = new BehaviorSubject<DataSourceModel[]>([]);
     public loading = false;
     public showPagination = false;
-
     private baseUrl = `${this.apiRoot}/data-sources`;
 
     constructor(
