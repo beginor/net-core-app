@@ -5,7 +5,7 @@ using NHibernate.Mapping.Attributes;
 namespace Beginor.GisHub.DataServices.Data {
 
     /// <summary>数据库连接串</summary>
-    [Class(Schema = "public", Table = "connection_strings", Where = "is_deleted = false")]
+    [Class(Schema = "public", Table = "connections", Where = "is_deleted = false")]
     public partial class ConnectionString : BaseEntity<long> {
 
         /// <summary>连接串ID</summary>
@@ -16,13 +16,33 @@ namespace Beginor.GisHub.DataServices.Data {
         [Property(Name = "Name", Column = "name", Type = "string", NotNull = true, Length = 64)]
         public virtual string Name { get; set; }
 
-        /// <summary>连接串值</summary>
-        [Property(Name = "Value", Column = "value", Type = "string", NotNull = true, Length = 512)]
-        public virtual string Value { get; set; }
-
         /// <summary>数据库类型（postgres、mssql、mysql、oracle、sqlite等）</summary>
         [Property(Name = "DatabaseType", Column = "database_type", Type = "string", NotNull = true, Length = 16)]
         public virtual string DatabaseType { get; set; }
+
+        /// <summary> 服务器地址 </summary>
+        [Property(Name = "ServerAddress", Column = "server_address", Type = "string", NotNull = true, Length = 64)]
+        public virtual string ServerAddress { get; set; }
+        
+        /// <summary> 服务器端口 </summary>
+        [Property(Name = "ServerPort", Column = "server_port", Type = "int", NotNull = false)]
+        public virtual int ServerPort { get; set; }
+        
+        /// <summary> 数据库名称 </summary>
+        [Property(Name = "DatabaseName", Column = "database_name", Type = "string", NotNull = true, Length = 64)]
+        public virtual string DatabaseName { get; set; }
+        
+        /// <summary> 用户名 </summary>
+        [Property(Name = "Username", Column = "username", Type = "string", NotNull = false, Length = 64)]
+        public virtual string Username { get; set; }
+        
+        /// <summary> 密码 </summary>
+        [Property(Name = "Password", Column = "password", Type = "string", NotNull = false, Length = 256)]
+        public virtual string Password { get; set; }
+        
+        /// <summary> 超时时间（秒） </summary>
+        [Property(Name = "Timeout", Column = "timeout", Type = "int", NotNull = false)]
+        public virtual int Timeout { get; set; }
 
         /// <summary>是否已删除（软删除）</summary>
         [Property(Name = "IsDeleted", Column = "is_deleted", Type = "bool", NotNull = true)]

@@ -32,13 +32,15 @@ namespace Beginor.GisHub.DataServices.Data {
                     Id = e.Id,
                     Name = e.Name,
                     DatabaseType = e.DatabaseType,
-                    Value = e.Value
+                    ServerAddress = e.ServerAddress,
+                    ServerPort = e.ServerPort,
+                    DatabaseName = e.DatabaseName,
+                    Username = e.Username,
+                    // Password = e.Password,
+                    Timeout = e.Timeout
                 })
                 .Skip(model.Skip).Take(model.Take)
                 .ToListAsync();
-            foreach (var item in data) {
-               item.Value = item.Value.Aggregate(new StringBuilder(), (sb, c) => sb.Append("*")).ToString();
-            }
             return new PaginatedResponseModel<ConnectionStringModel> {
                 Total = total,
                 Data = Mapper.Map<IList<ConnectionStringModel>>(data),
