@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from 'app-shared';
-import { TileMapService } from '../tile-maps.service';
+import { TileMapService } from '../tilemaps.service';
 
 @Component({
     selector: 'app-tile-map-list',

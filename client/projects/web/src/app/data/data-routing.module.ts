@@ -12,8 +12,8 @@ const routes: Routes = [
         loadChildren: () => import('./slpks/slpks.module').then(m => m.SlpkModule)
     },
     {
-        path: 'tile-maps',
-        loadChildren: () => import('./tile-maps/tile-maps.module').then(m => m.TileMapModule)
+        path: 'tilemaps',
+        loadChildren: () => import('./tilemaps/tilemaps.module').then(m => m.TileMapModule)
     },
     {
         path: 'connections',
@@ -21,7 +21,7 @@ const routes: Routes = [
     },
     {
         path: 'data-sources',
-        loadChildren: () => import('./data-sources/data-sources.module').then(m => m.DataSourceModule)
+        loadChildren: () => import('./datasources/data-sources.module').then(m => m.DataSourceModule)
     }
 ];
 // tslint:enable:max-line-length

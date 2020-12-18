@@ -7,7 +7,7 @@ import {
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
-import { TileMapService, TileMapModel } from '../tile-maps.service';
+import { TileMapService, TileMapModel } from '../tilemaps.service';
 import { ArcGisService } from '../../arcgis.service';
 
 @Component({
