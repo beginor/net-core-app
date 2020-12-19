@@ -11,7 +11,7 @@ import { TileMapService, TileMapModel } from '../tilemaps.service';
 import { ArcGisService } from '../../arcgis.service';
 
 @Component({
-    selector: 'app-tile-map-detail',
+    selector: 'app-tilemap-detail',
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.scss'],
     animations: [

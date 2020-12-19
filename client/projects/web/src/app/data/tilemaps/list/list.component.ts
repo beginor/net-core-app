@@ -5,7 +5,7 @@ import { AccountService } from 'app-shared';
 import { TileMapService } from '../tilemaps.service';
 
 @Component({
-    selector: 'app-tile-map-list',
+    selector: 'app-tilemap-list',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss']
 })

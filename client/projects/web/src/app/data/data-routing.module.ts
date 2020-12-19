@@ -20,7 +20,7 @@ const routes: Routes = [
         loadChildren: () => import('./connections/connections.module').then(m => m.ConnectionModule)
     },
     {
-        path: 'data-sources',
+        path: 'datasources',
         loadChildren: () => import('./datasources/datasources.module').then(m => m.DataSourceModule)
     }
 ];

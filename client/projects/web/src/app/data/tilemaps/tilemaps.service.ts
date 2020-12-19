@@ -20,7 +20,7 @@ export class TileMapService {
     public loading = false;
     public showPagination = false;
 
-    private baseUrl = `${this.apiRoot}/tile-maps`;
+    private baseUrl = `${this.apiRoot}/tilemaps`;
 
     constructor(
         private http: HttpClient,
