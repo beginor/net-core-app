@@ -65,7 +65,7 @@ export class DetailComponent implements OnInit {
             if (!!model) {
                 this.model = model;
                 this.connStr = this.connStrs.find(
-                    cs => cs.id === model.connectionString?.id
+                    cs => cs.id === model.connection?.id
                 );
             }
         }

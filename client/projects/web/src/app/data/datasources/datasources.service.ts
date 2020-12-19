@@ -88,7 +88,7 @@ export class DataSourceService {
         catch (ex) {
             console.error(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '创建数据源（数据表或视图）出错！' }
+                { type: 'danger', message: '创建数据源出错！' }
             );
             return;
         }
@@ -162,7 +162,7 @@ export interface DataSourceModel {
     /** 数据源名称 */
     name?: string;
     /** 数据库连接 */
-    connectionString?: { id?: string; name?: string };
+    connection?: { id?: string; name?: string };
     /** 数据表/视图架构 */
     schema?: string;
     /** 数据表/视图名称 */
