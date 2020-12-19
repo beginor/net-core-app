@@ -180,10 +180,20 @@ export interface ConnectionModel {
     id?: string;
     /** 连接名称 */
     name?: string;
-    /** 连接值 */
-    value?: string;
     /** 数据库类型（postgres、mssql、mysql、oracle、sqlite等） */
     databaseType?: string;
+    /** 服务器地址 */
+    serverAddress?: string;
+    /** 服务器端口 */
+    serverPort?: number;
+    /** 数据库名称 */
+    databaseName?: string;
+    /** 用户名 */
+    username?: string;
+    /** 密码 */
+    password?: string;
+    /** 超时时间（秒） */
+    timeout?: number;
 }
 
 /** 数据库连接 搜索参数 */
