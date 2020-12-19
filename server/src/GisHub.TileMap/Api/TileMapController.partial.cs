@@ -12,8 +12,8 @@ namespace Beginor.GisHub.TileMap.Api {
     partial class TileMapController {
 
         /// <summary>读取切片服务列表</summary>
-        [HttpGet("~/rest/services/tile-maps")]
-        [Authorize("tile_maps.read_tile_content")]
+        [HttpGet("~/rest/services/tilemaps")]
+        [Authorize("tilemaps.read_tile_content")]
         public async Task<ActionResult> GetTileMapList() {
             try {
                 var models = await repository.GetAllAsync();
@@ -27,8 +27,8 @@ namespace Beginor.GisHub.TileMap.Api {
         }
 
         /// <summary>读取切片服务信息</summary>
-        [HttpGet("~/rest/services/tile-maps/{id}/MapServer")]
-        [Authorize("tile_maps.read_tile_content")]
+        [HttpGet("~/rest/services/tilemaps/{id}/MapServer")]
+        [Authorize("tilemaps.read_tile_content")]
         public async Task<ActionResult> GetTileMapInfo(long id) {
             try {
                 var tileMapInfo  = await repository.GetTileMapInfoAsync(id);
@@ -46,8 +46,8 @@ namespace Beginor.GisHub.TileMap.Api {
         }
 
         /// <summary>读取切片服务的切片</summary>
-        [HttpGet("~/rest/services/tile-maps/{id}/MapServer/tile/{level:int}/{row:int}/{col:int}")]
-        [Authorize("tile_maps.read_tile_content")]
+        [HttpGet("~/rest/services/tilemaps/{id}/MapServer/tile/{level:int}/{row:int}/{col:int}")]
+        [Authorize("tilemaps.read_tile_content")]
         public async Task<IActionResult> GetTile(long id, int level, int row, int col) {
             try {
                 var modifiedTime = await repository.GetTileModifiedTimeAsync(id, level, row, col);

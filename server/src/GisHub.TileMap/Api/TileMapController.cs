@@ -14,7 +14,7 @@ namespace Beginor.GisHub.TileMap.Api {
 
     /// <summary>切片地图 服务接口</summary>
     [ApiController]
-    [Route("api/tile-maps")]
+    [Route("api/tilemaps")]
     public partial class TileMapController : Controller {
 
         private ILogger<TileMapController> logger;
@@ -40,7 +40,7 @@ namespace Beginor.GisHub.TileMap.Api {
         /// <response code="200">创建 切片地图 成功</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
-        [Authorize("tile_maps.create")]
+        [Authorize("tilemaps.create")]
         public async Task<ActionResult<TileMapModel>> Create(
             [FromBody]TileMapModel model
         ) {
@@ -50,7 +50,7 @@ namespace Beginor.GisHub.TileMap.Api {
                 return model;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not save {model.ToJson()} to tile_maps.");
+                logger.LogError(ex, $"Can not save {model.ToJson()} to tilemaps.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -60,7 +60,7 @@ namespace Beginor.GisHub.TileMap.Api {
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
-        [Authorize("tile_maps.delete")]
+        [Authorize("tilemaps.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
                 var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
@@ -68,7 +68,7 @@ namespace Beginor.GisHub.TileMap.Api {
                 return NoContent();
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not delete tile_maps by id {id} .");
+                logger.LogError(ex, $"Can not delete tilemaps by id {id} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -77,7 +77,7 @@ namespace Beginor.GisHub.TileMap.Api {
         /// <response code="200">成功, 分页返回结果</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("")]
-        [Authorize("tile_maps.read")]
+        [Authorize("tilemaps.read")]
         public async Task<ActionResult<PaginatedResponseModel<TileMapModel>>> Search(
             [FromQuery]TileMapSearchModel model
         ) {
@@ -86,7 +86,7 @@ namespace Beginor.GisHub.TileMap.Api {
                 return result;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not search tile_maps with {model.ToJson()} .");
+                logger.LogError(ex, $"Can not search tilemaps with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -98,7 +98,7 @@ namespace Beginor.GisHub.TileMap.Api {
         /// <response code="404"> 切片地图 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("tile_maps.read")]
+        [Authorize("tilemaps.read")]
         public async Task<ActionResult<TileMapModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);
@@ -108,7 +108,7 @@ namespace Beginor.GisHub.TileMap.Api {
                 return result;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not get tile_maps by id {id}.");
+                logger.LogError(ex, $"Can not get tilemaps by id {id}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -120,7 +120,7 @@ namespace Beginor.GisHub.TileMap.Api {
         /// <response code="404"> 切片地图 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
-        [Authorize("tile_maps.update")]
+        [Authorize("tilemaps.update")]
         public async Task<ActionResult<TileMapModel>> Update(
             [FromRoute]long id,
             [FromBody]TileMapModel model
@@ -135,7 +135,7 @@ namespace Beginor.GisHub.TileMap.Api {
                 return model;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not update tile_maps by id {id} with {model.ToJson()} .");
+                logger.LogError(ex, $"Can not update tilemaps by id {id} with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
