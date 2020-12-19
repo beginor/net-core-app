@@ -39,15 +39,65 @@
         <option value="sqlite">SQLite</option>
       </select>
     </div>
-    <div class="form-group" [class.is-valid]="connValue.valid"
-      [class.is-invalid]="!(connValue.valid || connValue.pristine)">
-      <label class="form-label text-muted" for="connValue">连接值  <i class="text-danger">*</i> </label>
-      <textarea class="form-control" type="text" id="connValue" name="connValue" rows="4"
-        placeholder="请输入连接内容 ..." [(ngModel)]="model.value"
-        [class.is-invalid]="!(connValue.valid || connValue.pristine)"
-        [class.is-valid]="connValue.valid"
-        required #connValue="ngModel" [disabled]="!editable"
-      ></textarea>
+    <div class="row">
+      <div class="col">
+        <div class="form-group" [class.is-valid]="serverAddress.valid"
+          [class.is-invalid]="!(serverAddress.valid || serverAddress.pristine)">
+          <label class="form-label text-muted" for="serverAddress">服务器地址 <i class="text-danger">*</i> </label>
+          <input class="form-control" type="text" id="serverAddress" name="serverAddress"
+            placeholder="请输入服务器地址 (IP或域名)..." [(ngModel)]="model.serverAddress"
+            [class.is-invalid]="!(serverAddress.valid || serverAddress.pristine)"
+            [class.is-valid]="serverAddress.valid"
+            required #serverAddress="ngModel" [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label class="form-label text-muted" for="serverPort">端口 </label>
+          <input class="form-control text-right" type="number" id="serverPort" name="serverPort"
+            placeholder="请输入端口 ..." [(ngModel)]="model.serverPort"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="form-group" [class.is-valid]="databaseName.valid"
+      [class.is-invalid]="!(databaseName.valid || databaseName.pristine)">
+      <label class="form-label text-muted" for="databaseName">数据库名称 <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="databaseName" name="databaseName"
+        placeholder="请输入数据库名称 ..." [(ngModel)]="model.databaseName"
+        [class.is-invalid]="!(databaseName.valid || databaseName.pristine)"
+        [class.is-valid]="databaseName.valid"
+        required #databaseName="ngModel" [disabled]="!editable"
+      />
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label class="form-label text-muted" for="username">用户名 </label>
+          <input class="form-control" type="text" id="username" name="username"
+            placeholder="请输入用户名 ..." [(ngModel)]="model.username"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label class="form-label text-muted" for="password">密码 </label>
+          <input class="form-control" type="text" id="password" name="password"
+            placeholder="请输入密码 ..." [(ngModel)]="model.password"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label text-muted" for="timeout">超时时间 </label>
+      <input class="form-control text-right" type="text" id="timeout" name="timeout"
+        placeholder="请输入超时时间 ..." [(ngModel)]="model.timeout"
+        [disabled]="!editable"
+      />
     </div>
   </div>
   <div *ngIf="info.privileges['connections.update'] && editable"
