@@ -36,6 +36,7 @@ namespace Beginor.GisHub.Test {
             startup.ConfigureServices(services);
             services.AddSingleton<IConfiguration>(config);
             services.AddSingleton(env);
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
             ServiceProvider = services.BuildServiceProvider(false);
         }
 

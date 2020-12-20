@@ -1,12 +1,19 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices {
 
     public interface IConnectionProvider {
 
-        Task<string> BuildConnectionStringAsync(long id);
+        string BuildConnectionString(ConnectionModel model);
 
-        Task<string[]> GetSchemasAsync(long id);
+        Task<IList<string>> GetSchemasAsync(ConnectionModel model);
+        
+        Task<IList<TableModel>> GetTablesAsync(ConnectionModel model, string schema);
+
+        Task<IList<ColumnModel>> GetColumnsAsync(ConnectionModel model, string schema, string tableName);
+
     }
 
 }
