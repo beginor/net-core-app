@@ -9,7 +9,7 @@ using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.Test.DataSource {
+namespace Beginor.GisHub.Test.DataSources {
 
     /// <summary>数据源（数据表或视图）仓储测试</summary>
     [TestFixture]
@@ -33,7 +33,7 @@ namespace Beginor.GisHub.Test.DataSource {
 
         [Test]
         public void _03_CanMapDataSource() {
-            var entity = new Beginor.GisHub.DataServices.Data.DataSource {
+            var entity = new DataSource {
                 Id = 1,
                 Connection = new Connection {
                     Id = 2,

@@ -38,6 +38,8 @@ namespace Beginor.GisHub.Entry {
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
+            services.AddSingleton<Beginor.GisHub.DataServices.IConnectionFactory, Beginor.GisHub.DataServices.ConnectionFactory>();
+            services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISConnectionProvider>();
         }
 
         private static void ConfigureApp(

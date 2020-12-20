@@ -25,25 +25,31 @@
         required #name="ngModel" [disabled]="!editable"
       />
     </div>
-    <div class="form-group" [class.is-valid]="connectionString.valid"
-      [class.is-invalid]="!(connectionString.valid || connectionString.pristine)">
-      <label class="form-label text-muted" for="connectionString">选择数据库连接 </label>
-      <select class="form-control" id="connectionString" name="connectionString"
-        required [(ngModel)]="connStr" #connectionString="ngModel"
-        [disabled]="!editable"
-        [class.is-invalid]="!(name.valid || name.pristine)"
-        [class.is-valid]="name.valid">
-        <option *ngFor="let str of connStrs" [ngValue]="str">
-          {{str.name}}
-        </option>
-      </select>
-    </div>
-    <div class="form-group" *ngIf="!!connStr && connStr.databaseType !== 'mysql'">
-      <label class="form-label text-muted" for="schema">架构 </label>
-      <input class="form-control" type="text" id="schema" name="schema"
-        placeholder="请输入数据表/视图架构 ..." [(ngModel)]="model.schema"
-        [disabled]="!editable"
-      />
+    <div class="row">
+      <div class="col">
+        <div class="form-group" [class.is-valid]="connectionString.valid"
+          [class.is-invalid]="!(connectionString.valid || connectionString.pristine)">
+          <label class="form-label text-muted" for="connectionString">选择数据库连接 </label>
+          <select class="form-control" id="connectionString" name="connectionString"
+            required [(ngModel)]="connStr" #connectionString="ngModel"
+            [disabled]="!editable"
+            [class.is-invalid]="!(name.valid || name.pristine)"
+            [class.is-valid]="name.valid">
+            <option *ngFor="let str of connStrs" [ngValue]="str">
+              {{str.name}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col" *ngIf="!!connStr && connStr.databaseType !== 'mysql'">
+        <div class="form-group">
+          <label class="form-label text-muted" for="schema">架构 </label>
+          <input class="form-control" type="text" id="schema" name="schema"
+            placeholder="请输入数据表/视图架构 ..." [(ngModel)]="model.schema"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <label class="form-label text-muted" for="tableName">数据表 <i class="text-danger">*</i> </label>
@@ -52,26 +58,25 @@
          [disabled]="!editable"
       />
     </div>
-    <div class="form-group">
-      <label class="form-label text-muted" for="primaryKeyColumn">主键列 <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="primaryKeyColumn" name="primaryKeyColumn"
-        placeholder="请输入主键列 ..." [(ngModel)]="model.primaryKeyColumn"
-        [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group">
-      <label class="form-label text-muted" for="displayColumn">显示列 <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="displayColumn" name="displayColumn"
-        placeholder="显示列" [(ngModel)]="model.displayColumn"
-        [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group">
-      <label class="form-label text-muted" for="geometryColumn">空间列 </label>
-      <input class="form-control" type="text" id="geometryColumn" name="geometryColumn"
-        placeholder="请输入空间列 ..." [(ngModel)]="model.geometryColumn"
-        [disabled]="!editable"
-      />
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label class="form-label text-muted" for="primaryKeyColumn">主键列 <i class="text-danger">*</i> </label>
+          <input class="form-control" type="text" id="primaryKeyColumn" name="primaryKeyColumn"
+            placeholder="请输入主键列 ..." [(ngModel)]="model.primaryKeyColumn"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label class="form-label text-muted" for="displayColumn">显示列 <i class="text-danger">*</i> </label>
+          <input class="form-control" type="text" id="displayColumn" name="displayColumn"
+            placeholder="显示列" [(ngModel)]="model.displayColumn"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <label class="form-label text-muted" for="presetCriteria">预置过滤条件 </label>
@@ -84,6 +89,13 @@
       <label class="form-label text-muted" for="defaultOrder">默认排序 </label>
       <input class="form-control" type="text" id="defaultOrder" name="defaultOrder"
         placeholder="请输入默认排序 ..." [(ngModel)]="model.defaultOrder"
+        [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group">
+      <label class="form-label text-muted" for="geometryColumn">空间列 </label>
+      <input class="form-control" type="text" id="geometryColumn" name="geometryColumn"
+        placeholder="请输入空间列 ..." [(ngModel)]="model.geometryColumn"
         [disabled]="!editable"
       />
     </div>
