@@ -1,6 +1,6 @@
 namespace Beginor.GisHub.DataServices {
 
-    public interface IConnectionFactory {
+    public interface IDataServiceFactory {
 
         IMetaDataProvider CreateMetadataProvider(string databaseType);
 

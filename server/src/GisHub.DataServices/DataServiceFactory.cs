@@ -4,11 +4,11 @@ using Beginor.AppFx.Core;
 
 namespace Beginor.GisHub.DataServices {
 
-    public class ConnectionFactory : Disposable, IConnectionFactory {
+    public class DataServiceFactory : Disposable, IDataServiceFactory {
 
         private IServiceScope scope;
 
-        public ConnectionFactory(IServiceProvider serviceProvider) {
+        public DataServiceFactory(IServiceProvider serviceProvider) {
             scope = serviceProvider.CreateScope();
         }
 

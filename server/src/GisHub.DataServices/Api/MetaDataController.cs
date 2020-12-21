@@ -18,12 +18,12 @@ namespace Beginor.GisHub.DataServices.Api {
 
         private ILogger<ConnectionController> logger;
         private IConnectionRepository repository;
-        private IConnectionFactory factory;
+        private IDataServiceFactory factory;
 
         public MetaDataController(
             ILogger<ConnectionController> logger,
             IConnectionRepository repository,
-            IConnectionFactory factory
+            IDataServiceFactory factory
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
