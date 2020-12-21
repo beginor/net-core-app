@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using Npgsql;
 using Beginor.AppFx.Core;
-using Beginor.GisHub.DataServices;
-using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices.PostGIS {
@@ -39,7 +36,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
         public async Task GetStatus(ConnectionModel model) {
             var connStr = BuildConnectionString(model);
             await using var conn = new NpgsqlConnection(connStr);
-            var dbNow = await conn.ExecuteScalarAsync<DateTime>("select now();");
+            await conn.ExecuteScalarAsync<DateTime>("select now();");
         }
 
         public async Task<IList<string>> GetSchemasAsync(ConnectionModel model) {
