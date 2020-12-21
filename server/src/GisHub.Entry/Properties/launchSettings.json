@@ -4,8 +4,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:5000",
-      "sslPort": 5001
+      "applicationUrl": "http://localhost:5000"
     }
   },
   "profiles": {
@@ -26,7 +25,7 @@
         "ASPNETCORE_PATHBASE": "/gishub",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://+:5000;https://+:5001"
+      "applicationUrl": "http://+:5000"
     }
   }
 }
