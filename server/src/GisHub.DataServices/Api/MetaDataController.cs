@@ -30,6 +30,30 @@ namespace Beginor.GisHub.DataServices.Api {
             this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
+        /// <summary>获取数据库连接状态(能否连接到数据库)</summary>
+        /// <response code="200">可以连接到数据库</response>
+        /// <response code="404">数据库连接 不存在</response>
+        /// <response code="500">无法连接到数据库</response>
+        [HttpGet("{id:long}/status")]
+        [Authorize("metadata.read_status")]
+        public async Task<ActionResult> GetStatus(
+            [FromRoute] long id
+        ) {
+            try {
+                var model = await repository.GetByIdAsync(id);
+                if (model == null) {
+                    return NotFound();
+                }
+                var provider = factory.CreateMetadataProvider(model.DatabaseType);
+                await provider.GetStatus(model);
+                return Ok();
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not get status by id {id} .");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
         /// <summary>
         /// 获取数据库架构 (schema) 元数据
         /// </summary>
@@ -37,7 +61,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="404">数据库连接 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}/schemas")]
-        // [Authorize("metadata.read_schemas")]
+        [Authorize("metadata.read_schemas")]
         public async Task<ActionResult<string[]>> GetSchemas(
             [FromRoute] long id
         ) {
@@ -63,7 +87,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="404"> 数据库连接 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}/tables")]
-        // [Authorize("metadata.read_tables")]
+        [Authorize("metadata.read_tables")]
         public async Task<ActionResult<TableModel[]>> GetTables(
             [FromRoute] long id,
             [FromQuery] string schema
@@ -90,7 +114,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="404"> 数据库连接 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}/tables/{tableName}/columns")]
-        // [Authorize("metadata.read_columns")]
+        [Authorize("metadata.read_columns")]
         public async Task<ActionResult<ColumnModel[]>> GetColumns(
             [FromRoute] long id,
             [FromRoute] string tableName,

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ using Beginor.GisHub.DataServices.Models;
 namespace Beginor.GisHub.DataServices.PostGIS {
 
     public class PostGISMetaDataProvider : Disposable, IMetaDataProvider {
-        
+
         public PostGISMetaDataProvider() { }
 
         protected override void Dispose(bool disposing) {
@@ -33,6 +34,12 @@ namespace Beginor.GisHub.DataServices.PostGIS {
                 CommandTimeout = model.Timeout
             };
             return builder.ConnectionString;
+        }
+
+        public async Task GetStatus(ConnectionModel model) {
+            var connStr = BuildConnectionString(model);
+            await using var conn = new NpgsqlConnection(connStr);
+            var dbNow = await conn.ExecuteScalarAsync<DateTime>("select now();");
         }
 
         public async Task<IList<string>> GetSchemasAsync(ConnectionModel model) {
@@ -97,7 +104,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             );
             return columns.ToList();
         }
-        
+
     }
 
 }
