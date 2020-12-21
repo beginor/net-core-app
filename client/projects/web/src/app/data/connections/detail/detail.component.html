@@ -32,11 +32,10 @@
         [class.is-invalid]="!(databaseType.valid || databaseType.pristine)"
         [class.is-valid]="databaseType.valid"
         required #databaseType="ngModel" [disabled]="!editable">
-        <option value="postgres">PostgreSQL</option>
+        <option value="postgis">PostgreSQL + PostGIS</option>
+        <option value="postgis">PostgreSQL + SDE</option>
         <option value="mssql">Microsoft SQL Server</option>
         <option value="mysql">MySQL / MariaDB</option>
-        <option value="oracle">Oracle</option>
-        <option value="sqlite">SQLite</option>
       </select>
     </div>
     <div class="row">
