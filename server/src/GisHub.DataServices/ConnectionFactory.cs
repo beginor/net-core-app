@@ -20,18 +20,22 @@ namespace Beginor.GisHub.DataServices {
             base.Dispose(disposing);
         }
 
-        public IConnectionProvider CreateProvider(string databaseType) {
+        public IMetaDataProvider CreateMetadataProvider(string databaseType) {
             string typeName;
             if (databaseType.Equals("postgis", StringComparison.OrdinalIgnoreCase)) {
-                typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISConnectionProvider,Beginor.GisHub.DataServices.PostGIS";
+                typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider,Beginor.GisHub.DataServices.PostGIS";
             }
             else {
                 throw new NotSupportedException(
                     $"Unsupported database type {databaseType}!"
                 );
             }
-            var provider = scope.ServiceProvider.GetService(Type.GetType(typeName));
-            return provider as IConnectionProvider;
+            var type = Type.GetType(typeName);
+            if (type == null) {
+                throw new InvalidOperationException($"Can not get type {type} !");
+            }
+            var provider = scope.ServiceProvider.GetService(type);
+            return provider as IMetaDataProvider;
         }
     }
 

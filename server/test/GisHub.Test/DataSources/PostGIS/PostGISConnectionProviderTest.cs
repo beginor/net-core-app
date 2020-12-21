@@ -13,7 +13,7 @@ namespace Beginor.GisHub.Test.DataSources.PostGIS {
 
     public class PostGISConnectionProviderTest : BaseTest {
 
-        private static PostGISConnectionProvider target;
+        private static PostGISMetaDataProvider target;
         private static IConnectionRepository repository;
 
         [OneTimeSetUp]
@@ -31,7 +31,7 @@ namespace Beginor.GisHub.Test.DataSources.PostGIS {
                     Timeout = 30
                 }));
             repository = mock.Object;
-            target = new PostGISConnectionProvider();
+            target = new PostGISMetaDataProvider();
         }
 
         [Test]

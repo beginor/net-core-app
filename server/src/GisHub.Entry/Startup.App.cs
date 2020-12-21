@@ -39,7 +39,7 @@ namespace Beginor.GisHub.Entry {
                 ServiceLifetime.Scoped
             );
             services.AddSingleton<Beginor.GisHub.DataServices.IConnectionFactory, Beginor.GisHub.DataServices.ConnectionFactory>();
-            services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISConnectionProvider>();
+            services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider>();
         }
 
         private static void ConfigureApp(

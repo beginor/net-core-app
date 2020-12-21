@@ -4,7 +4,7 @@ using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices {
 
-    public interface IConnectionProvider {
+    public interface IMetaDataProvider {
 
         string BuildConnectionString(ConnectionModel model);
 

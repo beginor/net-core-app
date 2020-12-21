@@ -11,9 +11,9 @@ using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices.PostGIS {
 
-    public class PostGISConnectionProvider : Disposable, IConnectionProvider {
+    public class PostGISMetaDataProvider : Disposable, IMetaDataProvider {
         
-        public PostGISConnectionProvider() { }
+        public PostGISMetaDataProvider() { }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
