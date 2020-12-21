@@ -5,7 +5,7 @@ using NHibernate.Mapping.Attributes;
 namespace Beginor.GisHub.DataServices.Data {
 
     /// <summary>数据源（数据表或视图）</summary>
-    [Class(Schema = "public", Table = "data_sources", Where = "is_deleted = false")]
+    [Class(Schema = "public", Table = "datasources", Where = "is_deleted = false")]
     public partial class DataSource : BaseEntity<long> {
 
         /// <summary>数据源id</summary>

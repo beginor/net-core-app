@@ -52,10 +52,10 @@ TableFilter:
     - aspnet_user_tokens
     - aspnet_users
     - slpks
-    - tile_maps
+    - tilemaps
   IncludeTables:
     - connections
-    - data_sources
+    - datasources
   IgnoreNoPKTable: true
   IgnoreView: true
 

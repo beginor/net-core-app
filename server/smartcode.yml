@@ -54,10 +54,10 @@ TableFilter:
     - app_client_errors
     - app_json_data
     - slpks
-    - tile_maps
+    - tilemaps
   IncludeTables:
     - connections
-    - data_sources
+    - datasources
   IgnoreNoPKTable: true
   IgnoreView: true
 
