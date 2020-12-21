@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,21 +19,39 @@ namespace Beginor.GisHub.DataServices.Api {
 
         private ILogger<ConnectionController> logger;
         private IConnectionRepository repository;
+        private IConnectionFactory factory;
 
         public ConnectionController(
             ILogger<ConnectionController> logger,
-            IConnectionRepository repository
+            IConnectionRepository repository,
+            IConnectionFactory factory
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 logger = null;
                 repository = null;
+                factory = null;
             }
             base.Dispose(disposing);
+        }
+
+        /// <summary>获取全部的数据库连接列表</summary>
+        [HttpGet("~/api/connections-list")]
+        [Authorize("connections.read")]
+        public async Task<ActionResult<List<ConnectionModel>>> GetAllForDisplayAsync() {
+            try {
+                var result = await repository.GetAllForDisplayAsync();
+                return result;
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, "Can not get connection-strings-list .");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
         }
 
         /// <summary>搜索 数据库连接 ， 分页返回结果</summary>
@@ -52,21 +71,6 @@ namespace Beginor.GisHub.DataServices.Api {
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
-
-        [HttpGet("~/api/connections-list")]
-        [Authorize("connections.read")]
-        /// <summary>获取全部的数据库连接列表</summary>
-        public async Task<ActionResult<List<ConnectionModel>>> GetAllForDisplayAsync() {
-            try {
-                var result = await repository.GetAllForDisplayAsync();
-                return result;
-            }
-            catch (Exception ex) {
-                logger.LogError(ex, "Can not get connection-strings-list .");
-                return this.InternalServerError(ex.GetOriginalMessage());
-            }
-        }
-
 
         /// <summary> 创建 数据库连接 </summary>
         /// <response code="200">创建 数据库连接 成功</response>
@@ -147,6 +151,87 @@ namespace Beginor.GisHub.DataServices.Api {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not update connections by id {id} with {model.ToJson()} .");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>
+        /// 获取数据库架构 (schema) 元数据
+        /// </summary>
+        /// <response code="200">获取成功，返回 获取数据库架构 (schema) 元数据列表</response>
+        /// <response code="404">数据库连接 不存在</response>
+        /// <response code="500">服务器内部错误</response>
+        [HttpGet("{id:long}/schemas")]
+        [Authorize("connections.read_metadata")]
+        public async Task<ActionResult<string[]>> GetSchemas(
+            [FromRoute] long id
+        ) {
+            try {
+                var model = await repository.GetByIdAsync(id);
+                if (model == null) {
+                    return NotFound();
+                }
+                var provider = factory.CreateProvider(model.DatabaseType);
+                var schemas = await provider.GetSchemasAsync(model);
+                return schemas.ToArray();
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not get schemas by id {id} .");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>
+        /// 获取数据库表/视图元数据
+        /// </summary>
+        /// <response code="200">获取成功，返回 数据库表/视图元数据列表</response>
+        /// <response code="404"> 数据库连接 不存在</response>
+        /// <response code="500">服务器内部错误</response>
+        [HttpGet("{id:long}/tables")]
+        [Authorize("connections.read_metadata")]
+        public async Task<ActionResult<TableModel[]>> GetTables(
+            [FromRoute] long id,
+            [FromQuery] string schema
+        ) {
+            try {
+                var model = await repository.GetByIdAsync(id);
+                if (model == null) {
+                    return NotFound();
+                }
+                var provider = factory.CreateProvider(model.DatabaseType);
+                var tables = await provider.GetTablesAsync(model, schema);
+                return tables.ToArray();
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not get tables by id {id} and schema {schema} .");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        /// <summary>
+        /// 获取数据库表/视图的列元数据
+        /// </summary>
+        /// <response code="200">获取成功，返回 数据库表/视图的列元数据列表</response>
+        /// <response code="404"> 数据库连接 不存在</response>
+        /// <response code="500">服务器内部错误</response>
+        [HttpGet("{id:long}/tables/{tableName}/columns")]
+        [Authorize("connections.read_metadata")]
+        public async Task<ActionResult<ColumnModel[]>> GetColumns(
+            [FromRoute] long id,
+            [FromRoute] string tableName,
+            [FromQuery] string schema
+        ) {
+            try {
+                var model = await repository.GetByIdAsync(id);
+                if (model == null) {
+                    return NotFound();
+                }
+                var provider = factory.CreateProvider(model.DatabaseType);
+                var columns = await provider.GetColumnsAsync(model, schema, tableName);
+                return columns.ToArray();
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not get tables by id {id} and schema {schema} and table {tableName}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }

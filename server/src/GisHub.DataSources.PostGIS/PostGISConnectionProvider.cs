@@ -38,9 +38,8 @@ namespace Beginor.GisHub.DataServices.PostGIS {
         public async Task<IList<string>> GetSchemasAsync(ConnectionModel model) {
             var connStr = BuildConnectionString(model);
             await using var conn = new NpgsqlConnection(connStr);
-            var sql = "select schema_name from information_schema.schemata"
-                + " where schema_owner = @username and schemata.catalog_name = @databaseName;";
-            var schemes = await conn.QueryAsync<string>(sql.ToString(), model);
+            var sql = "select distinct t.table_schema from information_schema.tables t;";
+            var schemes = await conn.QueryAsync<string>(sql);
             return schemes.ToList();
         }
 
@@ -54,15 +53,13 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             }
             var connStr = BuildConnectionString(model);
             await using var conn = new NpgsqlConnection(connStr);
-            var sql = "select t.tablename as table_name, obj_description(c.OID) as description, 'table' as type"
-                + " from pg_catalog.pg_tables t"
-                + " left join pg_catalog.pg_class c on c.relname = t.tablename and c.relkind = 'r'"
-                + " where t.schemaname = @schema"
-                + " union all"
-                + " select v.viewname as table_name, obj_description(c.OID) as description, 'view' as type"
-                + " from pg_catalog.pg_views v"
-                + " left join pg_catalog.pg_class c on c.relname = v.viewname and c.relkind = 'v'"
-                + " where v.schemaname = @schema";
+            var sql = "select"
+                + " t.table_schema,"
+                + " t.table_name,"
+                + " obj_description((t.table_schema||'.'||t.table_name)::regclass::oid) as description,"
+                + " t.table_type"
+                + " from information_schema.tables t"
+                + " where t.table_schema = @schema";
             var meta = await conn.QueryAsync<TableModel>(sql, new {schema});
             return meta.ToList();
         }
@@ -79,6 +76,8 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             var connStr = BuildConnectionString(model);
             await using var conn = new NpgsqlConnection(connStr);
             var sql = "select"
+                + " col.table_schema,"
+                + " col.table_name,"
                 + " col.column_name,"
                 + " col_description((col.table_schema || '.' || col.table_name)::regclass::oid, col.ordinal_position) as description,"
                 + " col.udt_name as data_type,"

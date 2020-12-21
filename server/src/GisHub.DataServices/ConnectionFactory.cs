@@ -6,15 +6,16 @@ namespace Beginor.GisHub.DataServices {
 
     public class ConnectionFactory : Disposable, IConnectionFactory {
 
-        private IServiceProvider serviceProvider;
+        private IServiceScope scope;
 
         public ConnectionFactory(IServiceProvider serviceProvider) {
-            this.serviceProvider = serviceProvider;
+            scope = serviceProvider.CreateScope();
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                serviceProvider = null;
+                scope.Dispose();
+                scope = null;
             }
             base.Dispose(disposing);
         }
@@ -29,7 +30,7 @@ namespace Beginor.GisHub.DataServices {
                     $"Unsupported database type {databaseType}!"
                 );
             }
-            var provider = this.serviceProvider.GetService(Type.GetType(typeName));
+            var provider = scope.ServiceProvider.GetService(Type.GetType(typeName));
             return provider as IConnectionProvider;
         }
     }

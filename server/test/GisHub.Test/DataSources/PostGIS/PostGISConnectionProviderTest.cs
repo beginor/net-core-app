@@ -64,6 +64,7 @@ namespace Beginor.GisHub.Test.DataSources.PostGIS {
             Assert.IsNotEmpty(tables);
             foreach (var table in tables) {
                 Console.WriteLine(table.ToJson());
+                Assert.AreEqual(table.TableSchema, "public");
                 Assert.IsNotNull(table.TableName);
             }
         }
@@ -75,6 +76,8 @@ namespace Beginor.GisHub.Test.DataSources.PostGIS {
             Assert.IsNotEmpty(columns);
             foreach (var col in columns) {
                 Console.WriteLine(col.ToJson());
+                Assert.AreEqual(col.TableSchema, "public");
+                Assert.AreEqual(col.TableName, "connections");
                 Assert.IsNotNull(col.ColumnName);
             }
         }
