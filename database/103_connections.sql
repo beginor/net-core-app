@@ -36,14 +36,14 @@ comment on column public.connections.name
 comment on column public.connections.database_type
     is '数据库类型（postgres、mssql、mysql、oracle、sqlite等）';
 
-comment on column public.connections.is_deleted
-    is '是否已删除（软删除）';
-
 comment on column public.connections.server_address
     is '服务器地址';
 
 comment on column public.connections.server_port
     is '服务器端口';
+
+comment on column public.connections.database_name
+    is '数据库名称';
 
 comment on column public.connections.username
     is '数据库用户名';
@@ -54,5 +54,5 @@ comment on column public.connections.password
 comment on column public.connections.timeout
     is '超时时间';
 
-comment on column public.connections.database_name
-    is '数据库名称';
+comment on column public.connections.is_deleted
+    is '是否已删除（软删除）';
