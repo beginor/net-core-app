@@ -15,38 +15,49 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="form-group" [class.is-valid]="name.valid"
-      [class.is-invalid]="!(name.valid || name.pristine)">
-      <label class="form-label text-muted" for="name">数据源名称  <i class="text-danger">*</i> </label>
+    <div class="form-group">
+      <label class="form-label text-muted" for="name">数据源名称 <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="name" name="name"
-        placeholder="请输入数据源名称 ..." [(ngModel)]="model.name"
-        [class.is-invalid]="!(name.valid || name.pristine)"
+        placeholder="请输入数据源名称 ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.name"
+        #name="ngModel"
+        [class.is-invalid]="!name.valid"
         [class.is-valid]="name.valid"
-        required #name="ngModel" [disabled]="!editable"
       />
     </div>
     <div class="row">
       <div class="col">
-        <div class="form-group" [class.is-valid]="connectionString.valid"
-          [class.is-invalid]="!(connectionString.valid || connectionString.pristine)">
-          <label class="form-label text-muted" for="connectionString">选择数据库连接 </label>
-          <select class="form-control" id="connectionString" name="connectionString"
-            required [(ngModel)]="connStr" #connectionString="ngModel"
+        <div class="form-group">
+          <label class="form-label text-muted" for="con">选择数据库连接 <i class="text-danger">*</i></label>
+          <select class="form-control custom-select" id="con" name="con"
+            aria-placeholder="qingxu" required
             [disabled]="!editable"
-            [class.is-invalid]="!(name.valid || name.pristine)"
-            [class.is-valid]="name.valid">
-            <option *ngFor="let str of connStrs" [ngValue]="str">
-              {{str.name}}
+            [(ngModel)]="connection"
+            #con="ngModel"
+            [class.is-invalid]="!con.valid"
+            [class.is-valid]="con.valid" (change)="onChangeConnection()">
+            <option *ngFor="let c of connections" [ngValue]="c">
+              {{c.name}}
             </option>
           </select>
         </div>
       </div>
-      <div class="col" *ngIf="!!connStr && connStr.databaseType !== 'mysql'">
+      <div class="col" *ngIf="!!connection && connection.databaseType !== 'mysql'">
         <div class="form-group">
-          <label class="form-label text-muted" for="schema">架构 </label>
+          <label class="form-label text-muted" for="schema">架构 <i class="text-danger">*</i></label>
           <input class="form-control" type="text" id="schema" name="schema"
-            placeholder="请输入数据表/视图架构 ..." [(ngModel)]="model.schema"
+            placeholder="请输入数据架构 ..." required
             [disabled]="!editable"
+            [(ngModel)]="model.schema"
+            #schema="ngModel"
+            [class.is-valid]="schema.valid"
+            [class.is-invalid]="!(schema.valid)"
+            [ngbTypeahead]="searchSchema" container="body"
+            #schemaInstance="ngbTypeahead"
+            (focus)="schemaFocus$.next($any($event).target.value)"
+            (click)="schemaClick$.next($any($event).target.value)"
+            (selectItem)="onChangeSchema($event)"
           />
         </div>
       </div>
@@ -54,9 +65,26 @@
     <div class="form-group">
       <label class="form-label text-muted" for="tableName">数据表 <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="tableName" name="tableName"
-         [(ngModel)]="model.tableName"
-         [disabled]="!editable"
-      />
+        placeholder="请输入数据表名称..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.tableName"
+        #tableName="ngModel"
+        [class.is-valid]="tableName.valid"
+        [class.is-invalid]="!(tableName.valid)"
+        [ngbTypeahead]="searchTable" container="body"
+        [inputFormatter]="tableFormatter"
+        [resultTemplate]="tableNameTemplate"
+        #tableInstance="ngbTypeahead"
+        (focus)="tableFocus$.next($any($event).target.value)"
+        (click)="tableClick$.next($any($event).target.value)"
+        />
+        <ng-template #tableNameTemplate let-r="result" let-t="term">
+          <ngb-highlight [result]="r.tableName" [term]="t"></ngb-highlight>
+          <span>{{r.tableType}}</span>
+          <span class="text-info ml-2" *ngIf="!!r.description">({{r.description}})</span>
+
+        </ng-template>
+        <!-- (selectItem)="onChangeTable($event)" -->
     </div>
     <div class="row">
       <div class="col">
