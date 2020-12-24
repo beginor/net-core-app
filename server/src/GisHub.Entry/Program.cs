@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Logging.Log4net;
@@ -32,10 +34,13 @@ namespace Beginor.GisHub.Entry {
                     var path = Path.Combine("config", "log.config");
                     logging.AddLog4net(path);
                 })
+                .ConfigureServices((context, services) => {
+                    var section = context.Configuration.GetSection("kestrel");
+                    if (section.Exists()) {
+                        services.Configure<KestrelServerOptions>(section);
+                    }
+                })
                 .ConfigureWebHostDefaults(webHost => {
-                    webHost.UseKestrel(kestrel => {
-                        kestrel.AddServerHeader = false;
-                    });
                     #if DEBUG
                     webHost.UseWebRoot("../../../client/dist/");
                     #endif
