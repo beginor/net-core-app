@@ -12,7 +12,7 @@
         <div class="card-header d-flex justify-content-between">
           <h5 class="card-title mb-0">切片地图</h5>
           <div class="btn-group btn-group-sm">
-            <button *ngIf="info.privileges['tile_maps.create']"
+            <button *ngIf="info.privileges['tilemaps.create']"
               type="button" class="btn btn-outline-primary"
               (click)="showDetail('0', true)">
               <svg-icon path="bi/plus"></svg-icon> 新建切片地图
@@ -95,17 +95,17 @@
                 <td class='text-center'>{{item.updatedAt | date:'yyyy-MM-dd'}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
-                    <button *ngIf="info.privileges['tile_maps.read']"
+                    <button *ngIf="info.privileges['tilemaps.read']"
                       class="btn btn-outline-secondary" ngbTooltip="详情" placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, false)">
                       <svg-icon path="bi/info-square"></svg-icon>
                     </button>
-                    <button *ngIf="info.privileges['tile_maps.update']"
+                    <button *ngIf="info.privileges['tilemaps.update']"
                       class="btn btn-outline-secondary" ngbTooltip="编辑" placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, true)">
                       <svg-icon path="bi/pencil-square"></svg-icon>
                     </button>
-                    <button *ngIf="info.privileges['tile_maps.delete']"
+                    <button *ngIf="info.privileges['tilemaps.delete']"
                         class="btn btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300"
                       (click)="delete(item.id)">
                       <svg-icon path="bi/trash"></svg-icon>

@@ -163,7 +163,7 @@ export class TileMapService {
         if (url.startsWith('/')) {
             url = `${location.protocol}//${location.host}${url}`;
         }
-        url = `${url}rest/services/tile-maps/${id}/MapServer`;
+        url = `${url}rest/services/tilemaps/${id}/MapServer`;
         return url;
     }
 
