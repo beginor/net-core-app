@@ -32,6 +32,8 @@ libpeerconnection.log
 npm-debug.log
 testem.log
 typings
+yarn.lock
+package-lock.json
 
 # e2e
 e2e/*.js
@@ -41,3 +43,11 @@ e2e/*.map
 # System Files
 .DS_Store
 Thumbs.db
+
+# c# related
+.idea
+.vs
+.vscode
+obj
+bin
+*.user
