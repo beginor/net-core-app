@@ -2,7 +2,7 @@
   "version": 8,
   "name": "landuse",
   "center": [111.74553099703218, 22.01361828397087],
-  "zoom": 7,
+  "zoom": 8,
   "sprite": "https://app.gdeei.cn/arcgis-js-api/mapbox/sprites/satellite-streets/sprite",
   "glyphs": "https://app.gdeei.cn/arcgis-js-api/mapbox/glyphs/{fontstack}/{range}.pbf",
   "sources": {
@@ -15,28 +15,31 @@
   },
   "layers": [
     {
-      "id": "A阳江市生态管控分区",
+      "id": "A阳江市生态管控分区/1-优先保护",
+      "filter": ["==", ["get", "GKQFL"], "1-优先保护"],
       "type": "fill",
       "source": "esri",
       "source-layer": "A阳江市生态管控分区",
       "layout": {},
       "paint": {
-        "fill-color": [
-          "match", ["get", "GKQFL"],
-          "1-优先保护", "#f03b20",
-          "3-一般管控", "#ffffb2",
-          "#cccccc"
-        ],
-        "fill-outline-color": [
-          "match", ["get", "GKQFL"],
-          "1-优先保护", "#bd0026",
-          "3-一般管控", "#fed976",
-          "#cccccc"
-        ]
+        "fill-color": "#f03b20",
+        "fill-outline-color": "#bd0026"
       }
     },
     {
-      "id": "roads",
+      "id": "A阳江市生态管控分区/3-一般管控",
+      "filter": ["==", ["get", "GKQFL"], "3-一般管控"],
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "A阳江市生态管控分区",
+      "layout": {},
+      "paint": {
+        "fill-color": "#ffffb2",
+        "fill-outline-color": "#fed976"
+      }
+    },
+    {
+      "id": "道路",
       "type": "line",
       "source": "esri",
       "source-layer": "roads",
