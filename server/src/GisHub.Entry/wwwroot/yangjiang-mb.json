@@ -1,0 +1,50 @@
+{
+  "version": 8,
+  "name": "landuse",
+  "center": [111.74553099703218, 22.01361828397087],
+  "zoom": 7,
+  "sprite": "https://app.gdeei.cn/arcgis-js-api/mapbox/sprites/satellite-streets/sprite",
+  "glyphs": "https://app.gdeei.cn/arcgis-js-api/mapbox/glyphs/{fontstack}/{range}.pbf",
+  "sources": {
+    "esri": {
+      "type": "vector",
+      "tiles": [
+        "http://localhost:5000/gishub/rest/services/tilemaps/1609232056640030977/MapServer/tile/{z}/{y}/{x}"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "A阳江市生态管控分区",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "A阳江市生态管控分区",
+      "layout": {},
+      "paint": {
+        "fill-color": [
+          "match", ["get", "GKQFL"],
+          "1-优先保护", "#f03b20",
+          "3-一般管控", "#ffffb2",
+          "#cccccc"
+        ],
+        "fill-outline-color": [
+          "match", ["get", "GKQFL"],
+          "1-优先保护", "#bd0026",
+          "3-一般管控", "#fed976",
+          "#cccccc"
+        ]
+      }
+    },
+    {
+      "id": "roads",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "roads",
+      "layout": { "line-cap": "round", "line-join": "round" },
+      "paint": {
+        "line-color": "#084594",
+        "line-width": 2.0
+      }
+    }
+  ]
+}

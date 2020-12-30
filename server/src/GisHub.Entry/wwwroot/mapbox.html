@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapbox Demo</title>
+  <style>html,body,#viewDiv { padding: 0; margin: 0; height: 100%; width: 100%; overflow: hidden; }</style>
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css' rel='stylesheet' />
+</head>
+<body>
+  <div id="viewDiv">
+  </div>
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiYmVnaW5vciIsImEiOiJjaXQyZmQ1M24wMGIzMnlwZDhqZG5heGIyIn0.cS4xQ_IUfmYUBHdt7i9qqg';
+    // get styles from query;
+    const arr = location.search.substring(1).split('&');
+    const query = {};
+    for (const item of arr) {
+      const itemArr = item.split('=');
+      query[itemArr[0]] = itemArr[1];
+    }
+    let style = query['style'];
+    if (!style) {
+      style = 'mapbox://styles/mapbox/satellite-streets-v11';
+    }
+    var map = new mapboxgl.Map({
+      container: 'viewDiv',
+      style,
+      transformRequest: (url, resourceType) => {
+        if (resourceType === 'Tile' && url.startsWith('http://localhost:5000/gishub/rest')) {
+          var headers = { 'X-Requested-With': 'XMLHttpRequest' };
+          jwt = localStorage.getItem('Bearer:/gishub/api');
+          if (!!jwt) {
+            headers['Authorization'] = `Bearer ${jwt}`;
+          }
+          return { url, headers };
+        }
+      }
+    });
+    Object.assign(window, { _mapview: map })
+    map.addControl(
+      new mapboxgl.NavigationControl({
+        showCompass: true,
+        showZoom: true,
+        visualizePitch: false
+      }),
+      'top-left'
+    );
+    map.on('click', e => {
+      const features = map.queryRenderedFeatures(e.point);
+      console.log(features);
+    });
+  </script>
+</body>
+</html>

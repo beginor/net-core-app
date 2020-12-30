@@ -1,0 +1,34 @@
+{
+  "version": 8,
+  "name": "landuse",
+  "center": [113.307649675, 23.1200491021],
+  "zoom": 2,
+  "sprite": "https://app.gdeei.cn/arcgis-js-api/mapbox/sprites/satellite-streets/sprite",
+  "glyphs": "https://app.gdeei.cn/arcgis-js-api/mapbox/glyphs/{fontstack}/{range}.pbf",
+  "sources": {
+    "esri": {
+      "type": "vector",
+      "tiles": ["http://localhost:5000/gishub/rest/services/tilemaps/1609209358925030404/MapServer/tile/{z}/{y}/{x}"],
+      "minzoom": 1,
+      "maxzoom": 2
+    }
+  },
+  "layers": [
+    {
+      "id": "earthquakes_2017",
+      "type": "circle",
+      "source": "esri",
+      "source-layer": "earthquakes_2017",
+      "layout": {},
+      "paint": {
+        "circle-color": "#38A800",
+        "circle-radius": [
+          "interpolate", ["linear"],
+          ["get", "mag"],
+          4, 4,
+          8, 35
+        ]
+      }
+    }
+  ]
+}

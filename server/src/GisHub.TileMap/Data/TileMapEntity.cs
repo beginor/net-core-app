@@ -5,7 +5,7 @@ using NHibernate.Mapping.Attributes;
 namespace Beginor.GisHub.TileMap.Data {
 
     /// <summary>切片地图</summary>
-    [Class(Schema = "public", Table = "tile_maps", Where = "is_deleted = false")]
+    [Class(Schema = "public", Table = "tilemaps", Where = "is_deleted = false")]
     public partial class TileMapEntity : BaseEntity<long> {
 
         /// <summary>切片地图id</summary>
