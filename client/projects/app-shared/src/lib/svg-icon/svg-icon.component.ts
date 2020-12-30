@@ -10,7 +10,13 @@ import { SvgIconService } from './svg-icon.service';
 })
 export class SvgIconComponent implements AfterViewInit {
 
-    @Input() public path!: string;
+    // tslint:disable-next-line: variable-name
+    private iconPath = '';
+    public get path(): string { return this.iconPath; }
+    @Input() public set path(val: string) {
+        this.iconPath = val;
+        this.ngAfterViewInit();
+    }
     @Input() public size = '1rem';
     @Input() public iconClass: string | undefined;
 
