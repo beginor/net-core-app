@@ -10,7 +10,14 @@ import { SvgIconService } from './svg-icon.service';
 })
 export class SvgIconComponent implements AfterViewInit {
 
-    @Input() public path!: string;
+    private iconPath = '';
+    public get path(): string { return this.iconPath; }
+    @Input() public set path(val: string) {
+        this.iconPath = val;
+        if (!!this.iconPath) {
+            this.updateIcon();
+        }
+    }
     @Input() public size = '1rem';
     @Input() public iconClass: string | undefined;
 
@@ -20,8 +27,15 @@ export class SvgIconComponent implements AfterViewInit {
     ) { }
 
     public async ngAfterViewInit(): Promise<void> {
-        let svg = this.el.nativeElement.firstChild as SVGElement;
+        const svg = this.el.nativeElement.firstChild as SVGElement;
         this.setIconProps(svg);
+        if (!!this.iconPath) {
+            await this.updateIcon();
+        }
+    }
+
+    private async updateIcon(): Promise<void> {
+        let svg = this.el.nativeElement.firstChild as SVGElement;
         const xml = await this.svg.loadSvgFile(this.path);
         svg.remove();
         this.el.nativeElement.innerHTML = xml;
