@@ -25,6 +25,7 @@ export class DetailComponent implements OnInit {
     public title = '';
     public editable = false;
     public model: ConnectionModel = {};
+    public showPass = false;
 
     private id = '';
     private reloadList = false;

@@ -17,9 +17,9 @@
         [routerLink]="node.url" routerLinkActive="active">
         {{node.title}}
       </a>
-      <template #httpLinkPopupTpl>
+      <ng-template #httpLinkPopupTpl>
         <a class="nav-sublink" [href]="node.url" [target]="node.target">{{node.title}}</a>
-      </template>
+      </ng-template>
     </li>
   </ng-container>
   <ng-container *ngIf="node.children">
