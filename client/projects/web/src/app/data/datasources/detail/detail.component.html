@@ -22,7 +22,7 @@
         [disabled]="!editable"
         [(ngModel)]="model.name"
         #name="ngModel"
-        [class.is-invalid]="!name.valid"
+        [class.is-invalid]="!(name.valid || name.pristine)"
         [class.is-valid]="name.valid"
       />
     </div>
@@ -35,7 +35,7 @@
             [disabled]="!editable"
             [(ngModel)]="connection"
             #con="ngModel"
-            [class.is-invalid]="!con.valid"
+            [class.is-invalid]="!(con.valid || con.pristine)"
             [class.is-valid]="con.valid" (change)="onChangeConnection()">
             <option *ngFor="let c of connections" [ngValue]="c">
               {{c.name}}
@@ -52,7 +52,7 @@
             [(ngModel)]="model.schema"
             #schema="ngModel"
             [class.is-valid]="schema.valid"
-            [class.is-invalid]="!(schema.valid)"
+            [class.is-invalid]="!(schema.valid || schema.pristine)"
             [ngbTypeahead]="searchSchema" container="body"
             #schemaInstance="ngbTypeahead"
             (focus)="schemaFocus$.next($any($event).target.value)"
@@ -70,7 +70,7 @@
         [(ngModel)]="model.tableName"
         #tableName="ngModel"
         [class.is-valid]="tableName.valid"
-        [class.is-invalid]="!(tableName.valid)"
+        [class.is-invalid]="!(tableName.valid || tableName.pristine)"
         [ngbTypeahead]="searchTable" container="body"
         [inputFormatter]="tableFormatter"
         [resultTemplate]="tableNameTemplate"
