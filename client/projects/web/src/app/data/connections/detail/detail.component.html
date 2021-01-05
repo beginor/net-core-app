@@ -28,7 +28,7 @@
     <div class="form-group" [class.is-valid]="databaseType.valid"
       [class.is-invalid]="!(databaseType.valid || databaseType.pristine)">
       <label class="form-label text-muted" for="databaseType">数据库类型  <i class="text-danger">*</i> </label>
-      <select class="form-control" type="text" id="databaseType" name="databaseType" [(ngModel)]="model.databaseType"
+      <select class="form-control custom-select" type="text" id="databaseType" name="databaseType" [(ngModel)]="model.databaseType"
         [class.is-invalid]="!(databaseType.valid || databaseType.pristine)"
         [class.is-valid]="databaseType.valid"
         required #databaseType="ngModel" [disabled]="!editable">
