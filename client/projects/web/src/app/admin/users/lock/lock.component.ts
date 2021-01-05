@@ -62,7 +62,7 @@ export class LockComponent implements OnInit {
     }
 
     public async onAnimationEvent(e: AnimationEvent): Promise<void> {
-        if (e.phaseName === 'done' && e.toState === 'void') {
+        if (e.fromState === '' && e.toState === 'void') {
             await this.router.navigate(['../..'], { relativeTo: this.route });
             // if (this.reloadList) {
             //     this.vm.search();

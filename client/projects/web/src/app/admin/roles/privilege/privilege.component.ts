@@ -42,7 +42,7 @@ export class PrivilegeComponent implements OnInit {
     }
 
     public async onAnimationEvent(e: AnimationEvent): Promise<void> {
-        if (e.phaseName === 'done' && e.toState === 'void') {
+        if (e.fromState === '' && e.toState === 'void') {
             await this.router.navigate(['../../'], { relativeTo: this.route });
         }
     }
