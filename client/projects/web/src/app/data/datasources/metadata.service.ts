@@ -26,9 +26,11 @@ export class MetadataService {
         return schemas;
     }
 
-    public async getTables(id: string, schema: string): Promise<TableModel[]> {
-        const params = new HttpParams()
-            .set('schema', schema);
+    public async getTables(id: string, schema?: string): Promise<TableModel[]> {
+        let params = new HttpParams();
+        if (!!schema) {
+            params = params.set('schema', schema);
+        }
         const tables = await this.http.get<TableModel[]>(
             `${this.url}/${id}/tables`,
             { params }
@@ -36,7 +38,7 @@ export class MetadataService {
         return tables;
     }
 
-    public async GetColumns(
+    public async getColumns(
         id: string,
         schema: string,
         tableName: string
@@ -62,7 +64,7 @@ export interface TableModel {
 export interface ColumnModel {
     tableSchema?: string;
     tableName?: string;
-    columnName?: string;
+    columnName: string;
     description?: string;
     dataType?: string;
     length?: number;
