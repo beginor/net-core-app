@@ -36,7 +36,9 @@
             [(ngModel)]="connection"
             #con="ngModel"
             [class.is-invalid]="!(con.valid || con.pristine)"
-            [class.is-valid]="con.valid" (change)="onChangeConnection()">
+            [class.is-valid]="con.valid"
+            (change)="onSelectConnection()"
+            >
             <option *ngFor="let c of connections" [ngValue]="c">
               {{c.name}}
             </option>
@@ -57,7 +59,7 @@
             #schemaInstance="ngbTypeahead"
             (focus)="schemaFocus$.next($any($event).target.value)"
             (click)="schemaClick$.next($any($event).target.value)"
-            (selectItem)="onChangeSchema($event)"
+            (selectItem)="onSelectSchema($event)"
           />
         </div>
       </div>
@@ -67,7 +69,7 @@
       <input class="form-control" type="text" id="tableName" name="tableName"
         placeholder="请输入数据表名称..." required
         [disabled]="!editable"
-        [(ngModel)]="model.tableName"
+        [(ngModel)]="table"
         #tableName="ngModel"
         [class.is-valid]="tableName.valid"
         [class.is-invalid]="!(tableName.valid || tableName.pristine)"
@@ -77,31 +79,57 @@
         #tableInstance="ngbTypeahead"
         (focus)="tableFocus$.next($any($event).target.value)"
         (click)="tableClick$.next($any($event).target.value)"
+        (selectItem)="onSelectTable($event)"
         />
         <ng-template #tableNameTemplate let-r="result" let-t="term">
+          <svg-icon class="mr-1" [path]="getTableIcon(r.tableType)"></svg-icon>
           <ngb-highlight [result]="r.tableName" [term]="t"></ngb-highlight>
-          <span>{{r.tableType}}</span>
           <span class="text-info ml-2" *ngIf="!!r.description">({{r.description}})</span>
-
         </ng-template>
-        <!-- (selectItem)="onChangeTable($event)" -->
     </div>
     <div class="row">
       <div class="col">
         <div class="form-group">
           <label class="form-label text-muted" for="primaryKeyColumn">主键列 <i class="text-danger">*</i> </label>
           <input class="form-control" type="text" id="primaryKeyColumn" name="primaryKeyColumn"
-            placeholder="请输入主键列 ..." [(ngModel)]="model.primaryKeyColumn"
+            placeholder="请输入主键列 ..." required
             [disabled]="!editable"
+            [(ngModel)]="pkColumn"
+            #primaryKeyColumn="ngModel"
+            [class.is-valid]="primaryKeyColumn.valid"
+            [class.is-invalid]="!(primaryKeyColumn.valid || primaryKeyColumn.pristine)"
+            [ngbTypeahead]="searchPkColumns" container="body"
+            #pkColInstance="ngbTypeahead"
+            [resultTemplate]="colTemplate"
+            [inputFormatter]="colFormater"
+            (focus)="pkColFocus$.next($any($event).target.value)"
+            (click)="pkColClick$.next($any($event).target.value)"
+            (selectItem)="onSelectPkColumn($event)"
           />
+          <ng-template #colTemplate let-r="result" let-t="term">
+            <ngb-highlight [result]="r.columnName" [term]="t"></ngb-highlight>
+            <span class="text-muted mx-1">({{r.dataType}})</span>
+            <span class="text-info ml-2" *ngIf="!!r.description">({{r.description}})</span>
+          </ng-template>
         </div>
       </div>
       <div class="col">
         <div class="form-group">
-          <label class="form-label text-muted" for="displayColumn">显示列 <i class="text-danger">*</i> </label>
+          <label class="form-label text-muted" for="displayColumn">默认显示列 <i class="text-danger">*</i> </label>
           <input class="form-control" type="text" id="displayColumn" name="displayColumn"
-            placeholder="显示列" [(ngModel)]="model.displayColumn"
+            placeholder="请输入默认显示列..." required
             [disabled]="!editable"
+            [(ngModel)]="displayColumn"
+            #displayColumnModel="ngModel"
+            [class.is-valid]="displayColumnModel.valid"
+            [class.is-invalid]="!(displayColumnModel.valid || displayColumnModel.pristine)"
+            [ngbTypeahead]="searchDisplayColumns"
+            #displayColInstance="ngbTypeahead" container="body"
+            [resultTemplate]="colTemplate"
+            [inputFormatter]="colFormater"
+            (focus)="displayColFocus$.next($any($event).target.value)"
+            (click)="displayColClick$.next($any($event).target.value)"
+            (selectItem)="onSelectDisplayColumn($event)"
           />
         </div>
       </div>
@@ -123,8 +151,16 @@
     <div class="form-group">
       <label class="form-label text-muted" for="geometryColumn">空间列 </label>
       <input class="form-control" type="text" id="geometryColumn" name="geometryColumn"
-        placeholder="请输入空间列 ..." [(ngModel)]="model.geometryColumn"
+        placeholder="请输入空间列 ..."
         [disabled]="!editable"
+        [(ngModel)]="geoColumn"
+        [ngbTypeahead]="searchGeoColumns" container="body"
+        #geoColInstance="ngbTypeahead"
+        [resultTemplate]="colTemplate"cd
+        [inputFormatter]="colFormater"
+        (focus)="geoColFocus$.next($any($event).target.value)"
+        (click)="geoColClick$.next($any($event).target.value)"
+        (selectItem)="onSelectGeoColumn($event)"
       />
     </div>
   </div>
