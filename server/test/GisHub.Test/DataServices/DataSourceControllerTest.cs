@@ -1,7 +1,7 @@
 using Beginor.GisHub.DataServices.Api;
 using NUnit.Framework;
 
-namespace Beginor.GisHub.Test.DataSources {
+namespace Beginor.GisHub.Test.DataServices {
 
     [TestFixture]
     public class DataSourceControllerTest : BaseTest<DataSourceController> {

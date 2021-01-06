@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GisHub.Gmap", "test\GisHub.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GisHub.DataServices", "src\GisHub.DataServices\GisHub.DataServices.csproj", "{332F67BF-5D12-417E-88B0-E83DBFD98B1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GisHub.DataSources.PostGIS", "src\GisHub.DataSources.PostGIS\GisHub.DataSources.PostGIS.csproj", "{ACBEC074-0712-4702-A7E3-E83EC3AE2525}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GisHub.DataServices.PostGIS", "src\GisHub.DataServices.PostGIS\GisHub.DataServices.PostGIS.csproj", "{ACBEC074-0712-4702-A7E3-E83EC3AE2525}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

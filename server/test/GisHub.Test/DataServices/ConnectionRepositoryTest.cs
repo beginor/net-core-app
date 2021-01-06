@@ -8,7 +8,7 @@ using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.Test.DataSources {
+namespace Beginor.GisHub.Test.DataServices {
 
     /// <summary>数据库连接仓储测试</summary>
     [TestFixture]
