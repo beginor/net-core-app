@@ -144,7 +144,7 @@ namespace Beginor.GisHub.TileMap.Data {
             var text = File.ReadAllText(entity.MapTileInfoPath)
                 .Replace("#name#", entity.Name)
                 .Replace("#description#", $"{entity.Name} Tile Server")
-                .Replace("#copyright#", $"{entity.Name} Tile Server by GisHub");
+                .Replace("#copyright#", $"{entity.Name} Tile Server by GISHub");
             return JsonDocument.Parse(text).RootElement;
         }
 

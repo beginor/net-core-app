@@ -22,7 +22,11 @@ namespace Beginor.GisHub.DataServices.Data {
             DataSourceSearchModel model
         ) {
             var query = Session.Query<DataSource>();
-            // todo: 添加自定义查询；
+            if (model.Keywords.IsNotNullOrEmpty()) {
+                query = query.Where(
+                    ds => ds.Name.Contains(model.Keywords) || ds.TableName.Contains(model.Keywords)
+                );
+            }
             var total = await query.LongCountAsync();
             var data = await query.OrderByDescending(e => e.Id)
                 .Skip(model.Skip).Take(model.Take)

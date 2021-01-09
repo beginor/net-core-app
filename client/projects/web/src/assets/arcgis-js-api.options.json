@@ -1,6 +1,6 @@
 {
-  "url": "https://app.gdeei.cn/arcgis-js-api/library/4.17/init.js",
-  "css": "https://app.gdeei.cn/arcgis-js-api/library/4.17/esri/themes/light/main.css",
+  "url": "http://localhost/arcgis-js-api/library/4.18/init.js",
+  "css": "http://localhost/arcgis-js-api/library/4.18/esri/themes/light/main.css",
   "dojoConfig": {
     "locale": "zh-cn",
     "async": true,

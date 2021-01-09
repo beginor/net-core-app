@@ -36,6 +36,9 @@ namespace Beginor.GisHub.DataServices.Models {
     }
 
     /// <summary>数据源（数据表或视图）搜索参数</summary>
-    public partial class DataSourceSearchModel : PaginatedRequestModel { }
+    public partial class DataSourceSearchModel : PaginatedRequestModel {
+        /// <summary>搜索数据源名称或者数据表的关键字</summary>
+        public string Keywords { get; set; }
+    }
 
 }

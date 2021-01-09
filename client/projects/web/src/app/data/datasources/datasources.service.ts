@@ -190,6 +190,8 @@ export interface DataSourceSearchModel {
     skip: number;
     /** 取多少条记录 */
     take: number;
+    /** 数据源名称或者数据表关键字 */
+    keywords?: string;
 }
 
 /** 数据源（数据表或视图） 搜索结果 */
