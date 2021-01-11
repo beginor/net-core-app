@@ -1,8 +1,8 @@
-import { browser, by, element, promise } from 'protractor';
+import { browser, by, element } from 'protractor';
 
 export class AppPage {
-    public navigateTo(): Promise<void> {
-        return browser.get(browser.baseUrl) as Promise<void>;
+    public async navigateTo(): Promise<unknown> {
+        return browser.get(browser.baseUrl) as Promise<unknown>;
     }
 
     public getTitleText(): Promise<string> {

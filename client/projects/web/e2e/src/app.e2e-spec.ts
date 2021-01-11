@@ -8,9 +8,9 @@ describe('net-core-app App', () => {
         page = new AppPage();
     });
 
-    it('should display Navbar Brand', () => {
-        page.navigateTo();
-        expect(page.getNavbarBrand()).toContain('Angular App Seed');
+    it('should display Navbar Brand', async () => {
+        await page.navigateTo();
+        expect(await page.getNavbarBrand()).toContain('Angular App Seed');
     });
 
 });
