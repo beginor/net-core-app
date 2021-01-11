@@ -154,6 +154,18 @@ export class SlpkService {
         }
     }
 
+    public getSlpkLayerUrl(id: string): string {
+        if (!id) {
+            return '';
+        }
+        let url = this.apiRoot.substring(0, this.apiRoot.length - 3);
+        if (url.startsWith('/')) {
+            url = `${location.protocol}//${location.host}${url}`;
+        }
+        url = `${url}/rest/services/slpks/${id}/SceneServer`;
+        return url;
+    }
+
 }
 
 /** slpk 航拍模型 */

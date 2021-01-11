@@ -155,7 +155,7 @@ export class TileMapService {
         }
     }
 
-    public getLayerUrl(id: string): string {
+    public getTileLayerUrl(id: string): string {
         if (!id) {
             return '';
         }

@@ -81,6 +81,12 @@
         </div>
       </div>
     </div>
+    <ng-container *ngIf="!editable">
+      <div class="slpk-preview-map border border-darken-1" #mapPreView></div>
+      <div class="row text-muted px-3" style="font-size: .6rem;">
+        服务地址：<a [href]="getSlpkLayerUrl()">{{getSlpkLayerUrl()}}</a> .
+      </div>
+    </ng-container>
   </div>
   <div *ngIf="info.privileges['app_privileges.update'] && editable"
     class="card-footer d-flex justify-content-between">

@@ -28,7 +28,7 @@ export class DetailComponent implements AfterViewInit, OnInit, OnDestroy {
     public editable = false;
     public model: TileMapModel = {};
     @ViewChild('mapPreView', { static: false })
-    private mapElRef!: ElementRef<HTMLDivElement>;
+    public mapElRef!: ElementRef<HTMLDivElement>;
 
     private id = '';
     private reloadList = false;
@@ -62,14 +62,12 @@ export class DetailComponent implements AfterViewInit, OnInit, OnDestroy {
         if (!this.mapElRef) {
             return;
         }
-        const url = this.getLayerUrl();
+        const url = this.getTileLayerUrl();
         if (!url) {
             return;
         }
-        this.arcgis.loadJsApi().then(
-            () => this.arcgis.createLayerPreview(
-                this.mapElRef.nativeElement, url
-            )
+        this.arcgis.createTileLayerPreview(
+            this.mapElRef.nativeElement, url
         ).then(mapview => this.mapview = mapview);
     }
 
@@ -112,11 +110,11 @@ export class DetailComponent implements AfterViewInit, OnInit, OnDestroy {
         this.goBack();
     }
 
-    public getLayerUrl(): string {
+    public getTileLayerUrl(): string {
         if (!this.id) {
             return '';
         }
-        return this.vm.getLayerUrl(this.id);
+        return this.vm.getTileLayerUrl(this.id);
     }
 
 }

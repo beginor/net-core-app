@@ -48,6 +48,13 @@ namespace Beginor.GisHub.Slpk.Api {
         }
 
         /// <summary>获取 slpk 场景节点信息</summary>
+        [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/layers/0/nodes/{node}")]
+        [Authorize("slpks.read_slpk_scene")]
+        public Task<ActionResult> GetLayer0NodeIndex(long id, string node) {
+            return GetNodeIndex(id, node);
+        }
+
+        /// <summary>获取 slpk 场景节点信息</summary>
         [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/nodes/{node}")]
         [Authorize("slpks.read_slpk_scene")]
         public async Task<ActionResult> GetNodeIndex(long id, string node) {
@@ -64,6 +71,13 @@ namespace Beginor.GisHub.Slpk.Api {
                 logger.LogError(ex, $"Can not get slpk {id} node {node} index!");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
+        }
+
+        /// <summary>获取 slpk 场景节点要素</summary>
+        [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/layers/0/nodes/{node}/features/{feature}")]
+        [Authorize("slpks.read_slpk_scene")]
+        public Task<ActionResult> GetLayer0NodeFeature(long id, string node, string feature) {
+            return GetNodeFeature(id, node, feature);
         }
 
         /// <summary>获取 slpk 场景节点要素</summary>
@@ -86,6 +100,12 @@ namespace Beginor.GisHub.Slpk.Api {
         }
 
         /// <summary>获取 slpk 场景节点坐标</summary>
+        [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/layers/0/nodes/{node}/geometries/{geometry}")]
+        [Authorize("slpks.read_slpk_scene")]
+        public Task<ActionResult> GetLayer0NodeGeometry(long id, string node, string geometry) {
+            return GetNodeGeometry(id, node, geometry);
+        }
+        /// <summary>获取 slpk 场景节点坐标</summary>
         [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/nodes/{node}/geometries/{geometry}")]
         [Authorize("slpks.read_slpk_scene")]
         public async Task<ActionResult> GetNodeGeometry(long id, string node, string geometry) {
@@ -105,6 +125,12 @@ namespace Beginor.GisHub.Slpk.Api {
         }
 
         /// <summary>获取 slpk 场景节点共享资源</summary>
+        [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/layers/0/nodes/{node}/shared")]
+        [Authorize("slpks.read_slpk_scene")]
+        public Task<ActionResult> GetLayer0NodeShared(long id, string node) {
+            return GetNodeShared(id, node);
+        }
+        /// <summary>获取 slpk 场景节点共享资源</summary>
         [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/nodes/{node}/shared")]
         [Authorize("slpks.read_slpk_scene")]
         public async Task<ActionResult> GetNodeShared(long id, string node) {
@@ -121,6 +147,13 @@ namespace Beginor.GisHub.Slpk.Api {
                 logger.LogError(ex, $"Can not get slpk {id} node {node} sharedResource.json!");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
+        }
+
+        /// <summary>获取 slpk 场景节点贴图</summary>
+        [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/layers/0/nodes/{node}/textures/{texture}")]
+        [Authorize("slpks.read_slpk_scene")]
+        public Task<ActionResult> GetLayer0NodeTexture(long id, string node, string texture) {
+            return GetNodeTexture(id, node, texture);
         }
 
         /// <summary>获取 slpk 场景节点贴图</summary>
