@@ -9,7 +9,7 @@ using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DataServices.PostGIS;
 
-namespace Beginor.GisHub.Test.GisHub.DataServices.PostGIS {
+namespace Beginor.GisHub.Test.DataServices.PostGIS {
 
     public class PostGISConnectionProviderTest : BaseTest {
 

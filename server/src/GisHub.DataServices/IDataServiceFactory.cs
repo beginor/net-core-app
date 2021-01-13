@@ -4,6 +4,8 @@ namespace Beginor.GisHub.DataServices {
 
         IMetaDataProvider CreateMetadataProvider(string databaseType);
 
+        IDataSourceReader CreateDataSourceReader(string databaseType);
+
     }
 
 }

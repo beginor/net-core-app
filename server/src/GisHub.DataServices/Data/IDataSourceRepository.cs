@@ -12,6 +12,10 @@ namespace Beginor.GisHub.DataServices.Data {
             DataSourceSearchModel model
         );
 
+        Task<DataSourceCacheItem> GetCacheItemByIdAsync(
+            long id
+        );
+
     }
 
 }

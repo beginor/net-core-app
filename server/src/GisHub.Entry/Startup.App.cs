@@ -40,6 +40,8 @@ namespace Beginor.GisHub.Entry {
             );
             services.AddSingleton<Beginor.GisHub.DataServices.IDataServiceFactory, Beginor.GisHub.DataServices.DataServiceFactory>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider>();
+            services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISDataSourceReader>();
+            services.AddSingleton<ConcurrentDictionary<long, Beginor.GisHub.DataServices.Data.DataSourceCacheItem>>();
         }
 
         private static void ConfigureApp(

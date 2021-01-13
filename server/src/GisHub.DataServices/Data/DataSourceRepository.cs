@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -15,7 +16,28 @@ namespace Beginor.GisHub.DataServices.Data {
     /// <summary>数据源（数据表或视图）仓储实现</summary>
     public partial class DataSourceRepository : HibernateRepository<DataSource, DataSourceModel, long>, IDataSourceRepository {
 
-        public DataSourceRepository(ISession session, IMapper mapper) : base(session, mapper) { }
+        private ConcurrentDictionary<long, DataSourceCacheItem> cache;
+        private IDataServiceFactory factory;
+
+        public DataSourceRepository(
+            ISession session,
+            IMapper mapper,
+            ConcurrentDictionary<long, DataSourceCacheItem> cache,
+            IDataServiceFactory factory
+        ) : base(session, mapper) {
+            this.cache = cache;
+            this.factory = factory;
+        }
+
+        protected override void Dispose(
+            bool disposing
+        ) {
+            if (disposing) {
+                cache = null;
+                factory = null;
+            }
+            base.Dispose(disposing);
+        }
 
         /// <summary>搜索 数据源（数据表或视图） ，返回分页结果。</summary>
         public async Task<PaginatedResponseModel<DataSourceModel>> SearchAsync(
@@ -39,13 +61,54 @@ namespace Beginor.GisHub.DataServices.Data {
             };
         }
 
+        public override Task UpdateAsync(
+            long id,
+            DataSourceModel model,
+            CancellationToken token = default
+        ) {
+            cache.TryRemove(id, out _);
+            return base.UpdateAsync(id, model, token);
+        }
+
         public override async Task DeleteAsync(long id, CancellationToken token = default) {
             var entity = Session.Get<DataSource>(id);
             if (entity != null) {
+                cache.TryRemove(id, out _);
                 entity.IsDeleted = true;
                 await Session.SaveAsync(entity, token);
-                await Session.FlushAsync();
+                await Session.FlushAsync(token);
             }
+        }
+
+        public async Task<DataSourceCacheItem> GetCacheItemByIdAsync(
+            long id
+        ) {
+            if (cache.TryGetValue(id, out var item)) {
+                return item;
+            }
+            var ds = await Session.Query<DataSource>()
+                .Where(e => e.Id == id)
+                .FirstOrDefaultAsync();
+            if (ds == null) {
+                return null;
+            }
+            item = new DataSourceCacheItem {
+                DataSourceId = ds.Id,
+                DataSourceName = ds.Name,
+                DatabaseType = ds.Connection.DatabaseType,
+                Schema = ds.Schema,
+                TableName = ds.TableName,
+                PrimaryKeyColumn = ds.PrimaryKeyColumn,
+                DisplayColumn = ds.DisplayColumn,
+                GeometryColumn = ds.GeometryColumn,
+                PresetCriteria = ds.PresetCriteria,
+                DefaultOrder = ds.DefaultOrder
+            };
+            var meta = factory.CreateMetadataProvider(item.DatabaseType);
+            var model = Mapper.Map<ConnectionModel>(ds.Connection);
+            item.ConnectionString = meta.BuildConnectionString(model);
+            cache.TryAdd(id, item);
+            return item;
         }
 
     }

@@ -13,4 +13,8 @@
     <ProjectReference Include="..\GisHub.DataServices\GisHub.DataServices.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NetTopologySuite" Version="2.1.0" />
+  </ItemGroup>
+
 </Project>

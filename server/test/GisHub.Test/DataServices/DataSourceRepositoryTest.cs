@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NHibernate;
 using NHibernate.NetCore;
 using NUnit.Framework;
+using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
@@ -46,6 +47,14 @@ namespace Beginor.GisHub.Test.DataServices {
             var entity2 = mapper.Map<Beginor.GisHub.DataServices.Data.DataSource>(model);
             Assert.IsNotNull(entity2.Connection);
             Assert.AreEqual(entity2.Connection.Id.ToString(), model.Connection.Id);
+        }
+
+        [Test]
+        public async Task _03_CanGetCacheItem() {
+            var id = 1607411721075030142;
+            var cacheItem = await Target.GetCacheItemByIdAsync(id);
+            Assert.IsNotNull(cacheItem);
+            Console.WriteLine(cacheItem.ToJson());
         }
 
     }
