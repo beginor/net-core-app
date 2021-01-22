@@ -58,10 +58,10 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             var connStr = BuildConnectionString(model);
             await using var conn = new NpgsqlConnection(connStr);
             var sql = "select"
-                + " t.table_schema,"
-                + " t.table_name,"
+                + " t.table_schema as schema,"
+                + " t.table_name as name,"
                 + " obj_description((t.table_schema||'.'||t.table_name)::regclass::oid) as description,"
-                + " t.table_type"
+                + " t.table_type as type"
                 + " from information_schema.tables t"
                 + " where t.table_schema = @schema";
             var meta = await conn.QueryAsync<TableModel>(sql, new {schema});
@@ -80,13 +80,13 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             var connStr = BuildConnectionString(model);
             await using var conn = new NpgsqlConnection(connStr);
             var sql = "select"
-                + " col.table_schema,"
-                + " col.table_name,"
-                + " col.column_name,"
+                + " col.table_schema as schema,"
+                + " col.table_name as table,"
+                + " col.column_name as name,"
                 + " col_description((col.table_schema || '.' || col.table_name)::regclass::oid, col.ordinal_position) as description,"
-                + " col.udt_name as data_type,"
+                + " col.udt_name as type,"
                 + " coalesce(col.character_maximum_length, col.numeric_precision, 0) as length,"
-                + " case col.is_nullable when 'YES' then true else false end as is_nullable"
+                + " case col.is_nullable when 'YES' then true else false end as nullable"
                 + " from information_schema.columns col"
                 + " where col.table_catalog = @database "
                 + " and col.table_schema = @schema"

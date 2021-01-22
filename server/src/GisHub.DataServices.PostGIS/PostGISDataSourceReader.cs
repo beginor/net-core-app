@@ -70,8 +70,8 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             }
             var cols = await GetColumnsAsync(dataSourceId);
             var colsDict = cols.ToDictionary(
-                c => c.ColumnName,
-                c => c.DataType,
+                c => c.Name,
+                c => c.Type,
                 StringComparer.OrdinalIgnoreCase
             );
             var selectArray = select.Split(',').Select(t => t.ToLower().Trim()).ToArray();
@@ -170,7 +170,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
                 }
                 if (orderBy.IsNotNullOrEmpty()) {
                     sql.AppendLine($" order by {orderBy} ");
-                } 
+                }
             }
             sql.AppendLine($" limit {count} offset {skip} ");
             var result = await ReadDataAsync(dataSourceId, sql.ToString());
@@ -191,6 +191,15 @@ namespace Beginor.GisHub.DataServices.PostGIS {
                 throw new ArgumentException($"Invalid select {select} for distinct !");
             }
             var sql = new StringBuilder();
+            if (ds.HasGeometryColumn) {
+                select = select.Split(
+                    ",",
+                    StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries
+                ).Aggregate(
+                    new StringBuilder(),
+                    (current, field) => current.Append(",").Append(field.EqualsOrdinalIgnoreCase(ds.GeometryColumn) ? $"st_astext({field}) as {field}" : field)
+                ).ToString().Substring(1);
+            }
             sql.AppendLine($" select distinct {select} ");
             sql.AppendLine($" from {ds.Schema}.{ds.TableName} ");
             AppendWhere(sql, ds.PresetCriteria, where);
@@ -216,7 +225,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             await conn.CloseAsync();
             return tableData;
         }
-        
+
     }
 
 }

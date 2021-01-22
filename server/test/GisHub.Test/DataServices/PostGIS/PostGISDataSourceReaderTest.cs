@@ -21,7 +21,7 @@ namespace Beginor.GisHub.Test.DataServices.PostGIS {
             var columns = await Target.GetColumnsAsync(dataSourceId);
             Assert.IsNotEmpty(columns);
             foreach (var col in columns) {
-                Assert.AreEqual(col.TableName, "books");
+                Assert.AreEqual(col.Table, "books");
             }
         }
 

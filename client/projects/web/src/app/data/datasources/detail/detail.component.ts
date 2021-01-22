@@ -87,7 +87,7 @@ export class DetailComponent implements OnInit {
         const clicksWithClosedPopup$ = this.tableClick$.pipe(filter(() => !this.tableInstance.isPopupOpen()));
         const inputFocus$ = this.tableFocus$;
         return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-            map(term => term === '' ? this.tables.slice(0, 10) : this.tables.filter(v => v.tableName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+            map(term => term === '' ? this.tables.slice(0, 10) : this.tables.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
         );
     }
     public searchPkColumns = (text$: Observable<string>) => {
@@ -95,7 +95,7 @@ export class DetailComponent implements OnInit {
         const clicksWithClosedPopup$ = this.pkColClick$.pipe(filter(() => !this.pkColInstance.isPopupOpen()));
         const inputFocus$ = this.pkColFocus$;
         return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-            map(term => term === '' ? this.columns.slice(0, 10) : this.columns.filter(c => c.columnName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+            map(term => term === '' ? this.columns.slice(0, 10) : this.columns.filter(c => c.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
         );
     }
     public searchDisplayColumns = (text$: Observable<string>) => {
@@ -103,7 +103,7 @@ export class DetailComponent implements OnInit {
         const clicksWithClosedPopup$ = this.displayColClick$.pipe(filter(() => !this.displayColInstance.isPopupOpen()));
         const inputFocus$ = this.displayColFocus$;
         return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-            map(term => term === '' ? this.columns.slice(0, 10) : this.columns.filter(c => c.columnName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+            map(term => term === '' ? this.columns.slice(0, 10) : this.columns.filter(c => c.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
         );
     }
     public searchGeoColumns = (text$: Observable<string>) => {
@@ -111,11 +111,11 @@ export class DetailComponent implements OnInit {
         const clicksWithClosedPopup$ = this.geoColClick$.pipe(filter(() => !this.geoColInstance.isPopupOpen()));
         const inputFocus$ = this.geoColFocus$;
         return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-            map(term => term === '' ? this.columns.slice(0, 10) : this.columns.filter(c => c.columnName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+            map(term => term === '' ? this.columns.slice(0, 10) : this.columns.filter(c => c.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
         );
     }
-    public tableFormatter = (t: TableModel | string) => typeof t === 'string' ? t : t.tableName;
-    public colFormater = (c: ColumnModel | string) => typeof c === 'string' ? c : c.columnName;
+    public tableFormatter = (t: TableModel | string) => typeof t === 'string' ? t : t.name;
+    public colFormater = (c: ColumnModel | string) => typeof c === 'string' ? c : c.name;
     // tslint:enable: max-line-length
 
     constructor(
@@ -152,15 +152,15 @@ export class DetailComponent implements OnInit {
                 this.connection = this.connections.find(
                     cs => cs.id === model.connection?.id
                 );
-                this.table = { tableName: model.tableName as string };
+                this.table = { name: model.tableName as string };
                 this.pkColumn = {
-                    columnName: model.primaryKeyColumn as string
+                    name: model.primaryKeyColumn as string
                 };
                 this.displayColumn = {
-                    columnName: model.displayColumn as string
+                    name: model.displayColumn as string
                 };
                 this.geoColumn = {
-                    columnName: model.geometryColumn as string
+                    name: model.geometryColumn as string
                 };
                 this.loadSchemas()
                     .then(() => this.loadTables())
@@ -230,23 +230,23 @@ export class DetailComponent implements OnInit {
 
     public async onSelectTable(e: NgbTypeaheadSelectItemEvent): Promise<void> {
         const table = e.item as TableModel;
-        this.model.tableName = table.tableName;
+        this.model.tableName = table.name;
         if (!this.model.name) {
-            this.model.name = table.description || table.tableName;
+            this.model.name = table.description || table.name;
         }
         await this.loadColumns();
     }
 
     public onSelectPkColumn(e: NgbTypeaheadSelectItemEvent): void {
-        this.model.primaryKeyColumn = e.item.columnName;
+        this.model.primaryKeyColumn = e.item.name;
     }
 
     public onSelectDisplayColumn(e: NgbTypeaheadSelectItemEvent): void {
-        this.model.displayColumn = e.item.columnName;
+        this.model.displayColumn = e.item.name;
     }
 
     public onSelectGeoColumn(e: NgbTypeaheadSelectItemEvent): void {
-        this.model.geometryColumn = e.item.columnName;
+        this.model.geometryColumn = e.item.name;
     }
 
     private async loadSchemas(): Promise<void> {

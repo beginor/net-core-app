@@ -55,18 +55,18 @@ export class MetadataService {
 }
 
 export interface TableModel {
-    tableSchema?: string;
-    tableName: string;
+    schema?: string;
+    name: string;
     description?: string;
-    tableType?: string;
+    type?: string;
 }
 
 export interface ColumnModel {
-    tableSchema?: string;
-    tableName?: string;
-    columnName: string;
+    schema?: string;
+    table?: string;
+    name: string;
     description?: string;
-    dataType?: string;
+    type?: string;
     length?: number;
-    isNullable?: boolean;
+    nullable?: boolean;
 }

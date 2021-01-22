@@ -13,23 +13,27 @@ namespace Beginor.GisHub.DataServices.Api {
     /// <summary>数据源（数据表或视图） 服务接口</summary>
     [ApiController]
     [Route("api/datasources")]
-    public class DataSourceController : Controller {
+    public partial class DataSourceController : Controller {
 
         private ILogger<DataSourceController> logger;
         private IDataSourceRepository repository;
+        private IDataServiceFactory factory;
 
         public DataSourceController(
             ILogger<DataSourceController> logger,
-            IDataSourceRepository repository
+            IDataSourceRepository repository,
+            IDataServiceFactory factory
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 logger = null;
                 repository = null;
+                factory = null;
             }
             base.Dispose(disposing);
         }

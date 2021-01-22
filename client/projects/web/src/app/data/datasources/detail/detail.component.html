@@ -82,8 +82,8 @@
         (selectItem)="onSelectTable($event)"
         />
         <ng-template #tableNameTemplate let-r="result" let-t="term">
-          <svg-icon class="mr-1" [path]="getTableIcon(r.tableType)"></svg-icon>
-          <ngb-highlight [result]="r.tableName" [term]="t"></ngb-highlight>
+          <svg-icon class="mr-1" [path]="getTableIcon(r.type)"></svg-icon>
+          <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
           <span class="text-info ml-2" *ngIf="!!r.description">({{r.description}})</span>
         </ng-template>
     </div>
@@ -107,8 +107,8 @@
             (selectItem)="onSelectPkColumn($event)"
           />
           <ng-template #colTemplate let-r="result" let-t="term">
-            <ngb-highlight [result]="r.columnName" [term]="t"></ngb-highlight>
-            <span class="text-muted mx-1">({{r.dataType}})</span>
+            <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+            <span class="text-muted mx-1">({{r.type}})</span>
             <span class="text-info ml-2" *ngIf="!!r.description">({{r.description}})</span>
           </ng-template>
         </div>
