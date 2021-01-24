@@ -16,7 +16,6 @@ namespace Beginor.GisHub.DataServices.Models {
         public string Type { get; set; }
         public int Length { get; set; }
         public bool Nullable { get; set; }
-
     }
 
 }

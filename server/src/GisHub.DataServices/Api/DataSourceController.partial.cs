@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DataServices.Data;
+using Beginor.GisHub.DataServices.GeoJson;
 
 namespace Beginor.GisHub.DataServices.Api {
 
@@ -40,19 +42,22 @@ namespace Beginor.GisHub.DataServices.Api {
         // [Authorize("datasources.read_data")]
         public async Task<ActionResult<long>> Count(
             [FromRoute]long id,
-            [FromQuery(Name = "$where")]string where
+            [FromQuery]CountParam param
         ) {
             try {
                 var model = await repository.GetCacheItemByIdAsync(id);
                 if (model == null) {
                     return NotFound();
                 }
+                if (!SqlValidator.IsValid(param.Where)) {
+                    return BadRequest($"$where = ${param.Where} is not allowed!");
+                }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
-                var count = await reader.CountAsync(id, where);
+                var count = await reader.CountAsync(id, param);
                 return count;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not count datasource {id} with {where} .");
+                logger.LogError(ex, $"Can not count datasource {id} with {param.Where} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -61,28 +66,35 @@ namespace Beginor.GisHub.DataServices.Api {
         // [Authorize("datasources.read_data")]
         public async Task<ActionResult> ReadData(
             [FromRoute] long id,
-            [FromQuery(Name = "$select")] string select = "",
-            [FromQuery(Name = "$where")] string where = "",
-            [FromQuery(Name = "$groupBy")] string groupBy = "",
-            [FromQuery(Name = "$orderBy")] string orderBy = "",
-            [FromQuery(Name = "$skip")] int skip = 0,
-            [FromQuery(Name = "$take")] int take = 10
+            [FromQuery] ReadDataParam param
         ) {
             try {
                 var model = await repository.GetCacheItemByIdAsync(id);
                 if (model == null) {
                     return NotFound();
                 }
+                if (!SqlValidator.IsValid(param.Select)) {
+                    return BadRequest($"$select = ${param.Select} is not allowed!");
+                }
+                if (!SqlValidator.IsValid(param.Where)) {
+                    return BadRequest($"$where = ${param.Where} is not allowed!");
+                }
+                if (!SqlValidator.IsValid(param.GroupBy)) {
+                    return BadRequest($"$groupBy = ${param.GroupBy} is not allowed!");
+                }
+                if (!SqlValidator.IsValid(param.OrderBy)) {
+                    return BadRequest($"$orderBy = ${param.OrderBy} is not allowed!");
+                }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
-                var data = await reader.ReadDataAsync(id, select, where, groupBy, orderBy, skip, take);
-                var total = await reader.CountAsync(id, where);
+                var data = await reader.ReadDataAsync(id, param);
+                var total = await reader.CountAsync(id, param);
                 var result = new PaginatedResponseModel<IDictionary<string, object>> {
-                    Total = total, Data = data, Skip = skip, Take = take
+                    Total = total, Data = data, Skip = param.Skip, Take = param.Take
                 };
                 return Json(result, CreateJsonSerializerOptions());
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not read data from datasource {id} with select {select} where {where} groupBy {groupBy} orderBy {orderBy} skip {skip} take {take} .");
+                logger.LogError(ex, $"Can not read data from datasource {id} with {param.ToJson(CreateJsonSerializerOptions())} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -91,21 +103,28 @@ namespace Beginor.GisHub.DataServices.Api {
         // [Authorize("datasources.read_data")]
         public async Task<ActionResult> ReadDistinctData(
             [FromRoute] long id,
-            [FromQuery(Name = "$select")] string select = "",
-            [FromQuery(Name = "$where")] string where = "",
-            [FromQuery(Name = "$orderBy")] string orderBy = ""
+            [FromQuery] DistinctParam param
         ) {
             try {
                 var model = await repository.GetCacheItemByIdAsync(id);
                 if (model == null) {
                     return NotFound();
                 }
+                if (!SqlValidator.IsValid(param.Select)) {
+                    return BadRequest($"$select = ${param.Select} is not allowed!");
+                }
+                if (!SqlValidator.IsValid(param.Where)) {
+                    return BadRequest($"$where = ${param.Where} is not allowed!");
+                }
+                if (!SqlValidator.IsValid(param.OrderBy)) {
+                    return BadRequest($"$orderBy = ${param.OrderBy} is not allowed!");
+                }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
-                var data = await reader.ReadDistinctDataAsync(id, select, where, orderBy);
+                var data = await reader.ReadDistinctDataAsync(id, param);
                 return Json(data, CreateJsonSerializerOptions());
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not read distinct data from datasource {id} with {select} {where} {orderBy} .");
+                logger.LogError(ex, $"Can not read distinct data from datasource {id} with {param.ToJson(CreateJsonSerializerOptions())} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -114,24 +133,68 @@ namespace Beginor.GisHub.DataServices.Api {
         // [Authorize("datasources.read_data")]
         public async Task<ActionResult> PivotData(
             long id,
-            [FromQuery(Name = "$select")]string select,
-            [FromQuery(Name = "$where")]string where,
-            [FromQuery(Name = "$aggregate")]string aggregate,
-            [FromQuery(Name = "$pivotField")]string pivotField,
-            [FromQuery(Name = "$pivotValue")]string pivotValue,
-            [FromQuery(Name = "$orderBy")]string orderBy
+            [FromQuery]PivotParam param
         ) {
             try {
                 var model = await repository.GetCacheItemByIdAsync(id);
                 if (model == null) {
                     return NotFound();
                 }
+                if (!SqlValidator.IsValid(param.Select)) {
+                    return BadRequest($"$select = ${param.Select} is not allowed!");
+                }
+                if (!SqlValidator.IsValid(param.Where)) {
+                    return BadRequest($"$where = ${param.Where} is not allowed!");
+                }
+                if (!SqlValidator.IsValid(param.Aggregate)) {
+                    return BadRequest($"$aggregate = ${param.Aggregate} is not allowed!");
+                }
+                if (!SqlValidator.IsValid(param.Field)) {
+                    return BadRequest($"$field = ${param.Field} is not allowed!");
+                }
+                if (!SqlValidator.IsValid(param.Value)) {
+                    return BadRequest($"$pivotValue = ${param.Value} is not allowed!");
+                }
+                if (!SqlValidator.IsValid(param.OrderBy)) {
+                    return BadRequest($"$orderBy = ${param.OrderBy} is not allowed!");
+                }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
-                var data = await reader.PivotData(id, select, where, aggregate, pivotField, pivotValue, orderBy);
+                var data = await reader.PivotData(id, param);
                 return Json(data, CreateJsonSerializerOptions());
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not read distinct data from datasource {id} with {select} {where} {orderBy} .");
+                logger.LogError(ex, $"Can not pivot data from datasource {id} with {param.ToJson(CreateJsonSerializerOptions())} .");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+
+        [HttpGet("{id:long}/geojson")]
+        // [Authorize("datasources.read_data")]
+        public async Task<ActionResult<GeoJsonFeatureCollection>> ReadAsGeoJson(
+            [FromRoute] long id,
+            [FromQuery] GeoJsonParam param
+        ) {
+            try {
+                var model = await repository.GetCacheItemByIdAsync(id);
+                if (model == null) {
+                    return NotFound();
+                }
+                if (!SqlValidator.IsValid(param.Select)) {
+                    return BadRequest($"$select = ${param.Select} is not allowed!");
+                }
+                if (!SqlValidator.IsValid(param.Where)) {
+                    return BadRequest($"$where = ${param.Where} is not allowed!");
+                }
+                if (!SqlValidator.IsValid(param.OrderBy)) {
+                    return BadRequest($"$orderBy = ${param.OrderBy} is not allowed!");
+                }
+                var reader = factory.CreateDataSourceReader(model.DatabaseType);
+                var fc = await reader.ReadAsFeatureCollection(id, param);
+                var json = JsonSerializer.Serialize(fc, typeof(object), CreateGeoJsonSerializerOptions());
+                return Content(json, "application/geo+json", Encoding.UTF8);
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not read data as geojson from datasource {id} with {param.ToJson(CreateJsonSerializerOptions())} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -141,6 +204,16 @@ namespace Beginor.GisHub.DataServices.Api {
                 DictionaryKeyPolicy = null,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 NumberHandling = JsonNumberHandling.Strict
+            };
+            return options;
+        }
+        
+        private JsonSerializerOptions CreateGeoJsonSerializerOptions() {
+            var options = new JsonSerializerOptions {
+                DictionaryKeyPolicy = null,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                NumberHandling = JsonNumberHandling.Strict,
+                IgnoreNullValues = true
             };
             return options;
         }

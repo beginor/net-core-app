@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Beginor.GisHub.DataServices.GeoJson;
 using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices {
@@ -16,38 +17,35 @@ namespace Beginor.GisHub.DataServices {
         /// </summary>
         Task<IList<IDictionary<string, object>>> ReadDataAsync(
             long dataSourceId,
-            string select,
-            string where,
-            string groupBy,
-            string orderBy,
-            int skip,
-            int count
+            ReadDataParam param
         );
         /// <summary>
         /// 读取数据源的记录数。
         /// </summary>
-        Task<long> CountAsync(long dataSourceId, string where);
+        Task<long> CountAsync(long dataSourceId, CountParam param);
         /// <summary>
         /// 读取数据源中不重复的数据
         /// </summary>
         Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(
             long dataSourceId,
-            string select,
-            string where,
-            string orderBy
+            DistinctParam param
         );
         /// <summary>
         /// 行列转置数据
         /// </summary>
         Task<IList<IDictionary<string, object>>> PivotData(
             long dataSourceId,
-            string select,
-            string where,
-            string aggregate,
-            string pivotField,
-            string pivotValue,
-            string orderBy
+            PivotParam param
         );
+
+        /// <summary>
+        /// Read data as GeoJson Feature Collection
+        /// </summary>
+        Task<GeoJsonFeatureCollection> ReadAsFeatureCollection(
+            long dataSourceId,
+            GeoJsonParam param
+        );
+
     }
 
 }
