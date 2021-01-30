@@ -63,6 +63,10 @@ namespace Beginor.GisHub.DataServices {
             AgsJsonParam param
         );
 
+        Task<int> GetSridAsync(long dataSourceId);
+
+        Task<string> GetGeometryTypeAsync(long dataSourceId);
+
     }
 
 }

@@ -105,6 +105,13 @@ namespace Beginor.GisHub.DataServices {
                 feature.Geometry = geom.ToGeoJson();
                 result.Features.Add(feature);
             }
+            result.Crs = new Crs {
+                Properties = new CrsProperties {
+                    Code = await GetSridAsync(dataSourceId)
+                }
+            };
+            var total = await CountAsync(dataSourceId, new CountParam { Where = param.Where });
+            result.ExceededTransferLimit = total > list.Count;
             return result;
         }
 
@@ -191,11 +198,29 @@ namespace Beginor.GisHub.DataServices {
                 var geom = reader.Read(wkt);
                 feature.Geometry = geom.ToAgs();
                 result.Features.Add(feature);
-                if (result.GeometryType.IsNullOrEmpty()) {
-                    result.GeometryType = geom.GeometryType;
-                }
             }
+            result.SpatialReference = new SpatialReference {
+                Wkid = await GetSridAsync(dataSourceId)
+            };
+            result.GeometryType = await GetAgsGeometryType(dataSourceId);
             return result;
+        }
+
+        private async Task<string> GetAgsGeometryType(long dataSourceId) {
+            var geomType = await GetGeometryTypeAsync(dataSourceId);
+            if (geomType == "point") {
+                return "point";
+            }
+            if (geomType == "multipoint") {
+                return "multipoint";
+            }
+            if (geomType.EndsWith("linestring")) {
+                return "polyline";
+            }
+            if (geomType.EndsWith("polygon")) {
+                return "polygon";
+            }
+            return geomType;
         }
 
         protected string CheckGeoSelectFields(
@@ -258,6 +283,10 @@ namespace Beginor.GisHub.DataServices {
                 sql.AppendLine($" where {where} ");
             }
         }
+
+        public abstract Task<int> GetSridAsync(long dataSourceId);
+
+        public abstract Task<string> GetGeometryTypeAsync(long dataSourceId);
 
     }
 }

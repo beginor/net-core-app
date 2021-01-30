@@ -198,6 +198,36 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             return data;
         }
 
+        public override async Task<int> GetSridAsync(long dataSourceId) {
+            var ds = await DataSourceRepo.GetCacheItemByIdAsync(dataSourceId);
+            if (ds == null) {
+                throw new ArgumentException($"Invalid dataSourceId {dataSourceId} !");
+            }
+            var sql = new StringBuilder();
+            sql.AppendLine($" select st_srid({ds.GeometryColumn}) ");
+            sql.AppendLine($" from {ds.Schema}.{ds.TableName} ");
+            sql.AppendLine($" where {ds.GeometryColumn} is not null ");
+            sql.AppendLine($" limit 1 ;");
+            await using var conn = new NpgsqlConnection(ds.ConnectionString);
+            var srid = await conn.ExecuteScalarAsync<int>(sql.ToString());
+            return srid;
+        }
+
+        public override async Task<string> GetGeometryTypeAsync(long dataSourceId) {
+            var ds = await DataSourceRepo.GetCacheItemByIdAsync(dataSourceId);
+            if (ds == null) {
+                throw new ArgumentException($"Invalid dataSourceId {dataSourceId} !");
+            }
+            var sql = new StringBuilder();
+            sql.AppendLine($" select st_geometrytype({ds.GeometryColumn}) ");
+            sql.AppendLine($" from {ds.Schema}.{ds.TableName} ");
+            sql.AppendLine($" where {ds.GeometryColumn} is not null ");
+            sql.AppendLine($" limit 1 ;");
+            await using var conn = new NpgsqlConnection(ds.ConnectionString);
+            var geoType = await conn.ExecuteScalarAsync<string>(sql.ToString());
+            return geoType.Substring(3).ToLowerInvariant();
+        }
+
         private async Task<IList<IDictionary<string, object>>> ReadDataAsync(
             long dataSourceId,
             string sql

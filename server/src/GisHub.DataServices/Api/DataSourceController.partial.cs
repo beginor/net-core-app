@@ -188,6 +188,9 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (!SqlValidator.IsValid(param.OrderBy)) {
                     return BadRequest($"$orderBy = ${param.OrderBy} is not allowed!");
                 }
+                if (!model.HasGeometryColumn) {
+                    return BadRequest($"Datasource {id} does not define geometry column !");
+                }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
                 var fc = await reader.ReadAsFeatureCollectionAsync(id, param);
                 var json = JsonSerializer.Serialize(fc, typeof(object), CreateGeoJsonSerializerOptions());
@@ -198,7 +201,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
-        
+
         [HttpGet("{id:long}/featureset")]
         // [Authorize("datasources.read_data")]
         public async Task<ActionResult<GeoJsonFeatureCollection>> ReadAsFeatureSet(
@@ -219,6 +222,9 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (!SqlValidator.IsValid(param.OrderBy)) {
                     return BadRequest($"$orderBy = ${param.OrderBy} is not allowed!");
                 }
+                if (!model.HasGeometryColumn) {
+                    return BadRequest($"Datasource {id} does not define geometry column !");
+                }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
                 var fc = await reader.ReadAsFeatureSetAsync(id, param);
                 var json = JsonSerializer.Serialize(fc, typeof(object), CreateAgsJsonSerializerOptions());
@@ -238,7 +244,7 @@ namespace Beginor.GisHub.DataServices.Api {
             };
             return options;
         }
-        
+
         private JsonSerializerOptions CreateGeoJsonSerializerOptions() {
             var options = new JsonSerializerOptions {
                 DictionaryKeyPolicy = null,
@@ -248,7 +254,7 @@ namespace Beginor.GisHub.DataServices.Api {
             };
             return options;
         }
-        
+
         private JsonSerializerOptions CreateAgsJsonSerializerOptions() {
             var options = new JsonSerializerOptions {
                 DictionaryKeyPolicy = null,

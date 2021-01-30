@@ -8,6 +8,7 @@ namespace Beginor.GisHub.DataServices.GeoJson {
         public double[] Bbox { get; set; }
         public IList<GeoJsonFeature> Features { get; set; }
         public Crs Crs { get; set; }
+        public bool ExceededTransferLimit { get; set; }
     }
 
 }
