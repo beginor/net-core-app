@@ -189,12 +189,43 @@ namespace Beginor.GisHub.DataServices.Api {
                     return BadRequest($"$orderBy = ${param.OrderBy} is not allowed!");
                 }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
-                var fc = await reader.ReadAsFeatureCollection(id, param);
+                var fc = await reader.ReadAsFeatureCollectionAsync(id, param);
                 var json = JsonSerializer.Serialize(fc, typeof(object), CreateGeoJsonSerializerOptions());
                 return Content(json, "application/geo+json", Encoding.UTF8);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not read data as geojson from datasource {id} with {param.ToJson(CreateJsonSerializerOptions())} .");
+                return this.InternalServerError(ex.GetOriginalMessage());
+            }
+        }
+        
+        [HttpGet("{id:long}/featureset")]
+        // [Authorize("datasources.read_data")]
+        public async Task<ActionResult<GeoJsonFeatureCollection>> ReadAsFeatureSet(
+            [FromRoute] long id,
+            [FromQuery] AgsJsonParam param
+        ) {
+            try {
+                var model = await repository.GetCacheItemByIdAsync(id);
+                if (model == null) {
+                    return NotFound();
+                }
+                if (!SqlValidator.IsValid(param.Select)) {
+                    return BadRequest($"$select = ${param.Select} is not allowed!");
+                }
+                if (!SqlValidator.IsValid(param.Where)) {
+                    return BadRequest($"$where = ${param.Where} is not allowed!");
+                }
+                if (!SqlValidator.IsValid(param.OrderBy)) {
+                    return BadRequest($"$orderBy = ${param.OrderBy} is not allowed!");
+                }
+                var reader = factory.CreateDataSourceReader(model.DatabaseType);
+                var fc = await reader.ReadAsFeatureSetAsync(id, param);
+                var json = JsonSerializer.Serialize(fc, typeof(object), CreateAgsJsonSerializerOptions());
+                return Content(json, "application/geo+json", Encoding.UTF8);
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not read data as FeatureSet from datasource {id} with {param.ToJson(CreateJsonSerializerOptions())} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -209,6 +240,16 @@ namespace Beginor.GisHub.DataServices.Api {
         }
         
         private JsonSerializerOptions CreateGeoJsonSerializerOptions() {
+            var options = new JsonSerializerOptions {
+                DictionaryKeyPolicy = null,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                NumberHandling = JsonNumberHandling.Strict,
+                IgnoreNullValues = true
+            };
+            return options;
+        }
+        
+        private JsonSerializerOptions CreateAgsJsonSerializerOptions() {
             var options = new JsonSerializerOptions {
                 DictionaryKeyPolicy = null,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,

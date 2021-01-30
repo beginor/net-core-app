@@ -2,12 +2,9 @@ namespace Beginor.GisHub.DataServices.GeoJson {
 
     public class GeoJsonLineString : GeoJsonGeometry {
 
-        public override string Type => "LineString";
+        public override string Type => GeoJsonGeometryType.LineString;
 
-        public new double[][] Coordinates {
-            get { return (double[][]) base.Coordinates; }
-            set { base.Coordinates = value; }
-        }
+        public double[][] Coordinates { get; set; }
 
     }
 

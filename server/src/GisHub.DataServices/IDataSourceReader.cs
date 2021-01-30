@@ -1,17 +1,20 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Beginor.GisHub.DataServices.Esri;
 using Beginor.GisHub.DataServices.GeoJson;
 using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices {
 
     public interface IDataSourceReader {
+
         /// <summary>
         /// 读取数据源的列信息
         /// </summary>
         Task<IList<ColumnModel>> GetColumnsAsync(
             long dataSourceId
         );
+
         /// <summary>
         /// 读取数据源的数据
         /// </summary>
@@ -19,10 +22,15 @@ namespace Beginor.GisHub.DataServices {
             long dataSourceId,
             ReadDataParam param
         );
+
         /// <summary>
         /// 读取数据源的记录数。
         /// </summary>
-        Task<long> CountAsync(long dataSourceId, CountParam param);
+        Task<long> CountAsync(
+            long dataSourceId,
+            CountParam param
+        );
+
         /// <summary>
         /// 读取数据源中不重复的数据
         /// </summary>
@@ -30,6 +38,7 @@ namespace Beginor.GisHub.DataServices {
             long dataSourceId,
             DistinctParam param
         );
+
         /// <summary>
         /// 行列转置数据
         /// </summary>
@@ -41,9 +50,17 @@ namespace Beginor.GisHub.DataServices {
         /// <summary>
         /// Read data as GeoJson Feature Collection
         /// </summary>
-        Task<GeoJsonFeatureCollection> ReadAsFeatureCollection(
+        Task<GeoJsonFeatureCollection> ReadAsFeatureCollectionAsync(
             long dataSourceId,
             GeoJsonParam param
+        );
+
+        /// <summary>
+        /// Read data as Esri FeatureSet
+        /// </summary>
+        Task<AgsFeatureSet> ReadAsFeatureSetAsync(
+            long dataSourceId,
+            AgsJsonParam param
         );
 
     }

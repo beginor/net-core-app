@@ -2,12 +2,9 @@ namespace Beginor.GisHub.DataServices.GeoJson {
 
     public class GeoJsonPolygon : GeoJsonGeometry {
 
-        public override string Type => "Polygon";
+        public override string Type => GeoJsonGeometryType.Polygon;
 
-        public double[][][] Coordinates {
-            get { return (double[][][]) base.Coordinates; }
-            set { base.Coordinates = value; }
-        }
+        public double[][][] Coordinates { get; set; }
 
     }
 

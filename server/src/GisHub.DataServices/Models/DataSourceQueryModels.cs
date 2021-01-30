@@ -20,6 +20,13 @@ namespace Beginor.GisHub.DataServices.Models {
         [FromQuery(Name = "$take")]
         public int Take { get; set; } = 10;
     }
+    
+    public class AgsJsonParam : DistinctParam {
+        [FromQuery(Name = "$skip")]
+        public int Skip { get; set; } = 0;
+        [FromQuery(Name = "$take")]
+        public int Take { get; set; } = 10;
+    }
 
     public class ReadDataParam : DistinctParam {
         [FromQuery(Name = "$groupBy")]
