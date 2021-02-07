@@ -12,6 +12,10 @@
     margin-bottom: 0 !important;
   }
 
+  .preview-link {
+    cursor: pointer;
+  }
+
   .detail-container {
     position: absolute;
     top: var(--navbar-height);

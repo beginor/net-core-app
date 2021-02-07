@@ -21,18 +21,15 @@ import { ArcGisService } from '../../arcgis.service';
         ])
     ]
 })
-export class DetailComponent implements AfterViewInit, OnInit, OnDestroy {
+export class DetailComponent implements OnInit {
 
     public animation = '';
     public title = '';
     public editable = false;
     public model: TileMapModel = {};
-    @ViewChild('mapPreView', { static: false })
-    public mapElRef!: ElementRef<HTMLDivElement>;
 
     private id = '';
     private reloadList = false;
-    private mapview?: __esri.MapView;
 
     constructor(
         private router: Router,
@@ -58,31 +55,12 @@ export class DetailComponent implements AfterViewInit, OnInit, OnDestroy {
         this.id = id;
     }
 
-    public ngAfterViewInit(): void {
-        if (!this.mapElRef) {
-            return;
-        }
-        const url = this.getTileLayerUrl();
-        if (!url) {
-            return;
-        }
-        this.arcgis.createTileLayerPreview(
-            this.mapElRef.nativeElement, url
-        ).then(mapview => this.mapview = mapview);
-    }
-
     public async ngOnInit(): Promise<void> {
         if (this.id !== '0') {
             const model = await this.vm.getById(this.id);
             if (!!model) {
                 this.model = model;
             }
-        }
-    }
-
-    public ngOnDestroy(): void {
-        if (!!this.mapview) {
-            this.mapview.destroy();
         }
     }
 
@@ -108,13 +86,6 @@ export class DetailComponent implements AfterViewInit, OnInit, OnDestroy {
         }
         this.reloadList = true;
         this.goBack();
-    }
-
-    public getTileLayerUrl(): string {
-        if (!this.id) {
-            return '';
-        }
-        return this.vm.getTileLayerUrl(this.id);
     }
 
 }

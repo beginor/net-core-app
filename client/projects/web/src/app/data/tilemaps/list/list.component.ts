@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
 import { TileMapService } from '../tilemaps.service';
+import { PreviewComponent } from '../preview/preview.component';
 
 @Component({
     selector: 'app-tilemap-list',
@@ -14,6 +16,7 @@ export class ListComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private modal: NgbModal,
         public account: AccountService,
         public vm: TileMapService
     ) { }
@@ -44,6 +47,15 @@ export class ListComponent implements OnInit {
         this.vm.searchModel.keywords = '';
         this.vm.searchModel.skip = 0;
         this.vm.search();
+    }
+
+    public async showPreview(id: string, name: string): Promise<void> {
+        const modalRef = this.modal.open(
+            PreviewComponent,
+            { container: 'body', size: 'xl' }
+        );
+        modalRef.componentInstance.id = id;
+        modalRef.componentInstance.name = name;
     }
 
 }
