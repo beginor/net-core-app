@@ -1,0 +1,12 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{name}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="slpk-preview-map border border-darken-1" #mapPreView></div>
+  <div class="row text-muted px-3" style="font-size: .6rem;">
+    服务地址：<a [href]="getSlpkLayerUrl()">{{getSlpkLayerUrl()}}/tiles/{{'{'}}z}/{{'{'}}y}/{{'{'}}x}</a> .
+  </div>
+</div>

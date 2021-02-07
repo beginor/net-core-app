@@ -49,7 +49,7 @@ export class ListComponent implements OnInit {
         this.vm.search();
     }
 
-    public async showPreview(id: string, name: string): Promise<void> {
+    public showPreview(id: string, name: string): void {
         const modalRef = this.modal.open(
             PreviewComponent,
             { container: 'body', size: 'xl' }

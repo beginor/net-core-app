@@ -3,17 +3,15 @@ import {
 } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { TileMapService } from '../tilemaps.service';
+import { SlpkService } from '../slpks.service';
 import { ArcGisService } from '../../arcgis.service';
 
 @Component({
-    selector: 'app-tilemaps-preview',
+    selector: 'app-preview',
     templateUrl: './preview.component.html',
     styleUrls: ['./preview.component.scss']
 })
 export class PreviewComponent implements AfterViewInit, OnInit, OnDestroy {
-
-    private mapview?: __esri.MapView;
 
     public id = '';
     public name = '';
@@ -21,9 +19,11 @@ export class PreviewComponent implements AfterViewInit, OnInit, OnDestroy {
     @ViewChild('mapPreView', { static: true })
     public mapElRef!: ElementRef<HTMLDivElement>;
 
+    private mapview?: __esri.SceneView;
+
     constructor(
         public activeModal: NgbActiveModal,
-        public vm: TileMapService,
+        public vm: SlpkService,
         private arcgis: ArcGisService
     ) { }
 
@@ -31,11 +31,11 @@ export class PreviewComponent implements AfterViewInit, OnInit, OnDestroy {
         if (!this.mapElRef) {
             return;
         }
-        const url = this.getTileLayerUrl();
+        const url = this.getSlpkLayerUrl();
         if (!url) {
             return;
         }
-        this.arcgis.createTileLayerPreview(
+        this.arcgis.createSlpkLayerPreview(
             this.mapElRef.nativeElement, url
         ).then(mapview => this.mapview = mapview);
     }
@@ -49,11 +49,11 @@ export class PreviewComponent implements AfterViewInit, OnInit, OnDestroy {
         }
     }
 
-    public getTileLayerUrl(): string {
+    public getSlpkLayerUrl(): string {
         if (!this.id) {
             return '';
         }
-        return this.vm.getTileLayerUrl(this.id);
+        return this.vm.getSlpkLayerUrl(this.id);
     }
 
 }

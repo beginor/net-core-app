@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
+import { PreviewComponent } from '../preview/preview.component';
 import { SlpkService } from '../slpks.service';
 
 @Component({
@@ -14,6 +16,7 @@ export class ListComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private modal: NgbModal,
         public account: AccountService,
         public vm: SlpkService
     ) { }
@@ -44,6 +47,15 @@ export class ListComponent implements OnInit {
         this.vm.searchModel.keywords = '';
         this.vm.searchModel.skip = 0;
         this.vm.search();
+    }
+
+    public showPreview(id: string, tag: string): void {
+        const modalRef = this.modal.open(
+            PreviewComponent,
+            { container: 'body', size: 'xl' }
+        );
+        modalRef.componentInstance.id = id;
+        modalRef.componentInstance.name = tag;
     }
 
 }

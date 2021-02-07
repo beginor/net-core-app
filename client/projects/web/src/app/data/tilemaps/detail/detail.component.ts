@@ -1,6 +1,5 @@
 import {
-    Component, OnInit, OnDestroy, ViewChild, AfterViewInit, ElementRef
-} from '@angular/core';
+    Component, OnInit} from '@angular/core';
 import {
     trigger, transition, useAnimation, AnimationEvent
 } from '@angular/animations';
@@ -8,7 +7,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import { TileMapService, TileMapModel } from '../tilemaps.service';
-import { ArcGisService } from '../../arcgis.service';
 
 @Component({
     selector: 'app-tilemap-detail',
@@ -34,7 +32,6 @@ export class DetailComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private arcgis: ArcGisService,
         public account: AccountService,
         public vm: TileMapService
     ) {
