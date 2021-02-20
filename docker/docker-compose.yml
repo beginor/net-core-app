@@ -1,4 +1,4 @@
-version: "3"
+version: "3.9"
 services:
   gishub:
     image: beginor/gishub
@@ -12,5 +12,5 @@ services:
     restart: unless-stopped
 networks:
   default:
-    external:
-      name: compose
+    external: true
+    name: compose
