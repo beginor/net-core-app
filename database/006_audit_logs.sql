@@ -15,6 +15,7 @@ create table public.app_audit_logs
     action_name character varying(64) collate pg_catalog."default",
     description character varying(256) collate pg_catalog."default",
     ip character varying(64) collate pg_catalog."default",
+    host_name character varying(128) collate pg_catalog."default",
     constraint pk_app_audit_logs primary key (id)
 )
 with (
@@ -58,10 +59,6 @@ comment on column public.app_audit_logs.description
     is '描述';
 comment on column public.app_audit_logs.ip
     is '客户端 IP 地址';
-
-alter table public.app_audit_logs
-    add column host_name character varying(32);
-
 comment on column public.app_audit_logs.host_name
     is '请求的主机名';
 
