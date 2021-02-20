@@ -12,7 +12,7 @@ SERVER_PREFIX="${COMPANY_NAME}.${PROJ_NAME}"
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/build-docker-image.sh
 sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/build-docker-image.sh
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./docker/build-docker-image.sh
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./docker/deploy-single-file.sh
+sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./docker/build-to-single-file.sh
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/deploy-docker-image.sh
 sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/deploy-docker-image.sh
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/Dockerfile
