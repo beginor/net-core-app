@@ -15,7 +15,7 @@ dotnet publish -r $1 -c Release \
   -p:PublishReadyToRun=false \
   -p:DebugType=None \
   -o ./dist \
-  ../server/src/NetCoreApp.Entry/NetCoreApp.Entry.csproj
+  ../server/src/GisHub.Entry/GisHub.Entry.csproj
 # modify config file to run in stagging server;
 sed -i.bak "s/ref=\"ConsoleAppender\"/ref=\"RollingFileAppender\"/g" dist/config/log.config
 sed -i.bak "s/DEBUG/ERROR/g" dist/config/log.config
