@@ -50,7 +50,7 @@ namespace Beginor.GisHub.DataServices.Api {
                     return NotFound();
                 }
                 if (!SqlValidator.IsValid(param.Where)) {
-                    return BadRequest($"$where = ${param.Where} is not allowed!");
+                    return BadRequest($"$where = {param.Where} is not allowed!");
                 }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
                 var count = await reader.CountAsync(id, param);
@@ -74,16 +74,16 @@ namespace Beginor.GisHub.DataServices.Api {
                     return NotFound();
                 }
                 if (!SqlValidator.IsValid(param.Select)) {
-                    return BadRequest($"$select = ${param.Select} is not allowed!");
+                    return BadRequest($"$select = {param.Select} is not allowed!");
                 }
                 if (!SqlValidator.IsValid(param.Where)) {
-                    return BadRequest($"$where = ${param.Where} is not allowed!");
+                    return BadRequest($"$where = {param.Where} is not allowed!");
                 }
                 if (!SqlValidator.IsValid(param.GroupBy)) {
-                    return BadRequest($"$groupBy = ${param.GroupBy} is not allowed!");
+                    return BadRequest($"$groupBy = {param.GroupBy} is not allowed!");
                 }
                 if (!SqlValidator.IsValid(param.OrderBy)) {
-                    return BadRequest($"$orderBy = ${param.OrderBy} is not allowed!");
+                    return BadRequest($"$orderBy = {param.OrderBy} is not allowed!");
                 }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
                 var data = await reader.ReadDataAsync(id, param);
@@ -111,13 +111,13 @@ namespace Beginor.GisHub.DataServices.Api {
                     return NotFound();
                 }
                 if (!SqlValidator.IsValid(param.Select)) {
-                    return BadRequest($"$select = ${param.Select} is not allowed!");
+                    return BadRequest($"$select = {param.Select} is not allowed!");
                 }
                 if (!SqlValidator.IsValid(param.Where)) {
-                    return BadRequest($"$where = ${param.Where} is not allowed!");
+                    return BadRequest($"$where = {param.Where} is not allowed!");
                 }
                 if (!SqlValidator.IsValid(param.OrderBy)) {
-                    return BadRequest($"$orderBy = ${param.OrderBy} is not allowed!");
+                    return BadRequest($"$orderBy = {param.OrderBy} is not allowed!");
                 }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
                 var data = await reader.ReadDistinctDataAsync(id, param);
@@ -141,22 +141,22 @@ namespace Beginor.GisHub.DataServices.Api {
                     return NotFound();
                 }
                 if (!SqlValidator.IsValid(param.Select)) {
-                    return BadRequest($"$select = ${param.Select} is not allowed!");
+                    return BadRequest($"$select = {param.Select} is not allowed!");
                 }
                 if (!SqlValidator.IsValid(param.Where)) {
-                    return BadRequest($"$where = ${param.Where} is not allowed!");
+                    return BadRequest($"$where = {param.Where} is not allowed!");
                 }
                 if (!SqlValidator.IsValid(param.Aggregate)) {
-                    return BadRequest($"$aggregate = ${param.Aggregate} is not allowed!");
+                    return BadRequest($"$aggregate = {param.Aggregate} is not allowed!");
                 }
                 if (!SqlValidator.IsValid(param.Field)) {
-                    return BadRequest($"$field = ${param.Field} is not allowed!");
+                    return BadRequest($"$field = {param.Field} is not allowed!");
                 }
                 if (!SqlValidator.IsValid(param.Value)) {
-                    return BadRequest($"$pivotValue = ${param.Value} is not allowed!");
+                    return BadRequest($"$pivotValue = {param.Value} is not allowed!");
                 }
                 if (!SqlValidator.IsValid(param.OrderBy)) {
-                    return BadRequest($"$orderBy = ${param.OrderBy} is not allowed!");
+                    return BadRequest($"$orderBy = {param.OrderBy} is not allowed!");
                 }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
                 var data = await reader.PivotData(id, param);
@@ -180,13 +180,13 @@ namespace Beginor.GisHub.DataServices.Api {
                     return NotFound();
                 }
                 if (!SqlValidator.IsValid(param.Select)) {
-                    return BadRequest($"$select = ${param.Select} is not allowed!");
+                    return BadRequest($"$select = {param.Select} is not allowed!");
                 }
                 if (!SqlValidator.IsValid(param.Where)) {
-                    return BadRequest($"$where = ${param.Where} is not allowed!");
+                    return BadRequest($"$where = {param.Where} is not allowed!");
                 }
                 if (!SqlValidator.IsValid(param.OrderBy)) {
-                    return BadRequest($"$orderBy = ${param.OrderBy} is not allowed!");
+                    return BadRequest($"$orderBy = {param.OrderBy} is not allowed!");
                 }
                 if (!model.HasGeometryColumn) {
                     return BadRequest($"Datasource {id} does not define geometry column !");
@@ -214,13 +214,13 @@ namespace Beginor.GisHub.DataServices.Api {
                     return NotFound();
                 }
                 if (!SqlValidator.IsValid(param.Select)) {
-                    return BadRequest($"$select = ${param.Select} is not allowed!");
+                    return BadRequest($"$select = {param.Select} is not allowed!");
                 }
                 if (!SqlValidator.IsValid(param.Where)) {
-                    return BadRequest($"$where = ${param.Where} is not allowed!");
+                    return BadRequest($"$where = {param.Where} is not allowed!");
                 }
                 if (!SqlValidator.IsValid(param.OrderBy)) {
-                    return BadRequest($"$orderBy = ${param.OrderBy} is not allowed!");
+                    return BadRequest($"$orderBy = {param.OrderBy} is not allowed!");
                 }
                 if (!model.HasGeometryColumn) {
                     return BadRequest($"Datasource {id} does not define geometry column !");
