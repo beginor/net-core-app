@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Concurrent;
-using System.IO;
-using System.Reflection;
 using Beginor.AppFx.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,7 +13,6 @@ namespace Beginor.GisHub.Entry {
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
             services.AddServiceWithDefaultImplements(
                 typeof(Beginor.GisHub.Data.ModelMapping).Assembly,
                 t => t.Name.EndsWith("Repository"),
