@@ -2,7 +2,7 @@
 # $1 is target runtime id;
 if [ -z "$1" ]
 then
-  echo "Please provide target runtime id."
+  echo "Please provide target runtime id like: linux-x64, win-x64 or osx-x64 ."
   exit 1
 fi
 echo "Target runtime id is $1"
