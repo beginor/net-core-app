@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-using System.Reflection;
 using Beginor.AppFx.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,7 +11,6 @@ namespace Beginor.NetCoreApp.Entry {
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
             services.AddServiceWithDefaultImplements(
                 typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly,
                 t => t.Name.EndsWith("Repository"),
