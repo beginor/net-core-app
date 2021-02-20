@@ -1,7 +1,7 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+FROM mcr.microsoft.com/dotnet/runtime-deps:5.0
+ENV ASPNETCORE_PATHBASE=/net-core-app \
+    ASPNETCORE_URLS=http://+:5000
 ADD dist /gishub
-ENV ASPNETCORE_PATHBASE=/gishub
-ENV ASPNETCORE_URLS=http://+:5000
 VOLUME [ "/gishub/config", "/gishub/log" ]
 WORKDIR /gishub
-ENTRYPOINT ["dotnet", "GisHub.dll"]
+ENTRYPOINT ["./GisHub"]
