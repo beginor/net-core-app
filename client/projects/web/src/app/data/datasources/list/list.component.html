@@ -90,8 +90,10 @@
               <tr *ngFor="let item of data; let i = index;">
                 <th scope="row" class="text-right text-muted">{{i+1+vm.searchModel.skip}}</th>
                 <td class='text-left'>
-                  <svg-icon [path]="!!item.geometryColumn ? 'bi/globe' : 'bi/table'"></svg-icon>
-                  {{item.name}}
+                  <a class="preview-link" (click)="showPreview(item.id, item.name)">
+                    <svg-icon [path]="!!item.geometryColumn ? 'bi/globe' : 'bi/table'"></svg-icon>
+                    {{item.name}}
+                  </a>
                 </td>
                 <td class='text-left'>{{item.connection.name}}</td>
                 <td class='text-left'>{{item.schema}}</td>

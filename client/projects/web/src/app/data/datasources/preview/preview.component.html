@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{name}} 数据预览</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body p-0">
+  <table class="table">
+    <thead>
+      <tr>
+        <th *ngFor="let col of columns" >
+          <div *ngIf="!!col.description" class="text-muted text-nowrap">{{col.description}}</div>
+          <div class="text-body text-nowrap">{{col.name}}</div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of data">
+        <td class="text-body text-wrap" *ngFor="let col of columns">
+          {{row[col.name]}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="modal-footer">
+  <div class="row no-gutters">
+    <div class="col-6"></div>
+    <div class="col-6">
+      <ngb-pagination></ngb-pagination>
+    </div>
+  </div>
+</div>

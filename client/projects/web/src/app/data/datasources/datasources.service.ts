@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
+import { ColumnModel } from './metadata.service';
 
 /** 数据源（数据表或视图）服务 */
 @Injectable({
@@ -153,6 +154,86 @@ export class DataSourceService {
         }
     }
 
+    public async getColumns(id: string): Promise<ColumnModel[]> {
+        try {
+            const result = await this.http.get<ColumnModel[]>(
+                `${this.baseUrl}/${id}/columns`
+            ).toPromise();
+            return result;
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert(
+                { type: 'danger', message: '获取数据源的列数据出错！' }
+            );
+            return [];
+        }
+    }
+
+    public async getData(
+        id: string,
+        params: ReadDataParam
+    ): Promise<PaginatedResult> {
+        try {
+            let httpParams = new HttpParams();
+            for (const key in params) {
+                if (params.hasOwnProperty(key)) {
+                    const val = params[key] as string;
+                    httpParams = httpParams.set(key, val);
+                }
+            }
+            const result = await this.http.get<PaginatedResult>(
+                `${this.baseUrl}/${id}/data`,
+                { params: httpParams }
+            ).toPromise();
+            return result;
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert(
+                { type: 'danger', message: '获取数据源的数据出错！' }
+            );
+            return {};
+        }
+    }
+
+}
+
+export interface CountParam {
+    [key: string]: undefined | number | string;
+    $where?: string;
+}
+export interface DistinctParam extends CountParam {
+    $select?: string;
+    $orderBy?: string;
+}
+export interface GeoJsonParam extends DistinctParam {
+    $skip?: number;
+    $take?: number;
+}
+export interface AgsJsonParam extends DistinctParam {
+    $skip?: number;
+    $take?: number;
+}
+export interface ReadDataParam extends DistinctParam {
+    $groupBy?: string;
+    $skip?: number;
+    $take?: number;
+}
+export interface PivotParam extends DistinctParam {
+    $aggregate?: string;
+    $field?: string;
+    $value?: string;
+}
+export interface PaginatedResult {
+    /** 请求跳过的记录数 */
+    skip?: number;
+    /** 请求多少条记录 */
+    take?: number;
+    /** 总记录数 */
+    total?: number;
+    /** 数据列表 */
+    data?: any[];
 }
 
 /** 数据源（数据表或视图） */

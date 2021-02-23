@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
 
 import { DataSourceService } from '../datasources.service';
+import { PreviewComponent } from '../preview/preview.component';
 
 @Component({
     selector: 'app-datasource-list',
@@ -15,6 +17,7 @@ export class ListComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private modal: NgbModal,
         public account: AccountService,
         public vm: DataSourceService
     ) { }
@@ -45,6 +48,15 @@ export class ListComponent implements OnInit {
         this.vm.searchModel.keywords = '';
         this.vm.searchModel.skip = 0;
         this.vm.search();
+    }
+
+    public showPreview(id: string, name: string): void {
+        const ref = this.modal.open(
+            PreviewComponent,
+            { container: 'body', size: 'xl' }
+        );
+        ref.componentInstance.id = id;
+        ref.componentInstance.name = name;
     }
 
 }
