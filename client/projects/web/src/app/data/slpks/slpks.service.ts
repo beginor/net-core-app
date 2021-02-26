@@ -162,7 +162,7 @@ export class SlpkService {
         if (url.startsWith('/')) {
             url = `${location.protocol}//${location.host}${url}`;
         }
-        url = `${url}/rest/services/slpks/${id}/SceneServer`;
+        url = `${url}rest/services/slpks/${id}/SceneServer`;
         return url;
     }
 

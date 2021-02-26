@@ -1,5 +1,11 @@
 <div class="modal-header">
-  <h4 class="modal-title">{{name}} 数据预览</h4>
+  <h4 class="modal-title">{{ds.name}} 数据预览</h4>
+  <div class="btn-group btn-group-sm ml-auto">
+    <button [class]="getPreviewButtonClass('data')" (click)="setPreviewType('data')">属性数据</button>
+    <button [class]="getPreviewButtonClass('geojson')" (click)="setPreviewType('geojson')">GeoJson</button>
+    <button [class]="getPreviewButtonClass('featureset')" (click)="setPreviewType('featureset')">FeatureSet</button>
+    <button [class]="getPreviewButtonClass('mapserver')" (click)="setPreviewType('mapserver')">MapServer</button>
+  </div>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -25,7 +31,11 @@
 </div>
 <div class="modal-footer">
   <div class="row no-gutters">
-    <div class="col-6"></div>
+    <div class="col-6">
+      <div class="text-muted" style="font-size: 0.6rem;">
+        服务地址：<a [href]="getPreviewUrl()" target="_blank">{{getPreviewUrl()}}</a>
+      </div>
+    </div>
     <div class="col-6">
       <ngb-pagination></ngb-pagination>
     </div>

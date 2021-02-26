@@ -4,7 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
 
-import { DataSourceService } from '../datasources.service';
+import { DataSourceModel, DataSourceService } from '../datasources.service';
 import { PreviewComponent } from '../preview/preview.component';
 
 @Component({
@@ -50,13 +50,12 @@ export class ListComponent implements OnInit {
         this.vm.search();
     }
 
-    public showPreview(id: string, name: string): void {
+    public showPreview(ds: DataSourceModel): void {
         const ref = this.modal.open(
             PreviewComponent,
             { container: 'body', size: 'xl' }
         );
-        ref.componentInstance.id = id;
-        ref.componentInstance.name = name;
+        ref.componentInstance.ds = ds;
     }
 
 }

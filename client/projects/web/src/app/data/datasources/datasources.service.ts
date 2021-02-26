@@ -197,6 +197,22 @@ export class DataSourceService {
         }
     }
 
+    public getPreviewUrl(id: string, type: PreviewType): string {
+        if (type !== 'mapserver') {
+            let url = `${this.baseUrl}/${id}/${type}`;
+            if (url.startsWith('/')) {
+                url = `${location.protocol}//${location.host}${url}`;
+            }
+            return url;
+        }
+        let url2 = this.apiRoot.substring(0, this.apiRoot.length - 3);
+        if (url2.startsWith('/')) {
+            url2 = `${location.protocol}//${location.host}${url2}`;
+        }
+        url2 = `${url2}rest/services/maps/${id}/MapServer/0`;
+        return url2;
+    }
+
 }
 
 export interface CountParam {
@@ -286,3 +302,5 @@ export interface DataSourceResultModel {
     /** 数据列表 */
     data?: DataSourceModel[];
 }
+
+export type PreviewType = 'data' | 'geojson' | 'featureset' | 'mapserver';
