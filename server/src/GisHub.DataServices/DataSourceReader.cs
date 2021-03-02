@@ -148,7 +148,8 @@ namespace Beginor.GisHub.DataServices {
             }
             var firstRow = list.First();
             var columns = await GetColumnsAsync(dataSourceId);
-            columns = columns.Where(c => selectFields.Contains(c.Name, StringComparison.OrdinalIgnoreCase)).ToList();
+            var fields = selectFields.Split(',');
+            columns = columns.Where(c => fields.Contains(c.Name)).ToList();
             result.Fields = new List<AgsField>(columns.Count);
             result.FieldAliases = new Dictionary<string, string>(columns.Count);
             var typeMap = AgsFieldDataTypes.FieldDataTypeMap;

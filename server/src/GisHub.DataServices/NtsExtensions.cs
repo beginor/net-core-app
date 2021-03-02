@@ -48,10 +48,10 @@ namespace Beginor.GisHub.DataServices {
             return new AgsPoint {
                 X = point.X,
                 Y = point.Y,
-                Z = point.Z,
-                M = point.M,
-                HasZ = !double.IsNaN(point.Z),
-                HasM = !double.IsNaN(point.M)
+                Z = double.IsNaN(point.Z) ? null : point.Z,
+                M = double.IsNaN(point.M) ? null : point.M,
+                HasZ = double.IsNaN(point.Z) ? null : true,
+                HasM = double.IsNaN(point.M) ? null : true
             };
         }
 
@@ -66,8 +66,8 @@ namespace Beginor.GisHub.DataServices {
             }
             return new AgsMultiPoint {
                 Points = list.ToArray(),
-                HasZ = !double.IsNaN(multiPoint.Coordinate.Z),
-                HasM = !double.IsNaN(multiPoint.Coordinate.M)
+                HasZ = double.IsNaN(multiPoint.Coordinate.Z) ? null : true,
+                HasM = double.IsNaN(multiPoint.Coordinate.M) ? null : true
             };
         }
 
@@ -78,8 +78,8 @@ namespace Beginor.GisHub.DataServices {
             list.AddRange(lineString.Coordinates.Select(c => c.ToArray()));
             return new AgsPolyline {
                 Paths = new[] { list.ToArray() },
-                HasZ = !double.IsNaN(lineString.Coordinate.Z),
-                HasM = !double.IsNaN(lineString.Coordinate.M)
+                HasZ = double.IsNaN(lineString.Coordinate.Z) ? null : true,
+                HasM = double.IsNaN(lineString.Coordinate.M) ? null : true
             };
         }
 
@@ -95,8 +95,8 @@ namespace Beginor.GisHub.DataServices {
             }
             return new AgsPolyline {
                 Paths = coords.ToArray(),
-                HasZ = !double.IsNaN(multiLine.Coordinate.Z),
-                HasM = !double.IsNaN(multiLine.Coordinate.M)
+                HasZ = double.IsNaN(multiLine.Coordinate.Z) ? null : true,
+                HasM = double.IsNaN(multiLine.Coordinate.M) ? null : true
             };
         }
 
@@ -111,8 +111,8 @@ namespace Beginor.GisHub.DataServices {
             );
             return new AgsPolygon {
                 Rings = list.ToArray(),
-                HasZ = !double.IsNaN(polygon.Coordinate.Z),
-                HasM = !double.IsNaN(polygon.Coordinate.M)
+                HasZ = double.IsNaN(polygon.Coordinate.Z) ? null : true,
+                HasM = double.IsNaN(polygon.Coordinate.M) ? null : true
             };
         }
 
@@ -123,8 +123,8 @@ namespace Beginor.GisHub.DataServices {
             list.AddRange(ring.Coordinates.Select(c => c.ToArray()));
             return new AgsPolygon {
                 Rings = new[] { list.ToArray() },
-                HasZ = !double.IsNaN(ring.Coordinate.Z),
-                HasM = !double.IsNaN(ring.Coordinate.M)
+                HasZ = double.IsNaN(ring.Coordinate.Z) ? null : true,
+                HasM = double.IsNaN(ring.Coordinate.M) ? null : true
             };
         }
 
@@ -142,11 +142,11 @@ namespace Beginor.GisHub.DataServices {
             }
             return new AgsPolygon {
                 Rings = list.ToArray(),
-                HasZ = !double.IsNaN(multiPolygon.Coordinate.Z),
-                HasM = !double.IsNaN(multiPolygon.Coordinate.M)
+                HasZ = double.IsNaN(multiPolygon.Coordinate.Z) ? null : true,
+                HasM = double.IsNaN(multiPolygon.Coordinate.M) ? null : true
             };
         }
-        
+
         #endregion
 
         #region "Convert NtsGeometry to GeoJson Geometry"
