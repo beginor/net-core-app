@@ -13,12 +13,16 @@ import { DataSourceRoutingModule } from './datasources-routing.module';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
 import { PreviewComponent } from './preview/preview.component';
+import { PreviewDataComponent } from './preview/preview-data.component';
+import { PreviewGeoJsonComponent } from './preview/preview-geojson.component';
 
 @NgModule({
     declarations: [
         ListComponent,
         DetailComponent,
-        PreviewComponent
+        PreviewComponent,
+        PreviewDataComponent,
+        PreviewGeoJsonComponent
     ],
     imports: [
         CommonModule,

@@ -7,7 +7,7 @@ import { SlpkService } from '../slpks.service';
 import { ArcGisService } from '../../arcgis.service';
 
 @Component({
-    selector: 'app-preview',
+    selector: 'app-slpks-preview',
     templateUrl: './preview.component.html',
     styleUrls: ['./preview.component.scss']
 })

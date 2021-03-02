@@ -1,0 +1,59 @@
+{
+  "accessToken": "pk.eyJ1IjoiYmVnaW5vciIsImEiOiJja2pmMWNkbXg4azcyMzVwZHFraGc1cjYzIn0.xo0073v7zQfAicAPsr0CHQ",
+  "style": "mapbox://styles/beginor/ckkf3glod0g1m17my2wh0s74q",
+  "camera": {
+    "center": { "lng": 113.08710083844062, "lat": 23.65525480283638 },
+    "zoom": 6,
+    "pitch": 0,
+    "bearing": 0
+  },
+  "defaults": {
+    "circle": {
+      "type": "circle",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-radius": 3,
+        "circle-color": "rgb(255, 0, 0)",
+        "circle-stroke-color": "rgb(0, 0, 0)",
+        "circle-stroke-width": 1.0
+      }
+    },
+    "line": {
+      "type": "line",
+      "layout": {
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgb(255, 0, 0)",
+        "line-width": 2
+      }
+    },
+    "fill": {
+      "type": "fill",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-antialias": true,
+        "fill-outline-color": "rgb(0, 0, 0)",
+        "fill-color": "rgb(255, 0, 0)",
+        "fill-opacity": 1.0
+      }
+    },
+    "label": {
+      "type": "symbol",
+      "layout": {
+        "visibility": "visible",
+        "text-offset": [0, -1.2]
+      },
+      "paint": {
+        "text-color": "rgb(255, 0, 0)",
+        "text-halo-color": "rgb(0, 0, 0)",
+        "text-halo-width": 2
+      }
+    }
+  }
+}

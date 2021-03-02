@@ -5,17 +5,13 @@ import { DataSourceService, DataSourceModel, ReadDataParam, PreviewType } from '
 import { ColumnModel } from '../metadata.service';
 
 @Component({
-    selector: 'app-preview',
+    selector: 'app-datasources-preview',
     templateUrl: './preview.component.html',
     styleUrls: ['./preview.component.scss']
 })
 export class PreviewComponent implements OnInit {
 
     public ds: DataSourceModel = { };
-
-    public columns: ColumnModel[] = [];
-    public data: any[] = [];
-    public readDataParam: ReadDataParam = {};
     public previewType: PreviewType = 'data';
 
     constructor(
@@ -24,16 +20,6 @@ export class PreviewComponent implements OnInit {
     ) { }
 
     public async ngOnInit(): Promise<void> {
-        const id = this.ds.id as string;
-        this.columns = await this.vm.getColumns(id);
-        this.readDataParam.$select = this.columns.map(
-            col => col.name
-        ).join(',');
-        const result = await this.vm.getData(
-            id,
-            this.readDataParam
-        );
-        this.data = result.data ?? [];
     }
 
     public setPreviewType(type: PreviewType): void {

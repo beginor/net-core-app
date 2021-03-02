@@ -213,6 +213,57 @@ export class DataSourceService {
         return url2;
     }
 
+    public async getCount(id: string, params: CountParam): Promise<number> {
+        try {
+            let httpParams = new HttpParams();
+            for (const key in params) {
+                if (params.hasOwnProperty(key)) {
+                    const val = params[key] as string;
+                    httpParams = httpParams.set(key, val);
+                }
+            }
+            const result = await this.http.get<number>(
+                `${this.baseUrl}/${id}/count`,
+                { params: httpParams }
+            ).toPromise();
+            return result;
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert(
+                { type: 'danger', message: '获取数据源的记录数出错！' }
+            );
+            return -1;
+        }
+    }
+
+    public async getGeoJson(
+        id: string,
+        params: GeoJsonParam
+    ): Promise<GeoJSON.FeatureCollection | undefined> {
+        try {
+            let httpParams = new HttpParams();
+            for (const key in params) {
+                if (params.hasOwnProperty(key)) {
+                    const val = params[key] as string;
+                    httpParams = httpParams.set(key, val);
+                }
+            }
+            const result = await this.http.get<GeoJSON.FeatureCollection>(
+                `${this.baseUrl}/${id}/geojson`,
+                { params: httpParams }
+            ).toPromise();
+            return result;
+        }
+        catch (ex) {
+            console.error(ex);
+            this.ui.showAlert(
+                { type: 'danger', message: '获取数据源的记录数出错！' }
+            );
+            return undefined;
+        }
+    }
+
 }
 
 export interface CountParam {
