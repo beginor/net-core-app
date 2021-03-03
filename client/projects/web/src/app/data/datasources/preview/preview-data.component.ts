@@ -38,7 +38,7 @@ import { DataSourceModel, DataSourceService, ReadDataParam } from '../datasource
 export class PreviewDataComponent implements OnInit, OnDestroy {
 
     @Input()
-    public ds: DataSourceModel = { };
+    public ds: DataSourceModel = { id: '' };
     public columns: ColumnModel[] = [];
     public data: any[] = [];
     public total = 0;

@@ -22,7 +22,7 @@ import {
 })
 export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
     @Input()
-    public ds: DataSourceModel = { };
+    public ds: DataSourceModel = { id: '' };
     @ViewChild('mapEl')
     public mapElRef!: ElementRef<HTMLDivElement>;
 

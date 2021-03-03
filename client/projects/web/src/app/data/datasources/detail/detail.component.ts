@@ -33,7 +33,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: DataSourceModel = {};
+    public model: DataSourceModel = { id: '' };
     public connections: ConnectionModel[] = [];
     public connection?: ConnectionModel;
 

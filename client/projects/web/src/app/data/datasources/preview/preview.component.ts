@@ -11,7 +11,7 @@ import { ColumnModel } from '../metadata.service';
 })
 export class PreviewComponent implements OnInit {
 
-    public ds: DataSourceModel = { };
+    public ds: DataSourceModel = { id: '' };
     public previewType: PreviewType = 'data';
 
     constructor(

@@ -251,7 +251,7 @@ export class DataSourceService {
             }
             const result = await this.http.get<GeoJSON.FeatureCollection>(
                 `${this.baseUrl}/${id}/geojson`,
-                { params: httpParams }
+                { params: httpParams,  }
             ).toPromise();
             return result;
         }
