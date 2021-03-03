@@ -165,11 +165,11 @@ export class AppPrivilegeService {
 /** 系统权限 */
 export interface AppPrivilegeModel {
     /** 权限ID */
-    id?: string;
+    id: string;
     /** 权限模块 */
     module?: string;
     /** 权限名称( Identity 的策略名称) */
-    name?: string;
+    name: string;
     /** 权限描述 */
     description?: string;
     /** 是否必须。 与代码中的 Authorize 标记对应的权限为必须的权限， 否则为可选的。 */

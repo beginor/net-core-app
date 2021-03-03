@@ -30,7 +30,7 @@ export class DetailComponent implements OnInit {
         { name: '新窗口', value: '_blank' },
         { name: '内嵌窗口', value: '_iframe' }
     ];
-    public model: NavItemModel = { target: '', roles: [] };
+    public model: NavItemModel = { id: '', target: '', roles: [] };
     public selectedRoles: string[] = [];
     public parents: MenuOption[] = [];
 

@@ -12,8 +12,11 @@ export class SvgIconComponent implements AfterViewInit {
 
     private viewInited = false;
     private iconPath = '';
-    public get path(): string { return this.iconPath; }
-    @Input() public set path(val: string) {
+    public get path(): string | undefined { return this.iconPath; }
+    @Input() public set path(val: string | undefined) {
+        if (!val) {
+            return;
+        }
         if (val !== this.iconPath) {
             this.iconPath = val;
             if (!!this.iconPath && this.viewInited) {
@@ -39,6 +42,9 @@ export class SvgIconComponent implements AfterViewInit {
     }
 
     private async updateIcon(): Promise<void> {
+        if (!this.path) {
+            return;
+        }
         let svg = this.el.nativeElement.firstChild as SVGElement;
         const xml = await this.svg.loadSvgFile(this.path);
         svg.remove();

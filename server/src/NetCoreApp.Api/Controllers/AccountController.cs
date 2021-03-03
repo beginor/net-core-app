@@ -97,7 +97,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             try {
                 var user = await userMgr.FindByNameAsync(model.UserName);
                 if (user == null) {
-                    return BadRequest($"用户 {model.UserName} 不存在!");
+                    return BadRequest($"登录失败， 请重试!");
                 }
                 if (await userMgr.IsLockedOutAsync(user)) {
                     return BadRequest($"用户 {model.UserName} 已经被锁定!");
@@ -115,7 +115,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (!isValid) {
                     await userMgr.AccessFailedAsync(user);
                     return BadRequest(
-                        $"输入的密码不正确， 请重试！"
+                        $"登录失败， 请重试！"
                     );
                 }
                 // update user last login and login count;

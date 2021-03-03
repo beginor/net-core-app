@@ -23,7 +23,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title: string;
     public editable: boolean;
-    public model: UserModel = { lockoutEnabled: true, gender: '保密' };
+    public model: UserModel = { id: '', lockoutEnabled: true, gender: '保密' };
     public dob = { year: 1970, month: 1, day: 1 };
 
     private id: string;

@@ -103,15 +103,15 @@ export interface AuditLogModel {
     /** 请求路径 */
     requestPath?: string;
     /** 请求方法 */
-    requestMethod?: string;
+    requestMethod: string;
     /** 用户名 */
     userName?: string;
     /** 开始时间 */
     startAt?: string;
     /** 耗时(毫秒) */
-    duration?: number;
+    duration: number;
     /** 响应状态码 */
-    responseCode?: number;
+    responseCode: number;
     /** 控制器名称 */
     controllerName?: string;
     /** 动作名称 */

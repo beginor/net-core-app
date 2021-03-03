@@ -23,7 +23,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title: string;
     public editable: boolean;
-    public model: AppPrivilegeModel = {};
+    public model: AppPrivilegeModel = { id: '', name: '' };
 
     private id: string;
     private reloadList = false;

@@ -189,7 +189,7 @@
               <ngb-pagination *ngIf="vm.showPagination"
                 class="d-flex justify-content-end"
                 size="sm"
-                [collectionSize]="vm.total | async"
+                [collectionSize]="(vm.total | async) || 0"
                 [page]="(vm.searchModel.skip / vm.searchModel.take) + 1"
                 [pageSize]="vm.searchModel.take"
                 [maxSize]="5"

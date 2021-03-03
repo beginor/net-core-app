@@ -222,7 +222,7 @@ export class NavItemsService {
 /** 导航节点（菜单） */
 export interface NavItemModel {
     /** 节点ID */
-    id?: string;
+    id: string;
     /** parent_id, int8 */
     parentId?: string;
     /** 标题 */
