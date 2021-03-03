@@ -4,7 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
 import { PreviewComponent } from '../preview/preview.component';
-import { SlpkService } from '../slpks.service';
+import { SlpkModel, SlpkService } from '../slpks.service';
 
 @Component({
     selector: 'app-slpk-list',
@@ -49,11 +49,16 @@ export class ListComponent implements OnInit {
         this.vm.search();
     }
 
-    public showPreview(id: string, tag: string): void {
+    public showPreview(item: SlpkModel): void {
         const modalRef = this.modal.open(
             PreviewComponent,
             { container: 'body', size: 'xl' }
         );
+        const id = item.id;
+        let tag = '';
+        if (!!item.tags && !!item.tags[0]) {
+            tag = item.tags[0];
+        }
         modalRef.componentInstance.id = id;
         modalRef.componentInstance.name = tag;
     }

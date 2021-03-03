@@ -177,7 +177,7 @@ export class ConnectionService {
 /** 数据库连接 */
 export interface ConnectionModel {
     /** 连接ID */
-    id?: string;
+    id: string;
     /** 连接名称 */
     name?: string;
     /** 数据库类型（postgres、mssql、mysql、oracle、sqlite等） */

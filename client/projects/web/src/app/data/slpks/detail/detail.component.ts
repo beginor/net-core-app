@@ -24,7 +24,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: SlpkModel = { tags: [] };
+    public model: SlpkModel = { id: '', tags: [] };
     public newTag = '';
 
     private id = '';

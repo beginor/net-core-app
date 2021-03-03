@@ -306,7 +306,7 @@ export interface PaginatedResult {
 /** 数据源（数据表或视图） */
 export interface DataSourceModel {
     /** 数据源id */
-    id?: string;
+    id: string;
     /** 数据源名称 */
     name?: string;
     /** 数据库连接 */

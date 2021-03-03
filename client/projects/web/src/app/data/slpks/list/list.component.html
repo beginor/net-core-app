@@ -89,7 +89,7 @@
               <tr *ngFor="let item of data; let i = index;">
                 <th scope="row" class="text-right text-muted">{{i+1+vm.searchModel.skip}}</th>
                 <td class='text-left'>
-                  <a class="preivew-link" (click)="showPreview(item.id, item.tags[0])">{{item.directory}}</a>
+                  <a class="preivew-link" (click)="showPreview(item)">{{item.directory}}</a>
                 </td>
                 <td class='text-right'>{{item.longitude}}</td>
                 <td class='text-right'>{{item.latitude}}</td>
@@ -132,7 +132,7 @@
               <ngb-pagination class="d-flex justify-content-end"
                 *ngIf="vm.showPagination"
                 size="sm"
-                [collectionSize]="vm.total | async"
+                [collectionSize]="(vm.total | async) || 0"
                 [page]="(vm.searchModel.skip / vm.searchModel.take) + 1"
                 [pageSize]="vm.searchModel.take"
                 [maxSize]="5"

@@ -24,7 +24,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: TileMapModel = {};
+    public model: TileMapModel = { id: '' };
 
     private id = '';
     private reloadList = false;

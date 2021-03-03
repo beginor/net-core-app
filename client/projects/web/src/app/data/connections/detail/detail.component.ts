@@ -24,7 +24,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: ConnectionModel = {};
+    public model: ConnectionModel = { id: '' };
     public showPass = false;
 
     private id = '';

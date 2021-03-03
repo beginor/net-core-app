@@ -171,7 +171,7 @@ export class SlpkService {
 /** slpk 航拍模型 */
 export interface SlpkModel {
     /** 航拍模型id */
-    id?: string;
+    id: string;
     /** 航拍模型目录 */
     directory?: string;
     /** 模型经度 */

@@ -172,7 +172,7 @@ export class TileMapService {
 /** 切片地图 */
 export interface TileMapModel {
     /** 切片地图id */
-    id?: string;
+    id: string;
     /** 切片地图名称 */
     name?: string;
     /** 缓存目录 */

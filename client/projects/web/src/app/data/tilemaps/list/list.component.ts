@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
-import { TileMapService } from '../tilemaps.service';
+import { TileMapModel, TileMapService } from '../tilemaps.service';
 import { PreviewComponent } from '../preview/preview.component';
 
 @Component({
@@ -49,11 +49,12 @@ export class ListComponent implements OnInit {
         this.vm.search();
     }
 
-    public showPreview(id: string, name: string): void {
+    public showPreview(model: TileMapModel): void {
         const modalRef = this.modal.open(
             PreviewComponent,
             { container: 'body', size: 'xl' }
         );
+        const { id, name } = model;
         modalRef.componentInstance.id = id;
         modalRef.componentInstance.name = name;
     }
