@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -95,9 +96,11 @@ namespace Beginor.GisHub.Api.Controllers {
             [FromBody]AccountLoginModel model
         ) {
             try {
+                model.UserName = Encoding.UTF8.GetString(Convert.FromBase64String(model.UserName));
+                model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
                 var user = await userMgr.FindByNameAsync(model.UserName);
                 if (user == null) {
-                    return BadRequest($"用户 {model.UserName} 不存在!");
+                    return BadRequest($"登录失败， 请重试!");
                 }
                 if (await userMgr.IsLockedOutAsync(user)) {
                     return BadRequest($"用户 {model.UserName} 已经被锁定!");
@@ -115,7 +118,7 @@ namespace Beginor.GisHub.Api.Controllers {
                 if (!isValid) {
                     await userMgr.AccessFailedAsync(user);
                     return BadRequest(
-                        $"输入的密码不正确， 请重试！"
+                        $"登录失败， 请重试！"
                     );
                 }
                 // update user last login and login count;

@@ -66,7 +66,12 @@ export class AccountService {
 
     public async login(model: LoginModel): Promise<void> {
         const url = this.apiRoot + '/account';
-        const token = await this.http.post(url, model, { responseType: 'text' })
+        const loginModel: LoginModel = {
+            userName: btoa(model.userName as string),
+            password: btoa(model.password as string),
+            isPersistent: model.isPersistent
+        };
+        const token = await this.http.post(url, loginModel, { responseType: 'text' })
             .toPromise();
         this.saveToken(token);
     }

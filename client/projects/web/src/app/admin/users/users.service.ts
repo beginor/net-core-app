@@ -268,7 +268,7 @@ export class UsersService {
  */
 export interface UserModel {
     /** 用户ID */
-    id?: string;
+    id: string;
     /** 用户名 */
     userName?: string;
     /** 电子邮箱地址 */

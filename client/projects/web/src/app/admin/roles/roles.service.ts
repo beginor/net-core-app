@@ -243,7 +243,7 @@ export class RolesService {
 /** 角色 */
 export interface AppRoleModel {
     /** 角色标识 */
-    id?: string;
+    id: string;
     /** 角色名称 */
     name: string;
     /** 角色描述 */
