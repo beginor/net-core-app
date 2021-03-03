@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -95,6 +96,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AccountLoginModel model
         ) {
             try {
+                model.UserName = Encoding.UTF8.GetString(Convert.FromBase64String(model.UserName));
+                model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
                 var user = await userMgr.FindByNameAsync(model.UserName);
                 if (user == null) {
                     return BadRequest($"登录失败， 请重试!");
