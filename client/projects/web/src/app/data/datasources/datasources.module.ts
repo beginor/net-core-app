@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
     NgbPaginationModule, NgbTooltipModule, NgbTypeaheadModule, NgbModalModule,
-    NgbNavModule
+    NgbNavModule, NgbProgressbarModule
 } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppSharedModule } from 'app-shared';
@@ -32,6 +32,7 @@ import { PreviewGeoJsonComponent } from './preview/preview-geojson.component';
         NgbTypeaheadModule,
         NgbModalModule,
         NgbNavModule,
+        NgbProgressbarModule,
         AppSharedModule,
         AppCommonModule,
         DataSourceRoutingModule

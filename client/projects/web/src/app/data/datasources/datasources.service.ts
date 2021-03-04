@@ -1,9 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpParams, HttpRequest } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
 import { ColumnModel } from './metadata.service';
+import { map } from 'rxjs/operators';
 
 /** 数据源（数据表或视图）服务 */
 @Injectable({
@@ -237,11 +238,12 @@ export class DataSourceService {
         }
     }
 
-    public async getGeoJson(
+    public getGeoJson(
         id: string,
-        params: GeoJsonParam
-    ): Promise<GeoJSON.FeatureCollection | undefined> {
-        try {
+        params: GeoJsonParam,
+        progressCallback: (total: number, loaded: number) => void
+    ): Promise<GeoJSON.FeatureCollection> {
+        return new Promise<any>((resolve, reject) => {
             let httpParams = new HttpParams();
             for (const key in params) {
                 if (params.hasOwnProperty(key)) {
@@ -249,19 +251,29 @@ export class DataSourceService {
                     httpParams = httpParams.set(key, val);
                 }
             }
-            const result = await this.http.get<GeoJSON.FeatureCollection>(
+            const req = new HttpRequest(
+                'GET',
                 `${this.baseUrl}/${id}/geojson`,
-                { params: httpParams,  }
-            ).toPromise();
-            return result;
-        }
-        catch (ex) {
-            console.error(ex);
-            this.ui.showAlert(
-                { type: 'danger', message: '获取数据源的记录数出错！' }
+                { params: httpParams, reportProgress: true }
             );
-            return undefined;
-        }
+            this.http.request<GeoJSON.FeatureCollection>(req).subscribe(
+                e => {
+                    if (e.type === HttpEventType.DownloadProgress) {
+                        progressCallback(e.total || 0, e.loaded);
+                    }
+                    else if (e.type === HttpEventType.Response) {
+                        resolve(e.body);
+                    }
+                },
+                ex => {
+                    console.error(ex);
+                    this.ui.showAlert(
+                        { type: 'danger', message: '获取数据源的记录数出错！' }
+                    );
+                    reject(ex);
+                }
+            );
+        });
     }
 
 }

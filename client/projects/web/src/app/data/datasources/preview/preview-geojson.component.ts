@@ -1,5 +1,5 @@
 import {
-    Component, ElementRef, Inject, Input, OnDestroy, AfterViewInit, ViewChild
+    Component, ElementRef, Inject, Input, OnDestroy, AfterViewInit, ViewChild, Output, EventEmitter
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -23,6 +23,7 @@ import {
 export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
     @Input()
     public ds: DataSourceModel = { id: '' };
+    @Output() public downloadProgress = new EventEmitter<number>(true);
     @ViewChild('mapEl')
     public mapElRef!: ElementRef<HTMLDivElement>;
 
@@ -105,8 +106,14 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
             return;
         }
         const count = await this.vm.getCount(id, { });
-        const geojson = await this.vm.getGeoJson(id, { $take: count });
-        this.map?.addSource(id, { type: 'geojson', data: geojson as any});
+        const geojson = await this.vm.getGeoJson(
+            id, { $take: count },
+            (total, loaded) => {
+                const percent = Number.parseFloat((loaded / total).toFixed(2));
+                this.downloadProgress.next(percent);
+            }
+        );
+        this.map?.addSource(id, { type: 'geojson', data: geojson});
         this.geoJson = geojson;
     }
 

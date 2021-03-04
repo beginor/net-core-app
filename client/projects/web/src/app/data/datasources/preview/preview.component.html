@@ -10,7 +10,7 @@
     <li *ngIf="!!ds.geometryColumn" ngbNavItem="geojson">
       <a ngbNavLink>GeoJson</a>
       <ng-template ngbNavContent>
-        <app-datasources-preview-geojson [ds]="ds"></app-datasources-preview-geojson>
+        <app-datasources-preview-geojson [ds]="ds" (downloadProgress)="updateProgress($event)"></app-datasources-preview-geojson>
       </ng-template>
     </li>
     <li *ngIf="!!ds.geometryColumn" ngbNavItem="featureset">
@@ -36,4 +36,7 @@
   <div class="text-muted" style="font-size: 0.6rem;">
     服务地址：<a [href]="getPreviewUrl()" target="_blank">{{getPreviewUrl()}}</a>
   </div>
+  <ngb-progressbar *ngIf="previewType != 'data'" class="ml-auto" style="width: 100px;" [showValue]="true"
+    type="success" [max]="100" [value]="downloadProgress">
+  </ngb-progressbar>
 </div>

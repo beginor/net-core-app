@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { DataSourceService, DataSourceModel, ReadDataParam, PreviewType } from '../datasources.service';
-import { ColumnModel } from '../metadata.service';
+import { DataSourceService, DataSourceModel, PreviewType } from '../datasources.service';
 
 @Component({
     selector: 'app-datasources-preview',
@@ -11,8 +10,17 @@ import { ColumnModel } from '../metadata.service';
 })
 export class PreviewComponent implements OnInit {
 
+    private pvType: PreviewType = 'data';
+
     public ds: DataSourceModel = { id: '' };
-    public previewType: PreviewType = 'data';
+    public get previewType(): PreviewType {
+        return this.pvType;
+    }
+    public set previewType(val: PreviewType) {
+        this.pvType = val;
+        this.downloadProgress = 0;
+    }
+    public downloadProgress = 0;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -20,10 +28,6 @@ export class PreviewComponent implements OnInit {
     ) { }
 
     public async ngOnInit(): Promise<void> {
-    }
-
-    public setPreviewType(type: PreviewType): void {
-        this.previewType = type;
     }
 
     public getPreviewUrl(): string {
@@ -37,6 +41,10 @@ export class PreviewComponent implements OnInit {
         return this.previewType === type
             ? 'btn btn-primary'
             : 'btn btn-outline-primary';
+    }
+
+    public updateProgress(percent: number): void {
+        this.downloadProgress = percent * 100;
     }
 
 }
