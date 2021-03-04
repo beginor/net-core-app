@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { AccountService } from 'app-shared';
 
@@ -140,48 +140,6 @@ export class ArcGisService {
             zoom: this.opts.zoom
         });
         mapview.ui.add(new Fullscreen({view: mapview}), 'top-right');
-        return mapview;
-    }
-
-    public async createFeatureSetPreview(
-        container: HTMLDivElement,
-        featureSet: __esri.FeatureSet
-    ): Promise<__esri.MapView> {
-        if (!isLoaded()) {
-            await this.loadJsApi();
-        }
-        const [
-            Map, MapView, FeatureLayer, Fullscreen, FeatureSet
-        ] = await loadModules<[
-            __esri.MapConstructor,
-            __esri.MapViewConstructor,
-            __esri.FeatureLayerConstructor,
-            __esri.FullscreenConstructor,
-            __esri.FeatureSet
-        ]>([
-            'esri/Map',
-            'esri/views/MapView',
-            'esri/layers/TileLayer',
-            'esri/widgets/Fullscreen'
-        ]);
-        const featureLayer = new FeatureLayer({
-            // objectIdField: featureSet.objectIdFieldName,
-            displayField: featureSet.displayFieldName,
-            geometryType: featureSet.geometryType as any,
-            fields: featureSet.fields,
-            source: featureSet.features
-        });
-        const map = new Map({
-            basemap: 'sattlite',
-            layers: [featureLayer]
-        });
-        const mapview = new MapView({
-            map,
-            container,
-            center: this.opts.center,
-            zoom: this.opts.zoom
-        });
-        await mapview.when();
         return mapview;
     }
 
