@@ -11,5 +11,11 @@
     "request": {
       "interceptors": []
     }
-  }
+  },
+  "center": {
+    "x": 113.08710083844062,
+    "y": 23.65525480283638,
+    "spatialReference": { "wkid": 4326 }
+  },
+  "zoom": 6
 }

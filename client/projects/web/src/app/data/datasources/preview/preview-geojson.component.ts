@@ -1,5 +1,6 @@
 import {
-    Component, ElementRef, Inject, Input, OnDestroy, AfterViewInit, ViewChild, Output, EventEmitter
+    Component, ElementRef, Inject, Input, OnDestroy, AfterViewInit, ViewChild,
+    Output, EventEmitter
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -13,11 +14,11 @@ import {
 @Component({
     selector: 'app-datasources-preview-geojson',
     template: `
-      <div #mapEl class="mapview_"></div>
+      <div #mapEl class="mapview"></div>
     `,
     styles: [
         ':host { display: flex; height: 100%; }',
-        'div.mapview_ { flex: 1; }'
+        'div.mapview { flex: 1; }'
     ]
 })
 export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {

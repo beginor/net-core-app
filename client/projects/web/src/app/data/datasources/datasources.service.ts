@@ -243,6 +243,30 @@ export class DataSourceService {
         params: GeoJsonParam,
         progressCallback: (total: number, loaded: number) => void
     ): Promise<GeoJSON.FeatureCollection> {
+        return this.getDataWithProgressCallback<GeoJSON.FeatureCollection>(
+            `${this.baseUrl}/${id}/geojson`,
+            params,
+            progressCallback
+        );
+    }
+
+    public getFeatureSetJson(
+        id: string,
+        params: AgsJsonParam,
+        progressCallback: (total: number, loaded: number) => void
+    ): Promise<__esri.FeatureSetProperties> {
+        return this.getDataWithProgressCallback<__esri.FeatureSetProperties>(
+            `${this.baseUrl}/${id}/featureset`,
+            params,
+            progressCallback
+        );
+    }
+
+    private getDataWithProgressCallback<T>(
+        url: string,
+        params: any,
+        progressCallback: (total: number, loaded: number) => void
+    ): Promise<T> {
         return new Promise<any>((resolve, reject) => {
             let httpParams = new HttpParams();
             for (const key in params) {
@@ -253,10 +277,10 @@ export class DataSourceService {
             }
             const req = new HttpRequest(
                 'GET',
-                `${this.baseUrl}/${id}/geojson`,
+                url,
                 { params: httpParams, reportProgress: true }
             );
-            this.http.request<GeoJSON.FeatureCollection>(req).subscribe(
+            this.http.request<T>(req).subscribe(
                 e => {
                     if (e.type === HttpEventType.DownloadProgress) {
                         progressCallback(e.total || 0, e.loaded);
@@ -268,7 +292,7 @@ export class DataSourceService {
                 ex => {
                     console.error(ex);
                     this.ui.showAlert(
-                        { type: 'danger', message: '获取数据源的记录数出错！' }
+                        { type: 'danger', message: '获取数据源的数据出错！' }
                     );
                     reject(ex);
                 }

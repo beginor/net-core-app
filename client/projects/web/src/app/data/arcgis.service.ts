@@ -10,6 +10,8 @@ import { isLoaded, loadScript, loadModules, ILoadScriptOptions } from 'esri-load
 })
 export class ArcGisService {
 
+    private opts!: ArcGisJsApiOptions;
+
     constructor(
         private http: HttpClient,
         @Inject('webRoot') private webRoot: string,
@@ -23,6 +25,7 @@ export class ArcGisService {
         const opts = await this.http.get<ArcGisJsApiOptions>(
             'assets/arcgis-js-api.options.json'
         ).toPromise();
+        this.opts = opts;
         const dojoConfig = opts.dojoConfig;
         Object.assign(window, { dojoConfig });
         const esriConfig = opts.esriConfig;
@@ -65,7 +68,9 @@ export class ArcGisService {
             layers: [tileLayer]
         });
         const mapView = new MapView({
-            map, container, extent: tileLayer.fullExtent
+            map, container,
+            center: this.opts.center,
+            zoom: this.opts.zoom
         });
         const fullscreen = new Fullscreen({ view: mapView });
         mapView.ui.add(fullscreen, 'top-right');
@@ -100,7 +105,9 @@ export class ArcGisService {
             ground: 'world-elevation'
         });
         const mapView = new SceneView({
-            map, container, extent: meshLayer.fullExtent
+            map, container,
+            center: this.opts.center,
+            zoom: this.opts.zoom
         });
         const fullscreen = new Fullscreen({ view: mapView });
         mapView.ui.add(fullscreen, 'top-right');
@@ -111,9 +118,78 @@ export class ArcGisService {
         return mapView;
     }
 
+    public async createMapView(
+        container: HTMLDivElement
+    ): Promise<__esri.MapView> {
+        if (!isLoaded()) {
+            await this.loadJsApi();
+        }
+        const [Map, MapView, Fullscreen] = await loadModules<[
+            __esri.MapConstructor,
+            __esri.MapViewConstructor,
+            __esri.FullscreenConstructor,
+        ]>([
+            'esri/Map',
+            'esri/views/MapView',
+            'esri/widgets/Fullscreen'
+        ]);
+        const mapview = new MapView({
+            container,
+            map: new Map({ basemap: 'satellite' }),
+            center: this.opts.center,
+            zoom: this.opts.zoom
+        });
+        mapview.ui.add(new Fullscreen({view: mapview}), 'top-right');
+        return mapview;
+    }
+
+    public async createFeatureSetPreview(
+        container: HTMLDivElement,
+        featureSet: __esri.FeatureSet
+    ): Promise<__esri.MapView> {
+        if (!isLoaded()) {
+            await this.loadJsApi();
+        }
+        const [
+            Map, MapView, FeatureLayer, Fullscreen, FeatureSet
+        ] = await loadModules<[
+            __esri.MapConstructor,
+            __esri.MapViewConstructor,
+            __esri.FeatureLayerConstructor,
+            __esri.FullscreenConstructor,
+            __esri.FeatureSet
+        ]>([
+            'esri/Map',
+            'esri/views/MapView',
+            'esri/layers/TileLayer',
+            'esri/widgets/Fullscreen'
+        ]);
+        const featureLayer = new FeatureLayer({
+            // objectIdField: featureSet.objectIdFieldName,
+            displayField: featureSet.displayFieldName,
+            geometryType: featureSet.geometryType as any,
+            fields: featureSet.fields,
+            source: featureSet.features
+        });
+        const map = new Map({
+            basemap: 'sattlite',
+            layers: [featureLayer]
+        });
+        const mapview = new MapView({
+            map,
+            container,
+            center: this.opts.center,
+            zoom: this.opts.zoom
+        });
+        await mapview.when();
+        return mapview;
+    }
+
 }
 
 interface ArcGisJsApiOptions extends ILoadScriptOptions {
     dojoConfig: Object;
     esriConfig: __esri.config;
+    center: number[];
+    zoom: number;
 }
