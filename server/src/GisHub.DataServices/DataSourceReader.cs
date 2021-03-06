@@ -82,8 +82,8 @@ namespace Beginor.GisHub.DataServices {
                 );
             }
             var rdp = new ReadDataParam {
-                Select = CheckGeoSelectFields(ds, param.Select),
-                Where = param.Where,
+                Select = CheckGeoSelect(ds, param.Select),
+                Where = CheckGeoWhere(ds, param.Where),
                 OrderBy = param.OrderBy,
                 Skip = param.Skip,
                 Take = param.Take
@@ -125,10 +125,10 @@ namespace Beginor.GisHub.DataServices {
                     $"Datasource {dataSourceId} does not has geometry column!"
                 );
             }
-            var selectFields = CheckGeoSelectFields(ds, param.Select);
+            var selectFields = CheckGeoSelect(ds, param.Select);
             var rdp = new ReadDataParam {
                 Select = selectFields,
-                Where = param.Where,
+                Where = CheckGeoWhere(ds, param.Where),
                 OrderBy = param.OrderBy,
                 Skip = param.Skip,
                 Take = param.Take
@@ -224,7 +224,7 @@ namespace Beginor.GisHub.DataServices {
             return geomType;
         }
 
-        protected string CheckGeoSelectFields(
+        protected string CheckGeoSelect(
             DataSourceCacheItem ds,
             string select
         ) {
@@ -242,6 +242,17 @@ namespace Beginor.GisHub.DataServices {
                 select = string.Join(',', cols);
             }
             return select;
+        }
+
+        protected string CheckGeoWhere(
+            DataSourceCacheItem ds,
+            string where
+        ) {
+            var geoWhere = $"( {ds.GeometryColumn} is not null )";
+            if (where.IsNotNullOrEmpty()) {
+                geoWhere = $"{geoWhere} and ( {where} ) ";
+            }
+            return geoWhere;
         }
 
         protected virtual KeyValuePair<string, object> ReadField(
