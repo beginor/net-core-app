@@ -7,7 +7,7 @@ namespace Beginor.GisHub.DataServices.Esri {
         public string ObjectIdFieldName { get; set; }
         public string GeometryType { get; set; }
         public IList<AgsFeature> Features { get; set; }
-        public SpatialReference SpatialReference { get; set; }
+        public AgsSpatialReference SpatialReference { get; set; }
         public Dictionary<string, string> FieldAliases { get; set; }
         public IList<AgsField> Fields { get; set; }
         public bool ExceededTransferLimit { get; set; }

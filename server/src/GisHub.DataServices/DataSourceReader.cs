@@ -200,7 +200,7 @@ namespace Beginor.GisHub.DataServices {
                 feature.Geometry = geom.ToAgs();
                 result.Features.Add(feature);
             }
-            result.SpatialReference = new SpatialReference {
+            result.SpatialReference = new AgsSpatialReference {
                 Wkid = await GetSridAsync(dataSourceId)
             };
             result.GeometryType = await GetAgsGeometryType(dataSourceId);

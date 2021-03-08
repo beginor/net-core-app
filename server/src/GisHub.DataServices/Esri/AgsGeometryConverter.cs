@@ -31,6 +31,9 @@ namespace Beginor.GisHub.DataServices.Esri {
             else if (value is AgsPolygon polygon) {
                 JsonSerializer.Serialize(writer, polygon, options);
             }
+            else if (value is AgsExtent extent) {
+                JsonSerializer.Serialize(writer, extent, options);
+            }
             else {
                 writer.WriteStringValue($"Unkonwn geometry type {value.GetType()} !");
             }
