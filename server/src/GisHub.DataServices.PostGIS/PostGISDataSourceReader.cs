@@ -35,11 +35,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             base.Dispose(disposing);
         }
 
-        public override async Task<long> CountAsync(long dataSourceId, CountParam param) {
-            var ds = await DataSourceRepo.GetCacheItemByIdAsync(dataSourceId);
-            if (ds == null) {
-                throw new ArgumentException($"Invalid dataSourceId {dataSourceId} !");
-            }
+        protected override async Task<long> CountAsync(DataSourceCacheItem ds, CountParam param) {
             var sb = new StringBuilder(" select count(*) ");
             sb.AppendLine($" from {ds.Schema}.{ds.TableName} ");
             AppendWhere(sb, ds.PresetCriteria, param.Where);
@@ -50,21 +46,17 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             return count;
         }
 
-        public override async Task<IList<IDictionary<string, object>>> PivotData(
-            long dataSourceId,
+        protected override async Task<IList<IDictionary<string, object>>> PivotData(
+            DataSourceCacheItem ds,
             PivotParam param
         ) {
-            var ds = await DataSourceRepo.GetCacheItemByIdAsync(dataSourceId);
-            if (ds == null) {
-                throw new ArgumentException($"Invalid dataSourceId {dataSourceId} !");
-            }
             if (param.Select.IsNullOrEmpty()) {
                 throw new ArgumentNullException($"{nameof(param.Select)} can not be empty!");
             }
             if (param.Aggregate.IsNullOrEmpty() || param.Field.IsNullOrEmpty()) {
                 throw new ArgumentNullException($"{nameof(param.Field)} and {nameof(param.Aggregate)} can not be empty");
             }
-            var cols = await GetColumnsAsync(dataSourceId);
+            var cols = await GetColumnsAsync(ds);
             var colsDict = cols.ToDictionary(
                 c => c.Name,
                 c => c.Type,
@@ -120,18 +112,14 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             if (param.OrderBy.IsNotNullOrEmpty()) {
                 sql.Append($" order by {param.OrderBy} ");
             }
-            var result = await ReadDataAsync(dataSourceId, sql.ToString());
+            var result = await ReadDataAsync(ds, sql.ToString());
             return result;
         }
 
-        public override async Task<IList<IDictionary<string, object>>> ReadDataAsync(
-            long dataSourceId,
+        protected override async Task<IList<IDictionary<string, object>>> ReadDataAsync(
+            DataSourceCacheItem ds,
             ReadDataParam param
         ) {
-            var ds = await DataSourceRepo.GetCacheItemByIdAsync(dataSourceId);
-            if (ds == null) {
-                throw new ArgumentException($"Invalid dataSourceId {dataSourceId} !");
-            }
             if (param.Select.IsNullOrEmpty()) {
                 param.Select = $"{ds.PrimaryKeyColumn}, {ds.DisplayColumn}";
             }
@@ -164,18 +152,14 @@ namespace Beginor.GisHub.DataServices.PostGIS {
                 }
             }
             sql.AppendLine($" limit {param.Take} offset {param.Skip} ");
-            var result = await ReadDataAsync(dataSourceId, sql.ToString());
+            var result = await ReadDataAsync(ds, sql.ToString());
             return result;
         }
 
-        public override async Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(
-            long dataSourceId,
+        protected override async Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(
+            DataSourceCacheItem ds,
             DistinctParam param
         ) {
-            var ds = await DataSourceRepo.GetCacheItemByIdAsync(dataSourceId);
-            if (ds == null) {
-                throw new ArgumentException($"Invalid dataSourceId {dataSourceId} !");
-            }
             if (param.Select.IsNullOrEmpty() || param.Select.Trim().Equals("*")) {
                 throw new ArgumentException($"Invalid select {param.Select} for distinct !");
             }
@@ -195,15 +179,11 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             if (param.OrderBy.IsNotNullOrEmpty()) {
                 sql.AppendLine($" order by {param.OrderBy} ");
             }
-            var data = await ReadDataAsync(dataSourceId, sql.ToString());
+            var data = await ReadDataAsync(ds, sql.ToString());
             return data;
         }
 
-        public override async Task<int> GetSridAsync(long dataSourceId) {
-            var ds = await DataSourceRepo.GetCacheItemByIdAsync(dataSourceId);
-            if (ds == null) {
-                throw new ArgumentException($"Invalid dataSourceId {dataSourceId} !");
-            }
+        protected override async Task<int> GetSridAsync(DataSourceCacheItem ds) {
             var sql = new StringBuilder();
             sql.AppendLine($" select st_srid({ds.GeometryColumn}) ");
             sql.AppendLine($" from {ds.Schema}.{ds.TableName} ");
@@ -214,11 +194,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             return srid;
         }
 
-        public override async Task<string> GetGeometryTypeAsync(long dataSourceId) {
-            var ds = await DataSourceRepo.GetCacheItemByIdAsync(dataSourceId);
-            if (ds == null) {
-                throw new ArgumentException($"Invalid dataSourceId {dataSourceId} !");
-            }
+        protected override async Task<string> GetGeometryTypeAsync(DataSourceCacheItem ds) {
             var sql = new StringBuilder();
             sql.AppendLine($" select st_geometrytype({ds.GeometryColumn}) ");
             sql.AppendLine($" from {ds.Schema}.{ds.TableName} ");
@@ -229,20 +205,19 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             return geoType.Substring(3).ToLowerInvariant();
         }
 
-        private async Task<IList<IDictionary<string, object>>> ReadDataAsync(
-            long dataSourceId,
-            string sql
-        ) {
-            var ds = await DataSourceRepo.GetCacheItemByIdAsync(dataSourceId);
-            if (ds == null) {
-                throw new ArgumentException($"Invalid dataSourceId {dataSourceId}");
-            }
+        private async Task<IList<IDictionary<string, object>>> ReadDataAsync(DataSourceCacheItem ds, string sql) {
             logger.LogInformation(sql);
             await using var conn = new NpgsqlConnection(ds.ConnectionString);
             await conn.OpenAsync();
             var tableData = await ReadDataAsync(conn, sql);
             await conn.CloseAsync();
             return tableData;
+        }
+
+        protected override AgsJsonParam ConvertQueryParams(DataSourceCacheItem ds, AgsQueryParam queryParam) {
+            var param = new AgsJsonParam();
+
+            return param;
         }
 
     }

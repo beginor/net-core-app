@@ -1,6 +1,4 @@
 using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -51,8 +49,8 @@ namespace Beginor.GisHub.DataServices.Api {
                     return NotFound();
                 }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
-                var layerDesc = await reader.GetLayerDescription(id);
-                return Json(layerDesc, JsonHelper.CreateAgsJsonSerializerOptions());
+                var layerDesc = await reader.GetLayerDescriptionAsync(id);
+                return Json(layerDesc, JsonFactory.CreateAgsJsonSerializerOptions());
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get layer description for datasource {id} .");
@@ -71,10 +69,10 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (featureSet == null) {
                     return NotFound();
                 }
-                return Json(featureSet, JsonHelper.CreateAgsJsonSerializerOptions());
+                return Json(featureSet, JsonFactory.CreateAgsJsonSerializerOptions());
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson(JsonHelper.CreateJsonSerializerOptions())}");
+                logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson(JsonFactory.CreateJsonSerializerOptions())}");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -91,10 +89,10 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (featureSet == null) {
                     return NotFound();
                 }
-                return Json(featureSet, JsonHelper.CreateAgsJsonSerializerOptions());
+                return Json(featureSet, JsonFactory.CreateAgsJsonSerializerOptions());
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson(JsonHelper.CreateJsonSerializerOptions())}");
+                logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson(JsonFactory.CreateJsonSerializerOptions())}");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -108,7 +106,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 return null;
             }
             var reader = factory.CreateDataSourceReader(model.DatabaseType);
-            var featureSet = await reader.Query(id, param);
+            var featureSet = await reader.QueryAsync(id, param);
             return featureSet;
         }
     }

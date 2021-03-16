@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Beginor.GisHub.DataServices {
 
-    public static class JsonHelper {
+    public static class JsonFactory {
 
         public static JsonSerializerOptions CreateJsonSerializerOptions() {
             var options = new JsonSerializerOptions {
