@@ -30,7 +30,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
                 var columns = await reader.GetColumnsAsync(id);
-                return Json(columns, CreateJsonSerializerOptions());
+                return Json(columns, JsonHelper.CreateJsonSerializerOptions());
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get columns of datasource {id} .");
@@ -91,10 +91,10 @@ namespace Beginor.GisHub.DataServices.Api {
                 var result = new PaginatedResponseModel<IDictionary<string, object>> {
                     Total = total, Data = data, Skip = param.Skip, Take = param.Take
                 };
-                return Json(result, CreateJsonSerializerOptions());
+                return Json(result, JsonHelper.CreateJsonSerializerOptions());
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not read data from datasource {id} with {param.ToJson(CreateJsonSerializerOptions())} .");
+                logger.LogError(ex, $"Can not read data from datasource {id} with {param.ToJson(JsonHelper.CreateJsonSerializerOptions())} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -121,10 +121,10 @@ namespace Beginor.GisHub.DataServices.Api {
                 }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
                 var data = await reader.ReadDistinctDataAsync(id, param);
-                return Json(data, CreateJsonSerializerOptions());
+                return Json(data, JsonHelper.CreateJsonSerializerOptions());
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not read distinct data from datasource {id} with {param.ToJson(CreateJsonSerializerOptions())} .");
+                logger.LogError(ex, $"Can not read distinct data from datasource {id} with {param.ToJson(JsonHelper.CreateJsonSerializerOptions())} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -160,10 +160,10 @@ namespace Beginor.GisHub.DataServices.Api {
                 }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
                 var data = await reader.PivotData(id, param);
-                return Json(data, CreateJsonSerializerOptions());
+                return Json(data, JsonHelper.CreateJsonSerializerOptions());
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not pivot data from datasource {id} with {param.ToJson(CreateJsonSerializerOptions())} .");
+                logger.LogError(ex, $"Can not pivot data from datasource {id} with {param.ToJson(JsonHelper.CreateJsonSerializerOptions())} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -193,11 +193,11 @@ namespace Beginor.GisHub.DataServices.Api {
                 }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
                 var fc = await reader.ReadAsFeatureCollectionAsync(id, param);
-                var json = JsonSerializer.Serialize(fc, typeof(object), CreateGeoJsonSerializerOptions());
+                var json = JsonSerializer.Serialize(fc, typeof(object), JsonHelper.CreateGeoJsonSerializerOptions());
                 return Content(json, "application/geo+json", Encoding.UTF8);
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not read data as geojson from datasource {id} with {param.ToJson(CreateJsonSerializerOptions())} .");
+                logger.LogError(ex, $"Can not read data as geojson from datasource {id} with {param.ToJson(JsonHelper.CreateJsonSerializerOptions())} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -227,42 +227,13 @@ namespace Beginor.GisHub.DataServices.Api {
                 }
                 var reader = factory.CreateDataSourceReader(model.DatabaseType);
                 var fc = await reader.ReadAsFeatureSetAsync(id, param);
-                var json = JsonSerializer.Serialize(fc, typeof(object), CreateAgsJsonSerializerOptions());
+                var json = JsonSerializer.Serialize(fc, typeof(object), JsonHelper.CreateAgsJsonSerializerOptions());
                 return Content(json, "application/geo+json", Encoding.UTF8);
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not read data as FeatureSet from datasource {id} with {param.ToJson(CreateJsonSerializerOptions())} .");
+                logger.LogError(ex, $"Can not read data as FeatureSet from datasource {id} with {param.ToJson(JsonHelper.CreateJsonSerializerOptions())} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
-        }
-
-        private JsonSerializerOptions CreateJsonSerializerOptions() {
-            var options = new JsonSerializerOptions {
-                DictionaryKeyPolicy = null,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                NumberHandling = JsonNumberHandling.Strict
-            };
-            return options;
-        }
-
-        private JsonSerializerOptions CreateGeoJsonSerializerOptions() {
-            var options = new JsonSerializerOptions {
-                DictionaryKeyPolicy = null,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                NumberHandling = JsonNumberHandling.Strict,
-                IgnoreNullValues = true
-            };
-            return options;
-        }
-
-        private JsonSerializerOptions CreateAgsJsonSerializerOptions() {
-            var options = new JsonSerializerOptions {
-                DictionaryKeyPolicy = null,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                NumberHandling = JsonNumberHandling.Strict,
-                IgnoreNullValues = true
-            };
-            return options;
         }
 
     }

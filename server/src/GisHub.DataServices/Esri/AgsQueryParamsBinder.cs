@@ -25,9 +25,9 @@ namespace Beginor.GisHub.DataServices.Esri {
             }
             return Task.FromException(new Exception($"Unsupported request method {bindingContext.HttpContext.Request.Method} !"));
         }
-        private static AgsQueryParams BindQuery(IEnumerable<KeyValuePair<string, StringValues>> paires) {
-            var type = typeof(AgsQueryParams);
-            var model = new AgsQueryParams();
+        private static AgsQueryParam BindQuery(IEnumerable<KeyValuePair<string, StringValues>> paires) {
+            var type = typeof(AgsQueryParam);
+            var model = new AgsQueryParam();
             var props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(p => p.GetCustomAttribute<FromQueryAttribute>() != null);
             foreach (var prop in props) {

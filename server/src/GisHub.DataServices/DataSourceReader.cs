@@ -142,7 +142,10 @@ namespace Beginor.GisHub.DataServices {
             if (list.Count <= 0) {
                 return result;
             }
-            var total = await this.CountAsync(dataSourceId, new CountParam { Where = param.Where });
+            var total = await this.CountAsync(
+                dataSourceId,
+                new CountParam { Where = param.Where }
+            );
             if (total > list.Count) {
                 result.ExceededTransferLimit = true;
             }
@@ -152,25 +155,27 @@ namespace Beginor.GisHub.DataServices {
             columns = columns.Where(c => fields.Contains(c.Name)).ToList();
             result.Fields = new List<AgsField>(columns.Count);
             result.FieldAliases = new Dictionary<string, string>(columns.Count);
-            var typeMap = AgsFieldDataTypes.FieldDataTypeMap;
-            foreach (var col in columns) {
-                result.FieldAliases[col.Name] = col.Description ?? col.Name;
-                var field = new AgsField {
-                    Name = col.Name,
-                    Alias = col.Description ?? col.Name
-                };
-                if (col.Name.EqualsOrdinalIgnoreCase(ds.PrimaryKeyColumn)) {
-                    field.Type = AgsFieldDataTypes.EsriOID;
-                }
-                else if (col.Name.EqualsOrdinalIgnoreCase(ds.GeometryColumn)) {
-                    field.Type = AgsFieldDataTypes.EsriGeometry;
-                }
-                else {
-                    var ft = firstRow[col.Name].GetType();
-                    field.Type = typeMap.ContainsKey(ft) ? typeMap[ft]() : AgsFieldDataTypes.EsriString;
-                }
-                result.Fields.Add(field);
-            }
+            var typeMap = AgsFieldType.FieldTypeMap;
+            result.FieldAliases = GetColumnAlises(columns);
+            // foreach (var col in columns) {
+            //     result.FieldAliases[col.Name] = col.Description ?? col.Name;
+            //     var field = new AgsField {
+            //         Name = col.Name,
+            //         Alias = col.Description ?? col.Name
+            //     };
+            //     if (col.Name.EqualsOrdinalIgnoreCase(ds.PrimaryKeyColumn)) {
+            //         field.Type = AgsFieldType.EsriOID;
+            //     }
+            //     else if (col.Name.EqualsOrdinalIgnoreCase(ds.GeometryColumn)) {
+            //         field.Type = AgsFieldType.EsriGeometry;
+            //     }
+            //     else {
+            //         var ft = firstRow[col.Name].GetType();
+            //         field.Type = typeMap.ContainsKey(ft) ? typeMap[ft]() : AgsFieldType.EsriString;
+            //     }
+            //     result.Fields.Add(field);
+            // }
+            result.Fields = await ConvertToFieldsAsync(ds, columns);
             columns.Remove(columns.First(col => col.Name.EqualsOrdinalIgnoreCase(ds.GeometryColumn)));
             foreach (var row in list) {
                 var wkt = (string)row[ds.GeometryColumn];
@@ -207,19 +212,19 @@ namespace Beginor.GisHub.DataServices {
             return result;
         }
 
-        private async Task<string> GetAgsGeometryType(long dataSourceId) {
+        protected async Task<string> GetAgsGeometryType(long dataSourceId) {
             var geomType = await GetGeometryTypeAsync(dataSourceId);
             if (geomType == "point") {
-                return "point";
+                return AgsGeometryType.Point;
             }
             if (geomType == "multipoint") {
-                return "multipoint";
+                return AgsGeometryType.MultiPoint;
             }
             if (geomType.EndsWith("linestring")) {
-                return "polyline";
+                return AgsGeometryType.Polyline;
             }
             if (geomType.EndsWith("polygon")) {
-                return "polygon";
+                return AgsGeometryType.Polygon;
             }
             return geomType;
         }
@@ -299,6 +304,137 @@ namespace Beginor.GisHub.DataServices {
         public abstract Task<int> GetSridAsync(long dataSourceId);
 
         public abstract Task<string> GetGeometryTypeAsync(long dataSourceId);
+
+        public virtual async Task<AgsLayerDescription> GetLayerDescription(
+            long dataSourceId
+        ) {
+            var ds = await DataSourceRepo.GetCacheItemByIdAsync(dataSourceId);
+            if (ds == null) {
+                throw new ArgumentException($"Invalid dataSourceId {dataSourceId} !");
+            }
+            if (ds.GeometryColumn.IsNullOrEmpty()) {
+                throw new InvalidOperationException($"Data source {dataSourceId} does not define a geometry column!");
+            }
+            var layerDesc = new AgsLayerDescription();
+            layerDesc.CurrentVersion = 10.61;
+            layerDesc.Id = 0;
+            layerDesc.Name = ds.DataSourceName;
+            layerDesc.Type = "Feature Layer";
+            layerDesc.Description = $"Map Service for {ds.DataSourceName}";
+            layerDesc.GeometryType = await GetAgsGeometryType(dataSourceId);
+            layerDesc.SourceSpatialReference = new AgsSpatialReference {
+                Wkid = await GetSridAsync(dataSourceId)
+            };
+            layerDesc.ObjectIdField = ds.PrimaryKeyColumn;
+            layerDesc.DisplayField = ds.DisplayColumn;
+            // columns
+            var columns = await GetColumnsAsync(dataSourceId);
+            layerDesc.Fields = await ConvertToFieldsAsync(ds, columns);
+            layerDesc.GeometryField = layerDesc.Fields.First(f => f.Type == AgsFieldType.EsriGeometry);
+            layerDesc.CanModifyLayer = false;
+            layerDesc.CanScaleSymbols = false;
+            layerDesc.HasLabels = false;
+            layerDesc.Capabilities = "Query,Data";
+            layerDesc.DrawingInfo = AgsDrawingInfo.CreateDefaultDrawingInfo(layerDesc.GeometryType);
+            layerDesc.MaxRecordCount = 1000;
+            layerDesc.SupportsStatistics = true;
+            layerDesc.SupportsAdvancedQueries = true;
+            layerDesc.SupportedQueryFormatsValue = "JSON,geoJSON";
+            layerDesc.IsDataVersioned = false;
+            // layerDesc.OwnershipBasedAccessControlForFeatures = null;
+            layerDesc.UseStandardizedQueries = true;
+            layerDesc.AdvancedQueryCapabilities = new AgsAdvancedQueryCapability {
+                UseStandardizedQueries = true,
+                SupportsStatistics = true,
+                SupportsHavingClause = true,
+                SupportsCountDistinct = true,
+                SupportsOrderBy = true,
+                SupportsDistinct = true,
+                SupportsPagination = true,
+                SupportsTrueCurve = true,
+                SupportsReturningQueryExtent = true,
+                SupportsQueryWithDistance = true,
+                SupportsSqlExpression = true
+            };
+            return layerDesc;
+        }
+
+        public Task<AgsFeatureSet> Query(
+            long dataSourceId,
+            AgsQueryParam queryParam
+        ) {
+            throw new NotImplementedException();
+        }
+
+        protected IDictionary<string, string> GetColumnAlises(
+            IList<ColumnModel> columns
+        ) {
+            return columns.ToDictionary(
+                col => col.Name, col => col.Description ?? col.Name
+            );
+        }
+
+        protected async Task<AgsField[]> ConvertToFieldsAsync(
+            DataSourceCacheItem ds,
+            IList<ColumnModel> columns
+        ) {
+            var param = new ReadDataParam {
+                Select = CheckGeoSelect(ds, string.Join(',', columns.Select(c => c.Name))),
+                Where = CheckGeoWhere(ds, string.Empty),
+                Take = 1
+            };
+            var data = await ReadDataAsync(ds.DataSourceId, param);
+            if (data.Count < 1) {
+                throw new InvalidOperationException($"Datasource {ds.DataSourceId} is empty !");
+            }
+            return ConvertToFields(ds, columns, data[0]);
+        }
+
+        private AgsField[] ConvertToFields(
+            DataSourceCacheItem ds,
+            IList<ColumnModel> columns,
+            IDictionary<string, object> row
+        ) {
+            var fields = new List<AgsField>();
+            foreach (var column in columns) {
+                var field = ConvertToField(ds, column, row);
+                fields.Add(field);
+            }
+            return fields.ToArray();
+        }
+
+        protected AgsField ConvertToField(
+            DataSourceCacheItem dataSource,
+            ColumnModel column,
+            IDictionary<string, object> row
+        ) {
+            var field = new AgsField {
+                Name = column.Name,
+                Alias = column.Description ?? column.Name
+            };
+            if (column.Name.EqualsOrdinalIgnoreCase(dataSource.PrimaryKeyColumn)) {
+                field.Type = AgsFieldType.EsriOID;
+            }
+            else if (column.Name.EqualsOrdinalIgnoreCase(dataSource.GeometryColumn)) {
+                field.Type = AgsFieldType.EsriGeometry;
+            }
+            else {
+                var dataType = row[column.Name].GetType();
+                var fieldTypeMap = AgsFieldType.FieldTypeMap;
+                if (fieldTypeMap.ContainsKey(dataType)) {
+                    field.Type = fieldTypeMap[dataType]();
+                    if (field.Type == AgsFieldType.EsriString) {
+                        field.Length = column.Length;
+                    }
+                }
+                else {
+                    field.Type = AgsFieldType.EsriString;
+                }
+            }
+            return field;
+        }
+
+        // protected abstract AgsJsonParam ConvertQueryParams(AgsQueryParam queryParam);
 
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Beginor.GisHub.DataServices.Esri {
 
-    public partial class AgsQueryParams : AgsCommonParams {
+    public partial class AgsQueryParam : AgsCommonParams {
         [FromQuery(Name = "where")]
         public string Where { get; set; }
         [FromQuery(Name = "geometry")]

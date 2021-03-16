@@ -67,6 +67,10 @@ namespace Beginor.GisHub.DataServices {
 
         Task<string> GetGeometryTypeAsync(long dataSourceId);
 
+        Task<AgsLayerDescription> GetLayerDescription(long dataSourceId);
+
+        Task<AgsFeatureSet> Query(long dataSourceId, AgsQueryParam queryParam);
+
     }
 
 }

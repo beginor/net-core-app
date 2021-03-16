@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Beginor.AppFx.Core;
 
 namespace Beginor.GisHub.DataServices.Esri {
 
-    partial class AgsQueryParams {
+    partial class AgsQueryParam {
+        [JsonIgnore]
         public AgsGeometry GeometryValue {
             get {
                 if (Geometry.IsNullOrEmpty()) {
@@ -14,29 +16,31 @@ namespace Beginor.GisHub.DataServices.Esri {
                 if (GeometryType.IsNullOrEmpty()) {
                     return null;
                 }
-                if (GeometryType == AgsGeometryTypes.Envelope) {
+                if (GeometryType == AgsGeometryType.Envelope) {
                     return JsonSerializer.Deserialize<AgsExtent>(Geometry);
                 }
-                if (GeometryType == AgsGeometryTypes.Point) {
+                if (GeometryType == AgsGeometryType.Point) {
                     return JsonSerializer.Deserialize<AgsPoint>(Geometry);
                 }
-                if (GeometryType == AgsGeometryTypes.MultiPoint) {
+                if (GeometryType == AgsGeometryType.MultiPoint) {
                     return JsonSerializer.Deserialize<AgsMultiPoint>(Geometry);
                 }
-                if (GeometryType == AgsGeometryTypes.Polyline) {
+                if (GeometryType == AgsGeometryType.Polyline) {
                     return JsonSerializer.Deserialize<AgsPolyline>(Geometry);
                 }
-                if (GeometryType == AgsGeometryTypes.Polygon) {
+                if (GeometryType == AgsGeometryType.Polygon) {
                     return JsonSerializer.Deserialize<AgsPolygon>(Geometry);
                 }
                 return null;
             }
         }
+        [JsonIgnore]
         public string[] OutFieldsValue {
             get {
                 return OutFields.Split(',');
             }
         }
+        [JsonIgnore]
         public long[] ObjectIdsValue {
             get {
                 if (ObjectIds.IsNullOrEmpty()) {
@@ -47,6 +51,7 @@ namespace Beginor.GisHub.DataServices.Esri {
                     .ToArray();
             }
         }
+        [JsonIgnore]
         public AgsSpatialReference OutSRValue {
             get {
                 if (OutSR == AgsSpatialReference.WGS84.Wkid.Value) {
@@ -61,6 +66,7 @@ namespace Beginor.GisHub.DataServices.Esri {
                 };
             }
         }
+        [JsonIgnore]
         public DateTime? TimeFrom {
             get {
                 if (string.IsNullOrEmpty(Time)) {
@@ -76,6 +82,7 @@ namespace Beginor.GisHub.DataServices.Esri {
                 return null;
             }
         }
+        [JsonIgnore]
         public DateTime? TimeTo {
             get {
                 if (string.IsNullOrEmpty(Time)) {
@@ -91,6 +98,7 @@ namespace Beginor.GisHub.DataServices.Esri {
                 return null;
             }
         }
+        [JsonIgnore]
         public string[] GroupByValue {
             get {
                 if (GroupByFieldsForStatistics.IsNullOrEmpty()) {
@@ -99,6 +107,7 @@ namespace Beginor.GisHub.DataServices.Esri {
                 return GroupByFieldsForStatistics.Split(',');
             }
         }
+        [JsonIgnore]
         public AgsOutputStatistic[] OutStatisticsValue {
             get {
                 if (OutStatistics.IsNullOrEmpty()) {

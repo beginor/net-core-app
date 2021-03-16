@@ -8,6 +8,7 @@ using Dapper;
 using Npgsql;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Data;
+using Beginor.GisHub.DataServices.Esri;
 using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices.PostGIS {
