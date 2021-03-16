@@ -50,7 +50,7 @@ namespace Beginor.GisHub.Test {
 
     public class TestHostingEnvironment : IWebHostEnvironment {
 
-        public string EnvironmentName { get; set; } = "Test";
+        public string EnvironmentName { get; set; } = "Development";
 
         public string ApplicationName { get; set; }
 
@@ -71,8 +71,7 @@ namespace Beginor.GisHub.Test {
         public void TestEnvironment() {
             var target = new TestHostingEnvironment();
             Assert.IsFalse(target.IsProduction());
-            Assert.IsFalse(target.IsDevelopment());
-            Assert.IsTrue(target.IsEnvironment("Test"));
+            Assert.IsTrue(target.IsDevelopment());
         }
 
     }

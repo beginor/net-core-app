@@ -24,15 +24,9 @@ namespace Beginor.GisHub.Entry {
                 "hibernate.config"
             );
             cfg.Configure(configFile);
-            var isTest = env.IsEnvironment("Test");
-            cfg.SetProperty(
-                Environment.ShowSql,
-                isTest.ToString()
-            );
-            cfg.SetProperty(
-                Environment.FormatSql,
-                isTest.ToString()
-            );
+            var isDevelopment = env.IsDevelopment().ToString();
+            cfg.SetProperty(Environment.ShowSql, isDevelopment);
+            cfg.SetProperty(Environment.FormatSql, isDevelopment);
             cfg.AddIdentityMappings();
             cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Data.ModelMapping).Assembly);
             cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Slpk.ModelMapping).Assembly);
