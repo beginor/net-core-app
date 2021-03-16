@@ -56,6 +56,24 @@ namespace Beginor.GisHub.DataServices {
             return provider as IDataSourceReader;
         }
 
+        public IFeatureProvider CreateFeatureProvider(string databaseType) {
+            string typeName;
+            if (databaseType.Equals("postgis", StringComparison.OrdinalIgnoreCase)) {
+                typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISFeatureProvider,Beginor.GisHub.DataServices.PostGIS";
+            }
+            else {
+                throw new NotSupportedException(
+                    $"Unsupported database type {databaseType}!"
+                );
+            }
+            var type = Type.GetType(typeName);
+            if (type == null) {
+                throw new InvalidOperationException($"Can not get type {type} !");
+            }
+            var provider = scope.ServiceProvider.GetService(type);
+            return provider as IFeatureProvider;
+        }
+
     }
 
 }

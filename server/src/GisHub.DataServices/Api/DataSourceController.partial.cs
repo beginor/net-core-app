@@ -24,12 +24,12 @@ namespace Beginor.GisHub.DataServices.Api {
             long id
         ) {
             try {
-                var model = await repository.GetCacheItemByIdAsync(id);
-                if (model == null) {
-                    return NotFound();
+                var dataSource = await repository.GetCacheItemByIdAsync(id);
+                if (dataSource == null) {
+                    return NotFound($"Datasource {id} does not exits !");
                 }
-                var reader = factory.CreateDataSourceReader(model.DatabaseType);
-                var columns = await reader.GetColumnsAsync(id);
+                var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
+                var columns = await reader.GetColumnsAsync(dataSource);
                 return Json(columns, JsonFactory.CreateJsonSerializerOptions());
             }
             catch (Exception ex) {
@@ -45,15 +45,15 @@ namespace Beginor.GisHub.DataServices.Api {
             [FromQuery]CountParam param
         ) {
             try {
-                var model = await repository.GetCacheItemByIdAsync(id);
-                if (model == null) {
-                    return NotFound();
+                var dataSource = await repository.GetCacheItemByIdAsync(id);
+                if (dataSource == null) {
+                    return NotFound($"Datasource {id} does not exits !");
                 }
                 if (!SqlValidator.IsValid(param.Where)) {
                     return BadRequest($"$where = {param.Where} is not allowed!");
                 }
-                var reader = factory.CreateDataSourceReader(model.DatabaseType);
-                var count = await reader.CountAsync(id, param);
+                var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
+                var count = await reader.CountAsync(dataSource, param);
                 return count;
             }
             catch (Exception ex) {
@@ -69,8 +69,8 @@ namespace Beginor.GisHub.DataServices.Api {
             [FromQuery] ReadDataParam param
         ) {
             try {
-                var model = await repository.GetCacheItemByIdAsync(id);
-                if (model == null) {
+                var dataSource = await repository.GetCacheItemByIdAsync(id);
+                if (dataSource == null) {
                     return NotFound();
                 }
                 if (!SqlValidator.IsValid(param.Select)) {
@@ -85,9 +85,9 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (!SqlValidator.IsValid(param.OrderBy)) {
                     return BadRequest($"$orderBy = {param.OrderBy} is not allowed!");
                 }
-                var reader = factory.CreateDataSourceReader(model.DatabaseType);
-                var data = await reader.ReadDataAsync(id, param);
-                var total = await reader.CountAsync(id, param);
+                var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
+                var data = await reader.ReadDataAsync(dataSource, param);
+                var total = await reader.CountAsync(dataSource, param);
                 var result = new PaginatedResponseModel<IDictionary<string, object>> {
                     Total = total, Data = data, Skip = param.Skip, Take = param.Take
                 };
@@ -106,8 +106,8 @@ namespace Beginor.GisHub.DataServices.Api {
             [FromQuery] DistinctParam param
         ) {
             try {
-                var model = await repository.GetCacheItemByIdAsync(id);
-                if (model == null) {
+                var dataSource = await repository.GetCacheItemByIdAsync(id);
+                if (dataSource == null) {
                     return NotFound();
                 }
                 if (!SqlValidator.IsValid(param.Select)) {
@@ -119,8 +119,8 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (!SqlValidator.IsValid(param.OrderBy)) {
                     return BadRequest($"$orderBy = {param.OrderBy} is not allowed!");
                 }
-                var reader = factory.CreateDataSourceReader(model.DatabaseType);
-                var data = await reader.ReadDistinctDataAsync(id, param);
+                var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
+                var data = await reader.ReadDistinctDataAsync(dataSource, param);
                 return Json(data, JsonFactory.CreateJsonSerializerOptions());
             }
             catch (Exception ex) {
@@ -136,8 +136,8 @@ namespace Beginor.GisHub.DataServices.Api {
             [FromQuery]PivotParam param
         ) {
             try {
-                var model = await repository.GetCacheItemByIdAsync(id);
-                if (model == null) {
+                var dataSource = await repository.GetCacheItemByIdAsync(id);
+                if (dataSource == null) {
                     return NotFound();
                 }
                 if (!SqlValidator.IsValid(param.Select)) {
@@ -158,8 +158,8 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (!SqlValidator.IsValid(param.OrderBy)) {
                     return BadRequest($"$orderBy = {param.OrderBy} is not allowed!");
                 }
-                var reader = factory.CreateDataSourceReader(model.DatabaseType);
-                var data = await reader.PivotData(id, param);
+                var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
+                var data = await reader.PivotData(dataSource, param);
                 return Json(data, JsonFactory.CreateJsonSerializerOptions());
             }
             catch (Exception ex) {
@@ -175,9 +175,12 @@ namespace Beginor.GisHub.DataServices.Api {
             [FromQuery] GeoJsonParam param
         ) {
             try {
-                var model = await repository.GetCacheItemByIdAsync(id);
-                if (model == null) {
-                    return NotFound();
+                var ds = await repository.GetCacheItemByIdAsync(id);
+                if (ds == null) {
+                    return NotFound($"Datasource {id} does not exist !");
+                }
+                if (!ds.HasGeometryColumn) {
+                    return BadRequest($"Datasource {id} does not define geometry column !");
                 }
                 if (!SqlValidator.IsValid(param.Select)) {
                     return BadRequest($"$select = {param.Select} is not allowed!");
@@ -188,12 +191,10 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (!SqlValidator.IsValid(param.OrderBy)) {
                     return BadRequest($"$orderBy = {param.OrderBy} is not allowed!");
                 }
-                if (!model.HasGeometryColumn) {
-                    return BadRequest($"Datasource {id} does not define geometry column !");
-                }
-                var reader = factory.CreateDataSourceReader(model.DatabaseType);
-                var fc = await reader.ReadAsFeatureCollectionAsync(id, param);
-                var json = JsonSerializer.Serialize(fc, typeof(object), JsonFactory.CreateGeoJsonSerializerOptions());
+                //
+                var featureProvider = factory.CreateFeatureProvider(ds.DatabaseType);
+                var featureCollection = await featureProvider.ReadAsFeatureCollectionAsync(ds, param);
+                var json = JsonSerializer.Serialize(featureCollection, typeof(GeoJsonFeatureCollection), JsonFactory.CreateGeoJsonSerializerOptions());
                 return Content(json, "application/geo+json", Encoding.UTF8);
             }
             catch (Exception ex) {
@@ -209,8 +210,8 @@ namespace Beginor.GisHub.DataServices.Api {
             [FromQuery] AgsJsonParam param
         ) {
             try {
-                var model = await repository.GetCacheItemByIdAsync(id);
-                if (model == null) {
+                var ds = await repository.GetCacheItemByIdAsync(id);
+                if (ds == null) {
                     return NotFound();
                 }
                 if (!SqlValidator.IsValid(param.Select)) {
@@ -222,13 +223,13 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (!SqlValidator.IsValid(param.OrderBy)) {
                     return BadRequest($"$orderBy = {param.OrderBy} is not allowed!");
                 }
-                if (!model.HasGeometryColumn) {
+                if (!ds.HasGeometryColumn) {
                     return BadRequest($"Datasource {id} does not define geometry column !");
                 }
-                var reader = factory.CreateDataSourceReader(model.DatabaseType);
-                var fc = await reader.ReadAsFeatureSetAsync(id, param);
+                var reader = factory.CreateFeatureProvider(ds.DatabaseType);
+                var fc = await reader.ReadAsFeatureSetAsync(ds, param);
                 var json = JsonSerializer.Serialize(fc, typeof(object), JsonFactory.CreateAgsJsonSerializerOptions());
-                return Content(json, "application/geo+json", Encoding.UTF8);
+                return Content(json, "application/json", Encoding.UTF8);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not read data as FeatureSet from datasource {id} with {param.ToJson(JsonFactory.CreateJsonSerializerOptions())} .");

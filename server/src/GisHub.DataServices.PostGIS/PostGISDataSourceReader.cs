@@ -35,19 +35,19 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             base.Dispose(disposing);
         }
 
-        protected override async Task<long> CountAsync(DataSourceCacheItem ds, CountParam param) {
+        public override async Task<long> CountAsync(DataSourceCacheItem dataSource, CountParam param) {
             var sb = new StringBuilder(" select count(*) ");
-            sb.AppendLine($" from {ds.Schema}.{ds.TableName} ");
-            AppendWhere(sb, ds.PresetCriteria, param.Where);
-            await using var conn = new NpgsqlConnection(ds.ConnectionString);
+            sb.AppendLine($" from {dataSource.Schema}.{dataSource.TableName} ");
+            AppendWhere(sb, dataSource.PresetCriteria, param.Where);
+            await using var conn = new NpgsqlConnection(dataSource.ConnectionString);
             var sql = sb.ToString();
             logger.LogInformation(sql);
             var count = await conn.ExecuteScalarAsync<long>(sql);
             return count;
         }
 
-        protected override async Task<IList<IDictionary<string, object>>> PivotData(
-            DataSourceCacheItem ds,
+        public override async Task<IList<IDictionary<string, object>>> PivotData(
+            DataSourceCacheItem dataSource,
             PivotParam param
         ) {
             if (param.Select.IsNullOrEmpty()) {
@@ -56,7 +56,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             if (param.Aggregate.IsNullOrEmpty() || param.Field.IsNullOrEmpty()) {
                 throw new ArgumentNullException($"{nameof(param.Field)} and {nameof(param.Aggregate)} can not be empty");
             }
-            var cols = await GetColumnsAsync(ds);
+            var cols = await GetColumnsAsync(dataSource);
             var colsDict = cols.ToDictionary(
                 c => c.Name,
                 c => c.Type,
@@ -107,36 +107,36 @@ namespace Beginor.GisHub.DataServices.PostGIS {
                 valueString = $", $$VALUES{valueString.TrimEnd(',')}$$";
             }
 
-            var sql = new StringBuilder($"select * from crosstab('select {param.Select} from {ds.Schema}.{ds.TableName} {groupBy} order by 1,2' {valueString}) as t ({pivotString})");
-            AppendWhere(sql, ds.PresetCriteria, param.Where);
+            var sql = new StringBuilder($"select * from crosstab('select {param.Select} from {dataSource.Schema}.{dataSource.TableName} {groupBy} order by 1,2' {valueString}) as t ({pivotString})");
+            AppendWhere(sql, dataSource.PresetCriteria, param.Where);
             if (param.OrderBy.IsNotNullOrEmpty()) {
                 sql.Append($" order by {param.OrderBy} ");
             }
-            var result = await ReadDataAsync(ds, sql.ToString());
+            var result = await ReadDataAsync(dataSource, sql.ToString());
             return result;
         }
 
-        protected override async Task<IList<IDictionary<string, object>>> ReadDataAsync(
-            DataSourceCacheItem ds,
+        public override async Task<IList<IDictionary<string, object>>> ReadDataAsync(
+            DataSourceCacheItem dataSource,
             ReadDataParam param
         ) {
             if (param.Select.IsNullOrEmpty()) {
-                param.Select = $"{ds.PrimaryKeyColumn}, {ds.DisplayColumn}";
+                param.Select = $"{dataSource.PrimaryKeyColumn}, {dataSource.DisplayColumn}";
             }
             var sql = new StringBuilder();
             // check selected fields when a table has geo column;
-            if (ds.HasGeometryColumn) {
+            if (dataSource.HasGeometryColumn) {
                 param.Select = param.Select.Split(
                     ",",
                     StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries
                 ).Aggregate(
                     new StringBuilder(),
-                    (current, field) => current.Append(",").Append(field.EqualsOrdinalIgnoreCase(ds.GeometryColumn) ? $"st_astext({field}) as {field}" : field)
+                    (current, field) => current.Append(",").Append(field.EqualsOrdinalIgnoreCase(dataSource.GeometryColumn) ? $"st_astext({field}) as {field}" : field)
                 ).ToString().Substring(1);
             }
             sql.AppendLine($" select {param.Select} ");
-            sql.AppendLine($" from {ds.Schema}.{ds.TableName} ");
-            AppendWhere(sql, ds.PresetCriteria, param.Where);
+            sql.AppendLine($" from {dataSource.Schema}.{dataSource.TableName} ");
+            AppendWhere(sql, dataSource.PresetCriteria, param.Where);
             if (param.GroupBy.IsNotNullOrEmpty()) {
                 sql.AppendLine($" group by {param.GroupBy} ");
                 if (param.OrderBy.IsNotNullOrEmpty()) {
@@ -145,79 +145,51 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             }
             else {
                 if (param.OrderBy.IsNullOrEmpty()) {
-                    param.OrderBy = ds.DefaultOrder;
+                    param.OrderBy = dataSource.DefaultOrder;
                 }
                 if (param.OrderBy.IsNotNullOrEmpty()) {
                     sql.AppendLine($" order by {param.OrderBy} ");
                 }
             }
             sql.AppendLine($" limit {param.Take} offset {param.Skip} ");
-            var result = await ReadDataAsync(ds, sql.ToString());
+            var result = await ReadDataAsync(dataSource, sql.ToString());
             return result;
         }
 
-        protected override async Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(
-            DataSourceCacheItem ds,
+        public override async Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(
+            DataSourceCacheItem dataSource,
             DistinctParam param
         ) {
             if (param.Select.IsNullOrEmpty() || param.Select.Trim().Equals("*")) {
                 throw new ArgumentException($"Invalid select {param.Select} for distinct !");
             }
             var sql = new StringBuilder();
-            if (ds.HasGeometryColumn) {
+            if (dataSource.HasGeometryColumn) {
                 param.Select = param.Select.Split(
                     ",",
                     StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries
                 ).Aggregate(
                     new StringBuilder(),
-                    (current, field) => current.Append(",").Append(field.EqualsOrdinalIgnoreCase(ds.GeometryColumn) ? $"st_astext({field}) as {field}" : field)
+                    (current, field) => current.Append(",").Append(field.EqualsOrdinalIgnoreCase(dataSource.GeometryColumn) ? $"st_astext({field}) as {field}" : field)
                 ).ToString().Substring(1);
             }
             sql.AppendLine($" select distinct {param.Select} ");
-            sql.AppendLine($" from {ds.Schema}.{ds.TableName} ");
-            AppendWhere(sql, ds.PresetCriteria, param.Where);
+            sql.AppendLine($" from {dataSource.Schema}.{dataSource.TableName} ");
+            AppendWhere(sql, dataSource.PresetCriteria, param.Where);
             if (param.OrderBy.IsNotNullOrEmpty()) {
                 sql.AppendLine($" order by {param.OrderBy} ");
             }
-            var data = await ReadDataAsync(ds, sql.ToString());
+            var data = await ReadDataAsync(dataSource, sql.ToString());
             return data;
         }
 
-        protected override async Task<int> GetSridAsync(DataSourceCacheItem ds) {
-            var sql = new StringBuilder();
-            sql.AppendLine($" select st_srid({ds.GeometryColumn}) ");
-            sql.AppendLine($" from {ds.Schema}.{ds.TableName} ");
-            sql.AppendLine($" where {ds.GeometryColumn} is not null ");
-            sql.AppendLine($" limit 1 ;");
-            await using var conn = new NpgsqlConnection(ds.ConnectionString);
-            var srid = await conn.ExecuteScalarAsync<int>(sql.ToString());
-            return srid;
-        }
-
-        protected override async Task<string> GetGeometryTypeAsync(DataSourceCacheItem ds) {
-            var sql = new StringBuilder();
-            sql.AppendLine($" select st_geometrytype({ds.GeometryColumn}) ");
-            sql.AppendLine($" from {ds.Schema}.{ds.TableName} ");
-            sql.AppendLine($" where {ds.GeometryColumn} is not null ");
-            sql.AppendLine($" limit 1 ;");
-            await using var conn = new NpgsqlConnection(ds.ConnectionString);
-            var geoType = await conn.ExecuteScalarAsync<string>(sql.ToString());
-            return geoType.Substring(3).ToLowerInvariant();
-        }
-
-        private async Task<IList<IDictionary<string, object>>> ReadDataAsync(DataSourceCacheItem ds, string sql) {
+        private async Task<IList<IDictionary<string, object>>> ReadDataAsync(DataSourceCacheItem dataSource, string sql) {
             logger.LogInformation(sql);
-            await using var conn = new NpgsqlConnection(ds.ConnectionString);
+            await using var conn = new NpgsqlConnection(dataSource.ConnectionString);
             await conn.OpenAsync();
             var tableData = await ReadDataAsync(conn, sql);
             await conn.CloseAsync();
             return tableData;
-        }
-
-        protected override AgsJsonParam ConvertQueryParams(DataSourceCacheItem ds, AgsQueryParam queryParam) {
-            var param = new AgsJsonParam();
-
-            return param;
         }
 
     }

@@ -1,76 +1,31 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Beginor.GisHub.DataServices.Esri;
-using Beginor.GisHub.DataServices.GeoJson;
+using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices {
 
     public interface IDataSourceReader {
-
         /// <summary>
         /// 读取数据源的列信息
         /// </summary>
-        Task<IList<ColumnModel>> GetColumnsAsync(
-            long dataSourceId
-        );
-
+        Task<IList<ColumnModel>> GetColumnsAsync(DataSourceCacheItem dataSource);
         /// <summary>
         /// 读取数据源的数据
         /// </summary>
-        Task<IList<IDictionary<string, object>>> ReadDataAsync(
-            long dataSourceId,
-            ReadDataParam param
-        );
-
+        Task<IList<IDictionary<string, object>>> ReadDataAsync(DataSourceCacheItem dataSource, ReadDataParam param);
         /// <summary>
         /// 读取数据源的记录数。
         /// </summary>
-        Task<long> CountAsync(
-            long dataSourceId,
-            CountParam param
-        );
-
+        Task<long> CountAsync(DataSourceCacheItem dataSource, CountParam param);
         /// <summary>
         /// 读取数据源中不重复的数据
         /// </summary>
-        Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(
-            long dataSourceId,
-            DistinctParam param
-        );
-
+        Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(DataSourceCacheItem dataSource, DistinctParam param);
         /// <summary>
         /// 行列转置数据
         /// </summary>
-        Task<IList<IDictionary<string, object>>> PivotData(
-            long dataSourceId,
-            PivotParam param
-        );
-
-        /// <summary>
-        /// Read data as GeoJson Feature Collection
-        /// </summary>
-        Task<GeoJsonFeatureCollection> ReadAsFeatureCollectionAsync(
-            long dataSourceId,
-            GeoJsonParam param
-        );
-
-        /// <summary>
-        /// Read data as Esri FeatureSet
-        /// </summary>
-        Task<AgsFeatureSet> ReadAsFeatureSetAsync(
-            long dataSourceId,
-            AgsJsonParam param
-        );
-
-        // Task<int> GetSridAsync(long dataSourceId);
-
-        // Task<string> GetGeometryTypeAsync(long dataSourceId);
-
-        Task<AgsLayerDescription> GetLayerDescriptionAsync(long dataSourceId);
-
-        Task<AgsFeatureSet> QueryAsync(long dataSourceId, AgsQueryParam queryParam);
-
+        Task<IList<IDictionary<string, object>>> PivotData(DataSourceCacheItem dataSource, PivotParam param);
     }
 
 }

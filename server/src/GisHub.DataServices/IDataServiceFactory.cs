@@ -6,6 +6,8 @@ namespace Beginor.GisHub.DataServices {
 
         IDataSourceReader CreateDataSourceReader(string databaseType);
 
+        IFeatureProvider CreateFeatureProvider(string databaseType);
+
     }
 
 }

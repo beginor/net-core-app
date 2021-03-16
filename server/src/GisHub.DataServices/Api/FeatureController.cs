@@ -44,16 +44,16 @@ namespace Beginor.GisHub.DataServices.Api {
             [FromQuery]AgsCommonParams param
         ) {
             try {
-                var model = await repository.GetCacheItemByIdAsync(id);
-                if (model == null) {
-                    return NotFound();
+                var dataSource = await repository.GetCacheItemByIdAsync(id);
+                if (dataSource == null) {
+                    return NotFound($"Datasource {id} does not exist !");
                 }
-                var reader = factory.CreateDataSourceReader(model.DatabaseType);
-                var layerDesc = await reader.GetLayerDescriptionAsync(id);
+                var featureProvider = factory.CreateFeatureProvider(dataSource.DatabaseType);
+                var layerDesc = await featureProvider.GetLayerDescriptionAsync(dataSource);
                 return Json(layerDesc, JsonFactory.CreateAgsJsonSerializerOptions());
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not get layer description for datasource {id} .");
+                logger.LogError(ex, $"Can not get layer description from datasource {id} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -67,7 +67,7 @@ namespace Beginor.GisHub.DataServices.Api {
             try {
                 var featureSet = await QueryFeatures(id, param);
                 if (featureSet == null) {
-                    return NotFound();
+                    return NotFound($"Datasource {id} does not exist !");
                 }
                 return Json(featureSet, JsonFactory.CreateAgsJsonSerializerOptions());
             }
@@ -87,7 +87,7 @@ namespace Beginor.GisHub.DataServices.Api {
             try {
                 var featureSet = await QueryFeatures(id, param);
                 if (featureSet == null) {
-                    return NotFound();
+                    return NotFound($"Datasource {id} does not exist !");
                 }
                 return Json(featureSet, JsonFactory.CreateAgsJsonSerializerOptions());
             }
@@ -101,12 +101,12 @@ namespace Beginor.GisHub.DataServices.Api {
             long id,
             AgsQueryParam param
         ) {
-            var model = await repository.GetCacheItemByIdAsync(id);
-            if (model == null) {
+            var dataSource = await repository.GetCacheItemByIdAsync(id);
+            if (dataSource == null) {
                 return null;
             }
-            var reader = factory.CreateDataSourceReader(model.DatabaseType);
-            var featureSet = await reader.QueryAsync(id, param);
+            var reader = factory.CreateFeatureProvider(dataSource.DatabaseType);
+            var featureSet = await reader.QueryAsync(dataSource, param);
             return featureSet;
         }
     }
