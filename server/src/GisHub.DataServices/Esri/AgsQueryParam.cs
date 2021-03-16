@@ -19,7 +19,7 @@ namespace Beginor.GisHub.DataServices.Esri {
         [FromQuery(Name = "outSR")]
         public int OutSR { get; set; }
         [FromQuery(Name = "spatialRel")]
-        public string SpatialRel { get; set; } = AgsSpatialRelationshipTypes.Intersects;
+        public string SpatialRel { get; set; } = AgsSpatialRelationshipType.Intersects;
         [FromQuery(Name = "returnGeometry")]
         public bool ReturnGeometry { get; set; } = true;
         [FromQuery(Name = "time")]

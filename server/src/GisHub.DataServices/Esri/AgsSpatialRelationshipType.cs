@@ -1,5 +1,5 @@
 namespace Beginor.GisHub.DataServices.Esri {
-    public static class AgsSpatialRelationshipTypes {
+    public static class AgsSpatialRelationshipType {
         public const string Intersects = "esriSpatialRelIntersects";
         public const string Contains = "esriSpatialRelContains";
         public const string Crosses = "esriSpatialRelCrosses";
