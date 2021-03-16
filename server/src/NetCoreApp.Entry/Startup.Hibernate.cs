@@ -24,15 +24,9 @@ namespace Beginor.NetCoreApp.Entry {
                 "hibernate.config"
             );
             cfg.Configure(configFile);
-            var isTest = env.IsEnvironment("Test");
-            cfg.SetProperty(
-                Environment.ShowSql,
-                isTest.ToString()
-            );
-            cfg.SetProperty(
-                Environment.FormatSql,
-                isTest.ToString()
-            );
+            var isDevelopment = env.IsDevelopment().ToString();
+            cfg.SetProperty(Environment.ShowSql, isDevelopment);
+            cfg.SetProperty(Environment.FormatSql, isDevelopment);
             cfg.AddIdentityMappings();
             cfg.AddAttributeMappingAssembly(typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly);
             services.AddHibernate(cfg);
