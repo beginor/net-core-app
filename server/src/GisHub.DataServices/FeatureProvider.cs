@@ -240,6 +240,10 @@ namespace Beginor.GisHub.DataServices {
                     result.Extent = extent;
                 }
             }
+            // if (queryParam.ReturnCountOnly) {
+            //     var count = await reader.CountAsync(dataSource, param);
+            //     result.Count = count;
+            // }
             return result;
         }
 

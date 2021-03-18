@@ -210,7 +210,7 @@ export class DataSourceService {
         if (url2.startsWith('/')) {
             url2 = `${location.protocol}//${location.host}${url2}`;
         }
-        url2 = `${url2}rest/services/maps/${id}/MapServer/0`;
+        url2 = `${url2}rest/services/features/${id}/MapServer/0`;
         return url2;
     }
 
