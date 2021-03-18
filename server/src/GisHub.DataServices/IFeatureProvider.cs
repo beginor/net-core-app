@@ -16,6 +16,8 @@ namespace Beginor.GisHub.DataServices {
 
         Task<AgsFeatureSet> QueryAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
 
+        Task<int> GetSridAsync(DataSourceCacheItem dataSource);
+
     }
 
 }

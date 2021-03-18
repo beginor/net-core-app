@@ -69,7 +69,7 @@ namespace Beginor.GisHub.Test {
             Console.WriteLine(polygon.ToAgs().ToJson());
         }
 
-        [Test, Ignore("Can not read bbox")]
+        [Test]
         public void _05_CanReadBBox() {
             var wkt = File.ReadAllText("wkt/bbox.wkt");
             Console.WriteLine(wkt);

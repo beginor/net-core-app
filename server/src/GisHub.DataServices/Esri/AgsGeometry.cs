@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using NetTopologySuite.Geometries;
 
 namespace Beginor.GisHub.DataServices.Esri {
 
@@ -8,5 +9,8 @@ namespace Beginor.GisHub.DataServices.Esri {
         public AgsSpatialReference SpatialReference { get; set; }
         public bool? HasM { get; set; }
         public bool? HasZ { get; set; }
+
+        public abstract Geometry ToGeometry();
+
     }
 }

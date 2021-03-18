@@ -32,9 +32,9 @@ namespace Beginor.GisHub.DataServices.Esri {
         [FromQuery(Name = "orderByFields")]
         public string OrderByFields { get; set; }
         [FromQuery(Name = "resultOffset")]
-        public int? ResultOffset { get; set; } = 0;
+        public int ResultOffset { get; set; } = 0;
         [FromQuery(Name = "resultRecordCount")]
-        public int? ResultRecordCount { get; set; } = 1000;
+        public int ResultRecordCount { get; set; } = 1000;
         [FromQuery(Name = "groupByFieldsForStatistics")]
         public string GroupByFieldsForStatistics { get; set; }
         [FromQuery(Name = "outStatistics")]

@@ -107,6 +107,10 @@ namespace Beginor.GisHub.DataServices.Data {
             var meta = factory.CreateMetadataProvider(item.DatabaseType);
             var model = Mapper.Map<ConnectionModel>(ds.Connection);
             item.ConnectionString = meta.BuildConnectionString(model);
+            if (item.HasGeometryColumn) {
+                var featureProvider = factory.CreateFeatureProvider(item.DatabaseType);
+                item.Srid = await featureProvider.GetSridAsync(item);
+            }
             cache.TryAdd(id, item);
             return item;
         }

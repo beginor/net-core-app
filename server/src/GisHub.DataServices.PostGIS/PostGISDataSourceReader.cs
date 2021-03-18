@@ -1,62 +1,48 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Dapper;
 using Npgsql;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Data;
-using Beginor.GisHub.DataServices.Esri;
 using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices.PostGIS {
 
     public class PostGISDataSourceReader : DataSourceReader {
 
-        private ILogger<PostGISDataSourceReader> logger;
+        // private ILogger<PostGISDataSourceReader> logger;
 
         public PostGISDataSourceReader(
             IDataServiceFactory factory,
             IDataSourceRepository dataSourceRepo,
             IConnectionRepository connectionRepo,
             ILogger<PostGISDataSourceReader> logger
-        ) : base(factory, dataSourceRepo, connectionRepo) {
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        ) : base(factory, dataSourceRepo, connectionRepo, logger) {
+            // this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         protected override void Dispose(
             bool disposing
         ) {
             if (disposing) {
-                logger = null;
+                // logger = null;
             }
             base.Dispose(disposing);
         }
 
-        public override async Task<long> CountAsync(DataSourceCacheItem dataSource, CountParam param) {
-            var sb = new StringBuilder(" select count(*) ");
-            sb.AppendLine($" from {dataSource.Schema}.{dataSource.TableName} ");
-            AppendWhere(sb, dataSource.PresetCriteria, param.Where);
-            await using var conn = new NpgsqlConnection(dataSource.ConnectionString);
-            var sql = sb.ToString();
-            logger.LogInformation(sql);
-            var count = await conn.ExecuteScalarAsync<long>(sql);
-            return count;
-        }
-
-        public override async Task<IList<IDictionary<string, object>>> PivotData(
-            DataSourceCacheItem dataSource,
-            PivotParam param
-        ) {
+        protected override string BuildPivotSql(DataSourceCacheItem dataSource, PivotParam param) {
             if (param.Select.IsNullOrEmpty()) {
                 throw new ArgumentNullException($"{nameof(param.Select)} can not be empty!");
             }
             if (param.Aggregate.IsNullOrEmpty() || param.Field.IsNullOrEmpty()) {
                 throw new ArgumentNullException($"{nameof(param.Field)} and {nameof(param.Aggregate)} can not be empty");
             }
-            var cols = await GetColumnsAsync(dataSource);
+            var task = GetColumnsAsync(dataSource);
+            task.Wait();
+            var cols = task.Result;
             var colsDict = cols.ToDictionary(
                 c => c.Name,
                 c => c.Type,
@@ -112,20 +98,20 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             if (param.OrderBy.IsNotNullOrEmpty()) {
                 sql.Append($" order by {param.OrderBy} ");
             }
-            var result = await ReadDataAsync(dataSource, sql.ToString());
-            return result;
+            return sql.ToString();
         }
 
-        public override async Task<IList<IDictionary<string, object>>> ReadDataAsync(
-            DataSourceCacheItem dataSource,
-            ReadDataParam param
-        ) {
+        public override IDbConnection CreateConnection(DataSourceCacheItem dataSource) {
+            return new NpgsqlConnection(dataSource.ConnectionString);
+        }
+
+        protected override string BuildReadDataSql(DataSourceCacheItem dataSource, ReadDataParam param) {
             if (param.Select.IsNullOrEmpty()) {
                 param.Select = $"{dataSource.PrimaryKeyColumn}, {dataSource.DisplayColumn}";
             }
             var sql = new StringBuilder();
             // check selected fields when a table has geo column;
-            if (dataSource.HasGeometryColumn) {
+            if (param.CheckGeometryColumn && dataSource.HasGeometryColumn) {
                 param.Select = param.Select.Split(
                     ",",
                     StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries
@@ -152,14 +138,17 @@ namespace Beginor.GisHub.DataServices.PostGIS {
                 }
             }
             sql.AppendLine($" limit {param.Take} offset {param.Skip} ");
-            var result = await ReadDataAsync(dataSource, sql.ToString());
-            return result;
+            return sql.ToString();
         }
 
-        public override async Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(
-            DataSourceCacheItem dataSource,
-            DistinctParam param
-        ) {
+        protected override string BuildCountSql(DataSourceCacheItem dataSource, CountParam param) {
+            var sql = new StringBuilder(" select count(*) ");
+            sql.AppendLine($" from {dataSource.Schema}.{dataSource.TableName} ");
+            AppendWhere(sql, dataSource.PresetCriteria, param.Where);
+            return sql.ToString();
+        }
+
+        protected override string BuildDistinctSql(DataSourceCacheItem dataSource, DistinctParam param) {
             if (param.Select.IsNullOrEmpty() || param.Select.Trim().Equals("*")) {
                 throw new ArgumentException($"Invalid select {param.Select} for distinct !");
             }
@@ -179,19 +168,8 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             if (param.OrderBy.IsNotNullOrEmpty()) {
                 sql.AppendLine($" order by {param.OrderBy} ");
             }
-            var data = await ReadDataAsync(dataSource, sql.ToString());
-            return data;
+            return sql.ToString();
         }
-
-        private async Task<IList<IDictionary<string, object>>> ReadDataAsync(DataSourceCacheItem dataSource, string sql) {
-            logger.LogInformation(sql);
-            await using var conn = new NpgsqlConnection(dataSource.ConnectionString);
-            await conn.OpenAsync();
-            var tableData = await ReadDataAsync(conn, sql);
-            await conn.CloseAsync();
-            return tableData;
-        }
-
     }
 
 }

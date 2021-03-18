@@ -7,6 +7,9 @@ using Beginor.AppFx.Core;
 namespace Beginor.GisHub.DataServices.Esri {
 
     partial class AgsQueryParam {
+
+        private AgsGeometry geometry = null;
+
         [JsonIgnore]
         public AgsGeometry GeometryValue {
             get {
@@ -16,22 +19,28 @@ namespace Beginor.GisHub.DataServices.Esri {
                 if (GeometryType.IsNullOrEmpty()) {
                     return null;
                 }
+                if (geometry != null) {
+                    return geometry;
+                }
                 if (GeometryType == AgsGeometryType.Envelope) {
-                    return JsonSerializer.Deserialize<AgsExtent>(Geometry);
+                    geometry = JsonSerializer.Deserialize<AgsExtent>(Geometry);
                 }
                 if (GeometryType == AgsGeometryType.Point) {
-                    return JsonSerializer.Deserialize<AgsPoint>(Geometry);
+                    geometry = JsonSerializer.Deserialize<AgsPoint>(Geometry);
                 }
                 if (GeometryType == AgsGeometryType.MultiPoint) {
-                    return JsonSerializer.Deserialize<AgsMultiPoint>(Geometry);
+                    geometry = JsonSerializer.Deserialize<AgsMultiPoint>(Geometry);
                 }
                 if (GeometryType == AgsGeometryType.Polyline) {
-                    return JsonSerializer.Deserialize<AgsPolyline>(Geometry);
+                    geometry = JsonSerializer.Deserialize<AgsPolyline>(Geometry);
                 }
                 if (GeometryType == AgsGeometryType.Polygon) {
-                    return JsonSerializer.Deserialize<AgsPolygon>(Geometry);
+                    geometry = JsonSerializer.Deserialize<AgsPolygon>(Geometry);
                 }
-                return null;
+                if (geometry != null && geometry.SpatialReference == null && InSR > 0) {
+                    geometry.SpatialReference = new AgsSpatialReference { Wkid = InSR };
+                }
+                return geometry;
             }
         }
         [JsonIgnore]
@@ -54,10 +63,10 @@ namespace Beginor.GisHub.DataServices.Esri {
         [JsonIgnore]
         public AgsSpatialReference OutSRValue {
             get {
-                if (OutSR == AgsSpatialReference.WGS84.Wkid.Value) {
+                if (OutSR == AgsSpatialReference.WGS84.Wkid) {
                     return AgsSpatialReference.WGS84;
                 }
-                if (OutSR == AgsSpatialReference.WebMercator.Wkid.Value || OutSR == AgsSpatialReference.WebMercator.LatestWkid) {
+                if (OutSR == AgsSpatialReference.WebMercator.Wkid || OutSR == AgsSpatialReference.WebMercator.LatestWkid) {
                     return AgsSpatialReference.WebMercator;
                 }
                 return new AgsSpatialReference {

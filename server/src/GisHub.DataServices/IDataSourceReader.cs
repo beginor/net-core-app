@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
@@ -26,6 +27,8 @@ namespace Beginor.GisHub.DataServices {
         /// 行列转置数据
         /// </summary>
         Task<IList<IDictionary<string, object>>> PivotData(DataSourceCacheItem dataSource, PivotParam param);
+        Task<T> ReadScalarAsync<T>(DataSourceCacheItem dataSource, ReadDataParam param);
+        IDbConnection CreateConnection(DataSourceCacheItem dataSource);
     }
 
 }
