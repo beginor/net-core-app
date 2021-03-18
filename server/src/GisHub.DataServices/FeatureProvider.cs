@@ -14,7 +14,8 @@ namespace Beginor.GisHub.DataServices {
 
     public abstract class FeatureProvider : IFeatureProvider {
 
-        private static readonly int[] SupportedSrids = { 3857, 4329, 4490 };
+        private static readonly int[] GeographicSrids = { 4326, 4490 };
+        private static readonly int[] MercatorSrids = { 3857, 102100 };
 
         protected IDataServiceFactory Factory { get; }
 
@@ -135,6 +136,7 @@ namespace Beginor.GisHub.DataServices {
             result.SpatialReference = new AgsSpatialReference {
                 Wkid = dataSource.Srid
             };
+            TryConvertSr(result, param.OutSR);
             result.GeometryType = GetAgsGeometryType(dataSource);
             return result;
         }
@@ -269,7 +271,7 @@ namespace Beginor.GisHub.DataServices {
         protected abstract ReadDataParam ConvertCountQueryParam(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
         protected string ProcessQueryGeometry(AgsQueryParam queryParam, int srid) {
             var geometry = queryParam.GeometryValue;
-            if (geometry != null && IsSupported(geometry.SpatialReference)) {
+            if (geometry != null && IsSupported(geometry.SpatialReference.Wkid)) {
                 if (srid != queryParam.InSR) {
                     throw new NotImplementedException();
                 }
@@ -334,8 +336,8 @@ namespace Beginor.GisHub.DataServices {
 
         protected abstract AgsJsonParam ConvertQueryParams(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
 
-        private bool IsSupported(AgsSpatialReference spatialRef) {
-            return SupportedSrids.Any(srid => srid == spatialRef.Wkid);
+        private static bool IsSupported(int srid) {
+            return GeographicSrids.Contains(srid) || MercatorSrids.Contains(srid);
         }
 
         private async Task<AgsField[]> ConvertToFieldsAsync(
@@ -394,6 +396,27 @@ namespace Beginor.GisHub.DataServices {
             return field;
         }
 
+        private static void TryConvertSr(AgsFeatureSet featureSet, int targetSR) {
+            if (!IsSupported(targetSR)) {
+                return;
+            }
+            var srcSR = featureSet.SpatialReference.Wkid;
+            if (NeedsConvert(srcSR, targetSR)) {
+                if (GeographicSrids.Contains(srcSR) && MercatorSrids.Contains(targetSR)) {
+                    foreach (var feature in featureSet.Features) {
+                        feature.Geometry = WebMercator.FromGeographic(feature.Geometry);
+                        feature.Geometry.SpatialReference = null;
+                    }
+                }
+                if (MercatorSrids.Contains(srcSR) && GeographicSrids.Contains(targetSR)) {
+                    foreach (var feature in featureSet.Features) {
+                        feature.Geometry = WebMercator.ToGeographic(feature.Geometry);
+                    }
+                }
+            }
+            featureSet.SpatialReference = new AgsSpatialReference { Wkid = targetSR };
+        }
+
         private string GetAgsGeometryType(DataSourceCacheItem dataSource) {
             var geomType = dataSource.GeometryType;
             if (geomType == "point") {
@@ -411,6 +434,24 @@ namespace Beginor.GisHub.DataServices {
             return geomType;
         }
 
+        private static bool NeedsConvert(int sourceSR, int targetSR) {
+            if (!IsSupported(sourceSR)) {
+                return false;
+            }
+            if (!IsSupported(targetSR)) {
+                return false;
+            }
+            if (sourceSR == targetSR) {
+                return false;
+            }
+            if (sourceSR == AgsSpatialReference.CGC2000.Wkid && targetSR == AgsSpatialReference.WGS84.Wkid) {
+                return false;
+            }
+            if (sourceSR == AgsSpatialReference.WGS84.Wkid && targetSR == AgsSpatialReference.CGC2000.Wkid) {
+                return false;
+            }
+            return true;
+        }
     }
 
 }

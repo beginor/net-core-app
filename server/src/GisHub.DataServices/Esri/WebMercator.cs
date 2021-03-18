@@ -35,7 +35,7 @@ namespace Beginor.GisHub.DataServices.Esri {
             return FromGeographic(geometry);
         }
 
-        private static AgsGeometry FromGeographic(
+        public static AgsGeometry FromGeographic(
             AgsGeometry geometry
         ) {
             AgsGeometry result = null;
@@ -88,7 +88,11 @@ namespace Beginor.GisHub.DataServices.Esri {
             if (geometry.SpatialReference?.Wkid != 102100 && geometry.SpatialReference?.Wkid != 3857) {
                 throw new InvalidOperationException("WkId != 102100 or 3857");
             }
-            return ToGeographic(geometry, new AgsSpatialReference { Wkid = 4326 });
+            var result = ToGeographic(geometry);
+            if (result != null) {
+                result.SpatialReference = new AgsSpatialReference { Wkid = 4326 };
+            }
+            return result;
         }
 
         /// Helper method for quickly unprojecting coordinates from
@@ -97,12 +101,15 @@ namespace Beginor.GisHub.DataServices.Esri {
             if (geometry.SpatialReference?.Wkid != 102100 && geometry.SpatialReference?.Wkid != 3857) {
                 throw new InvalidOperationException("WkId != 102100 or 3857");
             }
-            return ToGeographic(geometry, new AgsSpatialReference { Wkid = 4490 });
+            var result = ToGeographic(geometry);
+            if (result != null) {
+                result.SpatialReference = new AgsSpatialReference { Wkid = 4490 };
+            }
+            return result;
         }
 
-        private static AgsGeometry ToGeographic(
-            AgsGeometry geometry,
-            AgsSpatialReference spatialReference
+        public static AgsGeometry ToGeographic(
+            AgsGeometry geometry
         ) {
             AgsGeometry result = null;
             if (geometry is AgsPoint point) {
@@ -140,9 +147,6 @@ namespace Beginor.GisHub.DataServices.Esri {
                     Xmax = txys[1][0],
                     Ymax = txys[1][1]
                 };
-            }
-            if (result != null) {
-                result.SpatialReference = spatialReference;
             }
             return result;
         }
