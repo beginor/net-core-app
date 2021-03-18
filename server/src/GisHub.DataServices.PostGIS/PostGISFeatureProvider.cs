@@ -28,19 +28,33 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             IDataServiceFactory factory
         ) : base(factory) { }
 
-        protected override Task<AgsFeatureSet> QueryForIdsAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
-            throw new System.NotImplementedException();
+        protected override ReadDataParam ConvertIdsQueryParam(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
+            var result = new ReadDataParam();
+            result.Select = dataSource.PrimaryKeyColumn;
+            result.Where = BuildWhere(dataSource, queryParam);
+            result.OrderBy = queryParam.OrderByFields;
+            result.CheckGeometry = false;
+            return result;
         }
 
         protected override AgsJsonParam ConvertQueryParams(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
-            throw new System.NotImplementedException();
+            var result = new AgsJsonParam();
+            if (queryParam.OutFields.IsNullOrEmpty() || queryParam.OutFields.Trim() == "*") {
+                result.Select = $"{dataSource.PrimaryKeyColumn},{dataSource.DisplayColumn},st_astext({dataSource.GeometryColumn})";
+            }
+            result.Where = BuildWhere(dataSource, queryParam);
+            result.OrderBy = queryParam.OrderByFields;
+            result.Skip = queryParam.ResultOffset;
+            result.Take = queryParam.ResultRecordCount;
+            result.CheckGeometry = false;
+            return result;
         }
 
         protected override ReadDataParam ConvertExtentQueryParam(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
             var result = new ReadDataParam();
             result.Select = $"st_astext(st_extent({dataSource.GeometryColumn})::geometry) as {dataSource.GeometryColumn}";
             result.Where = BuildWhere(dataSource, queryParam);
-            result.CheckGeometryColumn = false;
+            result.CheckGeometry = false;
             return result;
         }
 
@@ -60,7 +74,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             }
             result.Skip = queryParam.ResultOffset;
             result.Take = queryParam.ResultRecordCount;
-            result.CheckGeometryColumn = false;
+            result.CheckGeometry = false;
             return result;
         }
 
@@ -68,7 +82,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             var result = new ReadDataParam();
             result.Select = "count(*) as feature_count";
             result.Where = BuildWhere(dataSource, queryParam);
-            result.CheckGeometryColumn = false;
+            result.CheckGeometry = false;
             return result;
         }
 
@@ -97,7 +111,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
         private string BuildWhere(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
             var where = new List<string>();
             // query where
-            if (queryParam.Where.IsNotNullOrEmpty()) {
+            if (queryParam.Where.IsNotNullOrEmpty() && queryParam.Where.Trim() != "1=1") {
                 where.Add($"{queryParam.Where}");
             }
             // query objectids

@@ -91,7 +91,7 @@ namespace Beginor.GisHub.DataServices.Esri {
 
         public AgsSpatialReference SourceSpatialReference { get; set; }
 
-        public JsonElement DrawingInfo { get; set; }
+        // public JsonElement DrawingInfo { get; set; }
 
     }
 

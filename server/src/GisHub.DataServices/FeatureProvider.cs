@@ -8,7 +8,6 @@ using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Esri;
 using Beginor.GisHub.DataServices.GeoJson;
 using Beginor.GisHub.DataServices.Models;
-using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 
 namespace Beginor.GisHub.DataServices {
@@ -85,7 +84,7 @@ namespace Beginor.GisHub.DataServices {
                 return result;
             }
             var total = await dsReader.CountAsync(dataSource, new CountParam {Where = param.Where});
-            if (total > list.Count) {
+            if (total > list.Count + param.Skip) {
                 result.ExceededTransferLimit = true;
             }
             // var firstRow = list.First();
@@ -179,7 +178,7 @@ namespace Beginor.GisHub.DataServices {
                 },
             };
             layerDesc.GeometryField = layerDesc.Fields.First(f => f.Type == AgsFieldType.EsriGeometry);
-            layerDesc.DrawingInfo = AgsDrawingInfo.CreateDefaultDrawingInfo(layerDesc.GeometryType);
+            // layerDesc.DrawingInfo = AgsDrawingInfo.CreateDefaultDrawingInfo(layerDesc.GeometryType);
             // layerDesc.OwnershipBasedAccessControlForFeatures = null;
             return layerDesc;
         }
@@ -206,7 +205,21 @@ namespace Beginor.GisHub.DataServices {
             return result;
         }
 
-        protected abstract Task<AgsFeatureSet> QueryForIdsAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
+        protected async Task<AgsFeatureSet> QueryForIdsAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
+            var param = ConvertIdsQueryParam(dataSource, queryParam);
+            var reader = Factory.CreateDataSourceReader(dataSource.DatabaseType);
+            var data = await reader.ReadDataAsync(dataSource, param);
+            var result = new AgsFeatureSet();
+            result.ObjectIdFieldName = dataSource.PrimaryKeyColumn;
+            var objectIds = new List<long>(data.Count);
+            foreach (var item in data) {
+                var val = item[dataSource.PrimaryKeyColumn];
+                var objectId = Convert.ToInt64(val);
+                objectIds.Add(objectId);
+            }
+            result.ObjectIds = objectIds.ToArray();
+            return result;
+        }
 
         protected async Task<AgsFeatureSet> QueryForCountAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
             var result = new AgsFeatureSet();
@@ -246,6 +259,8 @@ namespace Beginor.GisHub.DataServices {
             // }
             return result;
         }
+
+        protected abstract ReadDataParam ConvertIdsQueryParam(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
 
         protected abstract ReadDataParam ConvertExtentQueryParam(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
 

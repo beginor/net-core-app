@@ -5,7 +5,8 @@ namespace Beginor.GisHub.DataServices.Models {
     public class CountParam {
         [FromQuery(Name = "$where")]
         public string Where { get; set; }
-        public bool CheckGeometryColumn { get; set; } = true;
+        [FromQuery(Name = "$checkGeomegry")]
+        public bool CheckGeometry { get; set; } = true;
     }
 
     public class DistinctParam : CountParam {
@@ -21,7 +22,7 @@ namespace Beginor.GisHub.DataServices.Models {
         [FromQuery(Name = "$take")]
         public int Take { get; set; } = 10;
     }
-    
+
     public class AgsJsonParam : DistinctParam {
         [FromQuery(Name = "$skip")]
         public int Skip { get; set; } = 0;
