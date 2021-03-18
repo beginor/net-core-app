@@ -110,6 +110,7 @@ namespace Beginor.GisHub.DataServices.Data {
             if (item.HasGeometryColumn) {
                 var featureProvider = factory.CreateFeatureProvider(item.DatabaseType);
                 item.Srid = await featureProvider.GetSridAsync(item);
+                item.GeometryType = await featureProvider.GetGeometryTypeAsync(item);
             }
             cache.TryAdd(id, item);
             return item;

@@ -135,7 +135,7 @@ namespace Beginor.GisHub.DataServices {
             result.SpatialReference = new AgsSpatialReference {
                 Wkid = dataSource.Srid
             };
-            result.GeometryType = await GetAgsGeometryType(dataSource);
+            result.GeometryType = GetAgsGeometryType(dataSource);
             return result;
         }
 
@@ -148,7 +148,7 @@ namespace Beginor.GisHub.DataServices {
                 Name = dataSource.DataSourceName,
                 Type = "Feature Layer",
                 Description = $"Map Service for {dataSource.DataSourceName}",
-                GeometryType = await GetAgsGeometryType(dataSource),
+                GeometryType = GetAgsGeometryType(dataSource),
                 SourceSpatialReference = new AgsSpatialReference { Wkid = dataSource.Srid },
                 ObjectIdField = dataSource.PrimaryKeyColumn,
                 DisplayField = dataSource.DisplayColumn,
@@ -330,7 +330,7 @@ namespace Beginor.GisHub.DataServices {
 
         public abstract Task<int> GetSridAsync(DataSourceCacheItem dataSource);
 
-        protected abstract Task<string> GetGeometryTypeAsync(DataSourceCacheItem dataSource);
+        public abstract Task<string> GetGeometryTypeAsync(DataSourceCacheItem dataSource);
 
         protected abstract AgsJsonParam ConvertQueryParams(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
 
@@ -394,8 +394,8 @@ namespace Beginor.GisHub.DataServices {
             return field;
         }
 
-        private async Task<string> GetAgsGeometryType(DataSourceCacheItem dataSource) {
-            var geomType = await GetGeometryTypeAsync(dataSource);
+        private string GetAgsGeometryType(DataSourceCacheItem dataSource) {
+            var geomType = dataSource.GeometryType;
             if (geomType == "point") {
                 return AgsGeometryType.Point;
             }

@@ -47,6 +47,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             result.Skip = queryParam.ResultOffset;
             result.Take = queryParam.ResultRecordCount;
             result.CheckGeometry = false;
+            result.OutSR = queryParam.OutSR;
             return result;
         }
 
@@ -97,7 +98,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             return srid;
         }
 
-        protected override async Task<string> GetGeometryTypeAsync(DataSourceCacheItem dataSource) {
+        public override async Task<string> GetGeometryTypeAsync(DataSourceCacheItem dataSource) {
             var sql = new StringBuilder();
             sql.AppendLine($" select st_geometrytype({dataSource.GeometryColumn}) ");
             sql.AppendLine($" from {dataSource.Schema}.{dataSource.TableName} ");

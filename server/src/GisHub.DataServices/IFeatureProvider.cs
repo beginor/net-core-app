@@ -18,6 +18,8 @@ namespace Beginor.GisHub.DataServices {
 
         Task<int> GetSridAsync(DataSourceCacheItem dataSource);
 
+        Task<string> GetGeometryTypeAsync(DataSourceCacheItem dataSource);
+
     }
 
 }
