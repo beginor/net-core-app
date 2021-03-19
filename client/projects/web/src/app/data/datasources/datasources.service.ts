@@ -12,10 +12,7 @@ import { map } from 'rxjs/operators';
 })
 export class DataSourceService {
 
-    public searchModel: DataSourceSearchModel = {
-        skip: 0,
-        take: 10
-    };
+    public searchModel: DataSourceSearchModel = { skip: 0, take: 10 };
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<DataSourceModel[]>([]);
     public loading = false;
