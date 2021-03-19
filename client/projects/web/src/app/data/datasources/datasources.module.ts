@@ -16,6 +16,7 @@ import { PreviewComponent } from './preview/preview.component';
 import { PreviewDataComponent } from './preview/preview-data.component';
 import { PreviewGeoJsonComponent } from './preview/preview-geojson.component';
 import { PreviewFeatureSetComponent } from './preview/preview-featureset.component';
+import { PreviewMapServerComponent } from './preview/preview-mapserver.component';
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import { PreviewFeatureSetComponent } from './preview/preview-featureset.compone
         PreviewComponent,
         PreviewDataComponent,
         PreviewGeoJsonComponent,
-        PreviewFeatureSetComponent
+        PreviewFeatureSetComponent,
+        PreviewMapServerComponent
     ],
     imports: [
         CommonModule,

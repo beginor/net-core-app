@@ -183,7 +183,7 @@ namespace Beginor.GisHub.DataServices.Esri {
         ) {
             var result = new double[paths.Length][][];
             for (var i = 0; i < paths.Length; i++) {
-                result[i] = WebMercatorToGeographic(paths[i]);
+                result[i] = GeographicToWebMercator(paths[i]);
             }
             return result;
         }

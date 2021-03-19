@@ -1,20 +1,20 @@
 <div class="modal-header pb-0">
   <div class="modal-title">{{ds.name}} 数据预览</div>
   <ul class="nav-tabs ml-auto" ngbNav #nav="ngbNav" [(activeId)]="previewType">
-    <li ngbNavItem="data">
+    <li *ngIf="hasPrivilege('datasources.read_data')" ngbNavItem="data">
       <a ngbNavLink>属性数据</a>
       <ng-template ngbNavContent>
         <app-datasources-preview-data [ds]="ds"></app-datasources-preview-data>
       </ng-template>
     </li>
-    <li *ngIf="!!ds.geometryColumn" ngbNavItem="geojson">
+    <li *ngIf="!!ds.geometryColumn && hasPrivilege('datasources.read_geojson')" ngbNavItem="geojson">
       <a ngbNavLink>GeoJson</a>
       <ng-template ngbNavContent>
         <app-datasources-preview-geojson [ds]="ds" (downloadProgress)="updateProgress($event)">
         </app-datasources-preview-geojson>
       </ng-template>
     </li>
-    <li *ngIf="!!ds.geometryColumn" ngbNavItem="featureset">
+    <li *ngIf="!!ds.geometryColumn && hasPrivilege('datasources.read_featureset')" ngbNavItem="featureset">
       <a ngbNavLink>FeatureSet</a>
       <ng-template ngbNavContent>
         <app-datasources-preview-featureset [ds]="ds" (downloadProgress)="updateProgress($event)">
@@ -24,7 +24,7 @@
     <li *ngIf="!!ds.geometryColumn" ngbNavItem="mapserver">
       <a ngbNavLink>MapServer</a>
       <ng-template ngbNavContent>
-        MapServer Preview
+        <app-datasources-preview-mapserver [ds]="ds"></app-datasources-preview-mapserver>
       </ng-template>
     </li>
   </ul>
@@ -38,7 +38,7 @@
   <div class="text-muted" style="font-size: 0.6rem;">
     服务地址：<a [href]="getPreviewUrl()" target="_blank">{{getPreviewUrl()}}</a>
   </div>
-  <ngb-progressbar *ngIf="previewType != 'data'" class="ml-auto" style="width: 100px;" [showValue]="true"
+  <ngb-progressbar *ngIf="canShowProgress()" class="ml-auto" style="width: 100px;" [showValue]="true"
     type="success" [max]="100" [value]="downloadProgress">
   </ngb-progressbar>
 </div>

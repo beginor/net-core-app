@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { AccountService } from 'app-shared';
+
 import { DataSourceService, DataSourceModel, PreviewType } from '../datasources.service';
 
 @Component({
@@ -24,6 +26,7 @@ export class PreviewComponent implements OnInit {
 
     constructor(
         public activeModal: NgbActiveModal,
+        public account: AccountService,
         public vm: DataSourceService
     ) { }
 
@@ -45,6 +48,16 @@ export class PreviewComponent implements OnInit {
 
     public updateProgress(percent: number): void {
         this.downloadProgress = percent * 100;
+    }
+
+    public hasPrivilege(privilege: string): boolean {
+        var info = this.account.info.getValue();
+        return info.privileges[privilege];
+    }
+
+    public canShowProgress(): boolean {
+        return this.previewType === 'geojson'
+            || this.previewType === 'featureset';
     }
 
 }
