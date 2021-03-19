@@ -22,20 +22,21 @@ namespace Beginor.GisHub.DataServices.Esri {
                 if (geometry != null) {
                     return geometry;
                 }
+                var options = JsonFactory.CreateAgsJsonSerializerOptions();
                 if (GeometryType == AgsGeometryType.Envelope) {
-                    geometry = JsonSerializer.Deserialize<AgsExtent>(Geometry);
+                    geometry = JsonSerializer.Deserialize<AgsExtent>(Geometry, options);
                 }
                 if (GeometryType == AgsGeometryType.Point) {
-                    geometry = JsonSerializer.Deserialize<AgsPoint>(Geometry);
+                    geometry = JsonSerializer.Deserialize<AgsPoint>(Geometry, options);
                 }
                 if (GeometryType == AgsGeometryType.MultiPoint) {
-                    geometry = JsonSerializer.Deserialize<AgsMultiPoint>(Geometry);
+                    geometry = JsonSerializer.Deserialize<AgsMultiPoint>(Geometry, options);
                 }
                 if (GeometryType == AgsGeometryType.Polyline) {
-                    geometry = JsonSerializer.Deserialize<AgsPolyline>(Geometry);
+                    geometry = JsonSerializer.Deserialize<AgsPolyline>(Geometry, options);
                 }
                 if (GeometryType == AgsGeometryType.Polygon) {
-                    geometry = JsonSerializer.Deserialize<AgsPolygon>(Geometry);
+                    geometry = JsonSerializer.Deserialize<AgsPolygon>(Geometry, options);
                 }
                 if (geometry != null && geometry.SpatialReference == null && InSR > 0) {
                     geometry.SpatialReference = new AgsSpatialReference { Wkid = InSR };
