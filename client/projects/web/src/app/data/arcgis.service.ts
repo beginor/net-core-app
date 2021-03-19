@@ -34,9 +34,11 @@ export class ArcGisService {
         }
         esriConfig.request.interceptors.push({
             urls: new RegExp(this.webRoot),
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                Authorization: `Bearer ${this.account.token}`
+            before: param => {
+                const headers = param.requestOptions.headers || {};
+                headers['X-Requested-With'] = 'XMLHttpRequest';
+                headers['Authorization'] = `Bearer ${this.account.token}`
+                param.requestOptions.headers = headers;
             }
         });
         Object.assign(window, { esriConfig });

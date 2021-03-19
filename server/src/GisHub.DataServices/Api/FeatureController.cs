@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
@@ -39,6 +40,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         /// <summary>读取要素服务信息</summary>
         [HttpGet("{id:long}/MapServer/0")]
+        [Authorize("features.get_layer_info")]
         public async Task<ActionResult<AgsLayerDescription>> GetLayerDescription(
             [FromRoute]long id,
             [FromQuery]AgsCommonParams param
@@ -60,6 +62,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         /// <summary>查询空间要素</summary>
         [HttpGet("{id:long}/MapServer/0/query")]
+        [Authorize("features.query")]
         public async Task<ActionResult<AgsFeatureSet>> QueryFeaturesByGetAsync(
             [FromRoute]long id,
             [FromQuery]AgsQueryParam param
@@ -80,6 +83,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <summary>查询空间要素</summary>
         [HttpPost("{id:long}/MapServer/0/query")]
         [Consumes("application/x-www-form-urlencoded")]
+        [Authorize("features.query")]
         public async Task<ActionResult<AgsFeatureSet>> QueryFeaturesByPostAsync(
             [FromRoute]long id,
             [ModelBinder(BinderType = typeof(AgsQueryParamsBinder))]AgsQueryParam param
