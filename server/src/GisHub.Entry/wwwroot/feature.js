@@ -1,6 +1,6 @@
 define([
     'esri/Map',
-    'esri/views/SceneView',
+    'esri/views/MapView',
     'esri/layers/FeatureLayer'
 ], function(Map, MapView, FeatureLayer) {
     'use strict';

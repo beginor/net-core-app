@@ -10,7 +10,7 @@ namespace Beginor.GisHub.DataServices.Esri {
         public bool? HasM { get; set; }
         public bool? HasZ { get; set; }
 
-        public abstract Geometry ToGeometry();
+        public abstract Geometry ToNtsGeometry();
 
     }
 }

@@ -8,15 +8,18 @@ namespace Beginor.GisHub.DataServices.Esri {
         public double? Z { get; set; }
         public double? M { get; set; }
 
-        public override Geometry ToGeometry() {
-            var point = new Point(X, Y);
+        public override Geometry ToNtsGeometry() {
+            var target = new Point(X, Y);
             if (Z.HasValue) {
-                point.Z = Z.Value;
+                target.Z = Z.Value;
             }
             if (M.HasValue) {
-                point.M = M.Value;
+                target.M = M.Value;
             }
-            return point;
+            if (SpatialReference != null) {
+                target.SRID = SpatialReference.Wkid;
+            }
+            return target;
         }
 
     }

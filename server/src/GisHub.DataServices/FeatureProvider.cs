@@ -62,10 +62,7 @@ namespace Beginor.GisHub.DataServices {
             return result;
         }
 
-        public async Task<AgsFeatureSet> ReadAsFeatureSetAsync(
-            DataSourceCacheItem dataSource,
-            AgsJsonParam param
-        ) {
+        public async Task<AgsFeatureSet> ReadAsFeatureSetAsync(DataSourceCacheItem dataSource, AgsJsonParam param) {
             var dsReader = Factory.CreateDataSourceReader(dataSource.DatabaseType);
             var selectFields = CheckGeoSelect(dataSource, param.Select);
             var rdp = new ReadDataParam {
@@ -136,7 +133,7 @@ namespace Beginor.GisHub.DataServices {
             result.SpatialReference = new AgsSpatialReference {
                 Wkid = dataSource.Srid
             };
-            TryConvertSr(result, param.OutSR);
+            TryConvertFeatureSetSr(result, param.OutSR);
             result.GeometryType = GetAgsGeometryType(dataSource);
             return result;
         }
@@ -269,11 +266,12 @@ namespace Beginor.GisHub.DataServices {
         protected abstract ReadDataParam ConvertStatisticsQueryParam(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
 
         protected abstract ReadDataParam ConvertCountQueryParam(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
-        protected string ProcessQueryGeometry(AgsQueryParam queryParam, int srid) {
+        protected string ConvertQueryGeometryToWkt(AgsQueryParam queryParam, int srid) {
             var geometry = queryParam.GeometryValue;
-            if (geometry != null && IsSupported(geometry.SpatialReference.Wkid)) {
-                if (srid != queryParam.InSR) {
-                    throw new NotImplementedException();
+            if (geometry != null) {
+                var convertedGeometry = ConvertGeometrySr(geometry, geometry.SpatialReference.Wkid, srid);
+                if (convertedGeometry != null) {
+                    return convertedGeometry.ToNtsGeometry().AsText();
                 }
             }
             return string.Empty;
@@ -396,27 +394,6 @@ namespace Beginor.GisHub.DataServices {
             return field;
         }
 
-        private static void TryConvertSr(AgsFeatureSet featureSet, int targetSR) {
-            if (!IsSupported(targetSR)) {
-                return;
-            }
-            var srcSR = featureSet.SpatialReference.Wkid;
-            if (NeedsConvert(srcSR, targetSR)) {
-                if (GeographicSrids.Contains(srcSR) && MercatorSrids.Contains(targetSR)) {
-                    foreach (var feature in featureSet.Features) {
-                        feature.Geometry = WebMercator.FromGeographic(feature.Geometry);
-                        feature.Geometry.SpatialReference = null;
-                    }
-                }
-                if (MercatorSrids.Contains(srcSR) && GeographicSrids.Contains(targetSR)) {
-                    foreach (var feature in featureSet.Features) {
-                        feature.Geometry = WebMercator.ToGeographic(feature.Geometry);
-                    }
-                }
-            }
-            featureSet.SpatialReference = new AgsSpatialReference { Wkid = targetSR };
-        }
-
         private string GetAgsGeometryType(DataSourceCacheItem dataSource) {
             var geomType = dataSource.GeometryType;
             if (geomType == "point") {
@@ -451,6 +428,43 @@ namespace Beginor.GisHub.DataServices {
                 return false;
             }
             return true;
+        }
+
+        private static void TryConvertFeatureSetSr(AgsFeatureSet featureSet, int outSr) {
+            if (!IsSupported(outSr)) {
+                return;
+            }
+            var inSr = featureSet.SpatialReference.Wkid;
+            if (NeedsConvert(inSr, outSr)) {
+                if (GeographicSrids.Contains(inSr) && MercatorSrids.Contains(outSr)) {
+                    foreach (var feature in featureSet.Features) {
+                        feature.Geometry = WebMercator.FromGeographic(feature.Geometry);
+                        feature.Geometry.SpatialReference = null;
+                    }
+                }
+                if (MercatorSrids.Contains(inSr) && GeographicSrids.Contains(outSr)) {
+                    foreach (var feature in featureSet.Features) {
+                        feature.Geometry = WebMercator.ToGeographic(feature.Geometry);
+                    }
+                }
+            }
+            featureSet.SpatialReference = new AgsSpatialReference { Wkid = outSr };
+        }
+
+        private static AgsGeometry ConvertGeometrySr(AgsGeometry geometry, int inSr, int outSr) {
+            if (!IsSupported(outSr)) {
+                return null;
+            }
+            if (!NeedsConvert(inSr, outSr)) {
+                return null;
+            }
+            if (GeographicSrids.Contains(inSr) && MercatorSrids.Contains(outSr)) {
+                return WebMercator.FromGeographic(geometry);
+            }
+            if (MercatorSrids.Contains(inSr) && GeographicSrids.Contains(outSr)) {
+                return WebMercator.ToGeographic(geometry);
+            }
+            return null;
         }
     }
 

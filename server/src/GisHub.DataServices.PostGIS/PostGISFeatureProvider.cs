@@ -129,7 +129,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
 
         private string AppendGeometryCriteria(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
             var srid = dataSource.Srid;
-            var wkt = ProcessQueryGeometry(queryParam, srid);
+            var wkt = ConvertQueryGeometryToWkt(queryParam, srid);
             if (wkt.IsNullOrEmpty()) {
                 return string.Empty;
             }

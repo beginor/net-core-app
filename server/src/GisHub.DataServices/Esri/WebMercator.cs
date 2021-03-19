@@ -73,7 +73,7 @@ namespace Beginor.GisHub.DataServices.Esri {
                     Ymax = txys[1][1]
                 };
             }
-            if (result != null) {
+            if (result != null && geometry.SpatialReference != null) {
                 result.SpatialReference = new AgsSpatialReference {
                     Wkid = 102100,
                     LatestWkid = 3857
