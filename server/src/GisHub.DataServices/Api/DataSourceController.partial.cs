@@ -13,6 +13,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.GeoJson;
+using Beginor.GisHub.DataServices.Esri;
 
 namespace Beginor.GisHub.DataServices.Api {
 
@@ -205,7 +206,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         [HttpGet("{id:long}/featureset")]
         [Authorize("datasources.read_featureset")]
-        public async Task<ActionResult<GeoJsonFeatureCollection>> ReadAsFeatureSet(
+        public async Task<ActionResult<AgsFeatureSet>> ReadAsFeatureSet(
             [FromRoute] long id,
             [FromQuery] AgsJsonParam param
         ) {
