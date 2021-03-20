@@ -69,9 +69,18 @@ namespace Beginor.GisHub.Test {
             Console.WriteLine(polygon.ToAgs().ToJson());
         }
 
-        [Test]
+        [Test, Ignore("Nts wkt does not support BOX")]
         public void _05_CanReadBBox() {
             var wkt = File.ReadAllText("wkt/bbox.wkt");
+            Console.WriteLine(wkt);
+            var reader = new WKTReader();
+            var geom = reader.Read(wkt);
+            Console.WriteLine(geom.GetType());
+        }
+
+        [Test, Ignore("Nts wkt does not support MULTISURFACE")]
+        public void _06_CanReadMultiSurface() {
+            var wkt = File.ReadAllText("wkt/multisurface.wkt");
             Console.WriteLine(wkt);
             var reader = new WKTReader();
             var geom = reader.Read(wkt);
