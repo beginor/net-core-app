@@ -41,7 +41,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <summary>读取要素服务信息</summary>
         [HttpGet("{id:long}/MapServer/0")]
         [Authorize("features.get_layer_info")]
-        public async Task<ActionResult<AgsLayerDescription>> GetLayerDescription(
+        public async Task<ActionResult<AgsLayerDescription>> GetLayerDescriptionAsync(
             [FromRoute]long id,
             [FromQuery]AgsCommonParams param
         ) {
@@ -68,7 +68,7 @@ namespace Beginor.GisHub.DataServices.Api {
             [FromQuery]AgsQueryParam param
         ) {
             try {
-                var featureSet = await QueryFeatures(id, param);
+                var featureSet = await QueryFeaturesAsync(id, param);
                 if (featureSet == null) {
                     return NotFound($"Datasource {id} does not exist !");
                 }
@@ -89,7 +89,7 @@ namespace Beginor.GisHub.DataServices.Api {
             [ModelBinder(BinderType = typeof(AgsQueryParamsBinder))]AgsQueryParam param
         ) {
             try {
-                var featureSet = await QueryFeatures(id, param);
+                var featureSet = await QueryFeaturesAsync(id, param);
                 if (featureSet == null) {
                     return NotFound($"Datasource {id} does not exist !");
                 }
@@ -101,7 +101,7 @@ namespace Beginor.GisHub.DataServices.Api {
             }
         }
 
-        private async Task<AgsFeatureSet> QueryFeatures(
+        public async Task<AgsFeatureSet> QueryFeaturesAsync(
             long id,
             AgsQueryParam param
         ) {
