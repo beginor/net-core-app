@@ -210,7 +210,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
             if (handler.CanReadToken(token)) {
                 var jst = handler.ReadJwtToken(token);
                 var claim = jst.Claims.FirstOrDefault(
-                    c => c.Type == "unique_name" || c.Type == ClaimTypes.Name
+                    c => c.Type == "name" || c.Type == "unique_name" || c.Type == ClaimTypes.Name
                 );
                 if (claim != null) {
                     username = claim.Value;
