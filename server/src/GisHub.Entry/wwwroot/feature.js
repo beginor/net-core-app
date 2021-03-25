@@ -14,10 +14,39 @@ define([
         container: 'viewDiv',
     });
     view.when().then(_ => {
-        const layer = new FeatureLayer({
+        const layer1 = new FeatureLayer({
+            // url: 'http://localhost:5000/gishub/rest/services/features/1609887224871030614/MapServer/0',
+            url: 'https://it.gdeei.cn/gisserver/rest/services/BaseLayers/gd_sar_labels/MapServer/2',
+            renderer: {
+                type: 'simple',
+                symbol: {
+                    type: 'simple-marker',
+                    size: 6,
+                    color: 'red',
+                    outline: {
+                        with: 1,
+                        color: 'black'
+                    }
+                }
+            }
+        });
+        map.add(layer1);
+        const layer2 = new FeatureLayer({
             url: 'http://localhost:5000/gishub/rest/services/features/1609887224871030614/MapServer/0',
             // url: 'https://it.gdeei.cn/gisserver/rest/services/BaseLayers/gd_sar_labels/MapServer/2',
+            renderer: {
+                type: 'simple',
+                symbol: {
+                    type: 'simple-marker',
+                    size: 6,
+                    color: 'green',
+                    outline: {
+                        with: 1,
+                        color: 'black'
+                    }
+                }
+            }
         });
-        map.add(layer);
+        map.add(layer2);
     });
 });

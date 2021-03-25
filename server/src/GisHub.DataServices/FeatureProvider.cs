@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using NetTopologySuite.IO;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Esri;
 using Beginor.GisHub.DataServices.GeoJson;
 using Beginor.GisHub.DataServices.Models;
-using NetTopologySuite.IO;
 
 namespace Beginor.GisHub.DataServices {
 
@@ -177,6 +177,9 @@ namespace Beginor.GisHub.DataServices {
                 },
             };
             layerDesc.GeometryField = layerDesc.Fields.First(f => f.Type == AgsFieldType.EsriGeometry);
+            var provider = Factory.CreateFeatureProvider(dataSource.DatabaseType);
+            var featureset = await QueryForExtentAsync(dataSource, new AgsQueryParam());
+            layerDesc.Extent = featureset.Extent;
             // layerDesc.DrawingInfo = AgsDrawingInfo.CreateDefaultDrawingInfo(layerDesc.GeometryType);
             // layerDesc.OwnershipBasedAccessControlForFeatures = null;
             return layerDesc;
