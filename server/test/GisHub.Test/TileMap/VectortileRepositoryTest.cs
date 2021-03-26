@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using NHibernate;
 using NHibernate.NetCore;
 using NUnit.Framework;
-using Beginor.GisHub.VectorTile.Data;
-using Beginor.GisHub.VectorTile.Models;
+using Beginor.GisHub.TileMap.Data;
+using Beginor.GisHub.TileMap.Models;
 
 namespace Beginor.GisHub.Test.VectorTile {
 

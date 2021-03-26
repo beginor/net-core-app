@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Beginor.GisHub.VectorTile.Models;
-using Beginor.GisHub.VectorTile.Data;
+using Beginor.GisHub.TileMap.Models;
+using Beginor.GisHub.TileMap.Data;
 
-namespace Beginor.GisHub.VectorTile.Api {
+namespace Beginor.GisHub.TileMap.Api {
 
     /// <summary>矢量切片包 服务接口</summary>
     [ApiController]

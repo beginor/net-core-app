@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
-using Beginor.GisHub.VectorTile.Models;
+using Beginor.GisHub.TileMap.Models;
 
-namespace Beginor.GisHub.VectorTile.Data {
+namespace Beginor.GisHub.TileMap.Data {
 
     /// <summary>矢量切片包 仓储接口</summary>
     public partial interface IVectortileRepository : IRepository<VectortileModel, long> {

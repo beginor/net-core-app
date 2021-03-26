@@ -2,7 +2,7 @@ using System;
 using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
 
-namespace Beginor.GisHub.VectorTile.Data {
+namespace Beginor.GisHub.TileMap.Data {
 
     /// <summary>矢量切片包</summary>
     [Class(Schema = "public", Table = "vectortiles", Where = "is_deleted = false")]

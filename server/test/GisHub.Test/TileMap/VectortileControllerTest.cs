@@ -1,4 +1,4 @@
-using Beginor.GisHub.VectorTile.Api;
+using Beginor.GisHub.TileMap.Api;
 using NUnit.Framework;
 
 namespace Beginor.GisHub.Test.VectorTile {

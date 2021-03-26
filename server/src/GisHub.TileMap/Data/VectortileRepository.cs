@@ -8,10 +8,10 @@ using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using NHibernate;
 using NHibernate.Linq;
-using Beginor.GisHub.VectorTile.Data;
-using Beginor.GisHub.VectorTile.Models;
+using Beginor.GisHub.TileMap.Data;
+using Beginor.GisHub.TileMap.Models;
 
-namespace Beginor.GisHub.VectorTile.Data {
+namespace Beginor.GisHub.TileMap.Data {
 
     /// <summary>矢量切片包仓储实现</summary>
     public partial class VectortileRepository : HibernateRepository<Vectortile, VectortileModel, long>, IVectortileRepository {

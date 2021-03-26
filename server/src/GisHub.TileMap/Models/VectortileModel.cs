@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
-namespace Beginor.GisHub.VectorTile.Models {
+namespace Beginor.GisHub.TileMap.Models {
 
     /// <summary>矢量切片包模型</summary>
     public partial class VectortileModel : StringEntity {
