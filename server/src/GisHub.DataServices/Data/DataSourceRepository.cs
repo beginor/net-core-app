@@ -45,9 +45,14 @@ namespace Beginor.GisHub.DataServices.Data {
         ) {
             var query = Session.Query<DataSource>();
             if (model.Keywords.IsNotNullOrEmpty()) {
-                query = query.Where(
-                    ds => ds.Name.Contains(model.Keywords) || ds.TableName.Contains(model.Keywords)
-                );
+                if (long.TryParse(model.Keywords, out var id)) {
+                    query = query.Where(ds => ds.Id == id);
+                }
+                else {
+                    query = query.Where(
+                        ds => ds.Name.Contains(model.Keywords) || ds.TableName.Contains(model.Keywords)
+                    );
+                }
             }
             var total = await query.LongCountAsync();
             var data = await query.OrderByDescending(e => e.Id)
