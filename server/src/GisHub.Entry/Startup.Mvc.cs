@@ -27,6 +27,9 @@ namespace Beginor.GisHub.Entry {
                     manager.ApplicationParts.Add(
                         new AssemblyPart(typeof(Beginor.GisHub.DataServices.ModelMapping).Assembly)
                     );
+                     manager.ApplicationParts.Add(
+                        new AssemblyPart(typeof(Beginor.GisHub.VectorTile.ModelMapping).Assembly)
+                    );
                 })
                 .AddControllersAsServices()
                 .ConfigureApiBehaviorOptions(options => {

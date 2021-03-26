@@ -40,6 +40,11 @@ namespace Beginor.GisHub.Entry {
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISDataSourceReader>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISFeatureProvider>();
             services.AddSingleton<ConcurrentDictionary<long, Beginor.GisHub.DataServices.Data.DataSourceCacheItem>>();
+            services.AddServiceWithDefaultImplements(
+                typeof(Beginor.GisHub.VectorTile.ModelMapping).Assembly,
+                t => t.Name.EndsWith("Repository"),
+                ServiceLifetime.Scoped
+            );
         }
 
         private static void ConfigureApp(

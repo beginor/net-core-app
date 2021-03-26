@@ -55,9 +55,10 @@ TableFilter:
     - app_json_data
     - slpks
     - tilemaps
-  IncludeTables:
     - connections
     - datasources
+  IncludeTables:
+    - vectortiles
   IgnoreNoPKTable: true
   IgnoreView: true
 
