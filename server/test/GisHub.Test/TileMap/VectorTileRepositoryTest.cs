@@ -7,7 +7,7 @@ using NUnit.Framework;
 using Beginor.GisHub.TileMap.Data;
 using Beginor.GisHub.TileMap.Models;
 
-namespace Beginor.GisHub.Test.VectorTile {
+namespace Beginor.GisHub.Test.TileMap {
 
     /// <summary>矢量切片包仓储测试</summary>
     [TestFixture]
@@ -20,7 +20,7 @@ namespace Beginor.GisHub.Test.VectorTile {
 
         [Test]
         public async Task _02_CanDoSearchAsync() {
-            var searchModel = new VectortileSearchModel {
+            var searchModel = new VectorTileSearchModel {
                 Skip = 0,
                 Take = 10
             };

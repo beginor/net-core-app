@@ -30,7 +30,7 @@ namespace Beginor.GisHub.TileMap.Data {
 
         /// <summary>搜索 矢量切片包 ，返回分页结果。</summary>
         public async Task<PaginatedResponseModel<VectorTileModel>> SearchAsync(
-            VectortileSearchModel model
+            VectorTileSearchModel model
         ) {
             var query = Session.Query<VectorTileEntity>();
             // todo: 添加自定义查询；

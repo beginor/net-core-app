@@ -1,7 +1,7 @@
 using Beginor.GisHub.TileMap.Api;
 using NUnit.Framework;
 
-namespace Beginor.GisHub.Test.VectorTile {
+namespace Beginor.GisHub.Test.TileMap {
 
     [TestFixture]
     public class VectorTileControllerTest : BaseTest<VectorTileController> {

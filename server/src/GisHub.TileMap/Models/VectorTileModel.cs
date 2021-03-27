@@ -20,6 +20,6 @@ namespace Beginor.GisHub.TileMap.Models {
     }
 
     /// <summary>矢量切片包搜索参数</summary>
-    public partial class VectortileSearchModel : PaginatedRequestModel { }
+    public partial class VectorTileSearchModel : PaginatedRequestModel { }
 
 }

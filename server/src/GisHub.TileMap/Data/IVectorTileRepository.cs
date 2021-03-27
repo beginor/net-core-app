@@ -12,7 +12,7 @@ namespace Beginor.GisHub.TileMap.Data {
 
         /// <summary>搜索 矢量切片包 ，返回分页结果。</summary>
         Task<PaginatedResponseModel<VectorTileModel>> SearchAsync(
-            VectortileSearchModel model
+            VectorTileSearchModel model
         );
 
         Task SaveAsync(

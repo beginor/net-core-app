@@ -42,7 +42,7 @@ namespace Beginor.GisHub.TileMap.Api {
         [HttpGet("")]
         [Authorize("vectortiles.read")]
         public async Task<ActionResult<PaginatedResponseModel<VectorTileModel>>> Search(
-            [FromQuery]VectortileSearchModel model
+            [FromQuery]VectorTileSearchModel model
         ) {
             try {
                 var result = await repository.SearchAsync(model);
