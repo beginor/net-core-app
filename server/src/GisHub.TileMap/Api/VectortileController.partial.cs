@@ -1,53 +1,37 @@
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
+using Beginor.AppFx.Core;
+using Beginor.GisHub.TileMap.Models;
+using Beginor.GisHub.TileMap.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace Beginor.GisHub.TileMap.Api {
 
-    partial class TileMapController {
+    partial class VectortileController {
 
-        /// <summary>读取切片服务列表</summary>
-        [HttpGet("~/rest/services/tilemaps")]
-        [Authorize("tilemaps.read_tile_content")]
-        public async Task<ActionResult> GetTileMapList() {
+
+        [HttpGet("~/rest/services/vectortiles")]
+        [Authorize("vectortiles.read_tile_content")]
+        public async Task<ActionResult> GetVectorTileList() {
             try {
                 var models = await repository.GetAllAsync();
-                var tiles = models.Select(m => new { m.Id, m.Name, m.ContentType });
+                var tiles = models.Select(m => new { m.Id, m.Name, m.MinZoom, m.MaxZoom });
                 return Ok(tiles);
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not get tilemap list!");
+                logger.LogError(ex, $"Can not get vectortile list!");
                 return this.InternalServerError(ex);
             }
         }
 
-        /// <summary>读取切片服务信息</summary>
-        [HttpGet("~/rest/services/tilemaps/{id:long}/MapServer")]
-        [Authorize("tilemaps.read_tile_content")]
-        public async Task<ActionResult> GetTileMapInfo(long id) {
-            try {
-                var tileMapInfo  = await repository.GetTileMapInfoAsync(id);
-                var text = tileMapInfo.ToString();
-                var hasCallback = Request.Query.TryGetValue("callback", out var callback);
-                if (hasCallback) {
-                    text = $"{callback.First()}({text})";
-                }
-                return Content(text, hasCallback ? "text/javascript" : "application/json");
-            }
-            catch (Exception ex) {
-                logger.LogError(ex, $"Can not get tilemap info for {id}!");
-                return this.InternalServerError(ex);
-            }
-        }
-
-        /// <summary>读取切片服务的切片</summary>
-        [HttpGet("~/rest/services/tilemaps/{id:long}/MapServer/tile/{level:int}/{row:int}/{col:int}")]
-        [Authorize("tilemaps.read_tile_content")]
+        [HttpGet("~/rest/services/vectortiles/{id:long}/VectorTileServer/tile/{level:int}/{row:int}/{col:int}")]
+        [Authorize("vectortiles.read_tile_content")]
         public async Task<IActionResult> GetTile(long id, int level, int row, int col) {
             try {
                 var modifiedTime = await repository.GetTileModifiedTimeAsync(id, level, row, col);
@@ -68,17 +52,14 @@ namespace Beginor.GisHub.TileMap.Api {
                 }
                 Response.Headers["Cache-Control"] = "no-cache";
                 Response.Headers["ETag"] = fileEtag;
-                if (!content.ContentType.StartsWith("image", StringComparison.OrdinalIgnoreCase)) {
-                    Response.Headers["Content-Encoding"] = "gzip";
-                }
+                Response.Headers["Content-Encoding"] = "gzip";
                 return File(content.Content, content.ContentType);
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not get tile {id}:{level:int}/{row:int}/{col:int}!");
+                logger.LogError(ex, $"Can not get vector tile {id}:{level:int}/{row:int}/{col:int}!");
                 return this.InternalServerError(ex.Message);
             }
         }
-
     }
 
 }

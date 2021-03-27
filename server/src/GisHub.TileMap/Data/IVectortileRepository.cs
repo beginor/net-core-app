@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +14,29 @@ namespace Beginor.GisHub.TileMap.Data {
         Task<PaginatedResponseModel<VectortileModel>> SearchAsync(
             VectortileSearchModel model
         );
+
+        Task SaveAsync(
+            VectortileModel model,
+            string userId,
+            CancellationToken token = default
+        );
+
+        Task UpdateAsync(
+            long id,
+            VectortileModel model,
+            string userId,
+            CancellationToken token = default
+        );
+
+        Task DeleteAsync(
+            long id,
+            string userId,
+            CancellationToken token = default
+        );
+
+        Task<TileContentModel> GetTileContentAsync(long id, int level, int row, int col);
+
+        Task<DateTimeOffset?> GetTileModifiedTimeAsync(long id, int level, int row, int col);
 
     }
 

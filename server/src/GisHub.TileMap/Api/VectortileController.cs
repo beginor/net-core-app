@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +15,7 @@ namespace Beginor.GisHub.TileMap.Api {
     /// <summary>矢量切片包 服务接口</summary>
     [ApiController]
     [Route("api/vectortiles")]
-    public class VectortileController : Controller {
+    public partial class VectortileController : Controller {
 
         private ILogger<VectortileController> logger;
         private IVectortileRepository repository;
@@ -61,7 +63,8 @@ namespace Beginor.GisHub.TileMap.Api {
             [FromBody]VectortileModel model
         ) {
             try {
-                await repository.SaveAsync(model);
+                var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                await repository.SaveAsync(model, userId);
                 return model;
             }
             catch (Exception ex) {
@@ -78,7 +81,8 @@ namespace Beginor.GisHub.TileMap.Api {
         [Authorize("vectortiles.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
-                await repository.DeleteAsync(id);
+                var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                await repository.DeleteAsync(id, userId);
                 return NoContent();
             }
             catch (Exception ex) {
@@ -126,7 +130,8 @@ namespace Beginor.GisHub.TileMap.Api {
                 if (!exists) {
                     return NotFound();
                 }
-                await repository.UpdateAsync(id, model);
+                var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                await repository.UpdateAsync(id, model, userId);
                 return model;
             }
             catch (Exception ex) {

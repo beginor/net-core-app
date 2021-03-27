@@ -8,6 +8,7 @@ namespace Beginor.GisHub.TileMap.Data {
         public string MapTileInfoPath { get; set; }
         public string ContentType { get; set; }
         public DateTimeOffset? ModifiedTime { get; set; }
+        public bool IsBundled { get; set; }
 
     }
 

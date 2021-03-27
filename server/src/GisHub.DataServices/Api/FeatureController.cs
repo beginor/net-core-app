@@ -101,7 +101,7 @@ namespace Beginor.GisHub.DataServices.Api {
             }
         }
 
-        public async Task<AgsFeatureSet> QueryFeaturesAsync(
+        private async Task<AgsFeatureSet> QueryFeaturesAsync(
             long id,
             AgsQueryParam param
         ) {
