@@ -1,61 +1,73 @@
-# ASP.NET Core MVC + Angular 的模板项目
+# ASP.NET Core MVC + Angular 的后台管理模板项目
 
-注意： 本文中的命令行是指与 Linux/Unix `bash` 兼容的命令行， 如果是 Windows 系统， 可以使用 `git-bash` 或 安装 WSL 进行下面的操作。
+## 已经实现的功能
 
-## 重命名项目
+- 用户登录/注销；
+- 用户管理；
+- 角色管理；
+- 权限管理；
+- 用户与角色绑定；
+- 角色与权限绑定；
+- 菜单管理；
+- 菜单与角色绑定；
+- 访问日志查看；
 
-服务端的程序集名称 `Beginor.NetCoreApp.XXX`、命名空间 (`Beginor.NetCoreApp.XXX`)、 Web 上下文 `/net-core-app` 可以通过 `rename.sh` 进行修改。
+## 技术栈简介
 
-打开`rename.sh` 文件， 修改其中的 `COMPANY_NAME` 、 `PROJ_NAME` 以及 `CONTEXT_ROOT` ， 然后在命令行中执行这个脚本， 然后签入修改的内容。
+### Angular 前端
 
-## 创建数据库
+前端基于 Angular 实现， 使用到的类库主要有：
 
-依次执行 `database` 目录下的脚 SQL 本， 创建数据库， 并修改 `server/src/NetCoreApp.Api/hibernate.config` 和 `server/smart-code.yml` 中的数据库连接串。
+- `Angular` ， 已开启 TypeScript 严格模式以及 Angular 的严格模板检查；
+- `BootStrap` 以及 `Bootstrap-icons` ；
+- `ng-bootstrap`；
+- `Angular Component/Material`；
 
-## 运行与测试
+Angular 多项目结构， `projects` 提供了多个三个项目，分别是：
 
-### 前端
+- `web` 针对 PC 浏览器的后台管理界面， 使用 `ng-bootstrap` 实现；
+- `handset` 针对手持设备的界面， 比较简单， 仅作为示例， 使用 `Angular Component/Material` 实现；
+- `app-shared` 在 `web` 和 `handset` 两个项目中共享的组件和服务；
 
-在命令行中打开 `client` 目录， 运行 `npm ci` 安装所需的依赖项， 然后运行 `npm run build` 进行编译。
+### 后端
 
-### 服务端
+后端实现基于 .NET 5 实现， 使用到的类库有：
 
-1. 在命令行中打开 `server/test/NetCoreApp.Test` ， 输入 `dotnet test` ， 并查看测试结果， 应该能看到 `Test Run Successful.` 的输出；
-2. 在命令行中打开 `server/src/NetCoreApp.Api` ， 输入 `dotnet run` ， 看到如下输出：
+- `NHibernate` .NET 平台的老牌 ORM ， 存在多年一直都在更新维护， 非常稳定， 长期维护项目的首选；
+- `NHibernate.AspNetCore.Identity` 基于 NHibernate 的 Identity 实现， 完全不依赖微软的 EntityFramework ；
+- `Dapper` 灵活的 SQL 查询， 弥补 NHibernate 提供的 Linq 查询的不足；
+- `AutoMapper`
+- `Swashbuckle.AspNetCore` 为 API 提供基于 Swagger UI 界面；
 
-   ```sh
-   Now listening on: http://localhost:5000
-   Now listening on: https://localhost:5001
-   Application started. Press Ctrl+C to shut down.
-   ```
+### 数据库
 
-3. 打开浏览器， 浏览 `http://localhost:5000/net-core-app/swagger` 即可看到 swagger api 界面。
+默认是 PostgreSQL ， database 目录下的脚本也是基于 PostgreSQL 的； 如果需要创建其它类型的数据库， 则可以根据现有的 sql 语句进行修改；
 
-## 系统初始化
+> 为了保证开箱可用， 或许以后会切换为 SQLite 数据库；
 
-在进行访问系统之前， 需要根据 [初始化说明](docs/01_初始化.md) 进行初始化之后， 才能登录系统
+## 部署
 
-## 代码生成
+- 编译为 Docker 镜像进行部署；
+- 编译为单个可执行文件部署；
 
-使用 SmartCode 代码生成器， 定制了代码生成模板， 可以根据数据表生成：
+## 功能截图
 
-- 服务端基本的增删改查代码， 包括实体类， 仓储接口/实现类， 控制器， 单元测试；
-- 客户端基本的主从形式的列表和表单， 与服务端的代码相对应；
+![01_login](docs/assets/images/01_login.png)
 
-### 准备工作
+![02_admin_home](docs/assets/images/02_admin_home.png)
 
-1. 克隆 `https://github.com/beginor/SmartCode.git` 至本地工作区目录（~/Projects/smartcode）；
+![03_admin_menu](docs/assets/images/03_admin_menu.png)
 
-### 生成代码操作
+![04_admin_users](docs/assets/images/04_admin_users-1.png)
 
-1. 根据业务需求创建数据表；
-2. 打开命令行， 切换到 `server` 目录；
-3. 输入命令 `./smartcode.sh` 即可自动生成服务端增删改查代码;
-4. 运行单元测试， 确认全部单元测试通过；
-5. 运行 Api 项目， 确认生成的 Api 可用；
-6. 打开命令行， 切换到 `client` 目录；
-7. 输入命令 `./smartcode.sh` ， 即可生成客户端的主从形式的列表和表单代码；
+![05_admin_users](docs/assets/images/05_admin_users-2.png)
 
-## 建议的开发工具
+![06_admin_roles](docs/assets/images/06_admin_roles.png)
 
-- VSCode
+![07_admin_privileges](docs/assets/images/07_admin_privileges.png)
+
+![08_audit_log](docs/assets/images/08_audit_log.png)
+
+## 下载和使用
+
+请参考 [下载和使用](docs/00_下载和使用.md) 。
