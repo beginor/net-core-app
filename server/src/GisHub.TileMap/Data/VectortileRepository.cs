@@ -16,11 +16,11 @@ using System.IO;
 namespace Beginor.GisHub.TileMap.Data {
 
     /// <summary>矢量切片包仓储实现</summary>
-    public partial class VectortileRepository : HibernateRepository<Vectortile, VectortileModel, long>, IVectortileRepository {
+    public partial class VectorTileRepository : HibernateRepository<VectorTileEntity, VectorTileModel, long>, IVectorTileRepository {
 
         private ConcurrentDictionary<long, TileMapCacheItem> cache;
 
-        public VectortileRepository(
+        public VectorTileRepository(
             ISession session,
             IMapper mapper,
             ConcurrentDictionary<long, TileMapCacheItem> cache
@@ -29,29 +29,29 @@ namespace Beginor.GisHub.TileMap.Data {
         }
 
         /// <summary>搜索 矢量切片包 ，返回分页结果。</summary>
-        public async Task<PaginatedResponseModel<VectortileModel>> SearchAsync(
+        public async Task<PaginatedResponseModel<VectorTileModel>> SearchAsync(
             VectortileSearchModel model
         ) {
-            var query = Session.Query<Vectortile>();
+            var query = Session.Query<VectorTileEntity>();
             // todo: 添加自定义查询；
             var total = await query.LongCountAsync();
             var data = await query.OrderByDescending(e => e.Id)
                 .Skip(model.Skip).Take(model.Take)
                 .ToListAsync();
-            return new PaginatedResponseModel<VectortileModel> {
+            return new PaginatedResponseModel<VectorTileModel> {
                 Total = total,
-                Data = Mapper.Map<IList<VectortileModel>>(data),
+                Data = Mapper.Map<IList<VectorTileModel>>(data),
                 Skip = model.Skip,
                 Take = model.Take
             };
         }
 
         public async Task SaveAsync(
-            VectortileModel model,
+            VectorTileModel model,
             string userId,
             CancellationToken token = default
         ) {
-            var entity = Mapper.Map<Vectortile>(model);
+            var entity = Mapper.Map<VectorTileEntity>(model);
             entity.CreatedAt = DateTime.Now;
             entity.CreatorId = userId;
             entity.UpdatedAt = DateTime.Now;
@@ -63,14 +63,14 @@ namespace Beginor.GisHub.TileMap.Data {
 
         public async Task UpdateAsync(
             long id,
-            VectortileModel model,
+            VectorTileModel model,
             string userId,
             CancellationToken token = default
         ) {
-            var entity = await Session.LoadAsync<Vectortile>(id, token);
+            var entity = await Session.LoadAsync<VectorTileEntity>(id, token);
             if (entity == null) {
                 throw new InvalidOperationException(
-                    $"{typeof(VectortileModel)} with id {id} is null!"
+                    $"{typeof(VectorTileModel)} with id {id} is null!"
                 );
             }
             Mapper.Map(model, entity);
@@ -84,7 +84,7 @@ namespace Beginor.GisHub.TileMap.Data {
 
 
         public async Task DeleteAsync(long id, string userId, CancellationToken token = default) {
-            var entity = Session.Get<Vectortile>(id);
+            var entity = Session.Get<VectorTileEntity>(id);
             if (entity != null) {
                 entity.IsDeleted = true;
                 entity.UpdatedAt = DateTime.Now;
@@ -118,15 +118,15 @@ namespace Beginor.GisHub.TileMap.Data {
             return offset;
         }
 
-        private async Task<Vectortile> GetVectorTileByIdAsync(long id) {
+        private async Task<VectorTileEntity> GetVectorTileByIdAsync(long id) {
             if (cache.TryGetValue(id, out var cacheItem)) {
-                return new Vectortile {
+                return new VectorTileEntity {
                     Id = id,
                     Name = cacheItem.Name,
                     Directory = cacheItem.CacheDirectory
                 };
             }
-            var entity = await Session.Query<Vectortile>().FirstOrDefaultAsync(e => e.Id == id);
+            var entity = await Session.Query<VectorTileEntity>().FirstOrDefaultAsync(e => e.Id == id);
             if (entity == null) {
                 throw new TileNotFoundException($"Vectortile {id} doesn't exists in database.");
             }

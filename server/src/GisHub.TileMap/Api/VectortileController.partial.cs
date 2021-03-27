@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Beginor.GisHub.TileMap.Api {
 
-    partial class VectortileController {
+    partial class VectorTileController {
 
 
         [HttpGet("~/rest/services/vectortiles")]

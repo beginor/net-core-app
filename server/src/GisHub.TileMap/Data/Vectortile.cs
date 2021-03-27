@@ -6,7 +6,7 @@ namespace Beginor.GisHub.TileMap.Data {
 
     /// <summary>矢量切片包</summary>
     [Class(Schema = "public", Table = "vectortiles", Where = "is_deleted = false")]
-    public partial class Vectortile : BaseEntity<long> {
+    public partial class VectorTileEntity : BaseEntity<long> {
 
         /// <summary>矢量切片包ID</summary>
         [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]

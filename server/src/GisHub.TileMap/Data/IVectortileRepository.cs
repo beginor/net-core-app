@@ -8,22 +8,22 @@ using Beginor.GisHub.TileMap.Models;
 namespace Beginor.GisHub.TileMap.Data {
 
     /// <summary>矢量切片包 仓储接口</summary>
-    public partial interface IVectortileRepository : IRepository<VectortileModel, long> {
+    public partial interface IVectorTileRepository : IRepository<VectorTileModel, long> {
 
         /// <summary>搜索 矢量切片包 ，返回分页结果。</summary>
-        Task<PaginatedResponseModel<VectortileModel>> SearchAsync(
+        Task<PaginatedResponseModel<VectorTileModel>> SearchAsync(
             VectortileSearchModel model
         );
 
         Task SaveAsync(
-            VectortileModel model,
+            VectorTileModel model,
             string userId,
             CancellationToken token = default
         );
 
         Task UpdateAsync(
             long id,
-            VectortileModel model,
+            VectorTileModel model,
             string userId,
             CancellationToken token = default
         );

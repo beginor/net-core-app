@@ -15,14 +15,14 @@ namespace Beginor.GisHub.TileMap.Api {
     /// <summary>矢量切片包 服务接口</summary>
     [ApiController]
     [Route("api/vectortiles")]
-    public partial class VectortileController : Controller {
+    public partial class VectorTileController : Controller {
 
-        private ILogger<VectortileController> logger;
-        private IVectortileRepository repository;
+        private ILogger<VectorTileController> logger;
+        private IVectorTileRepository repository;
 
-        public VectortileController(
-            ILogger<VectortileController> logger,
-            IVectortileRepository repository
+        public VectorTileController(
+            ILogger<VectorTileController> logger,
+            IVectorTileRepository repository
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
@@ -41,7 +41,7 @@ namespace Beginor.GisHub.TileMap.Api {
         /// <response code="500">服务器内部错误</response>
         [HttpGet("")]
         [Authorize("vectortiles.read")]
-        public async Task<ActionResult<PaginatedResponseModel<VectortileModel>>> Search(
+        public async Task<ActionResult<PaginatedResponseModel<VectorTileModel>>> Search(
             [FromQuery]VectortileSearchModel model
         ) {
             try {
@@ -59,8 +59,8 @@ namespace Beginor.GisHub.TileMap.Api {
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
         [Authorize("vectortiles.create")]
-        public async Task<ActionResult<VectortileModel>> Create(
-            [FromBody]VectortileModel model
+        public async Task<ActionResult<VectorTileModel>> Create(
+            [FromBody]VectorTileModel model
         ) {
             try {
                 var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
@@ -99,7 +99,7 @@ namespace Beginor.GisHub.TileMap.Api {
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
         [Authorize("vectortiles.read")]
-        public async Task<ActionResult<VectortileModel>> GetById(long id) {
+        public async Task<ActionResult<VectorTileModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);
                 if (result == null) {
@@ -121,9 +121,9 @@ namespace Beginor.GisHub.TileMap.Api {
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
         [Authorize("vectortiles.update")]
-        public async Task<ActionResult<VectortileModel>> Update(
+        public async Task<ActionResult<VectorTileModel>> Update(
             [FromRoute]long id,
-            [FromBody]VectortileModel model
+            [FromBody]VectorTileModel model
         ) {
             try {
                 var exists = await repository.ExitsAsync(id);

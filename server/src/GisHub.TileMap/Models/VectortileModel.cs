@@ -5,7 +5,7 @@ using Beginor.AppFx.Core;
 namespace Beginor.GisHub.TileMap.Models {
 
     /// <summary>矢量切片包模型</summary>
-    public partial class VectortileModel : StringEntity {
+    public partial class VectorTileModel : StringEntity {
 
         /// <summary>矢量切片包名称</summary>
         [Required(ErrorMessage = "矢量切片包名称 必须填写！")]

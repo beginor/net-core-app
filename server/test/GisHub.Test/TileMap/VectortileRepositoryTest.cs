@@ -11,7 +11,7 @@ namespace Beginor.GisHub.Test.VectorTile {
 
     /// <summary>矢量切片包仓储测试</summary>
     [TestFixture]
-    public class VectortileRepositoryTest : BaseTest<IVectortileRepository> {
+    public class VectorTileRepositoryTest : BaseTest<IVectorTileRepository> {
 
         [Test]
         public void _01_CanResolveTarget() {
