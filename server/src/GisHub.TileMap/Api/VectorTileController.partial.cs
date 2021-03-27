@@ -15,7 +15,7 @@ namespace Beginor.GisHub.TileMap.Api {
 
     partial class VectorTileController {
 
-
+        /// <summary>读取切片服务列表</summary>
         [HttpGet("~/rest/services/vectortiles")]
         [Authorize("vectortiles.read_tile_content")]
         public async Task<ActionResult> GetVectorTileList() {
@@ -30,6 +30,7 @@ namespace Beginor.GisHub.TileMap.Api {
             }
         }
 
+        /// <summary>读取指定的矢量切片</summary>
         [HttpGet("~/rest/services/vectortiles/{id:long}/VectorTileServer/tile/{level:int}/{row:int}/{col:int}")]
         [Authorize("vectortiles.read_tile_content")]
         public async Task<IActionResult> GetTile(long id, int level, int row, int col) {
