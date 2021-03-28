@@ -1,0 +1,132 @@
+<form class="card detail" *ngIf="(account.info | async) as info" #detailForm="ngForm"
+  [@animation]="animation" (@animation.done)="onAnimationEvent($event)">
+  <div class="card-header d-flex justify-content-between align-content-center">
+    <h5 class="card-title mb-0">{{title}}</h5>
+    <div class="btn-group btn-group-sm">
+      <button *ngIf="info.privileges['vectortiles.update'] && editable"
+        type="button" class="btn btn-sm btn-outline-primary"
+        (click)="save()" [disabled]="!detailForm.valid">
+        <svg-icon path="bi/check"></svg-icon> 保存
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"
+        (click)="goBack()">
+        <svg-icon path="bi/x"></svg-icon> 取消
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-group">
+      <label class="form-label text-muted" for="id">矢量切片包ID  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="id" name="id"
+        placeholder="请输入矢量切片包ID ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.id"
+        #id="ngModel"
+        [class.is-invalid]="!(id.valid || id.pristine)"
+        [class.is-valid]="id.valid"
+      />
+    </div>
+    <div class="form-group">
+      <label class="form-label text-muted" for="name">矢量切片包名称  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="name" name="name"
+        placeholder="请输入矢量切片包名称 ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.name"
+        #name="ngModel"
+        [class.is-invalid]="!(name.valid || name.pristine)"
+        [class.is-valid]="name.valid"
+      />
+    </div>
+    <div class="form-group">
+      <label class="form-label text-muted" for="directory">矢量切片包目录  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="directory" name="directory"
+        placeholder="请输入矢量切片包目录 ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.directory"
+        #directory="ngModel"
+        [class.is-invalid]="!(directory.valid || directory.pristine)"
+        [class.is-valid]="directory.valid"
+      />
+    </div>
+    <div class="form-group">
+      <label class="form-label text-muted" for="minZoom">最小缩放级别 </label>
+      <input class="form-control" type="text" id="minZoom" name="minZoom"
+        placeholder="请输入最小缩放级别 ..."
+        [(ngModel)]="model.minZoom" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group">
+      <label class="form-label text-muted" for="maxZoom">最大缩放级别 </label>
+      <input class="form-control" type="text" id="maxZoom" name="maxZoom"
+        placeholder="请输入最大缩放级别 ..."
+        [(ngModel)]="model.maxZoom" [disabled]="!editable"
+      />
+    </div>
+    <div class="form-group">
+      <label class="form-label text-muted" for="creatorId">创建者id  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="creatorId" name="creatorId"
+        placeholder="请输入创建者id ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.creatorId"
+        #creatorId="ngModel"
+        [class.is-invalid]="!(creatorId.valid || creatorId.pristine)"
+        [class.is-valid]="creatorId.valid"
+      />
+    </div>
+    <div class="form-group">
+      <label class="form-label text-muted" for="createdAt">创建时间  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="createdAt" name="createdAt"
+        placeholder="请输入创建时间 ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.createdAt"
+        #createdAt="ngModel"
+        [class.is-invalid]="!(createdAt.valid || createdAt.pristine)"
+        [class.is-valid]="createdAt.valid"
+      />
+    </div>
+    <div class="form-group">
+      <label class="form-label text-muted" for="updaterId">更新者id  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="updaterId" name="updaterId"
+        placeholder="请输入更新者id ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.updaterId"
+        #updaterId="ngModel"
+        [class.is-invalid]="!(updaterId.valid || updaterId.pristine)"
+        [class.is-valid]="updaterId.valid"
+      />
+    </div>
+    <div class="form-group">
+      <label class="form-label text-muted" for="updatedAt">更新时间  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="updatedAt" name="updatedAt"
+        placeholder="请输入更新时间 ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.updatedAt"
+        #updatedAt="ngModel"
+        [class.is-invalid]="!(updatedAt.valid || updatedAt.pristine)"
+        [class.is-valid]="updatedAt.valid"
+      />
+    </div>
+    <div class="form-group">
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input"
+          id="isDeleted" name="isDeleted"
+          [(ngModel)]="model.isDeleted" [disabled]="!editable">
+        <label class="custom-control-label text-muted"
+          for="isDeleted">
+          是否删除
+        </label>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="info.privileges['vectortiles.update'] && editable"
+    class="card-footer d-flex justify-content-between">
+    <button type="button" class="btn btn-sm btn-outline-primary"
+      (click)="save()" [disabled]="!detailForm.valid">
+      <svg-icon path="bi/check"></svg-icon> 保存
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary"
+      (click)="goBack()">
+      <svg-icon path="bi/x"></svg-icon> 取消
+    </button>
+  </div>
+</form>

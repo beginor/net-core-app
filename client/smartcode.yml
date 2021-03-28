@@ -53,9 +53,10 @@ TableFilter:
     - aspnet_users
     - slpks
     - tilemaps
-  IncludeTables:
     - connections
     - datasources
+  IncludeTables:
+    - vectortiles
   IgnoreNoPKTable: true
   IgnoreView: true
 

@@ -22,6 +22,10 @@ const routes: Routes = [
     {
         path: 'datasources',
         loadChildren: () => import('./datasources/datasources.module').then(m => m.DataSourceModule)
+    },
+    {
+        path: 'vectortiles',
+        loadChildren: () => import('./vectortiles/vectortiles.module').then(m => m.VectortileModule)
     }
 ];
 // tslint:enable:max-line-length
