@@ -170,6 +170,18 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             }
             return sql.ToString();
         }
+
+        protected override string BuildScalarSql(DataSourceCacheItem dataSource, ReadDataParam param) {
+            if (param.Select.IsNullOrEmpty()) {
+                throw new InvalidOperationException("Select is not provided for scalar!");
+            }
+            var sql = new StringBuilder();
+            sql.AppendLine($" select {param.Select} ");
+            sql.AppendLine($" from {dataSource.Schema}.{dataSource.TableName} ");
+            AppendWhere(sql, dataSource.PresetCriteria, param.Where);
+            sql.AppendLine(" limit 1 offset 0 ");
+            return sql.ToString();
+        }
     }
 
 }

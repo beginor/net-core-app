@@ -75,7 +75,7 @@ namespace Beginor.GisHub.DataServices {
         }
 
         public Task<T> ReadScalarAsync<T>(DataSourceCacheItem dataSource, ReadDataParam param) {
-            var sql = BuildReadDataSql(dataSource, param);
+            var sql = BuildScalarSql(dataSource, param);
             return ReadScalarAsync<T>(dataSource, sql);
         }
 
@@ -88,6 +88,8 @@ namespace Beginor.GisHub.DataServices {
         protected abstract string BuildDistinctSql(DataSourceCacheItem dataSource, DistinctParam param);
 
         protected abstract string BuildPivotSql(DataSourceCacheItem dataSource, PivotParam param);
+
+        protected abstract string BuildScalarSql(DataSourceCacheItem dataSource, ReadDataParam param);
 
         protected virtual KeyValuePair<string, object> ReadField(IDataReader dataReader, int fieldIndex) {
             var name = dataReader.GetName(fieldIndex);

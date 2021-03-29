@@ -236,24 +236,21 @@ namespace Beginor.GisHub.DataServices {
             var result = new AgsFeatureSet();
             var param = ConvertExtentQueryParam(dataSource, queryParam);
             var reader = Factory.CreateDataSourceReader(dataSource.DatabaseType);
-            var data = await reader.ReadDataAsync(dataSource, param);
-            if (data.Count > 0) {
-                var wkt = data[0].Values.FirstOrDefault();
-                if (wkt != null) {
-                    var wktReader = new WKTReader();
-                    var geometry = wktReader.Read(wkt.ToString());
-                    var envelop = geometry.EnvelopeInternal;
-                    var extent = new AgsExtent {
-                        Xmin = envelop.MinX,
-                        Ymin = envelop.MinY,
-                        Xmax = envelop.MaxX,
-                        Ymax = envelop.MaxY,
-                        SpatialReference = new AgsSpatialReference {
-                            Wkid = dataSource.Srid
-                        }
-                    };
-                    result.Extent = extent;
-                }
+            var wkt = await reader.ReadScalarAsync<string>(dataSource, param);
+            if (wkt != null) {
+                var wktReader = new WKTReader();
+                var geometry = wktReader.Read(wkt.ToString());
+                var envelop = geometry.EnvelopeInternal;
+                var extent = new AgsExtent {
+                    Xmin = envelop.MinX,
+                    Ymin = envelop.MinY,
+                    Xmax = envelop.MaxX,
+                    Ymax = envelop.MaxY,
+                    SpatialReference = new AgsSpatialReference {
+                        Wkid = dataSource.Srid
+                    }
+                };
+                result.Extent = extent;
             }
             // if (queryParam.ReturnCountOnly) {
             //     var count = await reader.CountAsync(dataSource, param);
