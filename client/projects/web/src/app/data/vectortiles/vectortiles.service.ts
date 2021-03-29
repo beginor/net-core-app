@@ -161,23 +161,13 @@ export interface VectortileModel {
     /** 矢量切片包ID */
     id: string;
     /** 矢量切片包名称 */
-    name: string;
+    name?: string;
     /** 矢量切片包目录 */
-    directory: string;
+    directory?: string;
     /** 最小缩放级别 */
     minZoom?: number;
     /** 最大缩放级别 */
     maxZoom?: number;
-    /** 创建者id */
-    creatorId: string;
-    /** 创建时间 */
-    createdAt: string;
-    /** 更新者id */
-    updaterId: string;
-    /** 更新时间 */
-    updatedAt: string;
-    /** 是否删除 */
-    isDeleted: boolean;
 }
 
 /** 矢量切片包 搜索参数 */
