@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DataServices.Data;
 
@@ -18,15 +19,18 @@ namespace Beginor.GisHub.DataServices.Api {
         private ILogger<DataSourceController> logger;
         private IDataSourceRepository repository;
         private IDataServiceFactory factory;
+        private IAppJsonDataRepository jsonRepository;
 
         public DataSourceController(
             ILogger<DataSourceController> logger,
             IDataSourceRepository repository,
-            IDataServiceFactory factory
+            IDataServiceFactory factory,
+            IAppJsonDataRepository jsonRepository
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
             this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
+            this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
         }
 
         protected override void Dispose(bool disposing) {
@@ -34,6 +38,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 logger = null;
                 repository = null;
                 factory = null;
+                jsonRepository = null;
             }
             base.Dispose(disposing);
         }
@@ -83,6 +88,7 @@ namespace Beginor.GisHub.DataServices.Api {
         public async Task<ActionResult> Delete(long id) {
             try {
                 await repository.DeleteAsync(id);
+                await jsonRepository.DeleteAsync(id);
                 return NoContent();
             }
             catch (Exception ex) {
@@ -131,6 +137,7 @@ namespace Beginor.GisHub.DataServices.Api {
                     return NotFound();
                 }
                 await repository.UpdateAsync(id, model);
+                await jsonRepository.DeleteAsync(id);
                 return model;
             }
             catch (Exception ex) {
