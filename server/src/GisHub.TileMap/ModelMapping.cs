@@ -9,6 +9,9 @@ namespace Beginor.GisHub.TileMap {
             CreateMap<TileMapEntity, TileMapModel>()
                 .ReverseMap()
                 .ForMember(dest => dest.Id, map => map.Ignore());
+            CreateMap<VectorTileEntity, VectorTileModel>()
+                .ReverseMap()
+                .ForMember(dest => dest.Id, map => map.Ignore());
         }
 
     }

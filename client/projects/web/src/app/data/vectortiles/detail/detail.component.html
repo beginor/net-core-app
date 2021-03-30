@@ -16,18 +16,7 @@
   </div>
   <div class="card-body">
     <div class="form-group">
-      <label class="form-label text-muted" for="id">矢量切片包ID  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="id" name="id"
-        placeholder="请输入矢量切片包ID ..." required
-        [disabled]="!editable"
-        [(ngModel)]="model.id"
-        #id="ngModel"
-        [class.is-invalid]="!(id.valid || id.pristine)"
-        [class.is-valid]="id.valid"
-      />
-    </div>
-    <div class="form-group">
-      <label class="form-label text-muted" for="name">矢量切片包名称  <i class="text-danger">*</i> </label>
+      <label class="form-label text-muted" for="name">名称  <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="name" name="name"
         placeholder="请输入矢量切片包名称 ..." required
         [disabled]="!editable"
@@ -38,9 +27,9 @@
       />
     </div>
     <div class="form-group">
-      <label class="form-label text-muted" for="directory">矢量切片包目录  <i class="text-danger">*</i> </label>
+      <label class="form-label text-muted" for="directory">缓存目录  <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="directory" name="directory"
-        placeholder="请输入矢量切片包目录 ..." required
+        placeholder="请输入矢量切片包缓存目录 ..." required
         [disabled]="!editable"
         [(ngModel)]="model.directory"
         #directory="ngModel"
@@ -48,73 +37,24 @@
         [class.is-valid]="directory.valid"
       />
     </div>
-    <div class="form-group">
-      <label class="form-label text-muted" for="minZoom">最小缩放级别 </label>
-      <input class="form-control" type="text" id="minZoom" name="minZoom"
-        placeholder="请输入最小缩放级别 ..."
-        [(ngModel)]="model.minZoom" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group">
-      <label class="form-label text-muted" for="maxZoom">最大缩放级别 </label>
-      <input class="form-control" type="text" id="maxZoom" name="maxZoom"
-        placeholder="请输入最大缩放级别 ..."
-        [(ngModel)]="model.maxZoom" [disabled]="!editable"
-      />
-    </div>
-    <div class="form-group">
-      <label class="form-label text-muted" for="creatorId">创建者id  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="creatorId" name="creatorId"
-        placeholder="请输入创建者id ..." required
-        [disabled]="!editable"
-        [(ngModel)]="model.creatorId"
-        #creatorId="ngModel"
-        [class.is-invalid]="!(creatorId.valid || creatorId.pristine)"
-        [class.is-valid]="creatorId.valid"
-      />
-    </div>
-    <div class="form-group">
-      <label class="form-label text-muted" for="createdAt">创建时间  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="createdAt" name="createdAt"
-        placeholder="请输入创建时间 ..." required
-        [disabled]="!editable"
-        [(ngModel)]="model.createdAt"
-        #createdAt="ngModel"
-        [class.is-invalid]="!(createdAt.valid || createdAt.pristine)"
-        [class.is-valid]="createdAt.valid"
-      />
-    </div>
-    <div class="form-group">
-      <label class="form-label text-muted" for="updaterId">更新者id  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="updaterId" name="updaterId"
-        placeholder="请输入更新者id ..." required
-        [disabled]="!editable"
-        [(ngModel)]="model.updaterId"
-        #updaterId="ngModel"
-        [class.is-invalid]="!(updaterId.valid || updaterId.pristine)"
-        [class.is-valid]="updaterId.valid"
-      />
-    </div>
-    <div class="form-group">
-      <label class="form-label text-muted" for="updatedAt">更新时间  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="updatedAt" name="updatedAt"
-        placeholder="请输入更新时间 ..." required
-        [disabled]="!editable"
-        [(ngModel)]="model.updatedAt"
-        #updatedAt="ngModel"
-        [class.is-invalid]="!(updatedAt.valid || updatedAt.pristine)"
-        [class.is-valid]="updatedAt.valid"
-      />
-    </div>
-    <div class="form-group">
-      <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input"
-          id="isDeleted" name="isDeleted"
-          [(ngModel)]="model.isDeleted" [disabled]="!editable">
-        <label class="custom-control-label text-muted"
-          for="isDeleted">
-          是否删除
-        </label>
+    <div class="row">
+      <div class="col-6">
+        <div class="form-group">
+          <label class="form-label text-muted" for="minZoom">最小缩放级别 </label>
+          <input class="form-control" type="number" step="1" id="minZoom" name="minZoom"
+            placeholder="请输入最小缩放级别 ..."
+            [(ngModel)]="model.minZoom" [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="form-group">
+          <label class="form-label text-muted" for="maxZoom">最大缩放级别 </label>
+          <input class="form-control" type="number" step="1" id="maxZoom" name="maxZoom"
+            placeholder="请输入最大缩放级别 ..."
+            [(ngModel)]="model.maxZoom" [disabled]="!editable"
+          />
+        </div>
       </div>
     </div>
   </div>
