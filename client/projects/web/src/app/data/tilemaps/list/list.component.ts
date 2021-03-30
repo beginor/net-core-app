@@ -46,7 +46,7 @@ export class ListComponent implements OnInit {
     public async resetSearch(): Promise<void> {
         this.vm.searchModel.keywords = '';
         this.vm.searchModel.skip = 0;
-        this.vm.search();
+        await this.vm.search();
     }
 
     public showPreview(model: TileMapModel): void {

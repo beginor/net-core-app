@@ -33,7 +33,17 @@ namespace Beginor.GisHub.TileMap.Data {
             VectorTileSearchModel model
         ) {
             var query = Session.Query<VectorTileEntity>();
-            // todo: 添加自定义查询；
+            if (model.Keywords.IsNotNullOrEmpty()) {
+                var keywords = model.Keywords.Trim();
+                if (keywords.IsNotNullOrEmpty()) {
+                    if (long.TryParse(keywords, out var id)) {
+                        query = query.Where(e => e.Id == id);
+                    }
+                    else {
+                        query = query.Where(e => e.Name.Contains(keywords));
+                    }
+                }
+            }
             var total = await query.LongCountAsync();
             var data = await query.OrderByDescending(e => e.Id)
                 .Skip(model.Skip).Take(model.Take)

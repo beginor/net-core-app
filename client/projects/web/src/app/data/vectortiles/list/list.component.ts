@@ -41,4 +41,10 @@ export class ListComponent implements OnInit {
         }
     }
 
+    public async resetSearch(): Promise<void> {
+        this.vm.searchModel.keywords = '';
+        this.vm.searchModel.skip = 0;
+        await this.vm.search();
+    }
+
 }

@@ -177,6 +177,8 @@ export interface VectortileSearchModel {
     skip: number;
     /** 取多少条记录 */
     take: number;
+    /** 查询关键字 */
+    keywords?: string;
 }
 
 /** 矢量切片包 搜索结果 */
