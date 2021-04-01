@@ -166,6 +166,18 @@ export class VectortileService {
         return url;
     }
 
+    public getVectorTileLayerStyleUrl(id: string): string {
+        if (!id) {
+            return '';
+        }
+        let url = this.apiRoot.substring(0, this.apiRoot.length - 3);
+        if (url.startsWith('/')) {
+            url = `${location.protocol}//${location.host}${url}`;
+        }
+        url = `${url}rest/services/vectortiles/${id}/style`;
+        return url;
+    }
+
     public getVectorTileAssetsUrl(): string {
         let url = this.apiRoot.substring(0, this.apiRoot.length - 3);
         if (url.startsWith('/')) {

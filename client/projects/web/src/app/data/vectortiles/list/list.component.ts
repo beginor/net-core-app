@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
-
-import { VectortileService } from '../vectortiles.service';
+import { VectortileModel, VectortileService } from '../vectortiles.service';
+import { PreviewComponent } from '../preview/preview.component';
 
 @Component({
     selector: 'app-vectortile-list',
@@ -15,6 +16,7 @@ export class ListComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private modal: NgbModal,
         public account: AccountService,
         public vm: VectortileService
     ) { }
@@ -45,6 +47,16 @@ export class ListComponent implements OnInit {
         this.vm.searchModel.keywords = '';
         this.vm.searchModel.skip = 0;
         await this.vm.search();
+    }
+
+    public showPreview(model: VectortileModel): void {
+        const modalRef = this.modal.open(
+            PreviewComponent,
+            { container: 'body', size: 'xl' }
+        );
+        const { id, name } = model;
+        modalRef.componentInstance.id = id;
+        modalRef.componentInstance.name = name;
     }
 
 }

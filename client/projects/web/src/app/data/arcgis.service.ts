@@ -50,33 +50,16 @@ export class ArcGisService {
         container: HTMLDivElement,
         url: string
     ): Promise<__esri.MapView> {
-        if (!isLoaded()) {
-            await this.loadJsApi();
-        }
-        const [Map, MapView, TileLayer, Fullscreen] = await loadModules<[
-            __esri.MapConstructor,
-            __esri.MapViewConstructor,
-            __esri.TileLayerConstructor,
-            __esri.FullscreenConstructor
-        ]>([
-            'esri/Map',
-            'esri/views/MapView',
-            'esri/layers/TileLayer',
-            'esri/widgets/Fullscreen'
-        ]);
-        const tileLayer = new TileLayer({ url });
-        await tileLayer.load();
-        const map = new Map({
-            layers: [tileLayer]
-        });
-        const mapView = new MapView({
-            map, container,
-            center: this.opts.center,
-            zoom: this.opts.zoom
-        });
-        const fullscreen = new Fullscreen({ view: mapView });
-        mapView.ui.add(fullscreen, 'top-right');
-        mapView.when().then(() => {
+        const mapView = await this.createMapView(container);
+        mapView.when().then(async () => {
+            const [TileLayer] = await loadModules<[
+                __esri.TileLayerConstructor
+            ]>([
+                'esri/layers/TileLayer'
+            ]);
+            const tileLayer = new TileLayer({ url });
+            await tileLayer.load();
+            mapView.map.add(tileLayer);
             mapView.goTo(tileLayer.fullExtent);
         });
         return mapView;
@@ -113,7 +96,7 @@ export class ArcGisService {
         });
         const fullscreen = new Fullscreen({ view: mapView });
         mapView.ui.add(fullscreen, 'top-right');
-        mapView.when().then(async () => {
+        mapView.when().then(() => {
             map.add(meshLayer);
             mapView.goTo(meshLayer.fullExtent);
         });
@@ -142,6 +125,29 @@ export class ArcGisService {
             zoom: this.opts.zoom
         });
         mapview.ui.add(new Fullscreen({view: mapview}), 'top-right');
+        return mapview;
+    }
+
+    public async createVectorTileLayerPreview(
+        container: HTMLDivElement,
+        url: string
+    ): Promise<__esri.MapView> {
+        const mapview = await this.createMapView(container);
+        mapview.when().then(async () => {
+            const [VectorTileLayer] = await loadModules<[
+                __esri.VectorTileLayerConstructor
+            ]>([
+                'esri/layers/VectorTileLayer'
+            ]);
+            const vectorTileLayer = new VectorTileLayer({
+                style: url
+            });
+            // await vectorTileLayer.when();
+            // if (!!vectorTileLayer.fullExtent) {
+            //     mapview.goTo(vectorTileLayer.fullExtent);
+            // }
+            mapview.map.add(vectorTileLayer);
+        });
         return mapview;
     }
 

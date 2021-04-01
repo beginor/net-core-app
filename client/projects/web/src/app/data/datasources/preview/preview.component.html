@@ -1,5 +1,5 @@
 <div class="modal-header pb-0">
-  <div class="modal-title">{{ds.name}} 数据预览</div>
+  <h5 class="modal-title">{{ds.name}} 数据预览</h5>
   <ul class="nav-tabs ml-auto" ngbNav #nav="ngbNav" [(activeId)]="previewType">
     <li *ngIf="hasPrivilege('datasources.read_data')" ngbNavItem="data">
       <a ngbNavLink>属性数据</a>
