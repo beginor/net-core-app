@@ -9,6 +9,7 @@ create table public.vectortiles
     directory character varying(512) collate pg_catalog."default" not null,
     min_zoom smallint,
     max_zoom smallint,
+    default_style character varying(32),
     creator_id character varying(32) collate pg_catalog."default" not null,
     created_at timestamp without time zone not null,
     updater_id character varying(32) collate pg_catalog."default" not null,
@@ -64,3 +65,6 @@ comment on column public.vectortiles.updated_at
 
 comment on column public.vectortiles.is_deleted
     is '是否删除';
+
+comment on column public.vectortiles.default_style
+    is '默认样式';

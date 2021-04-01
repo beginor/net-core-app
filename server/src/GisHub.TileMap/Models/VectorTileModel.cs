@@ -17,6 +17,10 @@ namespace Beginor.GisHub.TileMap.Models {
         public short? MinZoom { get; set; }
         /// <summary>最大缩放级别</summary>
         public short? MaxZoom { get; set; }
+        /// <summary>默认样式</summary>
+        public string DefaultStyle { get; set; }
+        /// <summary>样式内容</summary>
+        public string StyleContent { get; set; }
     }
 
     /// <summary>矢量切片包搜索参数</summary>

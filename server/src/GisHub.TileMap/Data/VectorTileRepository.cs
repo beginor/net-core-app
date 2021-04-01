@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -11,7 +13,7 @@ using NHibernate;
 using NHibernate.Linq;
 using Beginor.GisHub.TileMap.Data;
 using Beginor.GisHub.TileMap.Models;
-using System.IO;
+using Beginor.GisHub.Data.Repositories;
 
 namespace Beginor.GisHub.TileMap.Data {
 
@@ -19,13 +21,16 @@ namespace Beginor.GisHub.TileMap.Data {
     public partial class VectorTileRepository : HibernateRepository<VectorTileEntity, VectorTileModel, long>, IVectorTileRepository {
 
         private ConcurrentDictionary<long, TileMapCacheItem> cache;
+        private IAppJsonDataRepository jsonRepository;
 
         public VectorTileRepository(
             ISession session,
             IMapper mapper,
-            ConcurrentDictionary<long, TileMapCacheItem> cache
+            ConcurrentDictionary<long, TileMapCacheItem> cache,
+            IAppJsonDataRepository jsonRepository
         ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
         }
 
         /// <summary>搜索 矢量切片包 ，返回分页结果。</summary>
@@ -66,9 +71,29 @@ namespace Beginor.GisHub.TileMap.Data {
             entity.CreatorId = userId;
             entity.UpdatedAt = DateTime.Now;
             entity.UpdaterId = userId;
-            await Session.SaveAsync(entity, token);
-            await Session.FlushAsync(token);
-            cache.TryRemove(entity.Id, out _);
+            using var trans = Session.BeginTransaction();
+            try {
+                await Session.SaveAsync(entity, token);
+                await Session.FlushAsync(token);
+                var styleContent = model.StyleContent;
+                if (styleContent.IsNotNullOrEmpty()) {
+                    styleContent = styleContent.Replace("{id}", entity.Id.ToString());
+                }
+                await TrySaveStyleContent(entity.Id, styleContent);
+                await trans.CommitAsync();
+                cache.TryRemove(entity.Id, out _);
+            }
+            catch (Exception) {
+                await trans.RollbackAsync();
+                throw;
+            }
+        }
+
+        private async Task TrySaveStyleContent(long id, string styleContent) {
+            if (styleContent.IsNotNullOrEmpty()) {
+                var jsonDoc = JsonDocument.Parse(styleContent);
+                await jsonRepository.SaveValueAsync(id, jsonDoc.RootElement);
+            }
         }
 
         public async Task UpdateAsync(
@@ -86,10 +111,19 @@ namespace Beginor.GisHub.TileMap.Data {
             Mapper.Map(model, entity);
             entity.UpdatedAt = DateTime.Now;
             entity.UpdaterId = userId;
-            await Session.UpdateAsync(entity, token);
-            await Session.FlushAsync(token);
-            Mapper.Map(entity, model);
-            cache.TryRemove(id, out _);
+            using var trans = Session.BeginTransaction();
+            try {
+                await Session.UpdateAsync(entity, token);
+                await Session.FlushAsync(token);
+                await TrySaveStyleContent(id, model.StyleContent);
+                await trans.CommitAsync();
+                Mapper.Map(entity, model);
+                cache.TryRemove(id, out _);
+            }
+            catch (Exception) {
+                await trans.RollbackAsync();
+                throw;
+            }
         }
 
 

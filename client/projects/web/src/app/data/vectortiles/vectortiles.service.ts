@@ -154,6 +154,27 @@ export class VectortileService {
         }
     }
 
+    public getVectorTileLayerUrl(id: string): string {
+        if (!id) {
+            return '';
+        }
+        let url = this.apiRoot.substring(0, this.apiRoot.length - 3);
+        if (url.startsWith('/')) {
+            url = `${location.protocol}//${location.host}${url}`;
+        }
+        url = `${url}rest/services/vectortiles/${id}/VectorTileServer`;
+        return url;
+    }
+
+    public getVectorTileAssetsUrl(): string {
+        let url = this.apiRoot.substring(0, this.apiRoot.length - 3);
+        if (url.startsWith('/')) {
+            url = `${location.protocol}//${location.host}${url}`;
+        }
+        url = `${url}web/assets/mapbox/`;
+        return url;
+    }
+
 }
 
 /** 矢量切片包 */
@@ -168,6 +189,10 @@ export interface VectortileModel {
     minZoom?: number;
     /** 最大缩放级别 */
     maxZoom?: number;
+    /** 默认样式 */
+    defaultStyle?: string;
+    /** 样式内容 */
+    styleContent?: string;
 }
 
 /** 矢量切片包 搜索参数 */

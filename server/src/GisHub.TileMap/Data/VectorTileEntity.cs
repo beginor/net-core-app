@@ -28,6 +28,9 @@ namespace Beginor.GisHub.TileMap.Data {
         [Property(Name = "MaxZoom", Column = "max_zoom", Type = "short", NotNull = false)]
         public virtual short? MaxZoom { get; set; }
 
+        [Property(Name = "DefaultStyle", Column = "default_style", Type = "string", Length = 32, NotNull = false)]
+        public virtual string DefaultStyle { get; set; }
+
         /// <summary>创建者id</summary>
         [Property(Name = "CreatorId", Column = "creator_id", Type = "string", NotNull = true, Length = 32)]
         public virtual string CreatorId { get; set; }

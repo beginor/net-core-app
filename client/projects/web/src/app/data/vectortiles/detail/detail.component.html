@@ -57,6 +57,10 @@
         </div>
       </div>
     </div>
+    <div class="custom-file">
+      <input class="custom-file-input" type="file" id="styleFile" name="styleFile" #styleFile >
+      <label class="custom-file-label" for="customFile">{{styleFileName}}</label>
+    </div>
   </div>
   <div *ngIf="info.privileges['vectortiles.update'] && editable"
     class="card-footer d-flex justify-content-between">
