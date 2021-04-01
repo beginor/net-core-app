@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text.Json;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -26,6 +27,23 @@ namespace Beginor.GisHub.TileMap.Api {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get vectortile list!");
+                return this.InternalServerError(ex);
+            }
+        }
+
+        /// <summary>读取矢量切片包的默认样式</summary>
+        [HttpGet("~/rest/services/vectortiles/{id:long}/style")]
+        [Authorize("vectortiles.read_tile_content")]
+        public async Task<ActionResult> GetStyle(long id) {
+            try {
+                var style = await jsonRepository.GetValueByIdAsync(id);
+                if (style.ValueKind == JsonValueKind.Undefined) {
+                    return NotFound();
+                }
+                return Ok(style);
+            }
+            catch(Exception ex) {
+                logger.LogError(ex, $"Can not get style for {id} !");
                 return this.InternalServerError(ex);
             }
         }

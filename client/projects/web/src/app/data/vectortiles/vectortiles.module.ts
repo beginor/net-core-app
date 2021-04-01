@@ -11,11 +11,13 @@ import { AppCommonModule } from 'projects/web/src/app/common';
 import { VectortileRoutingModule } from './vectortiles-routing.module';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
+import { PreviewComponent } from './preview/preview.component';
 
 @NgModule({
     declarations: [
         ListComponent,
-        DetailComponent
+        DetailComponent,
+        PreviewComponent
     ],
     imports: [
         CommonModule,
