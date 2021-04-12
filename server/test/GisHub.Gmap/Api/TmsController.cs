@@ -7,6 +7,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Gmap.Api {
 
+    /// <summary>
+    /// Convert tile schema from tms to xyz.
+    /// </summary>
     [Route("api/tms")]
     public class TmsController : Controller {
 
