@@ -315,7 +315,7 @@ export interface GeoJsonParam extends DistinctParam {
 export interface AgsJsonParam extends DistinctParam {
     $skip?: number;
     $take?: number;
-    $returnExtent: boolean;
+    $returnExtent?: boolean;
 }
 export interface ReadDataParam extends DistinctParam {
     $groupBy?: string;

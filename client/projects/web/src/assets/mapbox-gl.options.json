@@ -2,8 +2,8 @@
   "accessToken": "pk.eyJ1IjoiYmVnaW5vciIsImEiOiJja2pmMWNkbXg4azcyMzVwZHFraGc1cjYzIn0.xo0073v7zQfAicAPsr0CHQ",
   "style": "mapbox://styles/beginor/ckkf3glod0g1m17my2wh0s74q",
   "camera": {
-    "center": { "lng": 113.08710083844062, "lat": 23.65525480283638 },
-    "zoom": 6,
+    "center": { "lng": 108.445, "lat": 33.935 },
+    "zoom": 3,
     "pitch": 0,
     "bearing": 0
   },

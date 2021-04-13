@@ -59,6 +59,11 @@ namespace Beginor.GisHub.DataServices {
             };
             var total = await dsReader.CountAsync(dataSource, new CountParam {Where = param.Where});
             result.ExceededTransferLimit = total > list.Count;
+            if (param.ReturnBbox) {
+                var fs = await QueryForExtentAsync(dataSource, new AgsQueryParam { Where = param.Where });
+                var ext = fs.Extent;
+                result.Bbox = new double[] { ext.Xmin, ext.Ymin, ext.Xmax, ext.Ymax };
+            }
             return result;
         }
 

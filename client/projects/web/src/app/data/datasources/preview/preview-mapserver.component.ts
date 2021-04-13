@@ -59,7 +59,10 @@ export class PreviewMapServerComponent implements AfterViewInit, OnDestroy {
         const featureLayer = new FeatureLayer({
             url: this.vm.getPreviewUrl(id, 'mapserver')
         });
+        await featureLayer.load();
+        // await featureLayer.when();
         this.mapview?.map.add(featureLayer);
+        this.mapview?.goTo(featureLayer.fullExtent);
     }
 
 }

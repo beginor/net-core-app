@@ -7,7 +7,8 @@ import { HttpClient } from '@angular/common/http';
 
 import { DataSourceModel, DataSourceService } from '../datasources.service';
 import {
-    AnyLayer, CameraOptions, CircleLayer, Map, ScaleControl, NavigationControl
+    AnyLayer, CameraOptions, CircleLayer, Map, ScaleControl, NavigationControl,
+    LngLatBoundsLike
 } from 'mapbox-gl';
 
 
@@ -114,6 +115,10 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
                 this.downloadProgress.next(percent);
             }
         );
+        const bbox = geojson.bbox;
+        if (!!bbox) {
+            this.map?.fitBounds(bbox as LngLatBoundsLike, { padding: 20 });
+        }
         this.map?.addSource(id, { type: 'geojson', data: geojson});
         this.geoJson = geojson;
     }
