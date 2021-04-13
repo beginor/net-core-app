@@ -54,19 +54,23 @@ export class PreviewFeatureSetComponent implements AfterViewInit, OnDestroy {
         const count = await this.vm.getCount(id, { });
         const json: any = await this.vm.getFeatureSetJson(
             id,
-            { $take: count },
+            { $take: count, $returnExtent: true },
             (total, loaded) => {
                 const percent = Number.parseFloat((loaded / total).toFixed(2));
                 this.downloadProgress.next(percent);
             }
         );
-        const [FeatureSet, FeatureLayer] = await loadModules<[
+        const [FeatureSet, FeatureLayer, Extent] = await loadModules<[
             __esri.FeatureSetConstructor,
-            __esri.FeatureLayerConstructor
+            __esri.FeatureLayerConstructor,
+            __esri.ExtentConstructor
         ]>([
             'esri/tasks/support/FeatureSet',
-            'esri/layers/FeatureLayer'
+            'esri/layers/FeatureLayer',
+            'esri/geometry/Extent'
         ]);
+        const extent = new Extent(json.extent);
+        delete json.extent;
         const featureset = FeatureSet.fromJSON(json);
         const featureLayer = new FeatureLayer({
             geometryType: featureset.geometryType as any,
@@ -76,6 +80,7 @@ export class PreviewFeatureSetComponent implements AfterViewInit, OnDestroy {
             objectIdField: json.objectIdFieldName
         });
         this.mapview?.map.add(featureLayer);
+        await this.mapview?.goTo(extent);
     }
 
 }

@@ -21,6 +21,8 @@ namespace Beginor.GisHub.DataServices.Models {
         public int Skip { get; set; } = 0;
         [FromQuery(Name = "$take")]
         public int Take { get; set; } = 10;
+        [FromQuery(Name = "$returnBbox")]
+        public bool ReturnBbox { get; set; } = false;
     }
 
     public class AgsJsonParam : DistinctParam {
@@ -30,6 +32,8 @@ namespace Beginor.GisHub.DataServices.Models {
         public int Take { get; set; } = 10;
         [FromQuery(Name = "$outSR")]
         public int OutSR { get; set; } = 4326;
+        [FromQuery(Name = "$returnExtent")]
+        public bool ReturnExtent { get; set; } = false;
     }
 
     public class ReadDataParam : DistinctParam {

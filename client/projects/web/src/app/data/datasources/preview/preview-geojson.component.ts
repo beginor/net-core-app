@@ -108,7 +108,7 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
         }
         const count = await this.vm.getCount(id, { });
         const geojson = await this.vm.getGeoJson(
-            id, { $take: count },
+            id, { $take: count, $returnBbox: true },
             (total, loaded) => {
                 const percent = Number.parseFloat((loaded / total).toFixed(2));
                 this.downloadProgress.next(percent);

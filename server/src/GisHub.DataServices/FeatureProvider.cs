@@ -133,6 +133,10 @@ namespace Beginor.GisHub.DataServices {
             result.SpatialReference = new AgsSpatialReference {
                 Wkid = dataSource.Srid
             };
+            if (param.ReturnExtent) {
+                var fs = await QueryForExtentAsync(dataSource, new AgsQueryParam { Where = param.Where });
+                result.Extent = fs.Extent;
+            }
             TryConvertFeatureSetSr(result, param.OutSR);
             result.GeometryType = GetAgsGeometryType(dataSource);
             return result;
@@ -441,14 +445,24 @@ namespace Beginor.GisHub.DataServices {
                         feature.Geometry = WebMercator.FromGeographic(feature.Geometry);
                         feature.Geometry.SpatialReference = null;
                     }
+                    if (featureSet.Extent != null) {
+                        featureSet.Extent = (AgsExtent)WebMercator.FromGeographic(featureSet.Extent);
+                    }
                 }
                 if (MercatorSrids.Contains(inSr) && GeographicSrids.Contains(outSr)) {
                     foreach (var feature in featureSet.Features) {
                         feature.Geometry = WebMercator.ToGeographic(feature.Geometry);
                     }
+                    if (featureSet.Extent != null) {
+                        featureSet.Extent = (AgsExtent)WebMercator.ToGeographic(featureSet.Extent);
+                    }
                 }
             }
-            featureSet.SpatialReference = new AgsSpatialReference { Wkid = outSr };
+            var sr = new AgsSpatialReference { Wkid = outSr };
+            if (featureSet.Extent != null) {
+                featureSet.Extent.SpatialReference = sr;
+            }
+            featureSet.SpatialReference = sr;
         }
 
         private static AgsGeometry ConvertGeometrySr(AgsGeometry geometry, int inSr, int outSr) {

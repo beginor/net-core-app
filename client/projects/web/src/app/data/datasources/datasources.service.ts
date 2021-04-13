@@ -300,7 +300,7 @@ export class DataSourceService {
 }
 
 export interface CountParam {
-    [key: string]: undefined | number | string;
+    [key: string]: undefined | number | string | boolean;
     $where?: string;
 }
 export interface DistinctParam extends CountParam {
@@ -310,10 +310,12 @@ export interface DistinctParam extends CountParam {
 export interface GeoJsonParam extends DistinctParam {
     $skip?: number;
     $take?: number;
+    $returnBbox?: boolean;
 }
 export interface AgsJsonParam extends DistinctParam {
     $skip?: number;
     $take?: number;
+    $returnExtent: boolean;
 }
 export interface ReadDataParam extends DistinctParam {
     $groupBy?: string;
