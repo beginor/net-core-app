@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ArcGIS Javascript API Test</title>
+  <style>html,body,#viewDiv { padding: 0; margin: 0; height: 100%; width: 100%; overflow: hidden; }</style>
+  <link rel="stylesheet" href="https://app.gdeei.cn/arcgis-js-api/library/4.18/esri/themes/light/main.css" />
+  <script>
+  function beforeRequestCallback(param) {
+    const headers = param.requestOptions.headers || {};
+    headers['X-Requested-With'] = 'XMLHttpRequest';
+    const jwt = localStorage.getItem('Bearer:/gishub/api');
+    if (!!jwt) {
+        headers['Authorization'] = `Bearer ${jwt}`;
+    }
+    param.requestOptions.headers = headers;
+  }
+
+  function getQuery(name) {
+    const arr = location.search.substring(1).split('&');
+    const q = {};
+    for (const item of arr) {
+      const itemArr = item.split('=');
+      q[itemArr[0]] = itemArr[1];
+    }
+    return q[name];
+  }
+
+  window.dojoConfig = { locale: 'zh-cn', async: true };
+  window.esriConfig = {
+    locale: 'zh-cn',
+    request: {
+      interceptors: [
+        { urls: /gishub/, before: beforeRequestCallback }
+      ]
+    }
+  };
+  </script>
+  <script src="https://app.gdeei.cn/arcgis-js-api/library/4.18/init.js"></script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+<script>
+require([
+    // 'esri/config',
+    'esri/Map',
+    'esri/views/MapView',
+    'esri/layers/VectorTileLayer'
+], function (Map, MapView, VectorTileLayer) {
+    const map = new Map({
+        basemap: 'satellite'
+    });
+    const view = new MapView({
+        container: 'viewDiv', // Reference to the scene div created in step 5
+        map: map, // Reference to the map object created before the scene
+        zoom: 13, // Sets zoom level based on level of detail (LOD)
+        center: [113.31939, 23.12313] // Sets center point of view using longitude,latitude
+    });
+    Object.assign(window, { _mapview: view });
+    const road = new VectorTileLayer({
+        style: {
+            "version": 8,
+            "sprite": "https://app.gdeei.cn/arcgis-js-api/mapbox/sprites/satellite-streets/sprite",
+            "glyphs": "https://app.gdeei.cn/arcgis-js-api/mapbox/glyphs/{fontstack}/{range}.pbf",
+            "sources": {
+                "guangzhou_road": {
+                    type: 'vector',
+                    scheme: 'xyz',
+                    tiles: [`${location.protocol}//${location.host}/api/vector/guangzhou_road/{z}/{y}/{x}`],
+                    minzoom: 13,
+                    maxzoom: 19
+                }
+            },
+            "layers": [
+                {
+                    id: 'guangzhou_road',
+                    source: 'guangzhou_road',
+                    'source-layer': 'guangzhou_road',
+                    type: 'line',
+                    paint: {
+                        'line-color': '#00FF00',
+                        'line-width': 2
+                    }
+                }
+            ]
+        }
+    });
+    map.add(road);
+    const building = new VectorTileLayer({
+        style: {
+            "version": 8,
+            "sprite": "https://app.gdeei.cn/arcgis-js-api/mapbox/sprites/satellite-streets/sprite",
+            "glyphs": "https://app.gdeei.cn/arcgis-js-api/mapbox/glyphs/{fontstack}/{range}.pbf",
+            "sources": {
+                "guangzhou_building": {
+                    type: 'vector',
+                    scheme: 'xyz',
+                    tiles: [`${location.protocol}//${location.host}/api/vector/guangzhou_building/{z}/{y}/{x}`],
+                    minzoom: 15,
+                    maxzoom: 19
+                }
+            },
+            "layers": [
+                {
+                    id: 'guangzhou_building',
+                    source: 'guangzhou_building',
+                    'source-layer': 'guangzhou_building',
+                    type: 'fill',
+                    paint: {
+                        'fill-opacity': 0.8,
+                        // 'fill-height': ["to-number", ['get', 'height'], 0],
+                        // "fill-color": [
+                        //     "case",
+                        //     ["<=", ["to-number", ["get", "height"]], 20], "#feedde",
+                        //     ["<=", ["to-number", ["get", "height"]], 50], "#fdd0a2",
+                        //     ["<=", ["to-number", ["get", "height"]], 100], "#fdae6b",
+                        //     ["<=", ["to-number", ["get", "height"]], 150], "#fd8d3c",
+                        //     ["<=", ["to-number", ["get", "height"]], 200], "#f16913",
+                        //     ["<=", ["to-number", ["get", "height"]], 300], "#d94801",
+                        //     "#8c2d04"
+                        // ]
+                        "fill-color": "#8c2d04"
+                    }
+                }
+            ]
+        }
+    });
+    map.add(building);
+})
+</script>
+</body>
+
+</html>

@@ -10,6 +10,6 @@ indent_size = 4
 trim_trailing_whitespace = true
 
 # markdown files
-[*.md]
+[*.{md,json}]
 trim_trailing_whitespace = false
 indent_size = 2

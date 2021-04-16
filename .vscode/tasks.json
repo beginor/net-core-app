@@ -105,6 +105,16 @@
       "options": {
         "cwd": "${workspaceFolder}/server/test/GisHub.Gmap"
       }
+    },
+    {
+      "label": "dotnet:build:VectorTile",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["build"],
+      "problemMatcher": ["$msCompile"],
+      "options": {
+        "cwd": "${workspaceFolder}/server/test/GisHub.VectorTile"
+      }
     }
   ]
 }

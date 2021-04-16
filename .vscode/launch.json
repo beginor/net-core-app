@@ -65,6 +65,19 @@
       }
     },
     {
+      "name": "VectorTile",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "dotnet:build:VectorTile",
+      "program": "${workspaceFolder}/server/test/GisHub.VectorTile/bin/Debug/net5.0/VectorTile.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/server/test/GisHub.VectorTile",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    {
         "name": "Attach",
         "type": "coreclr",
         "request": "attach",
