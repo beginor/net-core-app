@@ -2,7 +2,7 @@
 <div class="app-main d-flex">
   <div class="error-container mt-5" *ngIf="ui.alerts.length > 0">
     <ngb-alert class="shadow" *ngFor="let alt of ui.alerts" [type]="alt.type"
-      (close)="ui.closeAlert(alt)">
+      (closed)="ui.closeAlert(alt)">
       {{ alt.message }}
     </ngb-alert>
   </div>
