@@ -67,24 +67,6 @@ namespace GisHub.VectorTile.Api {
             return buffer;
         }
 
-        /*
-        -- /tile/16/28445/53395
-        -- /tile/{z}/{y}/{x}
-        with mvt_geom as (
-            select
-                ST_AsMVTGeom(
-                    geom,
-                    ST_TileEnvelope(16, 53395, 28445),
-                    extent => 4096, buffer => 64
-                ) as geom,
-                id, name, fclass, ref, oneway, maxspeed, bridge, tunnel, layer
-            from public.sr3857_guangzhou_road
-            where geom && ST_TileEnvelope(16, 53395, 28445, margin => (64.0 / 4096))
-        )
-        select ST_AsMVT(mvt_geom, 'guangzhou_road', 4096, 'geom', 'id')
-        from mvt_geom
-        */
-
     }
 
     public class VectorTileOptions {
