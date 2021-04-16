@@ -14,7 +14,7 @@ namespace Beginor.GisHub.DataServices.Esri {
         public string GeometryType { get; set; }
 
         [FromQuery(Name = "outFields")]
-        public string OutFields { get; set; } = "*";
+        public string OutFields { get; set; } = "";
         [FromQuery(Name = "objectIds")]
         public string ObjectIds { get; set; }
         [FromQuery(Name = "outSR")]
