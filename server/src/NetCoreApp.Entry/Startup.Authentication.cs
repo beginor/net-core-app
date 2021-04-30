@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Api.Authorization;
 using Beginor.NetCoreApp.Common;
 
@@ -32,9 +35,24 @@ namespace Beginor.NetCoreApp.Entry {
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
+                x.Events = new JwtBearerEvents {
+                    OnTokenValidated = async context => {
+                        var authCache = context.HttpContext.RequestServices.GetService<IAuthorizationCache>();
+                        var identity = context.Principal.Identity as ClaimsIdentity;
+                        var userId = identity.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                        if (userId.IsNullOrEmpty()) {
+                            userId = "anonymous";
+                        }
+                        var cachedClaims = await authCache.GetUserClaimsAsync(userId);
+                        foreach (var claim in cachedClaims) {
+                            identity.AddClaim(claim);
+                        }
+                    }
+                };
             });
             // authorization;
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
+            services.AddSingleton<IAuthorizationCache, AuthorizationCache>();
         }
 
         private void ConfigureAuthentication(
