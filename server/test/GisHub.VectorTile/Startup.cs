@@ -27,6 +27,7 @@ namespace GisHub.VectorTile {
             services.Configure<VectorTileOptions>(
                 Configuration.GetSection("vectorTile")
             );
+            services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GisHub.VectorTile", Version = "v1" });
@@ -42,7 +43,12 @@ namespace GisHub.VectorTile {
             }
 
             app.UseStaticFiles();
-
+            app.UseCors(cors => {
+                cors.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin()
+                    .DisallowCredentials();
+            });
             app.UseRouting();
 
             app.UseAuthorization();
