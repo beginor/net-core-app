@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Api.Authorization;
@@ -37,7 +37,7 @@ namespace Beginor.GisHub.Entry {
                 };
                 x.Events = new JwtBearerEvents {
                     OnTokenValidated = async context => {
-                        var authCache = context.HttpContext.RequestServices.GetService<IAuthorizationCache>();
+                        var authCache = context.HttpContext.RequestServices.GetService<IDistributedCache>();
                         var identity = context.Principal.Identity as ClaimsIdentity;
                         var userId = identity.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
                         if (userId.IsNullOrEmpty()) {
@@ -52,7 +52,6 @@ namespace Beginor.GisHub.Entry {
             });
             // authorization;
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
-            services.AddSingleton<IAuthorizationCache, AuthorizationCache>();
         }
 
         private void ConfigureAuthentication(
