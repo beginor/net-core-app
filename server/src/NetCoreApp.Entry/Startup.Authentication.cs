@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Api.Authorization;
 using Beginor.NetCoreApp.Common;
-using Microsoft.Extensions.Caching.Distributed;
 
 namespace Beginor.NetCoreApp.Entry {
 
