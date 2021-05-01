@@ -37,13 +37,13 @@ namespace Beginor.NetCoreApp.Entry {
                 };
                 x.Events = new JwtBearerEvents {
                     OnTokenValidated = async context => {
-                        var authCache = context.HttpContext.RequestServices.GetService<IDistributedCache>();
+                        var cache = context.HttpContext.RequestServices.GetService<IDistributedCache>();
                         var identity = context.Principal.Identity as ClaimsIdentity;
                         var userId = identity.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
                         if (userId.IsNullOrEmpty()) {
                             userId = "anonymous";
                         }
-                        var cachedClaims = await authCache.GetUserClaimsAsync(userId);
+                        var cachedClaims = await cache.GetUserClaimsAsync(userId);
                         foreach (var claim in cachedClaims) {
                             identity.AddClaim(claim);
                         }
