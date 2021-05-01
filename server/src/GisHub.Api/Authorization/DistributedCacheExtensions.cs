@@ -2,7 +2,7 @@ using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
-using Beginor.NetCoreApp.Common;
+using Beginor.GisHub.Common;
 
 namespace Beginor.GisHub.Api.Authorization {
 
