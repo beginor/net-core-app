@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Beginor.NetCoreApp.Api.Authorization {
 
-    public static class CacheExtensions {
+    public static class DistributedCacheExtensions {
 
         public static async Task<Claim[]> GetUserClaimsAsync(this IDistributedCache cache, string userId) {
             var buffer = await cache.GetAsync(userId);
