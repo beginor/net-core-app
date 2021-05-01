@@ -11,14 +11,14 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NHibernate.Linq;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using NHibernate.Linq;
+using Beginor.NetCoreApp.Api.Authorization;
 using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
-using Beginor.NetCoreApp.Api.Authorization;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
