@@ -1,36 +1,40 @@
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Beginor.NetCoreApp.Common;
+using System.IO;
 
 namespace Beginor.NetCoreApp.Api.Authorization {
 
-    // public interface IAuthorizationCache {
-    //     Task<Claim[]> GetUserClaimsAsync(string userId);
-    //     Task SetUserClaimsAsync(string userId, Claim[] claims);
-    // }
+    public static class CacheExtensions {
 
-    // public class AuthorizationCache : IAuthorizationCache {
+        public static async Task<Claim[]> GetUserClaimsAsync(this IDistributedCache cache, string userId) {
+            var buffer = await cache.GetAsync(userId);
+            if (buffer == null) {
+                return new Claim[0];
+            }
+            var stream = new MemoryStream(buffer);
+            var reader = new BinaryReader(stream);
+            var count = reader.ReadInt32();
+            var claims = new Claim[count];
+            for (var i = 0; i < count; i++) {
+                claims[i] = new Claim(reader);
+            }
+            return claims;
+        }
 
-    //     public AuthorizationCache(IDistributedCache cache) {
-
-    //     }
-
-    //     private IDictionary<string, Claim[]> userRoles = new Dictionary<string, Claim[]>();
-
-    //     public Task<Claim[]> GetUserClaimsAsync(string userId) {
-    //         IDistributedCache cache = new MemoryDistributedCache(null);
-    //         if (userRoles.ContainsKey(userId)) {
-    //             return Task.FromResult(userRoles[userId]);
-    //         }
-    //         return Task.FromResult(new Claim[0]);
-    //     }
-
-    //     public Task SetUserClaimsAsync(string userId, Claim[] roles) {
-    //         userRoles[userId] = roles;
-    //         return Task.CompletedTask;
-    //     }
-
-    // }
+        public static async Task SetUserClaimsAsync(this IDistributedCache cache, string userId, Claim[] claims) {
+            // var json = JsonSeri
+            var stream = new MemoryStream();
+            var writer = new BinaryWriter(stream);
+            writer.Write(claims.Length);
+            foreach (var claim in claims) {
+                claim.WriteTo(writer);
+            }
+            writer.Flush();
+            var buffer = stream.GetBuffer();
+            await cache.SetAsync(userId, buffer);
+        }
+    }
 
 }

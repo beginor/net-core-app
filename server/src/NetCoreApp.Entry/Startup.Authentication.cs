@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Api.Authorization;
 using Beginor.NetCoreApp.Common;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Beginor.NetCoreApp.Entry {
 
@@ -36,13 +37,13 @@ namespace Beginor.NetCoreApp.Entry {
                 };
                 x.Events = new JwtBearerEvents {
                     OnTokenValidated = async context => {
-                        var authCache = context.HttpContext.RequestServices.GetService<ICache>();
+                        var authCache = context.HttpContext.RequestServices.GetService<IDistributedCache>();
                         var identity = context.Principal.Identity as ClaimsIdentity;
                         var userId = identity.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
                         if (userId.IsNullOrEmpty()) {
                             userId = "anonymous";
                         }
-                        var cachedClaims = await authCache.GetItemAsync<Claim[]>(userId);
+                        var cachedClaims = await authCache.GetUserClaimsAsync(userId);
                         foreach (var claim in cachedClaims) {
                             identity.AddClaim(claim);
                         }

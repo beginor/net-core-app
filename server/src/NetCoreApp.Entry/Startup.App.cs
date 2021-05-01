@@ -13,7 +13,6 @@ namespace Beginor.NetCoreApp.Entry {
             IWebHostEnvironment env
         ) {
             services.AddDistributedMemoryCache();
-            services.AddSingleton<ICache, Cache>();
             services.AddServiceWithDefaultImplements(
                 typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly,
                 t => t.Name.EndsWith("Repository"),

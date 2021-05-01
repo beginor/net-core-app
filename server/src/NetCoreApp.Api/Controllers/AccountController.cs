@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +18,7 @@ using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
+using Beginor.NetCoreApp.Api.Authorization;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
@@ -30,7 +32,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         private RoleManager<AppRole> roleMgr;
         private JwtOption jwt;
         private IAppNavItemRepository navRepo;
-        private ICache cache;
+        private IDistributedCache cache;
 
         public AccountController(
             ILogger<AccountController> logger,
@@ -38,7 +40,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             RoleManager<AppRole> roleMgr,
             IOptionsSnapshot<JwtOption> jwt,
             IAppNavItemRepository navRepo,
-            ICache cache
+            IDistributedCache cache
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
@@ -226,7 +228,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                         claimsToCache.Add(roleClaim);
                     }
                 }
-                await cache.SetItemAsync(user.Id, claimsToCache.ToArray());
+                await cache.SetUserClaimsAsync(user.Id, claimsToCache.ToArray());
             }
             return identity;
         }
@@ -262,7 +264,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     }
                 }
             }
-            await cache.SetItemAsync("anonymous", claimsToCache.ToArray());
+            await cache.SetUserClaimsAsync("anonymous", claimsToCache.ToArray());
             return identity;
         }
     }
