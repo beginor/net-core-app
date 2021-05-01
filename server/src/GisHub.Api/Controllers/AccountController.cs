@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using NHibernate.Linq;
+using Beginor.GisHub.Api.Authorization;
 using Beginor.GisHub.Common;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Data.Repositories;
@@ -30,19 +31,22 @@ namespace Beginor.GisHub.Api.Controllers {
         private RoleManager<AppRole> roleMgr;
         private JwtOption jwt;
         private IAppNavItemRepository navRepo;
+        private IAuthorizationCache authorizationCache;
 
         public AccountController(
             ILogger<AccountController> logger,
             UserManager<AppUser> userMgr,
             RoleManager<AppRole> roleMgr,
             IOptionsSnapshot<JwtOption> jwt,
-            IAppNavItemRepository navRepo
+            IAppNavItemRepository navRepo,
+            IAuthorizationCache authorizationCache
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
             this.roleMgr = roleMgr ?? throw new ArgumentNullException(nameof(roleMgr));
             this.jwt = jwt.Value ?? throw new ArgumentNullException(nameof(jwt));
             this.navRepo = navRepo ?? throw new ArgumentNullException(nameof(navRepo));
+            this.authorizationCache = authorizationCache ?? throw new ArgumentNullException(nameof(authorizationCache));
         }
 
         protected override void Dispose(bool disposing) {
@@ -52,6 +56,7 @@ namespace Beginor.GisHub.Api.Controllers {
                 roleMgr = null;
                 jwt = null;
                 navRepo = null;
+                authorizationCache = null;
             }
             base.Dispose(disposing);
         }
@@ -208,18 +213,21 @@ namespace Beginor.GisHub.Api.Controllers {
             // user claims;
             var userClaims = await userMgr.GetClaimsAsync(user);
             identity.AddClaims(userClaims);
+            // save role and role privileges to cache;
+            var claimsToCache = new List<Claim>();
             // role as claim;
             var roles = await userMgr.GetRolesAsync(user);
             // add role and role claims;
             foreach (var roleName in roles) {
-                identity.AddClaim(new Claim(ClaimTypes.Role, roleName));
+                claimsToCache.Add(new Claim(ClaimTypes.Role, roleName));
                 var role = await roleMgr.FindByNameAsync(roleName);
                 var roleClaims = await roleMgr.GetClaimsAsync(role);
                 foreach (var roleClaim in roleClaims) {
                     if (!identity.Claims.Any(c => c.Type == roleClaim.Type && c.Value == roleClaim.Value)) {
-                        identity.AddClaim(roleClaim);
+                        claimsToCache.Add(roleClaim);
                     }
                 }
+                await authorizationCache.SetUserClaimsAsync(user.Id, claimsToCache.ToArray());
             }
             return identity;
         }
@@ -238,21 +246,24 @@ namespace Beginor.GisHub.Api.Controllers {
             identity.AddClaim(
                 new Claim(ClaimTypes.GivenName, "用户")
             );
+            // save role and role privileges to cache;
+            var claimsToCache = new List<Claim>();
             // role as claim;
             var roles = await roleMgr.Roles
                 .Where(r => r.IsAnonymous == true)
                 .ToListAsync();
             // add role and role claims;
             foreach (var role in roles) {
-                identity.AddClaim(new Claim(ClaimTypes.Role, role.Name));
+                claimsToCache.Add(new Claim(ClaimTypes.Role, role.Name));
                 // var role = await roleMgr.FindByNameAsync(roleName);
                 var roleClaims = await roleMgr.GetClaimsAsync(role);
                 foreach (var roleClaim in roleClaims) {
                     if (!identity.Claims.Any(c => c.Type == roleClaim.Type && c.Value == roleClaim.Value)) {
-                        identity.AddClaim(roleClaim);
+                        claimsToCache.Add(roleClaim);
                     }
                 }
             }
+            await authorizationCache.SetUserClaimsAsync("anonymous", claimsToCache.ToArray());
             return identity;
         }
     }
