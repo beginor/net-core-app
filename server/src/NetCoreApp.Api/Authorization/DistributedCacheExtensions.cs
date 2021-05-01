@@ -1,8 +1,8 @@
+using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Beginor.NetCoreApp.Common;
-using System.IO;
 
 namespace Beginor.NetCoreApp.Api.Authorization {
 
