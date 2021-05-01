@@ -1,7 +1,8 @@
-using Beginor.AppFx.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Beginor.AppFx.DependencyInjection;
+using Beginor.NetCoreApp.Common;
 
 namespace Beginor.NetCoreApp.Entry {
 
@@ -11,6 +12,8 @@ namespace Beginor.NetCoreApp.Entry {
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
+            services.AddDistributedMemoryCache();
+            services.AddSingleton<ICache, Cache>();
             services.AddServiceWithDefaultImplements(
                 typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly,
                 t => t.Name.EndsWith("Repository"),
