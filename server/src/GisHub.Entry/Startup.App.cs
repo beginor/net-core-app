@@ -1,7 +1,9 @@
+using System;
+using System.Collections.Concurrent;
+using Beginor.AppFx.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Beginor.AppFx.DependencyInjection;
 
 namespace Beginor.GisHub.Entry {
 
@@ -13,10 +15,32 @@ namespace Beginor.GisHub.Entry {
         ) {
             services.AddDistributedMemoryCache();
             services.AddServiceWithDefaultImplements(
-                typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly,
+                typeof(Beginor.GisHub.Data.ModelMapping).Assembly,
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
+            services.AddServiceWithDefaultImplements(
+                typeof(Beginor.GisHub.Slpk.ModelMapping).Assembly,
+                t => t.Name.EndsWith("Repository"),
+                ServiceLifetime.Scoped
+            );
+            services.AddSingleton<ConcurrentDictionary<long, Beginor.GisHub.Slpk.Data.SlpkCacheItem>>();
+            services.AddServiceWithDefaultImplements(
+                typeof(Beginor.GisHub.TileMap.ModelMapping).Assembly,
+                t => t.Name.EndsWith("Repository"),
+                ServiceLifetime.Scoped
+            );
+            services.AddSingleton<ConcurrentDictionary<long, Beginor.GisHub.TileMap.Data.TileMapCacheItem>>();
+            services.AddServiceWithDefaultImplements(
+                typeof(Beginor.GisHub.DataServices.ModelMapping).Assembly,
+                t => t.Name.EndsWith("Repository"),
+                ServiceLifetime.Scoped
+            );
+            services.AddSingleton<Beginor.GisHub.DataServices.IDataServiceFactory, Beginor.GisHub.DataServices.DataServiceFactory>();
+            services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider>();
+            services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISDataSourceReader>();
+            services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISFeatureProvider>();
+            services.AddSingleton<ConcurrentDictionary<long, Beginor.GisHub.DataServices.Data.DataSourceCacheItem>>();
         }
 
         private static void ConfigureApp(
