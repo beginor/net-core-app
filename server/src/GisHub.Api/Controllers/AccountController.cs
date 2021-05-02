@@ -73,7 +73,7 @@ namespace Beginor.GisHub.Api.Controllers {
             try {
                 if (!User.Identity.IsAuthenticated || User.HasClaim(ClaimTypes.NameIdentifier, string.Empty)) {
                     var anonymousIdentity = await CreateAnonymousIdentity();
-                    var anonymousInfo = CreateAccountInfoModel(anonymousIdentity);
+                    var anonymousInfo = await CreateAccountInfoModel(anonymousIdentity);
                     anonymousInfo.Token = CreateJwtToken(anonymousIdentity);
                     return anonymousInfo;
                 }
@@ -81,9 +81,8 @@ namespace Beginor.GisHub.Api.Controllers {
                 if (appUser == null) {
                     return NotFound();
                 }
-                // var identity = User.Identity as ClaimsIdentity;
                 var identity = await CreateIdentityAsync(appUser);
-                var info = CreateAccountInfoModel(identity);
+                var info = await CreateAccountInfoModel(identity);
                 info.Token = CreateJwtToken(identity);
                 return info;
             }
@@ -167,23 +166,24 @@ namespace Beginor.GisHub.Api.Controllers {
             }
         }
 
-        private AccountInfoModel CreateAccountInfoModel(ClaimsIdentity user) {
+        private async Task<AccountInfoModel> CreateAccountInfoModel(ClaimsIdentity user) {
             var info = new AccountInfoModel {
                 Id = user.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value,
                 UserName = user.Claims.First(c => c.Type == ClaimTypes.Name).Value,
                 Surname = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value,
-                GivenName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value,
-                Roles = user.Claims
-                    .Where(c => c.Type == ClaimTypes.Role)
-                    .Select(c => c.Value)
-                    .Distinct()
-                    .ToDictionary(r => r, r => true),
-                Privileges = user.Claims
-                    .Where(c => c.Type == Consts.PrivilegeClaimType)
-                    .Select(c => c.Value)
-                    .Distinct()
-                    .ToDictionary(p => p, p => true)
+                GivenName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value
             };
+            var cachedClaims = await cache.GetUserClaimsAsync(info.Id);
+            info.Roles = cachedClaims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .Distinct()
+                .ToDictionary(r => r, r => true);
+            info.Privileges = cachedClaims
+                .Where(c => c.Type == Consts.PrivilegeClaimType)
+                .Select(c => c.Value)
+                .Distinct()
+                .ToDictionary(p => p, p => true);
             return info;
         }
 
