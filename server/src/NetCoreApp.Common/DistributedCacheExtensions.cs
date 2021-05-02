@@ -16,8 +16,9 @@ namespace Beginor.NetCoreApp.Common {
         }
 
         public static async Task SetAsync<T>(this IDistributedCache cache, string key, T value, CancellationToken token = default) {
-            var str = JsonSerializer.SerializeToUtf8Bytes(value);
-            await cache.SetAsync(key, str, token);
+            var buffer = JsonSerializer.SerializeToUtf8Bytes(value);
+            var options = new DistributedCacheEntryOptions();
+            await cache.SetAsync(key, buffer, options, token);
         }
     }
 
