@@ -12,17 +12,7 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-  <Import Project="../../package-references.props" />
-  <!--
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="Beginor.AppFx.Api" Version="5.0.2" />
-    <PackageReference Include="Beginor.AppFx.Core" Version="5.0.2" />
-    <PackageReference Include="Beginor.AppFx.Repository.Hibernate" Version="5.0.2" />
-    <PackageReference Include="Dapper" Version="2.0.35" />
-    <PackageReference Include="NHibernate" Version="5.3.5" />
-    <PackageReference Include="NHibernate.Extensions.NpgSql" Version="5.0.1" />
-    <PackageReference Include="NHibernate.Mapping.Attributes" Version="5.1.0" />
+    <ProjectReference Include="..\GisHub.Common\GisHub.Common.csproj" />
   </ItemGroup>
-  -->
 </Project>

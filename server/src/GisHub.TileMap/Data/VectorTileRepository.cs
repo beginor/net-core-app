@@ -1,17 +1,17 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
 using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using NHibernate;
 using NHibernate.Linq;
-using Beginor.GisHub.TileMap.Data;
+using Beginor.GisHub.Common;
 using Beginor.GisHub.TileMap.Models;
 using Beginor.GisHub.Data.Repositories;
 
@@ -20,13 +20,13 @@ namespace Beginor.GisHub.TileMap.Data {
     /// <summary>矢量切片包仓储实现</summary>
     public partial class VectorTileRepository : HibernateRepository<VectorTileEntity, VectorTileModel, long>, IVectorTileRepository {
 
-        private ConcurrentDictionary<long, TileMapCacheItem> cache;
+        private IDistributedCache cache;
         private IAppJsonDataRepository jsonRepository;
 
         public VectorTileRepository(
             ISession session,
             IMapper mapper,
-            ConcurrentDictionary<long, TileMapCacheItem> cache,
+            IDistributedCache cache,
             IAppJsonDataRepository jsonRepository
         ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
@@ -81,7 +81,7 @@ namespace Beginor.GisHub.TileMap.Data {
                 }
                 await TrySaveStyleContent(entity.Id, styleContent);
                 await trans.CommitAsync();
-                cache.TryRemove(entity.Id, out _);
+                await cache.RemoveAsync(entity.Id.ToString(), token);
             }
             catch (Exception) {
                 await trans.RollbackAsync();
@@ -118,7 +118,7 @@ namespace Beginor.GisHub.TileMap.Data {
                 await TrySaveStyleContent(id, model.StyleContent);
                 await trans.CommitAsync();
                 Mapper.Map(entity, model);
-                cache.TryRemove(id, out _);
+                await cache.RemoveAsync(id.ToString(), token);
             }
             catch (Exception) {
                 await trans.RollbackAsync();
@@ -146,24 +146,30 @@ namespace Beginor.GisHub.TileMap.Data {
         }
 
         public async Task<DateTimeOffset?> GetTileModifiedTimeAsync(long id, int level, int row, int col) {
-            if (cache.TryGetValue(id, out var cacheItem)) {
-                if (cacheItem.ModifiedTime != null) {
-                    return cacheItem.ModifiedTime.Value;
-                }
+            var key = id.ToString();
+            var cacheItem = await cache.GetAsync<TileMapCacheItem>(key);
+            if (cacheItem != null && cacheItem.ModifiedTime != null) {
+                return cacheItem.ModifiedTime.Value;
             }
             var tilemap = await GetVectorTileByIdAsync(id);
             if (tilemap.Directory.IsNullOrEmpty() || !Directory.Exists(tilemap.Directory)) {
                 return null;
             }
             var offset = BundleHelper.GetTileModifiedTime(tilemap.Directory, level, row, col);
-            if (offset != null && cache.TryGetValue(id, out var ci)) {
-                ci.ModifiedTime = offset;
+            if (offset != null) {
+                var ci = await cache.GetAsync<TileMapCacheItem>(key);
+                if (ci != null) {
+                    ci.ModifiedTime = offset;
+                    await cache.SetAsync(key, ci);
+                }
             }
             return offset;
         }
 
         private async Task<VectorTileEntity> GetVectorTileByIdAsync(long id) {
-            if (cache.TryGetValue(id, out var cacheItem)) {
+            var key = id.ToString();
+            var cacheItem = await cache.GetAsync<TileMapCacheItem>(key);
+            if (cacheItem != null) {
                 return new VectorTileEntity {
                     Id = id,
                     Name = cacheItem.Name,
@@ -174,7 +180,8 @@ namespace Beginor.GisHub.TileMap.Data {
             if (entity == null) {
                 throw new TileNotFoundException($"Vectortile {id} doesn't exists in database.");
             }
-            cache.TryAdd(id, new TileMapCacheItem {
+
+            await cache.SetAsync(key, new TileMapCacheItem {
                 Name = entity.Name,
                 CacheDirectory = entity.Directory,
                 IsBundled = true,

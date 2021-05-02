@@ -1,16 +1,17 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
 using AutoMapper;
-using Beginor.AppFx.Core;
-using Beginor.AppFx.Repository.Hibernate;
 using Dapper;
 using NHibernate;
 using NHibernate.Linq;
+using Beginor.AppFx.Core;
+using Beginor.AppFx.Repository.Hibernate;
+using Beginor.GisHub.Common;
 using Beginor.GisHub.Slpk.Models;
 
 namespace Beginor.GisHub.Slpk.Data {
@@ -18,12 +19,12 @@ namespace Beginor.GisHub.Slpk.Data {
     /// <summary>slpk 航拍模型仓储实现</summary>
     public class SlpkRepository : HibernateRepository<SlpkEntity, SlpkModel, long>, ISlpkRepository {
 
-        private ConcurrentDictionary<long, SlpkCacheItem> cache;
+        private IDistributedCache cache;
 
         public SlpkRepository(
             ISession session,
             IMapper mapper,
-            ConcurrentDictionary<long, SlpkCacheItem> cache
+            IDistributedCache cache
         ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
         }
@@ -71,7 +72,7 @@ namespace Beginor.GisHub.Slpk.Data {
             entity.UpdaterId = userId;
             await Session.SaveAsync(entity, token);
             await Session.FlushAsync(token);
-            cache.TryRemove(entity.Id, out _);
+            await cache.RemoveAsync(entity.Id.ToString());
         }
 
         public async Task UpdateAsync(long id, SlpkModel model, string userId, CancellationToken token = default) {
@@ -87,7 +88,7 @@ namespace Beginor.GisHub.Slpk.Data {
             await Session.UpdateAsync(entity, token);
             await Session.FlushAsync(token);
             Mapper.Map(entity, model);
-            cache.TryRemove(id, out _);
+            await cache.RemoveAsync(id.ToString(), token);
         }
 
         public async Task DeleteAsync(long id, string userId, CancellationToken token = default) {
@@ -99,18 +100,20 @@ namespace Beginor.GisHub.Slpk.Data {
                 await Session.UpdateAsync(entity, token);
                 await Session.FlushAsync(token);
             }
-            cache.TryRemove(id, out _);
+            await cache.RemoveAsync(id.ToString(), token);
         }
 
         public async Task<string> GetSlpkDirectoryAsync(long id) {
-            if (cache.TryGetValue(id, out var cacheItem)) {
-                return cacheItem.Directory;
+            var key = id.ToString();
+            var cachedItem = await cache.GetAsync<SlpkCacheItem>(key);
+            if (cachedItem != null) {
+                return cachedItem.Directory;
             }
             var directory = await Session.Query<SlpkEntity>()
                 .Where(e => e.Id == id)
                 .Select(e => e.Directory)
                 .FirstOrDefaultAsync();
-            cache.TryAdd(id, new SlpkCacheItem { Id = id, Directory = directory });
+            await cache.SetAsync(key, new SlpkCacheItem { Id = id, Directory = directory });
             return directory;
         }
 

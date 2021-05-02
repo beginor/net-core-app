@@ -1,14 +1,15 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
 using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
+using Beginor.GisHub.Common;
 using Beginor.GisHub.TileMap.Models;
 using NHibernate;
 using NHibernate.Linq;
@@ -18,12 +19,12 @@ namespace Beginor.GisHub.TileMap.Data {
     /// <summary>切片地图仓储实现</summary>
     public partial class TileMapRepository : HibernateRepository<TileMapEntity, TileMapModel, long>, ITileMapRepository {
 
-        private ConcurrentDictionary<long, TileMapCacheItem> cache;
+        private IDistributedCache cache;
 
         public TileMapRepository(
             ISession session,
             IMapper mapper,
-            ConcurrentDictionary<long, TileMapCacheItem> cache
+            IDistributedCache cache
         ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
         }
@@ -66,7 +67,7 @@ namespace Beginor.GisHub.TileMap.Data {
             entity.UpdaterId = userId;
             await Session.SaveAsync(entity, token);
             await Session.FlushAsync(token);
-            cache.TryRemove(entity.Id, out _);
+            await cache.RemoveAsync(entity.Id.ToString(), token);
         }
 
         public async Task UpdateAsync(
@@ -87,7 +88,7 @@ namespace Beginor.GisHub.TileMap.Data {
             await Session.UpdateAsync(entity, token);
             await Session.FlushAsync(token);
             Mapper.Map(entity, model);
-            cache.TryRemove(id, out _);
+            await cache.RemoveAsync(id.ToString(), token);
         }
 
         public async Task DeleteAsync(
@@ -103,7 +104,7 @@ namespace Beginor.GisHub.TileMap.Data {
                 await Session.UpdateAsync(entity, token);
                 await Session.FlushAsync(token);
             }
-            cache.TryRemove(id, out _);
+            await cache.RemoveAsync(id.ToString(), token);
         }
 
         public async Task<TileContentModel> GetTileContentAsync(long id, int level, int row, int col) {
@@ -122,21 +123,23 @@ namespace Beginor.GisHub.TileMap.Data {
         }
 
         private async Task<TileMapEntity> GetTileMapByIdAsync(long id) {
-            if (cache.TryGetValue(id, out var cacheItem)) {
+            var key = id.ToString();
+            var cachedItem = await cache.GetAsync<TileMapCacheItem>(key);
+            if (cachedItem != null) {
                 return new TileMapEntity {
                     Id = id,
-                    Name = cacheItem.Name,
-                    CacheDirectory = cacheItem.CacheDirectory,
-                    MapTileInfoPath = cacheItem.MapTileInfoPath,
-                    ContentType = cacheItem.ContentType,
-                    IsBundled = cacheItem.IsBundled
+                    Name = cachedItem.Name,
+                    CacheDirectory = cachedItem.CacheDirectory,
+                    MapTileInfoPath = cachedItem.MapTileInfoPath,
+                    ContentType = cachedItem.ContentType,
+                    IsBundled = cachedItem.IsBundled
                 };
             }
             var entity = await Session.Query<TileMapEntity>().FirstOrDefaultAsync(e => e.Id == id);
             if (entity == null) {
                 throw new TileNotFoundException($"Tilemap {id} doesn't exists in database.");
             }
-            cache.TryAdd(id, new TileMapCacheItem {
+            await cache.SetAsync(key, new TileMapCacheItem {
                 Name = entity.Name,
                 CacheDirectory = entity.CacheDirectory,
                 MapTileInfoPath = entity.MapTileInfoPath,
@@ -157,7 +160,9 @@ namespace Beginor.GisHub.TileMap.Data {
         }
 
         public async Task<DateTimeOffset?> GetTileModifiedTimeAsync(long id, int level, int row, int col) {
-            if (cache.TryGetValue(id, out var cacheItem)) {
+            var key = id.ToString();
+            var cacheItem = await cache.GetAsync<TileMapCacheItem>(key);
+            if (cacheItem != null) {
                 if (cacheItem.ModifiedTime != null) {
                     return cacheItem.ModifiedTime.Value;
                 }
@@ -167,8 +172,12 @@ namespace Beginor.GisHub.TileMap.Data {
                 return null;
             }
             var offset = BundleHelper.GetTileModifiedTime(tilemap.CacheDirectory, level, row, col);
-            if (offset != null && cache.TryGetValue(id, out var ci)) {
-                ci.ModifiedTime = offset;
+            if (offset != null ) {
+                var ci = await cache.GetAsync<TileMapCacheItem>(key);
+                if (ci != null) {
+                    ci.ModifiedTime = offset;
+                    await cache.SetAsync(key, ci);
+                }
             }
             return offset;
         }
