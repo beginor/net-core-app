@@ -13,7 +13,7 @@ namespace Beginor.NetCoreApp.Api.Authorization {
             if (buffer == null) {
                 return new Claim[0];
             }
-            var stream = new MemoryStream(buffer);
+            await using var stream = new MemoryStream(buffer);
             var reader = new BinaryReader(stream);
             var count = reader.ReadInt32();
             var claims = new Claim[count];
@@ -24,8 +24,7 @@ namespace Beginor.NetCoreApp.Api.Authorization {
         }
 
         public static async Task SetUserClaimsAsync(this IDistributedCache cache, string userId, Claim[] claims) {
-            // var json = JsonSeri
-            var stream = new MemoryStream();
+            await using var stream = new MemoryStream();
             var writer = new BinaryWriter(stream);
             writer.Write(claims.Length);
             foreach (var claim in claims) {
