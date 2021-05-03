@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,23 @@ namespace Beginor.GisHub.Entry {
                     Title = "GisHub API Help",
                     Version = "1.0.0"
                 });
+                var securityScheme = new OpenApiSecurityScheme {
+                    Name = "Authorization",
+                    Description = "JWT Authorization Header",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                    BearerFormat = "JWT",
+                    Reference = new OpenApiReference {
+                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+                opt.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
+                opt.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                    [securityScheme] = new string[0]
+                });
+
                 var dir = new DirectoryInfo(
                     AppDomain.CurrentDomain.BaseDirectory
                 );
