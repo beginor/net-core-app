@@ -93,7 +93,7 @@ namespace Beginor.GisHub.DataServices {
 
         protected virtual KeyValuePair<string, object> ReadField(IDataReader dataReader, int fieldIndex) {
             var name = dataReader.GetName(fieldIndex);
-            var value = dataReader.GetValue(fieldIndex);
+            var value = dataReader.IsDBNull(fieldIndex) ? null : dataReader.GetValue(fieldIndex);
             return new KeyValuePair<string, object>(name, value);
         }
 
