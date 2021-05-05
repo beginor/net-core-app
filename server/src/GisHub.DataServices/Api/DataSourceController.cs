@@ -104,7 +104,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="404"> 数据源（数据表或视图） 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("datasources.read")]
+        [Authorize("datasources.read_by_id")]
         public async Task<ActionResult<DataSourceModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);
