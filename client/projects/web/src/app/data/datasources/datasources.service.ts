@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
 import { ColumnModel } from './metadata.service';
+import { RolesService, AppRoleModel } from '../../admin/roles/roles.service';
 
 /** 数据源（数据表或视图）服务 */
 @Injectable({
@@ -16,14 +17,20 @@ export class DataSourceService {
     public data = new BehaviorSubject<DataSourceModel[]>([]);
     public loading = false;
     public showPagination = false;
+    public roles: AppRoleModel[] = [];
+
     private baseUrl = `${this.apiRoot}/datasources`;
+    private roleSvc: RolesService;
 
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService,
         private errorHandler: ErrorHandler
-    ) { }
+    ) {
+        this.roleSvc = new RolesService(http, apiRoot, ui, errorHandler);
+        this.roleSvc.data.subscribe(data => { this.roles = data; });
+    }
 
     /** 搜索数据源（数据表或视图） */
     public async search(): Promise<void> {
@@ -295,6 +302,20 @@ export class DataSourceService {
                 }
             );
         });
+    }
+
+    public async getAllRoles(): Promise<void> {
+        try {
+            this.roleSvc.searchModel.skip = 0;
+            this.roleSvc.searchModel.take = 999;
+            await this.roleSvc.search();
+        }
+        catch (ex) {
+            this.errorHandler.handleError(ex);
+            this.ui.showAlert(
+                { type: 'danger', message: '获取角色列表出错！' }
+            );
+        }
     }
 
 }

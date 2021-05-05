@@ -135,6 +135,21 @@
       </div>
     </div>
     <div class="form-group">
+      <label class="form-label text-muted" for="geometryColumn">空间列 </label>
+      <input class="form-control" type="text" id="geometryColumn" name="geometryColumn"
+        placeholder="请输入空间列 ..."
+        [disabled]="!editable"
+        [(ngModel)]="geoColumn"
+        [ngbTypeahead]="searchGeoColumns" container="body"
+        #geoColInstance="ngbTypeahead"
+        [resultTemplate]="colTemplate"
+        [inputFormatter]="colFormater"
+        (focus)="geoColFocus$.next($any($event).target.value)"
+        (click)="geoColClick$.next($any($event).target.value)"
+        (selectItem)="onSelectGeoColumn($event)"
+      />
+    </div>
+    <div class="form-group">
       <label class="form-label text-muted" for="presetCriteria">预置过滤条件 </label>
       <input class="form-control" type="text" id="presetCriteria" name="presetCriteria"
         placeholder="请输入预置过滤条件 ..." [(ngModel)]="model.presetCriteria"
@@ -149,19 +164,15 @@
       />
     </div>
     <div class="form-group">
-      <label class="form-label text-muted" for="geometryColumn">空间列 </label>
-      <input class="form-control" type="text" id="geometryColumn" name="geometryColumn"
-        placeholder="请输入空间列 ..."
-        [disabled]="!editable"
-        [(ngModel)]="geoColumn"
-        [ngbTypeahead]="searchGeoColumns" container="body"
-        #geoColInstance="ngbTypeahead"
-        [resultTemplate]="colTemplate"cd
-        [inputFormatter]="colFormater"
-        (focus)="geoColFocus$.next($any($event).target.value)"
-        (click)="geoColClick$.next($any($event).target.value)"
-        (selectItem)="onSelectGeoColumn($event)"
-      />
+      <label class="form-label text-muted">授权角色</label>
+      <div class="form-text">
+        <div class="custom-control custom-switch custom-control-inline" *ngFor="let role of vm.roles">
+          <input class="custom-control-input" type="checkbox" [id]="role.id"
+            [name]="role.name" [disabled]="!editable" [value]="role.name"
+            [checked]="isRoleChecked(role.name)" (change)="toggleCheckedRole(role.name)" />
+          <label class="custom-control-label text-muted" [for]="role.id">{{role.description}}</label>
+        </div>
+      </div>
     </div>
   </div>
   <div *ngIf="info.privileges['datasources.update'] && editable"
