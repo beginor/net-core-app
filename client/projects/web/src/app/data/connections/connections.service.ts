@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
@@ -25,7 +25,8 @@ export class ConnectionService {
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
-        private ui: UiService
+        private ui: UiService,
+        private errorHandler: ErrorHandler
     ) { }
 
     /** 搜索数据库连接 */
@@ -52,7 +53,7 @@ export class ConnectionService {
             this.showPagination = total > data.length;
         }
         catch (ex) {
-            console.error(ex.toString());
+            this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
             this.ui.showAlert(
@@ -73,7 +74,7 @@ export class ConnectionService {
             return result;
         }
         catch (ex) {
-            console.error(ex.toString());
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '加载全部数据库连接出错！' }
             );
@@ -105,7 +106,7 @@ export class ConnectionService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '创建数据库连接出错！' }
             );
@@ -122,7 +123,7 @@ export class ConnectionService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取指定的数据库连接出错！' }
             );
@@ -143,7 +144,7 @@ export class ConnectionService {
             return true;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '删除数据库连接出错！' }
             );
@@ -164,7 +165,7 @@ export class ConnectionService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '更新数据库连接出错！' }
             );

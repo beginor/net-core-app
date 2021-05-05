@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
@@ -25,7 +25,8 @@ export class TileMapService {
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
-        private ui: UiService
+        private ui: UiService,
+        private errorHandler: ErrorHandler
     ) { }
 
     /** 搜索切片地图 */
@@ -52,7 +53,7 @@ export class TileMapService {
             this.showPagination = total > data.length;
         }
         catch (ex) {
-            console.error(ex.toString());
+            this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
             this.ui.showAlert(
@@ -88,7 +89,7 @@ export class TileMapService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '创建切片地图出错！' }
             );
@@ -105,7 +106,7 @@ export class TileMapService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取指定的切片地图出错！' }
             );
@@ -126,7 +127,7 @@ export class TileMapService {
             return true;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '删除切片地图出错！' }
             );
@@ -147,7 +148,7 @@ export class TileMapService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '更新切片地图出错！' }
             );

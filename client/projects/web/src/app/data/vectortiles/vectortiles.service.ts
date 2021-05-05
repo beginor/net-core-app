@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
@@ -24,7 +24,8 @@ export class VectortileService {
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
-        private ui: UiService
+        private ui: UiService,
+        private errorHandler: ErrorHandler
     ) { }
 
     /** 搜索矢量切片包 */
@@ -51,7 +52,7 @@ export class VectortileService {
             this.showPagination = total > data.length;
         }
         catch (ex) {
-            console.error(ex.toString());
+            this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
             this.ui.showAlert(
@@ -87,7 +88,7 @@ export class VectortileService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '创建矢量切片包出错！' }
             );
@@ -104,7 +105,7 @@ export class VectortileService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取指定的矢量切片包出错！' }
             );
@@ -125,7 +126,7 @@ export class VectortileService {
             return true;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '删除矢量切片包出错！' }
             );
@@ -146,7 +147,7 @@ export class VectortileService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '更新矢量切片包出错！' }
             );

@@ -1,10 +1,9 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpEventType, HttpParams, HttpRequest } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
 import { ColumnModel } from './metadata.service';
-import { map } from 'rxjs/operators';
 
 /** 数据源（数据表或视图）服务 */
 @Injectable({
@@ -22,7 +21,8 @@ export class DataSourceService {
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
-        private ui: UiService
+        private ui: UiService,
+        private errorHandler: ErrorHandler
     ) { }
 
     /** 搜索数据源（数据表或视图） */
@@ -49,7 +49,7 @@ export class DataSourceService {
             this.showPagination = total > data.length;
         }
         catch (ex) {
-            console.error(ex.toString());
+            this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
             this.ui.showAlert(
@@ -85,7 +85,7 @@ export class DataSourceService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '创建数据源出错！' }
             );
@@ -102,7 +102,7 @@ export class DataSourceService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取指定的数据源（数据表或视图）出错！' }
             );
@@ -123,7 +123,7 @@ export class DataSourceService {
             return true;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '删除数据源（数据表或视图）出错！' }
             );
@@ -144,7 +144,7 @@ export class DataSourceService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '更新数据源（数据表或视图）出错！' }
             );
@@ -160,7 +160,7 @@ export class DataSourceService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取数据源的列数据出错！' }
             );
@@ -187,7 +187,7 @@ export class DataSourceService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取数据源的数据出错！' }
             );
@@ -227,7 +227,7 @@ export class DataSourceService {
             return result;
         }
         catch (ex) {
-            console.error(ex);
+            this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取数据源的记录数出错！' }
             );
@@ -287,7 +287,7 @@ export class DataSourceService {
                     }
                 },
                 ex => {
-                    console.error(ex);
+                    this.errorHandler.handleError(ex);
                     this.ui.showAlert(
                         { type: 'danger', message: '获取数据源的数据出错！' }
                     );
@@ -364,6 +364,8 @@ export interface DataSourceModel {
     tags?: string[];
     /** 是否删除 */
     isDeleted?: boolean;
+    /** 允许的角色 */
+    roles?: string[];
 }
 
 /** 数据源（数据表或视图） 搜索参数 */
