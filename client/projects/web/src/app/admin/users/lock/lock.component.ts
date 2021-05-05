@@ -12,7 +12,7 @@ import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import { UsersService } from '../users.service';
 
 @Component({
-    selector: 'app-lock',
+    selector: 'app-user-lock',
     templateUrl: './lock.component.html',
     styleUrls: ['./lock.component.scss'],
     animations: [
