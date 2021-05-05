@@ -55,6 +55,10 @@ namespace Beginor.GisHub.DataServices.Data {
         /// <summary>是否删除</summary>
         [Property(Name = "IsDeleted", Column = "is_deleted", Type = "bool", NotNull = true)]
         public virtual bool IsDeleted { get; set; }
+
+        /// <summary>允许的角色</summary>
+        [Property(Name = "Roles", Column = "roles", TypeType = typeof(NHibernate.Extensions.NpgSql.StringArrayType), NotNull = false)]
+        public virtual string[] Roles { get; set; }
     }
 
 }

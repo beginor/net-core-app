@@ -32,6 +32,8 @@ namespace Beginor.GisHub.DataServices.Models {
         public string DefaultOrder { get; set; }
         /// <summary>标签</summary>
         public string[] Tags { get; set; }
+        /// <summary>允许的角色</summary>
+        public string[] Roles { get; set; }
 
     }
 

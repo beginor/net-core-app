@@ -16,6 +16,7 @@ create table public.datasources
     default_order character varying(128) collate pg_catalog."default",
     tags character varying(16)[] collate pg_catalog."default",
     is_deleted boolean not null default false,
+    roles character varying(64)[] collate pg_catalog."default",
     constraint pk_datasources primary key (id),
     constraint fk_datasources_connection_id foreign key (connection_id)
         references public.connections (id) match simple
@@ -77,3 +78,6 @@ create index fki_fk_connections_id
     on public.datasources using btree
     (connection_id asc nulls last)
     tablespace pg_default;
+
+comment on column public.datasources.roles
+    is '允许的角色';
