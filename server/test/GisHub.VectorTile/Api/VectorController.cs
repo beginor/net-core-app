@@ -45,7 +45,7 @@ namespace GisHub.VectorTile.Api {
             var sql = new StringBuilder();
             sql.AppendLine("with mvt_geom as (");
             sql.AppendLine("  select");
-            sql.AppendLine($"    ST_AsMVTGeom(");
+            sql.AppendLine("    ST_AsMVTGeom(");
             if (vectorLayer.Srid == 3857) {
                 sql.AppendLine($"      {vectorLayer.GeometryColumn},");
             }
@@ -54,7 +54,7 @@ namespace GisHub.VectorTile.Api {
             }
             sql.AppendLine($"      ST_TileEnvelope({z}, {x}, {y}),");
             sql.AppendLine("      extent => 4096, buffer => 64");
-            sql.AppendLine($") as {vectorLayer.GeometryColumn},");
+            sql.AppendLine($"    ) as {vectorLayer.GeometryColumn},");
             sql.AppendLine($"    {vectorLayer.IdColumn}, {vectorLayer.AttributeColumns}");
             sql.AppendLine($"  from {vectorLayer.Schema}.{vectorLayer.TableName}");
             sql.AppendLine($"  where {vectorLayer.GeometryColumn} && ST_TileEnvelope({z}, {x}, {y}, margin => (64.0 / 4096))");
