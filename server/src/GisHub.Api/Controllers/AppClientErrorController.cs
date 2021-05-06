@@ -94,7 +94,7 @@ namespace Beginor.GisHub.Api.Controllers {
         /// <response code="404"> 程序客户端错误记录 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("app_client_errors.read")]
+        [Authorize("app_client_errors.read_by_id")]
         public async Task<ActionResult<AppClientErrorModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);

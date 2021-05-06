@@ -59,7 +59,7 @@ namespace Beginor.GisHub.Api.Controllers {
         /// <response code="404"> json 数据 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("app_json_data.read")]
+        [Authorize("app_json_data.read_by_id")]
         public async Task<ActionResult> GetById(long id) {
             try {
                 var value = await repository.GetValueByIdAsync(id);

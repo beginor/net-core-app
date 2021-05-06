@@ -8,7 +8,7 @@ import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import { UserModel, UsersService } from '../users.service';
 
 @Component({
-    selector: 'app-roles',
+    selector: 'app-user-roles',
     templateUrl: './roles.component.html',
     styleUrls: ['./roles.component.scss'],
     animations: [

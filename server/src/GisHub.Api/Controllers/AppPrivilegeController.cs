@@ -96,7 +96,7 @@ namespace Beginor.GisHub.Api.Controllers {
         /// <response code="404"> 系统权限 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("app_privileges.read")]
+        [Authorize("app_privileges.read_by_id")]
         public async Task<ActionResult<AppPrivilegeModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);
@@ -164,7 +164,7 @@ namespace Beginor.GisHub.Api.Controllers {
         /// <response code="200">获取成功，返回模块列表。</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("~/api/modules")]
-        [Authorize("app_privileges.read")]
+        [Authorize("app_privileges.read_modules")]
         public async Task<ActionResult<string[]>> GetModules() {
             try {
                 var modules = await repository.GetModulesAsync();
