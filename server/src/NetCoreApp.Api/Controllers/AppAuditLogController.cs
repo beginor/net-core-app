@@ -77,7 +77,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404"> 审计日志 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("app_audit_logs.read")]
+        [Authorize("app_audit_logs.read_by_id")]
         public async Task<ActionResult<AppAuditLogModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);

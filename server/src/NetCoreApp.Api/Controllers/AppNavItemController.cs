@@ -94,7 +94,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="404"> 导航节点（菜单） 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("app_nav_items.read")]
+        [Authorize("app_nav_items.read_by_id")]
         public async Task<ActionResult<AppNavItemModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);

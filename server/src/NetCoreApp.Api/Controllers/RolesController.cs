@@ -135,7 +135,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">获取角色成功，返回角色信息。</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("app_roles.read")]
+        [Authorize("app_roles.read_by_id")]
         public async Task<ActionResult<AppRoleModel>> GetById(
             long id
         ) {

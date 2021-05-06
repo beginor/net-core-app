@@ -175,7 +175,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="200">获取用户成功，返回用户信息。</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("app_users.read")]
+        [Authorize("app_users.read_by_id")]
         public async Task<ActionResult<AppUserModel>> GetById(long id) {
             try {
                 var user = await userMgr.FindByIdAsync(id.ToString());
