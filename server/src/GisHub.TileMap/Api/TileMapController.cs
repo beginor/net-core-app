@@ -98,7 +98,7 @@ namespace Beginor.GisHub.TileMap.Api {
         /// <response code="404"> 切片地图 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("tilemaps.read")]
+        [Authorize("tilemaps.read_by_id")]
         public async Task<ActionResult<TileMapModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);

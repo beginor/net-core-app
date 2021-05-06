@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Models;
-using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.GeoJson;
 using Beginor.GisHub.DataServices.Esri;
 

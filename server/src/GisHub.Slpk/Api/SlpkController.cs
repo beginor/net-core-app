@@ -102,7 +102,7 @@ namespace Beginor.GisHub.Slpk.Api {
         /// <response code="404"> slpk 航拍模型 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("slpks.read")]
+        [Authorize("slpks.read_by_id")]
         public async Task<ActionResult<SlpkModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);

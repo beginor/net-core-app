@@ -97,7 +97,7 @@
                 <td class='text-center'>{{item.updatedAt | date:'yyyy-MM-dd'}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
-                    <button *ngIf="info.privileges['tilemaps.read']"
+                    <button *ngIf="info.privileges['tilemaps.read_by_id']"
                       class="btn btn-outline-secondary" ngbTooltip="详情" placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, false)">
                       <svg-icon path="bi/info-square"></svg-icon>

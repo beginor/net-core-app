@@ -103,7 +103,7 @@ namespace Beginor.GisHub.TileMap.Api {
         /// <response code="404"> 矢量切片包 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("vectortiles.read")]
+        [Authorize("vectortiles.read_by_id")]
         public async Task<ActionResult<VectorTileModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);
