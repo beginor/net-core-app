@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { AccountService } from 'app-shared';
+
 @Component({
     selector: 'app-dashbord',
     templateUrl: './dashbord.component.html',
@@ -7,9 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashbordComponent implements OnInit {
 
-    constructor() { }
+    constructor(
+        public account: AccountService
+    ) { }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
     }
 
 }
