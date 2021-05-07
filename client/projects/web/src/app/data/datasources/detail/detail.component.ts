@@ -69,7 +69,6 @@ export class DetailComponent implements OnInit {
     public geoColInstance!: NgbTypeahead;
     public geoColFocus$ = new Subject<string>();
     public geoColClick$ = new Subject<string>();
-    public selectedRoles: string[] = [];
 
     private id = '';
     private reloadList = false;
@@ -150,6 +149,9 @@ export class DetailComponent implements OnInit {
         if (this.id !== '0') {
             const model = await this.vm.getById(this.id);
             if (!!model) {
+                if (!model.roles) {
+                    model.roles = [];
+                }
                 this.model = model;
                 this.connection = this.connections.find(
                     cs => cs.id === model.connection?.id
@@ -168,7 +170,10 @@ export class DetailComponent implements OnInit {
                     .then(() => this.loadTables())
                     .then(() => this.loadColumns());
             }
-            this.selectedRoles = this.model.roles ?? [];
+        }
+        else {
+            const roles = this.account.info.getValue().roles;
+            this.model.roles = Object.keys(roles);
         }
     }
 
