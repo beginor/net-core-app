@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,7 +54,10 @@ namespace Beginor.GisHub.DataServices.Api {
             [FromQuery]DataSourceSearchModel model
         ) {
             try {
-                var result = await repository.SearchAsync(model);
+                var roles = User.Claims.Where(c => c.Type == ClaimTypes.Role)
+                    .Select(c => c.Value)
+                    .ToArray();
+                var result = await repository.SearchAsync(model, roles);
                 return result;
             }
             catch (Exception ex) {

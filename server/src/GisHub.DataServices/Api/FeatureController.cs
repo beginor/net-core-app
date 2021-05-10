@@ -10,6 +10,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.DataServices.Esri;
 using Beginor.GisHub.DataServices.Data;
+using Beginor.GisHub.DataServices.Filters;
 
 namespace Beginor.GisHub.DataServices.Api {
 
@@ -48,6 +49,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <summary>读取要素服务信息</summary>
         [HttpGet("{id:long}/MapServer/0")]
         [Authorize("features.get_layer_info")]
+        [DataSourceRolesFilter(IdParameterName = "id")]
         public async Task<ActionResult<AgsLayerDescription>> GetLayerDescriptionAsync(
             [FromRoute]long id,
             [FromQuery]AgsCommonParams param
@@ -78,6 +80,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <summary>查询空间要素</summary>
         [HttpGet("{id:long}/MapServer/0/query")]
         [Authorize("features.query")]
+        [DataSourceRolesFilter(IdParameterName = "id")]
         public async Task<ActionResult<AgsFeatureSet>> QueryFeaturesByGetAsync(
             [FromRoute]long id,
             [FromQuery]AgsQueryParam param
@@ -99,6 +102,7 @@ namespace Beginor.GisHub.DataServices.Api {
         [HttpPost("{id:long}/MapServer/0/query")]
         [Consumes("application/x-www-form-urlencoded")]
         [Authorize("features.query")]
+        [DataSourceRolesFilter(IdParameterName = "id")]
         public async Task<ActionResult<AgsFeatureSet>> QueryFeaturesByPostAsync(
             [FromRoute]long id,
             [ModelBinder(BinderType = typeof(AgsQueryParamsBinder))]AgsQueryParam param

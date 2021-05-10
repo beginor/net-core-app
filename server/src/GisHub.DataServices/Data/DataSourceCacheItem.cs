@@ -17,6 +17,7 @@ namespace Beginor.GisHub.DataServices.Data {
         public string DefaultOrder { get; set; }
         public int Srid { get; set; }
         public string GeometryType { get; set; }
+        public string[] Roles { get; set; }
 
         public bool HasGeometryColumn => GeometryColumn.IsNotNullOrEmpty();
 

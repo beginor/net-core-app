@@ -9,7 +9,8 @@ namespace Beginor.GisHub.DataServices.Data {
 
         /// <summary>搜索 数据源（数据表或视图） ，返回分页结果。</summary>
         Task<PaginatedResponseModel<DataSourceModel>> SearchAsync(
-            DataSourceSearchModel model
+            DataSourceSearchModel model,
+            string[] roles
         );
 
         Task<DataSourceCacheItem> GetCacheItemByIdAsync(

@@ -27,7 +27,7 @@ namespace Beginor.GisHub.Test.DataServices {
                 Skip = 0,
                 Take = 10
             };
-            var result = await Target.SearchAsync(searchModel);
+            var result = await Target.SearchAsync(searchModel, new []{ "users" });
             Assert.GreaterOrEqual(result.Total, 0);
             Assert.GreaterOrEqual(result.Take, result.Data.Count);
         }

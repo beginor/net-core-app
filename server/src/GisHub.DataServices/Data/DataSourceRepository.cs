@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
+using Dapper;
 using NHibernate;
 using NHibernate.Linq;
 using Beginor.GisHub.Common;
@@ -41,23 +43,45 @@ namespace Beginor.GisHub.DataServices.Data {
 
         /// <summary>搜索 数据源（数据表或视图） ，返回分页结果。</summary>
         public async Task<PaginatedResponseModel<DataSourceModel>> SearchAsync(
-            DataSourceSearchModel model
+            DataSourceSearchModel model,
+            string[] roles
         ) {
             var query = Session.Query<DataSource>();
+            var totalSql = new StringBuilder(" select count(ds.*) ");
+            var dataSql = new StringBuilder(" select ds.*, c.* ");
+            var body = new StringBuilder();
+            body.AppendLine(" from public.datasources as ds ");
+            body.AppendLine(" inner join connections c on c.id = ds.connection_id and c.is_deleted = false ");
+            body.AppendLine(" where (ds.is_deleted = false) and (ds.roles && @roles::character varying[]) ");
+            //
+            long id = 0;
             if (model.Keywords.IsNotNullOrEmpty()) {
-                if (long.TryParse(model.Keywords, out var id)) {
-                    query = query.Where(ds => ds.Id == id);
-                }
-                else {
-                    query = query.Where(
-                        ds => ds.Name.Contains(model.Keywords) || ds.TableName.Contains(model.Keywords)
-                    );
-                }
+                body.AppendLine(
+                    long.TryParse(model.Keywords, out id)
+                        ? " and (ds.id = @id) "
+                        : " and (ds.name like '%' || @keywords || '%' or ds.table_name like '%' || @keywords || '%') "
+                );
             }
-            var total = await query.LongCountAsync();
-            var data = await query.OrderByDescending(e => e.Id)
-                .Skip(model.Skip).Take(model.Take)
-                .ToListAsync();
+            var param = new {
+                roles = roles,
+                id = id,
+                keywords = model.Keywords,
+                take = model.Take,
+                skip = model.Skip
+            };
+            totalSql.Append(body.ToString());
+            var total = await Session.Connection.ExecuteScalarAsync<long>(totalSql.ToString(), param);
+            dataSql.Append(body.ToString());
+            dataSql.AppendLine(" order by ds.id desc ");
+            dataSql.AppendLine(" limit @take offset @skip ");
+            var data = await Session.Connection.QueryAsync<DataSource, Connection, DataSource>(
+                sql: dataSql.ToString(),
+                map: (ds, conn) => {
+                    ds.Connection = conn;
+                    return ds;
+                },
+                param: param
+            );
             return new PaginatedResponseModel<DataSourceModel> {
                 Total = total,
                 Data = Mapper.Map<IList<DataSourceModel>>(data),
@@ -109,7 +133,8 @@ namespace Beginor.GisHub.DataServices.Data {
                 DisplayColumn = ds.DisplayColumn,
                 GeometryColumn = ds.GeometryColumn,
                 PresetCriteria = ds.PresetCriteria,
-                DefaultOrder = ds.DefaultOrder
+                DefaultOrder = ds.DefaultOrder,
+                Roles = ds.Roles
             };
             var meta = factory.CreateMetadataProvider(item.DatabaseType);
             var model = Mapper.Map<ConnectionModel>(ds.Connection);
