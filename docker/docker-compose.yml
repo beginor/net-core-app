@@ -4,11 +4,15 @@ services:
     image: beginor/gishub
     hostname: gishub
     ports:
-      - 5000:80
+      - 5000:5000
     volumes:
+      - ./config:/gishub/config
       - ./log:/gishub/log
+      - ./data:/gishub_data
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:5000
+      ASPNETCORE_PATHBASE: /gishub
     restart: unless-stopped
 networks:
   default:
