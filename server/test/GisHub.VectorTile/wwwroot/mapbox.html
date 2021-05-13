@@ -63,7 +63,7 @@
         container: 'viewDiv',
         style,
         center: [113.31939, 23.12313],
-        zoom: 13,
+        zoom: 8,
         pitch: 0
     });
 
@@ -74,41 +74,34 @@
     map.once('load').then(() => {
         // add road;
         map.addSource(
-            'guangzhou_road',
+            'guangzhou',
             {
                 type: 'vector',
                 scheme: 'xyz',
-                tiles: [`${location.protocol}//${location.host}/api/vector/guangzhou_road/{z}/{y}/{x}`],
-                minzoom: 13,
-                maxzoom: 19
+                tiles: [`${location.protocol}//${location.host}/api/vector/{z}/{y}/{x}`],
+                minzoom: 9,
+                maxzoom: 17
             }
         );
         map.addLayer({
             id: 'guangzhou_road',
-            source: 'guangzhou_road',
+            source: 'guangzhou',
             'source-layer': 'guangzhou_road',
             type: 'line',
+            minzoom: 9,
+            maxzoom: 15,
             paint: {
                 'line-color': '#00FF00',
                 'line-width': 2
             }
         });
-        // add building
-        map.addSource(
-            'guangzhou_building',
-            {
-                type: 'vector',
-                scheme: 'xyz',
-                tiles: [`${location.protocol}//${location.host}/api/vector/guangzhou_building/{z}/{y}/{x}`],
-                minzoom: 15,
-                maxzoom: 19
-            }
-        );
         map.addLayer({
             id: 'guangzhou_building',
-            source: 'guangzhou_building',
+            source: 'guangzhou',
             'source-layer': 'guangzhou_building',
             type: 'fill-extrusion',
+            minzoom: 13,
+            maxzoom: 17,
             paint: {
                 'fill-extrusion-opacity': 0.8,
                 'fill-extrusion-height': ["to-number", ['get', 'height'], 0],
