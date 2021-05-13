@@ -16,16 +16,23 @@ import { DataSourceModel, DataSourceService, ReadDataParam } from '../datasource
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let row of data; let i = index;">
-            <td class="text-body text-nowrap" *ngFor="let col of columns">
-            {{row[col.name]}}
-            </td>
-          </tr>
-          <tr *ngIf="total > data.length">
-            <td class="table-info" [colSpan]="columns.length">
-            共 {{total}} 条记录， 预览仅显示前 {{data.length}} 条记录。
-            </td>
-          </tr>
+          <ng-container *ngIf="data.length > 0;else emptyTpl">
+            <tr *ngFor="let row of data; let i = index;">
+              <td class="text-body text-nowrap" *ngFor="let col of columns">
+              {{row[col.name]}}
+              </td>
+            </tr>
+            <tr *ngIf="total > data.length">
+              <td class="table-info" [colSpan]="columns.length">
+              共 {{total}} 条记录， 预览仅显示前 {{data.length}} 条记录。
+              </td>
+            </tr>
+          </ng-container>
+          <ng-template #emptyTpl>
+            <tr>
+              <td class="text-warning text-center" [colSpan]="columns.length" >该数据源无数据！</td>
+            </tr>
+          </ng-template>
         </tbody>
       </table>
     `,
