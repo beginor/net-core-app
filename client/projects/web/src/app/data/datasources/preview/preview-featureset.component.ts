@@ -6,8 +6,9 @@ import { HttpClient } from '@angular/common/http';
 
 import { loadModules } from 'esri-loader';
 
-import { DataSourceModel, DataSourceService } from '../datasources.service';
+import { UiService } from '../../../common'
 import { ArcGisService } from '../../arcgis.service';
+import { DataSourceModel, DataSourceService } from '../datasources.service';
 
 @Component({
     selector: 'app-datasources-preview-featureset',
@@ -27,8 +28,8 @@ export class PreviewFeatureSetComponent implements AfterViewInit, OnDestroy {
     private mapview?: __esri.MapView;
 
     constructor(
-        private http: HttpClient,
         private vm: DataSourceService,
+        private ui: UiService,
         private arcgis: ArcGisService
     ) { }
 
@@ -52,6 +53,9 @@ export class PreviewFeatureSetComponent implements AfterViewInit, OnDestroy {
             return;
         }
         const count = await this.vm.getCount(id, { });
+        if (count <= 0) {
+            this.ui.showAlert({ type: 'warning', message: '该数据源无数据！' });
+        }
         const json: any = await this.vm.getFeatureSetJson(
             id,
             { $take: count, $returnExtent: true },
