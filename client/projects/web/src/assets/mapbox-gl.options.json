@@ -14,7 +14,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "circle-radius": 3,
+        "circle-radius": 4,
         "circle-color": "rgb(255, 0, 0)",
         "circle-stroke-color": "rgb(0, 0, 0)",
         "circle-stroke-width": 1.0

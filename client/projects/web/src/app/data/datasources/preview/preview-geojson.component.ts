@@ -4,13 +4,14 @@ import {
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-
-import { DataSourceModel, DataSourceService } from '../datasources.service';
 import {
     AnyLayer, CameraOptions, CircleLayer, Map, ScaleControl, NavigationControl,
-    LngLatBoundsLike
+    LngLatBoundsLike, Popup
 } from 'mapbox-gl';
 
+
+import { UiService } from '../../../common';
+import { DataSourceModel, DataSourceService } from '../datasources.service';
 
 @Component({
     selector: 'app-datasources-preview-geojson',
@@ -34,10 +35,12 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
     private styleId = 'mapbox-gl-style';
     private geoJson?: GeoJSON.FeatureCollection;
     private options!: MapboxGlOptions;
+    private popup?: Popup;
 
     constructor(
         private http: HttpClient,
         @Inject(DOCUMENT) private doc: Document,
+        private ui: UiService,
         private vm: DataSourceService
     ) {
     }
@@ -65,6 +68,9 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
 
     public ngOnDestroy(): void {
         if (!!this.map) {
+            if (!!this.popup) {
+                this.popup.remove();
+            }
             this.map.remove();
             const style = this.doc.head.querySelector(`#${this.styleId}`);
             if (!!style) {
@@ -82,24 +88,47 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
             return;
         }
         const geoType = this.geoJson.features[0].geometry.type;
+        const id = this.ds.id as string;
         if (geoType === 'Point' || geoType === 'MultiPoint') {
             const circle = this.options.defaults['circle'] as CircleLayer;
-            circle.id = this.ds.id as string;
-            circle.source = this.ds.id as string;
+            circle.id = id;
+            circle.source = id;
             this.map.addLayer(circle);
         }
         if (geoType === 'LineString' || geoType === 'MultiLineString') {
             const line = this.options.defaults['line'] as CircleLayer;
-            line.id = this.ds.id as string;
-            line.source = this.ds.id as string;
+            line.id = id;
+            line.source = id;
             this.map.addLayer(line);
         }
         if (geoType === 'Polygon' || geoType === 'MultiPolygon') {
             const fill = this.options.defaults['fill'] as CircleLayer;
-            fill.id = this.ds.id as string;
-            fill.source = this.ds.id as string;
+            fill.id = id;
+            fill.source = id;
             this.map.addLayer(fill);
         }
+        this.map.on('click', id, e => {
+            if (!!e.features && e.features.length > 0) {
+                const feature = e.features[0];
+                if (!this.popup) {
+                    this.popup = new Popup({
+                        closeButton: true,
+                        closeOnClick: true
+                    });
+                }
+                this.popup.setLngLat(e.lngLat);
+                const pkCol = this.ds.primaryKeyColumn as string;
+                const dpCol = this.ds.displayColumn as string;
+                const html = [
+                    '<table class="table table-bordered table-striped table-sm m-0"><tbody>',
+                    `<tr><td>${pkCol}</td><td>${feature.properties?.[pkCol]}</td></tr>`,
+                    `<tr><td>${dpCol}</td><td>${feature.properties?.[dpCol]}</td></tr>`,
+                    `</tbody></table>`
+                ];
+                this.popup.setHTML(html.join(''));
+                this.popup.addTo(this.map as Map);
+            }
+        });
     }
 
     private async loadGeoJson(): Promise<void> {
@@ -108,6 +137,9 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
             return;
         }
         const count = await this.vm.getCount(id, { });
+        if (count <= 0) {
+            this.ui.showAlert({ type: 'warning', message: '该数据源无数据！' });
+        }
         const geojson = await this.vm.getGeoJson(
             id, { $take: count, $returnBbox: true },
             (total, loaded) => {
