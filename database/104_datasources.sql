@@ -81,3 +81,15 @@ create index fki_fk_connections_id
 
 comment on column public.datasources.roles
     is '允许的角色';
+
+alter table public.datasources
+    add column description character varying(256) collate pg_catalog."default";
+
+comment on column public.datasources.description
+    is '数据源描述';
+
+alter table public.datasources
+    add column fields jsonb;
+
+comment on column public.datasources.fields
+    is '数据源允许的的字段列表';

@@ -10,6 +10,8 @@ namespace Beginor.GisHub.DataServices.Models {
         /// <summary>数据源名称</summary>
         [Required(ErrorMessage = "数据源名称 必须填写！")]
         public string Name { get; set; }
+        /// <summary>数据源描述</summary>
+        public string Description { get; set; }
         /// <summary>数据库连接</summary>
         [Required(ErrorMessage = "数据库连接 必须填写！")]
         public StringIdNameEntity Connection { get; set; }
@@ -18,6 +20,8 @@ namespace Beginor.GisHub.DataServices.Models {
         /// <summary>数据表/视图名称</summary>
         [Required(ErrorMessage = "数据表/视图名称 必须填写！")]
         public string TableName { get; set; }
+        /// <summary>数据源公开的列</summary>
+        public DataSourceFieldModel[] Fields { get; set; }
         /// <summary>主键列名称</summary>
         [Required(ErrorMessage = "主键列名称 必须填写！")]
         public string PrimaryKeyColumn { get; set; }
@@ -35,6 +39,15 @@ namespace Beginor.GisHub.DataServices.Models {
         /// <summary>允许的角色</summary>
         public string[] Roles { get; set; }
 
+    }
+
+    public class DataSourceFieldModel {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Type { get; set; }
+        public int Length { get; set; }
+        public bool Nullable { get; set; }
+        public bool Editable { get; set; }
     }
 
     /// <summary>数据源（数据表或视图）搜索参数</summary>

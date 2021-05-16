@@ -16,6 +16,10 @@ namespace Beginor.GisHub.DataServices.Data {
         [Property(Name = "Name", Column = "name", Type = "string", NotNull = true, Length = 32)]
         public virtual string Name { get; set; }
 
+        /// <summary>数据源描述</summary>
+        [Property(Name = "Description", Column = "description", Type = "string", NotNull = true, Length = 256)]
+        public virtual string Description { get; set; }
+
         /// <summary>数据库连接id</summary>
         [ManyToOne(Name = "Connection", Column = "connection_id", ClassType = typeof(Connection), NotFound = NotFoundMode.Ignore)]
         public virtual Connection Connection { get; set; }
@@ -27,6 +31,10 @@ namespace Beginor.GisHub.DataServices.Data {
         /// <summary>数据表/视图名称</summary>
         [Property(Name = "TableName", Column = "table_name", Type = "string", NotNull = true, Length = 64)]
         public virtual string TableName { get; set; }
+
+        /// <summary>数据源公开的字段列表</summary>
+        [Property(Name = "Fields", Column = "fields", TypeType = typeof(NHibernate.Extensions.NpgSql.JsonbType<DataSourceField[]>), NotNull = false)]
+        public virtual DataSourceField[] Fields { get; set; }
 
         /// <summary>主键列名称</summary>
         [Property(Name = "PrimaryKeyColumn", Column = "primary_key_column", Type = "string", NotNull = true, Length = 256)]
@@ -59,6 +67,16 @@ namespace Beginor.GisHub.DataServices.Data {
         /// <summary>允许的角色</summary>
         [Property(Name = "Roles", Column = "roles", TypeType = typeof(NHibernate.Extensions.NpgSql.StringArrayType), NotNull = false)]
         public virtual string[] Roles { get; set; }
+
+    }
+
+    public class DataSourceField {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Type { get; set; }
+        public int Length { get; set; }
+        public bool Nullable { get; set; }
+        public bool Editable { get; set; }
     }
 
 }

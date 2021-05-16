@@ -39,6 +39,14 @@ namespace Beginor.GisHub.Test.DataServices {
                 Connection = new Connection {
                     Id = 2,
                     Name = "Test"
+                },
+                Fields = new [] {
+                    new DataSourceField {
+                        Name = "id",
+                        Type = "int",
+                        Nullable = false,
+                        Editable = false,
+                    }
                 }
             };
             var mapper = ServiceProvider.GetService<AutoMapper.IMapper>();
@@ -47,6 +55,7 @@ namespace Beginor.GisHub.Test.DataServices {
             var entity2 = mapper.Map<Beginor.GisHub.DataServices.Data.DataSource>(model);
             Assert.IsNotNull(entity2.Connection);
             Assert.AreEqual(entity2.Connection.Id.ToString(), model.Connection.Id);
+            Assert.IsNotEmpty(model.Fields);
         }
 
         [Test]
