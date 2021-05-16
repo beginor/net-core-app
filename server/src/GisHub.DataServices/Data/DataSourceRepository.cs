@@ -74,6 +74,7 @@ namespace Beginor.GisHub.DataServices.Data {
             dataSql.Append(body.ToString());
             dataSql.AppendLine(" order by ds.id desc ");
             dataSql.AppendLine(" limit @take offset @skip ");
+            Dapper.SqlMapper.AddTypeHandler(new JsonTypedHandler<DataSourceField[]>());
             var data = await Session.Connection.QueryAsync<DataSource, Connection, DataSource>(
                 sql: dataSql.ToString(),
                 map: (ds, conn) => {
