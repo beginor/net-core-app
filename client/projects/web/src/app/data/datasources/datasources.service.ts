@@ -365,12 +365,16 @@ export interface DataSourceModel {
     id: string;
     /** 数据源名称 */
     name?: string;
+    /** 数据源描述 */
+    description?: string;
     /** 数据库连接 */
     connection?: { id?: string; name?: string };
     /** 数据表/视图架构 */
     schema?: string;
     /** 数据表/视图名称 */
     tableName?: string;
+    /** 数据源的公开字段 */
+    fields?: DataSourceFieldModel[];
     /** 主键列名称 */
     primaryKeyColumn?: string;
     /** 显示列名称， 查询时不指定字段则返回数据表的主键列和显示列。 */
@@ -387,6 +391,15 @@ export interface DataSourceModel {
     isDeleted?: boolean;
     /** 允许的角色 */
     roles?: string[];
+}
+
+export interface DataSourceFieldModel {
+    name?: string;
+    description?: string;
+    type?: string;
+    length?: number;
+    nullable?: boolean;
+    editable?: boolean;
 }
 
 /** 数据源（数据表或视图） 搜索参数 */

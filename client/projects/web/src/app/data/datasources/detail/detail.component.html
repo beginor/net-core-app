@@ -16,7 +16,7 @@
   </div>
   <div class="card-body">
     <div class="form-group">
-      <label class="form-label text-muted" for="name">数据源名称 <i class="text-danger">*</i> </label>
+      <label class="form-label text-muted" for="name">名称 <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="name" name="name"
         placeholder="请输入数据源名称 ..." required
         [disabled]="!editable"
@@ -24,6 +24,14 @@
         #name="ngModel"
         [class.is-invalid]="!(name.valid || name.pristine)"
         [class.is-valid]="name.valid"
+      />
+    </div>
+    <div class="form-group">
+      <label class="form-label text-muted" for="description">描述 </label>
+      <input class="form-control" type="text" id="description" name="description"
+        placeholder="请输入数据源描述 ..."
+        [disabled]="!editable"
+        [(ngModel)]="model.description"
       />
     </div>
     <div class="row">
