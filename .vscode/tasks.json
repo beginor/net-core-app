@@ -9,6 +9,7 @@
       "type": "shell",
       "args": ["run", "start"],
       "problemMatcher": ["$tsc", "$node-sass"],
+      "group": "none",
       "options": {
         "cwd": "${workspaceRoot}/client"
       }
@@ -19,6 +20,7 @@
       "type": "shell",
       "args": ["run", "lint"],
       "problemMatcher": ["$tslint5"],
+      "group": "none",
       "options": {
         "cwd": "${workspaceRoot}/client"
       }
@@ -30,6 +32,17 @@
       "args": ["run", "build"],
       "problemMatcher": ["$tsc", "$node-sass"],
       "group": { "kind": "build", "isDefault": true },
+      "options": {
+        "cwd": "${workspaceRoot}/client"
+      }
+    },
+    {
+      "label": "npm:watch-web",
+      "command": "npm",
+      "type": "shell",
+      "args": ["run", "watch-web"],
+      "problemMatcher": ["$tsc", "$node-sass"],
+      "group": "none",
       "options": {
         "cwd": "${workspaceRoot}/client"
       }
@@ -62,16 +75,18 @@
       "type": "shell",
       "args": ["run"],
       "problemMatcher": ["$msCompile"],
+      "group": "none",
       "options": {
         "cwd": "${workspaceRoot}/server/src/NetCoreApp.Entry"
       }
     },
     {
-      "label": "dotnet:watch",
+      "label": "dotnet:watch-run",
       "command": "dotnet",
       "type": "shell",
       "args": ["watch", "run"],
       "problemMatcher": ["$msCompile"],
+      "group": "none",
       "options": {
         "cwd": "${workspaceRoot}/server/src/NetCoreApp.Entry"
       }
@@ -82,6 +97,7 @@
       "type": "shell",
       "args": ["test"],
       "problemMatcher": ["$msCompile"],
+      "group": { "kind": "test", "isDefault": true },
       "options": {
         "cwd": "${workspaceRoot}/server/test/NetCoreApp.Test"
       }
