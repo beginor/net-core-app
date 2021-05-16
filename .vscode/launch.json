@@ -19,20 +19,6 @@
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/server/src/NetCoreApp.Entry/Views"
       }
-    },
-    {
-      "type": "chrome",
-      "request": "launch",
-      "name": "Client",
-      "url": "http://localhost:4200",
-      "webRoot": "${workspaceRoot}/client",
-      "osx": {
-        "runtimeExecutable": "/Applications/Chromium.app/Contents/MacOS/Chromium"
-      },
-      "runtimeArgs": [
-        "--incognito"
-      ],
-      "disableNetworkCache": true
     }
   ]
 }
