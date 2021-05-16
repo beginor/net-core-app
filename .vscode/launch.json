@@ -21,6 +21,20 @@
       }
     },
     {
+      "name": "SlpkExtractor",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "dotnet:build:SlpkExtractor",
+      "program": "${workspaceFolder}/server/test/GisHub.SlpkExtractor/bin/Debug/net5.0/Beginor.GisHub.SlpkExtractor.dll",
+      "args": [
+        "/Volumes/WD25A2/gis_data/SLPK/广雅中学.slpk",
+        "/Users/zhang/Documents/GIS_Data/slpk"
+      ],
+      "cwd": "${workspaceFolder}/server/test/GisHub.SlpkExtractor",
+      "stopAtEntry": false,
+      "console": "internalConsole"
+    },
+    {
       "name": "Gmap",
       "type": "coreclr",
       "request": "launch",
