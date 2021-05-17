@@ -10,12 +10,13 @@ import {
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
-import { DataSourceService, DataSourceModel } from '../datasources.service';
+import { DataSourceService, DataSourceModel, DataSourceFieldModel } from '../datasources.service';
 import { MetadataService, TableModel, ColumnModel } from '../metadata.service';
 import {
     ConnectionService, ConnectionModel
 } from '../../connections/connections.service';
 import { NgbTypeahead, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
+import { UiService } from '../../../common';
 
 @Component({
     selector: 'app-datasource-detail',
@@ -41,9 +42,6 @@ export class DetailComponent implements OnInit {
     public tables: TableModel[] = [];
     public table?: TableModel;
     public columns: ColumnModel[] = [];
-    public pkColumn?: ColumnModel;
-    public displayColumn?: ColumnModel;
-    public geoColumn?: ColumnModel;
 
     // schema typeahead
     @ViewChild('schemaInstance', { static: false })
@@ -55,20 +53,6 @@ export class DetailComponent implements OnInit {
     public tableInstance!: NgbTypeahead;
     public tableFocus$ = new Subject<string>();
     public tableClick$ = new Subject<string>();
-    // pk col typeahead
-    @ViewChild('pkColInstance', { static: false })
-    public pkColInstance!: NgbTypeahead;
-    public pkColFocus$ = new Subject<string>();
-    public pkColClick$ = new Subject<string>();
-    // display col typeahead
-    @ViewChild('displayColInstance', { static: false })
-    public displayColInstance!: NgbTypeahead;
-    public displayColFocus$ = new Subject<string>();
-    public displayColClick$ = new Subject<string>();
-    @ViewChild('geoColInstance', { static: false })
-    public geoColInstance!: NgbTypeahead;
-    public geoColFocus$ = new Subject<string>();
-    public geoColClick$ = new Subject<string>();
 
     private id = '';
     private reloadList = false;
@@ -90,38 +74,13 @@ export class DetailComponent implements OnInit {
             map(term => term === '' ? this.tables.slice(0, 10) : this.tables.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
         );
     }
-    public searchPkColumns = (text$: Observable<string>) => {
-        const debouncedText$ = text$.pipe(debounceTime(300), distinctUntilChanged());
-        const clicksWithClosedPopup$ = this.pkColClick$.pipe(filter(() => !this.pkColInstance.isPopupOpen()));
-        const inputFocus$ = this.pkColFocus$;
-        return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-            map(term => term === '' ? this.columns.slice(0, 10) : this.columns.filter(c => c.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-        );
-    }
-    public searchDisplayColumns = (text$: Observable<string>) => {
-        const debouncedText$ = text$.pipe(debounceTime(300), distinctUntilChanged());
-        const clicksWithClosedPopup$ = this.displayColClick$.pipe(filter(() => !this.displayColInstance.isPopupOpen()));
-        const inputFocus$ = this.displayColFocus$;
-        return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-            map(term => term === '' ? this.columns.slice(0, 10) : this.columns.filter(c => c.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-        );
-    }
-    public searchGeoColumns = (text$: Observable<string>) => {
-        const debouncedText$ = text$.pipe(debounceTime(300), distinctUntilChanged());
-        const clicksWithClosedPopup$ = this.geoColClick$.pipe(filter(() => !this.geoColInstance.isPopupOpen()));
-        const inputFocus$ = this.geoColFocus$;
-        return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-            map(term => term === '' ? this.columns.slice(0, 10) : this.columns.filter(c => c.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-        );
-    }
     public tableFormatter = (t: TableModel | string) => typeof t === 'string' ? t : t.name;
-    public colFormater = (c: ColumnModel | string) => typeof c === 'string' ? c : c.name;
     // tslint:enable: max-line-length
-
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         private conn: ConnectionService,
+        private ui: UiService,
         public meta: MetadataService,
         public account: AccountService,
         public vm: DataSourceService
@@ -157,15 +116,6 @@ export class DetailComponent implements OnInit {
                     cs => cs.id === model.connection?.id
                 );
                 this.table = { name: model.tableName as string };
-                this.pkColumn = {
-                    name: model.primaryKeyColumn as string
-                };
-                this.displayColumn = {
-                    name: model.displayColumn as string
-                };
-                this.geoColumn = {
-                    name: model.geometryColumn as string
-                };
                 this.loadSchemas()
                     .then(() => this.loadTables())
                     .then(() => this.loadColumns());
@@ -191,8 +141,8 @@ export class DetailComponent implements OnInit {
     }
 
     public async save(): Promise<void> {
-        if (!this.geoColumn) {
-            delete this.model.geometryColumn;
+        if (!this.checkGeometryColumns()) {
+            return;
         }
         if (this.id !== '0') {
             await this.vm.update(this.id, this.model);
@@ -245,18 +195,6 @@ export class DetailComponent implements OnInit {
         await this.loadColumns();
     }
 
-    public onSelectPkColumn(e: NgbTypeaheadSelectItemEvent): void {
-        this.model.primaryKeyColumn = e.item.name;
-    }
-
-    public onSelectDisplayColumn(e: NgbTypeaheadSelectItemEvent): void {
-        this.model.displayColumn = e.item.name;
-    }
-
-    public onSelectGeoColumn(e: NgbTypeaheadSelectItemEvent): void {
-        this.model.geometryColumn = e.item.name;
-    }
-
     public isRoleChecked(role: string): boolean {
         if (!this.model.roles) {
             return false;
@@ -275,6 +213,91 @@ export class DetailComponent implements OnInit {
         else {
             this.model.roles.push(role);
         }
+    }
+
+    public toggleField(name: string): void {
+        if (!this.model.fields) {
+            this.model.fields = [];
+        }
+        const idx = this.model.fields.findIndex(x => x.name === name);
+        if (idx > -1) {
+            this.model.fields.splice(idx, 1);
+            return;
+        }
+        const col = this.columns.find(x => x.name === name);
+        if (!col) {
+            return;
+        }
+        const field: DataSourceFieldModel = {
+            name: col.name,
+            description: col.description,
+            type: col.type,
+            length: col.length,
+            nullable: col.nullable,
+            editable: false
+        };
+        this.model.fields.push(field);
+        console.log(this.model);
+    }
+
+    public isFieldChecked(name: string): boolean {
+        if (!this.model.fields) {
+            return false;
+        }
+        return this.model.fields.findIndex(x => x.name === name) > -1;
+    }
+
+    public isAllFieldChecked(): boolean {
+        if (!this.model.fields) {
+            return false;
+        }
+        if (!this.columns) {
+            return false;
+        }
+        return this.columns.length === this.model.fields.length;
+    }
+
+    public toggleAllField(): void {
+        if (this.columns.length === 0) {
+            return;
+        }
+        if (!this.model.fields) {
+            this.model.fields = [];
+        }
+        if (this.isAllFieldChecked()) {
+            this.model.fields = [];
+            return;
+        }
+        this.model.fields = [];
+        this.columns.forEach(col => {
+            this.toggleField(col.name);
+         });
+    }
+
+    public toggleFieldEditable(name: string): void {
+        if (!this.model.fields) {
+            return;
+        }
+        const idx = this.model.fields.findIndex(x => x.name === name);
+        if (idx === -1) {
+            return;
+        }
+        this.model.fields[idx].editable = !this.model.fields[idx].editable;
+    }
+
+    public isFieldEditable(name: string): boolean {
+        if (!this.model.fields) {
+            return false;
+        }
+        const field = this.model.fields.find(x => x.name === name);
+        return field?.editable as boolean;
+    }
+
+    public isFieldsValid(): boolean {
+        return !!this.model.primaryKeyColumn &&
+            !!this.model.displayColumn &&
+            !!this.model.fields &&
+            this.model.fields.length > 0;
     }
 
     private async loadSchemas(): Promise<void> {
@@ -315,6 +338,35 @@ export class DetailComponent implements OnInit {
             this.model.tableName as string
         );
         this.columns = columns;
+    }
+
+    private checkGeometryColumns(): boolean {
+        const geometryCols = this.model.fields?.filter(
+            x => x.type === 'geometry'
+        );
+        if (!!geometryCols) {
+            if (geometryCols.length > 1) {
+                this.ui.showAlert({
+                    type: 'danger',
+                    message: '一个数据源只能包含一个空间数据列， 请重新选择！'
+                });
+                return false;
+            }
+            else {
+                if (geometryCols.length > 0) {
+                    this.model.geometryColumn = geometryCols[0].name;
+                }
+                else {
+                    delete this.model.geometryColumn;
+                }
+            }
+        }
+        else {
+            if (!!this.model.geometryColumn) {
+                delete this.model.geometryColumn;
+            }
+        }
+        return true;
     }
 
 }
