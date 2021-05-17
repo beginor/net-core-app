@@ -3,3 +3,6 @@ root = false
 # html/scss/css files
 [*.{html,scss,css,json,xml,csproj,config,yml}]
 indent_size = 2
+
+[*.ts]
+indent_size = 4
