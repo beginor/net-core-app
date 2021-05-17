@@ -1,17 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using GisHub.VectorTile.Api;
+using SysEnvironment = System.Environment;
 
 namespace GisHub.VectorTile {
 
@@ -30,7 +26,7 @@ namespace GisHub.VectorTile {
             services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "GisHub.VectorTile", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "VectorTile", Version = "v1" });
             });
         }
 
@@ -39,8 +35,16 @@ namespace GisHub.VectorTile {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GisHub.VectorTile v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "VectorTile v1"));
             }
+
+            var pathbase = GetAppPathbase();
+            if (string.IsNullOrEmpty(pathbase)) {
+                return;
+            }
+            app.UsePathBase(new PathString(pathbase));
+            var message = "Hosting pathbase: " + pathbase;
+            Console.WriteLine(message);
 
             app.UseStaticFiles();
             app.UseCors(cors => {
@@ -51,11 +55,15 @@ namespace GisHub.VectorTile {
             });
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
+        }
+
+        private string GetAppPathbase() {
+            return SysEnvironment.GetEnvironmentVariable(
+                "ASPNETCORE_PATHBASE"
+            );
         }
     }
 }
