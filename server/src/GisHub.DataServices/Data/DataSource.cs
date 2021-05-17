@@ -17,7 +17,7 @@ namespace Beginor.GisHub.DataServices.Data {
         public virtual string Name { get; set; }
 
         /// <summary>数据源描述</summary>
-        [Property(Name = "Description", Column = "description", Type = "string", NotNull = true, Length = 256)]
+        [Property(Name = "Description", Column = "description", Type = "string", NotNull = false, Length = 256)]
         public virtual string Description { get; set; }
 
         /// <summary>数据库连接id</summary>
