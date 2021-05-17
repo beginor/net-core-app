@@ -35,6 +35,17 @@
       "options": {
         "cwd": "${workspaceRoot}/server/src/GisHub.Entry"
       }
+    },
+    {
+      "label": "dotnet:build:VectorTile",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["build"],
+      "problemMatcher": ["$msCompile"],
+      "group": { "kind": "build", "isDefault": true },
+      "options": {
+        "cwd": "${workspaceRoot}/server/test/GisHub.VectorTile"
+      }
     }
   ]
 }

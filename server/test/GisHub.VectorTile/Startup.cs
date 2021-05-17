@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using GisHub.VectorTile.Api;
+using GisHub.VectorTile.Data;
 using SysEnvironment = System.Environment;
 
 namespace GisHub.VectorTile {
@@ -20,9 +21,13 @@ namespace GisHub.VectorTile {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            services.Configure<VectorTileOptions>(
-                Configuration.GetSection("vectorTile")
+            services.Configure<Dictionary<string, string>>(
+                Configuration.GetSection("connectionStrings")
             );
+            services.Configure<Dictionary<string, VectorTileSource>>(
+                Configuration.GetSection("vectors")
+            );
+            services.AddSingleton<VectorTileProvider>();
             services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c => {
@@ -39,12 +44,11 @@ namespace GisHub.VectorTile {
             }
 
             var pathbase = GetAppPathbase();
-            if (string.IsNullOrEmpty(pathbase)) {
-                return;
+            if (!string.IsNullOrEmpty(pathbase)) {
+                app.UsePathBase(new PathString(pathbase));
+                var message = "Hosting pathbase: " + pathbase;
+                Console.WriteLine(message);
             }
-            app.UsePathBase(new PathString(pathbase));
-            var message = "Hosting pathbase: " + pathbase;
-            Console.WriteLine(message);
 
             app.UseStaticFiles();
             app.UseCors(cors => {

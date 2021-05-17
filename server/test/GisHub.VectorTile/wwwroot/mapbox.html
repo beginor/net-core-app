@@ -14,33 +14,13 @@
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiYmVnaW5vciIsImEiOiJja2pmMWNkbXg4azcyMzVwZHFraGc1cjYzIn0.xo0073v7zQfAicAPsr0CHQ';
 
-    function getQuery(key) {
-        const arr = location.search.substring(1).split('&');
-        const query = {};
-        for (const item of arr) {
-            const itemArr = item.split('=');
-            query[itemArr[0]] = itemArr[1];
-        }
-        return query[key]
-    }
-
     function initMap({ container, style, center, zoom, pitch}) {
         const map = new mapboxgl.Map({
             container,
             style,
             center,
             zoom,
-            pitch,
-            transformRequest: (url, resourceType) => {
-                if (resourceType === 'Tile' && url.startsWith('http://localhost:5000/gishub/rest')) {
-                    const headers = { 'X-Requested-With': 'XMLHttpRequest' };
-                    jwt = localStorage.getItem('Bearer:/gishub/api');
-                    if (!!jwt) {
-                        headers['Authorization'] = `Bearer ${jwt}`;
-                    }
-                    return { url, headers };
-                }
-            }
+            pitch
         });
         Object.assign(window, { _mapview: map })
         map.addControl(
@@ -53,15 +33,10 @@
         );
         return map;
     }
-    // get styles from query;
-    let style = getQuery('style');
-    if (!style) {
-        style = 'mapbox://styles/beginor/ckkf3glod0g1m17my2wh0s74q';
-    }
 
     const map = initMap({
         container: 'viewDiv',
-        style,
+        style: 'mapbox://styles/beginor/ckkf3glod0g1m17my2wh0s74q',
         center: [113.31939, 23.12313],
         zoom: 8,
         pitch: 0
@@ -78,7 +53,7 @@
             {
                 type: 'vector',
                 scheme: 'xyz',
-                tiles: [`${location.protocol}//${location.host}/l3a1/vector/api/vector/{z}/{y}/{x}`],
+                tiles: [`${location.protocol}//${location.host}/api/vectortiles/test1/{z}/{y}/{x}`],
                 minzoom: 9,
                 maxzoom: 17
             }

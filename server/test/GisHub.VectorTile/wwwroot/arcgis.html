@@ -8,38 +8,11 @@
   <title>ArcGIS Javascript API Test</title>
   <style>html,body,#viewDiv { padding: 0; margin: 0; height: 100%; width: 100%; overflow: hidden; }</style>
   <script>
-  function beforeRequestCallback(param) {
-  const headers = param.requestOptions.headers || {};
-  headers['X-Requested-With'] = 'XMLHttpRequest';
-  const jwt = localStorage.getItem('Bearer:/gishub/api');
-  if (!!jwt) {
-    headers['Authorization'] = `Bearer ${jwt}`;
-  }
-  param.requestOptions.headers = headers;
-  }
-
-  function getQuery(name) {
-  const arr = location.search.substring(1).split('&');
-  const q = {};
-  for (const item of arr) {
-    const itemArr = item.split('=');
-    q[itemArr[0]] = itemArr[1];
-  }
-  return q[name];
-  }
-
-  window.dojoConfig = { locale: 'zh-cn', async: true };
-  window.esriConfig = {
-  locale: 'zh-cn',
-  request: {
-    interceptors: [
-    { urls: /gishub/, before: beforeRequestCallback }
-    ]
-  }
-  };
+  window.dojoConfig = { async: true };
+  window.esriConfig = { locale: 'zh-cn' };
   </script>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/themes/light/main.css" />
-  <script src="https://js.arcgis.com/4.19/init.js"></script>
+  <link rel="stylesheet" href="https://app.gdeei.cn/arcgis-js-api/library/4.18/esri/themes/light/main.css" />
+  <script src="https://app.gdeei.cn/arcgis-js-api/library/4.18/init.js"></script>
 </head>
 
 <body>
@@ -68,10 +41,10 @@ require([
         "sprite": "https://app.gdeei.cn/arcgis-js-api/mapbox/sprites/satellite-streets/sprite",
         "glyphs": "https://app.gdeei.cn/arcgis-js-api/mapbox/glyphs/{fontstack}/{range}.pbf",
         "sources": {
-          "esri": {
+          "guangzhou": {
             type: 'vector',
             scheme: 'xyz',
-            tiles: [`${location.protocol}//${location.host}/api/vector/{z}/{y}/{x}`],
+            tiles: [`${location.protocol}//${location.host}/api/vectortiles/test1/{z}/{y}/{x}`],
             minzoom: 9,
             maxzoom: 17
           }
@@ -79,7 +52,7 @@ require([
         "layers": [
           {
             id: 'guangzhou_road',
-            source: 'esri',
+            source: 'guangzhou',
             'source-layer': 'guangzhou_road',
             type: 'line',
             minzoom: 9,
@@ -87,18 +60,6 @@ require([
             paint: {
               'line-color': '#00FF00',
               'line-width': 2
-            }
-          },
-          {
-            id: 'guangzhou_building',
-            source: 'esri',
-            'source-layer': 'guangzhou_building',
-            type: 'fill',
-            minzoom: 13,
-            maxzoom: 17,
-            paint: {
-              'fill-opacity': 0.8,
-              "fill-color": "#8c2d04"
             }
           }
         ]
