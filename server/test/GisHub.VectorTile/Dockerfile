@@ -5,6 +5,6 @@ ENV ASPNETCORE_PATHBASE=/l3a1/vector \
 
 ADD dist /vector
 
-VOLUME [ "/vector/config", "/vector/log" ]
+VOLUME [ "/vector/config", "/vector/log", "vector/wwwroot" ]
 WORKDIR /vector
 ENTRYPOINT ["./VectorTile"]
