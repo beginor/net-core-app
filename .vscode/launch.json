@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet:build",
-      "program": "${workspaceFolder}/server/src/GisHub.Entry/bin/Debug/net5.0/NetCoreApp.dll",
+      "program": "${workspaceFolder}/server/src/GisHub.Entry/bin/Debug/net5.0/GisHub.dll",
       "args": [],
       "cwd": "${workspaceFolder}/server/src/GisHub.Entry",
       "stopAtEntry": false,
