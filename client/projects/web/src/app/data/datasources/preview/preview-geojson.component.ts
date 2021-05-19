@@ -36,6 +36,7 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
     private geoJson?: GeoJSON.FeatureCollection;
     private options!: MapboxGlOptions;
     private popup?: Popup;
+    private fields: string[] = [];
 
     constructor(
         private http: HttpClient,
@@ -117,14 +118,14 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
                     });
                 }
                 this.popup.setLngLat(e.lngLat);
-                const pkCol = this.ds.primaryKeyColumn as string;
-                const dpCol = this.ds.displayColumn as string;
                 const html = [
+                    '<div style="max-height: 200px; overflow: auto;">',
                     '<table class="table table-bordered table-striped table-sm m-0"><tbody>',
-                    `<tr><td>${pkCol}</td><td>${feature.properties?.[pkCol]}</td></tr>`,
-                    `<tr><td>${dpCol}</td><td>${feature.properties?.[dpCol]}</td></tr>`,
-                    `</tbody></table>`
                 ];
+                for (const field of this.fields) {
+                    html.push(`<tr><td>${field}</td><td>${feature.properties?.[field]}</td></tr>`);
+                }
+                html.push(`</tbody></table></div>`);
                 this.popup.setHTML(html.join(''));
                 this.popup.addTo(this.map as Map);
             }
@@ -137,11 +138,20 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
             return;
         }
         const count = await this.vm.getCount(id, { });
+        const columns = await this.vm.getColumns(id);
+        this.fields = columns.filter(
+            x => x.name !== this.ds.geometryColumn
+        ).map(x => x.name);
         if (count <= 0) {
             this.ui.showAlert({ type: 'warning', message: '该数据源无数据！' });
         }
         const geojson = await this.vm.getGeoJson(
-            id, { $take: count, $returnBbox: true },
+            id,
+            {
+                $take: count,
+                $returnBbox: true,
+                $select: this.fields.join(',')
+            },
             (total, loaded) => {
                 const percent = Number.parseFloat((loaded / total).toFixed(2));
                 this.downloadProgress.next(percent);

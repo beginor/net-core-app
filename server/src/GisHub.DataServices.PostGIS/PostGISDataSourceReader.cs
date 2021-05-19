@@ -109,6 +109,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             if (param.Select.IsNullOrEmpty()) {
                 param.Select = $"{dataSource.PrimaryKeyColumn}, {dataSource.DisplayColumn}";
             }
+            // todo: check select
             var sql = new StringBuilder();
             // check selected fields when a table has geo column;
             if (param.CheckGeometry && dataSource.HasGeometryColumn) {

@@ -1,7 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
-import { ColumnModel } from '../metadata.service';
-import { DataSourceModel, DataSourceService, ReadDataParam } from '../datasources.service';
+import {
+    DataSourceModel, DataSourceService, ReadDataParam, DataSourceFieldModel
+} from '../datasources.service';
 
 @Component({
     selector: 'app-datasources-preview-data',
@@ -60,7 +61,7 @@ export class PreviewDataComponent implements OnInit, OnDestroy {
 
     @Input()
     public ds: DataSourceModel = { id: '' };
-    public columns: ColumnModel[] = [];
+    public columns: DataSourceFieldModel[] = [];
     public data: any[] = [];
     public total = 0;
     public readDataParam: ReadDataParam = { };

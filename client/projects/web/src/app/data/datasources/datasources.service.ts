@@ -159,9 +159,9 @@ export class DataSourceService {
         }
     }
 
-    public async getColumns(id: string): Promise<ColumnModel[]> {
+    public async getColumns(id: string): Promise<DataSourceFieldModel[]> {
         try {
-            const result = await this.http.get<ColumnModel[]>(
+            const result = await this.http.get<DataSourceFieldModel[]>(
                 `${this.baseUrl}/${id}/columns`
             ).toPromise();
             return result;
@@ -394,7 +394,7 @@ export interface DataSourceModel {
 }
 
 export interface DataSourceFieldModel {
-    name?: string;
+    name: string;
     description?: string;
     type?: string;
     length?: number;
