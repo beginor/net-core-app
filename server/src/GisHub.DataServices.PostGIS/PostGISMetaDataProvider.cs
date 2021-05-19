@@ -57,7 +57,8 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             }
             var connStr = BuildConnectionString(model);
             await using var conn = new NpgsqlConnection(connStr);
-            var sql = "select"
+            var sql = ""
+                + " select"
                 + " t.table_schema as schema,"
                 + " t.table_name as name,"
                 + " obj_description((t.table_schema||'.'||t.table_name)::regclass::oid) as description,"
@@ -79,7 +80,8 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             }
             var connStr = BuildConnectionString(model);
             await using var conn = new NpgsqlConnection(connStr);
-            var sql = "select"
+            var sql = ""
+                + " select"
                 + " col.table_schema as schema,"
                 + " col.table_name as table,"
                 + " col.column_name as name,"
@@ -90,7 +92,8 @@ namespace Beginor.GisHub.DataServices.PostGIS {
                 + " from information_schema.columns col"
                 + " where col.table_catalog = @database "
                 + " and col.table_schema = @schema"
-                + " and col.table_name = @tableName";
+                + " and col.table_name = @tableName"
+                + " order by col.ordinal_position ";
             var columns = await conn.QueryAsync<ColumnModel>(
                 sql,
                 new {
