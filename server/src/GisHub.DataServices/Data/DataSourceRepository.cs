@@ -131,7 +131,8 @@ namespace Beginor.GisHub.DataServices.Data {
                 GeometryColumn = ds.GeometryColumn,
                 PresetCriteria = ds.PresetCriteria,
                 DefaultOrder = ds.DefaultOrder,
-                Roles = ds.Roles
+                Roles = ds.Roles,
+                Fields = ds.Fields
             };
             var meta = factory.CreateMetadataProvider(item.DatabaseType);
             var model = Mapper.Map<ConnectionModel>(ds.Connection);
