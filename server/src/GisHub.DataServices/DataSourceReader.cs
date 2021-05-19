@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -48,12 +49,22 @@ namespace Beginor.GisHub.DataServices {
             return ReadScalarAsync<long>(dataSource, sql);
         }
 
-        public virtual async Task<IList<ColumnModel>> GetColumnsAsync(DataSourceCacheItem dataSource) {
-            var dsModel = await DataSourceRepo.GetByIdAsync(dataSource.DataSourceId);
-            var connModel = await ConnectionRepo.GetByIdAsync(long.Parse(dsModel.Connection.Id));
-            var meta = Factory.CreateMetadataProvider(connModel.DatabaseType);
-            var columns = await meta.GetColumnsAsync(connModel, dataSource.Schema, dataSource.TableName);
-            return columns;
+        public virtual Task<IList<ColumnModel>> GetColumnsAsync(DataSourceCacheItem dataSource) {
+            var columns = from field in dataSource.Fields
+                select new ColumnModel {
+                    Name = field.Name,
+                    Description = field.Description,
+                    Length = field.Length,
+                    Nullable = field.Nullable,
+                    Type = field.Type
+                };
+            IList<ColumnModel> result = columns.ToList();
+            return Task.FromResult(result);
+            // var dsModel = await DataSourceRepo.GetByIdAsync(dataSource.DataSourceId);
+            // var connModel = await ConnectionRepo.GetByIdAsync(long.Parse(dsModel.Connection.Id));
+            // var meta = Factory.CreateMetadataProvider(connModel.DatabaseType);
+            // var columns = await meta.GetColumnsAsync(connModel, dataSource.Schema, dataSource.TableName);
+            // return columns;
         }
 
         public virtual Task<IList<IDictionary<string, object>>> PivotData(DataSourceCacheItem dataSource, PivotParam param) {
