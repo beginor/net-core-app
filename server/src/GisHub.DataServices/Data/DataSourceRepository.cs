@@ -48,10 +48,10 @@ namespace Beginor.GisHub.DataServices.Data {
         ) {
             var query = Session.Query<DataSource>();
             var totalSql = new StringBuilder(" select count(ds.*) ");
-            var dataSql = new StringBuilder(" select ds.*, c.* ");
+            var dataSql = new StringBuilder(" select ds.id, ds.name, ds.description, ds.schema, ds.table_name, ds.primary_key_column, ds.display_column, ds.geometry_column ");
             var body = new StringBuilder();
             body.AppendLine(" from public.datasources as ds ");
-            body.AppendLine(" inner join connections c on c.id = ds.connection_id and c.is_deleted = false ");
+            // body.AppendLine(" inner join connections c on c.id = ds.connection_id and c.is_deleted = false ");
             body.AppendLine(" where (ds.is_deleted = false) and (ds.roles && @roles::character varying[]) ");
             //
             long id = 0;
@@ -63,8 +63,8 @@ namespace Beginor.GisHub.DataServices.Data {
                 );
             }
             var param = new {
-                roles = roles,
-                id = id,
+                roles,
+                id,
                 keywords = model.Keywords,
                 take = model.Take,
                 skip = model.Skip
@@ -74,13 +74,9 @@ namespace Beginor.GisHub.DataServices.Data {
             dataSql.Append(body.ToString());
             dataSql.AppendLine(" order by ds.id desc ");
             dataSql.AppendLine(" limit @take offset @skip ");
-            Dapper.SqlMapper.AddTypeHandler(new JsonTypedHandler<DataSourceField[]>());
-            var data = await Session.Connection.QueryAsync<DataSource, Connection, DataSource>(
+            // Dapper.SqlMapper.AddTypeHandler(new JsonTypedHandler<DataSourceField[]>());
+            var data = await Session.Connection.QueryAsync<DataSource>(
                 sql: dataSql.ToString(),
-                map: (ds, conn) => {
-                    ds.Connection = conn;
-                    return ds;
-                },
                 param: param
             );
             return new PaginatedResponseModel<DataSourceModel> {

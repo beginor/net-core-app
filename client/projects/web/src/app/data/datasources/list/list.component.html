@@ -76,10 +76,9 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-center text-nowrap text-muted">#</th>
+                <th scope="col" class="text-right text-nowrap text-muted">#</th>
                 <th scope="col" class="text-left text-nowrap text-muted">名称</th>
-                <th scope="col" class="text-center text-nowrap text-muted">数据库</th>
-                <th scope="col" class="text-center text-nowrap text-muted">架构</th>
+                <th scope="col" class="text-left text-nowrap text-muted">描述</th>
                 <th scope="col" class="text-left text-nowrap text-muted">数据表</th>
                 <th scope="col" class="text-left text-nowrap text-muted">主键</th>
                 <th scope="col" class="text-left text-nowrap text-muted">显示列</th>
@@ -95,9 +94,8 @@
                     {{item.name}}
                   </a>
                 </td>
-                <td class='text-left'>{{item.connection?.name}}</td>
-                <td class='text-left'>{{item.schema}}</td>
-                <td class='text-left'>{{item.tableName}}</td>
+                <td class='text-left'>{{item.description}}</td>
+                <td class='text-left'>{{!!item.schema ? (item.schema + '.' + item.tableName) : item.tableName}}</td>
                 <td class='text-left'>{{item.primaryKeyColumn}}</td>
                 <td class='text-left'>{{item.displayColumn}}</td>
                 <td class="text-center">
