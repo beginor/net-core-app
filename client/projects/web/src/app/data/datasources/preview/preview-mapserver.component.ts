@@ -2,7 +2,6 @@ import {
     Component, ElementRef, Input, OnDestroy, AfterViewInit, ViewChild,
     Output, EventEmitter
 } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
 import { loadModules } from 'esri-loader';
 
@@ -27,7 +26,6 @@ export class PreviewMapServerComponent implements AfterViewInit, OnDestroy {
     private mapview?: __esri.MapView;
 
     constructor(
-        private http: HttpClient,
         private vm: DataSourceService,
         private arcgis: ArcGisService
     ) { }
@@ -51,13 +49,33 @@ export class PreviewMapServerComponent implements AfterViewInit, OnDestroy {
         if (!id) {
             return;
         }
+        const columns = await this.vm.getColumns(id);
+        const fields = columns.filter(
+            x => x.name !== this.ds.geometryColumn
+        );
         const [FeatureLayer] = await loadModules<[
             __esri.FeatureLayerConstructor
         ]>([
             'esri/layers/FeatureLayer'
         ]);
         const featureLayer = new FeatureLayer({
-            url: this.vm.getPreviewUrl(id, 'mapserver')
+            url: this.vm.getPreviewUrl(id, 'mapserver'),
+            outFields: fields.map(x => x.name ),
+            popupEnabled: true,
+            popupTemplate: {
+                title: `{${this.ds.displayColumn}}`,
+                content: [
+                    {
+                        type: 'fields',
+                        fieldInfos: fields.map(x => {
+                            return {
+                                fieldName: x.name,
+                                label: x.description ?? x.name
+                            };
+                        })
+                    }
+                ]
+            }
         });
         await featureLayer.load();
         // await featureLayer.when();

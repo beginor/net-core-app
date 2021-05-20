@@ -56,9 +56,17 @@ export class PreviewFeatureSetComponent implements AfterViewInit, OnDestroy {
         if (count <= 0) {
             this.ui.showAlert({ type: 'warning', message: '该数据源无数据！' });
         }
+        const columns = await this.vm.getColumns(id);
+        const fields = columns.filter(
+            x => x.name !== this.ds.geometryColumn
+        );
         const json: any = await this.vm.getFeatureSetJson(
             id,
-            { $take: count, $returnExtent: true },
+            {
+                $take: count,
+                $returnExtent: true,
+                $select: fields.map(x => x.name ).join(',')
+            },
             (total, loaded) => {
                 const percent = Number.parseFloat((loaded / total).toFixed(2));
                 this.downloadProgress.next(percent);
@@ -81,7 +89,22 @@ export class PreviewFeatureSetComponent implements AfterViewInit, OnDestroy {
             fields: featureset.fields,
             source: featureset.features,
             spatialReference: featureset.spatialReference,
-            objectIdField: json.objectIdFieldName
+            objectIdField: json.objectIdFieldName,
+            popupEnabled: true,
+            popupTemplate: {
+                title: `{${this.ds.displayColumn}}`,
+                content: [
+                    {
+                        type: 'fields',
+                        fieldInfos: fields.map(x => {
+                            return {
+                                fieldName: x.name,
+                                label: x.description ?? x.name
+                            };
+                        })
+                    }
+                ]
+            }
         });
         this.mapview?.map.add(featureLayer);
         await this.mapview?.goTo(extent);

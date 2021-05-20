@@ -138,13 +138,13 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
             return;
         }
         const count = await this.vm.getCount(id, { });
+        if (count <= 0) {
+            this.ui.showAlert({ type: 'warning', message: '该数据源无数据！' });
+        }
         const columns = await this.vm.getColumns(id);
         this.fields = columns.filter(
             x => x.name !== this.ds.geometryColumn
         ).map(x => x.name);
-        if (count <= 0) {
-            this.ui.showAlert({ type: 'warning', message: '该数据源无数据！' });
-        }
         const geojson = await this.vm.getGeoJson(
             id,
             {
