@@ -10,3 +10,4 @@ export * from './lib/validators';
 export * from './lib/http-error.handler';
 export * from './lib/svg-icon/svg-icon.component';
 export * from './lib/svg-icon/svg-icon.service';
+export * from './lib/iframe/iframe.component';
