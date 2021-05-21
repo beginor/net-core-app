@@ -1,4 +1,5 @@
 import { Component, OnInit, ErrorHandler } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 import { AccountService, LoginModel } from 'app-shared';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -48,6 +49,12 @@ export class LoginComponent implements OnInit {
 
     public clearMessage(): void {
         this.message.next();
+    }
+
+    public passwordKeyUp(e: KeyboardEvent, loginForm: NgForm): void {
+        if (e.key === 'Enter' && loginForm.valid) {
+            this.login();
+        }
     }
 
 }
