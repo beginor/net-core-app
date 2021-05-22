@@ -30,7 +30,7 @@ const routes: Routes = [
         canLoad: []
     },
     {
-        path: 'iframe',
+        path: 'iframe/:src',
         component: IframeComponent,
         canLoad: []
     }

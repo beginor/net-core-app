@@ -18,7 +18,12 @@
         <a class="nav-link" *ngIf="navigation.isRouterLink(item);else httpLinkTpl"
           [routerLink]="item.url">{{item.title}}</a>
         <ng-template #httpLinkTpl>
-          <a class="nav-link" [href]="item.url" [target]="item.target">{{item.title}}</a>
+          <ng-container *ngIf="item.target === '_blank';else iframeTpl">
+            <a class="nav-link" [href]="item.url" [target]="item.target">{{item.title}}</a>
+          </ng-container>
+          <ng-template #iframeTpl>
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/iframe', item.url]">{{item.title}}</a>
+          </ng-template>
         </ng-template>
       </li>
     </ul>
