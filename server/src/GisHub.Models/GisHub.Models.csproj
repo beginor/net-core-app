@@ -10,10 +10,4 @@
 
   <Import Project="../../package-references.props" />
 
-  <!--
-  <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="Beginor.AppFx.Core" Version="5.0.2" />
-  </ItemGroup>
-  -->
 </Project>

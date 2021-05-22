@@ -61,6 +61,7 @@ namespace Beginor.GisHub.Entry {
         ) {
             app.UseSwagger().UseSwaggerUI(options => {
                 // options.RoutePrefix = pathbase;
+                options.UseRequestInterceptor("function (req) { if (req.url.endsWith('/api/account') && req.method === 'POST') { var param = JSON.parse(req.body); param.userName = btoa(param.userName); param.password = btoa(param.password); req.body = JSON.stringify(param); } return req; }");
                 options.SwaggerEndpoint(
                     GetAppPathbase() + "/swagger/v1/swagger.json",
                     "GisHub API v1.0.0"

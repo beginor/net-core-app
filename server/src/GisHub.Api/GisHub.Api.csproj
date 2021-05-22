@@ -13,18 +13,7 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <Import Project="../../package-references.props" />
-  <!--
-  <ItemGroup>
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" />
-    <PackageReference Include="Beginor.AppFx.Api" Version="5.0.2" />
-    <PackageReference Include="Beginor.AppFx.Core" Version="5.0.2" />
-    <PackageReference Include="NHibernate" Version="5.3.5" />
-    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="5.0.1" />
-    <PackageReference Include="NHibernate.NetCore" Version="5.0.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-  </ItemGroup>
-  -->
+
   <ItemGroup>
     <ProjectReference Include="..\GisHub.Common\GisHub.Common.csproj" />
     <ProjectReference Include="..\GisHub.Data\GisHub.Data.csproj" />
