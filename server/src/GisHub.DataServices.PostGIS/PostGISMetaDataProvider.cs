@@ -64,7 +64,8 @@ namespace Beginor.GisHub.DataServices.PostGIS {
                 + " obj_description((t.table_schema||'.'||t.table_name)::regclass::oid) as description,"
                 + " t.table_type as type"
                 + " from information_schema.tables t"
-                + " where t.table_schema = @schema";
+                + " where t.table_schema = @schema"
+                + " order by t.table_name";
             var meta = await conn.QueryAsync<TableModel>(sql, new {schema});
             return meta.ToList();
         }
