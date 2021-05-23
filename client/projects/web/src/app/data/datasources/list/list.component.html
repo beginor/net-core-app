@@ -2,7 +2,7 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a routerLink="/">首页</a></li>
     <li class="breadcrumb-item"><a routerLink="/data">数据</a></li>
-    <li class="breadcrumb-item active" aria-current="page">数据源</li>
+    <li class="breadcrumb-item active" aria-current="page">数据服务</li>
   </ol>
 </nav>
 <div class="container-fluid">
@@ -10,12 +10,12 @@
     <div class="col-12">
       <div class="card" *ngIf="(account.info | async) as info">
         <div class="card-header d-flex justify-content-between">
-          <h5 class="card-title mb-0">数据源</h5>
+          <h5 class="card-title mb-0">数据服务</h5>
           <div class="btn-group btn-group-sm">
             <button *ngIf="info.privileges['datasources.create']"
               type="button" class="btn btn-outline-primary"
               (click)="showDetail('0', true)">
-              <svg-icon path="bi/plus"></svg-icon> 新建数据源
+              <svg-icon path="bi/plus"></svg-icon> 新建数据服务
             </button>
             <button type="button" class="btn btn-outline-secondary"
               (click)="loadData()">
@@ -57,7 +57,7 @@
                 <div class="col-6">
                   <div class="input-group input-group-sm">
                     <input class="form-control" type="text" name="keywords"
-                      placeholder="搜索数据源"
+                      placeholder="搜索数据服务"
                       [(ngModel)]="vm.searchModel.keywords"
                       (keyup.enter)="vm.search()" />
                     <div class="input-group-append">

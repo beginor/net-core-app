@@ -39,15 +39,15 @@ export class DetailComponent implements OnInit {
         const id = route.snapshot.params.id;
         const editable = route.snapshot.params.editable;
         if (id === '0') {
-            this.title = '新建数据库连接';
+            this.title = '新建数据源';
             this.editable = true;
         }
         else if (editable === 'true') {
-            this.title = '编辑数据库连接';
+            this.title = '编辑数据源';
             this.editable = true;
         }
         else {
-            this.title = '查看数据库连接';
+            this.title = '查看数据源';
             this.editable = false;
         }
         this.id = id;

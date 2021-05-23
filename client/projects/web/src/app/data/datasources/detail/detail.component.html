@@ -18,7 +18,7 @@
     <div class="form-group">
       <label class="form-label text-muted" for="name">名称 <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="name" name="name"
-        placeholder="请输入数据源名称 ..." required
+        placeholder="请输入数据服务名称 ..." required
         [disabled]="!editable"
         [(ngModel)]="model.name"
         #name="ngModel"
@@ -29,7 +29,7 @@
     <div class="form-group">
       <label class="form-label text-muted" for="description">描述 </label>
       <input class="form-control" type="text" id="description" name="description"
-        placeholder="请输入数据源描述 ..."
+        placeholder="请输入数据服务描述 ..."
         [disabled]="!editable"
         [(ngModel)]="model.description"
       />
@@ -37,7 +37,7 @@
     <div class="row">
       <div class="col">
         <div class="form-group">
-          <label class="form-label text-muted" for="con">选择数据库连接 <i class="text-danger">*</i></label>
+          <label class="form-label text-muted" for="con">选择数据源 <i class="text-danger">*</i></label>
           <select class="form-control custom-select" id="con" name="con" required
             [disabled]="!editable"
             [(ngModel)]="connection"
@@ -56,7 +56,7 @@
         <div class="form-group">
           <label class="form-label text-muted" for="schema">架构 <i class="text-danger">*</i></label>
           <input class="form-control" type="text" id="schema" name="schema"
-            placeholder="请输入数据架构 ..." required
+            placeholder="请输入数据源架构 ..." required
             [disabled]="!editable"
             [(ngModel)]="model.schema"
             #schema="ngModel"
