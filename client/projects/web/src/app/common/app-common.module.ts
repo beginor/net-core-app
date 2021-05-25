@@ -11,13 +11,15 @@ import { NavTopBarComponent } from './nav-topbar/nav-topbar.component';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { NavSidebarComponent } from './nav-sidebar/nav-sidebar.component';
 import { NavItemComponent } from './nav-item/nav-item.component';
+import { IframeComponent } from './iframe/iframe.component';
 
 @NgModule({
     declarations: [
         NavTopBarComponent,
         ConfirmComponent,
         NavSidebarComponent,
-        NavItemComponent
+        NavItemComponent,
+        IframeComponent
     ],
     imports: [
         CommonModule,
@@ -30,7 +32,8 @@ import { NavItemComponent } from './nav-item/nav-item.component';
     ],
     exports: [
         NavTopBarComponent,
-        NavSidebarComponent
+        NavSidebarComponent,
+        IframeComponent
     ],
     entryComponents: [
         ConfirmComponent

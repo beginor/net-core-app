@@ -27,7 +27,6 @@ export class DetailComponent implements OnInit {
     public editable: boolean;
     public targets = [
         { name: '当前窗口', value: '' },
-        { name: '新窗口', value: '_blank' },
         { name: '内嵌窗口', value: '_iframe' }
     ];
     public model: NavItemModel = { id: '', target: '', roles: [] };

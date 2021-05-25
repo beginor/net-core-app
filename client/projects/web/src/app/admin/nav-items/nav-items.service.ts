@@ -239,6 +239,8 @@ export interface NavItemModel {
     roles?: string[];
     /** 导航目标 */
     target?: string;
+    /** 内嵌窗口地址 */
+    frameUrl?: string;
 }
 
 /** 导航节点（菜单） 搜索参数 */

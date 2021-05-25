@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AuthGuard, IframeComponent } from 'app-shared';
+import { AuthGuard } from 'app-shared';
 
 import { environment } from '../environments/environment';
+import { IframeComponent } from './common';
 
 // tslint:disable:max-line-length
 const routes: Routes = [

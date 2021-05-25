@@ -1,56 +1,23 @@
-<a class="nav-link" *ngIf="navigation.isRouterLink(node);else httpLinkTpl" routerLinkActive="active" [routerLink]="node.url">
+<a class="nav-link" routerLinkActive="active" [routerLink]="node.url">
   <svg-icon class="nav-icon ml-2" [path]="node.icon"></svg-icon>
   <span class="ml-1" *ngIf="!sidebarCollapsed">{{node.title}}</span>
 </a>
-<ng-template #httpLinkTpl>
-  <ng-container *ngIf="node.target === '_blank'; else iframeLinkTpl">
-    <a class="nav-link" [href]="node.url" [target]="node.target">
-      <svg-icon class="nav-icon ml-2" [path]="node.icon"></svg-icon>
-      <span class="ml-1" *ngIf="!sidebarCollapsed">{{node.title}}</span>
-    </a>
-  </ng-container>
-  <ng-template #iframeLinkTpl>
-    <a class="nav-link" routerLinkActive="active"[routerLink]="['/iframe', node.url]">
-      <svg-icon class="nav-icon ml-2" [path]="node.icon"></svg-icon>
-      <span class="ml-1" *ngIf="!sidebarCollapsed">{{node.title}}</span>
-    </a>
-  </ng-template>
-</ng-template>
 
 <ul class="nav-link-subitems" *ngIf="(node.children && node.children.length > 0) || sidebarCollapsed"
   [class.sidebar-collapsed]="sidebarCollapsed">
   <ng-container *ngIf="sidebarCollapsed">
     <li>
-      <a class="nav-sublink" *ngIf="navigation.isRouterLink(node);else httpLinkPopupTpl"
-        [routerLink]="node.url" routerLinkActive="active">
+      <a class="nav-sublink" [routerLink]="node.url" routerLinkActive="active">
         {{node.title}}
       </a>
-      <ng-template #httpLinkPopupTpl>
-        <ng-container *ngIf="node.target === '_blank'; else iframePopupTpl">
-          <a class="nav-sublink" [href]="node.url" [target]="node.target">{{node.title}}</a>
-        </ng-container>
-        <ng-template #iframePopupTpl>
-          <a class="nav-sublink" routerLinkActive="active" [routerLink]="['/iframe', node.url]">{{node.title}}</a>
-        </ng-template>
-      </ng-template>
     </li>
   </ng-container>
   <ng-container *ngIf="node.children">
     <li class="divider" *ngIf="sidebarCollapsed"></li>
     <li *ngFor="let child of node.children">
-      <ng-container *ngIf="navigation.isRouterLink(child) else httpsubLinkTpl">
-        <a class="nav-sublink" [routerLink]="child.url" routerLinkActive="active">
-          {{child.title}}
-        </a>
-      </ng-container>
-      <ng-template #httpsubLinkTpl>
-        <ng-container *ngIf="child.target === '_blank' else iframesubLinkTpl">
-          <a class="nav-sublink" [href]="child.url" [target]="child.target">{{child.title}}</a>
-        </ng-container>
-        <ng-template #iframesubLinkTpl>
-          <a class="nav-sublink" routerLinkActive="active" [routerLink]="['/iframe', child.url]">{{child.title}}</a>
-        </ng-template>
-      </ng-template>
+      <a class="nav-sublink" [routerLink]="child.url" routerLinkActive="active">
+        {{child.title}}
+      </a>
     </li>
   </ng-container>
 </ul>

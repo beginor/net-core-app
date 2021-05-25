@@ -54,6 +54,9 @@ namespace Beginor.NetCoreApp.Data.Entities {
         /// <summary>导航目标窗口</summary>
         [Property(Name = "Target", Column = "target", Type = "string", NotNull = false, Length = 16)]
         public virtual string Target { get; set; }
+        /// <summary>内嵌窗口地址</summary>
+        [Property(Name = "FrameUrl", Column = "frame_url", Type = "string", NotNull = false, Length = 256)]
+        public virtual string FrameUrl { get; set; }
     }
 
 }
