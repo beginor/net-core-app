@@ -76,3 +76,9 @@ comment on column public.app_nav_items.roles
 
 comment on column public.app_nav_items.target
     is '导航目标';
+
+alter table public.app_nav_items
+    add column frame_url character varying(256);
+
+comment on column public.app_nav_items.frame_url
+    is '内嵌窗口地址';

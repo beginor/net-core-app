@@ -126,11 +126,11 @@ namespace Beginor.GisHub.Data.Repositories {
             var conn = Session.Connection;
             var sql = @"
                 with recursive cte as (
-                    select p.id, p.parent_id, p.title, p.tooltip, p.icon, p.url, p.sequence, p.roles, p.target
+                    select p.id, p.parent_id, p.title, p.tooltip, p.icon, p.url, p.sequence, p.roles, p.target, p.frame_url
                     from public.app_nav_items p
                     where p.parent_id is null and p.is_deleted = false
                     union all
-                    select c.id, c.parent_id, c.title, c.tooltip, c.icon, c.url, c.sequence, c.roles, c.target
+                    select c.id, c.parent_id, c.title, c.tooltip, c.icon, c.url, c.sequence, c.roles, c.target, c.frame_url
                     from public.app_nav_items c
                     inner join cte on cte.id = c.parent_id
                     where c.is_deleted = false and c.roles && @roles::character varying[]
@@ -164,6 +164,7 @@ namespace Beginor.GisHub.Data.Repositories {
                     Icon = item.Icon,
                     Tooltip = item.Tooltip,
                     Target = item.Target,
+                    FrameUrl = item.FrameUrl,
                     Children = FindChildrenRecursive(item.Id, items)
                 });
             return children.ToArray();

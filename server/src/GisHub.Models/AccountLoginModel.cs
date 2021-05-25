@@ -57,6 +57,8 @@ namespace Beginor.GisHub.Models {
         public MenuNodeModel[] Children { get; set; }
         /// <summary>目标窗口</summary>
         public string Target { get; set; }
+        /** 内嵌窗口地址 */
+        public string FrameUrl { get; set; }
     }
 
 }

@@ -42,17 +42,24 @@ export class NavigationService {
         return this.location.path().includes(node.url as string);
     }
 
-    public isRouterLink(node: NavigationNode): boolean {
-        if (!node.url) {
-            return false;
+    public findCurrentIframeUrl(): string | undefined {
+        const root = this.root.getValue();
+        return this.findIframeUrl(root.children || [], this.currentUrl);
+    }
+
+    private findIframeUrl(
+        nodes: NavigationNode[],
+        url: string
+    ): string | undefined {
+        for (const node of nodes) {
+            if (node.url === url) {
+                return node.frameUrl;
+            }
+            if (url.startsWith(node.url as string) && !!node.children) {
+                return this.findIframeUrl(node.children, url);
+            }
         }
-        if (node.url.startsWith('https://') || node.url.startsWith('http://')) {
-            return false;
-        }
-        if (!!node.target) {
-            return false;
-        }
-        return true;
+        return '';
     }
 
     private setupNavigationNodes(rootNode: NavigationNode): void {
@@ -78,7 +85,8 @@ export class NavigationService {
                 }
                 if (path.startsWith(node.url)) {
                     this.sidebarNodes.next(node.children);
-                    this.showSidebar = !!node.children && node.children.length > 0;
+                    this.showSidebar =
+                        (!!node.children) && node.children.length > 0;
                     break;
                 }
             }
@@ -130,5 +138,6 @@ export interface NavigationNode {
     hidden?: boolean;
     icon?: string;
     target?: string;
+    frameUrl?: string;
     children?: NavigationNode[];
 }
