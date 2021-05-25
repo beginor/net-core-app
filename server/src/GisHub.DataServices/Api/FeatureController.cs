@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -128,8 +129,11 @@ namespace Beginor.GisHub.DataServices.Api {
             if (dataSource == null) {
                 return null;
             }
-            var reader = factory.CreateFeatureProvider(dataSource.DatabaseType);
-            var featureSet = await reader.QueryAsync(dataSource, param);
+            if (param.OutFields.Trim() == "*") {
+                param.OutFields = string.Join(",", dataSource.Fields.Select(f => f.Name));
+            }
+            var featureProvider = factory.CreateFeatureProvider(dataSource.DatabaseType);
+            var featureSet = await featureProvider.QueryAsync(dataSource, param);
             return featureSet;
         }
     }

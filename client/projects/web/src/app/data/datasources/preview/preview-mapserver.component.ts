@@ -60,7 +60,7 @@ export class PreviewMapServerComponent implements AfterViewInit, OnDestroy {
         ]);
         const featureLayer = new FeatureLayer({
             url: this.vm.getPreviewUrl(id, 'mapserver'),
-            outFields: fields.map(x => x.name ),
+            outFields: fields.map(x => x.name),
             popupEnabled: true,
             popupTemplate: {
                 title: `{${this.ds.displayColumn}}`,
@@ -70,7 +70,7 @@ export class PreviewMapServerComponent implements AfterViewInit, OnDestroy {
                         fieldInfos: fields.map(x => {
                             return {
                                 fieldName: x.name,
-                                label: x.description ?? x.name
+                                label: x.name
                             };
                         })
                     }

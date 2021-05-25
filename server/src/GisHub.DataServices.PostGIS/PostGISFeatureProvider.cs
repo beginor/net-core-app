@@ -42,6 +42,9 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             if (queryParam.OutFields.IsNullOrEmpty() || queryParam.OutFields.Trim() == "*") {
                 result.Select = $"{dataSource.PrimaryKeyColumn},{dataSource.DisplayColumn},st_astext({dataSource.GeometryColumn})";
             }
+            else {
+                result.Select = queryParam.OutFields;
+            }
             result.Where = BuildWhere(dataSource, queryParam);
             result.OrderBy = queryParam.OrderByFields;
             result.Skip = queryParam.ResultOffset;

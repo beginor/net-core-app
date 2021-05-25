@@ -111,6 +111,9 @@ namespace Beginor.GisHub.DataServices {
                 foreach (var col in columns) {
                     var fieldName = col.Name;
                     var fieldVal = row[fieldName];
+                    if (fieldVal == null) {
+                        continue;
+                    }
                     if (fieldName.EqualsOrdinalIgnoreCase(dataSource.PrimaryKeyColumn)) {
                         attrs[fieldName] = fieldVal;
                     }
@@ -388,16 +391,22 @@ namespace Beginor.GisHub.DataServices {
                 field.Type = AgsFieldType.EsriGeometry;
             }
             else {
-                var dataType = row[column.Name].GetType();
-                var fieldTypeMap = AgsFieldType.FieldTypeMap;
-                if (fieldTypeMap.ContainsKey(dataType)) {
-                    field.Type = fieldTypeMap[dataType]();
-                    if (field.Type == AgsFieldType.EsriString) {
-                        field.Length = column.Length;
-                    }
+                var data = row[column.Name];
+                if (data == null) {
+                    field.Type = AgsFieldType.EsriString;
                 }
                 else {
-                    field.Type = AgsFieldType.EsriString;
+                    var dataType = data.GetType();
+                    var fieldTypeMap = AgsFieldType.FieldTypeMap;
+                    if (fieldTypeMap.ContainsKey(dataType)) {
+                        field.Type = fieldTypeMap[dataType]();
+                        if (field.Type == AgsFieldType.EsriString) {
+                            field.Length = column.Length;
+                        }
+                    }
+                    else {
+                        field.Type = AgsFieldType.EsriString;
+                    }
                 }
             }
             return field;

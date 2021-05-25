@@ -99,7 +99,7 @@ export class PreviewFeatureSetComponent implements AfterViewInit, OnDestroy {
                         fieldInfos: fields.map(x => {
                             return {
                                 fieldName: x.name,
-                                label: x.description ?? x.name
+                                label: x.name
                             };
                         })
                     }
