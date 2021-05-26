@@ -17,3 +17,5 @@ then
 fi
 
 scp -r dist/* $2
+
+rm -rf dist
