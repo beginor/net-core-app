@@ -2,7 +2,7 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a routerLink="/">首页</a></li>
     <li class="breadcrumb-item"><a routerLink="/data">数据</a></li>
-    <li class="breadcrumb-item active" aria-current="page">切片地图</li>
+    <li class="breadcrumb-item active" aria-current="page">栅格切片包</li>
   </ol>
 </nav>
 <div class="container-fluid">
@@ -10,12 +10,12 @@
     <div class="col-12">
       <div class="card" *ngIf="(account.info | async) as info">
         <div class="card-header d-flex justify-content-between">
-          <h5 class="card-title mb-0">切片地图</h5>
+          <h5 class="card-title mb-0">栅格切片包</h5>
           <div class="btn-group btn-group-sm">
             <button *ngIf="info.privileges['tilemaps.create']"
               type="button" class="btn btn-outline-primary"
               (click)="showDetail('0', true)">
-              <svg-icon path="bi/plus"></svg-icon> 新建切片地图
+              <svg-icon path="bi/plus"></svg-icon> 新建栅格切片包
             </button>
             <button type="button" class="btn btn-outline-secondary"
               (click)="loadData()">

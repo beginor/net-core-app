@@ -19,9 +19,9 @@
       <div class="col">
         <div class="form-group" [class.is-valid]="name.valid"
           [class.is-invalid]="!(name.valid || name.pristine)">
-          <label class="form-label text-muted" for="name">切片地图名称  <i class="text-danger">*</i> </label>
+          <label class="form-label text-muted" for="name">栅格切片包名称  <i class="text-danger">*</i> </label>
           <input class="form-control" type="text" id="name" name="name"
-            placeholder="请输入切片地图名称 ..." [(ngModel)]="model.name"
+            placeholder="请输入栅格切片包名称 ..." [(ngModel)]="model.name"
             [class.is-invalid]="!(name.valid || name.pristine)"
             [class.is-valid]="name.valid"
             required #name="ngModel" [disabled]="!editable"

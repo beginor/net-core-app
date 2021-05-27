@@ -38,15 +38,15 @@ export class DetailComponent implements OnInit {
         const id = route.snapshot.params.id;
         const editable = route.snapshot.params.editable;
         if (id === '0') {
-            this.title = '新建切片地图';
+            this.title = '新建栅格切片包';
             this.editable = true;
         }
         else if (editable === 'true') {
-            this.title = '编辑切片地图';
+            this.title = '编辑栅格切片包';
             this.editable = true;
         }
         else {
-            this.title = '查看切片地图';
+            this.title = '查看栅格切片包';
             this.editable = false;
         }
         this.id = id;
