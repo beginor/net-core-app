@@ -23,7 +23,7 @@ namespace Gmap.Utils {
         }
 
         private static double ToRadians(double deg) {
-            return deg * 180.0 / Math.PI;
+            return deg * Math.PI / 180.0;
         }
 
     }

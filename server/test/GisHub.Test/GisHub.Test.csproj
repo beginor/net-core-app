@@ -27,6 +27,7 @@
     <ProjectReference Include="..\..\src\GisHub.Data\GisHub.Data.csproj" />
     <ProjectReference Include="..\..\src\GisHub.Entry\GisHub.Entry.csproj" />
     <ProjectReference Include="..\..\src\GisHub.Models\GisHub.Models.csproj" />
+    <ProjectReference Include="..\GisHub.Gmap\GisHub.Gmap.csproj" />
   </ItemGroup>
 
   <ItemGroup>

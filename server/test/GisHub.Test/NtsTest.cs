@@ -87,6 +87,26 @@ namespace Beginor.GisHub.Test {
             Console.WriteLine(geom.GetType());
         }
 
+        [Test]
+        public void _07_CanComputeExtent() {
+            using var wkt = new StreamReader("wkt/gd_buffer.wkt");
+            var reader = new WKTReader();
+            var geom = reader.Read(wkt) as MultiPolygon;
+            Assert.IsNotNull(geom);
+            var envelop = geom.EnvelopeInternal;
+            Assert.IsNotNull(envelop);
+            var minX = envelop.MinX;
+            var maxX = envelop.MaxX;
+            var minY = envelop.MinY;
+            var maxY = envelop.MaxY;
+            var z = 19;
+            var minCol = Gmap.Utils.MercatorTileUtil.Lng2TileX(minX, z);
+            var minRow = Gmap.Utils.MercatorTileUtil.Lat2TileY(minY, z);
+            var maxCol = Gmap.Utils.MercatorTileUtil.Lng2TileX(maxX, z);
+            var maxRow = Gmap.Utils.MercatorTileUtil.Lat2TileY(maxY, z);
+            Console.WriteLine($"z: {z}, minCol: {minCol}, minRow: {minRow}, maxCol: {maxCol}, maxRow: {maxRow}");
+        }
+
     }
 
 }
