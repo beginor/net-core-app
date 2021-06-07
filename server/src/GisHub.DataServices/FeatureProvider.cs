@@ -279,7 +279,7 @@ namespace Beginor.GisHub.DataServices {
 
         protected abstract ReadDataParam ConvertCountQueryParam(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
         protected string ConvertQueryGeometryToWkt(AgsQueryParam queryParam, int srid) {
-            var geometry = queryParam.GeometryValue;
+            var geometry = queryParam.GetGeometryValue();
             if (geometry != null) {
                 var convertedGeometry = ConvertGeometrySr(geometry, geometry.SpatialReference.Wkid, srid);
                 if (convertedGeometry != null) {

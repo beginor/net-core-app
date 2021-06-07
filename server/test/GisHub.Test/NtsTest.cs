@@ -4,6 +4,7 @@ using System.Text.Json;
 using NUnit.Framework;
 using NetTopologySuite.Geometries;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Common;
 using Beginor.GisHub.DataServices;
 using Beginor.GisHub.DataServices.GeoJson;
 using NetTopologySuite.IO;
@@ -19,7 +20,8 @@ namespace Beginor.GisHub.Test {
                 JsonSerializerDefaults.Web
             );
             options.Converters.Add(new GeoJsonGeometryConverter());
-            var point2D = new Point(113.2, 23.4);
+            options.Converters.Add(new CoordinateConverter());
+            var point2D = new Point(113.2, 23.40000444);
             var arr2D = point2D.Coordinate.ToArray();
             Assert.AreEqual(arr2D.Length, 2);
             Console.WriteLine(point2D.ToGeoJson().ToJson(options));

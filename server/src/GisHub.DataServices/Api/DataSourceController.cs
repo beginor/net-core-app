@@ -22,17 +22,20 @@ namespace Beginor.GisHub.DataServices.Api {
         private IDataSourceRepository repository;
         private IDataServiceFactory factory;
         private IAppJsonDataRepository jsonRepository;
+        private JsonSerializerOptionsFactory serializerOptionsFactory;
 
         public DataSourceController(
             ILogger<DataSourceController> logger,
             IDataSourceRepository repository,
             IDataServiceFactory factory,
-            IAppJsonDataRepository jsonRepository
+            IAppJsonDataRepository jsonRepository,
+            JsonSerializerOptionsFactory serializerOptionsFactory
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
             this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
             this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
+            this.serializerOptionsFactory = serializerOptionsFactory ?? throw new ArgumentNullException(nameof(serializerOptionsFactory));
         }
 
         protected override void Dispose(bool disposing) {
@@ -41,6 +44,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 repository = null;
                 factory = null;
                 jsonRepository = null;
+                serializerOptionsFactory = null;
             }
             base.Dispose(disposing);
         }

@@ -24,17 +24,20 @@ namespace Beginor.GisHub.DataServices.Api {
         private IDataSourceRepository repository;
         private IDataServiceFactory factory;
         private IAppJsonDataRepository jsonRepository;
+        private JsonSerializerOptionsFactory serializerOptionsFactory;
 
         public FeatureController(
             ILogger<DataSourceController> logger,
             IDataSourceRepository repository,
             IDataServiceFactory factory,
-            IAppJsonDataRepository jsonRepository
+            IAppJsonDataRepository jsonRepository,
+            JsonSerializerOptionsFactory serializerOptionsFactory
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
             this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
             this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
+            this.serializerOptionsFactory = serializerOptionsFactory ?? throw new ArgumentNullException(nameof(serializerOptionsFactory));
         }
 
         protected override void Dispose(bool disposing) {
@@ -43,6 +46,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 repository = null;
                 factory = null;
                 jsonRepository = null;
+                serializerOptionsFactory = null;
             }
             base.Dispose(disposing);
         }
@@ -60,7 +64,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (dataSource == null) {
                     return NotFound($"Datasource {id} does not exist !");
                 }
-                var serializerOptions = JsonFactory.CreateAgsJsonSerializerOptions();
+                var serializerOptions = serializerOptionsFactory.CreateAgsJsonSerializerOptions();
                 var jsonElement = await jsonRepository.GetValueByIdAsync(id);
                 if (jsonElement.ValueKind != JsonValueKind.Undefined) {
                     return Json(jsonElement, serializerOptions);
@@ -91,10 +95,10 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (featureSet == null) {
                     return NotFound($"Datasource {id} does not exist !");
                 }
-                return Json(featureSet, JsonFactory.CreateAgsJsonSerializerOptions());
+                return Json(featureSet, serializerOptionsFactory.CreateAgsJsonSerializerOptions());
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson(JsonFactory.CreateJsonSerializerOptions())}");
+                logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson()}");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
@@ -113,10 +117,10 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (featureSet == null) {
                     return NotFound($"Datasource {id} does not exist !");
                 }
-                return Json(featureSet, JsonFactory.CreateAgsJsonSerializerOptions());
+                return Json(featureSet, serializerOptionsFactory.CreateAgsJsonSerializerOptions());
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson(JsonFactory.CreateJsonSerializerOptions())}");
+                logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson()}");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
