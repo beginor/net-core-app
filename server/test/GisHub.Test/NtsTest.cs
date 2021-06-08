@@ -19,7 +19,7 @@ namespace Beginor.GisHub.Test {
             var options = new JsonSerializerOptions(
                 JsonSerializerDefaults.Web
             );
-            options.Converters.Add(new GeoJsonGeometryConverter());
+            options.Converters.Add(new GeoJsonGeometryConverter(new CoordinateConverter()));
             options.Converters.Add(new CoordinateConverter());
             var point2D = new Point(113.2, 23.40000444);
             var arr2D = point2D.Coordinate.ToArray();

@@ -17,17 +17,20 @@ namespace Beginor.GisHub.DataServices {
         private static readonly int[] GeographicSrids = { 4326, 4490 };
         private static readonly int[] MercatorSrids = { 3857, 102100 };
 
-        protected IDataServiceFactory Factory { get; }
+        private JsonSerializerOptionsFactory serializerOptionsFactory;
 
-        protected FeatureProvider(IDataServiceFactory factory) {
-            Factory = factory;
+        protected IDataServiceFactory DataServiceFactory { get; }
+
+        protected FeatureProvider(IDataServiceFactory dataServiceFactory, JsonSerializerOptionsFactory serializerOptionsFactory) {
+            DataServiceFactory = dataServiceFactory ?? throw new ArgumentNullException(nameof(dataServiceFactory));
+            this.serializerOptionsFactory = serializerOptionsFactory ?? throw new ArgumentNullException(nameof(serializerOptionsFactory));
         }
 
         public async Task<GeoJsonFeatureCollection> ReadAsFeatureCollectionAsync(
             DataSourceCacheItem dataSource,
             GeoJsonParam param
         ) {
-            var dsReader = Factory.CreateDataSourceReader(dataSource.DatabaseType);
+            var dsReader = DataServiceFactory.CreateDataSourceReader(dataSource.DatabaseType);
             var rdp = new ReadDataParam {
                 Select = CheckGeoSelect(dataSource, param.Select),
                 Where = CheckGeoWhere(dataSource, param.Where),
@@ -68,7 +71,7 @@ namespace Beginor.GisHub.DataServices {
         }
 
         public async Task<AgsFeatureSet> ReadAsFeatureSetAsync(DataSourceCacheItem dataSource, AgsJsonParam param) {
-            var dsReader = Factory.CreateDataSourceReader(dataSource.DatabaseType);
+            var dsReader = DataServiceFactory.CreateDataSourceReader(dataSource.DatabaseType);
             var selectFields = CheckGeoSelect(dataSource, param.Select);
             var rdp = new ReadDataParam {
                 Select = selectFields,
@@ -151,7 +154,7 @@ namespace Beginor.GisHub.DataServices {
         }
 
         public async Task<AgsLayerDescription> GetLayerDescriptionAsync(DataSourceCacheItem dataSource) {
-            var reader = Factory.CreateDataSourceReader(dataSource.DatabaseType);
+            var reader = DataServiceFactory.CreateDataSourceReader(dataSource.DatabaseType);
             var columns = await reader.GetColumnsAsync(dataSource);
             var layerDesc = new AgsLayerDescription {
                 CurrentVersion = 10.61,
@@ -189,7 +192,7 @@ namespace Beginor.GisHub.DataServices {
                 },
             };
             layerDesc.GeometryField = layerDesc.Fields.First(f => f.Type == AgsFieldType.EsriGeometry);
-            var provider = Factory.CreateFeatureProvider(dataSource.DatabaseType);
+            var provider = DataServiceFactory.CreateFeatureProvider(dataSource.DatabaseType);
             var featureset = await QueryForExtentAsync(dataSource, new AgsQueryParam());
             layerDesc.Extent = featureset.Extent;
             // layerDesc.DrawingInfo = AgsDrawingInfo.CreateDefaultDrawingInfo(layerDesc.GeometryType);
@@ -213,7 +216,7 @@ namespace Beginor.GisHub.DataServices {
             }
             else {
                 var param = ConvertQueryParams(dataSource, queryParam);
-                var featureProvider = Factory.CreateFeatureProvider(dataSource.DatabaseType);
+                var featureProvider = DataServiceFactory.CreateFeatureProvider(dataSource.DatabaseType);
                 result = await featureProvider.ReadAsFeatureSetAsync(dataSource, param);
             }
             return result;
@@ -221,7 +224,7 @@ namespace Beginor.GisHub.DataServices {
 
         protected async Task<AgsFeatureSet> QueryForIdsAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
             var param = ConvertIdsQueryParam(dataSource, queryParam);
-            var reader = Factory.CreateDataSourceReader(dataSource.DatabaseType);
+            var reader = DataServiceFactory.CreateDataSourceReader(dataSource.DatabaseType);
             var data = await reader.ReadDataAsync(dataSource, param);
             var result = new AgsFeatureSet();
             result.ObjectIdFieldName = dataSource.PrimaryKeyColumn;
@@ -238,7 +241,7 @@ namespace Beginor.GisHub.DataServices {
         protected async Task<AgsFeatureSet> QueryForCountAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
             var result = new AgsFeatureSet();
             var param = ConvertCountQueryParam(dataSource, queryParam);
-            var reader = Factory.CreateDataSourceReader(dataSource.DatabaseType);
+            var reader = DataServiceFactory.CreateDataSourceReader(dataSource.DatabaseType);
             var count = await reader.ReadScalarAsync<long>(dataSource, param);
             result.Count = count;
             return result;
@@ -247,7 +250,7 @@ namespace Beginor.GisHub.DataServices {
         protected async Task<AgsFeatureSet> QueryForExtentAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
             var result = new AgsFeatureSet();
             var param = ConvertExtentQueryParam(dataSource, queryParam);
-            var reader = Factory.CreateDataSourceReader(dataSource.DatabaseType);
+            var reader = DataServiceFactory.CreateDataSourceReader(dataSource.DatabaseType);
             var wkt = await reader.ReadScalarAsync<string>(dataSource, param);
             if (wkt != null) {
                 var wktReader = new WKTReader();
@@ -279,7 +282,7 @@ namespace Beginor.GisHub.DataServices {
 
         protected abstract ReadDataParam ConvertCountQueryParam(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
         protected string ConvertQueryGeometryToWkt(AgsQueryParam queryParam, int srid) {
-            var geometry = queryParam.GetGeometryValue();
+            var geometry = queryParam.GetGeometryValue(serializerOptionsFactory.AgsJsonSerializerOptions);
             if (geometry != null) {
                 var convertedGeometry = ConvertGeometrySr(geometry, geometry.SpatialReference.Wkid, srid);
                 if (convertedGeometry != null) {
@@ -291,7 +294,7 @@ namespace Beginor.GisHub.DataServices {
 
         protected async Task<AgsFeatureSet> QueryForStatisticsAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
             var param = ConvertStatisticsQueryParam(dataSource, queryParam);
-            var reader = Factory.CreateDataSourceReader(dataSource.DatabaseType);
+            var reader = DataServiceFactory.CreateDataSourceReader(dataSource.DatabaseType);
             var data = await reader.ReadDataAsync(dataSource, param);
             var result = new AgsFeatureSet {
                 Features = new List<AgsFeature>(data.Count)

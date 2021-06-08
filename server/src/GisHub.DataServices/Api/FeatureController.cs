@@ -64,7 +64,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (dataSource == null) {
                     return NotFound($"Datasource {id} does not exist !");
                 }
-                var serializerOptions = serializerOptionsFactory.CreateAgsJsonSerializerOptions();
+                var serializerOptions = serializerOptionsFactory.AgsJsonSerializerOptions;
                 var jsonElement = await jsonRepository.GetValueByIdAsync(id);
                 if (jsonElement.ValueKind != JsonValueKind.Undefined) {
                     return Json(jsonElement, serializerOptions);
@@ -95,7 +95,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (featureSet == null) {
                     return NotFound($"Datasource {id} does not exist !");
                 }
-                return Json(featureSet, serializerOptionsFactory.CreateAgsJsonSerializerOptions());
+                return Json(featureSet, serializerOptionsFactory.AgsJsonSerializerOptions);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson()}");
@@ -117,7 +117,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (featureSet == null) {
                     return NotFound($"Datasource {id} does not exist !");
                 }
-                return Json(featureSet, serializerOptionsFactory.CreateAgsJsonSerializerOptions());
+                return Json(featureSet, serializerOptionsFactory.AgsJsonSerializerOptions);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson()}");

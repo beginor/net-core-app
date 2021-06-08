@@ -29,4 +29,10 @@ namespace Beginor.GisHub.DataServices {
 
     }
 
+    public class CoordinateOptions {
+
+
+
+    }
+
 }

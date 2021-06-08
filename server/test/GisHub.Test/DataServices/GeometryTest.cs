@@ -11,8 +11,9 @@ namespace Beginor.GisHub.Test.DataServices {
 
         [Test]
         public void CanDeserializeGeometry() {
+            var factory = new JsonSerializerOptionsFactory(new CoordinateConverter());
             var json = "{\"spatialReference\":{\"latestWkid\":3857,\"wkid\":102100},\"xmin\":11271098.442813028,\"ymin\":2504688.542850986,\"xmax\":11897270.578525025,\"ymax\":3130860.6785629876}";
-            var extent = JsonSerializer.Deserialize<AgsExtent>(json, JsonSerializerOptionsFactory.CreateAgsJsonSerializerOptions());
+            var extent = JsonSerializer.Deserialize<AgsExtent>(json, factory.AgsJsonSerializerOptions);
             Assert.IsNotNull(extent);
             var wkt = extent.ToNtsGeometry().AsText();
             Assert.IsNotNull(wkt);

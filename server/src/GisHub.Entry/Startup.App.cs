@@ -1,13 +1,14 @@
 using Beginor.AppFx.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Beginor.GisHub.Entry {
 
     partial class Startup {
 
-        private static void ConfigureAppServices(
+        private void ConfigureAppServices(
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
@@ -32,13 +33,19 @@ namespace Beginor.GisHub.Entry {
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
+
+            var coordinateConverter = new Beginor.GisHub.DataServices.CoordinateConverter();
+            var coordinateSection = config.GetSection("coordinate");
+            coordinateSection.Bind(coordinateConverter);
+            services.AddSingleton<Beginor.GisHub.DataServices.CoordinateConverter>(coordinateConverter);
             services.AddSingleton<Beginor.GisHub.DataServices.IDataServiceFactory, Beginor.GisHub.DataServices.DataServiceFactory>();
+            services.AddSingleton<Beginor.GisHub.DataServices.JsonSerializerOptionsFactory>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISDataSourceReader>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISFeatureProvider>();
         }
 
-        private static void ConfigureApp(
+        private void ConfigureApp(
             IApplicationBuilder app,
             IWebHostEnvironment env
         ) {

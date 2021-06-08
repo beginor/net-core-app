@@ -25,8 +25,9 @@ namespace Beginor.GisHub.DataServices.PostGIS {
         };
 
         public PostGISFeatureProvider(
-            IDataServiceFactory factory
-        ) : base(factory) { }
+            IDataServiceFactory dataServiceFactory,
+            JsonSerializerOptionsFactory jsonSerializerOptionsFactory
+        ) : base(dataServiceFactory, jsonSerializerOptionsFactory) { }
 
         protected override ReadDataParam ConvertIdsQueryParam(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
             var result = new ReadDataParam();

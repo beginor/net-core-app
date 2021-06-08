@@ -30,7 +30,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 }
                 var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
                 var columns = await reader.GetColumnsAsync(dataSource);
-                return Json(columns, serializerOptionsFactory.CreateJsonSerializerOptions());
+                return Json(columns, serializerOptionsFactory.JsonSerializerOptions);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get columns of datasource {id} .");
@@ -93,7 +93,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 var result = new PaginatedResponseModel<IDictionary<string, object>> {
                     Total = total, Data = data, Skip = param.Skip, Take = param.Take
                 };
-                return Json(result, serializerOptionsFactory.CreateJsonSerializerOptions());
+                return Json(result, serializerOptionsFactory.JsonSerializerOptions);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not read data from datasource {id} with {param.ToJson()} .");
@@ -124,7 +124,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 }
                 var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
                 var data = await reader.ReadDistinctDataAsync(dataSource, param);
-                return Json(data, serializerOptionsFactory.CreateJsonSerializerOptions());
+                return Json(data, serializerOptionsFactory.JsonSerializerOptions);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not read distinct data from datasource {id} with {param.ToJson()} .");
@@ -164,7 +164,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 }
                 var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
                 var data = await reader.PivotData(dataSource, param);
-                return Json(data, serializerOptionsFactory.CreateJsonSerializerOptions());
+                return Json(data, serializerOptionsFactory.JsonSerializerOptions);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not pivot data from datasource {id} with {param.ToJson()} .");
@@ -199,7 +199,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 //
                 var featureProvider = factory.CreateFeatureProvider(ds.DatabaseType);
                 var featureCollection = await featureProvider.ReadAsFeatureCollectionAsync(ds, param);
-                var json = JsonSerializer.Serialize(featureCollection, typeof(GeoJsonFeatureCollection), serializerOptionsFactory.CreateGeoJsonSerializerOptions());
+                var json = JsonSerializer.Serialize(featureCollection, typeof(GeoJsonFeatureCollection), serializerOptionsFactory.GeoJsonSerializerOptions);
                 return Content(json, "application/geo+json", Encoding.UTF8);
             }
             catch (Exception ex) {
@@ -234,7 +234,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 }
                 var reader = factory.CreateFeatureProvider(ds.DatabaseType);
                 var fc = await reader.ReadAsFeatureSetAsync(ds, param);
-                var json = JsonSerializer.Serialize(fc, typeof(object), serializerOptionsFactory.CreateAgsJsonSerializerOptions());
+                var json = JsonSerializer.Serialize(fc, typeof(object), serializerOptionsFactory.AgsJsonSerializerOptions);
                 return Content(json, "application/json", Encoding.UTF8);
             }
             catch (Exception ex) {

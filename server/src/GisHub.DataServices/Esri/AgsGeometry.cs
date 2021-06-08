@@ -1,10 +1,8 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using NetTopologySuite.Geometries;
 
 namespace Beginor.GisHub.DataServices.Esri {
 
-    [JsonConverter(typeof(AgsGeometryConverter))]
+    // [JsonConverter(typeof(AgsGeometryConverter))]
     public abstract class AgsGeometry {
         public AgsSpatialReference SpatialReference { get; set; }
         public bool? HasM { get; set; }
