@@ -366,8 +366,8 @@ export interface DataServiceModel {
     name?: string;
     /** 数据服务描述 */
     description?: string;
-    /** 数据库连接 */
-    connection?: { id?: string; name?: string };
+    /** 数据源 */
+    dataSource?: { id?: string; name?: string };
     /** 数据表/视图架构 */
     schema?: string;
     /** 数据表/视图名称 */

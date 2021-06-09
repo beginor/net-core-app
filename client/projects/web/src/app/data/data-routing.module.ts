@@ -16,8 +16,8 @@ const routes: Routes = [
         loadChildren: () => import('./tilemaps/tilemaps.module').then(m => m.TileMapModule)
     },
     {
-        path: 'connections',
-        loadChildren: () => import('./connections/connections.module').then(m => m.ConnectionModule)
+        path: 'datasources',
+        loadChildren: () => import('./datasources/datasources.module').then(m => m.DataSourceModule)
     },
     {
         path: 'dataservices',

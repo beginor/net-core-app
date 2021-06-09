@@ -6,10 +6,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
-import { ConnectionService, ConnectionModel } from '../connections.service';
+import { DataSourceService, DataSourceModel } from '../datasources.service';
 
 @Component({
-    selector: 'app-connection-detail',
+    selector: 'app-datasources-detail',
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.scss'],
     animations: [
@@ -24,7 +24,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: ConnectionModel = { id: '' };
+    public model: DataSourceModel = { id: '' };
     public showPass = false;
 
     private id = '';
@@ -34,7 +34,7 @@ export class DetailComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         public account: AccountService,
-        public vm: ConnectionService
+        public vm: DataSourceService
     ) {
         const id = route.snapshot.params.id;
         const editable = route.snapshot.params.editable;

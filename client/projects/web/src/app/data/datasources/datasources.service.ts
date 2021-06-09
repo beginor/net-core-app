@@ -4,19 +4,19 @@ import { BehaviorSubject } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
 
-/** 数据库连接服务 */
+/** 数据源服务 */
 @Injectable({
     providedIn: 'root'
 })
-export class ConnectionService {
+export class DataSourceService {
 
-    public searchModel: ConnectionSearchModel = {
+    public searchModel: DataSourceSearchModel = {
         keywords: '',
         skip: 0,
         take: 10
     };
     public total = new BehaviorSubject<number>(0);
-    public data = new BehaviorSubject<ConnectionModel[]>([]);
+    public data = new BehaviorSubject<DataSourceModel[]>([]);
     public loading = false;
     public showPagination = false;
 
@@ -29,7 +29,7 @@ export class ConnectionService {
         private errorHandler: ErrorHandler
     ) { }
 
-    /** 搜索数据库连接 */
+    /** 搜索数据源 */
     public async search(): Promise<void> {
         let params = new HttpParams();
         for (const key in this.searchModel) {
@@ -40,7 +40,7 @@ export class ConnectionService {
         }
         this.loading = true;
         try {
-            const result = await this.http.get<ConnectionResultModel>(
+            const result = await this.http.get<DataSourceResultModel>(
                 this.baseUrl,
                 {
                     params: params
@@ -57,7 +57,7 @@ export class ConnectionService {
             this.total.next(0);
             this.data.next([]);
             this.ui.showAlert(
-                { type: 'danger', message: '加载数据库连接数据出错!'}
+                { type: 'danger', message: '加载数据源数据出错!'}
             );
         }
         finally {
@@ -65,10 +65,10 @@ export class ConnectionService {
         }
     }
 
-    /** 加载全部数据库连接 */
-    public async getAll(): Promise<ConnectionModel[]> {
+    /** 加载全部数据源 */
+    public async getAll(): Promise<DataSourceModel[]> {
         try {
-            const result = await this.http.get<ConnectionModel[]>(
+            const result = await this.http.get<DataSourceModel[]>(
                 `${this.apiRoot}/connections-list`
             ).toPromise();
             return result;
@@ -76,7 +76,7 @@ export class ConnectionService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '加载全部数据库连接出错！' }
+                { type: 'danger', message: '加载全部数据源出错！' }
             );
             return [];
         }
@@ -94,12 +94,12 @@ export class ConnectionService {
         await this.search();
     }
 
-    /** 创建数据库连接 */
+    /** 创建数据源 */
     public async create(
-        model: ConnectionModel
-    ): Promise<ConnectionModel | undefined> {
+        model: DataSourceModel
+    ): Promise<DataSourceModel | undefined> {
         try {
-            const result = await this.http.post<ConnectionModel>(
+            const result = await this.http.post<DataSourceModel>(
                 this.baseUrl,
                 model
             ).toPromise();
@@ -108,16 +108,16 @@ export class ConnectionService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '创建数据库连接出错！' }
+                { type: 'danger', message: '创建数据源出错！' }
             );
             return;
         }
     }
 
-    /** 获取指定的数据库连接 */
-    public async getById(id: string): Promise<ConnectionModel | undefined> {
+    /** 获取指定的数据源 */
+    public async getById(id: string): Promise<DataSourceModel | undefined> {
         try {
-            const result = await this.http.get<ConnectionModel>(
+            const result = await this.http.get<DataSourceModel>(
                 `${this.baseUrl}/${id}`
             ).toPromise();
             return result;
@@ -125,13 +125,13 @@ export class ConnectionService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '获取指定的数据库连接出错！' }
+                { type: 'danger', message: '获取指定的数据源出错！' }
             );
             return;
         }
     }
 
-    /** 删除数据库连接 */
+    /** 删除数据源 */
     public async delete(id: string): Promise<boolean> {
         const confirm = await this.ui.showConfirm('确认删除么？');
         if (!confirm) {
@@ -146,19 +146,19 @@ export class ConnectionService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '删除数据库连接出错！' }
+                { type: 'danger', message: '删除数据源出错！' }
             );
             return false;
         }
     }
 
-    /** 更新数据库连接 */
+    /** 更新数据源 */
     public async update(
         id: string,
-        model: ConnectionModel
-    ): Promise<ConnectionModel | undefined> {
+        model: DataSourceModel
+    ): Promise<DataSourceModel | undefined> {
         try {
-            const result = await this.http.put<ConnectionModel>(
+            const result = await this.http.put<DataSourceModel>(
                 `${this.baseUrl}/${id}`,
                 model
             ).toPromise();
@@ -167,7 +167,7 @@ export class ConnectionService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '更新数据库连接出错！' }
+                { type: 'danger', message: '更新数据源出错！' }
             );
             return;
         }
@@ -175,11 +175,11 @@ export class ConnectionService {
 
 }
 
-/** 数据库连接 */
-export interface ConnectionModel {
-    /** 连接ID */
+/** 数据源 */
+export interface DataSourceModel {
+    /** 数据源ID */
     id: string;
-    /** 连接名称 */
+    /** 数据源名称 */
     name?: string;
     /** 数据库类型（postgres、mssql、mysql、oracle、sqlite等） */
     databaseType?: string;
@@ -197,8 +197,8 @@ export interface ConnectionModel {
     timeout?: number;
 }
 
-/** 数据库连接 搜索参数 */
-export interface ConnectionSearchModel {
+/** 数据源 搜索参数 */
+export interface DataSourceSearchModel {
     [key: string]: undefined | number | string;
     keywords: string;
     /** 跳过的记录数 */
@@ -207,8 +207,8 @@ export interface ConnectionSearchModel {
     take: number;
 }
 
-/** 数据库连接 搜索结果 */
-export interface ConnectionResultModel {
+/** 数据源 搜索结果 */
+export interface DataSourceResultModel {
     /** 请求跳过的记录数 */
     skip?: number;
     /** 请求多少条记录 */
@@ -216,5 +216,5 @@ export interface ConnectionResultModel {
     /** 总记录数 */
     total?: number;
     /** 数据列表 */
-    data?: ConnectionModel[];
+    data?: DataSourceModel[];
 }

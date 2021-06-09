@@ -40,19 +40,19 @@
           <label class="form-label text-muted" for="con">选择数据源 <i class="text-danger">*</i></label>
           <select class="form-control custom-select" id="con" name="con" required
             [disabled]="!editable"
-            [(ngModel)]="connection"
+            [(ngModel)]="dataSource"
             #con="ngModel"
             [class.is-invalid]="!(con.valid || con.pristine)"
             [class.is-valid]="con.valid"
-            (change)="onSelectConnection()"
+            (change)="onSelectDataSource()"
             >
-            <option *ngFor="let c of connections" [ngValue]="c">
+            <option *ngFor="let c of dataSources" [ngValue]="c">
               {{c.name}}
             </option>
           </select>
         </div>
       </div>
-      <div class="col" *ngIf="!!connection && connection.databaseType !== 'mysql'">
+      <div class="col" *ngIf="!!dataSource && dataSource.databaseType !== 'mysql'">
         <div class="form-group">
           <label class="form-label text-muted" for="schema">架构 <i class="text-danger">*</i></label>
           <input class="form-control" type="text" id="schema" name="schema"

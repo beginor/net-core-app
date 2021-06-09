@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ConnectionService } from './connections.service';
+import { DataSourceService } from './datasources.service';
 
-describe('ConnectionStringService', () => {
+describe('DataSourceService', () => {
 
     beforeEach(() => TestBed.configureTestingModule({}));
 
     it('should be created', () => {
-        const service: ConnectionService = TestBed.inject(ConnectionService);
+        const service: DataSourceService = TestBed.inject(DataSourceService);
         expect(service).toBeTruthy();
     });
 

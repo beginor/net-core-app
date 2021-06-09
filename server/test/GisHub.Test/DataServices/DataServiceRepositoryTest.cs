@@ -51,10 +51,10 @@ namespace Beginor.GisHub.Test.DataServices {
             };
             var mapper = ServiceProvider.GetService<AutoMapper.IMapper>();
             var model = mapper.Map<DataServiceModel>(entity);
-            Assert.AreEqual(entity.DataSource.Id.ToString(), model.Connection.Id);
+            Assert.AreEqual(entity.DataSource.Id.ToString(), model.DataSource.Id);
             var entity2 = mapper.Map<Beginor.GisHub.DataServices.Data.DataService>(model);
             Assert.IsNotNull(entity2.DataSource);
-            Assert.AreEqual(entity2.DataSource.Id.ToString(), model.Connection.Id);
+            Assert.AreEqual(entity2.DataSource.Id.ToString(), model.DataSource.Id);
             Assert.IsNotEmpty(model.Fields);
         }
 

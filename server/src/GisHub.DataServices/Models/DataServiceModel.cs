@@ -5,25 +5,22 @@ using Beginor.AppFx.Core;
 namespace Beginor.GisHub.DataServices.Models {
 
     /// <summary>数据服务模型</summary>
-    /// <summary>数据服务模型</summary>
-    /// <summary>数据服务模型</summary>
-    /// <summary>数据服务模型</summary>
     public partial class DataServiceModel : StringEntity {
 
-        /// <summary>数据源名称</summary>
-        [Required(ErrorMessage = "数据源名称 必须填写！")]
+        /// <summary>数据服务名称</summary>
+        [Required(ErrorMessage = "数据服务名称 必须填写！")]
         public string Name { get; set; }
-        /// <summary>数据源描述</summary>
+        /// <summary>数据服务描述</summary>
         public string Description { get; set; }
         /// <summary>数据库连接</summary>
         [Required(ErrorMessage = "数据库连接 必须填写！")]
-        public StringIdNameEntity Connection { get; set; }
+        public StringIdNameEntity DataSource { get; set; }
         /// <summary>数据表/视图架构</summary>
         public string Schema { get; set; }
         /// <summary>数据表/视图名称</summary>
         [Required(ErrorMessage = "数据表/视图名称 必须填写！")]
         public string TableName { get; set; }
-        /// <summary>数据源公开的列</summary>
+        /// <summary>数据服务公开的列</summary>
         public DataServiceFieldModel[] Fields { get; set; }
         /// <summary>主键列名称</summary>
         [Required(ErrorMessage = "主键列名称 必须填写！")]

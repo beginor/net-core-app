@@ -3,10 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from 'app-shared';
 
-import { ConnectionService } from '../connections.service';
+import { DataSourceService } from '../datasources.service';
 
 @Component({
-    selector: 'app-connection-list',
+    selector: 'app-datasources-list',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss']
 })
@@ -16,7 +16,7 @@ export class ListComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         public account: AccountService,
-        public vm: ConnectionService
+        public vm: DataSourceService
     ) { }
 
     public ngOnInit(): void {

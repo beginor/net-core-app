@@ -13,8 +13,8 @@ import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import { DataServiceService, DataServiceModel, DataServiceFieldModel } from '../dataservices.service';
 import { MetadataService, TableModel, ColumnModel } from '../metadata.service';
 import {
-    ConnectionService, ConnectionModel
-} from '../../connections/connections.service';
+    DataSourceService, DataSourceModel
+} from '../../datasources/datasources.service';
 import { NgbTypeahead, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 import { UiService } from '../../../common';
 
@@ -35,8 +35,8 @@ export class DetailComponent implements OnInit {
     public title = '';
     public editable = false;
     public model: DataServiceModel = { id: '' };
-    public connections: ConnectionModel[] = [];
-    public connection?: ConnectionModel;
+    public dataSources: DataSourceModel[] = [];
+    public dataSource?: DataSourceModel;
 
     public schemas: string[] = [];
     public tables: TableModel[] = [];
@@ -79,7 +79,7 @@ export class DetailComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private conn: ConnectionService,
+        private conn: DataSourceService,
         private ui: UiService,
         public meta: MetadataService,
         public account: AccountService,
@@ -103,7 +103,7 @@ export class DetailComponent implements OnInit {
     }
 
     public async ngOnInit(): Promise<void> {
-        this.connections = await this.conn.getAll();
+        this.dataSources = await this.conn.getAll();
         await this.vm.getAllRoles();
         if (this.id !== '0') {
             const model = await this.vm.getById(this.id);
@@ -112,8 +112,8 @@ export class DetailComponent implements OnInit {
                     model.roles = [];
                 }
                 this.model = model;
-                this.connection = this.connections.find(
-                    cs => cs.id === model.connection?.id
+                this.dataSource = this.dataSources.find(
+                    cs => cs.id === model.dataSource?.id
                 );
                 this.table = { name: model.tableName as string };
                 this.loadSchemas()
@@ -166,12 +166,12 @@ export class DetailComponent implements OnInit {
         return icon;
     }
 
-    public async onSelectConnection(): Promise<void> {
-        this.model.connection = {
-            id: this.connection?.id,
-            name: this.connection?.name
+    public async onSelectDataSource(): Promise<void> {
+        this.model.dataSource = {
+            id: this.dataSource?.id,
+            name: this.dataSource?.name
         };
-        if (this.connection?.databaseType !== 'mysql') {
+        if (this.dataSource?.databaseType !== 'mysql') {
             await this.loadSchemas();
         }
         else {
@@ -301,39 +301,39 @@ export class DetailComponent implements OnInit {
     }
 
     private async loadSchemas(): Promise<void> {
-        if (!this.connection) {
+        if (!this.dataSource) {
             return;
         }
         const schemas = await this.meta.getSchemas(
-            this.connection.id as string
+            this.dataSource.id as string
         );
         this.schemas = schemas;
     }
 
     private async loadTables(): Promise<void> {
-        if (!this.connection) {
+        if (!this.dataSource) {
             return;
         }
         let schema = '';
-        if (this.connection.databaseType !== 'mysql') {
+        if (this.dataSource.databaseType !== 'mysql') {
             schema = this.model.schema as string;
         }
         const tables = await this.meta.getTables(
-            this.connection.id as string,
+            this.dataSource.id as string,
             schema
         );
         this.tables = tables;
     }
 
     private async loadColumns(): Promise<void> {
-        if (!this.connection) {
+        if (!this.dataSource) {
             return;
         }
         if (!this.model.tableName) {
             return;
         }
         const columns = await this.meta.getColumns(
-            this.connection.id as string,
+            this.dataSource.id as string,
             this.model.schema as string,
             this.model.tableName as string
         );
