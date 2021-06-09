@@ -44,7 +44,7 @@ namespace Beginor.GisHub.DataServices.Data {
         [Property(Name = "Timeout", Column = "timeout", Type = "int", NotNull = false)]
         public virtual int Timeout { get; set; }
 
-        /// <summary>是否已删除（软删除）</summary>
+        /// <summary>是否删除</summary>
         [Property(Name = "IsDeleted", Column = "is_deleted", Type = "bool", NotNull = true)]
         public virtual bool IsDeleted { get; set; }
     }

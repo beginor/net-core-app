@@ -55,4 +55,4 @@ comment on column public.data_sources.timeout
     is '超时时间';
 
 comment on column public.data_sources.is_deleted
-    is '是否已删除（软删除）';
+    is '是否删除';
