@@ -50,7 +50,7 @@ namespace Beginor.GisHub.DataServices.Data {
             var totalSql = new StringBuilder(" select count(ds.*) ");
             var dataSql = new StringBuilder(" select ds.id, ds.name, ds.description, ds.schema, ds.table_name, ds.primary_key_column, ds.display_column, ds.geometry_column ");
             var body = new StringBuilder();
-            body.AppendLine(" from public.datasources as ds ");
+            body.AppendLine(" from public.data_services as ds ");
             // body.AppendLine(" inner join connections c on c.id = ds.connection_id and c.is_deleted = false ");
             body.AppendLine(" where (ds.is_deleted = false) and (ds.roles && @roles::character varying[]) ");
             //
