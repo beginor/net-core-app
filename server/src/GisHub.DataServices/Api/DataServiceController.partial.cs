@@ -19,7 +19,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         [HttpGet("{id:long}/columns")]
         [Authorize("dataservices.read_data")]
-        [DataSourceRolesFilter(IdParameterName = "id")]
+        [DataServiceRolesFilter(IdParameterName = "id")]
         public async Task<ActionResult<List<ColumnModel>>> GetColumns(
             long id
         ) {
@@ -40,7 +40,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         [HttpGet("{id:long}/count")]
         [Authorize("dataservices.read_data")]
-        [DataSourceRolesFilter(IdParameterName = "id")]
+        [DataServiceRolesFilter(IdParameterName = "id")]
         public async Task<ActionResult<long>> Count(
             [FromRoute]long id,
             [FromQuery]CountParam param
@@ -65,7 +65,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         [HttpGet("{id:long}/data")]
         [Authorize("dataservices.read_data")]
-        [DataSourceRolesFilter(IdParameterName = "id")]
+        [DataServiceRolesFilter(IdParameterName = "id")]
         public async Task<ActionResult> ReadData(
             [FromRoute] long id,
             [FromQuery] ReadDataParam param
@@ -103,7 +103,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         [HttpGet("{id:long}/distinct")]
         [Authorize("dataservices.read_data")]
-        [DataSourceRolesFilter(IdParameterName = "id")]
+        [DataServiceRolesFilter(IdParameterName = "id")]
         public async Task<ActionResult> ReadDistinctData(
             [FromRoute] long id,
             [FromQuery] DistinctParam param
@@ -134,7 +134,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         [HttpGet("{id:long}/pivot")]
         [Authorize("dataservices.read_data")]
-        [DataSourceRolesFilter(IdParameterName = "id")]
+        [DataServiceRolesFilter(IdParameterName = "id")]
         public async Task<ActionResult> PivotData(
             long id,
             [FromQuery]PivotParam param
@@ -174,7 +174,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         [HttpGet("{id:long}/geojson")]
         [Authorize("dataservices.read_geojson")]
-        [DataSourceRolesFilter(IdParameterName = "id")]
+        [DataServiceRolesFilter(IdParameterName = "id")]
         public async Task<ActionResult<GeoJsonFeatureCollection>> ReadAsGeoJson(
             [FromRoute] long id,
             [FromQuery] GeoJsonParam param
@@ -210,7 +210,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         [HttpGet("{id:long}/featureset")]
         [Authorize("dataservices.read_featureset")]
-        [DataSourceRolesFilter(IdParameterName = "id")]
+        [DataServiceRolesFilter(IdParameterName = "id")]
         public async Task<ActionResult<AgsFeatureSet>> ReadAsFeatureSet(
             [FromRoute] long id,
             [FromQuery] AgsJsonParam param

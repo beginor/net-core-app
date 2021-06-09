@@ -12,7 +12,7 @@ namespace Beginor.GisHub.Test.DataServices {
 
     /// <summary>数据库连接仓储测试</summary>
     [TestFixture]
-    public class ConnectionRepositoryTest : BaseTest<IConnectionRepository> {
+    public class ConnectionRepositoryTest : BaseTest<IDataSourceRepository> {
 
         [Test]
         public void _01_CanResolveTarget() {
@@ -21,7 +21,7 @@ namespace Beginor.GisHub.Test.DataServices {
 
         [Test]
         public async Task _02_CanDoSearchAsync() {
-            var searchModel = new ConnectionStringSearchModel {
+            var searchModel = new DataSourceSearchModel {
                 Skip = 0,
                 Take = 10
             };

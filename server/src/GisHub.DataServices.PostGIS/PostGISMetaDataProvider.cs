@@ -20,7 +20,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             base.Dispose(disposing);
         }
 
-        public string BuildConnectionString(ConnectionModel model) {
+        public string BuildConnectionString(DataSourceModel model) {
             var builder = new NpgsqlConnectionStringBuilder {
                 ApplicationName = "GisHub",
                 Host = model.ServerAddress,
@@ -33,13 +33,13 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             return builder.ConnectionString;
         }
 
-        public async Task GetStatus(ConnectionModel model) {
+        public async Task GetStatus(DataSourceModel model) {
             var connStr = BuildConnectionString(model);
             await using var conn = new NpgsqlConnection(connStr);
             await conn.ExecuteScalarAsync<DateTime>("select now();");
         }
 
-        public async Task<IList<string>> GetSchemasAsync(ConnectionModel model) {
+        public async Task<IList<string>> GetSchemasAsync(DataSourceModel model) {
             var connStr = BuildConnectionString(model);
             await using var conn = new NpgsqlConnection(connStr);
             var sql = "select distinct t.table_schema from information_schema.tables t;";
@@ -48,7 +48,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
         }
 
         public async Task<IList<TableModel>> GetTablesAsync(
-            ConnectionModel model,
+            DataSourceModel model,
             string schema
         ) {
             var schemas = await GetSchemasAsync(model);
@@ -71,7 +71,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
         }
 
         public async Task<IList<ColumnModel>> GetColumnsAsync(
-            ConnectionModel model,
+            DataSourceModel model,
             string schema,
             string tableName
         ) {

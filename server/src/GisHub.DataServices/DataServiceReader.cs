@@ -18,17 +18,17 @@ namespace Beginor.GisHub.DataServices {
 
         protected IDataServiceFactory Factory { get; private set; }
         protected IDataServiceRepository DataServiceRepo { get; private set; }
-        protected IConnectionRepository ConnectionRepo { get; private set; }
+        protected IDataSourceRepository DataSourceRepo { get; private set; }
 
         protected DataServiceReader(
             IDataServiceFactory factory,
             IDataServiceRepository dataServiceRepo,
-            IConnectionRepository connectionRepo,
+            IDataSourceRepository dataSourceRepo,
             ILogger<DataServiceReader> logger
         ) {
             Factory = factory ?? throw new ArgumentNullException(nameof(factory));
             DataServiceRepo = dataServiceRepo ?? throw new ArgumentNullException(nameof(dataServiceRepo));
-            ConnectionRepo = connectionRepo ?? throw new ArgumentNullException(nameof(connectionRepo));
+            DataSourceRepo = dataSourceRepo ?? throw new ArgumentNullException(nameof(dataSourceRepo));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -38,19 +38,19 @@ namespace Beginor.GisHub.DataServices {
             if (disposing) {
                 Factory = null;
                 DataServiceRepo = null;
-                ConnectionRepo = null;
+                DataSourceRepo = null;
                 logger = null;
             }
             base.Dispose(disposing);
         }
 
-        public Task<long> CountAsync(DataSourceCacheItem dataSource, CountParam param) {
-            var sql = BuildCountSql(dataSource, param);
-            return ReadScalarAsync<long>(dataSource, sql);
+        public Task<long> CountAsync(DataServiceCacheItem dataService, CountParam param) {
+            var sql = BuildCountSql(dataService, param);
+            return ReadScalarAsync<long>(dataService, sql);
         }
 
-        public virtual Task<IList<ColumnModel>> GetColumnsAsync(DataSourceCacheItem dataSource) {
-            var columns = from field in dataSource.Fields
+        public virtual Task<IList<ColumnModel>> GetColumnsAsync(DataServiceCacheItem dataService) {
+            var columns = from field in dataService.Fields
                 select new ColumnModel {
                     Name = field.Name,
                     Description = field.Description,
@@ -60,47 +60,42 @@ namespace Beginor.GisHub.DataServices {
                 };
             IList<ColumnModel> result = columns.ToList();
             return Task.FromResult(result);
-            // var dsModel = await DataSourceRepo.GetByIdAsync(dataSource.DataSourceId);
-            // var connModel = await ConnectionRepo.GetByIdAsync(long.Parse(dsModel.Connection.Id));
-            // var meta = Factory.CreateMetadataProvider(connModel.DatabaseType);
-            // var columns = await meta.GetColumnsAsync(connModel, dataSource.Schema, dataSource.TableName);
-            // return columns;
         }
 
-        public virtual Task<IList<IDictionary<string, object>>> PivotData(DataSourceCacheItem dataSource, PivotParam param) {
-            var sql = BuildPivotSql(dataSource, param);
-            return ReadDataAsync(dataSource, sql);
+        public virtual Task<IList<IDictionary<string, object>>> PivotData(DataServiceCacheItem dataService, PivotParam param) {
+            var sql = BuildPivotSql(dataService, param);
+            return ReadDataAsync(dataService, sql);
         }
 
         public Task<IList<IDictionary<string, object>>> ReadDataAsync(
-            DataSourceCacheItem dataSource,
+            DataServiceCacheItem dataService,
             ReadDataParam param
         ) {
-            var sql = BuildReadDataSql(dataSource, param);
-            return ReadDataAsync(dataSource, sql);
+            var sql = BuildReadDataSql(dataService, param);
+            return ReadDataAsync(dataService, sql);
         }
 
-        public Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(DataSourceCacheItem dataSource, DistinctParam param) {
-            var sql = BuildDistinctSql(dataSource, param);
-            return ReadDataAsync(dataSource, sql);
+        public Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(DataServiceCacheItem dataService, DistinctParam param) {
+            var sql = BuildDistinctSql(dataService, param);
+            return ReadDataAsync(dataService, sql);
         }
 
-        public Task<T> ReadScalarAsync<T>(DataSourceCacheItem dataSource, ReadDataParam param) {
-            var sql = BuildScalarSql(dataSource, param);
-            return ReadScalarAsync<T>(dataSource, sql);
+        public Task<T> ReadScalarAsync<T>(DataServiceCacheItem dataService, ReadDataParam param) {
+            var sql = BuildScalarSql(dataService, param);
+            return ReadScalarAsync<T>(dataService, sql);
         }
 
-        public abstract IDbConnection CreateConnection(DataSourceCacheItem dataSource);
+        public abstract IDbConnection CreateConnection(DataServiceCacheItem dataService);
 
-        protected abstract string BuildReadDataSql(DataSourceCacheItem dataSource, ReadDataParam param);
+        protected abstract string BuildReadDataSql(DataServiceCacheItem dataService, ReadDataParam param);
 
-        protected abstract string BuildCountSql(DataSourceCacheItem dataSource, CountParam param);
+        protected abstract string BuildCountSql(DataServiceCacheItem dataService, CountParam param);
 
-        protected abstract string BuildDistinctSql(DataSourceCacheItem dataSource, DistinctParam param);
+        protected abstract string BuildDistinctSql(DataServiceCacheItem dataService, DistinctParam param);
 
-        protected abstract string BuildPivotSql(DataSourceCacheItem dataSource, PivotParam param);
+        protected abstract string BuildPivotSql(DataServiceCacheItem dataService, PivotParam param);
 
-        protected abstract string BuildScalarSql(DataSourceCacheItem dataSource, ReadDataParam param);
+        protected abstract string BuildScalarSql(DataServiceCacheItem dataService, ReadDataParam param);
 
         protected virtual KeyValuePair<string, object> ReadField(IDataReader dataReader, int fieldIndex) {
             var name = dataReader.GetName(fieldIndex);
@@ -108,8 +103,8 @@ namespace Beginor.GisHub.DataServices {
             return new KeyValuePair<string, object>(name, value);
         }
 
-        protected virtual async Task<IList<IDictionary<string, object>>> ReadDataAsync(DataSourceCacheItem dataSource, string sql) {
-            using var conn = CreateConnection(dataSource);
+        protected virtual async Task<IList<IDictionary<string, object>>> ReadDataAsync(DataServiceCacheItem dataService, string sql) {
+            using var conn = CreateConnection(dataService);
             logger.LogInformation(sql);
             var reader = await conn.ExecuteReaderAsync(sql);
             var result = new List<IDictionary<string, object>>();
@@ -124,8 +119,8 @@ namespace Beginor.GisHub.DataServices {
             return result;
         }
 
-        protected virtual async Task<T> ReadScalarAsync<T>(DataSourceCacheItem dataSource, string sql) {
-            using var conn = CreateConnection(dataSource);
+        protected virtual async Task<T> ReadScalarAsync<T>(DataServiceCacheItem dataService, string sql) {
+            using var conn = CreateConnection(dataService);
             logger.LogInformation(sql);
             var value = await conn.ExecuteScalarAsync<T>(sql);
             return value;

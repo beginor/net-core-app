@@ -8,7 +8,7 @@ namespace Beginor.GisHub.DataServices.Data {
     [Class(Schema = "public", Table = "data_services", Where = "is_deleted = false")]
     public partial class DataService : BaseEntity<long> {
 
-        /// <summary>数据服务id</summary>
+        /// <summary>数据服务ID</summary>
         [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]
         public override long Id { get { return base.Id; } set { base.Id = value; } }
 
@@ -20,9 +20,9 @@ namespace Beginor.GisHub.DataServices.Data {
         [Property(Name = "Description", Column = "description", Type = "string", NotNull = false, Length = 256)]
         public virtual string Description { get; set; }
 
-        /// <summary>数据库连接id</summary>
-        [ManyToOne(Name = "Connection", Column = "connection_id", ClassType = typeof(Connection), NotFound = NotFoundMode.Ignore)]
-        public virtual Connection Connection { get; set; }
+        /// <summary>数据源id</summary>
+        [ManyToOne(Name = "Connection", Column = "data_source_id", ClassType = typeof(DataSource), NotFound = NotFoundMode.Ignore)]
+        public virtual DataSource DataSource { get; set; }
 
         /// <summary>数据表/视图架构</summary>
         [Property(Name = "Schema", Column = "schema", Type = "string", NotNull = false, Length = 16)]

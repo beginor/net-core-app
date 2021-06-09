@@ -4,15 +4,15 @@ using NHibernate.Mapping.Attributes;
 
 namespace Beginor.GisHub.DataServices.Data {
 
-    /// <summary>数据库连接</summary>
-    [Class(Schema = "public", Table = "connections", Where = "is_deleted = false")]
-    public partial class Connection : BaseEntity<long> {
+    /// <summary>数据源</summary>
+    [Class(Schema = "public", Table = "data_sources", Where = "is_deleted = false")]
+    public partial class DataSource : BaseEntity<long> {
 
-        /// <summary>连接ID</summary>
+        /// <summary>数据源ID</summary>
         [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]
         public override long Id { get { return base.Id; } set { base.Id = value; } }
 
-        /// <summary>连接名称</summary>
+        /// <summary>数据源名称</summary>
         [Property(Name = "Name", Column = "name", Type = "string", NotNull = true, Length = 64)]
         public virtual string Name { get; set; }
 

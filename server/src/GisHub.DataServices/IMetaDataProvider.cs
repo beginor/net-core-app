@@ -6,15 +6,15 @@ namespace Beginor.GisHub.DataServices {
 
     public interface IMetaDataProvider {
 
-        string BuildConnectionString(ConnectionModel model);
+        string BuildConnectionString(DataSourceModel model);
 
-        Task GetStatus(ConnectionModel model);
+        Task GetStatus(DataSourceModel model);
 
-        Task<IList<string>> GetSchemasAsync(ConnectionModel model);
+        Task<IList<string>> GetSchemasAsync(DataSourceModel model);
 
-        Task<IList<TableModel>> GetTablesAsync(ConnectionModel model, string schema);
+        Task<IList<TableModel>> GetTablesAsync(DataSourceModel model, string schema);
 
-        Task<IList<ColumnModel>> GetColumnsAsync(ConnectionModel model, string schema, string tableName);
+        Task<IList<ColumnModel>> GetColumnsAsync(DataSourceModel model, string schema, string tableName);
 
     }
 

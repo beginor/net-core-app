@@ -9,11 +9,11 @@ namespace Beginor.GisHub.DataServices.Data {
 
         /// <summary>搜索 数据服务 ，返回分页结果。</summary>
         Task<PaginatedResponseModel<DataServiceModel>> SearchAsync(
-            DataSourceSearchModel model,
+            DataServiceSearchModel model,
             string[] roles
         );
 
-        Task<DataSourceCacheItem> GetCacheItemByIdAsync(
+        Task<DataServiceCacheItem> GetCacheItemByIdAsync(
             long id
         );
 

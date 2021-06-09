@@ -10,25 +10,25 @@ namespace Beginor.GisHub.DataServices {
         /// <summary>
         /// 读取数据服务的列信息
         /// </summary>
-        Task<IList<ColumnModel>> GetColumnsAsync(DataSourceCacheItem dataSource);
+        Task<IList<ColumnModel>> GetColumnsAsync(DataServiceCacheItem dataService);
         /// <summary>
         /// 读取数据服务的数据
         /// </summary>
-        Task<IList<IDictionary<string, object>>> ReadDataAsync(DataSourceCacheItem dataSource, ReadDataParam param);
+        Task<IList<IDictionary<string, object>>> ReadDataAsync(DataServiceCacheItem dataService, ReadDataParam param);
         /// <summary>
         /// 读取数据服务的记录数。
         /// </summary>
-        Task<long> CountAsync(DataSourceCacheItem dataSource, CountParam param);
+        Task<long> CountAsync(DataServiceCacheItem dataService, CountParam param);
         /// <summary>
         /// 读取数据服务中不重复的数据
         /// </summary>
-        Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(DataSourceCacheItem dataSource, DistinctParam param);
+        Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(DataServiceCacheItem dataService, DistinctParam param);
         /// <summary>
         /// 行列转置数据
         /// </summary>
-        Task<IList<IDictionary<string, object>>> PivotData(DataSourceCacheItem dataSource, PivotParam param);
-        Task<T> ReadScalarAsync<T>(DataSourceCacheItem dataSource, ReadDataParam param);
-        IDbConnection CreateConnection(DataSourceCacheItem dataSource);
+        Task<IList<IDictionary<string, object>>> PivotData(DataServiceCacheItem dataService, PivotParam param);
+        Task<T> ReadScalarAsync<T>(DataServiceCacheItem dataService, ReadDataParam param);
+        IDbConnection CreateConnection(DataServiceCacheItem dataService);
     }
 
 }

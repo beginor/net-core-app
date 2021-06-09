@@ -27,25 +27,25 @@ namespace Beginor.GisHub.DataServices {
         }
 
         public async Task<GeoJsonFeatureCollection> ReadAsFeatureCollectionAsync(
-            DataSourceCacheItem dataSource,
+            DataServiceCacheItem dataService,
             GeoJsonParam param
         ) {
-            var dsReader = DataServiceFactory.CreateDataSourceReader(dataSource.DatabaseType);
+            var dsReader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
             var rdp = new ReadDataParam {
-                Select = CheckGeoSelect(dataSource, param.Select),
-                Where = CheckGeoWhere(dataSource, param.Where),
+                Select = CheckGeoSelect(dataService, param.Select),
+                Where = CheckGeoWhere(dataService, param.Where),
                 OrderBy = param.OrderBy,
                 Skip = param.Skip,
                 Take = param.Take
             };
-            var list = await dsReader.ReadDataAsync(dataSource, rdp);
+            var list = await dsReader.ReadDataAsync(dataService, rdp);
             var result = new GeoJsonFeatureCollection {
                 Features = new List<GeoJsonFeature>(list.Count)
             };
             foreach (var dict in list) {
-                var id = dict[dataSource.PrimaryKeyColumn];
-                var wkt = (string) dict[dataSource.GeometryColumn];
-                dict.Remove(dataSource.GeometryColumn);
+                var id = dict[dataService.PrimaryKeyColumn];
+                var wkt = (string) dict[dataService.GeometryColumn];
+                dict.Remove(dataService.GeometryColumn);
                 var feature = new GeoJsonFeature {
                     Id = id,
                     Properties = dict
@@ -57,44 +57,44 @@ namespace Beginor.GisHub.DataServices {
             }
             result.Crs = new Crs {
                 Properties = new CrsProperties {
-                    Code = dataSource.Srid
+                    Code = dataService.Srid
                 }
             };
-            var total = await dsReader.CountAsync(dataSource, new CountParam {Where = param.Where});
+            var total = await dsReader.CountAsync(dataService, new CountParam {Where = param.Where});
             result.ExceededTransferLimit = total > list.Count;
             if (param.ReturnBbox) {
-                var fs = await QueryForExtentAsync(dataSource, new AgsQueryParam { Where = param.Where });
+                var fs = await QueryForExtentAsync(dataService, new AgsQueryParam { Where = param.Where });
                 var ext = fs.Extent;
                 result.Bbox = new double[] { ext.Xmin, ext.Ymin, ext.Xmax, ext.Ymax };
             }
             return result;
         }
 
-        public async Task<AgsFeatureSet> ReadAsFeatureSetAsync(DataSourceCacheItem dataSource, AgsJsonParam param) {
-            var dsReader = DataServiceFactory.CreateDataSourceReader(dataSource.DatabaseType);
-            var selectFields = CheckGeoSelect(dataSource, param.Select);
+        public async Task<AgsFeatureSet> ReadAsFeatureSetAsync(DataServiceCacheItem dataService, AgsJsonParam param) {
+            var dsReader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
+            var selectFields = CheckGeoSelect(dataService, param.Select);
             var rdp = new ReadDataParam {
                 Select = selectFields,
-                Where = CheckGeoWhere(dataSource, param.Where),
+                Where = CheckGeoWhere(dataService, param.Where),
                 OrderBy = param.OrderBy,
                 Skip = param.Skip,
                 Take = param.Take
             };
-            var list = await dsReader.ReadDataAsync(dataSource, rdp);
+            var list = await dsReader.ReadDataAsync(dataService, rdp);
             var result = new AgsFeatureSet {
                 Features = new List<AgsFeature>(list.Count),
-                ObjectIdFieldName = dataSource.PrimaryKeyColumn,
-                DisplayFieldName = dataSource.DisplayColumn,
+                ObjectIdFieldName = dataService.PrimaryKeyColumn,
+                DisplayFieldName = dataService.DisplayColumn,
             };
             if (list.Count <= 0) {
                 return result;
             }
-            var total = await dsReader.CountAsync(dataSource, new CountParam {Where = param.Where});
+            var total = await dsReader.CountAsync(dataService, new CountParam {Where = param.Where});
             if (total > list.Count + param.Skip) {
                 result.ExceededTransferLimit = true;
             }
             // var firstRow = list.First();
-            var columns = await dsReader.GetColumnsAsync(dataSource);
+            var columns = await dsReader.GetColumnsAsync(dataService);
             var fields = selectFields.Split(',');
             columns = columns.Where(c => fields.Contains(c.Name)).ToList();
             result.Fields = new List<AgsField>(columns.Count);
@@ -103,13 +103,13 @@ namespace Beginor.GisHub.DataServices {
             result.FieldAliases = columns.ToDictionary(
                 col => col.Name, col => col.Description ?? col.Name
             );
-            result.Fields = await ConvertToFieldsAsync(dataSource, columns, dsReader);
+            result.Fields = await ConvertToFieldsAsync(dataService, columns, dsReader);
             columns.Remove(
-                columns.First(col => col.Name.EqualsOrdinalIgnoreCase(dataSource.GeometryColumn))
+                columns.First(col => col.Name.EqualsOrdinalIgnoreCase(dataService.GeometryColumn))
             );
             foreach (var row in list) {
-                var wkt = (string) row[dataSource.GeometryColumn];
-                row.Remove(dataSource.GeometryColumn);
+                var wkt = (string) row[dataService.GeometryColumn];
+                row.Remove(dataService.GeometryColumn);
                 var attrs = new Dictionary<string, object>(row.Count);
                 foreach (var col in columns) {
                     var fieldName = col.Name;
@@ -117,7 +117,7 @@ namespace Beginor.GisHub.DataServices {
                     if (fieldVal == null) {
                         continue;
                     }
-                    if (fieldName.EqualsOrdinalIgnoreCase(dataSource.PrimaryKeyColumn)) {
+                    if (fieldName.EqualsOrdinalIgnoreCase(dataService.PrimaryKeyColumn)) {
                         attrs[fieldName] = fieldVal;
                     }
                     else if (!typeMap.ContainsKey(fieldVal.GetType())) {
@@ -142,31 +142,31 @@ namespace Beginor.GisHub.DataServices {
                 result.Features.Add(feature);
             }
             result.SpatialReference = new AgsSpatialReference {
-                Wkid = dataSource.Srid
+                Wkid = dataService.Srid
             };
             if (param.ReturnExtent) {
-                var fs = await QueryForExtentAsync(dataSource, new AgsQueryParam { Where = param.Where });
+                var fs = await QueryForExtentAsync(dataService, new AgsQueryParam { Where = param.Where });
                 result.Extent = fs.Extent;
             }
             TryConvertFeatureSetSr(result, param.OutSR);
-            result.GeometryType = GetAgsGeometryType(dataSource);
+            result.GeometryType = GetAgsGeometryType(dataService);
             return result;
         }
 
-        public async Task<AgsLayerDescription> GetLayerDescriptionAsync(DataSourceCacheItem dataSource) {
-            var reader = DataServiceFactory.CreateDataSourceReader(dataSource.DatabaseType);
-            var columns = await reader.GetColumnsAsync(dataSource);
+        public async Task<AgsLayerDescription> GetLayerDescriptionAsync(DataServiceCacheItem dataService) {
+            var reader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
+            var columns = await reader.GetColumnsAsync(dataService);
             var layerDesc = new AgsLayerDescription {
                 CurrentVersion = 10.61,
                 Id = 0,
-                Name = dataSource.DataSourceName,
+                Name = dataService.DataSourceName,
                 Type = "Feature Layer",
-                Description = $"Map Service for {dataSource.DataSourceName}",
-                GeometryType = GetAgsGeometryType(dataSource),
-                SourceSpatialReference = new AgsSpatialReference { Wkid = dataSource.Srid },
-                ObjectIdField = dataSource.PrimaryKeyColumn,
-                DisplayField = dataSource.DisplayColumn,
-                Fields = await ConvertToFieldsAsync(dataSource, columns, reader),
+                Description = $"Map Service for {dataService.DataSourceName}",
+                GeometryType = GetAgsGeometryType(dataService),
+                SourceSpatialReference = new AgsSpatialReference { Wkid = dataService.Srid },
+                ObjectIdField = dataService.PrimaryKeyColumn,
+                DisplayField = dataService.DisplayColumn,
+                Fields = await ConvertToFieldsAsync(dataService, columns, reader),
                 CanModifyLayer = false,
                 CanScaleSymbols = false,
                 HasLabels = false,
@@ -192,45 +192,45 @@ namespace Beginor.GisHub.DataServices {
                 },
             };
             layerDesc.GeometryField = layerDesc.Fields.First(f => f.Type == AgsFieldType.EsriGeometry);
-            var provider = DataServiceFactory.CreateFeatureProvider(dataSource.DatabaseType);
-            var featureset = await QueryForExtentAsync(dataSource, new AgsQueryParam());
+            var provider = DataServiceFactory.CreateFeatureProvider(dataService.DatabaseType);
+            var featureset = await QueryForExtentAsync(dataService, new AgsQueryParam());
             layerDesc.Extent = featureset.Extent;
             // layerDesc.DrawingInfo = AgsDrawingInfo.CreateDefaultDrawingInfo(layerDesc.GeometryType);
             // layerDesc.OwnershipBasedAccessControlForFeatures = null;
             return layerDesc;
         }
 
-        public async Task<AgsFeatureSet> QueryAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
+        public async Task<AgsFeatureSet> QueryAsync(DataServiceCacheItem dataService, AgsQueryParam queryParam) {
             AgsFeatureSet result;
             if (queryParam.OutStatistics.IsNotNullOrEmpty()) {
-                result = await QueryForStatisticsAsync(dataSource, queryParam);
+                result = await QueryForStatisticsAsync(dataService, queryParam);
             }
             else if (queryParam.ReturnExtentOnly) {
-                result = await QueryForExtentAsync(dataSource, queryParam);
+                result = await QueryForExtentAsync(dataService, queryParam);
             }
             else if (queryParam.ReturnCountOnly) {
-                result = await QueryForCountAsync(dataSource, queryParam);
+                result = await QueryForCountAsync(dataService, queryParam);
             }
             else if (queryParam.ReturnIdsOnly) {
-                result = await QueryForIdsAsync(dataSource, queryParam);
+                result = await QueryForIdsAsync(dataService, queryParam);
             }
             else {
-                var param = ConvertQueryParams(dataSource, queryParam);
-                var featureProvider = DataServiceFactory.CreateFeatureProvider(dataSource.DatabaseType);
-                result = await featureProvider.ReadAsFeatureSetAsync(dataSource, param);
+                var param = ConvertQueryParams(dataService, queryParam);
+                var featureProvider = DataServiceFactory.CreateFeatureProvider(dataService.DatabaseType);
+                result = await featureProvider.ReadAsFeatureSetAsync(dataService, param);
             }
             return result;
         }
 
-        protected async Task<AgsFeatureSet> QueryForIdsAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
-            var param = ConvertIdsQueryParam(dataSource, queryParam);
-            var reader = DataServiceFactory.CreateDataSourceReader(dataSource.DatabaseType);
-            var data = await reader.ReadDataAsync(dataSource, param);
+        protected async Task<AgsFeatureSet> QueryForIdsAsync(DataServiceCacheItem dataService, AgsQueryParam queryParam) {
+            var param = ConvertIdsQueryParam(dataService, queryParam);
+            var reader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
+            var data = await reader.ReadDataAsync(dataService, param);
             var result = new AgsFeatureSet();
-            result.ObjectIdFieldName = dataSource.PrimaryKeyColumn;
+            result.ObjectIdFieldName = dataService.PrimaryKeyColumn;
             var objectIds = new List<long>(data.Count);
             foreach (var item in data) {
-                var val = item[dataSource.PrimaryKeyColumn];
+                var val = item[dataService.PrimaryKeyColumn];
                 var objectId = Convert.ToInt64(val);
                 objectIds.Add(objectId);
             }
@@ -238,20 +238,20 @@ namespace Beginor.GisHub.DataServices {
             return result;
         }
 
-        protected async Task<AgsFeatureSet> QueryForCountAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
+        protected async Task<AgsFeatureSet> QueryForCountAsync(DataServiceCacheItem dataService, AgsQueryParam queryParam) {
             var result = new AgsFeatureSet();
-            var param = ConvertCountQueryParam(dataSource, queryParam);
-            var reader = DataServiceFactory.CreateDataSourceReader(dataSource.DatabaseType);
-            var count = await reader.ReadScalarAsync<long>(dataSource, param);
+            var param = ConvertCountQueryParam(dataService, queryParam);
+            var reader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
+            var count = await reader.ReadScalarAsync<long>(dataService, param);
             result.Count = count;
             return result;
         }
 
-        protected async Task<AgsFeatureSet> QueryForExtentAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
+        protected async Task<AgsFeatureSet> QueryForExtentAsync(DataServiceCacheItem dataService, AgsQueryParam queryParam) {
             var result = new AgsFeatureSet();
-            var param = ConvertExtentQueryParam(dataSource, queryParam);
-            var reader = DataServiceFactory.CreateDataSourceReader(dataSource.DatabaseType);
-            var wkt = await reader.ReadScalarAsync<string>(dataSource, param);
+            var param = ConvertExtentQueryParam(dataService, queryParam);
+            var reader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
+            var wkt = await reader.ReadScalarAsync<string>(dataService, param);
             if (wkt != null) {
                 var wktReader = new WKTReader();
                 var geometry = wktReader.Read(wkt.ToString());
@@ -262,7 +262,7 @@ namespace Beginor.GisHub.DataServices {
                     Xmax = envelop.MaxX,
                     Ymax = envelop.MaxY,
                     SpatialReference = new AgsSpatialReference {
-                        Wkid = dataSource.Srid
+                        Wkid = dataService.Srid
                     }
                 };
                 result.Extent = extent;
@@ -274,13 +274,13 @@ namespace Beginor.GisHub.DataServices {
             return result;
         }
 
-        protected abstract ReadDataParam ConvertIdsQueryParam(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
+        protected abstract ReadDataParam ConvertIdsQueryParam(DataServiceCacheItem dataService, AgsQueryParam queryParam);
 
-        protected abstract ReadDataParam ConvertExtentQueryParam(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
+        protected abstract ReadDataParam ConvertExtentQueryParam(DataServiceCacheItem dataService, AgsQueryParam queryParam);
 
-        protected abstract ReadDataParam ConvertStatisticsQueryParam(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
+        protected abstract ReadDataParam ConvertStatisticsQueryParam(DataServiceCacheItem dataService, AgsQueryParam queryParam);
 
-        protected abstract ReadDataParam ConvertCountQueryParam(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
+        protected abstract ReadDataParam ConvertCountQueryParam(DataServiceCacheItem dataService, AgsQueryParam queryParam);
         protected string ConvertQueryGeometryToWkt(AgsQueryParam queryParam, int srid) {
             var geometry = queryParam.GetGeometryValue(serializerOptionsFactory.AgsJsonSerializerOptions);
             if (geometry != null) {
@@ -292,10 +292,10 @@ namespace Beginor.GisHub.DataServices {
             return string.Empty;
         }
 
-        protected async Task<AgsFeatureSet> QueryForStatisticsAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam) {
-            var param = ConvertStatisticsQueryParam(dataSource, queryParam);
-            var reader = DataServiceFactory.CreateDataSourceReader(dataSource.DatabaseType);
-            var data = await reader.ReadDataAsync(dataSource, param);
+        protected async Task<AgsFeatureSet> QueryForStatisticsAsync(DataServiceCacheItem dataService, AgsQueryParam queryParam) {
+            var param = ConvertStatisticsQueryParam(dataService, queryParam);
+            var reader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
+            var data = await reader.ReadDataAsync(dataService, param);
             var result = new AgsFeatureSet {
                 Features = new List<AgsFeature>(data.Count)
             };
@@ -318,68 +318,68 @@ namespace Beginor.GisHub.DataServices {
             return result;
         }
 
-        protected string CheckGeoSelect(DataSourceCacheItem dataSource, string select) {
+        protected string CheckGeoSelect(DataServiceCacheItem dataService, string select) {
             if (select.IsNullOrEmpty()) {
-                select = $"{dataSource.PrimaryKeyColumn},{dataSource.DisplayColumn},{dataSource.GeometryColumn}";
+                select = $"{dataService.PrimaryKeyColumn},{dataService.DisplayColumn},{dataService.GeometryColumn}";
             }
             else {
                 var cols = select.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).ToList();
-                if (!cols.Contains(dataSource.GeometryColumn, StringComparer.OrdinalIgnoreCase)) {
-                    cols.Add(dataSource.GeometryColumn);
+                if (!cols.Contains(dataService.GeometryColumn, StringComparer.OrdinalIgnoreCase)) {
+                    cols.Add(dataService.GeometryColumn);
                 }
-                if (!cols.Contains(dataSource.PrimaryKeyColumn, StringComparer.OrdinalIgnoreCase)) {
-                    cols.Insert(0, dataSource.PrimaryKeyColumn);
+                if (!cols.Contains(dataService.PrimaryKeyColumn, StringComparer.OrdinalIgnoreCase)) {
+                    cols.Insert(0, dataService.PrimaryKeyColumn);
                 }
                 select = string.Join(',', cols);
             }
             return select;
         }
 
-        protected string CheckGeoWhere(DataSourceCacheItem dataSource, string where) {
-            var geoWhere = $"( {dataSource.GeometryColumn} is not null )";
+        protected string CheckGeoWhere(DataServiceCacheItem dataService, string where) {
+            var geoWhere = $"( {dataService.GeometryColumn} is not null )";
             if (where.IsNotNullOrEmpty()) {
                 geoWhere = $"{geoWhere} and ( {where} ) ";
             }
             return geoWhere;
         }
 
-        public abstract Task<int> GetSridAsync(DataSourceCacheItem dataSource);
+        public abstract Task<int> GetSridAsync(DataServiceCacheItem dataService);
 
-        public abstract Task<string> GetGeometryTypeAsync(DataSourceCacheItem dataSource);
+        public abstract Task<string> GetGeometryTypeAsync(DataServiceCacheItem dataService);
 
-        protected abstract AgsJsonParam ConvertQueryParams(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
+        protected abstract AgsJsonParam ConvertQueryParams(DataServiceCacheItem dataService, AgsQueryParam queryParam);
 
         private static bool IsSupported(int srid) {
             return GeographicSrids.Contains(srid) || MercatorSrids.Contains(srid);
         }
 
         private async Task<AgsField[]> ConvertToFieldsAsync(
-            DataSourceCacheItem dataSource,
+            DataServiceCacheItem dataService,
             IList<ColumnModel> columns,
             IDataServiceReader reader
         ) {
             var param = new ReadDataParam {
-                Select = CheckGeoSelect(dataSource, string.Join(',', columns.Select(c => c.Name))),
-                Where = CheckGeoWhere(dataSource, string.Empty),
+                Select = CheckGeoSelect(dataService, string.Join(',', columns.Select(c => c.Name))),
+                Where = CheckGeoWhere(dataService, string.Empty),
                 Take = 1
             };
-            var data = await reader.ReadDataAsync(dataSource, param);
+            var data = await reader.ReadDataAsync(dataService, param);
             if (data.Count < 1) {
-                throw new InvalidOperationException($"Datasource {dataSource.DataSourceId} is empty !");
+                throw new InvalidOperationException($"Datasource {dataService.DataSourceId} is empty !");
             }
-            return ConvertToFields(dataSource, columns, data[0]);
+            return ConvertToFields(dataService, columns, data[0]);
         }
 
         private AgsField[] ConvertToFields(
-            DataSourceCacheItem dataSource,
+            DataServiceCacheItem dataService,
             IEnumerable<ColumnModel> columns,
             IDictionary<string, object> row
         ) {
-            return columns.Select(column => ConvertToField(dataSource, column, row)).ToArray();
+            return columns.Select(column => ConvertToField(dataService, column, row)).ToArray();
         }
 
         private AgsField ConvertToField(
-            DataSourceCacheItem dataSource,
+            DataServiceCacheItem dataService,
             ColumnModel column,
             IDictionary<string, object> row
         ) {
@@ -387,10 +387,10 @@ namespace Beginor.GisHub.DataServices {
                 Name = column.Name,
                 Alias = column.Description ?? column.Name
             };
-            if (column.Name.EqualsOrdinalIgnoreCase(dataSource.PrimaryKeyColumn)) {
+            if (column.Name.EqualsOrdinalIgnoreCase(dataService.PrimaryKeyColumn)) {
                 field.Type = AgsFieldType.EsriOID;
             }
-            else if (column.Name.EqualsOrdinalIgnoreCase(dataSource.GeometryColumn)) {
+            else if (column.Name.EqualsOrdinalIgnoreCase(dataService.GeometryColumn)) {
                 field.Type = AgsFieldType.EsriGeometry;
             }
             else {
@@ -415,8 +415,8 @@ namespace Beginor.GisHub.DataServices {
             return field;
         }
 
-        private string GetAgsGeometryType(DataSourceCacheItem dataSource) {
-            var geomType = dataSource.GeometryType;
+        private string GetAgsGeometryType(DataServiceCacheItem dataService) {
+            var geomType = dataService.GeometryType;
             if (geomType == "point") {
                 return AgsGeometryType.Point;
             }

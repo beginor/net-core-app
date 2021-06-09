@@ -7,32 +7,28 @@ namespace Beginor.GisHub.DataServices {
 
     public class JsonSerializerOptionsFactory {
 
-        private readonly JsonSerializerOptions jsonSerializerOptions;
-        private readonly JsonSerializerOptions geoJsonSerializerOptions;
-        private readonly JsonSerializerOptions agsJsonSerializerOptions;
-
         public JsonSerializerOptionsFactory(CoordinateConverter coordinateConverter) {
-            jsonSerializerOptions = new (JsonSerializerDefaults.Web) {
+            JsonSerializerOptions = new (JsonSerializerDefaults.Web) {
                 DictionaryKeyPolicy = null,
                 IgnoreNullValues = true
             };
-            geoJsonSerializerOptions = new (JsonSerializerDefaults.Web) {
+            GeoJsonSerializerOptions = new (JsonSerializerDefaults.Web) {
                 DictionaryKeyPolicy = null,
                 IgnoreNullValues = true
             };
-            geoJsonSerializerOptions.Converters.Add(new GeoJsonGeometryConverter(coordinateConverter));
-            agsJsonSerializerOptions = new (JsonSerializerDefaults.Web) {
+            GeoJsonSerializerOptions.Converters.Add(new GeoJsonGeometryConverter(coordinateConverter));
+            AgsJsonSerializerOptions = new (JsonSerializerDefaults.Web) {
                 DictionaryKeyPolicy = null,
                 IgnoreNullValues = true
             };
-            agsJsonSerializerOptions.Converters.Add(new AgsGeometryConverter(coordinateConverter));
+            AgsJsonSerializerOptions.Converters.Add(new AgsGeometryConverter(coordinateConverter));
         }
 
-        public JsonSerializerOptions JsonSerializerOptions => jsonSerializerOptions;
+        public JsonSerializerOptions JsonSerializerOptions { get; }
 
-        public JsonSerializerOptions GeoJsonSerializerOptions => geoJsonSerializerOptions;
+        public JsonSerializerOptions GeoJsonSerializerOptions { get; }
 
-        public JsonSerializerOptions AgsJsonSerializerOptions => agsJsonSerializerOptions;
+        public JsonSerializerOptions AgsJsonSerializerOptions { get; }
 
     }
 }

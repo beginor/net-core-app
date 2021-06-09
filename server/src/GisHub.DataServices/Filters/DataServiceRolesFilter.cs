@@ -8,7 +8,7 @@ using Beginor.GisHub.DataServices.Data;
 
 namespace Beginor.GisHub.DataServices.Filters {
 
-    public class DataSourceRolesFilter : ActionFilterAttribute {
+    public class DataServiceRolesFilter : ActionFilterAttribute {
 
         public string IdParameterName { get; set; }
 

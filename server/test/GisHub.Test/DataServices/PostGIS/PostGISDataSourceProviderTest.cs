@@ -11,16 +11,16 @@ using Beginor.GisHub.DataServices.PostGIS;
 
 namespace Beginor.GisHub.Test.DataServices.PostGIS {
 
-    public class PostGISConnectionProviderTest : BaseTest {
+    public class PostGISDataSourceProviderTest : BaseTest {
 
         private static PostGISMetaDataProvider target;
-        private static IConnectionRepository repository;
+        private static IDataSourceRepository repository;
 
         [OneTimeSetUp]
         public static void Initialize() {
-            var mock = new Mock<IConnectionRepository>();
+            var mock = new Mock<IDataSourceRepository>();
             mock.Setup(repo => repo.GetByIdAsync(1L, default))
-                .Returns(Task.FromResult(new ConnectionModel {
+                .Returns(Task.FromResult(new DataSourceModel {
                     Id = "1",
                     DatabaseType = "postgis",
                     ServerAddress = "127.0.0.1",

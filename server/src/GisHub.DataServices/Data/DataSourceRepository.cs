@@ -14,21 +14,21 @@ using Beginor.GisHub.DataServices.Models;
 namespace Beginor.GisHub.DataServices.Data {
 
     /// <summary>数据库连接仓储实现</summary>
-    public partial class ConnectionRepository : HibernateRepository<Connection, ConnectionModel, long>, IConnectionRepository {
+    public partial class DataSourceRepository : HibernateRepository<DataSource, DataSourceModel, long>, IDataSourceRepository {
 
-        public ConnectionRepository(ISession session, IMapper mapper) : base(session, mapper) { }
+        public DataSourceRepository(ISession session, IMapper mapper) : base(session, mapper) { }
 
         /// <summary>搜索 数据库连接 ，返回分页结果。</summary>
-        public async Task<PaginatedResponseModel<ConnectionModel>> SearchAsync(
-            ConnectionStringSearchModel model
+        public async Task<PaginatedResponseModel<DataSourceModel>> SearchAsync(
+            DataSourceSearchModel model
         ) {
-            var query = Session.Query<Connection>();
+            var query = Session.Query<DataSource>();
             if (model.Keywords.IsNotNullOrEmpty()) {
                 query = query.Where(e => e.Name.Contains(model.Keywords));
             }
             var total = await query.LongCountAsync();
             var data = await query.OrderByDescending(e => e.Id)
-                .Select(e => new Connection {
+                .Select(e => new DataSource {
                     Id = e.Id,
                     Name = e.Name,
                     DatabaseType = e.DatabaseType,
@@ -41,16 +41,16 @@ namespace Beginor.GisHub.DataServices.Data {
                 })
                 .Skip(model.Skip).Take(model.Take)
                 .ToListAsync();
-            return new PaginatedResponseModel<ConnectionModel> {
+            return new PaginatedResponseModel<DataSourceModel> {
                 Total = total,
-                Data = Mapper.Map<IList<ConnectionModel>>(data),
+                Data = Mapper.Map<IList<DataSourceModel>>(data),
                 Skip = model.Skip,
                 Take = model.Take
             };
         }
 
         public override async Task DeleteAsync(long id, CancellationToken token = default) {
-            var entity = Session.Get<Connection>(id);
+            var entity = Session.Get<DataSource>(id);
             if (entity != null) {
                 entity.IsDeleted = true;
                 await Session.SaveAsync(entity, token);
@@ -58,14 +58,14 @@ namespace Beginor.GisHub.DataServices.Data {
             }
         }
 
-        public async Task<List<ConnectionModel>> GetAllForDisplayAsync() {
-            var data = await Session.Query<Connection>()
-                .Select(e => new Connection {
+        public async Task<List<DataSourceModel>> GetAllForDisplayAsync() {
+            var data = await Session.Query<DataSource>()
+                .Select(e => new DataSource {
                     Id = e.Id,
                     Name = e.Name,
                     DatabaseType = e.DatabaseType
                 }).ToListAsync();
-            return Mapper.Map<List<ConnectionModel>>(data);
+            return Mapper.Map<List<DataSourceModel>>(data);
         }
 
     }

@@ -17,12 +17,12 @@ namespace Beginor.GisHub.DataServices.Api {
     public class MetaDataController : Controller {
 
         private ILogger<MetaDataController> logger;
-        private IConnectionRepository repository;
+        private IDataSourceRepository repository;
         private IDataServiceFactory factory;
 
         public MetaDataController(
             ILogger<MetaDataController> logger,
-            IConnectionRepository repository,
+            IDataSourceRepository repository,
             IDataServiceFactory factory
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));

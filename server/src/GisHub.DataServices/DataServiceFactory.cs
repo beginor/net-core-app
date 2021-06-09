@@ -32,7 +32,7 @@ namespace Beginor.GisHub.DataServices {
             }
             var type = Type.GetType(typeName);
             if (type == null) {
-                throw new InvalidOperationException($"Can not get type {type} !");
+                throw new InvalidOperationException($"Can not get type {typeName} !");
             }
             var provider = scope.ServiceProvider.GetService(type);
             return provider as IMetaDataProvider;
@@ -44,13 +44,11 @@ namespace Beginor.GisHub.DataServices {
                 typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISDataSourceReader,Beginor.GisHub.DataServices.PostGIS";
             }
             else {
-                throw new NotSupportedException(
-                    $"Unsupported database type {databaseType}!"
-                );
+                throw new NotSupportedException($"Unsupported database type {databaseType}!");
             }
             var type = Type.GetType(typeName);
             if (type == null) {
-                throw new InvalidOperationException($"Can not get type {type} !");
+                throw new InvalidOperationException($"Can not get type {typeName} !");
             }
             var provider = scope.ServiceProvider.GetService(type);
             return provider as IDataServiceReader;
@@ -62,13 +60,11 @@ namespace Beginor.GisHub.DataServices {
                 typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISFeatureProvider,Beginor.GisHub.DataServices.PostGIS";
             }
             else {
-                throw new NotSupportedException(
-                    $"Unsupported database type {databaseType}!"
-                );
+                throw new NotSupportedException($"Unsupported database type {databaseType}!");
             }
             var type = Type.GetType(typeName);
             if (type == null) {
-                throw new InvalidOperationException($"Can not get type {type} !");
+                throw new InvalidOperationException($"Can not get type {typeName} !");
             }
             var provider = scope.ServiceProvider.GetService(type);
             return provider as IFeatureProvider;

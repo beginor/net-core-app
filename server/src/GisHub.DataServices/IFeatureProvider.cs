@@ -8,17 +8,17 @@ namespace Beginor.GisHub.DataServices {
 
     public interface IFeatureProvider {
 
-        Task<GeoJsonFeatureCollection> ReadAsFeatureCollectionAsync(DataSourceCacheItem dataSource, GeoJsonParam param);
+        Task<GeoJsonFeatureCollection> ReadAsFeatureCollectionAsync(DataServiceCacheItem dataService, GeoJsonParam param);
 
-        Task<AgsFeatureSet> ReadAsFeatureSetAsync(DataSourceCacheItem dataSource, AgsJsonParam param);
+        Task<AgsFeatureSet> ReadAsFeatureSetAsync(DataServiceCacheItem dataService, AgsJsonParam param);
 
-        Task<AgsLayerDescription> GetLayerDescriptionAsync(DataSourceCacheItem dataSource);
+        Task<AgsLayerDescription> GetLayerDescriptionAsync(DataServiceCacheItem dataService);
 
-        Task<AgsFeatureSet> QueryAsync(DataSourceCacheItem dataSource, AgsQueryParam queryParam);
+        Task<AgsFeatureSet> QueryAsync(DataServiceCacheItem dataService, AgsQueryParam queryParam);
 
-        Task<int> GetSridAsync(DataSourceCacheItem dataSource);
+        Task<int> GetSridAsync(DataServiceCacheItem dataService);
 
-        Task<string> GetGeometryTypeAsync(DataSourceCacheItem dataSource);
+        Task<string> GetGeometryTypeAsync(DataServiceCacheItem dataService);
 
     }
 

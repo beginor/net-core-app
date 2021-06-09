@@ -23,7 +23,7 @@ namespace Beginor.GisHub.Test.DataServices {
 
         [Test]
         public async Task _02_CanDoSearchAsync() {
-            var searchModel = new DataSourceSearchModel {
+            var searchModel = new DataServiceSearchModel {
                 Skip = 0,
                 Take = 10
             };
@@ -36,7 +36,7 @@ namespace Beginor.GisHub.Test.DataServices {
         public void _03_CanMapDataSource() {
             var entity = new DataService {
                 Id = 1,
-                Connection = new Connection {
+                DataSource = new DataSource {
                     Id = 2,
                     Name = "Test"
                 },
@@ -51,10 +51,10 @@ namespace Beginor.GisHub.Test.DataServices {
             };
             var mapper = ServiceProvider.GetService<AutoMapper.IMapper>();
             var model = mapper.Map<DataServiceModel>(entity);
-            Assert.AreEqual(entity.Connection.Id.ToString(), model.Connection.Id);
+            Assert.AreEqual(entity.DataSource.Id.ToString(), model.Connection.Id);
             var entity2 = mapper.Map<Beginor.GisHub.DataServices.Data.DataService>(model);
-            Assert.IsNotNull(entity2.Connection);
-            Assert.AreEqual(entity2.Connection.Id.ToString(), model.Connection.Id);
+            Assert.IsNotNull(entity2.DataSource);
+            Assert.AreEqual(entity2.DataSource.Id.ToString(), model.Connection.Id);
             Assert.IsNotEmpty(model.Fields);
         }
 

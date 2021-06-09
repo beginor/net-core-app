@@ -6,14 +6,14 @@ using Beginor.GisHub.DataServices.Models;
 namespace Beginor.GisHub.DataServices.Data {
 
     /// <summary>数据库连接 仓储接口</summary>
-    public partial interface IConnectionRepository : IRepository<ConnectionModel, long> {
+    public partial interface IDataSourceRepository : IRepository<DataSourceModel, long> {
 
         /// <summary>搜索 数据库连接 ，返回分页结果。</summary>
-        Task<PaginatedResponseModel<ConnectionModel>> SearchAsync(
-            ConnectionStringSearchModel model
+        Task<PaginatedResponseModel<DataSourceModel>> SearchAsync(
+            DataSourceSearchModel model
         );
 
-        Task<List<ConnectionModel>> GetAllForDisplayAsync();
+        Task<List<DataSourceModel>> GetAllForDisplayAsync();
 
     }
 

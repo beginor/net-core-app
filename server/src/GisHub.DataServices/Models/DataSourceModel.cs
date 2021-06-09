@@ -4,11 +4,11 @@ using Beginor.AppFx.Core;
 
 namespace Beginor.GisHub.DataServices.Models {
 
-    /// <summary>数据库连接模型</summary>
-    public partial class ConnectionModel : StringEntity {
+    /// <summary>数据源模型</summary>
+    public partial class DataSourceModel : StringEntity {
 
-        /// <summary>连接名称</summary>
-        [Required(ErrorMessage = "连接名称 必须填写！")]
+        /// <summary>数据源名称</summary>
+        [Required(ErrorMessage = "数据源名称 必须填写！")]
         public string Name { get; set; }
         /// <summary>数据库类型（postgres、mssql、mysql、oracle、sqlite等）</summary>
         [Required(ErrorMessage = "数据库类型（postgres、mssql、mysql、oracle、sqlite等） 必须填写！")]
@@ -30,8 +30,8 @@ namespace Beginor.GisHub.DataServices.Models {
 
     }
 
-    /// <summary>数据库连接搜索参数</summary>
-    public partial class ConnectionStringSearchModel : PaginatedRequestModel {
+    /// <summary>数据源搜索参数</summary>
+    public partial class DataSourceSearchModel : PaginatedRequestModel {
         public string Keywords { get; set; }
     }
 

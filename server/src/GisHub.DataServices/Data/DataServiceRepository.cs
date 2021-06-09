@@ -43,7 +43,7 @@ namespace Beginor.GisHub.DataServices.Data {
 
         /// <summary>搜索 数据源（数据表或视图） ，返回分页结果。</summary>
         public async Task<PaginatedResponseModel<DataServiceModel>> SearchAsync(
-            DataSourceSearchModel model,
+            DataServiceSearchModel model,
             string[] roles
         ) {
             var query = Session.Query<DataService>();
@@ -106,11 +106,11 @@ namespace Beginor.GisHub.DataServices.Data {
             }
         }
 
-        public async Task<DataSourceCacheItem> GetCacheItemByIdAsync(
+        public async Task<DataServiceCacheItem> GetCacheItemByIdAsync(
             long id
         ) {
             var key = id.ToString();
-            var item = await cache.GetAsync<DataSourceCacheItem>(key);
+            var item = await cache.GetAsync<DataServiceCacheItem>(key);
             if (item != null) {
                 return item;
             }
@@ -120,10 +120,10 @@ namespace Beginor.GisHub.DataServices.Data {
             if (ds == null) {
                 return null;
             }
-            item = new DataSourceCacheItem {
+            item = new DataServiceCacheItem {
                 DataSourceId = ds.Id,
                 DataSourceName = ds.Name,
-                DatabaseType = ds.Connection.DatabaseType,
+                DatabaseType = ds.DataSource.DatabaseType,
                 Schema = ds.Schema,
                 TableName = ds.TableName,
                 PrimaryKeyColumn = ds.PrimaryKeyColumn,
@@ -135,7 +135,7 @@ namespace Beginor.GisHub.DataServices.Data {
                 Fields = ds.Fields
             };
             var meta = factory.CreateMetadataProvider(item.DatabaseType);
-            var model = Mapper.Map<ConnectionModel>(ds.Connection);
+            var model = Mapper.Map<DataSourceModel>(ds.DataSource);
             item.ConnectionString = meta.BuildConnectionString(model);
             if (item.HasGeometryColumn) {
                 var featureProvider = factory.CreateFeatureProvider(item.DatabaseType);

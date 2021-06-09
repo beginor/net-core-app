@@ -18,9 +18,9 @@ namespace Beginor.GisHub.DataServices.PostGIS {
         public PostGisDataServiceReader(
             IDataServiceFactory factory,
             IDataServiceRepository dataServiceRepo,
-            IConnectionRepository connectionRepo,
+            IDataSourceRepository dataSourceRepo,
             ILogger<PostGisDataServiceReader> logger
-        ) : base(factory, dataServiceRepo, connectionRepo, logger) {
+        ) : base(factory, dataServiceRepo, dataSourceRepo, logger) {
             // this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -33,14 +33,14 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             base.Dispose(disposing);
         }
 
-        protected override string BuildPivotSql(DataSourceCacheItem dataSource, PivotParam param) {
+        protected override string BuildPivotSql(DataServiceCacheItem dataService, PivotParam param) {
             if (param.Select.IsNullOrEmpty()) {
                 throw new ArgumentNullException($"{nameof(param.Select)} can not be empty!");
             }
             if (param.Aggregate.IsNullOrEmpty() || param.Field.IsNullOrEmpty()) {
                 throw new ArgumentNullException($"{nameof(param.Field)} and {nameof(param.Aggregate)} can not be empty");
             }
-            var task = GetColumnsAsync(dataSource);
+            var task = GetColumnsAsync(dataService);
             task.Wait();
             var cols = task.Result;
             var colsDict = cols.ToDictionary(
@@ -93,37 +93,37 @@ namespace Beginor.GisHub.DataServices.PostGIS {
                 valueString = $", $$VALUES{valueString.TrimEnd(',')}$$";
             }
 
-            var sql = new StringBuilder($"select * from crosstab('select {param.Select} from {dataSource.Schema}.{dataSource.TableName} {groupBy} order by 1,2' {valueString}) as t ({pivotString})");
-            AppendWhere(sql, dataSource.PresetCriteria, param.Where);
+            var sql = new StringBuilder($"select * from crosstab('select {param.Select} from {dataService.Schema}.{dataService.TableName} {groupBy} order by 1,2' {valueString}) as t ({pivotString})");
+            AppendWhere(sql, dataService.PresetCriteria, param.Where);
             if (param.OrderBy.IsNotNullOrEmpty()) {
                 sql.Append($" order by {param.OrderBy} ");
             }
             return sql.ToString();
         }
 
-        public override IDbConnection CreateConnection(DataSourceCacheItem dataSource) {
-            return new NpgsqlConnection(dataSource.ConnectionString);
+        public override IDbConnection CreateConnection(DataServiceCacheItem dataService) {
+            return new NpgsqlConnection(dataService.ConnectionString);
         }
 
-        protected override string BuildReadDataSql(DataSourceCacheItem dataSource, ReadDataParam param) {
+        protected override string BuildReadDataSql(DataServiceCacheItem dataService, ReadDataParam param) {
             if (param.Select.IsNullOrEmpty()) {
-                param.Select = $"{dataSource.PrimaryKeyColumn}, {dataSource.DisplayColumn}";
+                param.Select = $"{dataService.PrimaryKeyColumn}, {dataService.DisplayColumn}";
             }
             // todo: check select
             var sql = new StringBuilder();
             // check selected fields when a table has geo column;
-            if (param.CheckGeometry && dataSource.HasGeometryColumn) {
+            if (param.CheckGeometry && dataService.HasGeometryColumn) {
                 param.Select = param.Select.Split(
                     ",",
                     StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries
                 ).Aggregate(
                     new StringBuilder(),
-                    (current, field) => current.Append(",").Append(field.EqualsOrdinalIgnoreCase(dataSource.GeometryColumn) ? $"st_astext({field}) as {field}" : field)
+                    (current, field) => current.Append(",").Append(field.EqualsOrdinalIgnoreCase(dataService.GeometryColumn) ? $"st_astext({field}) as {field}" : field)
                 ).ToString().Substring(1);
             }
             sql.AppendLine($" select {param.Select} ");
-            sql.AppendLine($" from {dataSource.Schema}.{dataSource.TableName} ");
-            AppendWhere(sql, dataSource.PresetCriteria, param.Where);
+            sql.AppendLine($" from {dataService.Schema}.{dataService.TableName} ");
+            AppendWhere(sql, dataService.PresetCriteria, param.Where);
             if (param.GroupBy.IsNotNullOrEmpty()) {
                 sql.AppendLine($" group by {param.GroupBy} ");
                 if (param.OrderBy.IsNotNullOrEmpty()) {
@@ -132,7 +132,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             }
             else {
                 if (param.OrderBy.IsNullOrEmpty()) {
-                    param.OrderBy = dataSource.DefaultOrder;
+                    param.OrderBy = dataService.DefaultOrder;
                 }
                 if (param.OrderBy.IsNotNullOrEmpty()) {
                     sql.AppendLine($" order by {param.OrderBy} ");
@@ -142,44 +142,44 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             return sql.ToString();
         }
 
-        protected override string BuildCountSql(DataSourceCacheItem dataSource, CountParam param) {
+        protected override string BuildCountSql(DataServiceCacheItem dataService, CountParam param) {
             var sql = new StringBuilder(" select count(*) ");
-            sql.AppendLine($" from {dataSource.Schema}.{dataSource.TableName} ");
-            AppendWhere(sql, dataSource.PresetCriteria, param.Where);
+            sql.AppendLine($" from {dataService.Schema}.{dataService.TableName} ");
+            AppendWhere(sql, dataService.PresetCriteria, param.Where);
             return sql.ToString();
         }
 
-        protected override string BuildDistinctSql(DataSourceCacheItem dataSource, DistinctParam param) {
+        protected override string BuildDistinctSql(DataServiceCacheItem dataService, DistinctParam param) {
             if (param.Select.IsNullOrEmpty() || param.Select.Trim().Equals("*")) {
                 throw new ArgumentException($"Invalid select {param.Select} for distinct !");
             }
             var sql = new StringBuilder();
-            if (dataSource.HasGeometryColumn) {
+            if (dataService.HasGeometryColumn) {
                 param.Select = param.Select.Split(
                     ",",
                     StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries
                 ).Aggregate(
                     new StringBuilder(),
-                    (current, field) => current.Append(",").Append(field.EqualsOrdinalIgnoreCase(dataSource.GeometryColumn) ? $"st_astext({field}) as {field}" : field)
+                    (current, field) => current.Append(",").Append(field.EqualsOrdinalIgnoreCase(dataService.GeometryColumn) ? $"st_astext({field}) as {field}" : field)
                 ).ToString().Substring(1);
             }
             sql.AppendLine($" select distinct {param.Select} ");
-            sql.AppendLine($" from {dataSource.Schema}.{dataSource.TableName} ");
-            AppendWhere(sql, dataSource.PresetCriteria, param.Where);
+            sql.AppendLine($" from {dataService.Schema}.{dataService.TableName} ");
+            AppendWhere(sql, dataService.PresetCriteria, param.Where);
             if (param.OrderBy.IsNotNullOrEmpty()) {
                 sql.AppendLine($" order by {param.OrderBy} ");
             }
             return sql.ToString();
         }
 
-        protected override string BuildScalarSql(DataSourceCacheItem dataSource, ReadDataParam param) {
+        protected override string BuildScalarSql(DataServiceCacheItem dataService, ReadDataParam param) {
             if (param.Select.IsNullOrEmpty()) {
                 throw new InvalidOperationException("Select is not provided for scalar!");
             }
             var sql = new StringBuilder();
             sql.AppendLine($" select {param.Select} ");
-            sql.AppendLine($" from {dataSource.Schema}.{dataSource.TableName} ");
-            AppendWhere(sql, dataSource.PresetCriteria, param.Where);
+            sql.AppendLine($" from {dataService.Schema}.{dataService.TableName} ");
+            AppendWhere(sql, dataService.PresetCriteria, param.Where);
             sql.AppendLine(" limit 1 offset 0 ");
             return sql.ToString();
         }

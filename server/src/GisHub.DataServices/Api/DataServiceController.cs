@@ -55,7 +55,7 @@ namespace Beginor.GisHub.DataServices.Api {
         [HttpGet("")]
         [Authorize("dataservices.read")]
         public async Task<ActionResult<PaginatedResponseModel<DataServiceModel>>> Search(
-            [FromQuery]DataSourceSearchModel model
+            [FromQuery]DataServiceSearchModel model
         ) {
             try {
                 var roles = User.Claims.Where(c => c.Type == ClaimTypes.Role)

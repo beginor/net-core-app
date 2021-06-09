@@ -2,7 +2,7 @@ using Beginor.AppFx.Core;
 
 namespace Beginor.GisHub.DataServices.Data {
 
-    public class DataSourceCacheItem {
+    public class DataServiceCacheItem {
 
         public long DataSourceId { get; set; }
         public string DataSourceName { get; set; }
