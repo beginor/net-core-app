@@ -3,23 +3,22 @@ import { HttpClient, HttpEventType, HttpParams, HttpRequest } from '@angular/com
 import { BehaviorSubject } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
-import { ColumnModel } from './metadata.service';
 import { RolesService, AppRoleModel } from '../../admin/roles/roles.service';
 
-/** 数据源（数据表或视图）服务 */
+/** 数据服务服务 */
 @Injectable({
     providedIn: 'root'
 })
-export class DataSourceService {
+export class DataServiceService {
 
-    public searchModel: DataSourceSearchModel = { skip: 0, take: 10 };
+    public searchModel: DataServiceSearchModel = { skip: 0, take: 10 };
     public total = new BehaviorSubject<number>(0);
-    public data = new BehaviorSubject<DataSourceModel[]>([]);
+    public data = new BehaviorSubject<DataServiceModel[]>([]);
     public loading = false;
     public showPagination = false;
     public roles: AppRoleModel[] = [];
 
-    private baseUrl = `${this.apiRoot}/datasources`;
+    private baseUrl = `${this.apiRoot}/dataservices`;
     private roleSvc: RolesService;
 
     constructor(
@@ -32,7 +31,7 @@ export class DataSourceService {
         this.roleSvc.data.subscribe(data => { this.roles = data; });
     }
 
-    /** 搜索数据源（数据表或视图） */
+    /** 搜索数据服务 */
     public async search(): Promise<void> {
         let params = new HttpParams();
         for (const key in this.searchModel) {
@@ -43,7 +42,7 @@ export class DataSourceService {
         }
         this.loading = true;
         try {
-            const result = await this.http.get<DataSourceResultModel>(
+            const result = await this.http.get<DataServiceResultModel>(
                 this.baseUrl,
                 {
                     params: params
@@ -60,7 +59,7 @@ export class DataSourceService {
             this.total.next(0);
             this.data.next([]);
             this.ui.showAlert(
-                { type: 'danger', message: '加载数据源（数据表或视图）数据出错!'}
+                { type: 'danger', message: '加载数据服务数据出错!'}
             );
         }
         finally {
@@ -80,12 +79,12 @@ export class DataSourceService {
         await this.search();
     }
 
-    /** 创建数据源（数据表或视图） */
+    /** 创建数据服务 */
     public async create(
-        model: DataSourceModel
-    ): Promise<DataSourceModel | undefined> {
+        model: DataServiceModel
+    ): Promise<DataServiceModel | undefined> {
         try {
-            const result = await this.http.post<DataSourceModel>(
+            const result = await this.http.post<DataServiceModel>(
                 this.baseUrl,
                 model
             ).toPromise();
@@ -94,16 +93,16 @@ export class DataSourceService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '创建数据源出错！' }
+                { type: 'danger', message: '创建数据服务出错！' }
             );
             return;
         }
     }
 
-    /** 获取指定的数据源（数据表或视图） */
-    public async getById(id: string): Promise<DataSourceModel | undefined> {
+    /** 获取指定的数据服务 */
+    public async getById(id: string): Promise<DataServiceModel | undefined> {
         try {
-            const result = await this.http.get<DataSourceModel>(
+            const result = await this.http.get<DataServiceModel>(
                 `${this.baseUrl}/${id}`
             ).toPromise();
             return result;
@@ -111,13 +110,13 @@ export class DataSourceService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '获取指定的数据源（数据表或视图）出错！' }
+                { type: 'danger', message: '获取指定的数据服务出错！' }
             );
             return;
         }
     }
 
-    /** 删除数据源（数据表或视图） */
+    /** 删除数据服务 */
     public async delete(id: string): Promise<boolean> {
         const confirm = await this.ui.showConfirm('确认删除么？');
         if (!confirm) {
@@ -132,19 +131,19 @@ export class DataSourceService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '删除数据源（数据表或视图）出错！' }
+                { type: 'danger', message: '删除数据服务出错！' }
             );
             return false;
         }
     }
 
-    /** 更新数据源（数据表或视图） */
+    /** 更新数据服务 */
     public async update(
         id: string,
-        model: DataSourceModel
-    ): Promise<DataSourceModel | undefined> {
+        model: DataServiceModel
+    ): Promise<DataServiceModel | undefined> {
         try {
-            const result = await this.http.put<DataSourceModel>(
+            const result = await this.http.put<DataServiceModel>(
                 `${this.baseUrl}/${id}`,
                 model
             ).toPromise();
@@ -153,15 +152,15 @@ export class DataSourceService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '更新数据源（数据表或视图）出错！' }
+                { type: 'danger', message: '更新数据服务出错！' }
             );
             return;
         }
     }
 
-    public async getColumns(id: string): Promise<DataSourceFieldModel[]> {
+    public async getColumns(id: string): Promise<DataServiceFieldModel[]> {
         try {
-            const result = await this.http.get<DataSourceFieldModel[]>(
+            const result = await this.http.get<DataServiceFieldModel[]>(
                 `${this.baseUrl}/${id}/columns`
             ).toPromise();
             return result;
@@ -169,7 +168,7 @@ export class DataSourceService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '获取数据源的列数据出错！' }
+                { type: 'danger', message: '获取数据服务的列数据出错！' }
             );
             return [];
         }
@@ -196,7 +195,7 @@ export class DataSourceService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '获取数据源的数据出错！' }
+                { type: 'danger', message: '获取数据服务的数据出错！' }
             );
             return {};
         }
@@ -236,7 +235,7 @@ export class DataSourceService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '获取数据源的记录数出错！' }
+                { type: 'danger', message: '获取数据服务的记录数出错！' }
             );
             return -1;
         }
@@ -296,7 +295,7 @@ export class DataSourceService {
                 ex => {
                     this.errorHandler.handleError(ex);
                     this.ui.showAlert(
-                        { type: 'danger', message: '获取数据源的数据出错！' }
+                        { type: 'danger', message: '获取数据服务的数据出错！' }
                     );
                     reject(ex);
                 }
@@ -359,13 +358,13 @@ export interface PaginatedResult {
     data?: any[];
 }
 
-/** 数据源（数据表或视图） */
-export interface DataSourceModel {
-    /** 数据源id */
+/** 数据服务 */
+export interface DataServiceModel {
+    /** 数据服务id */
     id: string;
-    /** 数据源名称 */
+    /** 数据服务名称 */
     name?: string;
-    /** 数据源描述 */
+    /** 数据服务描述 */
     description?: string;
     /** 数据库连接 */
     connection?: { id?: string; name?: string };
@@ -373,8 +372,8 @@ export interface DataSourceModel {
     schema?: string;
     /** 数据表/视图名称 */
     tableName?: string;
-    /** 数据源的公开字段 */
-    fields?: DataSourceFieldModel[];
+    /** 数据服务的公开字段 */
+    fields?: DataServiceFieldModel[];
     /** 主键列名称 */
     primaryKeyColumn?: string;
     /** 显示列名称， 查询时不指定字段则返回数据表的主键列和显示列。 */
@@ -393,7 +392,7 @@ export interface DataSourceModel {
     roles?: string[];
 }
 
-export interface DataSourceFieldModel {
+export interface DataServiceFieldModel {
     name: string;
     description?: string;
     type?: string;
@@ -402,19 +401,19 @@ export interface DataSourceFieldModel {
     editable?: boolean;
 }
 
-/** 数据源（数据表或视图） 搜索参数 */
-export interface DataSourceSearchModel {
+/** 数据服务 搜索参数 */
+export interface DataServiceSearchModel {
     [key: string]: undefined | number | string;
     /** 跳过的记录数 */
     skip: number;
     /** 取多少条记录 */
     take: number;
-    /** 数据源名称或者数据表关键字 */
+    /** 数据服务名称或者数据表关键字 */
     keywords?: string;
 }
 
-/** 数据源（数据表或视图） 搜索结果 */
-export interface DataSourceResultModel {
+/** 数据服务 搜索结果 */
+export interface DataServiceResultModel {
     /** 请求跳过的记录数 */
     skip?: number;
     /** 请求多少条记录 */
@@ -422,7 +421,7 @@ export interface DataSourceResultModel {
     /** 总记录数 */
     total?: number;
     /** 数据列表 */
-    data?: DataSourceModel[];
+    data?: DataServiceModel[];
 }
 
 export type PreviewType = 'data' | 'geojson' | 'featureset' | 'mapserver';

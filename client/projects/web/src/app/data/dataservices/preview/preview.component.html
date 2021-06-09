@@ -1,30 +1,30 @@
 <div class="modal-header pb-0">
   <h5 class="modal-title">{{ds.name}} 数据预览</h5>
   <ul class="nav-tabs ml-auto" ngbNav #nav="ngbNav" [(activeId)]="previewType">
-    <li *ngIf="hasPrivilege('datasources.read_data')" ngbNavItem="data">
+    <li *ngIf="hasPrivilege('data_services.read_data')" ngbNavItem="data">
       <a ngbNavLink>属性数据</a>
       <ng-template ngbNavContent>
-        <app-datasources-preview-data [ds]="ds"></app-datasources-preview-data>
+        <app-dataservices-preview-data [ds]="ds"></app-dataservices-preview-data>
       </ng-template>
     </li>
-    <li *ngIf="!!ds.geometryColumn && hasPrivilege('datasources.read_geojson')" ngbNavItem="geojson">
+    <li *ngIf="!!ds.geometryColumn && hasPrivilege('data_services.read_geojson')" ngbNavItem="geojson">
       <a ngbNavLink>GeoJson</a>
       <ng-template ngbNavContent>
-        <app-datasources-preview-geojson [ds]="ds" (downloadProgress)="updateProgress($event)">
-        </app-datasources-preview-geojson>
+        <app-dataservices-preview-geojson [ds]="ds" (downloadProgress)="updateProgress($event)">
+        </app-dataservices-preview-geojson>
       </ng-template>
     </li>
-    <li *ngIf="!!ds.geometryColumn && hasPrivilege('datasources.read_featureset')" ngbNavItem="featureset">
+    <li *ngIf="!!ds.geometryColumn && hasPrivilege('data_services.read_featureset')" ngbNavItem="featureset">
       <a ngbNavLink>FeatureSet</a>
       <ng-template ngbNavContent>
-        <app-datasources-preview-featureset [ds]="ds" (downloadProgress)="updateProgress($event)">
-        </app-datasources-preview-featureset>
+        <app-dataservices-preview-featureset [ds]="ds" (downloadProgress)="updateProgress($event)">
+        </app-dataservices-preview-featureset>
       </ng-template>
     </li>
     <li *ngIf="!!ds.geometryColumn" ngbNavItem="mapserver">
       <a ngbNavLink>MapServer</a>
       <ng-template ngbNavContent>
-        <app-datasources-preview-mapserver [ds]="ds"></app-datasources-preview-mapserver>
+        <app-dataservices-preview-mapserver [ds]="ds"></app-dataservices-preview-mapserver>
       </ng-template>
     </li>
   </ul>

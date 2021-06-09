@@ -11,10 +11,10 @@ import {
 
 
 import { UiService } from '../../../common';
-import { DataSourceModel, DataSourceService } from '../datasources.service';
+import { DataServiceModel, DataServiceService } from '../dataservices.service';
 
 @Component({
-    selector: 'app-datasources-preview-geojson',
+    selector: 'app-dataservices-preview-geojson',
     template: `
       <div #mapEl class="mapview"></div>
     `,
@@ -25,7 +25,7 @@ import { DataSourceModel, DataSourceService } from '../datasources.service';
 })
 export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
     @Input()
-    public ds: DataSourceModel = { id: '' };
+    public ds: DataServiceModel = { id: '' };
     @Output() public downloadProgress = new EventEmitter<number>(true);
     @ViewChild('mapEl')
     public mapElRef!: ElementRef<HTMLDivElement>;
@@ -42,7 +42,7 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
         private http: HttpClient,
         @Inject(DOCUMENT) private doc: Document,
         private ui: UiService,
-        private vm: DataSourceService
+        private vm: DataServiceService
     ) {
     }
 

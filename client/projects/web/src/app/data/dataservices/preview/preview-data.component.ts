@@ -1,11 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import {
-    DataSourceModel, DataSourceService, ReadDataParam, DataSourceFieldModel
-} from '../datasources.service';
+    DataServiceModel, DataServiceService, ReadDataParam, DataServiceFieldModel
+} from '../dataservices.service';
 
 @Component({
-    selector: 'app-datasources-preview-data',
+    selector: 'app-dataservices-preview-data',
     template: `
       <table class="table table-striped table-sm">
         <thead>
@@ -60,8 +60,8 @@ import {
 export class PreviewDataComponent implements OnInit, OnDestroy {
 
     @Input()
-    public ds: DataSourceModel = { id: '' };
-    public columns: DataSourceFieldModel[] = [];
+    public ds: DataServiceModel = { id: '' };
+    public columns: DataServiceFieldModel[] = [];
     public data: any[] = [];
     public total = 0;
     public readDataParam: ReadDataParam = { };
@@ -70,7 +70,7 @@ export class PreviewDataComponent implements OnInit, OnDestroy {
     public isEmpty = false;
 
     constructor(
-        private vm: DataSourceService
+        private vm: DataServiceService
     ) { }
 
     public async ngOnInit(): Promise<void> {

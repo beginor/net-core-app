@@ -4,11 +4,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
 
-import { DataSourceModel, DataSourceService } from '../datasources.service';
+import { DataServiceModel, DataServiceService } from '../dataservices.service';
 import { PreviewComponent } from '../preview/preview.component';
 
 @Component({
-    selector: 'app-datasource-list',
+    selector: 'app-dataservices-list',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss']
 })
@@ -19,7 +19,7 @@ export class ListComponent implements OnInit {
         private route: ActivatedRoute,
         private modal: NgbModal,
         public account: AccountService,
-        public vm: DataSourceService
+        public vm: DataServiceService
     ) { }
 
     public ngOnInit(): void {
@@ -50,7 +50,7 @@ export class ListComponent implements OnInit {
         this.vm.search();
     }
 
-    public showPreview(ds: DataSourceModel): void {
+    public showPreview(ds: DataServiceModel): void {
         const ref = this.modal.open(
             PreviewComponent,
             { container: 'body', size: 'xl' }

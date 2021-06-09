@@ -5,11 +5,11 @@ import {
 
 import { loadModules } from 'esri-loader';
 
-import { DataSourceModel, DataSourceService } from '../datasources.service';
+import { DataServiceModel, DataServiceService } from '../dataservices.service';
 import { ArcGisService } from '../../arcgis.service';
 
 @Component({
-    selector: 'app-datasources-preview-mapserver',
+    selector: 'app-dataservices-preview-mapserver',
     template: `<div #mapEl class="mapview"></div>`,
     styles: [
         ':host { display: flex; height: 100%; }',
@@ -18,7 +18,7 @@ import { ArcGisService } from '../../arcgis.service';
 })
 export class PreviewMapServerComponent implements AfterViewInit, OnDestroy {
     @Input()
-    public ds: DataSourceModel = { id: '' };
+    public ds: DataServiceModel = { id: '' };
     @Output() public downloadProgress = new EventEmitter<number>(true);
     @ViewChild('mapEl')
     public mapElRef!: ElementRef<HTMLDivElement>;
@@ -26,7 +26,7 @@ export class PreviewMapServerComponent implements AfterViewInit, OnDestroy {
     private mapview?: __esri.MapView;
 
     constructor(
-        private vm: DataSourceService,
+        private vm: DataServiceService,
         private arcgis: ArcGisService
     ) { }
 

@@ -9,7 +9,7 @@ import {
 import { AppSharedModule } from 'app-shared';
 
 import { AppCommonModule } from 'projects/web/src/app/common';
-import { DataSourceRoutingModule } from './datasources-routing.module';
+import { DataServiceRoutingModule } from './dataservices-routing.module';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
 import { PreviewComponent } from './preview/preview.component';
@@ -39,7 +39,7 @@ import { PreviewMapServerComponent } from './preview/preview-mapserver.component
         NgbProgressbarModule,
         AppSharedModule,
         AppCommonModule,
-        DataSourceRoutingModule
+        DataServiceRoutingModule
     ]
 })
-export class DataSourceModule { }
+export class DataServiceModule { }

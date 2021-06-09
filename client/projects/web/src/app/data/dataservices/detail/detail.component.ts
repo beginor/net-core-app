@@ -10,7 +10,7 @@ import {
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
-import { DataSourceService, DataSourceModel, DataSourceFieldModel } from '../datasources.service';
+import { DataServiceService, DataServiceModel, DataServiceFieldModel } from '../dataservices.service';
 import { MetadataService, TableModel, ColumnModel } from '../metadata.service';
 import {
     ConnectionService, ConnectionModel
@@ -19,7 +19,7 @@ import { NgbTypeahead, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-boot
 import { UiService } from '../../../common';
 
 @Component({
-    selector: 'app-datasource-detail',
+    selector: 'app-dataservices-detail',
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.scss'],
     animations: [
@@ -34,7 +34,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: DataSourceModel = { id: '' };
+    public model: DataServiceModel = { id: '' };
     public connections: ConnectionModel[] = [];
     public connection?: ConnectionModel;
 
@@ -83,7 +83,7 @@ export class DetailComponent implements OnInit {
         private ui: UiService,
         public meta: MetadataService,
         public account: AccountService,
-        public vm: DataSourceService
+        public vm: DataServiceService
     ) {
         const id = route.snapshot.params.id;
         const editable = route.snapshot.params.editable;
@@ -228,7 +228,7 @@ export class DetailComponent implements OnInit {
         if (!col) {
             return;
         }
-        const field: DataSourceFieldModel = {
+        const field: DataServiceFieldModel = {
             name: col.name,
             description: col.description,
             type: col.type,

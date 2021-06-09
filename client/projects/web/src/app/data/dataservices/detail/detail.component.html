@@ -3,7 +3,7 @@
   <div class="card-header d-flex justify-content-between align-content-center">
     <h5 class="card-title mb-0">{{title}}</h5>
     <div class="btn-group btn-group-sm">
-      <button *ngIf="info.privileges['datasources.update'] && editable"
+      <button *ngIf="info.privileges['data_services.update'] && editable"
         type="button" class="btn btn-sm btn-outline-primary"
         (click)="save()" [disabled]="!(detailForm.valid && isFieldsValid())">
         <svg-icon path="bi/check"></svg-icon> 保存
@@ -181,7 +181,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="info.privileges['datasources.update'] && editable"
+  <div *ngIf="info.privileges['data_services.update'] && editable"
     class="card-footer d-flex justify-content-between">
     <button type="button" class="btn btn-sm btn-outline-primary"
       (click)="save()" [disabled]="!(detailForm.valid && isFieldsValid())">

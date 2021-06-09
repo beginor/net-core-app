@@ -3,10 +3,10 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
 
-import { DataSourceService, DataSourceModel, PreviewType } from '../datasources.service';
+import { DataServiceService, DataServiceModel, PreviewType } from '../dataservices.service';
 
 @Component({
-    selector: 'app-datasources-preview',
+    selector: 'app-dataservices-preview',
     templateUrl: './preview.component.html',
     styleUrls: ['./preview.component.scss']
 })
@@ -14,7 +14,7 @@ export class PreviewComponent implements OnInit {
 
     private pvType: PreviewType = 'data';
 
-    public ds: DataSourceModel = { id: '' };
+    public ds: DataServiceModel = { id: '' };
     public get previewType(): PreviewType {
         return this.pvType;
     }
@@ -27,7 +27,7 @@ export class PreviewComponent implements OnInit {
     constructor(
         public activeModal: NgbActiveModal,
         public account: AccountService,
-        public vm: DataSourceService
+        public vm: DataServiceService
     ) { }
 
     public async ngOnInit(): Promise<void> {

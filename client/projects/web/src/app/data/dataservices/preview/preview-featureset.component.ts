@@ -8,10 +8,10 @@ import { loadModules } from 'esri-loader';
 
 import { UiService } from '../../../common'
 import { ArcGisService } from '../../arcgis.service';
-import { DataSourceModel, DataSourceService } from '../datasources.service';
+import { DataServiceModel, DataServiceService } from '../dataservices.service';
 
 @Component({
-    selector: 'app-datasources-preview-featureset',
+    selector: 'app-dataservices-preview-featureset',
     template: `<div #mapEl class="mapview"></div>`,
     styles: [
         ':host { display: flex; height: 100%; }',
@@ -20,7 +20,7 @@ import { DataSourceModel, DataSourceService } from '../datasources.service';
 })
 export class PreviewFeatureSetComponent implements AfterViewInit, OnDestroy {
     @Input()
-    public ds: DataSourceModel = { id: '' };
+    public ds: DataServiceModel = { id: '' };
     @Output() public downloadProgress = new EventEmitter<number>(true);
     @ViewChild('mapEl')
     public mapElRef!: ElementRef<HTMLDivElement>;
@@ -28,7 +28,7 @@ export class PreviewFeatureSetComponent implements AfterViewInit, OnDestroy {
     private mapview?: __esri.MapView;
 
     constructor(
-        private vm: DataSourceService,
+        private vm: DataServiceService,
         private ui: UiService,
         private arcgis: ArcGisService
     ) { }

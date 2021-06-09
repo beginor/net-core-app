@@ -12,7 +12,7 @@
         <div class="card-header d-flex justify-content-between">
           <h5 class="card-title mb-0">数据服务</h5>
           <div class="btn-group btn-group-sm">
-            <button *ngIf="info.privileges['datasources.create']"
+            <button *ngIf="info.privileges['data_services.create']"
               type="button" class="btn btn-outline-primary"
               (click)="showDetail('0', true)">
               <svg-icon path="bi/plus"></svg-icon> 新建数据服务
@@ -100,17 +100,17 @@
                 <td class='text-left'>{{item.displayColumn}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
-                    <button *ngIf="info.privileges['datasources.read_by_id']"
+                    <button *ngIf="info.privileges['data_services.read_by_id']"
                       class="btn btn-outline-secondary" ngbTooltip="详情" placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, false)">
                       <svg-icon path="bi/info-square"></svg-icon>
                     </button>
-                    <button *ngIf="info.privileges['datasources.update']"
+                    <button *ngIf="info.privileges['data_services.update']"
                       class="btn btn-outline-secondary" ngbTooltip="编辑" placement="top" [openDelay]="300"
                       (click)="showDetail(item.id, true)">
                       <svg-icon path="bi/pencil-square"></svg-icon>
                     </button>
-                    <button *ngIf="info.privileges['datasources.delete']"
+                    <button *ngIf="info.privileges['data_services.delete']"
                         class="btn btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300"
                       (click)="delete(item.id)">
                       <svg-icon path="bi/trash"></svg-icon>

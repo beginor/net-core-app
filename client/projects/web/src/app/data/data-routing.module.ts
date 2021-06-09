@@ -21,7 +21,7 @@ const routes: Routes = [
     },
     {
         path: 'dataservices',
-        loadChildren: () => import('./dataservices/datasources.module').then(m => m.DataSourceModule)
+        loadChildren: () => import('./dataservices/dataservices.module').then(m => m.DataServiceModule)
     },
     {
         path: 'vectortiles',
