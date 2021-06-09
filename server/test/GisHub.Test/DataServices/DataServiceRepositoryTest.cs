@@ -14,7 +14,7 @@ namespace Beginor.GisHub.Test.DataServices {
 
     /// <summary>数据源（数据表或视图）仓储测试</summary>
     [TestFixture]
-    public class DataSourceRepositoryTest : BaseTest<IDataSourceRepository> {
+    public class DataServiceRepositoryTest : BaseTest<IDataServiceRepository> {
 
         [Test]
         public void _01_CanResolveTarget() {
@@ -34,14 +34,14 @@ namespace Beginor.GisHub.Test.DataServices {
 
         [Test]
         public void _03_CanMapDataSource() {
-            var entity = new DataSource {
+            var entity = new DataService {
                 Id = 1,
                 Connection = new Connection {
                     Id = 2,
                     Name = "Test"
                 },
                 Fields = new [] {
-                    new DataSourceField {
+                    new DataServiceField {
                         Name = "id",
                         Type = "int",
                         Nullable = false,
@@ -50,9 +50,9 @@ namespace Beginor.GisHub.Test.DataServices {
                 }
             };
             var mapper = ServiceProvider.GetService<AutoMapper.IMapper>();
-            var model = mapper.Map<DataSourceModel>(entity);
+            var model = mapper.Map<DataServiceModel>(entity);
             Assert.AreEqual(entity.Connection.Id.ToString(), model.Connection.Id);
-            var entity2 = mapper.Map<Beginor.GisHub.DataServices.Data.DataSource>(model);
+            var entity2 = mapper.Map<Beginor.GisHub.DataServices.Data.DataService>(model);
             Assert.IsNotNull(entity2.Connection);
             Assert.AreEqual(entity2.Connection.Id.ToString(), model.Connection.Id);
             Assert.IsNotEmpty(model.Fields);

@@ -13,20 +13,20 @@ using Beginor.GisHub.DataServices.Data;
 
 namespace Beginor.GisHub.DataServices.Api {
 
-    /// <summary>数据源（数据表或视图） 服务接口</summary>
+    /// <summary>数据服务 服务接口</summary>
     [ApiController]
-    [Route("api/datasources")]
-    public partial class DataSourceController : Controller {
+    [Route("api/dataservices")]
+    public partial class DataServiceController : Controller {
 
-        private ILogger<DataSourceController> logger;
-        private IDataSourceRepository repository;
+        private ILogger<DataServiceController> logger;
+        private IDataServiceRepository repository;
         private IDataServiceFactory factory;
         private IAppJsonDataRepository jsonRepository;
         private JsonSerializerOptionsFactory serializerOptionsFactory;
 
-        public DataSourceController(
-            ILogger<DataSourceController> logger,
-            IDataSourceRepository repository,
+        public DataServiceController(
+            ILogger<DataServiceController> logger,
+            IDataServiceRepository repository,
             IDataServiceFactory factory,
             IAppJsonDataRepository jsonRepository,
             JsonSerializerOptionsFactory serializerOptionsFactory
@@ -49,12 +49,12 @@ namespace Beginor.GisHub.DataServices.Api {
             base.Dispose(disposing);
         }
 
-        /// <summary>搜索 数据源（数据表或视图） ， 分页返回结果</summary>
+        /// <summary>搜索 数据服务 ， 分页返回结果</summary>
         /// <response code="200">成功, 分页返回结果</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("")]
-        [Authorize("datasources.read")]
-        public async Task<ActionResult<PaginatedResponseModel<DataSourceModel>>> Search(
+        [Authorize("dataservices.read")]
+        public async Task<ActionResult<PaginatedResponseModel<DataServiceModel>>> Search(
             [FromQuery]DataSourceSearchModel model
         ) {
             try {
@@ -65,35 +65,35 @@ namespace Beginor.GisHub.DataServices.Api {
                 return result;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not search datasources with {model.ToJson()} .");
+                logger.LogError(ex, $"Can not search dataservice with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
-        /// <summary> 创建 数据源（数据表或视图） </summary>
-        /// <response code="200">创建 数据源（数据表或视图） 成功</response>
+        /// <summary> 创建 数据服务 </summary>
+        /// <response code="200">创建 数据服务 成功</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
-        [Authorize("datasources.create")]
-        public async Task<ActionResult<DataSourceModel>> Create(
-            [FromBody]DataSourceModel model
+        [Authorize("dataservices.create")]
+        public async Task<ActionResult<DataServiceModel>> Create(
+            [FromBody]DataServiceModel model
         ) {
             try {
                 await repository.SaveAsync(model);
                 return model;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not save {model.ToJson()} to datasources.");
+                logger.LogError(ex, $"Can not save {model.ToJson()} to dataservice.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
-        /// <summary>删除 数据源（数据表或视图） </summary>
-        /// <response code="204">删除 数据源（数据表或视图） 成功</response>
+        /// <summary>删除 数据服务 </summary>
+        /// <response code="204">删除 数据服务 成功</response>
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
-        [Authorize("datasources.delete")]
+        [Authorize("dataservices.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
                 await repository.DeleteAsync(id);
@@ -101,20 +101,20 @@ namespace Beginor.GisHub.DataServices.Api {
                 return NoContent();
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not delete datasources by id {id} .");
+                logger.LogError(ex, $"Can not delete dataservice by id {id} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
         /// <summary>
-        /// 获取指定的 数据源（数据表或视图）
+        /// 获取指定的 数据服务
         /// </summary>
-        /// <response code="200">返回 数据源（数据表或视图） 信息</response>
-        /// <response code="404"> 数据源（数据表或视图） 不存在</response>
+        /// <response code="200">返回 数据服务 信息</response>
+        /// <response code="404"> 数据服务 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("datasources.read_by_id")]
-        public async Task<ActionResult<DataSourceModel>> GetById(long id) {
+        [Authorize("dataservices.read_by_id")]
+        public async Task<ActionResult<DataServiceModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);
                 if (result == null) {
@@ -123,22 +123,22 @@ namespace Beginor.GisHub.DataServices.Api {
                 return result;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not get datasources by id {id}.");
+                logger.LogError(ex, $"Can not get dataservice by id {id}.");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
         /// <summary>
-        /// 更新 数据源（数据表或视图）
+        /// 更新 数据服务
         /// </summary>
-        /// <response code="200">更新成功，返回 数据源（数据表或视图） 信息</response>
-        /// <response code="404"> 数据源（数据表或视图） 不存在</response>
+        /// <response code="200">更新成功，返回 数据服务 信息</response>
+        /// <response code="404"> 数据服务 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
-        [Authorize("datasources.update")]
-        public async Task<ActionResult<DataSourceModel>> Update(
+        [Authorize("dataservices.update")]
+        public async Task<ActionResult<DataServiceModel>> Update(
             [FromRoute]long id,
-            [FromBody]DataSourceModel model
+            [FromBody]DataServiceModel model
         ) {
             try {
                 var exists = await repository.ExitsAsync(id);
@@ -150,7 +150,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 return model;
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not update datasources by id {id} with {model.ToJson()} .");
+                logger.LogError(ex, $"Can not update dataservice by id {id} with {model.ToJson()} .");
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }

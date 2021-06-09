@@ -356,7 +356,7 @@ namespace Beginor.GisHub.DataServices {
         private async Task<AgsField[]> ConvertToFieldsAsync(
             DataSourceCacheItem dataSource,
             IList<ColumnModel> columns,
-            IDataSourceReader reader
+            IDataServiceReader reader
         ) {
             var param = new ReadDataParam {
                 Select = CheckGeoSelect(dataSource, string.Join(',', columns.Select(c => c.Name))),

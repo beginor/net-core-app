@@ -4,8 +4,11 @@ using Beginor.AppFx.Core;
 
 namespace Beginor.GisHub.DataServices.Models {
 
-    /// <summary>数据源（数据表或视图）模型</summary>
-    public partial class DataSourceModel : StringEntity {
+    /// <summary>数据服务模型</summary>
+    /// <summary>数据服务模型</summary>
+    /// <summary>数据服务模型</summary>
+    /// <summary>数据服务模型</summary>
+    public partial class DataServiceModel : StringEntity {
 
         /// <summary>数据源名称</summary>
         [Required(ErrorMessage = "数据源名称 必须填写！")]
@@ -21,7 +24,7 @@ namespace Beginor.GisHub.DataServices.Models {
         [Required(ErrorMessage = "数据表/视图名称 必须填写！")]
         public string TableName { get; set; }
         /// <summary>数据源公开的列</summary>
-        public DataSourceFieldModel[] Fields { get; set; }
+        public DataServiceFieldModel[] Fields { get; set; }
         /// <summary>主键列名称</summary>
         [Required(ErrorMessage = "主键列名称 必须填写！")]
         public string PrimaryKeyColumn { get; set; }
@@ -41,7 +44,8 @@ namespace Beginor.GisHub.DataServices.Models {
 
     }
 
-    public class DataSourceFieldModel {
+    /// <summary> 数据服务字段模型 </summary>
+    public class DataServiceFieldModel {
         public string Name { get; set; }
         public string Description { get; set; }
         public string Type { get; set; }
@@ -50,7 +54,7 @@ namespace Beginor.GisHub.DataServices.Models {
         public bool Editable { get; set; }
     }
 
-    /// <summary>数据源（数据表或视图）搜索参数</summary>
+    /// <summary>数据服务搜索参数</summary>
     public partial class DataSourceSearchModel : PaginatedRequestModel {
         /// <summary>搜索数据源名称或者数据表的关键字</summary>
         public string Keywords { get; set; }

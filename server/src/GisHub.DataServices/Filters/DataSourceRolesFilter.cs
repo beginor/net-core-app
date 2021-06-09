@@ -21,7 +21,7 @@ namespace Beginor.GisHub.DataServices.Filters {
             }
             else {
                 var id = (long) context.ActionArguments[IdParameterName];
-                var repo = context.HttpContext.RequestServices.GetService<IDataSourceRepository>();
+                var repo = context.HttpContext.RequestServices.GetService<IDataServiceRepository>();
                 if (repo != null) {
                     var cachedItem = await repo.GetCacheItemByIdAsync(id);
                     var userRoles = context.HttpContext.User.Claims.Where(

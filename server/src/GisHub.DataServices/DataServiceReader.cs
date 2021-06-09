@@ -12,22 +12,22 @@ using Dapper;
 
 namespace Beginor.GisHub.DataServices {
 
-    public abstract class DataSourceReader : Disposable, IDataSourceReader {
+    public abstract class DataServiceReader : Disposable, IDataServiceReader {
 
-        private ILogger<DataSourceReader> logger;
+        private ILogger<DataServiceReader> logger;
 
         protected IDataServiceFactory Factory { get; private set; }
-        protected IDataSourceRepository DataSourceRepo { get; private set; }
+        protected IDataServiceRepository DataServiceRepo { get; private set; }
         protected IConnectionRepository ConnectionRepo { get; private set; }
 
-        protected DataSourceReader(
+        protected DataServiceReader(
             IDataServiceFactory factory,
-            IDataSourceRepository dataSourceRepo,
+            IDataServiceRepository dataServiceRepo,
             IConnectionRepository connectionRepo,
-            ILogger<DataSourceReader> logger
+            ILogger<DataServiceReader> logger
         ) {
             Factory = factory ?? throw new ArgumentNullException(nameof(factory));
-            DataSourceRepo = dataSourceRepo ?? throw new ArgumentNullException(nameof(dataSourceRepo));
+            DataServiceRepo = dataServiceRepo ?? throw new ArgumentNullException(nameof(dataServiceRepo));
             ConnectionRepo = connectionRepo ?? throw new ArgumentNullException(nameof(connectionRepo));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
@@ -37,7 +37,7 @@ namespace Beginor.GisHub.DataServices {
         ) {
             if (disposing) {
                 Factory = null;
-                DataSourceRepo = null;
+                DataServiceRepo = null;
                 ConnectionRepo = null;
                 logger = null;
             }

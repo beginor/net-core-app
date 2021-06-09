@@ -20,7 +20,7 @@ namespace Beginor.GisHub.Test.DataServices {
 
         [Test]
         public async Task _01_CanQueryFeatures() {
-            var repo = ServiceProvider.GetService<IDataSourceRepository>();
+            var repo = ServiceProvider.GetService<IDataServiceRepository>();
             Assert.IsNotNull(repo);
             var dataSource = await repo.GetCacheItemByIdAsync(1609887224871030614);
             Assert.IsNotNull(dataSource);

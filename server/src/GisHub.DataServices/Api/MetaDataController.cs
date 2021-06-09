@@ -16,12 +16,12 @@ namespace Beginor.GisHub.DataServices.Api {
     [Route("api/metadata")]
     public class MetaDataController : Controller {
 
-        private ILogger<ConnectionController> logger;
+        private ILogger<MetaDataController> logger;
         private IConnectionRepository repository;
         private IDataServiceFactory factory;
 
         public MetaDataController(
-            ILogger<ConnectionController> logger,
+            ILogger<MetaDataController> logger,
             IConnectionRepository repository,
             IDataServiceFactory factory
         ) {

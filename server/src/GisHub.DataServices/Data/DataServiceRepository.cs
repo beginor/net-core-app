@@ -16,12 +16,12 @@ using Beginor.GisHub.DataServices.Models;
 namespace Beginor.GisHub.DataServices.Data {
 
     /// <summary>数据源（数据表或视图）仓储实现</summary>
-    public partial class DataSourceRepository : HibernateRepository<DataSource, DataSourceModel, long>, IDataSourceRepository {
+    public partial class DataServiceRepository : HibernateRepository<DataService, DataServiceModel, long>, IDataServiceRepository {
 
         private IDistributedCache cache;
         private IDataServiceFactory factory;
 
-        public DataSourceRepository(
+        public DataServiceRepository(
             ISession session,
             IMapper mapper,
             IDistributedCache cache,
@@ -42,11 +42,11 @@ namespace Beginor.GisHub.DataServices.Data {
         }
 
         /// <summary>搜索 数据源（数据表或视图） ，返回分页结果。</summary>
-        public async Task<PaginatedResponseModel<DataSourceModel>> SearchAsync(
+        public async Task<PaginatedResponseModel<DataServiceModel>> SearchAsync(
             DataSourceSearchModel model,
             string[] roles
         ) {
-            var query = Session.Query<DataSource>();
+            var query = Session.Query<DataService>();
             var totalSql = new StringBuilder(" select count(ds.*) ");
             var dataSql = new StringBuilder(" select ds.id, ds.name, ds.description, ds.schema, ds.table_name, ds.primary_key_column, ds.display_column, ds.geometry_column ");
             var body = new StringBuilder();
@@ -75,13 +75,13 @@ namespace Beginor.GisHub.DataServices.Data {
             dataSql.AppendLine(" order by ds.id desc ");
             dataSql.AppendLine(" limit @take offset @skip ");
             // Dapper.SqlMapper.AddTypeHandler(new JsonTypedHandler<DataSourceField[]>());
-            var data = await Session.Connection.QueryAsync<DataSource>(
+            var data = await Session.Connection.QueryAsync<DataService>(
                 sql: dataSql.ToString(),
                 param: param
             );
-            return new PaginatedResponseModel<DataSourceModel> {
+            return new PaginatedResponseModel<DataServiceModel> {
                 Total = total,
-                Data = Mapper.Map<IList<DataSourceModel>>(data),
+                Data = Mapper.Map<IList<DataServiceModel>>(data),
                 Skip = model.Skip,
                 Take = model.Take
             };
@@ -89,7 +89,7 @@ namespace Beginor.GisHub.DataServices.Data {
 
         public override async Task UpdateAsync(
             long id,
-            DataSourceModel model,
+            DataServiceModel model,
             CancellationToken token = default
         ) {
             await cache.RemoveAsync(id.ToString(), token);
@@ -97,7 +97,7 @@ namespace Beginor.GisHub.DataServices.Data {
         }
 
         public override async Task DeleteAsync(long id, CancellationToken token = default) {
-            var entity = Session.Get<DataSource>(id);
+            var entity = Session.Get<DataService>(id);
             if (entity != null) {
                 await cache.RemoveAsync(id.ToString(), token);
                 entity.IsDeleted = true;
@@ -114,7 +114,7 @@ namespace Beginor.GisHub.DataServices.Data {
             if (item != null) {
                 return item;
             }
-            var ds = await Session.Query<DataSource>()
+            var ds = await Session.Query<DataService>()
                 .Where(e => e.Id == id)
                 .FirstOrDefaultAsync();
             if (ds == null) {

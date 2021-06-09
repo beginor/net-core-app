@@ -38,7 +38,7 @@ namespace Beginor.GisHub.DataServices {
             return provider as IMetaDataProvider;
         }
 
-        public IDataSourceReader CreateDataSourceReader(string databaseType) {
+        public IDataServiceReader CreateDataSourceReader(string databaseType) {
             string typeName;
             if (databaseType.Equals("postgis", StringComparison.OrdinalIgnoreCase)) {
                 typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISDataSourceReader,Beginor.GisHub.DataServices.PostGIS";
@@ -53,7 +53,7 @@ namespace Beginor.GisHub.DataServices {
                 throw new InvalidOperationException($"Can not get type {type} !");
             }
             var provider = scope.ServiceProvider.GetService(type);
-            return provider as IDataSourceReader;
+            return provider as IDataServiceReader;
         }
 
         public IFeatureProvider CreateFeatureProvider(string databaseType) {

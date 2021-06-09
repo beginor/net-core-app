@@ -12,10 +12,10 @@ namespace Beginor.GisHub.DataServices {
                 .ForMember(dest => dest.Id, map => map.Ignore());
             CreateMap<Connection, StringIdNameEntity>()
                 .ReverseMap();
-            CreateMap<DataSource, DataSourceModel>()
+            CreateMap<DataService, DataServiceModel>()
                 .ReverseMap()
                 .ForMember(dest => dest.Id, map => map.Ignore());
-            CreateMap<DataSourceField, DataSourceFieldModel>()
+            CreateMap<DataServiceField, DataServiceFieldModel>()
                 .ReverseMap();
         }
 

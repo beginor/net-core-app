@@ -12,7 +12,7 @@ using Beginor.GisHub.DataServices.PostGIS;
 namespace Beginor.GisHub.Test.DataServices.PostGIS {
 
     [TestFixture]
-    public class PostGISDataSourceReaderTest : BaseTest<PostGISDataSourceReader> {
+    public class PostGISDataSourceReaderTest : BaseTest<PostGisDataServiceReader> {
 
         [Test]
         public void _01_CanResolveTarget() {
@@ -22,7 +22,7 @@ namespace Beginor.GisHub.Test.DataServices.PostGIS {
         [Test]
         public async Task _02_CanGetColumns() {
             var dataSourceId = 1607411884905030151;
-            var repo = ServiceProvider.GetService<IDataSourceRepository>();
+            var repo = ServiceProvider.GetService<IDataServiceRepository>();
             var dataSource = await repo.GetCacheItemByIdAsync(dataSourceId);
             var columns = await Target.GetColumnsAsync(dataSource);
             Assert.IsNotEmpty(columns);
@@ -34,7 +34,7 @@ namespace Beginor.GisHub.Test.DataServices.PostGIS {
         [Test]
         public async Task _03_CanCountData() {
             var dataSourceId = 1607411884905030151;
-            var repo = ServiceProvider.GetService<IDataSourceRepository>();
+            var repo = ServiceProvider.GetService<IDataServiceRepository>();
             var dataSource = await repo.GetCacheItemByIdAsync(dataSourceId);
             var count = await Target.CountAsync(
                 dataSource,
@@ -46,7 +46,7 @@ namespace Beginor.GisHub.Test.DataServices.PostGIS {
         [Test]
         public async Task _04_CanReadDistinctData() {
             var dataSourceId = 1607411884905030151;
-            var repo = ServiceProvider.GetService<IDataSourceRepository>();
+            var repo = ServiceProvider.GetService<IDataServiceRepository>();
             var dataSource = await repo.GetCacheItemByIdAsync(dataSourceId);
             var data = await Target.ReadDistinctDataAsync(
                 dataSource,
@@ -62,7 +62,7 @@ namespace Beginor.GisHub.Test.DataServices.PostGIS {
         [Test]
         public async Task _05_CanReadData() {
             var dataSourceId = 1609887224871030614;
-            var repo = ServiceProvider.GetService<IDataSourceRepository>();
+            var repo = ServiceProvider.GetService<IDataServiceRepository>();
             var dataSource = await repo.GetCacheItemByIdAsync(dataSourceId);
             var data = await Target.ReadDataAsync(
                 dataSource,

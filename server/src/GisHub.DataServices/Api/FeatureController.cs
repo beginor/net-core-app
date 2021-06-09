@@ -20,15 +20,15 @@ namespace Beginor.GisHub.DataServices.Api {
     [Route("rest/services/features")]
     public class FeatureController : Controller {
 
-        private ILogger<DataSourceController> logger;
-        private IDataSourceRepository repository;
+        private ILogger<FeatureController> logger;
+        private IDataServiceRepository repository;
         private IDataServiceFactory factory;
         private IAppJsonDataRepository jsonRepository;
         private JsonSerializerOptionsFactory serializerOptionsFactory;
 
         public FeatureController(
-            ILogger<DataSourceController> logger,
-            IDataSourceRepository repository,
+            ILogger<FeatureController> logger,
+            IDataServiceRepository repository,
             IDataServiceFactory factory,
             IAppJsonDataRepository jsonRepository,
             JsonSerializerOptionsFactory serializerOptionsFactory

@@ -4,19 +4,19 @@ using NHibernate.Mapping.Attributes;
 
 namespace Beginor.GisHub.DataServices.Data {
 
-    /// <summary>数据源（数据表或视图）</summary>
-    [Class(Schema = "public", Table = "datasources", Where = "is_deleted = false")]
-    public partial class DataSource : BaseEntity<long> {
+    /// <summary>数据服务</summary>
+    [Class(Schema = "public", Table = "data_services", Where = "is_deleted = false")]
+    public partial class DataService : BaseEntity<long> {
 
-        /// <summary>数据源id</summary>
+        /// <summary>数据服务id</summary>
         [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]
         public override long Id { get { return base.Id; } set { base.Id = value; } }
 
-        /// <summary>数据源名称</summary>
+        /// <summary>数据服务名称</summary>
         [Property(Name = "Name", Column = "name", Type = "string", NotNull = true, Length = 32)]
         public virtual string Name { get; set; }
 
-        /// <summary>数据源描述</summary>
+        /// <summary>数据服务描述</summary>
         [Property(Name = "Description", Column = "description", Type = "string", NotNull = false, Length = 256)]
         public virtual string Description { get; set; }
 
@@ -32,9 +32,9 @@ namespace Beginor.GisHub.DataServices.Data {
         [Property(Name = "TableName", Column = "table_name", Type = "string", NotNull = true, Length = 64)]
         public virtual string TableName { get; set; }
 
-        /// <summary>数据源公开的字段列表</summary>
-        [Property(Name = "Fields", Column = "fields", TypeType = typeof(NHibernate.Extensions.NpgSql.JsonbType<DataSourceField[]>), NotNull = false)]
-        public virtual DataSourceField[] Fields { get; set; }
+        /// <summary>数据服务公开的字段列表</summary>
+        [Property(Name = "Fields", Column = "fields", TypeType = typeof(NHibernate.Extensions.NpgSql.JsonbType<DataServiceField[]>), NotNull = false)]
+        public virtual DataServiceField[] Fields { get; set; }
 
         /// <summary>主键列名称</summary>
         [Property(Name = "PrimaryKeyColumn", Column = "primary_key_column", Type = "string", NotNull = true, Length = 256)]
@@ -70,7 +70,7 @@ namespace Beginor.GisHub.DataServices.Data {
 
     }
 
-    public class DataSourceField {
+    public class DataServiceField {
         public string Name { get; set; }
         public string Description { get; set; }
         public string Type { get; set; }

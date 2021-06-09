@@ -11,16 +11,16 @@ using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices.PostGIS {
 
-    public class PostGISDataSourceReader : DataSourceReader {
+    public class PostGisDataServiceReader : DataServiceReader {
 
         // private ILogger<PostGISDataSourceReader> logger;
 
-        public PostGISDataSourceReader(
+        public PostGisDataServiceReader(
             IDataServiceFactory factory,
-            IDataSourceRepository dataSourceRepo,
+            IDataServiceRepository dataServiceRepo,
             IConnectionRepository connectionRepo,
-            ILogger<PostGISDataSourceReader> logger
-        ) : base(factory, dataSourceRepo, connectionRepo, logger) {
+            ILogger<PostGisDataServiceReader> logger
+        ) : base(factory, dataServiceRepo, connectionRepo, logger) {
             // this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
