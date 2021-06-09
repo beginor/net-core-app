@@ -53,7 +53,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="200">成功, 分页返回结果</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("")]
-        [Authorize("dataservices.read")]
+        [Authorize("data_services.read")]
         public async Task<ActionResult<PaginatedResponseModel<DataServiceModel>>> Search(
             [FromQuery]DataServiceSearchModel model
         ) {
@@ -74,7 +74,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="200">创建 数据服务 成功</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
-        [Authorize("dataservices.create")]
+        [Authorize("data_services.create")]
         public async Task<ActionResult<DataServiceModel>> Create(
             [FromBody]DataServiceModel model
         ) {
@@ -93,7 +93,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
-        [Authorize("dataservices.delete")]
+        [Authorize("data_services.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
                 await repository.DeleteAsync(id);
@@ -113,7 +113,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="404"> 数据服务 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("dataservices.read_by_id")]
+        [Authorize("data_services.read_by_id")]
         public async Task<ActionResult<DataServiceModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);
@@ -135,7 +135,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="404"> 数据服务 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
-        [Authorize("dataservices.update")]
+        [Authorize("data_services.update")]
         public async Task<ActionResult<DataServiceModel>> Update(
             [FromRoute]long id,
             [FromBody]DataServiceModel model

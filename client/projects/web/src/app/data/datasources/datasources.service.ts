@@ -20,7 +20,7 @@ export class DataSourceService {
     public loading = false;
     public showPagination = false;
 
-    private baseUrl = `${this.apiRoot}/connections`;
+    private baseUrl = `${this.apiRoot}/datasources`;
 
     constructor(
         private http: HttpClient,
@@ -69,7 +69,7 @@ export class DataSourceService {
     public async getAll(): Promise<DataSourceModel[]> {
         try {
             const result = await this.http.get<DataSourceModel[]>(
-                `${this.apiRoot}/connections-list`
+                `${this.apiRoot}/datasources-list`
             ).toPromise();
             return result;
         }

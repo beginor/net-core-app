@@ -26,9 +26,7 @@ namespace Beginor.GisHub.DataServices {
                 typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider,Beginor.GisHub.DataServices.PostGIS";
             }
             else {
-                throw new NotSupportedException(
-                    $"Unsupported database type {databaseType}!"
-                );
+                throw new NotSupportedException($"Unsupported database type {databaseType}!");
             }
             var type = Type.GetType(typeName);
             if (type == null) {
@@ -41,7 +39,7 @@ namespace Beginor.GisHub.DataServices {
         public IDataServiceReader CreateDataSourceReader(string databaseType) {
             string typeName;
             if (databaseType.Equals("postgis", StringComparison.OrdinalIgnoreCase)) {
-                typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISDataSourceReader,Beginor.GisHub.DataServices.PostGIS";
+                typeName = "Beginor.GisHub.DataServices.PostGIS.PostGisDataServiceReader,Beginor.GisHub.DataServices.PostGIS";
             }
             else {
                 throw new NotSupportedException($"Unsupported database type {databaseType}!");

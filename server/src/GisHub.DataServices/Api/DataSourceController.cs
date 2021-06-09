@@ -37,7 +37,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         /// <summary>获取全部的数据源列表</summary>
         [HttpGet("~/api/datasources-list")]
-        [Authorize("datasources.read")]
+        [Authorize("data_sources.read")]
         public async Task<ActionResult<List<DataSourceModel>>> GetAllForDisplayAsync() {
             try {
                 var result = await repository.GetAllForDisplayAsync();
@@ -53,7 +53,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="200">成功, 分页返回结果</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("")]
-        [Authorize("datasources.read")]
+        [Authorize("data_sources.read")]
         public async Task<ActionResult<PaginatedResponseModel<DataSourceModel>>> Search(
             [FromQuery]DataSourceSearchModel model
         ) {
@@ -71,7 +71,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="200">创建 数据源 成功</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPost("")]
-        [Authorize("datasources.create")]
+        [Authorize("data_sources.create")]
         public async Task<ActionResult<DataSourceModel>> Create(
             [FromBody]DataSourceModel model
         ) {
@@ -90,7 +90,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="500">服务器内部错误</response>
         [HttpDelete("{id:long}")]
         [ProducesResponseType(204)]
-        [Authorize("datasources.delete")]
+        [Authorize("data_sources.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
                 await repository.DeleteAsync(id);
@@ -109,7 +109,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="404"> 数据源 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpGet("{id:long}")]
-        [Authorize("datasources.read_by_id")]
+        [Authorize("data_sources.read_by_id")]
         public async Task<ActionResult<DataSourceModel>> GetById(long id) {
             try {
                 var result = await repository.GetByIdAsync(id);
@@ -131,7 +131,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <response code="404"> 数据源 不存在</response>
         /// <response code="500">服务器内部错误</response>
         [HttpPut("{id:long}")]
-        [Authorize("datasources.update")]
+        [Authorize("data_sources.update")]
         public async Task<ActionResult<DataSourceModel>> Update(
             [FromRoute]long id,
             [FromBody]DataSourceModel model
