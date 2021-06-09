@@ -6,20 +6,22 @@ create table public.data_services
 (
     id bigint not null default snow_flake_id(),
     name character varying(32) collate pg_catalog."default" not null,
-    datasource_id bigint not null,
+    description character varying(256) collate pg_catalog."default",
+    data_source_id bigint not null,
     schema character varying(16) collate pg_catalog."default",
     table_name character varying(64) collate pg_catalog."default" not null,
+    fields jsonb,
     primary_key_column character varying(256) collate pg_catalog."default" not null,
     display_column character varying(256) collate pg_catalog."default" not null,
     geometry_column character varying(256) collate pg_catalog."default",
     preset_criteria character varying(128) collate pg_catalog."default",
     default_order character varying(128) collate pg_catalog."default",
     tags character varying(16)[] collate pg_catalog."default",
-    is_deleted boolean not null default false,
     roles character varying(64)[] collate pg_catalog."default",
+    is_deleted boolean not null default false,
     constraint pk_data_services primary key (id),
-    constraint fk_data_services_datasource_id foreign key (datasource_id)
-        references public.datasources (id) match simple
+    constraint fk_data_services_data_source_id foreign key (data_source_id)
+        references public.data_sources (id) match simple
         on update no action
         on delete no action
         not valid
@@ -41,7 +43,7 @@ comment on column public.data_services.id
 comment on column public.data_services.name
     is '数据服务名称';
 
-comment on column public.data_services.datasource_id
+comment on column public.data_services.data_source_id
     is '数据库源id';
 
 comment on column public.data_services.schema
@@ -75,22 +77,16 @@ comment on column public.data_services.is_deleted
 
 -- drop index public.fki_fk_datasources_id;
 
-create index fki_fk_datasource_id
+create index fki_fk_data_source_id
     on public.data_services using btree
-    (datasource_id asc nulls last)
+    (data_source_id asc nulls last)
     tablespace pg_default;
 
 comment on column public.data_services.roles
     is '允许的角色';
 
-alter table public.data_services
-    add column description character varying(256) collate pg_catalog."default";
-
 comment on column public.data_services.description
     is '数据服务描述';
-
-alter table public.data_services
-    add column fields jsonb;
 
 comment on column public.data_services.fields
     is '数据服务允许的的字段列表';
