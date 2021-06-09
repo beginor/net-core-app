@@ -1,8 +1,8 @@
--- table: public.connections
+-- table: public.data_sources
 
--- drop table public.connections;
+-- drop table public.data_sources;
 
-create table public.connections
+create table public.data_sources
 (
     id bigint not null default snow_flake_id(),
     name character varying(64) collate pg_catalog."default" not null,
@@ -14,45 +14,45 @@ create table public.connections
     password character varying(256) collate pg_catalog."default",
     timeout integer,
     is_deleted boolean not null default false,
-    constraint pk_connections primary key (id)
+    constraint pk_data_sources primary key (id)
 )
 with (
     oids = false
 )
 tablespace pg_default;
 
-alter table public.connections
+alter table public.data_sources
     owner to postgres;
 
-comment on table public.connections
-    is '数据库连接';
+comment on table public.data_sources
+    is '数据源';
 
-comment on column public.connections.id
-    is '连接id';
+comment on column public.data_sources.id
+    is '数据源id';
 
-comment on column public.connections.name
-    is '连接名称';
+comment on column public.data_sources.name
+    is '数据源名称';
 
-comment on column public.connections.database_type
+comment on column public.data_sources.database_type
     is '数据库类型（postgres、mssql、mysql、oracle、sqlite等）';
 
-comment on column public.connections.server_address
+comment on column public.data_sources.server_address
     is '服务器地址';
 
-comment on column public.connections.server_port
+comment on column public.data_sources.server_port
     is '服务器端口';
 
-comment on column public.connections.database_name
+comment on column public.data_sources.database_name
     is '数据库名称';
 
-comment on column public.connections.username
+comment on column public.data_sources.username
     is '数据库用户名';
 
-comment on column public.connections.password
+comment on column public.data_sources.password
     is '数据库密码';
 
-comment on column public.connections.timeout
+comment on column public.data_sources.timeout
     is '超时时间';
 
-comment on column public.connections.is_deleted
+comment on column public.data_sources.is_deleted
     is '是否已删除（软删除）';
