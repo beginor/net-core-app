@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -61,6 +62,20 @@ namespace Beginor.GisHub.Test {
             var options = section.Get<CustomHeaderOptions>();
             Assert.IsNotNull(options.Headers);
             Assert.Greater(options.Headers.Keys.Count, 0);
+        }
+
+        [Test]
+        [TestCase("/web/home")]
+        [TestCase("/web/about")]
+        [TestCase("/web/admin/users")]
+        [TestCase("/web/assets/icon")]
+        public void _07_CanMatchUrl(string url) {
+            var shouldIgnore = url.ToLowerInvariant().StartsWith("/web/assets/");
+            var regex = new Regex("/web/(?!assets/).*");
+            var isMatch = regex.IsMatch(url);
+            Assert.AreEqual(shouldIgnore, !isMatch);
+            var match = regex.Match(url);
+            Console.WriteLine(match);
         }
 
     }
