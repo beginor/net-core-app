@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,7 +41,7 @@ namespace Beginor.GisHub.Api.Middlewares {
                 var filePath = Path.Combine(env.WebRootPath, reqPath.Substring(1));
                 if (!File.Exists(filePath) && !Directory.Exists(filePath)) {
                     var failback = options.Failbacks.FirstOrDefault(
-                        f => reqPath.StartsWith(f.PathBase, StringComparison.OrdinalIgnoreCase)
+                        f => f.PathBaseRegex.IsMatch(reqPath.ToLowerInvariant())
                     );
                     if (failback != null) {
                         request.Path = failback.Failback;
@@ -56,6 +57,18 @@ namespace Beginor.GisHub.Api.Middlewares {
     }
 
     public class SpaFailback {
+        private Regex pathBaseRegex;
+        public Regex PathBaseRegex {
+            get {
+                if (string.IsNullOrEmpty(PathBase)) {
+                    return null;
+                }
+                if (pathBaseRegex == null) {
+                    pathBaseRegex = new Regex(PathBase);
+                }
+                return pathBaseRegex;
+            }
+        }
         public string PathBase { get; set; }
         public string Failback { get; set; }
     }
