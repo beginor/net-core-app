@@ -16,7 +16,7 @@ namespace Beginor.NetCoreApp.Data.Entities {
         [Property(Name = "Ip", Column = "ip", Type = "string", NotNull = false, Length = 64)]
         public virtual string Ip { get; set; }
         /// <summary>请求的主机名</summary>
-        [Property(Name = "HostName", Column = "host_name", Type = "string", NotNull = true, Length = 32)]
+        [Property(Name = "HostName", Column = "host_name", Type = "string", NotNull = false, Length = 32)]
         public virtual string HostName { get; set; }
 
         /// <summary>请求路径</summary>
