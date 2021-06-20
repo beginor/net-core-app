@@ -5,7 +5,7 @@ DataSource:
   Parameters:
     DbName: net_core_app
     DbProvider: PostgreSql
-    ConnectionString: server=127.0.0.1;port=5432;database=net_core_app;user id=postgres;password=postgis_11;
+    ConnectionString: server=127.0.0.1;port=54321;database=net_core_app;user id=postgres;password=aJv6YoG0CkM9YdqP;
     DbSchema: public
 Language: CSharp
 TemplateEngine:
