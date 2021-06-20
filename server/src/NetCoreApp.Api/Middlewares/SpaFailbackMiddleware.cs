@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Beginor.NetCoreApp.Common;
 
 namespace Beginor.NetCoreApp.Api.Middlewares {
 
@@ -37,7 +38,7 @@ namespace Beginor.NetCoreApp.Api.Middlewares {
         public Task InvokeAsync(HttpContext context) {
             var request = context.Request;
             var reqPath = request.Path.ToString();
-            if (!string.IsNullOrEmpty(reqPath)) {
+            if (!request.IsAjaxRequest() && !string.IsNullOrEmpty(reqPath)) {
                 var filePath = Path.Combine(env.WebRootPath, reqPath.Substring(1));
                 if (!File.Exists(filePath) && !Directory.Exists(filePath)) {
                     var failback = options.Failbacks.FirstOrDefault(
