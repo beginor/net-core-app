@@ -106,7 +106,14 @@ namespace GisHub.VectorTile.Data {
             sqlBuilder.AppendLine($"    ) as {layer.GeometryColumn},");
             sqlBuilder.AppendLine($"    {layer.IdColumn}, {layer.AttributeColumns}");
             sqlBuilder.AppendLine($"  from {layer.Schema}.{layer.TableName}");
-            sqlBuilder.AppendLine($"  where {layer.GeometryColumn} && ST_TileEnvelope({z}, {x}, {y}, margin => (64.0 / 4096))");
+            sqlBuilder.AppendLine($"  where ");
+            if (layer.Srid == 3857) {
+                sqlBuilder.Append($"    {layer.GeometryColumn} ");
+            }
+            else {
+                sqlBuilder.Append($" ST_Transform({layer.GeometryColumn}, 3857) ");
+            }
+            sqlBuilder.AppendLine($" && ST_TileEnvelope({z}, {x}, {y}, margin => (64.0 / 4096))");
             sqlBuilder.AppendLine(")");
             sqlBuilder.AppendLine($"select ST_AsMVT(mvt_geom, '{layer.Name}', 4096, '{layer.GeometryColumn}', '{layer.IdColumn}')");
             sqlBuilder.AppendLine("from mvt_geom");
