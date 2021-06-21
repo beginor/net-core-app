@@ -1,0 +1,19 @@
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Models;
+
+namespace Beginor.NetCoreApp.Data.Repositories {
+
+    /// <summary>服务器目录 仓储接口</summary>
+    public partial interface IServerFolderRepository : IRepository<ServerFolderModel, long> {
+
+        /// <summary>搜索 服务器目录 ，返回分页结果。</summary>
+        Task<PaginatedResponseModel<ServerFolderModel>> SearchAsync(
+            ServerFolderSearchModel model
+        );
+
+    }
+
+}
