@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
@@ -13,6 +14,12 @@ namespace Beginor.NetCoreApp.Data.Repositories {
         Task<PaginatedResponseModel<ServerFolderModel>> SearchAsync(
             ServerFolderSearchModel model
         );
+
+        Task<ServerFolderBrowseModel> GetFolderContentAsync(string alias, string path, string searchPattern);
+
+        Task<string> GetPhysicalPath(string alias, string path);
+
+        Task<Stream> GetFileContentAsync(string alias, string path);
 
     }
 

@@ -8,7 +8,7 @@ create table if not exists public.server_folders
     alias_name character varying(32) collate pg_catalog."default" not null,
     root_folder character varying(128) collate pg_catalog."default" not null,
     readonly boolean not null default true,
-    roles character varying(64) collate pg_catalog."default",
+    roles character varying(64)[] collate pg_catalog."default",
     constraint pk_server_folders primary key (id)
 )
 
@@ -33,4 +33,4 @@ comment on column public.server_folders.readonly
     is '是否只读';
 
 comment on column public.server_folders.roles
-    is '可访问此目录的角色列表';
+    is '可访问此目录的角色';

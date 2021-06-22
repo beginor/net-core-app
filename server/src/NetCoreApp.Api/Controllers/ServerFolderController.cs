@@ -7,29 +7,34 @@ using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Models;
 using Beginor.NetCoreApp.Data.Repositories;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
     /// <summary>服务器目录 服务接口</summary>
     [ApiController]
     [Route("api/server-folders")]
-    public class ServerFolderController : Controller {
+    public partial class ServerFolderController : Controller {
 
         private ILogger<ServerFolderController> logger;
         private IServerFolderRepository repository;
+        private IContentTypeProvider contentTypeProvider;
 
         public ServerFolderController(
             ILogger<ServerFolderController> logger,
-            IServerFolderRepository repository
+            IServerFolderRepository repository,
+            IContentTypeProvider contentTypeProvider
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.contentTypeProvider = contentTypeProvider ?? throw new ArgumentNullException(nameof(contentTypeProvider));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 logger = null;
                 repository = null;
+                contentTypeProvider = null;
             }
             base.Dispose(disposing);
         }

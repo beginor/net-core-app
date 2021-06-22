@@ -19,23 +19,28 @@ namespace Beginor.NetCoreApp.Test {
             if (ServiceProvider != null) {
                 return;
             }
+            var services = new ServiceCollection();
+            // setup test hosting env
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            baseDir = Path.Combine(baseDir, "config");
+            IWebHostEnvironment env = new TestHostEnvironment();
+            env.ContentRootPath = Path.Combine(baseDir);
+            env.WebRootPath = Path.Combine(env.ContentRootPath, "..", "..", "..", "..", "..", "..", "client", "dist");
+            services.AddSingleton(env);
+            // config files in config folder;
+            var configDir = Path.Combine(env.ContentRootPath, "config");
             var config = new ConfigurationBuilder()
-                .AddJsonFile(Path.Combine(baseDir, "appsettings.json"))
+                .AddJsonFile(Path.Combine(configDir, "appsettings.json"))
                 .AddJsonFile(
-                    Path.Combine(baseDir, "appsettings.Development.json")
+                    Path.Combine(configDir, "appsettings.Development.json")
                 )
                 .Build();
-            IWebHostEnvironment env = new TestHostingEnvironment();
-            var services = new ServiceCollection();
+            services.AddSingleton<IConfiguration>(config);
+            // startup and build services;
             var startup = new Startup(config, env);
             services.AddLogging(logging => {
-                logging.AddLog4net(Path.Combine(baseDir, "log.config"));
+                logging.AddLog4net(Path.Combine(configDir, "log.config"));
             });
             startup.ConfigureServices(services);
-            services.AddSingleton<IConfiguration>(config);
-            services.AddSingleton(env);
             ServiceProvider = services.BuildServiceProvider(false);
         }
 
@@ -47,7 +52,7 @@ namespace Beginor.NetCoreApp.Test {
 
     }
 
-    public class TestHostingEnvironment : IWebHostEnvironment {
+    public class TestHostEnvironment : IWebHostEnvironment {
 
         public string EnvironmentName { get; set; } = "Development";
 
@@ -68,7 +73,7 @@ namespace Beginor.NetCoreApp.Test {
 
         [Test]
         public void TestEnvironment() {
-            var target = new TestHostingEnvironment();
+            var target = new TestHostEnvironment();
             Assert.IsFalse(target.IsProduction());
             Assert.IsTrue(target.IsDevelopment());
         }

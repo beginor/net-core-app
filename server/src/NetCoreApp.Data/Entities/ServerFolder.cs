@@ -25,9 +25,17 @@ namespace Beginor.NetCoreApp.Data.Entities {
         [Property(Name = "Readonly", Column = "readonly", Type = "bool", NotNull = true)]
         public virtual bool Readonly { get; set; }
 
-        /// <summary>roles, _varchar</summary>
+        /// <summary>可访问此目录的角色</summary>
         [Property(Name = "Roles", Column = "roles", TypeType = typeof(StringArrayType), NotNull = false)]
         public virtual string[] Roles { get; set; }
+    }
+
+    public class ServerFolderCacheItem {
+        public long Id { get; set; }
+        public string AliasName { get; set; }
+        public string RootFolder { get; set; }
+        public bool Readonly { get; set; }
+        public string[] Roles { get; set; }
     }
 
 }

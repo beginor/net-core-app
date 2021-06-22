@@ -30,6 +30,18 @@ namespace Beginor.NetCoreApp.Test.Data {
             Assert.GreaterOrEqual(result.Take, result.Data.Count);
         }
 
+        [Test]
+        public async Task _03_GetFolderContentAsync() {
+            var result = await Target.GetFolderContentAsync("icons", "fa", "*.svg");
+            Assert.IsNotNull(result);
+            Assert.IsNotEmpty(result.Folders);
+            Assert.IsEmpty(result.Files);
+            result = await Target.GetFolderContentAsync("icons", "bi/", "*.svg");
+            Assert.IsNotNull(result);
+            Assert.IsNotEmpty(result.Files);
+            Assert.IsEmpty(result.Folders);
+        }
+
     }
 
 }
