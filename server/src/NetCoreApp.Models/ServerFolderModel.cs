@@ -26,9 +26,11 @@ namespace Beginor.NetCoreApp.Models {
 
     /// <summary>服务目录浏览模型</summary>
     public class ServerFolderBrowseModel {
-        /// <summary>请求路径 (icons:assets/bi/)</summary>
+        /// <summary>别名</summary>
+        public string Alias { get; set; }
+        /// <summary>请求路径 (/bi/)</summary>
         public string Path { get; set; }
-        /// <summary>请求路径 (icons:assets/bi/)</summary>
+        /// <summary>文件过滤 (*.*)</summary>
         public string Filter { get; set; }
         /// <summary>子目录名称</summary>
         public string[] Folders { get; set; }

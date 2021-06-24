@@ -46,26 +46,22 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             };
         }
 
-        public async Task<ServerFolderBrowseModel> GetFolderContentAsync(string alias, string path, string searchPattern) {
-            Argument.NotNullOrEmpty(path, nameof(path));
-            var folderItem = await GetByAlias(alias);
+        public async Task<ServerFolderBrowseModel> GetFolderContentAsync(ServerFolderBrowseModel model) {
+            var folderItem = await GetByAlias(model.Alias);
             if (folderItem == null) {
                 return null;
             }
-            if (path.StartsWith(Path.PathSeparator)) {
-                path = path.Substring(1);
+            if (model.Path.StartsWith(Path.DirectorySeparatorChar)) {
+                model.Path = model.Path.Substring(1);
             }
-            var model = new ServerFolderBrowseModel {
-                Path = $"{alias}:{path}"
-            };
             var cachedItem = await GetCacheItemAsync(folderItem.Id);
-            var serverPath = Path.Combine(cachedItem.RootFolder, path);
+            var serverPath = Path.Combine(cachedItem.RootFolder, model.Path);
             var dirInfo = new DirectoryInfo(serverPath);
             if (!dirInfo.Exists) {
                 return null;
             }
-            model.Folders = dirInfo.EnumerateDirectories(searchPattern).Select(x => x.Name).ToArray();
-            model.Files = dirInfo.EnumerateFiles(searchPattern).Select(x => x.Name).ToArray();
+            model.Folders = dirInfo.EnumerateDirectories().Select(x => x.Name).ToArray();
+            model.Files = dirInfo.EnumerateFiles(model.Filter).Select(x => x.Name).ToArray();
             return model;
         }
 

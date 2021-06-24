@@ -32,11 +32,21 @@ namespace Beginor.NetCoreApp.Test.Data {
 
         [Test]
         public async Task _03_GetFolderContentAsync() {
-            var result = await Target.GetFolderContentAsync("icons", "fa", "*.svg");
+            var faModel = new ServerFolderBrowseModel {
+                Alias = "icons",
+                Path = "fa",
+                Filter = "*.*"
+            };
+            var result = await Target.GetFolderContentAsync(faModel);
             Assert.IsNotNull(result);
             Assert.IsNotEmpty(result.Folders);
             Assert.IsEmpty(result.Files);
-            result = await Target.GetFolderContentAsync("icons", "bi/", "*.svg");
+            var biModel = new ServerFolderBrowseModel {
+                Alias = "icons",
+                Path = "bi",
+                Filter = "*.svg"
+            };
+            result = await Target.GetFolderContentAsync(biModel);
             Assert.IsNotNull(result);
             Assert.IsNotEmpty(result.Files);
             Assert.IsEmpty(result.Folders);

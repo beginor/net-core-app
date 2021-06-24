@@ -13,25 +13,33 @@ namespace Beginor.NetCoreApp.Api.Controllers {
     partial class ServerFolderController {
 
         [HttpGet("{alias}/browse")]
+        [Authorize("server_folders.read_folder_content")]
         public async Task<ActionResult<ServerFolderBrowseModel>> GetFolderContent(
             string alias,
             string path,
-            string searchPattern = "*.*"
+            string filter = "*.*"
         ) {
             try {
-                var model = await repository.GetFolderContentAsync(alias, path, searchPattern);
+                var model = await repository.GetFolderContentAsync(
+                    new ServerFolderBrowseModel {
+                        Alias = alias,
+                        Path = path,
+                        Filter = filter
+                    }
+                );
                 if (model == null) {
                     return NotFound();
                 }
                 return Ok(model);
             }
             catch (Exception ex) {
-                logger.LogError(ex, $"Can not get folder content for {alias}:{path}, {searchPattern} .", ex);
+                logger.LogError(ex, $"Can not get folder content for {alias}:{path}, {filter} .", ex);
                 return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
         [HttpGet("{alias}/file")]
+        [Authorize("server_folders.read_file_content")]
         public async Task<ActionResult> GetFileContent(
             string alias,
             string path

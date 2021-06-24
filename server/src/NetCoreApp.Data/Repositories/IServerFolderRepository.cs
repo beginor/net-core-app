@@ -15,7 +15,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             ServerFolderSearchModel model
         );
 
-        Task<ServerFolderBrowseModel> GetFolderContentAsync(string alias, string path, string searchPattern);
+        Task<ServerFolderBrowseModel> GetFolderContentAsync(ServerFolderBrowseModel model);
 
         Task<string> GetPhysicalPath(string alias, string path);
 
