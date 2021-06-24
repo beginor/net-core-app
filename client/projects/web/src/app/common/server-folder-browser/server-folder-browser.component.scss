@@ -1,0 +1,19 @@
+:host {
+  display: block;
+
+  .scroll-viewport {
+    height: 60vh;
+  }
+
+  .folder-item {
+    cursor: pointer;
+  }
+
+  .file-item {
+    //
+  }
+
+  .folder-item-name {
+    font-size: .8125rem;;
+  }
+}

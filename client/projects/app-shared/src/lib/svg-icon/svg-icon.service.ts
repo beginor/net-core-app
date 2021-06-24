@@ -32,10 +32,12 @@ export class SvgIconService {
                 });
             });
         }
-        const loadingOp = this.http.get(
-            `${this.basePath}/${path}.svg`,
-            { responseType: 'text' }
-        ).pipe(share());
+        let url = `${this.basePath}/${path}`;
+        if (!url.endsWith('.svg')) {
+            url += '.svg';
+        }
+        const loadingOp = this.http.get(url, { responseType: 'text' })
+            .pipe(share());
         this.loadingMap.set(key, loadingOp);
         return new Promise<string>((resolve, reject) => {
             loadingOp.subscribe({

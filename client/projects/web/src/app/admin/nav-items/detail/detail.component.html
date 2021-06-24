@@ -88,10 +88,18 @@
       <div class="col-4">
         <div class="form-group">
           <label class="form-label text-muted" for="icon">图标 </label>
-          <input class="form-control" type="text" id="icon" name="icon"
-            placeholder="请输入图标 ..." [(ngModel)]="model.icon"
-            [disabled]="!editable"
-          />
+          <div class="input-group">
+            <input class="form-control" type="text" id="icon" name="icon"
+              placeholder="请输入图标 ..." [(ngModel)]="model.icon"
+              [disabled]="!editable"
+            />
+            <div class="input-group-append" *ngIf="editable">
+              <button class="btn btn-outline-secondary" type="button"
+                (click)="showIconDialog()">
+                <svg-icon path="bi/search"></svg-icon>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-8">
