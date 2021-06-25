@@ -2,15 +2,13 @@
   display: block;
 
   .scroll-viewport {
-    height: 60vh;
+    height: 50vh;
   }
 
   .folder-item {
     cursor: pointer;
-  }
-
-  .file-item {
-    //
+    width: 120px;
+    height: 120px;
   }
 
   .folder-item-name {

@@ -1,29 +1,47 @@
 <div class="modal-header">
   <h5 class="modal-title">{{title}}</h5>
+
+  <div class="ml-2 mr-auto btn-group btn-group-sm">
+    <button type="button" class="btn btn-outline-secondary"
+      (click)="getFolderContentByPath('.')">
+      <svg-icon path="bi/house"></svg-icon> {{params.alias}}
+    </button>
+    <button type="button" class="btn btn-outline-secondary"
+      *ngFor="let bc of breadcrumbs" (click)="getFolderContentByPath(bc.path)">
+      {{bc.name}}
+    </button>
+  </div>
+
+  <div class="ml-auto d-flex">
+    <div class="input-group input-group-sm mr-1" style="width: 120px;">
+      <input #searchEl class="form-control form-control" type="text" placeholder="搜索..."
+        (keyup)="search($event)">
+    </div>
+    <div class="btn-group btn-group-sm">
+      <button type="button" class="btn btn-sm btn-outline-primary"
+        (click)="ok()">
+        <svg-icon path="bi/check"></svg-icon> 确定
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"
+        (click)="modal.dismiss('cancel')">
+        <svg-icon path="bi/x"></svg-icon> 取消
+      </button>
+    </div>
+  </div>
 </div>
 <div class="modal-body">
-  <div>{{params.alias}}:{{params.path}}</div>
   <cdk-virtual-scroll-viewport class="scroll-viewport" [itemSize]="20">
-    <div class="rounded bg-light p-4 m-2 folder-item text-center d-inline-block"
-      *cdkVirtualFor="let item of items"
-      [title]="item.name" container="body"
-      (click)="getFolderContent(item)">
-      <div class="text-info">
-        <svg-icon path="bi/folder" iconClass="bi bi-2x"></svg-icon>
+    <div class="rounded bg-light p-4 m-2 folder-item text-center d-inline-block border"
+      [ngClass]="{ 'border-primary': item.name === selectedItem?.name }"
+      *cdkVirtualFor="let item of filteredItems"
+      [ngbTooltip]="item.name" container="body" [openDelay]="500"
+      (dblclick)="getFolderContent(item)" (click)="setSelectedItem(item)">
+      <div [class]="getFolderItemClass(item)">
+        <svg-icon [path]="getFolderItemIconPath(item)" iconClass="bi bi-2x"></svg-icon>
       </div>
-      <div class="text-muted mt-1 folder-item-name">
-        {{item.name}}
+      <div class="text-muted mt-1 folder-item-name text-truncate user-select-none">
+        {{ item.type === 'folder' ? item.name : item.name + '.' + item.ext }}
       </div>
     </div>
   </cdk-virtual-scroll-viewport>
-</div>
-<div class="modal-footer d-flex justify-content-between">
-  <button type="button" class="btn btn-sm btn-outline-primary"
-    (click)="modal.close('ok')">
-    <svg-icon path="bi/check"></svg-icon> 确定
-  </button>
-  <button type="button" class="btn btn-sm btn-outline-secondary"
-    (click)="modal.dismiss('cancel')">
-    <svg-icon path="bi/x"></svg-icon> 取消
-  </button>
 </div>

@@ -40,7 +40,7 @@ export class ServerFolderService {
 
 export interface ServerFolderContent {
     alias: string;
-    path?: string;
+    path: string;
     filter?: string;
     folders?: string[];
     files?: string[];

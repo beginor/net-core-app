@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import {
@@ -26,6 +27,7 @@ import { ServerFolderBrowserComponent } from './server-folder-browser/server-fol
     ],
     imports: [
         CommonModule,
+        FormsModule,
         RouterModule,
         ScrollingModule,
         NgbAlertModule,

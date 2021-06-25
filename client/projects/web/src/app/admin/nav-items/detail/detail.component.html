@@ -95,6 +95,7 @@
             />
             <div class="input-group-append" *ngIf="editable">
               <button class="btn btn-outline-secondary" type="button"
+                ngbTooltip="从图标库查找图标" [openDelay]="300"
                 (click)="showIconDialog()">
                 <svg-icon path="bi/search"></svg-icon>
               </button>
