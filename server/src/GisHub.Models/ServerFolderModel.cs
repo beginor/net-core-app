@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
-namespace Beginor.NetCoreApp.Models {
+namespace Beginor.GisHub.Models {
 
     /// <summary>服务器目录模型</summary>
     public partial class ServerFolderModel : StringEntity {

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Beginor.NetCoreApp.Common;
+using Beginor.GisHub.Common;
 
 namespace Beginor.GisHub.Api.Middlewares {
 

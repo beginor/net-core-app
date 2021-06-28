@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Http;
 
-namespace Beginor.NetCoreApp.Common {
+namespace Beginor.GisHub.Common {
 
     public static class HttpRequestExtensions {
 

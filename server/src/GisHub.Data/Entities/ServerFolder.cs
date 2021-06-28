@@ -3,7 +3,7 @@ using Beginor.AppFx.Core;
 using NHibernate.Extensions.NpgSql;
 using NHibernate.Mapping.Attributes;
 
-namespace Beginor.NetCoreApp.Data.Entities {
+namespace Beginor.GisHub.Data.Entities {
 
     /// <summary>服务器目录</summary>
     [Class(Schema = "public", Table = "server_folders")]
