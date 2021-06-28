@@ -3,8 +3,8 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "web": {
-      "projectType": "application",
+    "app-shared": {
+      "projectType": "library",
       "schematics": {
         "@schematics/angular:class": {
           "skipTests": true
@@ -26,91 +26,27 @@
           "skipTests": true
         }
       },
-      "root": "projects/web",
-      "sourceRoot": "projects/web/src",
-      "prefix": "app",
+      "root": "projects/app-shared",
+      "sourceRoot": "projects/app-shared/src",
+      "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "outputPath": "dist/web",
-            "index": "projects/web/src/index.html",
-            "main": "projects/web/src/main.ts",
-            "polyfills": "projects/web/src/polyfills.ts",
-            "tsConfig": "projects/web/tsconfig.app.json",
-            "aot": true,
-            "assets": [
-              "projects/web/src/favicon.ico",
-              "projects/web/src/assets",
-              {
-                "input": "node_modules/bootstrap-icons/icons",
-                "glob": "*.svg",
-                "output": "assets/icons/bi"
-              },
-              {
-                "input": "node_modules/@fortawesome/fontawesome-free/svgs",
-                "glob": "**/*.svg",
-                "output": "assets/icons/fa"
-              }
-            ],
-            "styles": [
-              "projects/web/src/styles.scss"
-            ],
-            "scripts": []
+            "tsConfig": "projects/app-shared/tsconfig.lib.json",
+            "project": "projects/app-shared/ng-package.json"
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/web/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
+              "tsConfig": "projects/app-shared/tsconfig.lib.prod.json"
             }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "web:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "web:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "web:build"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/web/tsconfig.app.json"
+              "projects/app-shared/tsconfig.lib.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -220,8 +156,8 @@
         }
       }
     },
-    "app-shared": {
-      "projectType": "library",
+    "web": {
+      "projectType": "application",
       "schematics": {
         "@schematics/angular:class": {
           "skipTests": true
@@ -243,27 +179,91 @@
           "skipTests": true
         }
       },
-      "root": "projects/app-shared",
-      "sourceRoot": "projects/app-shared/src",
-      "prefix": "lib",
+      "root": "projects/web",
+      "sourceRoot": "projects/web/src",
+      "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "tsConfig": "projects/app-shared/tsconfig.lib.json",
-            "project": "projects/app-shared/ng-package.json"
+            "outputPath": "dist/web",
+            "index": "projects/web/src/index.html",
+            "main": "projects/web/src/main.ts",
+            "polyfills": "projects/web/src/polyfills.ts",
+            "tsConfig": "projects/web/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "projects/web/src/favicon.ico",
+              "projects/web/src/assets",
+              {
+                "input": "node_modules/bootstrap-icons/icons",
+                "glob": "*.svg",
+                "output": "assets/icons/bi"
+              },
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/svgs",
+                "glob": "**/*.svg",
+                "output": "assets/icons/fa"
+              }
+            ],
+            "styles": [
+              "projects/web/src/styles.scss"
+            ],
+            "scripts": []
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/app-shared/tsconfig.lib.prod.json"
+              "fileReplacements": [
+                {
+                  "replace": "projects/web/src/environments/environment.ts",
+                  "with": "projects/web/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
             }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "web:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "web:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "web:build"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/app-shared/tsconfig.lib.json"
+              "projects/web/tsconfig.app.json"
             ],
             "exclude": [
               "**/node_modules/**"
