@@ -1,6 +1,11 @@
 # http://editorconfig.org
 root = false
 
+# html/scss/css files
+[*.{json,xml,csproj,config,yml}]
+indent_size = 2
+
+
 # Dotnet code style settings:
 [*.{cs,vb}]
 # Sort using and Import directives with System.* appearing first

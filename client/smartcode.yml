@@ -5,7 +5,7 @@ DataSource:
   Parameters:
     DbName: test_db
     DbProvider: PostgreSql
-    ConnectionString: server=127.0.0.1;port=5432;database=gishub;user id=postgres;password=postgis_11;
+    ConnectionString: server=127.0.0.1;port=54321;database=net_core_app;user id=postgres;password=aJv6YoG0CkM9YdqP;
     DbSchema: public
 Language: TypeScript
 TemplateEngine:
@@ -88,15 +88,6 @@ Build:
       Path: '{{Items.CurrentTable.ConvertedName}}'
       Name: '{{Items.CurrentTable.ConvertedName}}.service'
       Extension: '.ts'
-  ServiceSpec:
-    Type: Table
-    Module: Data
-    TemplateEngine:
-      Path: Service.Spec.cshtml
-    Output:
-      Path: '{{Items.CurrentTable.ConvertedName}}'
-      Name: '{{Items.CurrentTable.ConvertedName}}.service.spec'
-      Extension: '.ts'
   ListComponent:
     Type: Table
     Module: Data
@@ -105,15 +96,6 @@ Build:
     Output:
       Path: '{{Items.CurrentTable.ConvertedName}}/list'
       Name: 'list.component'
-      Extension: '.ts'
-  ListComponentSpec:
-    Type: Table
-    Module: Data
-    TemplateEngine:
-      Path: ListComponent.Spec.cshtml
-    Output:
-      Path: '{{Items.CurrentTable.ConvertedName}}/list'
-      Name: 'list.component.spec'
       Extension: '.ts'
   ListComponentScss:
     Type: Table
@@ -141,15 +123,6 @@ Build:
     Output:
       Path: '{{Items.CurrentTable.ConvertedName}}/detail'
       Name: 'detail.component'
-      Extension: '.ts'
-  DetailComponentSpec:
-    Type: Table
-    Module: Data
-    TemplateEngine:
-      Path: DetailComponent.Spec.cshtml
-    Output:
-      Path: '{{Items.CurrentTable.ConvertedName}}/detail'
-      Name: 'detail.component.spec'
       Extension: '.ts'
   DetailComponentScss:
     Type: Table

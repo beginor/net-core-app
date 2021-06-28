@@ -5,7 +5,7 @@ DataSource:
   Parameters:
     DbName: gishub
     DbProvider: PostgreSql
-    ConnectionString: server=127.0.0.1;port=5432;database=gishub;user id=postgres;password=postgis_11;
+    ConnectionString: server=127.0.0.1;port=54321;database=net_core_app;user id=postgres;password=aJv6YoG0CkM9YdqP;
     DbSchema: public
 Language: CSharp
 TemplateEngine:
@@ -53,6 +53,7 @@ TableFilter:
     - aspnet_users
     - app_client_errors
     - app_json_data
+    - server_folders
     - slpks
     - tilemaps
     - connections

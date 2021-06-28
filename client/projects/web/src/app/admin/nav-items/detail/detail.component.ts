@@ -3,11 +3,13 @@ import {
     trigger, transition, useAnimation, AnimationEvent
 } from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import {
     NavItemsService, NavItemModel, MenuOption
 } from '../nav-items.service';
+import { ServerFolderBrowserComponent } from '../../../common';
 
 @Component({
     selector: 'app-nav-item-detail',
@@ -38,6 +40,7 @@ export class DetailComponent implements OnInit {
 
     constructor(
         private router: Router,
+        private modal: NgbModal,
         private route: ActivatedRoute,
         public account: AccountService,
         public vm: NavItemsService
@@ -113,6 +116,26 @@ export class DetailComponent implements OnInit {
         else {
             this.model.roles.push(role);
         }
+    }
+
+    public showIconDialog(): void {
+        const modalRef = this.modal.open(
+            ServerFolderBrowserComponent,
+            { size: 'lg', backdrop: 'static', keyboard: false }
+        );
+        modalRef.componentInstance.title = '选择图标';
+        modalRef.componentInstance.params = {
+            alias: 'icons',
+            path: '.',
+            filter: '*.svg'
+        };
+        modalRef.result.then((path: string) => {
+            let icon = path;
+            if (icon.endsWith('.svg')) {
+                icon = icon.substr(0, icon.length - 4);
+                this.model.icon = icon;
+            }
+        }).catch(_ => { });
     }
 
 }
