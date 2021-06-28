@@ -42,6 +42,7 @@ namespace Beginor.GisHub.Test {
             });
             startup.ConfigureServices(services);
             ServiceProvider = services.BuildServiceProvider(false);
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
         }
 
     }
