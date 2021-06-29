@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AccountService } from 'app-shared';
@@ -11,7 +11,7 @@ import { NavMenuService } from './nav-menu.service';
     templateUrl: './nav-menu.component.html',
     styleUrls: ['./nav-menu.component.scss']
 })
-export class NavMenuComponent implements OnInit {
+export class NavMenuComponent {
 
     constructor(
         private router: Router,
@@ -19,9 +19,6 @@ export class NavMenuComponent implements OnInit {
         public vm: NavMenuService,
         public accountSvc: AccountService
     ) { }
-
-    public ngOnInit(): void {
-    }
 
     public toggleDrawer(): void {
         this.ui.drawer.subscribe(drawer => {

@@ -6,7 +6,6 @@ import { AuthGuard } from 'app-shared';
 import { environment } from '../environments/environment';
 import { IframeComponent } from './common';
 
-// tslint:disable:max-line-length
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     {
@@ -36,7 +35,7 @@ const routes: Routes = [
         canLoad: []
     }
 ];
-// tslint:enable:max-line-length
+
 @NgModule({
     imports: [
         RouterModule.forRoot(routes, {

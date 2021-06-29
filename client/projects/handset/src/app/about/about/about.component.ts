@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { UiService } from '../../services/ui.service';
 
@@ -7,14 +7,11 @@ import { UiService } from '../../services/ui.service';
     templateUrl: './about.component.html',
     styleUrls: ['./about.component.scss']
 })
-export class AboutComponent implements OnInit {
+export class AboutComponent {
 
     constructor(
         private ui: UiService
     ) { }
-
-    public ngOnInit(): void {
-    }
 
     public toggleDrawer(): void {
         this.ui.drawer.subscribe(drawer => {

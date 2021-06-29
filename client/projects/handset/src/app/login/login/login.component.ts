@@ -1,4 +1,4 @@
-import { Component, OnInit, ErrorHandler } from '@angular/core';
+import { Component, ErrorHandler } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -9,7 +9,7 @@ import { AccountService, LoginModel } from 'app-shared';
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
     public model: LoginModel = { };
     public loading = false;
@@ -21,9 +21,6 @@ export class LoginComponent implements OnInit {
         private accountSvc: AccountService,
         private errorHandler: ErrorHandler
     ) { }
-
-    public ngOnInit(): void {
-    }
 
     public async login(): Promise<void> {
         if (this.loading) {

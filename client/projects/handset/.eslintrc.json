@@ -10,8 +10,7 @@
       ],
       "parserOptions": {
         "project": [
-          "projects/handset/tsconfig.app.json",
-          "projects/handset/tsconfig.spec.json"
+          "projects/handset/tsconfig.app.json"
         ],
         "createDefaultProgram": true
       },

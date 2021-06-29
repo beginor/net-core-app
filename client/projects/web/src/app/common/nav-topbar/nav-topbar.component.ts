@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AccountService } from 'app-shared';
@@ -9,7 +9,7 @@ import { NavigationService } from '../services/navigation.service';
     templateUrl: './nav-topbar.component.html',
     styleUrls: ['./nav-topbar.component.scss']
 })
-export class NavTopBarComponent implements OnInit {
+export class NavTopBarComponent {
 
     public collapsed = true;
 
@@ -18,9 +18,6 @@ export class NavTopBarComponent implements OnInit {
         public account: AccountService,
         public navigation: NavigationService
     ) { }
-
-    public ngOnInit(): void {
-    }
 
     public async logout(e: Event): Promise<void> {
         e.preventDefault();

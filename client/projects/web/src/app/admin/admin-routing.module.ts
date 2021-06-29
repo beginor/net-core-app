@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 
-// tslint:disable:max-line-length
 const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'dashboard', component: DashboardComponent },
@@ -28,7 +27,7 @@ const routes: Routes = [
         loadChildren: () => import('./nav-items/nav-items.module').then(m => m.NavItemsModule)
     }
 ];
-// tslint:enable:max-line-length
+
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
