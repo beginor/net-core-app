@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
     trigger, transition, useAnimation, AnimationEvent
 } from '@angular/animations';
@@ -23,7 +23,7 @@ import { UsersService } from '../users.service';
         ])
     ]
 })
-export class PasswordComponent implements OnInit {
+export class PasswordComponent {
 
     public animation = '';
     public title: string;
@@ -60,9 +60,6 @@ export class PasswordComponent implements OnInit {
                 [ Validators.required, confirmTo('password') ]
             )
         });
-    }
-
-    public ngOnInit(): void {
     }
 
     public async onAnimationEvent(e: AnimationEvent): Promise<void> {

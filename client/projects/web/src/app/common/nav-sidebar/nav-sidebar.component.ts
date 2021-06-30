@@ -1,7 +1,7 @@
 import {
     trigger, animate, style, state, transition, AnimationEvent
 } from '@angular/animations';
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 
 import { NavigationService } from '../services/navigation.service';
 
@@ -18,7 +18,7 @@ import { NavigationService } from '../services/navigation.service';
         ])
     ]
 })
-export class NavSidebarComponent implements OnInit {
+export class NavSidebarComponent {
 
     public status = 'expanded';
     public collapsed = false;
@@ -27,9 +27,6 @@ export class NavSidebarComponent implements OnInit {
     constructor(
         public navigation: NavigationService
     ) { }
-
-    public ngOnInit(): void {
-    }
 
     public toggle(): void {
         if (this.status === 'collapsed') {

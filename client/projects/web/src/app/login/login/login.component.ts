@@ -1,4 +1,4 @@
-import { Component, OnInit, ErrorHandler } from '@angular/core';
+import { Component, ErrorHandler } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { AccountService, LoginModel } from 'app-shared';
@@ -10,7 +10,7 @@ import { Subject } from 'rxjs';
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
     public model: LoginModel = {};
     public loading = false;
@@ -22,9 +22,6 @@ export class LoginComponent implements OnInit {
         private acntSvc: AccountService,
         private errorHandler: ErrorHandler
     ) { }
-
-    public ngOnInit(): void {
-    }
 
     public async login(): Promise<void> {
         try {

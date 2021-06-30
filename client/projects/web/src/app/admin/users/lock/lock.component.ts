@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
     trigger, transition, useAnimation, AnimationEvent
 } from '@angular/animations';
@@ -22,7 +22,7 @@ import { UsersService } from '../users.service';
         ])
     ]
 })
-export class LockComponent implements OnInit {
+export class LockComponent {
 
     public animation = '';
     public title: string;
@@ -56,9 +56,6 @@ export class LockComponent implements OnInit {
                 Validators.required
             )
         });
-    }
-
-    public ngOnInit(): void {
     }
 
     public async onAnimationEvent(e: AnimationEvent): Promise<void> {

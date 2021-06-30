@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from 'app-shared';
@@ -10,7 +10,7 @@ import { UsersService, UserModel } from '../users.service';
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss']
 })
-export class ListComponent implements OnInit, OnDestroy {
+export class ListComponent implements OnInit {
 
     constructor(
         private router: Router,
@@ -29,10 +29,6 @@ export class ListComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.loadData();
-    }
-
-    public ngOnDestroy(): void {
-        // this.vm.cleanUp();
     }
 
     public async loadData(): Promise<void> {

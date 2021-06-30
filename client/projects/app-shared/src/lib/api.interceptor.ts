@@ -13,7 +13,6 @@ export class ApiInterceptor implements HttpInterceptor {
         private account: AccountService
     ) { }
 
-    // tslint:disable: no-any
     public intercept(
         req: HttpRequest<any>,
         next: HttpHandler
@@ -32,6 +31,5 @@ export class ApiInterceptor implements HttpInterceptor {
         }
         return next.handle(req);
     }
-    // tslint:enable: no-any
 
 }
