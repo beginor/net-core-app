@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { AccountService } from 'app-shared';
 
@@ -7,13 +7,10 @@ import { AccountService } from 'app-shared';
     templateUrl: './dashbord.component.html',
     styleUrls: ['./dashbord.component.scss']
 })
-export class DashbordComponent implements OnInit {
+export class DashbordComponent {
 
     constructor(
         public account: AccountService
     ) { }
-
-    public ngOnInit(): void {
-    }
 
 }

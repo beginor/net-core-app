@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import {
     DataServiceModel, DataServiceService, ReadDataParam, DataServiceFieldModel
@@ -57,7 +57,7 @@ import {
         '.col-name, .col-desc { white-space: nowrap; }'
     ]
 })
-export class PreviewDataComponent implements OnInit, OnDestroy {
+export class PreviewDataComponent implements OnInit {
 
     @Input()
     public ds: DataServiceModel = { id: '' };
@@ -80,10 +80,6 @@ export class PreviewDataComponent implements OnInit, OnDestroy {
         }
         await this.loadColumns();
         await this.loadData();
-    }
-
-    public ngOnDestroy(): void {
-        // alert('destroy');
     }
 
     private async loadColumns(): Promise<void> {

@@ -1,5 +1,5 @@
 import {
-    AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild
+    AfterViewInit, Component, ElementRef, OnDestroy, ViewChild
 } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -11,7 +11,7 @@ import { VectortileService } from '../vectortiles.service';
     templateUrl: './preview.component.html',
     styleUrls: ['./preview.component.scss']
 })
-export class PreviewComponent implements AfterViewInit, OnInit, OnDestroy {
+export class PreviewComponent implements AfterViewInit, OnDestroy {
 
     private mapview?: __esri.MapView;
 
@@ -39,9 +39,6 @@ export class PreviewComponent implements AfterViewInit, OnInit, OnDestroy {
             this.mapElRef.nativeElement,
             this.vm.getVectorTileLayerStyleUrl(this.id)
         ).then(mapview => this.mapview = mapview);
-    }
-
-    public ngOnInit(): void {
     }
 
     public ngOnDestroy(): void {

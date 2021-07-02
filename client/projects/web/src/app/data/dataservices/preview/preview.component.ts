@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
@@ -10,7 +10,7 @@ import { DataServiceService, DataServiceModel, PreviewType } from '../dataservic
     templateUrl: './preview.component.html',
     styleUrls: ['./preview.component.scss']
 })
-export class PreviewComponent implements OnInit {
+export class PreviewComponent {
 
     private pvType: PreviewType = 'data';
 
@@ -29,9 +29,6 @@ export class PreviewComponent implements OnInit {
         public account: AccountService,
         public vm: DataServiceService
     ) { }
-
-    public async ngOnInit(): Promise<void> {
-    }
 
     public getPreviewUrl(): string {
         if (!this.ds.id) {
