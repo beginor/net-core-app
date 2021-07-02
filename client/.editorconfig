@@ -1,5 +1,5 @@
 root = false
 
 # html/scss/css files
-[*.{html,scss,css,json,yml}]
+[*.{html,scss,css,yml}]
 indent_size = 2
