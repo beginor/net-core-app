@@ -2,7 +2,7 @@
 root = false
 
 # html/scss/css files
-[*.{json,xml,csproj,config,yml}]
+[*.{xml,csproj,config,yml}]
 indent_size = 2
 
 
