@@ -19,6 +19,13 @@
       "extends": [
         "plugin:@angular-eslint/template/recommended"
       ]
+    },
+    {
+      "files": ["*.js"],
+      "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 2021
+      }
     }
   ]
 }
