@@ -22,7 +22,7 @@
   "typescript.referencesCodeLens.enabled": true,
   "typescript.check.npmIsInstalled": true,
   "typescript.tsdk": "client/node_modules/typescript/lib",
-  // "window.nativeTabs": false,
   "workbench.activityBar.visible": true,
-  "workbench.sideBar.location": "left"
+  "workbench.sideBar.location": "left",
+  "eslint.workingDirectories": ["client"]
 }
