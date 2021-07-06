@@ -76,8 +76,8 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-center text-nowrap text-muted">#</th>
-                <th scope="col" class="text-center text-nowrap text-muted">名称</th>
+                <th scope="col" class="text-right text-nowrap text-muted">#</th>
+                <th scope="col" class="text-left text-nowrap text-muted">名称</th>
                 <th scope="col" class="text-left text-nowrap text-muted">缓存目录</th>
                 <th scope="col" class="text-center text-nowrap text-muted">紧凑格式</th>
                 <th scope="col" class="text-center text-nowrap text-muted">创建时间</th>
@@ -91,7 +91,7 @@
                 <td class='text-left'>
                   <a class="preview-link" (click)="showPreview(item)">{{item.name}}</a>
                 </td>
-                <td class='text-left' style="text-overflow: ellipsis;">{{item.cacheDirectory}}</td>
+                <td class='text-left'>{{item.cacheDirectory}}</td>
                 <td class='text-center'>{{!!item.isBundled ? '是' : '否'}}</td>
                 <td class='text-center'>{{item.createdAt | date:'yyyy-MM-dd'}}</td>
                 <td class='text-center'>{{item.updatedAt | date:'yyyy-MM-dd'}}</td>

@@ -1,12 +1,13 @@
-import {
-    Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
     trigger, transition, useAnimation, AnimationEvent
 } from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import { TileMapService, TileMapModel } from '../tilemaps.service';
+import { ServerFolderBrowserComponent } from '../../../common';
 
 @Component({
     selector: 'app-tilemap-detail',
@@ -32,11 +33,12 @@ export class DetailComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private modal: NgbModal,
         public account: AccountService,
         public vm: TileMapService
     ) {
-        const id = route.snapshot.params.id;
-        const editable = route.snapshot.params.editable;
+        const id = route.snapshot.params.id as string;
+        const editable = route.snapshot.params.editable as string;
         if (id === '0') {
             this.title = '新建栅格切片包';
             this.editable = true;
@@ -65,7 +67,7 @@ export class DetailComponent implements OnInit {
         if (e.fromState === '' && e.toState === 'void') {
             await this.router.navigate(['../'], { relativeTo: this.route });
             if (this.reloadList) {
-                this.vm.search();
+                void this.vm.search();
             }
         }
     }
@@ -83,6 +85,45 @@ export class DetailComponent implements OnInit {
         }
         this.reloadList = true;
         this.goBack();
+    }
+
+    public showCacheFolderModal(): void {
+        const modalRef = this.modal.open(
+            ServerFolderBrowserComponent,
+            { size: 'xl', backdrop: 'static', keyboard: false }
+        );
+        const params = {
+            alias: 'gisdata',
+            path: '.',
+            filter: '*.*'
+        };
+        Object.assign(modalRef.componentInstance, {
+            title: '选择缓存目录',
+            params
+        });
+        modalRef.result.then((path: string) => {
+            this.model.cacheDirectory = `${params.alias}:${path}`;
+        })
+        .catch(_ => { /* ignore error. */ });
+    }
+
+    public showFolderDialog(): void {
+        const modalRef = this.modal.open(
+            ServerFolderBrowserComponent,
+            { size: 'xl', backdrop: 'static', keyboard: false }
+        );
+        const params = {
+            alias: 'gisdata',
+            path: '.',
+            filter: '*.json'
+        };
+        Object.assign(modalRef.componentInstance, {
+            title: '选择切片信息',
+            params
+        });
+        modalRef.result.then((path: string) => {
+            this.model.mapTileInfoPath = `${params.alias}:${path}`;
+        }).catch(_ => { /* ignore select error */ });
     }
 
 }

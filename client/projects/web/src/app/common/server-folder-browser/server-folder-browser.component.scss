@@ -2,7 +2,7 @@
   display: block;
 
   .scroll-viewport {
-    height: 50vh;
+    height: calc(100vh - 15rem);
   }
 
   .folder-item {
