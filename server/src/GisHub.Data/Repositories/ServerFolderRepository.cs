@@ -65,9 +65,14 @@ namespace Beginor.GisHub.Data.Repositories {
             return model;
         }
 
-        public async Task<string> GetPhysicalPath(string alias, string path) {
-            Argument.NotNullOrEmpty(alias, nameof(alias));
-            Argument.NotNullOrEmpty(path, nameof(path));
+        public async Task<string> GetPhysicalPathAsync(string aliasedPath) {
+            Argument.NotNullOrEmpty(aliasedPath, nameof(aliasedPath));
+            var idx = aliasedPath.IndexOf(':');
+            if (idx < 0) {
+                throw new InvalidOperationException($"Invalid path {aliasedPath}");
+            }
+            var alias = aliasedPath.Substring(0, idx);
+            var path = aliasedPath.Substring(idx + 1);
             var folderItem = await GetByAlias(alias);
             if (folderItem == null) {
                 return string.Empty;
@@ -86,7 +91,7 @@ namespace Beginor.GisHub.Data.Repositories {
         public async Task<Stream> GetFileContentAsync(string alias, string path) {
             Argument.NotNullOrEmpty(alias, nameof(alias));
             Argument.NotNullOrEmpty(path, nameof(path));
-            var physicalPath = await GetPhysicalPath(alias, path);
+            var physicalPath = await GetPhysicalPathAsync($"{alias}:{path}");
             if (physicalPath.IsNullOrEmpty()) {
                 return null;
             }

@@ -17,7 +17,7 @@ namespace Beginor.GisHub.Data.Repositories {
 
         Task<ServerFolderBrowseModel> GetFolderContentAsync(ServerFolderBrowseModel model);
 
-        Task<string> GetPhysicalPath(string alias, string path);
+        Task<string> GetPhysicalPathAsync(string aliasedPath);
 
         Task<Stream> GetFileContentAsync(string alias, string path);
 
