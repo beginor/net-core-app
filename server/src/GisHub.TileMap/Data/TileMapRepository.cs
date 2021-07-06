@@ -10,6 +10,7 @@ using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using Beginor.GisHub.Common;
+using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.TileMap.Models;
 using NHibernate;
 using NHibernate.Linq;
@@ -20,13 +21,16 @@ namespace Beginor.GisHub.TileMap.Data {
     public partial class TileMapRepository : HibernateRepository<TileMapEntity, TileMapModel, long>, ITileMapRepository {
 
         private IDistributedCache cache;
+        private IServerFolderRepository serverFolderRepository;
 
         public TileMapRepository(
             ISession session,
             IMapper mapper,
-            IDistributedCache cache
+            IDistributedCache cache,
+            IServerFolderRepository serverFolderRepository
         ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            this.serverFolderRepository = serverFolderRepository ?? throw new ArgumentNullException(nameof(serverFolderRepository));
         }
 
         /// <summary>搜索 切片地图 ，返回分页结果。</summary>
@@ -139,13 +143,17 @@ namespace Beginor.GisHub.TileMap.Data {
             if (entity == null) {
                 throw new TileNotFoundException($"Tilemap {id} doesn't exists in database.");
             }
+            entity.CacheDirectory = await serverFolderRepository.GetPhysicalPathAsync(entity.CacheDirectory);
+            entity.MapTileInfoPath = await serverFolderRepository.GetPhysicalPathAsync(entity.MapTileInfoPath);
             await cache.SetAsync(key, new TileMapCacheItem {
                 Name = entity.Name,
                 CacheDirectory = entity.CacheDirectory,
                 MapTileInfoPath = entity.MapTileInfoPath,
                 ContentType = entity.ContentType,
                 IsBundled = entity.IsBundled,
-                ModifiedTime = null
+                ModifiedTime = null,
+                MinLevel = entity.MinLevel,
+                MaxLevel = entity.MaxLevel
             });
             return entity;
         }
