@@ -44,7 +44,11 @@
       { "level": 16, "resolution": 2.388657133974685, "scale": 9027.977411 },
       { "level": 17, "resolution": 1.1943285668550503, "scale": 4513.988705 },
       { "level": 18, "resolution": 0.5971642835598172, "scale": 2256.994353 },
-      { "level": 19, "resolution": 0.29858214164761665, "scale": 1128.497176 }
+      { "level": 19, "resolution": 0.29858214164761665, "scale": 1128.497176 },
+      { "level": 20, "resolution": 0.14929107082380833, "scale": 564.248588 },
+      { "level": 21, "resolution": 0.07464553541190416, "scale": 282.124294 },
+      { "level": 22, "resolution": 0.03732276770595208, "scale": 141.062147 },
+      { "level": 23, "resolution": 0.01866138385297604, "scale": 70.5310735 }
     ]
   },
   "initialExtent": {
@@ -62,7 +66,7 @@
     "spatialReference": { "wkid": 102100, "latestWkid": 3857 }
   },
   "minScale": 147914381.897889,
-  "maxScale": 1128.497176,
+  "maxScale": 70.5310735,
   "units": "esriMeters",
   "supportedImageFormatTypes": "PNG32",
   "capabilities": "Map",
