@@ -52,6 +52,16 @@ namespace Beginor.NetCoreApp.Test.Data {
             Assert.IsEmpty(result.Folders);
         }
 
+        [Test]
+        public async Task _04_CanGetPhysicalPath() {
+            var aliasedPath = "icons:bi";
+            var physicalPath = await Target.GetPhysicalPathAsync(aliasedPath);
+            Assert.IsNotNull(physicalPath);
+            Console.WriteLine(aliasedPath);
+            Console.WriteLine(physicalPath);
+            Assert.IsTrue(System.IO.Directory.Exists(physicalPath));
+        }
+
     }
 
 }
