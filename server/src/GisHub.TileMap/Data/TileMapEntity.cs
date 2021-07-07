@@ -32,6 +32,14 @@ namespace Beginor.GisHub.TileMap.Data {
         [Property(Name = "IsBundled", Column = "is_bundled", Type = "bool", NotNull = true)]
         public virtual bool IsBundled { get; set; }
 
+        /// <summary>最小缩放级别</summary>
+        [Property(Name = "MinLevel", Column = "min_level", Type = "short", NotNull = true)]
+        public virtual short MinLevel { get; set; }
+
+        /// <summary>最大缩放级别</summary>
+        [Property(Name = "MaxLevel", Column = "max_level", Type = "short", NotNull = true)]
+        public virtual short MaxLevel { get; set; }
+
         /// <summary>创建者id</summary>
         [Property(Name = "CreatorId", Column = "creator_id", Type = "string", NotNull = true, Length = 32)]
         public virtual string CreatorId { get; set; }

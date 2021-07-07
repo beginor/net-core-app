@@ -9,7 +9,8 @@ namespace Beginor.GisHub.TileMap.Data {
         public string ContentType { get; set; }
         public DateTimeOffset? ModifiedTime { get; set; }
         public bool IsBundled { get; set; }
-
+        public short MinLevel { get; set; }
+        public short MaxLevel { get; set; }
     }
 
 }

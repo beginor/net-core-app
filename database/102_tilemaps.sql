@@ -1,69 +1,76 @@
--- table: public.tilemaps
+-- Table: public.tilemaps
 
--- drop table public.tilemaps;
+-- DROP TABLE public.tilemaps;
 
-create table public.tilemaps
+CREATE TABLE IF NOT EXISTS public.tilemaps
 (
-    id bigint not null default snow_flake_id(),
-    name character varying(32) collate pg_catalog."default" not null,
-    cache_directory character varying(512) collate pg_catalog."default" not null,
-    map_tile_info_path character varying(512) collate pg_catalog."default" not null,
-    content_type character varying(64) collate pg_catalog."default" not null,
-    is_bundled boolean not null,
-    creator_id character varying(32) collate pg_catalog."default" not null,
-    created_at timestamp without time zone not null,
-    updater_id character varying(32) collate pg_catalog."default" not null,
-    updated_at timestamp without time zone not null,
-    is_deleted boolean not null,
-    constraint pk_tilemaps primary key (id),
-    constraint fk_tilemaps_creator foreign key (creator_id)
-        references public.app_users (id) match simple
-        on update cascade
-        on delete cascade,
-    constraint fk_tilemaps_updator foreign key (updater_id)
-        references public.app_users (id) match simple
-        on update no action
-        on delete no action
+    id bigint NOT NULL DEFAULT snow_flake_id(),
+    name character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    cache_directory character varying(512) COLLATE pg_catalog."default" NOT NULL,
+    map_tile_info_path character varying(512) COLLATE pg_catalog."default" NOT NULL,
+    content_type character varying(64) COLLATE pg_catalog."default" NOT NULL,
+    is_bundled boolean NOT NULL,
+    min_level smallint NOT NULL DEFAULT 0,
+    max_level smallint NOT NULL DEFAULT 23,
+    creator_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updater_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    is_deleted boolean NOT NULL,
+    CONSTRAINT pk_tilemaps PRIMARY KEY (id),
+    CONSTRAINT fk_tilemaps_creator FOREIGN KEY (creator_id)
+        REFERENCES public.app_users (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_tilemaps_updator FOREIGN KEY (updater_id)
+        REFERENCES public.app_users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
-with (
-    oids = false
-)
-tablespace pg_default;
 
-alter table public.tilemaps
-    owner to postgres;
-comment on table public.tilemaps
-    is '切片地图';
+TABLESPACE pg_default;
 
-comment on column public.tilemaps.id
-    is '切片地图id';
+ALTER TABLE public.tilemaps
+    OWNER to postgres;
 
-comment on column public.tilemaps.name
-    is '切片地图名称';
+COMMENT ON TABLE public.tilemaps
+    IS '切片地图';
 
-comment on column public.tilemaps.cache_directory
-    is '缓存目录';
+COMMENT ON COLUMN public.tilemaps.id
+    IS '切片地图id';
 
-comment on column public.tilemaps.map_tile_info_path
-    is '切片信息路径';
+COMMENT ON COLUMN public.tilemaps.name
+    IS '切片地图名称';
 
-comment on column public.tilemaps.is_bundled
-    is '是否为紧凑格式';
+COMMENT ON COLUMN public.tilemaps.cache_directory
+    IS '缓存目录';
 
-comment on column public.tilemaps.creator_id
-    is '创建者id';
+COMMENT ON COLUMN public.tilemaps.map_tile_info_path
+    IS '切片信息路径';
 
-comment on column public.tilemaps.created_at
-    is '创建时间';
+COMMENT ON COLUMN public.tilemaps.content_type
+    IS '内容类型';
 
-comment on column public.tilemaps.updater_id
-    is '更新者id';
+COMMENT ON COLUMN public.tilemaps.is_bundled
+    IS '是否为紧凑格式';
 
-comment on column public.tilemaps.updated_at
-    is '更新时间';
+COMMENT ON COLUMN public.tilemaps.creator_id
+    IS '创建者id';
 
-comment on column public.tilemaps.is_deleted
-    is '是否删除';
+COMMENT ON COLUMN public.tilemaps.created_at
+    IS '创建时间';
 
-comment on column public.tilemaps.content_type
-    is '内容类型';
+COMMENT ON COLUMN public.tilemaps.updater_id
+    IS '更新者id';
+
+COMMENT ON COLUMN public.tilemaps.updated_at
+    IS '更新时间';
+
+COMMENT ON COLUMN public.tilemaps.is_deleted
+    IS '是否删除';
+
+COMMENT ON COLUMN public.tilemaps.min_level
+    IS '最小缩放级别';
+
+COMMENT ON COLUMN public.tilemaps.max_level
+    IS '最大缩放级别';
