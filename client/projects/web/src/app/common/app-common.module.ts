@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import {
-    NgbAlertModule, NgbDropdownModule, NgbModalModule, NgbTooltipModule
+    NgbAlertModule, NgbDropdownModule, NgbModalModule, NgbTooltipModule,
+    NgbCollapseModule
 } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppSharedModule } from 'app-shared';
@@ -14,7 +15,9 @@ import { ConfirmComponent } from './confirm/confirm.component';
 import { NavSidebarComponent } from './nav-sidebar/nav-sidebar.component';
 import { NavItemComponent } from './nav-item/nav-item.component';
 import { IframeComponent } from './iframe/iframe.component';
-import { ServerFolderBrowserComponent } from './server-folder-browser/server-folder-browser.component';
+import {
+    ServerFolderBrowserComponent
+} from './server-folder-browser/server-folder-browser.component';
 
 @NgModule({
     declarations: [
@@ -34,6 +37,7 @@ import { ServerFolderBrowserComponent } from './server-folder-browser/server-fol
         NgbDropdownModule,
         NgbModalModule,
         NgbTooltipModule,
+        NgbCollapseModule,
         AppSharedModule
     ],
     exports: [

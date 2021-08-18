@@ -19,14 +19,14 @@
           </div>
         </div>
         <form class="p-2 bg-light">
-          <div class="form-row">
+          <div class="row">
             <div class="col-6">
-              <div class="row no-gutters align-items-center">
+              <div class="row g-0 align-items-center">
                 <label for="pageSize" class="col-auto col-form-label col-form-label-sm">
                   显示：
                 </label>
                 <div class="col-auto">
-                  <select id="pageSize" name="pageSize" class="form-control form-control-sm"
+                  <select id="pageSize" name="pageSize" class="form-select form-select-sm"
                     [(ngModel)]="vm.searchModel.take"
                     (change)="onPageSizeChange($event)">
                     <option [value]="10">10</option>
@@ -44,10 +44,10 @@
               </div>
             </div>
             <div class="col-6">
-              <div class="row no-gutters">
+              <div class="row g-0">
                 <div class="col-4"></div>
-                <div class="col pr-2">
-                  <div class="row no-gutters">
+                <div class="col pe-2">
+                  <div class="row g-0">
                     <label for="requestDate" class="col-auto col-form-label col-form-label-sm">日期：</label>
                     <div class="col">
                       <div class="input-group input-group-sm">
@@ -57,12 +57,10 @@
                           [(ngModel)]="vm.searchDate"
                           [maxDate]="maxDate"
                           (dateSelect)="onSelectDate($event)">
-                        <div class="input-group-append">
-                          <button class="btn btn-outline-secondary" type="button"
-                            (click)="d.toggle()">
-                            <svg-icon path="bi/calendar3"></svg-icon>
-                          </button>
-                        </div>
+                        <button class="btn btn-outline-secondary" type="button"
+                          (click)="d.toggle()">
+                          <svg-icon path="bi/calendar3"></svg-icon>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -73,12 +71,10 @@
                       placeholder="用户名搜索" name="userName"
                       [(ngModel)]="vm.searchModel.userName"
                       (keyup.enter)="onUserNameChanged()">
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary" type="button"
-                        (click)="onUserNameChanged()">
-                        <svg-icon path="bi/search"></svg-icon>
-                      </button>
-                    </div>
+                    <button class="btn btn-outline-secondary" type="button"
+                      (click)="onUserNameChanged()">
+                      <svg-icon path="bi/search"></svg-icon>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -105,24 +101,24 @@
             </thead>
             <tbody *ngIf="(vm.data | async) as data">
               <tr *ngFor="let item of data; let i = index;">
-                <th scope="row" class="text-right text-muted">{{i+1+vm.searchModel.skip}}</th>
-                <td class="text-left">{{item.ip}}</td>
-                <td class="text-left">{{item.hostName}}</td>
-                <td class="text-left">{{item.requestPath}}</td>
+                <th scope="row" class="text-end text-muted">{{i+1+vm.searchModel.skip}}</th>
+                <td class="text-start">{{item.ip}}</td>
+                <td class="text-start">{{item.hostName}}</td>
+                <td class="text-start">{{item.requestPath}}</td>
                 <td [class]="getRequestMethodClasses(item.requestMethod)">{{item.requestMethod}}</td>
                 <td class="text-center">{{item.userName}}</td>
                 <td class="text-center">{{item.startAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                 <td [class]="getDurationClasses(item.duration)">{{item.duration}}</td>
                 <td [class]="getResponseCodeClasses(item.responseCode)">{{item.responseCode}}</td>
-                <td class="text-left">{{item.controllerName}}</td>
-                <td class="text-left">{{item.actionName}}</td>
-                <td class="text-left">{{item.description}}</td>
+                <td class="text-start">{{item.controllerName}}</td>
+                <td class="text-start">{{item.actionName}}</td>
+                <td class="text-start">{{item.description}}</td>
               </tr>
             </tbody>
           </table>
         </div>
         <div class="card-footer">
-          <div *ngIf="(vm.data | async) as data" class="row no-gutters">
+          <div *ngIf="(vm.data | async) as data" class="row g-0">
             <div class="col-6 d-flex align-items-center">
               <div [class]="data.length > 0 ? 'text-muted' : 'text-warning'">
                 <ng-container *ngIf="data.length > 0;else emptyTpl">

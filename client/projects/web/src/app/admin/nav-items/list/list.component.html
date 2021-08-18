@@ -24,15 +24,15 @@
           </div>
         </div>
         <form class="p-2 bg-light">
-          <div class="form-row">
+          <div class="row">
             <div class="col-6">
-              <div class="row no-gutters align-items-center">
+              <div class="row g-0 align-items-center">
                 <label for="pageSize" class="col-auto col-form-label col-form-label-sm">
                   显示：
                 </label>
                 <div class="col-auto">
                   <select id="pageSize" name="pageSize"
-                    class="form-control form-control-sm"
+                    class="form-select form-select-sm"
                     [(ngModel)]="vm.searchModel.take"
                     (change)="vm.onPageSizeChange()">
                     <option [value]="10">10</option>
@@ -50,7 +50,7 @@
               </div>
             </div>
             <div class="col-6">
-              <div class="row no-gutters">
+              <div class="row g-0">
                 <div class="col-6">
                   <!-- <span class="text-muted">其它工具栏</span> -->
                 </div>
@@ -65,23 +65,23 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-right text-nowrap text-muted">#</th>
-                <th scope="col" class="text-left text-nowrap text-muted">标题</th>
-                <th scope="col" class="text-left text-nowrap text-muted">提示文字</th>
-                <th scope="col" class="text-left text-nowrap text-muted">图标</th>
-                <th scope="col" class="text-left text-nowrap text-muted">导航地址</th>
+                <th scope="col" class="text-end text-nowrap text-muted">#</th>
+                <th scope="col" class="text-start text-nowrap text-muted">标题</th>
+                <th scope="col" class="text-start text-nowrap text-muted">提示文字</th>
+                <th scope="col" class="text-start text-nowrap text-muted">图标</th>
+                <th scope="col" class="text-start text-nowrap text-muted">导航地址</th>
                 <th scope="col" class="text-center text-nowrap text-muted">顺序</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">
               <tr *ngFor="let item of data; let i = index;">
-                <th scope="row" class="text-right text-muted">{{i+1+vm.searchModel.skip}}</th>
-                <td class='text-left'>{{item.title}}</td>
-                <td class='text-left'>{{item.tooltip}}</td>
-                <td class='text-left'><svg-icon *ngIf="item.icon" iconClass="bi" [path]="item.icon"></svg-icon> {{item.icon}}</td>
-                <td class='text-left'>{{item.url}}</td>
-                <td class='text-right'>{{item.sequence}}</td>
+                <th scope="row" class="text-end text-muted">{{i+1+vm.searchModel.skip}}</th>
+                <td class='text-start'>{{item.title}}</td>
+                <td class='text-start'>{{item.tooltip}}</td>
+                <td class='text-start'><svg-icon *ngIf="item.icon" iconClass="bi" [path]="item.icon"></svg-icon> {{item.icon}}</td>
+                <td class='text-start'>{{item.url}}</td>
+                <td class='text-end'>{{item.sequence}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
                     <button *ngIf="info.privileges['app_nav_items.read']"
@@ -106,7 +106,7 @@
           </table>
         </div>
         <div class="card-footer">
-          <div *ngIf="(vm.data | async) as data" class="row no-gutters">
+          <div *ngIf="(vm.data | async) as data" class="row g-0">
             <div class="col-6 d-flex align-items-center">
               <div [class]="data.length > 0 ? 'text-muted' : 'text-warning'">
                 <ng-container *ngIf="data.length > 0;else emptyTpl">

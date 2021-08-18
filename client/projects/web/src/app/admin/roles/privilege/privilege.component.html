@@ -10,9 +10,9 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="form-group" *ngFor="let mp of vm.privileges">
+    <div class="mb-3" *ngFor="let mp of vm.privileges">
       <h6 class="" for="">{{mp.module}}</h6>
-      <div class="form-check-inline" *ngFor="let p of mp.privileges">
+      <div class="form-check form-check-inline" *ngFor="let p of mp.privileges">
         <input class="form-check-input" type="checkbox" [name]="p.name" [id]="p.id"
           [value]="p.name" [checked]="vm.rolePrivileges[p.name]"
           (click)="togglePrivilege($event)" />

@@ -67,3 +67,12 @@ body {
     transform: rotate(1turn)
   }
 }
+
+.breadcrumb {
+  padding: .75rem 1rem;
+  // background-color: var(--bs-gray-200);
+}
+
+.form-check.form-switch > input[type=checkbox].form-check-input {
+  border-radius: $form-switch-border-radius;
+}

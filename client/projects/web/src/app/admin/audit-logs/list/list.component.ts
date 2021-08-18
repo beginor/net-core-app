@@ -46,7 +46,7 @@ export class ListComponent implements OnInit {
     }
 
     public getDurationClasses(duration: number): string {
-        const classes = ['text-right'];
+        const classes = ['text-end'];
         if (duration < 1000) {
             classes.push('text-success');
         }
@@ -60,7 +60,7 @@ export class ListComponent implements OnInit {
     }
 
     public getResponseCodeClasses(code: number): string {
-        const classes = ['text-right'];
+        const classes = ['text-end'];
         if (code < 300) {
             classes.push('text-success');
         }

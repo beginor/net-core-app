@@ -20,6 +20,7 @@ export class NavTopBarComponent {
     ) { }
 
     public async logout(e: Event): Promise<void> {
+        this.collapsed = true;
         e.preventDefault();
         await this.account.logout();
         await this.router.navigateByUrl('/');

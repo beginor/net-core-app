@@ -10,11 +10,11 @@
     [ngbTooltip]="collapsed ? '打开侧边栏' : null" [openDelay]="500" placement="right"
     container="body">
     <ng-container *ngIf="collapsed; else expandTpl">
-      <svg-icon class="ml-2" path="bi/chevron-double-right"></svg-icon>
+      <svg-icon class="ms-2" path="bi/chevron-double-right"></svg-icon>
     </ng-container>
     <ng-template #expandTpl>
-      <svg-icon class="ml-2" path="bi/chevron-double-left"></svg-icon>
-      <span class="collapse-text ml-1" >收起侧边栏</span>
+      <svg-icon class="ms-2" path="bi/chevron-double-left"></svg-icon>
+      <span class="collapse-text ms-1" >收起侧边栏</span>
     </ng-template>
   </div>
 </ng-container>

@@ -17,7 +17,7 @@
   <div class="card-body">
     <div class="row">
       <div class="col">
-        <div class="form-group" [class.is-valid]="surname.valid"
+        <div class="mb-3" [class.is-valid]="surname.valid"
           [class.is-invalid]="!(surname.valid || surname.pristine)">
           <label class="form-label text-muted" for="surname">姓氏 <i class="text-danger">*</i></label>
           <input class="form-control" type="text" id="surname" name="surname"
@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="col">
-        <div class="form-group" [class.is-valid]="givenName.valid"
+        <div class="mb-3" [class.is-valid]="givenName.valid"
           [class.is-invalid]="!(givenName.valid || givenName.pristine)">
           <label class="form-label text-muted" for="givenName">名称 <i class="text-danger">*</i></label>
           <input class="form-control" type="text" id="givenName" name="givenName"
@@ -39,7 +39,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group" [class.is-valid]="userName.valid"
+    <div class="mb-3" [class.is-valid]="userName.valid"
       [class.is-invalid]="!(userName.valid || userName.pristine)">
       <label class="form-label text-muted" for="userName">用户名 <i class="text-danger">*</i></label>
       <input class="form-control" type="text" id="userName" name="userName"
@@ -50,7 +50,7 @@
     </div>
     <div class="row">
       <div class="col">
-        <div class="form-group" [class.is-valid]="email.valid"
+        <div class="mb-3" [class.is-valid]="email.valid"
           [class.is-invalid]="!(email.valid || email.pristine)">
           <label class="form-label text-muted" for="email">电子邮箱 <i class="text-danger">*</i></label>
           <input class="form-control" type="text" id="email" name="email"
@@ -59,19 +59,19 @@
             [class.is-valid]="email.valid"
             required #email="ngModel" [disabled]="!editable" />
         </div>
-        <div class="form-group">
-          <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input"
+        <div class="mb-3">
+          <div class="form-check form-switch">
+            <input type="checkbox" class="form-check-input"
               id="emailConfirmed" name="emailConfirmed"
               [(ngModel)]="model.emailConfirmed" [disabled]="!editable">
-            <label class="custom-control-label text-muted" for="emailConfirmed">
+            <label class="form-check-label text-muted" for="emailConfirmed">
               电子邮箱已确认
             </label>
           </div>
         </div>
       </div>
       <div class="col">
-        <div class="form-group" [class.is-valid]="phoneNumber.valid"
+        <div class="mb-3" [class.is-valid]="phoneNumber.valid"
           [class.is-invalid]="!(phoneNumber.valid || phoneNumber.pristine)">
           <label class="form-label text-muted" for="phoneNumber">电话号码 <i class="text-danger">*</i></label>
           <input class="form-control" type="text" id="phoneNumber" name="phoneNumber"
@@ -80,12 +80,12 @@
             [class.is-valid]="phoneNumber.valid"
             required #phoneNumber="ngModel" [disabled]="!editable" />
         </div>
-        <div class="form-group">
-          <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input"
+        <div class="mb-3">
+          <div class="form-check form-switch">
+            <input type="checkbox" class="form-check-input"
               id="phoneNumberConfirmed" name="phoneNumberConfirmed"
               [(ngModel)]="model.phoneNumberConfirmed" [disabled]="!editable">
-            <label class="custom-control-label text-muted" for="phoneNumberConfirmed">
+            <label class="form-check-label text-muted" for="phoneNumberConfirmed">
               电话号码已确认
             </label>
           </div>
@@ -95,7 +95,7 @@
     <hr />
     <div class="row">
       <div class="col">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label text-muted" for="dateOfBirth">出生日期</label>
           <div class="input-group">
             <input class="form-control" type="text" id="dateOfBirth" name="dateOfBirth"
@@ -112,7 +112,7 @@
         </div>
       </div>
       <div class="col">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label text-muted" for="gender">性别</label>
           <div class="form-control-plaintext">
             <div class="form-check form-check-inline">
@@ -134,19 +134,19 @@
         </div>
       </div>
     </div>
-    <div class="form-group">
+    <div class="mb-3">
       <label class="form-label text-muted" for="streetAddress">地址</label>
       <input class="form-control" type="text" id="streetAddress" name="streetAddress"
         placeholder="请输入用户地址 ..." [(ngModel)]="model.streetAddress"
         [disabled]="!editable" />
     </div>
     <hr />
-    <div class="form-group">
-      <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input"
+    <div class="mb-3">
+      <div class="form-check form-switch">
+        <input type="checkbox" class="form-check-input"
           id="lockoutEnabled" name="lockoutEnabled"
           [(ngModel)]="model.lockoutEnabled" [disabled]="!editable">
-        <label class="custom-control-label text-muted" for="lockoutEnabled">
+        <label class="form-check-label text-muted" for="lockoutEnabled">
           连续输错密码时，允许锁定该用户
         </label>
       </div>

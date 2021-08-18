@@ -23,15 +23,15 @@
             </div>
         </div>
         <form class="p-2 bg-light">
-          <div class="form-row">
+          <div class="row">
             <div class="col-6">
-              <div class="row no-gutters align-items-center">
+              <div class="row g-0 align-items-center">
                 <label for="pageSize" class="col-auto col-form-label col-form-label-sm">
                   显示：
                 </label>
                 <div class="col-auto">
                   <select id="pageSize" name="pageSize"
-                    class="form-control form-control-sm"
+                    class="form-select form-select-sm"
                     [(ngModel)]="vm.searchModel.take"
                     (change)="vm.onPageSizeChange()">
                     <option [value]="5">5</option>
@@ -50,10 +50,10 @@
               </div>
             </div>
             <div class="col-6">
-              <div class="row no-gutters">
+              <div class="row g-0">
                 <div class="col-2"></div>
                 <div class="col">
-                  <select class="form-control form-control-sm" name="roleName"
+                  <select class="form-select form-select-sm" name="roleName"
                     [(ngModel)]="vm.searchModel.roleName" (change)="searchByRole()">
                     <option value="">全部用户 ({{ getUserCount() }})</option>
                     <option *ngFor="let r of vm.roles | async" [value]="r.name">
@@ -67,20 +67,15 @@
                       placeholder="按用户名搜索"
                       [(ngModel)]="vm.searchModel.userName"
                       (keyup.enter)="vm.search()" />
-                    <div class="input-group-append">
-                      <button class="btn btn-sm btn-outline-secondary" type="button"
-                        *ngIf="vm.searchModel.userName" (click)="cleanUserSearch()">
-                        <svg-icon path="bi/x"></svg-icon>
-                      </button>
-                    </div>
+                    <button class="btn btn-sm btn-outline-secondary" type="button"
+                      *ngIf="vm.searchModel.userName" (click)="cleanUserSearch()">
+                      <svg-icon path="bi/x"></svg-icon>
+                    </button>
                   </div>
                 </div>
                 <div class="col">
-                  <div class="input-group input-group-sm ml-2">
-                    <div class="input-group-prepend">
-                      <div class="input-group-text">排序：</div>
-                    </div>
-                    <select class="form-control" name="sortBy" [(ngModel)]="vm.searchModel.sortBy"
+                  <div class="input-group input-group-sm ms-2">
+                    <select class="form-select" name="sortBy" [(ngModel)]="vm.searchModel.sortBy"
                       (change)="vm.search()">
                       <option *ngFor="let sm of vm.sortMethods" [value]="sm.value">
                         {{sm.text}}
@@ -96,19 +91,19 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-right">#</th>
-                <th scope="col" class="text-left">用户名</th>
+                <th scope="col" class="text-end">#</th>
+                <th scope="col" class="text-start">用户名</th>
                 <th scope="col" class="text-center">电话</th>
                 <th scope="col" class="text-center">创建时间</th>
                 <th scope="col" class="text-center">最近登录</th>
-                <th scope="col" class="text-right">登录次数</th>
+                <th scope="col" class="text-end">登录次数</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">
               <tr *ngFor="let item of data; let i = index;">
-                <th scope="row" class="text-right">{{i + 1}}</th>
-                <td class="text-left">
+                <th scope="row" class="text-end">{{i + 1}}</th>
+                <td class="text-start">
                   {{getFullname(item)}}
                   <svg-icon class="text-danger" style="cursor: pointer;" path="bi/lock-fill"
                     *ngIf="isLockout(item)" ngbTooltip="该用户已经被锁定！"></svg-icon>
@@ -116,7 +111,7 @@
                 <td class="text-center">{{item.phoneNumber}}</td>
                 <td class="text-center">{{item.createTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
                 <td class="text-center">{{item.lastLogin | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-                <td class="text-right">{{item.loginCount}}</td>
+                <td class="text-end">{{item.loginCount}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
                     <button class="btn btn-outline-secondary" type="button"
@@ -176,7 +171,7 @@
           </table>
         </div>
         <div class="card-footer">
-          <div *ngIf="(vm.data | async) as data" class="row no-gutters">
+          <div *ngIf="(vm.data | async) as data" class="row g-0">
             <div class="col-6 d-flex align-items-center">
               <div [class]="data.length > 0 ? 'text-muted' : 'text-warning'">
                 <ng-container *ngIf="data.length > 0;else emptyTpl">

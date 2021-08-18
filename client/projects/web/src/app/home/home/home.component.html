@@ -1,8 +1,11 @@
 <div class="container p-5">
-  <button class="btn btn-lg btn-block btn-outline-primary"
-    (click)="vm.updateMessage()">
-    {{vm.message | async}}
-  </button>
+
+  <div class="d-grid gap-2">
+    <button class="btn btn-lg btn-outline-primary"
+      (click)="vm.updateMessage()">
+      {{vm.message | async}}
+    </button>
+  </div>
 
   <div *ngIf="(vm.info | async) as info" class="alert alert-warning mt-3">
     {{info}}
