@@ -24,9 +24,9 @@
           </div>
         </div>
         <form class="p-2 bg-light">
-          <div class="form-row">
+          <div class="row">
             <div class="col-6">
-              <div class="row no-gutters align-items-center">
+              <div class="row g-0 align-items-center">
                 <label for="pageSize" class="col-auto col-form-label col-form-label-sm">
                   显示：
                 </label>
@@ -50,7 +50,7 @@
               </div>
             </div>
             <div class="col-6">
-              <div class="row no-gutters">
+              <div class="row g-0">
                 <div class="col-6">
                   <!-- <span class="text-muted">其它工具栏</span> -->
                 </div>
@@ -76,28 +76,28 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-right text-nowrap text-muted">#</th>
-                <th scope="col" class="text-left text-nowrap text-muted">名称</th>
-                <th scope="col" class="text-left text-nowrap text-muted">描述</th>
-                <th scope="col" class="text-left text-nowrap text-muted">数据表</th>
-                <th scope="col" class="text-left text-nowrap text-muted">主键</th>
-                <th scope="col" class="text-left text-nowrap text-muted">显示列</th>
+                <th scope="col" class="text-end text-nowrap text-muted">#</th>
+                <th scope="col" class="text-start text-nowrap text-muted">名称</th>
+                <th scope="col" class="text-start text-nowrap text-muted">描述</th>
+                <th scope="col" class="text-start text-nowrap text-muted">数据表</th>
+                <th scope="col" class="text-start text-nowrap text-muted">主键</th>
+                <th scope="col" class="text-start text-nowrap text-muted">显示列</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">
               <tr *ngFor="let item of data; let i = index;">
-                <th scope="row" class="text-right text-muted">{{i+1+vm.searchModel.skip}}</th>
-                <td class='text-left'>
+                <th scope="row" class="text-end text-muted">{{i+1+vm.searchModel.skip}}</th>
+                <td class='text-start'>
                   <a class="preview-link" (click)="showPreview(item)">
                     <svg-icon [path]="!!item.geometryColumn ? 'bi/globe' : 'bi/table'"></svg-icon>
                     {{item.name}}
                   </a>
                 </td>
-                <td class='text-left'>{{item.description}}</td>
-                <td class='text-left'>{{!!item.schema ? (item.schema + '.' + item.tableName) : item.tableName}}</td>
-                <td class='text-left'>{{item.primaryKeyColumn}}</td>
-                <td class='text-left'>{{item.displayColumn}}</td>
+                <td class='text-start'>{{item.description}}</td>
+                <td class='text-start'>{{!!item.schema ? (item.schema + '.' + item.tableName) : item.tableName}}</td>
+                <td class='text-start'>{{item.primaryKeyColumn}}</td>
+                <td class='text-start'>{{item.displayColumn}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
                     <button *ngIf="info.privileges['data_services.read_by_id']"
@@ -122,7 +122,7 @@
           </table>
         </div>
         <div class="card-footer">
-          <div *ngIf="(vm.data | async) as data" class="row no-gutters">
+          <div *ngIf="(vm.data | async) as data" class="row g-0">
             <div class="col-6 d-flex align-items-center">
               <div [class]="data.length > 0 ? 'text-muted' : 'text-warning'">
                 <ng-container *ngIf="data.length > 0;else emptyTpl">

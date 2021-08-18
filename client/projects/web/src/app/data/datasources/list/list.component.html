@@ -24,9 +24,9 @@
           </div>
         </div>
         <form class="p-2 bg-light">
-          <div class="form-row">
+          <div class="row">
             <div class="col-6">
-              <div class="row no-gutters align-items-center">
+              <div class="row g-0 align-items-center">
                 <label for="pageSize" class="col-auto col-form-label col-form-label-sm">
                   显示：
                 </label>
@@ -50,7 +50,7 @@
               </div>
             </div>
             <div class="col-6">
-              <div class="row no-gutters">
+              <div class="row g-0">
                 <div class="col-6">
                   <!-- <span class="text-muted">其它工具栏</span> -->
                 </div>
@@ -76,27 +76,27 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-right text-nowrap text-muted">#</th>
-                <th scope="col" class="text-left text-nowrap text-muted">名称</th>
+                <th scope="col" class="text-end text-nowrap text-muted">#</th>
+                <th scope="col" class="text-start text-nowrap text-muted">名称</th>
                 <th scope="col" class="text-center text-nowrap text-muted">数据库类型</th>
-                <th scope="col" class="text-left text-nowrap text-muted">服务器</th>
-                <th scope="col" class="text-right text-nowrap text-muted">端口</th>
-                <th scope="col" class="text-left text-nowrap text-muted">数据库</th>
-                <th scope="col" class="text-left text-nowrap text-muted">用户名</th>
-                <th scope="col" class="text-right text-nowrap text-muted">超时时间(秒)</th>
+                <th scope="col" class="text-start text-nowrap text-muted">服务器</th>
+                <th scope="col" class="text-end text-nowrap text-muted">端口</th>
+                <th scope="col" class="text-start text-nowrap text-muted">数据库</th>
+                <th scope="col" class="text-start text-nowrap text-muted">用户名</th>
+                <th scope="col" class="text-end text-nowrap text-muted">超时时间(秒)</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">
               <tr *ngFor="let item of data; let i = index;">
-                <th scope="row" class="text-right text-muted">{{i+1+vm.searchModel.skip}}</th>
-                <td class='text-left'>{{item.name}}</td>
+                <th scope="row" class="text-end text-muted">{{i+1+vm.searchModel.skip}}</th>
+                <td class='text-start'>{{item.name}}</td>
                 <td class='text-center'>{{item.databaseType}}</td>
-                <td class='text-left'>{{item.serverAddress}}</td>
-                <td class='text-right'>{{item.serverPort}}</td>
-                <td class='text-left'>{{item.databaseName}}</td>
-                <td class='text-left'>{{item.username}}</td>
-                <td class='text-right'>{{item.timeout}}</td>
+                <td class='text-start'>{{item.serverAddress}}</td>
+                <td class='text-end'>{{item.serverPort}}</td>
+                <td class='text-start'>{{item.databaseName}}</td>
+                <td class='text-start'>{{item.username}}</td>
+                <td class='text-end'>{{item.timeout}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
                     <button *ngIf="info.privileges['data_sources.read_by_id']"
@@ -121,7 +121,7 @@
           </table>
         </div>
         <div class="card-footer">
-          <div *ngIf="(vm.data | async) as data" class="row no-gutters">
+          <div *ngIf="(vm.data | async) as data" class="row g-0">
             <div class="col-6 d-flex align-items-center">
               <div [class]="data.length > 0 ? 'text-muted' : 'text-warning'">
                 <ng-container *ngIf="data.length > 0;else emptyTpl">

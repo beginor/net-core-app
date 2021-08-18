@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="form-group">
+    <div class="mb-3">
       <label class="form-label text-muted" for="name">名称 <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="name" name="name"
         placeholder="请输入数据服务名称 ..." required
@@ -26,7 +26,7 @@
         [class.is-valid]="name.valid"
       />
     </div>
-    <div class="form-group">
+    <div class="mb-3">
       <label class="form-label text-muted" for="description">描述 </label>
       <input class="form-control" type="text" id="description" name="description"
         placeholder="请输入数据服务描述 ..."
@@ -36,7 +36,7 @@
     </div>
     <div class="row">
       <div class="col">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label text-muted" for="con">选择数据源 <i class="text-danger">*</i></label>
           <select class="form-control custom-select" id="con" name="con" required
             [disabled]="!editable"
@@ -53,7 +53,7 @@
         </div>
       </div>
       <div class="col" *ngIf="!!dataSource && dataSource.databaseType !== 'mysql'">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label text-muted" for="schema">架构 <i class="text-danger">*</i></label>
           <input class="form-control" type="text" id="schema" name="schema"
             placeholder="请输入数据源架构 ..." required
@@ -71,7 +71,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group">
+    <div class="mb-3">
       <label class="form-label text-muted" for="tableName">数据表 <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="tableName" name="tableName"
         placeholder="请输入数据表名称..." required
@@ -89,12 +89,12 @@
         (selectItem)="onSelectTable($event)"
         />
         <ng-template #tableNameTemplate let-r="result" let-t="term">
-          <svg-icon class="mr-1" [path]="getTableIcon(r.type)"></svg-icon>
+          <svg-icon class="me-1" [path]="getTableIcon(r.type)"></svg-icon>
           <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
-          <span class="text-info ml-2" *ngIf="!!r.description">({{r.description}})</span>
+          <span class="text-info ms-2" *ngIf="!!r.description">({{r.description}})</span>
         </ng-template>
     </div>
-    <div class="form-group">
+    <div class="mb-3">
       <label class="form-label text-muted">输出字段配置</label>
       <table class="table table-bordered table-sm">
         <thead>
@@ -122,8 +122,8 @@
                   [checked]="isFieldChecked(col.name)" />
               </div>
             </td>
-            <td class="text-left">
-              <span class="text-muted mr-1">{{col.name}} ({{col.type}})</span>
+            <td class="text-start">
+              <span class="text-muted me-1">{{col.name}} ({{col.type}})</span>
               <span class="text-info" *ngIf="!!col.description">{{col.description}}</span>
             </td>
             <td class="text-center text-muted">
@@ -155,21 +155,21 @@
         </tbody>
       </table>
     </div>
-    <div class="form-group">
+    <div class="mb-3">
       <label class="form-label text-muted" for="presetCriteria">预置过滤条件 </label>
       <input class="form-control" type="text" id="presetCriteria" name="presetCriteria"
         placeholder="请输入预置过滤条件 ..." [(ngModel)]="model.presetCriteria"
         [disabled]="!editable"
       />
     </div>
-    <div class="form-group">
+    <div class="mb-3">
       <label class="form-label text-muted" for="defaultOrder">默认排序 </label>
       <input class="form-control" type="text" id="defaultOrder" name="defaultOrder"
         placeholder="请输入默认排序 ..." [(ngModel)]="model.defaultOrder"
         [disabled]="!editable"
       />
     </div>
-    <div class="form-group">
+    <div class="mb-3">
       <label class="form-label text-muted">授权角色</label>
       <div class="form-text">
         <div class="custom-control custom-switch custom-control-inline" *ngFor="let role of vm.roles">

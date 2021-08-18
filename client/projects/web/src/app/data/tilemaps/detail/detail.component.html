@@ -17,7 +17,7 @@
   <div class="card-body">
     <div class="row">
       <div class="col">
-        <div class="form-group" [class.is-valid]="name.valid"
+        <div class="mb-3" [class.is-valid]="name.valid"
           [class.is-invalid]="!(name.valid || name.pristine)">
           <label class="form-label text-muted" for="name">栅格切片包名称  <i class="text-danger">*</i> </label>
           <input class="form-control" type="text" id="name" name="name"
@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="col">
-        <div class="form-group" [class.is-valid]="contentType.valid"
+        <div class="mb-3" [class.is-valid]="contentType.valid"
           [class.is-invalid]="!(contentType.valid || contentType.pristine)">
           <label class="form-label text-muted" for="contentType">内容类型  <i class="text-danger">*</i> </label>
           <input class="form-control" type="text" id="contentType" name="contentType"
@@ -41,7 +41,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group" [class.is-valid]="cacheDirectory.valid"
+    <div class="mb-3" [class.is-valid]="cacheDirectory.valid"
       [class.is-invalid]="!(cacheDirectory.valid || cacheDirectory.pristine)">
       <label class="form-label text-muted" for="cacheDirectory">缓存目录  <i class="text-danger">*</i> </label>
       <div class="input-group">
@@ -60,7 +60,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group" [class.is-valid]="mapTileInfoPath.valid"
+    <div class="mb-3" [class.is-valid]="mapTileInfoPath.valid"
       [class.is-invalid]="!(mapTileInfoPath.valid || mapTileInfoPath.pristine)">
       <label class="form-label text-muted" for="mapTileInfoPath">切片信息路径  <i class="text-danger">*</i> </label>
       <div class="input-group">
@@ -81,12 +81,12 @@
     </div>
     <div class="row">
       <div class="col-auto">
-        <div class="form-group mb-1">
-          <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input"
+        <div class="mb-3 mb-1">
+          <div class="form-check form-switch">
+            <input type="checkbox" class="form-check-input"
               id="isBundled" name="isBundled"
               [(ngModel)]="model.isBundled" [disabled]="!editable">
-            <label class="custom-control-label text-muted"
+            <label class="form-check-label text-muted"
               for="isBundled">
               紧凑格式
             </label>
@@ -94,7 +94,7 @@
         </div>
       </div>
       <div class="col-auto" *ngIf="!editable">
-        <div class="form-group mb-1">
+        <div class="mb-3 mb-1">
           <div class="form-control-plaintext p-0">{{model.createdAt | date:'yyyy年M月d日'}}创建，{{model.updatedAt | date:'yyyy年M月d日'}}更新。</div>
         </div>
       </div>

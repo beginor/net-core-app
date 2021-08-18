@@ -16,7 +16,7 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="form-group" [class.is-valid]="directory.valid"
+    <div class="mb-3" [class.is-valid]="directory.valid"
       [class.is-invalid]="!(directory.valid || directory.pristine)">
       <label class="form-label text-muted" for="directory">目录  <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="directory" name="directory"
@@ -28,10 +28,10 @@
     </div>
     <div class="row">
       <div class="col">
-        <div class="form-group" [class.is-valid]="longitude.valid"
+        <div class="mb-3" [class.is-valid]="longitude.valid"
           [class.is-invalid]="!(longitude.valid || longitude.pristine)">
           <label class="form-label text-muted" for="longitude">模型经度  <i class="text-danger">*</i> </label>
-          <input class="form-control text-right" type="number" step="0.1" id="longitude" name="longitude"
+          <input class="form-control text-end" type="number" step="0.1" id="longitude" name="longitude"
             placeholder="请输入模型经度 ..." [(ngModel)]="model.longitude"
             [class.is-invalid]="!(longitude.valid || longitude.pristine)"
             [class.is-valid]="longitude.valid"
@@ -40,10 +40,10 @@
         </div>
       </div>
       <div class="col">
-        <div class="form-group" [class.is-valid]="latitude.valid"
+        <div class="mb-3" [class.is-valid]="latitude.valid"
           [class.is-invalid]="!(latitude.valid || latitude.pristine)">
           <label class="form-label text-muted" for="latitude">模型纬度  <i class="text-danger">*</i> </label>
-          <input class="form-control text-right" type="number" step="0.1" id="latitude" name="latitude"
+          <input class="form-control text-end" type="number" step="0.1" id="latitude" name="latitude"
             placeholder="请输入模型纬度 ..." [(ngModel)]="model.latitude"
             [class.is-invalid]="!(latitude.valid || latitude.pristine)"
             [class.is-valid]="latitude.valid"
@@ -52,10 +52,10 @@
         </div>
       </div>
       <div class="col">
-        <div class="form-group" [class.is-valid]="elevation.valid"
+        <div class="mb-3" [class.is-valid]="elevation.valid"
           [class.is-invalid]="!(elevation.valid || elevation.pristine)">
           <label class="form-label text-muted" for="elevation">模型海拔高度  <i class="text-danger">*</i> </label>
-          <input class="form-control text-right" type="number" step="0.1" id="elevation" name="elevation"
+          <input class="form-control text-end" type="number" step="0.1" id="elevation" name="elevation"
             placeholder="请输入模型海拔高度 ..." [(ngModel)]="model.elevation"
             [class.is-invalid]="!(elevation.valid || elevation.pristine)"
             [class.is-valid]="elevation.valid"
@@ -64,21 +64,19 @@
         </div>
       </div>
     </div>
-    <div class="form-group">
+    <div class="mb-3">
       <label class="form-label text-muted" for="tags">标签 </label>
       <div class="input-group">
-        <div class="input-group-prepend">
-          <button class="btn btn-outline-secondary" type="button"
-            *ngFor="let t of model.tags" ngbTooltip="点击删除这个标签" container="body"
-            [disabled]="!editable" (click)="delTag(t)">{{t}}</button>
-        </div>
+        <button class="btn btn-outline-secondary" type="button"
+          *ngFor="let t of model.tags" ngbTooltip="点击删除这个标签" container="body"
+          [disabled]="!editable" (click)="delTag(t)">{{t}}</button>
         <input class="form-control" type="text" id="newTag" name="newTag"
           placeholder="请输入新标签 ..." *ngIf="editable" [(ngModel)]="newTag" />
-        <div class="input-group-append" *ngIf="!!newTag">
+        <ng-container *ngIf="!!newTag">
           <button class="btn btn-outline-secondary" (click)="addNewTag()">
             <svg-icon path="bi/plus"></svg-icon>
           </button>
-        </div>
+        </ng-container>
       </div>
     </div>
   </div>

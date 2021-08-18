@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="form-group" [class.is-valid]="name.valid"
+    <div class="mb-3" [class.is-valid]="name.valid"
       [class.is-invalid]="!(name.valid || name.pristine)">
       <label class="form-label text-muted" for="name">数据源名称  <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="name" name="name"
@@ -25,7 +25,7 @@
         required #name="ngModel" [disabled]="!editable"
       />
     </div>
-    <div class="form-group" [class.is-valid]="databaseType.valid"
+    <div class="mb-3" [class.is-valid]="databaseType.valid"
       [class.is-invalid]="!(databaseType.valid || databaseType.pristine)">
       <label class="form-label text-muted" for="databaseType">数据库类型  <i class="text-danger">*</i> </label>
       <select class="form-control custom-select" type="text" id="databaseType" name="databaseType" [(ngModel)]="model.databaseType"
@@ -40,7 +40,7 @@
     </div>
     <div class="row">
       <div class="col">
-        <div class="form-group" [class.is-valid]="serverAddress.valid"
+        <div class="mb-3" [class.is-valid]="serverAddress.valid"
           [class.is-invalid]="!(serverAddress.valid || serverAddress.pristine)">
           <label class="form-label text-muted" for="serverAddress">服务器地址 <i class="text-danger">*</i> </label>
           <input class="form-control" type="text" id="serverAddress" name="serverAddress"
@@ -52,16 +52,16 @@
         </div>
       </div>
       <div class="col">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label text-muted" for="serverPort">端口 </label>
-          <input class="form-control text-right" type="number" id="serverPort" name="serverPort"
+          <input class="form-control text-end" type="number" id="serverPort" name="serverPort"
             placeholder="请输入端口 ..." [(ngModel)]="model.serverPort"
             [disabled]="!editable"
           />
         </div>
       </div>
     </div>
-    <div class="form-group" [class.is-valid]="databaseName.valid"
+    <div class="mb-3" [class.is-valid]="databaseName.valid"
       [class.is-invalid]="!(databaseName.valid || databaseName.pristine)">
       <label class="form-label text-muted" for="databaseName">数据库名称 <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="databaseName" name="databaseName"
@@ -73,7 +73,7 @@
     </div>
     <div class="row">
       <div class="col">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label text-muted" for="username">用户名 </label>
           <input class="form-control" type="text" id="username" name="username"
             placeholder="请输入用户名 ..." [(ngModel)]="model.username"
@@ -82,7 +82,7 @@
         </div>
       </div>
       <div class="col">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label text-muted" for="password">密码 </label>
           <div class="input-group">
             <input class="form-control" type="text" id="password" name="password"
@@ -105,10 +105,10 @@
         </div>
       </div>
     </div>
-    <div class="form-group">
+    <div class="mb-3">
       <label class="form-label text-muted" for="timeout">连接超时时间（秒） </label>
 
-      <input class="form-control text-right" type="text" id="timeout" name="timeout"
+      <input class="form-control text-end" type="text" id="timeout" name="timeout"
         placeholder="请输入连接超时时间 ..." [(ngModel)]="model.timeout"
         [disabled]="!editable"
       />

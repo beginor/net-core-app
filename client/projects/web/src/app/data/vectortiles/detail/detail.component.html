@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="form-group">
+    <div class="mb-3">
       <label class="form-label text-muted" for="name">名称  <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="name" name="name"
         placeholder="请输入矢量切片包名称 ..." required
@@ -26,7 +26,7 @@
         [class.is-valid]="name.valid"
       />
     </div>
-    <div class="form-group">
+    <div class="mb-3">
       <label class="form-label text-muted" for="directory">缓存目录  <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="directory" name="directory"
         placeholder="请输入矢量切片包缓存目录 ..." required
@@ -39,7 +39,7 @@
     </div>
     <div class="row">
       <div class="col-6">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label text-muted" for="minZoom">最小缩放级别 </label>
           <input class="form-control" type="number" step="1" id="minZoom" name="minZoom"
             placeholder="请输入最小缩放级别 ..."
@@ -48,7 +48,7 @@
         </div>
       </div>
       <div class="col-6">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label text-muted" for="maxZoom">最大缩放级别 </label>
           <input class="form-control" type="number" step="1" id="maxZoom" name="maxZoom"
             placeholder="请输入最大缩放级别 ..."
@@ -57,9 +57,13 @@
         </div>
       </div>
     </div>
-    <div class="custom-file">
-      <input class="custom-file-input" type="file" id="styleFile" name="styleFile" #styleFile >
-      <label class="custom-file-label" for="customFile">{{styleFileName}}</label>
+    <div class="mb-3" *ngIf="!!styleFileName">
+      <label class="form-label text-muted">默认样式</label>
+      <div class="form-control-plaintext">{{styleFileName}}</div>
+    </div>
+    <div class="mb-3" *ngIf="editable">
+      <label class="form-label text-muted" for="styleFile">选择默认样式</label>
+      <input class="form-control" type="file" id="styleFile" name="styleFile" #styleFile >
     </div>
   </div>
   <div *ngIf="info.privileges['vectortiles.update'] && editable"

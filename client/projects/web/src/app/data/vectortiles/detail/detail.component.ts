@@ -30,7 +30,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     public model: VectortileModel = { id: '' };
     public styleFileName = '选择默认样式';
     @ViewChild('styleFile', { static: false })
-    public styleFileRef!: ElementRef<HTMLInputElement>;
+    public styleFileRef?: ElementRef<HTMLInputElement>;
 
     private id = '';
     private reloadList = false;
@@ -71,14 +71,14 @@ export class DetailComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        this.styleFileRef.nativeElement.addEventListener(
+        this.styleFileRef?.nativeElement.addEventListener(
             'change',
             this.styleChangeHandle
         );
     }
 
     public ngOnDestroy(): void {
-        this.styleFileRef.nativeElement.removeEventListener(
+        this.styleFileRef?.nativeElement.removeEventListener(
             'change',
             this.styleChangeHandle
         );
@@ -109,7 +109,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     }
 
     private async onStyleFileChange(e: Event): Promise<void> {
-        const files = this.styleFileRef.nativeElement.files;
+        const files = this.styleFileRef?.nativeElement.files;
         if (!!files) {
             const file = files[0];
             this.zone.run(() => {
