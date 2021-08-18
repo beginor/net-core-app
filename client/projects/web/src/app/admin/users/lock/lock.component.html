@@ -26,12 +26,10 @@
           [class.is-valid]="lockoutEnd.valid"
           ngbDatepicker container="body" #le="ngbDatepicker" [minDate]="calendar.getToday()"
           required />
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="button"
-            (click)="le.toggle()">
-            <svg-icon path="bi/calendar3"></svg-icon>
-          </button>
-        </div>
+        <button class="btn btn-outline-secondary" type="button"
+          (click)="le.toggle()">
+          <svg-icon path="bi/calendar3"></svg-icon>
+        </button>
       </div>
     </div>
   </div>
