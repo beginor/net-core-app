@@ -102,12 +102,10 @@
               placeholder="请选择出生日期 ..." [(ngModel)]="dob"
               ngbDatepicker container="body" #dp="ngbDatepicker"
               #dateOfBirth="ngModel" [disabled]="!editable" />
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary calendar"
-                (click)="dp.toggle()" [disabled]="!editable">
-                <svg-icon path="bi/calendar3"></svg-icon>
-              </button>
-            </div>
+            <button class="btn btn-outline-secondary calendar"
+              (click)="dp.toggle()" [disabled]="!editable">
+              <svg-icon path="bi/calendar3"></svg-icon>
+            </button>
           </div>
         </div>
       </div>
