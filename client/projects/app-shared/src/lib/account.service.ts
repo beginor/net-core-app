@@ -29,7 +29,7 @@ export class AccountService {
         @Inject('apiRoot') private apiRoot: string
     ) {
         this.interval$ = interval(1000 * 60 * 5).subscribe(
-            () => this.getInfo()
+            () => void this.getInfo()
         );
     }
 

@@ -23,9 +23,9 @@
           </div>
         </div>
         <form class="p-2 bg-light">
-          <div class="form-row">
+          <div class="row">
             <div class="col-6">
-              <div class="row no-gutters align-items-center">
+              <div class="row g-0 align-items-center">
                 <div class="col-auto text-muted px-2 py-1">全部角色， 共 {{vm.total | async}} 条记录</div>
                 <div class="col-auto text-muted px-2">
                   <ng-container *ngIf="vm.loading">
@@ -35,7 +35,7 @@
               </div>
             </div>
             <div class="col-6">
-              <div class="row no-gutters">
+              <div class="row g-0">
                 <div class="col-6">
                   <!-- <span class="text-muted">其它工具栏</span> -->
                 </div>
@@ -50,23 +50,23 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-right text-nowrap text-muted">#</th>
-                <th scope="col" class="text-left text-nowrap text-muted">名称</th>
-                <th scope="col" class="text-left text-nowrap text-muted">描述</th>
+                <th scope="col" class="text-end text-nowrap text-muted">#</th>
+                <th scope="col" class="text-start text-nowrap text-muted">名称</th>
+                <th scope="col" class="text-start text-nowrap text-muted">描述</th>
                 <th scope="col" class="text-center text-nowrap text-muted">是否默认</th>
                 <th scope="col" class="text-center text-nowrap text-muted">是否匿名</th>
-                <th scope="col" class="text-right text-nowrap text-muted">用户数</th>
+                <th scope="col" class="text-end text-nowrap text-muted">用户数</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">
               <tr *ngFor="let item of data; let i = index;">
-                <th scope="row" class="text-right text-muted">{{i+1+vm.searchModel.skip}}</th>
-                <td class="text-left">{{item.name}}</td>
-                <td class="text-left">{{item.description}}</td>
+                <th scope="row" class="text-end text-muted">{{i+1+vm.searchModel.skip}}</th>
+                <td class="text-start">{{item.name}}</td>
+                <td class="text-start">{{item.description}}</td>
                 <td class="text-center">{{item.isDefault ? '是' : '否'}}</td>
                 <td class="text-center">{{item.isAnonymous ? '是' : '否'}}</td>
-                <td class="text-right"><a [routerLink]="['../../users', {roleName: item.name}]">{{item.userCount}}</a></td>
+                <td class="text-end"><a [routerLink]="['../users', {roleName: item.name}]">{{item.userCount}}</a></td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
                     <button *ngIf="info.privileges['app_roles.read']"

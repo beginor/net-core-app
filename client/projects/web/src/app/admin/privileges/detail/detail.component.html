@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="form-group" [class.is-valid]="module.valid"
+    <div class="mb-3" [class.is-valid]="module.valid"
       [class.is-invalid]="!(module.valid || module.pristine)">
       <label class="form-label text-muted" for="module">权限模块 <i class="text-danger">*</i></label>
       <input class="form-control" type="text" id="module" name="module"
@@ -24,7 +24,7 @@
         [class.is-valid]="module.valid"
         required #module="ngModel" [disabled]="!editable" />
     </div>
-    <div class="form-group" [class.is-valid]="name.valid"
+    <div class="mb-3" [class.is-valid]="name.valid"
       [class.is-invalid]="!(name.valid || name.pristine)">
       <label class="form-label text-muted" for="name">权限名称 <i class="text-danger">*</i></label>
       <input class="form-control" type="text" id="name" name="name"
@@ -33,7 +33,7 @@
         [class.is-valid]="name.valid"
         required #name="ngModel" [disabled]="!editable" />
     </div>
-    <div class="form-group" [class.is-valid]="description.valid"
+    <div class="mb-3" [class.is-valid]="description.valid"
       [class.is-invalid]="!(description.valid || description.pristine)">
       <label class="form-label text-muted" for="description">权限描述 <i class="text-danger">*</i></label>
       <input class="form-control" type="text" id="description" name="description"
@@ -42,12 +42,12 @@
         [class.is-valid]="description.valid"
         required #description="ngModel" [disabled]="!editable"/>
     </div>
-    <div class="form-group">
-      <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input"
+    <div class="mb-3">
+      <div class="form-check form-switch">
+        <input type="checkbox" class="form-check-input"
           id="isRequired" name="isRequired"
           [(ngModel)]="model.isRequired" [disabled]="!editable">
-        <label class="custom-control-label text-muted"
+        <label class="form-check-label text-muted"
           for="isRequired">
           是否必须的权限
         </label>

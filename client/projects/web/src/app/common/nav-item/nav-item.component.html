@@ -1,6 +1,6 @@
 <a class="nav-link" routerLinkActive="active" [routerLink]="node.url">
-  <svg-icon class="nav-icon ml-2" [path]="node.icon"></svg-icon>
-  <span class="ml-1" *ngIf="!sidebarCollapsed">{{node.title}}</span>
+  <svg-icon class="nav-icon ms-2" [path]="node.icon"></svg-icon>
+  <span class="ms-1" *ngIf="!sidebarCollapsed">{{node.title}}</span>
 </a>
 
 <ul class="nav-link-subitems" *ngIf="(node.children && node.children.length > 0) || sidebarCollapsed"

@@ -6,7 +6,7 @@
   display: block;
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: var(--light);
+  background-color: var(--bs-light);
 
   ngb-pagination ::ng-deep ul.pagination {
     margin-bottom: 0 !important;

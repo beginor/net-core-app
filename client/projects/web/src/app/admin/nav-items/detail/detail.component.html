@@ -18,16 +18,16 @@
   <div class="card-body">
     <div class="row">
       <div class="col">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label text-muted" for="parentId">父节点 <i class="text-danger">*</i> </label>
-          <select class="form-control" id="parentId" name="parentId" required
+          <select class="form-select" id="parentId" name="parentId" required
             [(ngModel)]="model.parentId" [disabled]="!editable">
             <option *ngFor="let p of parents" [value]="p.id">{{p.title}}</option>
           </select>
         </div>
       </div>
       <div class="col">
-        <div class="form-group" [class.is-valid]="title.valid"
+        <div class="mb-3" [class.is-valid]="title.valid"
           [class.is-invalid]="!(title.valid || title.pristine)">
           <label class="form-label text-muted" for="title">标题 <i class="text-danger">*</i> </label>
           <input class="form-control" type="text" id="title" name="title"
@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="col">
-        <div class="form-group" [class.is-valid]="sequence.valid"
+        <div class="mb-3" [class.is-valid]="sequence.valid"
           [class.is-invalid]="!(sequence.valid || sequence.pristine)">
           <label class="form-label text-muted" for="sequence">顺序 <i class="text-danger">*</i></label>
           <input class="form-control" type="number" id="sequence" name="sequence"
@@ -53,17 +53,17 @@
     </div>
     <div class="row">
       <div class="col-4">
-        <div class="form-group" [class.is-valid]="url.valid"
+        <div class="mb-3" [class.is-valid]="url.valid"
           [class.is-invalid]="!(url.valid || url.pristine)">
           <label class="form-label text-muted" for="target">导航窗口 <i class="text-danger">*</i> </label>
-          <select class="form-control" id="target" name="target"
+          <select class="form-select" id="target" name="target"
             [(ngModel)]="model.target" [disabled]="!editable">
             <option *ngFor="let _t of targets" [value]="_t.value">{{_t.name}}</option>
           </select>
         </div>
       </div>
       <div class="col-8">
-        <div class="form-group" [class.is-valid]="url.valid"
+        <div class="mb-3" [class.is-valid]="url.valid"
           [class.is-invalid]="!(url.valid || url.pristine)">
           <label class="form-label text-muted" for="url">导航地址 <i class="text-danger">*</i> </label>
           <input class="form-control" type="text" id="url" name="url"
@@ -75,7 +75,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group" *ngIf="model.target === '_iframe'">
+    <div class="mb-3" *ngIf="model.target === '_iframe'">
       <label class="form-label text-muted">内嵌窗口地址 <i class="text-danger">*</i></label>
       <input class="form-control" type="text" id="frame_url" name="frameUrl"
         placeholder="请输入内嵌窗口地址 ..." [(ngModel)]="model.frameUrl"
@@ -86,7 +86,7 @@
     </div>
     <div class="row">
       <div class="col-4">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label text-muted" for="icon">图标 </label>
           <div class="input-group">
             <input class="form-control" type="text" id="icon" name="icon"
@@ -104,7 +104,7 @@
         </div>
       </div>
       <div class="col-8">
-        <div class="form-group">
+        <div class="mb-3">
           <label class="form-label text-muted" for="tooltip">提示文字 </label>
           <input class="form-control" type="text" id="tooltip" name="tooltip"
             placeholder="请输入提示文字 ..." [(ngModel)]="model.tooltip"
@@ -114,14 +114,14 @@
       </div>
     </div>
     <!-- <hr /> -->
-    <div class="form-group">
+    <div class="mb-3">
       <label class="form-label text-muted">菜单角色</label>
-      <div class="form-text">
-        <div class="custom-control custom-switch custom-control-inline" *ngFor="let role of vm.roles">
-          <input class="custom-control-input" type="checkbox" [id]="role.id"
+      <div class="mt-2">
+        <div class="form-check form-check-inline form-switch" *ngFor="let role of vm.roles">
+          <input class="form-check-input" type="checkbox" [id]="role.id"
             [name]="role.name" [disabled]="!editable" [value]="role.name"
             [checked]="isRoleChecked(role.name)" (change)="toggleCheckedRole(role.name)" />
-          <label class="custom-control-label text-muted" [for]="role.id">{{role.description}}</label>
+          <label class="form-check-label text-muted" [for]="role.id">{{role.description}}</label>
         </div>
       </div>
     </div>

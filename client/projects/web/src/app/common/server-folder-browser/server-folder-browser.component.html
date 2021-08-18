@@ -1,7 +1,7 @@
 <div class="modal-header">
   <h5 class="modal-title">{{title}}</h5>
 
-  <div class="ml-2 mr-auto btn-group btn-group-sm">
+  <div class="ms-2 me-auto btn-group btn-group-sm">
     <button type="button" class="btn btn-outline-secondary"
       (click)="getFolderContentByPath('.')">
       <svg-icon path="bi/house"></svg-icon> {{params.alias}}
@@ -12,8 +12,8 @@
     </button>
   </div>
 
-  <div class="ml-auto d-flex">
-    <div class="input-group input-group-sm mr-1" style="width: 120px;">
+  <div class="ms-auto d-flex">
+    <div class="input-group input-group-sm me-1" style="width: 120px;">
       <input #searchEl class="form-control form-control" type="text" placeholder="搜索..."
         (keyup)="search($event)">
     </div>

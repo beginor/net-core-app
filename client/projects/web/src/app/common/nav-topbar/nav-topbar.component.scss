@@ -12,9 +12,11 @@
 
     .navbar-nav.modules {
 
-      .nav-item.active {
-        border-bottom: .25rem solid $navbar-dark-active-color;
-        margin-bottom: -0.5rem;
+      @include media-breakpoint-up(md) {
+        .nav-item.active {
+          border-bottom: .25rem solid $navbar-dark-active-color;
+          margin-bottom: -0.5rem;
+        }
       }
     }
 
