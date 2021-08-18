@@ -38,7 +38,7 @@
       <div class="col">
         <div class="mb-3">
           <label class="form-label text-muted" for="con">选择数据源 <i class="text-danger">*</i></label>
-          <select class="form-control custom-select" id="con" name="con" required
+          <select class="form-select" id="con" name="con" required
             [disabled]="!editable"
             [(ngModel)]="dataSource"
             #con="ngModel"
@@ -172,11 +172,11 @@
     <div class="mb-3">
       <label class="form-label text-muted">授权角色</label>
       <div class="form-text">
-        <div class="custom-control custom-switch custom-control-inline" *ngFor="let role of vm.roles">
-          <input class="custom-control-input" type="checkbox" [id]="role.id"
+        <div class="form-check form-check-inline form-switch" *ngFor="let role of vm.roles">
+          <input class="form-check-input" type="checkbox" [id]="role.id"
             [name]="role.name" [disabled]="!editable" [value]="role.name"
             [checked]="isRoleChecked(role.name)" (change)="toggleCheckedRole(role.name)" />
-          <label class="custom-control-label text-muted" [for]="role.id">{{role.description}}</label>
+          <label class="form-check-label text-muted" [for]="role.id">{{role.description}}</label>
         </div>
       </div>
     </div>

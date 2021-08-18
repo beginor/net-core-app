@@ -28,7 +28,7 @@
     <div class="mb-3" [class.is-valid]="databaseType.valid"
       [class.is-invalid]="!(databaseType.valid || databaseType.pristine)">
       <label class="form-label text-muted" for="databaseType">数据库类型  <i class="text-danger">*</i> </label>
-      <select class="form-control custom-select" type="text" id="databaseType" name="databaseType" [(ngModel)]="model.databaseType"
+      <select class="form-select" id="databaseType" name="databaseType" [(ngModel)]="model.databaseType"
         [class.is-invalid]="!(databaseType.valid || databaseType.pristine)"
         [class.is-valid]="databaseType.valid"
         required #databaseType="ngModel" [disabled]="!editable">
@@ -95,19 +95,16 @@
                 [disabled]="!editable"
               />
             </ng-template>
-            <div class="input-group-append">
-              <button type="button" class="btn btn-outline-secondary" (click)="showPass = !showPass"
-                [ngbTooltip]="showPass ? '隐藏密码' : '显示密码'">
-                <svg-icon [path]="showPass ? 'bi/eye-slash' : 'bi/eye'"></svg-icon>
-              </button>
-            </div>
+            <button type="button" class="btn btn-outline-secondary" (click)="showPass = !showPass"
+              [ngbTooltip]="showPass ? '隐藏密码' : '显示密码'">
+              <svg-icon [path]="showPass ? 'bi/eye-slash' : 'bi/eye'"></svg-icon>
+            </button>
           </div>
         </div>
       </div>
     </div>
     <div class="mb-3">
       <label class="form-label text-muted" for="timeout">连接超时时间（秒） </label>
-
       <input class="form-control text-end" type="text" id="timeout" name="timeout"
         placeholder="请输入连接超时时间 ..." [(ngModel)]="model.timeout"
         [disabled]="!editable"

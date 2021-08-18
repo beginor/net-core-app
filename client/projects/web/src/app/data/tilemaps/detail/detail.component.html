@@ -51,13 +51,13 @@
           [class.is-valid]="cacheDirectory.valid"
           required #cacheDirectory="ngModel" [disabled]="!editable"
         />
-        <div class="input-group-append" *ngIf="editable && info.privileges['server_folders.read_folder_content']">
+        <ng-container *ngIf="editable && info.privileges['server_folders.read_folder_content']">
           <button class="btn btn-outline-secondary" type="button"
             ngbTooltip="选择缓存目录" [openDelay]="300"
             (click)="showCacheFolderModal()">
             <svg-icon path="bi/search"></svg-icon>
           </button>
-        </div>
+        </ng-container>
       </div>
     </div>
     <div class="mb-3" [class.is-valid]="mapTileInfoPath.valid"
@@ -70,13 +70,13 @@
           [class.is-valid]="mapTileInfoPath.valid"
           required #mapTileInfoPath="ngModel" [disabled]="!editable"
         />
-        <div class="input-group-append" *ngIf="editable && info.privileges['server_folders.read_folder_content']">
+        <ng-container *ngIf="editable && info.privileges['server_folders.read_folder_content']">
           <button class="btn btn-outline-secondary" type="button"
             ngbTooltip="选择切片信息" [openDelay]="300"
             (click)="showFolderDialog()">
             <svg-icon path="bi/search"></svg-icon>
           </button>
-        </div>
+        </ng-container>
       </div>
     </div>
     <div class="row">

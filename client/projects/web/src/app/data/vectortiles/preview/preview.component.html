@@ -1,12 +1,10 @@
 <div class="modal-header">
   <h5 class="modal-title">{{name}}</h5>
-  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
-    <span aria-hidden="true">&times;</span>
-  </button>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
 </div>
 <div class="modal-body p-1">
   <div class="tile-map-preview border border-darken-1" #mapPreView></div>
-  <div class="row text-muted px-3" style="font-size: .6rem;">
+  <div class="text-muted py-2" style="font-size: .6rem;">
     服务地址：<a [href]="getVectorTileLayerUrl()">{{getVectorTileLayerUrl()}}/tiles/{{'{'}}z}/{{'{'}}y}/{{'{'}}x}</a> .
   </div>
 </div>
