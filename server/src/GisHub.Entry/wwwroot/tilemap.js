@@ -9,11 +9,11 @@ define(['esri/Map', 'esri/views/SceneView', 'esri/layers/TileLayer'], function (
         center: [113, 22] // Sets center point of view using longitude,latitude
     });
     const gaofen = new TileLayer({
-        url: '/gishub/rest/services/tile-maps/1600409446764030070/MapServer'
+        url: '/gishub/rest/services/tilemaps/1600409446764030070/MapServer'
     });
     view.map.add(gaofen);
     const label = new TileLayer({
-        url: '/gishub/rest/services/tile-maps/1600409603668030071/MapServer'
+        url: '/gishub/rest/services/tilemaps/1600409603668030071/MapServer'
     });
     view.map.add(label);
 })
