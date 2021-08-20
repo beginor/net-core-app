@@ -45,12 +45,12 @@ export class LoginComponent {
     }
 
     public clearMessage(): void {
-        this.message.next();
+        this.message.next(undefined);
     }
 
     public passwordKeyUp(e: KeyboardEvent, loginForm: NgForm): void {
         if (e.key === 'Enter' && loginForm.valid) {
-            this.login();
+            void this.login();
         }
     }
 

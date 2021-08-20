@@ -1,7 +1,7 @@
 import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
 
@@ -48,12 +48,11 @@ export class AuditLogsService {
         }
         this.loading = true;
         try {
-            const result = await this.http.get<AuditLogResultModel>(
-                this.baseUrl,
-                {
+            const result = await lastValueFrom(
+                this.http.get<AuditLogResultModel>(this.baseUrl, {
                     params: params
-                }
-            ).toPromise();
+                })
+            );
             const total = result.total ?? 0;
             const data = result.data ?? [];
             this.total.next(total);
@@ -73,10 +72,9 @@ export class AuditLogsService {
     }
 
     public async create(model: AuditLogModel): Promise<AuditLogModel> {
-        const result = await this.http.post<AuditLogModel>(
-            this.baseUrl,
-            model
-        ).toPromise();
+        const result = await lastValueFrom(
+            this.http.post<AuditLogModel>(this.baseUrl, model)
+        );
         return result;
     }
 
@@ -84,10 +82,9 @@ export class AuditLogsService {
         id: string,
         model: AuditLogModel
     ): Promise<AuditLogModel> {
-        const result = await this.http.put<AuditLogModel>(
-            `${this.baseUrl}/${id}`,
-            model
-        ).toPromise();
+        const result = await lastValueFrom(
+            this.http.put<AuditLogModel>(`${this.baseUrl}/${id}`, model)
+        );
         return result;
     }
 }

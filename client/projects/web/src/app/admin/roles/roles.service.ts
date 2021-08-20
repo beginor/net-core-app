@@ -1,6 +1,6 @@
 import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
 
@@ -66,12 +66,9 @@ export class RolesService {
         }
         this.loading = true;
         try {
-            const result = await this.http.get<AppRoleResultModel>(
-                this.baseUrl,
-                {
-                    params: params
-                }
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<AppRoleResultModel>(this.baseUrl, { params })
+            );
             const total = result.total ?? 0;
             const data = result.data ?? [];
             this.total.next(total);
@@ -79,10 +76,12 @@ export class RolesService {
             this.showPagination = total > data.length;
         }
         catch (ex) {
-            this.errorHandler.handleError(ex.toString());
+            this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
-            this.ui.showAlert({ type: 'danger', message: '加载角色数据出错!'});
+            this.ui.showAlert(
+                { type: 'danger', message: '加载角色数据出错!'}
+            );
         }
         finally {
             this.loading = false;
@@ -106,15 +105,16 @@ export class RolesService {
         model: AppRoleModel
     ): Promise<AppRoleModel | undefined> {
         try {
-            const result = await this.http.post<AppRoleModel>(
-                this.baseUrl,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.post<AppRoleModel>(this.baseUrl, model)
+            );
             return result;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '创建角色出错！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '创建角色出错！' }
+            );
             return;
         }
     }
@@ -122,14 +122,16 @@ export class RolesService {
     /** 获取指定的角色 */
     public async getById(id: string): Promise<AppRoleModel | undefined> {
         try {
-            const result = await this.http.get<AppRoleModel>(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<AppRoleModel>(`${this.baseUrl}/${id}`)
+            );
             return result;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '获取指定的角色出错！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '获取指定的角色出错！' }
+            );
             return;
         }
     }
@@ -141,14 +143,16 @@ export class RolesService {
             return false;
         }
         try {
-            await this.http.delete(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            await lastValueFrom(
+                this.http.delete(`${this.baseUrl}/${id}`)
+            );
             return true;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '删除角色出错！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '删除角色出错！' }
+            );
             return false;
         }
     }
@@ -159,15 +163,16 @@ export class RolesService {
         model: AppRoleModel
     ): Promise<AppRoleModel | undefined> {
         try {
-            const result = await this.http.put<AppRoleModel>(
-                `${this.baseUrl}/${id}`,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.put<AppRoleModel>(`${this.baseUrl}/${id}`, model)
+            );
             return result;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '更新角色出错！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '更新角色出错！' }
+            );
             return;
         }
     }
@@ -192,14 +197,18 @@ export class RolesService {
         try {
             this.rolePrivileges = {};
             const url = `${this.baseUrl}/${roleId}/privileges`;
-            const privileges = await this.http.get<string[]>(url).toPromise();
+            const privileges = await lastValueFrom(
+                this.http.get<string[]>(url)
+            );
             for (const p of privileges) {
                 this.rolePrivileges[p] = true;
             }
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '获取角色权限出错！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '获取角色权限出错！' }
+            );
         }
     }
 
@@ -215,24 +224,28 @@ export class RolesService {
         if (!!this.rolePrivileges[privilege]) {
             try {
                 // remove privilege from role;
-                await this.http.delete(url).toPromise();
+                await lastValueFrom(this.http.delete(url));
                 this.rolePrivileges[privilege] = false;
             }
             catch (ex) {
                 this.errorHandler.handleError(ex);
-                this.ui.showAlert({ type: 'danger', message: '删除角色权限失败！' });
+                this.ui.showAlert(
+                    { type: 'danger', message: '删除角色权限失败！' }
+                );
                 this.rolePrivileges[privilege] = true;
             }
         }
         else {
             try {
                 // add privilege to role;
-                await this.http.post(url, null).toPromise();
+                await lastValueFrom(this.http.post(url, null));
                 this.rolePrivileges[privilege] = true;
             }
             catch (ex) {
                 this.errorHandler.handleError(ex);
-                this.ui.showAlert({ type: 'danger', message: '添加角色权限失败！' });
+                this.ui.showAlert(
+                    { type: 'danger', message: '添加角色权限失败！' }
+                );
                 this.rolePrivileges[privilege] = false;
             }
         }

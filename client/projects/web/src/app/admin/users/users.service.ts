@@ -1,6 +1,7 @@
 import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
 import { RolesService, AppRoleModel } from '../roles/roles.service';
@@ -53,12 +54,9 @@ export class UsersService {
         }
         this.loading = true;
         try {
-            const result = await this.http.get<UserSearchResult>(
-                this.baseUrl,
-                {
-                    params: params
-                }
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<UserSearchResult>(this.baseUrl, { params })
+            );
             const total = result.total ?? 0;
             const data = result.data ?? [];
             this.total.next(total);
@@ -69,7 +67,9 @@ export class UsersService {
             this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
-            this.ui.showAlert({ type: 'danger', message: '加载用户数据出错!'});
+            this.ui.showAlert(
+                { type: 'danger', message: '加载用户数据出错!'}
+            );
         }
         finally {
             this.loading = false;
@@ -93,15 +93,16 @@ export class UsersService {
         model: UserModel
     ): Promise<UserModel | undefined> {
         try {
-            const result = await this.http.post<UserModel>(
-                this.baseUrl,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.post<UserModel>(this.baseUrl, model)
+            );
             return result;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '创建用户出错！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '创建用户出错！' }
+            );
             return;
         }
     }
@@ -109,14 +110,16 @@ export class UsersService {
     /** 获取指定的用户 */
     public async getById(id: string): Promise<UserModel | undefined> {
         try {
-            const result = await this.http.get<UserModel>(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<UserModel>(`${this.baseUrl}/${id}`)
+            );
             return result;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '获取指定的用户出错！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '获取指定的用户出错！' }
+            );
             return;
         }
     }
@@ -128,14 +131,16 @@ export class UsersService {
             return false;
         }
         try {
-            await this.http.delete(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            await lastValueFrom(
+                this.http.delete(`${this.baseUrl}/${id}`)
+            );
             return true;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '删除用户出错！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '删除用户出错！' }
+            );
             return false;
         }
     }
@@ -146,15 +151,16 @@ export class UsersService {
         model: UserModel
     ): Promise<UserModel | undefined> {
         try {
-            const result = await this.http.put<UserModel>(
-                `${this.baseUrl}/${id}`,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.put<UserModel>(`${this.baseUrl}/${id}`, model)
+            );
             return result;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '更新用户出错！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '更新用户出错！' }
+            );
             return;
         }
     }
@@ -166,13 +172,15 @@ export class UsersService {
         }
         try {
             const url = `${this.baseUrl}/${id}/unlock`;
-            await this.http.put<null>(url, null).toPromise();
-            this.search();
+            await lastValueFrom(this.http.put<null>(url, null));
+            await this.search();
             return true;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '解锁用户失败！'});
+            this.ui.showAlert(
+                { type: 'danger', message: '解锁用户失败！'}
+            );
             return false;
         }
     }
@@ -180,13 +188,15 @@ export class UsersService {
     public async lockUser(id: string, lockoutEnd: string): Promise<boolean> {
         try {
             const url = `${this.baseUrl}/${id}/lock/${lockoutEnd}`;
-            await this.http.put<null>(url, null).toPromise();
+            await lastValueFrom(this.http.put<null>(url, null));
             await this.search();
             return true;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '锁定用户失败！'});
+            this.ui.showAlert(
+                { type: 'danger', message: '锁定用户失败！'}
+            );
             return false;
         }
     }
@@ -201,12 +211,14 @@ export class UsersService {
         }
         try {
             const url = `${this.baseUrl}/${id}/reset-pass`;
-            await this.http.put<ResetPasswordModel>(url, model).toPromise();
+            await lastValueFrom(this.http.put<ResetPasswordModel>(url, model));
             return true;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '重置用户密码失败！'});
+            this.ui.showAlert(
+                { type: 'danger', message: '重置用户密码失败！'}
+            );
             return false;
         }
     }
@@ -220,7 +232,9 @@ export class UsersService {
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '获取全部角色失败！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '获取全部角色失败！' }
+            );
         }
     }
 
@@ -228,12 +242,16 @@ export class UsersService {
     public async getUserRoles(userId: string): Promise<string[]> {
         try {
             const url = `${this.baseUrl}/${userId}/roles`;
-            const roles = await this.http.get<AppRoleModel[]>(url).toPromise();
+            const roles = await lastValueFrom(
+                this.http.get<AppRoleModel[]>(url)
+            );
             return roles.map(r => r.name);
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '获取用户角色失败！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '获取用户角色失败！' }
+            );
             return [];
         }
     }
@@ -246,18 +264,20 @@ export class UsersService {
         try {
             if (toAdd.length > 0) {
                 const rolesToAdd = toAdd.join(',');
-                const addUrl = `${this.baseUrl}/${userId}/roles/${rolesToAdd}`;
-                await this.http.put(addUrl, null).toPromise();
+                const url = `${this.baseUrl}/${userId}/roles/${rolesToAdd}`;
+                await lastValueFrom(this.http.put(url, null));
             }
             if (toDelete.length > 0) {
                 const rolesToDelete = toDelete.join(',');
-                const delUrl = `${this.baseUrl}/${userId}/roles/${rolesToDelete}`;
-                await this.http.delete(delUrl).toPromise();
+                const url = `${this.baseUrl}/${userId}/roles/${rolesToDelete}`;
+                await lastValueFrom(this.http.delete(url));
             }
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '保存用户角色失败！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '保存用户角色失败！' }
+            );
         }
     }
 

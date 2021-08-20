@@ -1,6 +1,8 @@
 import { ErrorHandler, Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
+import { lastValueFrom } from 'rxjs';
+
 import { UiService } from './ui.service';
 
 @Injectable({
@@ -23,14 +25,15 @@ export class ServerFolderService {
             const httpParams = new HttpParams()
                 .set('path', params.path as string)
                 .set('filter', params.filter as string);
-            const result = await this.http.get<ServerFolderContent>(
-                url,
-                { params: httpParams }
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<ServerFolderContent>(url, { params: httpParams })
+            );
             return result;
         }
         catch (ex) {
-            this.ui.showAlert({ type: 'warning', message: '无法获取服务器目录内容！' });
+            this.ui.showAlert(
+                { type: 'warning', message: '无法获取服务器目录内容！' }
+            );
             this.errorHandler.handleError(ex);
             return params;
         }
