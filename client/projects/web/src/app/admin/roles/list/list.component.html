@@ -71,25 +71,26 @@
                   <div class="btn-group btn-group-sm">
                     <button *ngIf="info.privileges['app_roles.read']"
                       class="btn btn-outline-secondary" ngbTooltip="详情"
-                      placement="top" [openDelay]="300"
+                      placement="top" [openDelay]="300" container="body"
                       (click)="showDetail(item.id, false)">
                       <svg-icon path="bi/info-square"></svg-icon>
                     </button>
                     <button *ngIf="info.privileges['app_roles.update']"
                       class="btn btn-outline-secondary" ngbTooltip="编辑"
-                      placement="top" [openDelay]="300"
+                      placement="top" [openDelay]="300" container="body"
                       (click)="showDetail(item.id, true)">
                       <svg-icon path="bi/pencil-square"></svg-icon>
                     </button>
                     <button *ngIf="info.privileges['app_roles.read_role_privileges']"
                       class="btn btn-outline-secondary" ngbTooltip="角色权限"
-                      placement="top" [openDelay]="300"
+                      placement="top" [openDelay]="300" container="body"
                       (click)="showPrivileges(item)">
                       <svg-icon path="bi/shield-lock"></svg-icon>
                     </button>
                     <button *ngIf="info.privileges['app_roles.delete']"
                       class="btn btn-outline-secondary" ngbTooltip="删除"
-                      placement="top" [openDelay]="300" (click)="delete(item.id)"
+                      placement="top" [openDelay]="300" container="body"
+                      (click)="delete(item.id)"
                       [disabled]="$any(item.userCount) > 0">
                       <svg-icon path="bi/trash"></svg-icon>
                     </button>
