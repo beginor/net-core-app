@@ -1,5 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+
+import { lastValueFrom } from 'rxjs';
+
 import { UiService } from 'projects/web/src/app/common';
 
 @Injectable({ providedIn: 'root' })
@@ -14,15 +17,15 @@ export class MetadataService {
     ) { }
 
     public async getStatus(id: string): Promise<void> {
-        await this.http.get(
-            `${this.url}/${id}/status`
-        ).toPromise();
+        await lastValueFrom(
+            this.http.get(`${this.url}/${id}/status`)
+        );
     }
 
     public async getSchemas(id: string): Promise<string[]> {
-        const schemas = await this.http.get<string[]>(
-            `${this.url}/${id}/schemas`
-        ).toPromise();
+        const schemas = await lastValueFrom(
+            this.http.get<string[]>(`${this.url}/${id}/schemas`)
+        );
         return schemas;
     }
 
@@ -31,10 +34,9 @@ export class MetadataService {
         if (!!schema) {
             params = params.set('schema', schema);
         }
-        const tables = await this.http.get<TableModel[]>(
-            `${this.url}/${id}/tables`,
-            { params }
-        ).toPromise();
+        const tables = await lastValueFrom(
+            this.http.get<TableModel[]>(`${this.url}/${id}/tables`, { params })
+        );
         return tables;
     }
 
@@ -45,10 +47,9 @@ export class MetadataService {
     ): Promise<ColumnModel[]> {
         const params = new HttpParams()
             .set('schema', schema);
-        const columns = await this.http.get<ColumnModel[]>(
-            `${this.url}/${id}/tables/${tableName}/columns`,
-            { params }
-        ).toPromise();
+        const columns = await lastValueFrom(
+            this.http.get<ColumnModel[]>(`${this.url}/${id}/tables/${tableName}/columns`, { params }) // eslint-disable-line max-len
+        );
         return columns;
     }
 

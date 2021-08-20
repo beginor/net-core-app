@@ -1,6 +1,7 @@
 import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
 
@@ -39,12 +40,9 @@ export class VectortileService {
         }
         this.loading = true;
         try {
-            const result = await this.http.get<VectortileResultModel>(
-                this.baseUrl,
-                {
-                    params: params
-                }
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<VectortileResultModel>(this.baseUrl, { params })
+            );
             const total = result.total ?? 0;
             const data = result.data ?? [];
             this.total.next(total);
@@ -81,10 +79,9 @@ export class VectortileService {
         model: VectortileModel
     ): Promise<VectortileModel | undefined> {
         try {
-            const result = await this.http.post<VectortileModel>(
-                this.baseUrl,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.post<VectortileModel>(this.baseUrl, model)
+            );
             return result;
         }
         catch (ex) {
@@ -99,9 +96,9 @@ export class VectortileService {
     /** 获取指定的矢量切片包 */
     public async getById(id: string): Promise<VectortileModel | undefined> {
         try {
-            const result = await this.http.get<VectortileModel>(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<VectortileModel>(`${this.baseUrl}/${id}`)
+            );
             return result;
         }
         catch (ex) {
@@ -120,9 +117,9 @@ export class VectortileService {
             return false;
         }
         try {
-            await this.http.delete(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            await lastValueFrom(
+                this.http.delete(`${this.baseUrl}/${id}`)
+            );
             return true;
         }
         catch (ex) {
@@ -140,10 +137,9 @@ export class VectortileService {
         model: VectortileModel
     ): Promise<VectortileModel | undefined> {
         try {
-            const result = await this.http.put<VectortileModel>(
-                `${this.baseUrl}/${id}`,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.put<VectortileModel>(`${this.baseUrl}/${id}`, model)
+            );
             return result;
         }
         catch (ex) {

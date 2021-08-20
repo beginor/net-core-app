@@ -1,6 +1,6 @@
 import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
 
@@ -40,12 +40,9 @@ export class DataSourceService {
         }
         this.loading = true;
         try {
-            const result = await this.http.get<DataSourceResultModel>(
-                this.baseUrl,
-                {
-                    params: params
-                }
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<DataSourceResultModel>(this.baseUrl, { params })
+            );
             const total = result.total ?? 0;
             const data = result.data ?? [];
             this.total.next(total);
@@ -68,9 +65,9 @@ export class DataSourceService {
     /** 加载全部数据源 */
     public async getAll(): Promise<DataSourceModel[]> {
         try {
-            const result = await this.http.get<DataSourceModel[]>(
-                `${this.apiRoot}/datasources-list`
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<DataSourceModel[]>(`${this.apiRoot}/datasources-list`) // eslint-disable-line max-len
+            );
             return result;
         }
         catch (ex) {
@@ -99,10 +96,9 @@ export class DataSourceService {
         model: DataSourceModel
     ): Promise<DataSourceModel | undefined> {
         try {
-            const result = await this.http.post<DataSourceModel>(
-                this.baseUrl,
-                model
-            ).toPromise();
+            const result = lastValueFrom(
+                await this.http.post<DataSourceModel>(this.baseUrl, model)
+            );
             return result;
         }
         catch (ex) {
@@ -117,9 +113,9 @@ export class DataSourceService {
     /** 获取指定的数据源 */
     public async getById(id: string): Promise<DataSourceModel | undefined> {
         try {
-            const result = await this.http.get<DataSourceModel>(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<DataSourceModel>(`${this.baseUrl}/${id}`)
+            );
             return result;
         }
         catch (ex) {
@@ -138,9 +134,9 @@ export class DataSourceService {
             return false;
         }
         try {
-            await this.http.delete(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            await lastValueFrom(
+                this.http.delete(`${this.baseUrl}/${id}`)
+            );
             return true;
         }
         catch (ex) {
@@ -158,10 +154,9 @@ export class DataSourceService {
         model: DataSourceModel
     ): Promise<DataSourceModel | undefined> {
         try {
-            const result = await this.http.put<DataSourceModel>(
-                `${this.baseUrl}/${id}`,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.put<DataSourceModel>(`${this.baseUrl}/${id}`, model)
+            );
             return result;
         }
         catch (ex) {

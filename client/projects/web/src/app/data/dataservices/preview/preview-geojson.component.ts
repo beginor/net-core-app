@@ -9,6 +9,7 @@ import {
     LngLatBoundsLike, Popup
 } from 'mapbox-gl';
 
+import { lastValueFrom } from 'rxjs';
 
 import { UiService } from '../../../common';
 import { DataServiceModel, DataServiceService } from '../dataservices.service';
@@ -48,7 +49,9 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
 
     public async ngAfterViewInit(): Promise<void> {
         await this.loadMapStyle();
-        this.options = await this.http.get<MapboxGlOptions>('./assets/mapbox-gl.options.json').toPromise();
+        this.options = await lastValueFrom(
+            this.http.get<MapboxGlOptions>('./assets/mapbox-gl.options.json')
+        );
         const map = new Map({
             accessToken: this.options.accessToken,
             style: this.options.style,
@@ -120,10 +123,10 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
                 this.popup.setLngLat(e.lngLat);
                 const html = [
                     '<div style="max-height: 200px; overflow: auto;">',
-                    '<table class="table table-bordered table-striped table-sm m-0"><tbody>',
+                    '<table class="table table-bordered table-striped table-sm m-0"><tbody>', // eslint-disable-line max-len
                 ];
                 for (const field of this.fields) {
-                    html.push(`<tr><td>${field}</td><td>${feature.properties?.[field]}</td></tr>`);
+                    html.push(`<tr><td>${field}</td><td>${feature.properties?.[field]}</td></tr>`); // eslint-disable-line max-len
                 }
                 html.push(`</tbody></table></div>`);
                 this.popup.setHTML(html.join(''));

@@ -1,9 +1,13 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import { lastValueFrom } from 'rxjs';
+
 import { AccountService } from 'app-shared';
 
-import { isLoaded, loadScript, loadModules, ILoadScriptOptions } from 'esri-loader';
+import {
+    isLoaded, loadScript, loadModules, ILoadScriptOptions
+} from 'esri-loader';
 
 @Injectable({
     providedIn: 'root'
@@ -22,9 +26,9 @@ export class ArcGisService {
         if (isLoaded()) {
             return;
         }
-        const opts = await this.http.get<ArcGisJsApiOptions>(
+        const opts = await lastValueFrom(this.http.get<ArcGisJsApiOptions>(
             'assets/arcgis-js-api.options.json'
-        ).toPromise();
+        ));
         this.opts = opts;
         const dojoConfig = opts.dojoConfig;
         Object.assign(window, { dojoConfig });

@@ -1,6 +1,9 @@
 import { Injectable, Inject, ErrorHandler } from '@angular/core';
-import { HttpClient, HttpEventType, HttpParams, HttpRequest } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import {
+    HttpClient, HttpEventType, HttpParams, HttpRequest
+} from '@angular/common/http';
+
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
 import { RolesService, AppRoleModel } from '../../admin/roles/roles.service';
@@ -42,12 +45,9 @@ export class DataServiceService {
         }
         this.loading = true;
         try {
-            const result = await this.http.get<DataServiceResultModel>(
-                this.baseUrl,
-                {
-                    params: params
-                }
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<DataServiceResultModel>(this.baseUrl, { params })
+            );
             const total = result.total ?? 0;
             const data = result.data ?? [];
             this.total.next(total);
@@ -84,10 +84,9 @@ export class DataServiceService {
         model: DataServiceModel
     ): Promise<DataServiceModel | undefined> {
         try {
-            const result = await this.http.post<DataServiceModel>(
-                this.baseUrl,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.post<DataServiceModel>(this.baseUrl, model)
+            );
             return result;
         }
         catch (ex) {
@@ -102,9 +101,9 @@ export class DataServiceService {
     /** 获取指定的数据服务 */
     public async getById(id: string): Promise<DataServiceModel | undefined> {
         try {
-            const result = await this.http.get<DataServiceModel>(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<DataServiceModel>(`${this.baseUrl}/${id}`)
+            );
             return result;
         }
         catch (ex) {
@@ -123,9 +122,9 @@ export class DataServiceService {
             return false;
         }
         try {
-            await this.http.delete(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            await lastValueFrom(
+                this.http.delete(`${this.baseUrl}/${id}`)
+            );
             return true;
         }
         catch (ex) {
@@ -143,10 +142,9 @@ export class DataServiceService {
         model: DataServiceModel
     ): Promise<DataServiceModel | undefined> {
         try {
-            const result = await this.http.put<DataServiceModel>(
-                `${this.baseUrl}/${id}`,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.put<DataServiceModel>(`${this.baseUrl}/${id}`, model)
+            );
             return result;
         }
         catch (ex) {
@@ -160,9 +158,9 @@ export class DataServiceService {
 
     public async getColumns(id: string): Promise<DataServiceFieldModel[]> {
         try {
-            const result = await this.http.get<DataServiceFieldModel[]>(
-                `${this.baseUrl}/${id}/columns`
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<DataServiceFieldModel[]>(`${this.baseUrl}/${id}/columns`) // eslint-disable-line max-len
+            );
             return result;
         }
         catch (ex) {
@@ -186,10 +184,9 @@ export class DataServiceService {
                     httpParams = httpParams.set(key, val);
                 }
             }
-            const result = await this.http.get<PaginatedResult>(
-                `${this.baseUrl}/${id}/data`,
-                { params: httpParams }
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<PaginatedResult>(`${this.baseUrl}/${id}/data`, { params: httpParams }) // eslint-disable-line max-len
+            );
             return result;
         }
         catch (ex) {
@@ -226,10 +223,9 @@ export class DataServiceService {
                     httpParams = httpParams.set(key, val);
                 }
             }
-            const result = await this.http.get<number>(
-                `${this.baseUrl}/${id}/count`,
-                { params: httpParams }
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<number>(`${this.baseUrl}/${id}/count`, { params: httpParams }) // eslint-disable-line max-len
+            );
             return result;
         }
         catch (ex) {
@@ -270,7 +266,7 @@ export class DataServiceService {
         params: any,
         progressCallback: (total: number, loaded: number) => void
     ): Promise<T> {
-        return new Promise<any>((resolve, reject) => {
+        return new Promise<T>((resolve, reject) => {
             let httpParams = new HttpParams();
             for (const key in params) {
                 if (params.hasOwnProperty(key)) {
@@ -283,23 +279,23 @@ export class DataServiceService {
                 url,
                 { params: httpParams, reportProgress: true }
             );
-            this.http.request<T>(req).subscribe(
-                e => {
+            this.http.request<T>(req).subscribe({
+                next: e => {
                     if (e.type === HttpEventType.DownloadProgress) {
                         progressCallback(e.total || 0, e.loaded);
                     }
                     else if (e.type === HttpEventType.Response) {
-                        resolve(e.body);
+                        resolve(e.body as T);
                     }
                 },
-                ex => {
+                error: ex => {
                     this.errorHandler.handleError(ex);
                     this.ui.showAlert(
                         { type: 'danger', message: '获取数据服务的数据出错！' }
                     );
                     reject(ex);
                 }
-            );
+            });
         });
     }
 

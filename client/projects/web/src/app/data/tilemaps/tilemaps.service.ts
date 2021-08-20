@@ -1,6 +1,7 @@
 import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
 
@@ -40,12 +41,9 @@ export class TileMapService {
         }
         this.loading = true;
         try {
-            const result = await this.http.get<TileMapResultModel>(
-                this.baseUrl,
-                {
-                    params: params
-                }
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<TileMapResultModel>(this.baseUrl, { params })
+            );
             const total = result.total ?? 0;
             const data = result.data ?? [];
             this.total.next(total);
@@ -82,10 +80,9 @@ export class TileMapService {
         model: TileMapModel
     ): Promise<TileMapModel | undefined> {
         try {
-            const result = await this.http.post<TileMapModel>(
-                this.baseUrl,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.post<TileMapModel>(this.baseUrl, model)
+            );
             return result;
         }
         catch (ex) {
@@ -100,9 +97,9 @@ export class TileMapService {
     /** 获取指定的切片地图 */
     public async getById(id: string): Promise<TileMapModel | undefined> {
         try {
-            const result = await this.http.get<TileMapModel>(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<TileMapModel>(`${this.baseUrl}/${id}`)
+            );
             return result;
         }
         catch (ex) {
@@ -121,9 +118,9 @@ export class TileMapService {
             return false;
         }
         try {
-            await this.http.delete(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            await lastValueFrom(
+                this.http.delete(`${this.baseUrl}/${id}`)
+            );
             return true;
         }
         catch (ex) {
@@ -141,10 +138,9 @@ export class TileMapService {
         model: TileMapModel
     ): Promise<TileMapModel | undefined> {
         try {
-            const result = await this.http.put<TileMapModel>(
-                `${this.baseUrl}/${id}`,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.put<TileMapModel>(`${this.baseUrl}/${id}`, model)
+            );
             return result;
         }
         catch (ex) {

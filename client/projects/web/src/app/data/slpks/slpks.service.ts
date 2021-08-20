@@ -1,6 +1,7 @@
 import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
 
@@ -39,12 +40,9 @@ export class SlpkService {
         }
         this.loading = true;
         try {
-            const result = await this.http.get<SlpkResultModel>(
-                this.baseUrl,
-                {
-                    params: params
-                }
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<SlpkResultModel>(this.baseUrl, { params })
+            );
             const total = result.total ?? 0;
             const data = result.data ?? [];
             this.total.next(total);
@@ -81,10 +79,9 @@ export class SlpkService {
         model: SlpkModel
     ): Promise<SlpkModel | undefined> {
         try {
-            const result = await this.http.post<SlpkModel>(
-                this.baseUrl,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.post<SlpkModel>(this.baseUrl, model)
+            );
             return result;
         }
         catch (ex) {
@@ -99,9 +96,9 @@ export class SlpkService {
     /** 获取指定的slpk 航拍模型 */
     public async getById(id: string): Promise<SlpkModel | undefined> {
         try {
-            const result = await this.http.get<SlpkModel>(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<SlpkModel>(`${this.baseUrl}/${id}`)
+            );
             return result;
         }
         catch (ex) {
@@ -120,9 +117,9 @@ export class SlpkService {
             return false;
         }
         try {
-            await this.http.delete(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            await lastValueFrom(
+                this.http.delete(`${this.baseUrl}/${id}`)
+            );
             return true;
         }
         catch (ex) {
@@ -140,10 +137,9 @@ export class SlpkService {
         model: SlpkModel
     ): Promise<SlpkModel | undefined> {
         try {
-            const result = await this.http.put<SlpkModel>(
-                `${this.baseUrl}/${id}`,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.put<SlpkModel>(`${this.baseUrl}/${id}`, model)
+            );
             return result;
         }
         catch (ex) {
