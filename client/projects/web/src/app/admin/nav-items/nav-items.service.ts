@@ -1,6 +1,6 @@
 import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { UiService, NavigationNode } from 'projects/web/src/app/common';
 import { RolesService, AppRoleModel } from '../roles/roles.service';
@@ -49,12 +49,9 @@ export class NavItemsService {
         }
         this.loading = true;
         try {
-            const result = await this.http.get<AppNavItemResultModel>(
-                this.baseUrl,
-                {
-                    params: params
-                }
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<AppNavItemResultModel>(this.baseUrl, { params: params }) // eslint-disable-line max-len
+            );
             const total = result.total ?? 0;
             const data = result.data ?? [];
             this.total.next(total);
@@ -65,7 +62,9 @@ export class NavItemsService {
             this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
-            this.uiService.showAlert({ type: 'danger', message: '加载导航节点（菜单）数据出错!'});
+            this.uiService.showAlert(
+                { type: 'danger', message: '加载导航节点（菜单）数据出错!'}
+            );
         }
         finally {
             this.loading = false;
@@ -89,10 +88,9 @@ export class NavItemsService {
         model: NavItemModel
     ): Promise<NavItemModel | undefined> {
         try {
-            const result = await this.http.post<NavItemModel>(
-                this.baseUrl,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.post<NavItemModel>(this.baseUrl, model)
+            );
             return result;
         }
         catch (ex) {
@@ -107,9 +105,9 @@ export class NavItemsService {
     /** 获取指定的导航节点（菜单） */
     public async getById(id: string): Promise<NavItemModel | undefined> {
         try {
-            const result = await this.http.get<NavItemModel>(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<NavItemModel>(`${this.baseUrl}/${id}`)
+            );
             return result;
         }
         catch (ex) {
@@ -128,9 +126,9 @@ export class NavItemsService {
             return false;
         }
         try {
-            await this.http.delete(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            await lastValueFrom(
+                this.http.delete(`${this.baseUrl}/${id}`)
+            );
             return true;
         }
         catch (ex) {
@@ -148,10 +146,9 @@ export class NavItemsService {
         model: NavItemModel
     ): Promise<NavItemModel | undefined> {
         try {
-            const result = await this.http.put<NavItemModel>(
-                `${this.baseUrl}/${id}`,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.put<NavItemModel>(`${this.baseUrl}/${id}`, model)
+            );
             return result;
         }
         catch (ex) {
@@ -179,8 +176,9 @@ export class NavItemsService {
         const options: MenuOption[] = [];
         try {
             const menuUrl = `${this.apiRoot}/account/menu`;
-            const rootNode = await this.http.get<NavigationNode>(menuUrl)
-                .toPromise();
+            const rootNode = await lastValueFrom(
+                this.http.get<NavigationNode>(menuUrl)
+            );
             const option = { level: 0, id: rootNode.id, title: rootNode.title };
             options.push(option);
             this.pushChildrenRecursively(

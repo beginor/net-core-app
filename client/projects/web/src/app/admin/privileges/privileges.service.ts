@@ -1,6 +1,6 @@
 import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { UiService} from 'projects/web/src/app/common';
 
@@ -43,10 +43,9 @@ export class AppPrivilegeService {
         }
         this.loading = true;
         try {
-            const result = await this.http.get<AppPrivilegeResultModel>(
-                this.baseUrl,
-                { params: params }
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<AppPrivilegeResultModel>(this.baseUrl, { params }) // eslint-disable-line max-len
+            );
             const total = result.total ?? 0;
             const data = result.data ?? [];
             this.total.next(total);
@@ -57,7 +56,9 @@ export class AppPrivilegeService {
             this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
-            this.ui.showAlert({ type: 'danger', message: '加载系统权限数据出错！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '加载系统权限数据出错！' }
+            );
         }
         finally {
             this.loading = false;
@@ -79,15 +80,16 @@ export class AppPrivilegeService {
         model: AppPrivilegeModel
     ): Promise<AppPrivilegeModel | undefined> {
         try {
-            const result = await this.http.post<AppPrivilegeModel>(
-                this.baseUrl,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.post<AppPrivilegeModel>(this.baseUrl, model)
+            );
             return result;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '创建系统权限出错！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '创建系统权限出错！' }
+            );
             return;
         }
     }
@@ -95,14 +97,16 @@ export class AppPrivilegeService {
     /** 获取指定的 系统权限 */
     public async getById(id: string): Promise<AppPrivilegeModel | undefined> {
         try {
-            const result = await this.http.get<AppPrivilegeModel>(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.get<AppPrivilegeModel>(`${this.baseUrl}/${id}`)
+            );
             return result;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '加载系统权限数据出错！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '加载系统权限数据出错！' }
+            );
             return;
         }
     }
@@ -114,14 +118,16 @@ export class AppPrivilegeService {
             return false;
         }
         try {
-            await this.http.delete(
-                `${this.baseUrl}/${id}`
-            ).toPromise();
+            await lastValueFrom(
+                this.http.delete(`${this.baseUrl}/${id}`)
+            );
             return true;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '删除系统权限出错！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '删除系统权限出错！' }
+            );
             return false;
         }
     }
@@ -132,15 +138,16 @@ export class AppPrivilegeService {
         model: AppPrivilegeModel
     ): Promise<AppPrivilegeModel | undefined> {
         try {
-            const result = await this.http.put<AppPrivilegeModel>(
-                `${this.baseUrl}/${id}`,
-                model
-            ).toPromise();
+            const result = await lastValueFrom(
+                this.http.put<AppPrivilegeModel>(`${this.baseUrl}/${id}`, model)
+            );
             return result;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '更新系统权限出错！' });
+            this.ui.showAlert(
+                { type: 'danger', message: '更新系统权限出错！' }
+            );
             return;
         }
     }
@@ -148,14 +155,16 @@ export class AppPrivilegeService {
     /** 获取模块名称 */
     public async getModules(): Promise<void> {
         try {
-            const modules = await this.http.get<string[]>(
-                `${this.apiRoot}/modules`
-            ).toPromise();
+            const modules = await lastValueFrom(
+                this.http.get<string[]>(`${this.apiRoot}/modules`)
+            );
             this.modules.next(modules);
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert({ type: 'danger', message: '加载模块列表出错!'});
+            this.ui.showAlert(
+                { type: 'danger', message: '加载模块列表出错!'}
+            );
             this.modules.next([]);
         }
     }

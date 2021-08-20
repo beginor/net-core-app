@@ -3,7 +3,8 @@ import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
+
 import { AccountService } from 'app-shared';
 
 @Injectable({
@@ -114,18 +115,18 @@ export class NavigationService {
 
     private loadAccountMenu(): void {
         const menuUrl = `${this.apiRoot}/account/menu`;
-        this.http.get<NavigationNode>(menuUrl)
-            .toPromise()
-            .then(node => {
-                this.setupNavigationNodes(node);
-                this.updateTitle(node.title as string);
-                if (!this.initialized) {
-                    this.initialized = true;
-                }
-            })
-            .catch(ex => {
-                this.errorHandler.handleError(ex);
-            });
+        lastValueFrom(
+            this.http.get<NavigationNode>(menuUrl)
+        ).then(node => {
+            this.setupNavigationNodes(node);
+            this.updateTitle(node.title as string);
+            if (!this.initialized) {
+                this.initialized = true;
+            }
+        })
+        .catch(ex => {
+            this.errorHandler.handleError(ex);
+        });
     }
 
 }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 
-import { BehaviorSubject, Subscription, interval } from 'rxjs';
+import { BehaviorSubject, Subscription, interval, lastValueFrom } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -36,7 +36,7 @@ export class AccountService {
     public async getInfo(): Promise<AccountInfo> {
         try {
             const url = this.apiRoot + '/account/info';
-            const info = await this.http.get<AccountInfo>(url).toPromise();
+            const info = await lastValueFrom(this.http.get<AccountInfo>(url));
             if (!!info.token) {
                 this.saveToken(info.token);
                 delete info.token;
@@ -71,8 +71,9 @@ export class AccountService {
             password: btoa(model.password as string),
             isPersistent: model.isPersistent
         };
-        const token = await this.http.post(url, loginModel, { responseType: 'text' })
-            .toPromise();
+        const token = await lastValueFrom(
+            this.http.post(url, loginModel, { responseType: 'text' })
+        );
         this.saveToken(token);
     }
 
