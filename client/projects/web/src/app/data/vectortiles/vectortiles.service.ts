@@ -202,6 +202,14 @@ export interface VectortileModel {
     defaultStyle?: string;
     /** 样式内容 */
     styleContent?: string;
+    /** 最小纬度 */
+    minLatitude?: number;
+    /** 最大纬度 */
+    maxLatitude?: number;
+    /** 最小经度 */
+    minLongitude?: number;
+    /** 最大经度 */
+    maxLongitude?: number;
 }
 
 /** 矢量切片包 搜索参数 */

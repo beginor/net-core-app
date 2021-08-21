@@ -37,6 +37,7 @@
         [class.is-valid]="directory.valid"
       />
     </div>
+    <hr class="mt-0 mb-2" />
     <div class="row">
       <div class="col-6">
         <div class="mb-3">
@@ -57,12 +58,58 @@
         </div>
       </div>
     </div>
-    <div class="mb-3" *ngIf="!!styleFileName">
-      <label class="form-label text-muted">默认样式</label>
+    <hr class="mt-0 mb-2" />
+    <div class="row">
+      <div class="col">
+        <div class="mb-3">
+          <label class="form-label text-muted" for="minLongitude">最小经度</label>
+          <input class="form-control text-end" type="number" step="0.1" min="-180" max="180"
+            id="minLongitude" name="minLongitude"
+            placeholder="请输入矢量切片包的最小经度" [(ngModel)]="model.minLongitude"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <div class="mb-3">
+          <label class="form-label text-muted" for="maxLongitude">最大经度</label>
+          <input class="form-control text-end" type="number" step="0.1" min="-180" max="180"
+            id="maxLongitude" name="maxLongitude"
+            placeholder="请输入矢量切片包的最大经度" [(ngModel)]="model.maxLongitude"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="mb-3">
+          <label class="form-label text-muted" for="minLatitude">最小纬度</label>
+          <input class="form-control text-end" type="number" step="0.1" min="-90" max="90"
+            id="minLatitude" name="minLatitude"
+            placeholder="请输入矢量切片包的最小纬度" [(ngModel)]="model.minLatitude"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <div class="mb-3">
+          <label class="form-label text-muted" for="maxLatitude">最大纬度</label>
+          <input class="form-control text-end" type="number" step="0.1" min="-90" max="90"
+            id="maxLatitude" name="maxLatitude"
+            placeholder="请输入矢量切片包的最大纬度" [(ngModel)]="model.maxLatitude"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
+    </div>
+    <hr class="mt-0 mb-2" />
+    <div class="mb-3" *ngIf="!editable && !!styleFileName">
+      <label class="form-label text-muted">当前默认样式</label>
       <div class="form-control-plaintext">{{styleFileName}}</div>
     </div>
     <div class="mb-3" *ngIf="editable">
-      <label class="form-label text-muted" for="styleFile">选择默认样式</label>
+      <label class="form-label text-muted" for="styleFile">选择新的默认样式</label>
       <input class="form-control" type="file" id="styleFile" name="styleFile" #styleFile >
     </div>
   </div>

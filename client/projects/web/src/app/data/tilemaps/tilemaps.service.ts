@@ -180,16 +180,22 @@ export interface TileMapModel {
     contentType?: string;
     /** 是否为紧凑格式 */
     isBundled?: boolean;
-    /** 创建者id */
-    creatorId?: string;
+    /** 最小缩放级别 */
+    minLevel?: number;
+    /** 最大缩放级别 */
+    maxLevel?: number;
+    /** 最小纬度 */
+    minLatitude?: number;
+    /** 最大纬度 */
+    maxLatitude?: number;
+    /** 最小经度 */
+    minLongitude?: number;
+    /** 最大经度 */
+    maxLongitude?: number;
     /** 创建时间 */
     createdAt?: string;
-    /** 更新者id */
-    updaterId?: string;
     /** 更新时间 */
     updatedAt?: string;
-    /** 是否删除 */
-    isDeleted?: boolean;
 }
 
 /** 切片地图 搜索参数 */

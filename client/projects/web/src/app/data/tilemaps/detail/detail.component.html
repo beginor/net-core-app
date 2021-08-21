@@ -17,8 +17,7 @@
   <div class="card-body">
     <div class="row">
       <div class="col">
-        <div class="mb-3" [class.is-valid]="name.valid"
-          [class.is-invalid]="!(name.valid || name.pristine)">
+        <div class="mb-3">
           <label class="form-label text-muted" for="name">栅格切片包名称  <i class="text-danger">*</i> </label>
           <input class="form-control" type="text" id="name" name="name"
             placeholder="请输入栅格切片包名称 ..." [(ngModel)]="model.name"
@@ -29,8 +28,7 @@
         </div>
       </div>
       <div class="col">
-        <div class="mb-3" [class.is-valid]="contentType.valid"
-          [class.is-invalid]="!(contentType.valid || contentType.pristine)">
+        <div class="mb-3">
           <label class="form-label text-muted" for="contentType">内容类型  <i class="text-danger">*</i> </label>
           <input class="form-control" type="text" id="contentType" name="contentType"
             placeholder="请输入内容类型 ..." [(ngModel)]="model.contentType"
@@ -96,6 +94,72 @@
       <div class="col-auto" *ngIf="!editable">
         <div class="mb-3 mb-1">
           <div class="form-control-plaintext p-0">{{model.createdAt | date:'yyyy年M月d日'}}创建，{{model.updatedAt | date:'yyyy年M月d日'}}更新。</div>
+        </div>
+      </div>
+    </div>
+    <hr class="mt-0 mb-2" />
+    <div class="row">
+      <div class="col">
+        <div class="mb-3">
+          <label class="form-label text-muted" for="minLevel">最小缩放级别</label>
+          <input class="form-control text-end" type="number" step="1" min="0" max="32"
+            id="minLevel" name="minLevel"
+            placeholder="请输入栅格切片包的最小缩放级别" [(ngModel)]="model.minLevel"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <label class="form-label text-muted" for="maxLevel">最大缩放级别</label>
+        <input class="form-control text-end" type="number" step="1" min="0" max="32"
+          id="maxLevel" name="maxLevel"
+          placeholder="请输入栅格切片包的最大缩放级别" [(ngModel)]="model.maxLevel"
+          [disabled]="!editable"
+        />
+      </div>
+    </div>
+    <hr class="mt-0 mb-2" />
+    <div class="row">
+      <div class="col">
+        <div class="mb-3">
+          <label class="form-label text-muted" for="minLongitude">最小经度</label>
+          <input class="form-control text-end" type="number" step="0.1" min="-180" max="180"
+            id="minLongitude" name="minLongitude"
+            placeholder="请输入栅格切片包的最小经度" [(ngModel)]="model.minLongitude"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <div class="mb-3">
+          <label class="form-label text-muted" for="maxLongitude">最大经度</label>
+          <input class="form-control text-end" type="number" step="0.1" min="-180" max="180"
+            id="maxLongitude" name="maxLongitude"
+            placeholder="请输入栅格切片包的最大经度" [(ngModel)]="model.maxLongitude"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="mb-3">
+          <label class="form-label text-muted" for="minLatitude">最小纬度</label>
+          <input class="form-control text-end" type="number" step="0.1" min="-90" max="90"
+            id="minLatitude" name="minLatitude"
+            placeholder="请输入栅格切片包的最小纬度" [(ngModel)]="model.minLatitude"
+            [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <div class="mb-3">
+          <label class="form-label text-muted" for="maxLatitude">最大纬度</label>
+          <input class="form-control text-end" type="number" step="0.1" min="-90" max="90"
+            id="maxLatitude" name="maxLatitude"
+            placeholder="请输入栅格切片包的最大纬度" [(ngModel)]="model.maxLatitude"
+            [disabled]="!editable"
+          />
         </div>
       </div>
     </div>
