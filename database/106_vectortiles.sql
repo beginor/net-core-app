@@ -10,6 +10,10 @@ create table public.vectortiles
     min_zoom smallint,
     max_zoom smallint,
     default_style character varying(32),
+    min_latitude numeric(10, 8),
+    max_latitude numeric(10, 8),
+    min_longitude numeric(11, 8),
+    max_longitude numeric(11, 8),
     creator_id character varying(32) collate pg_catalog."default" not null,
     created_at timestamp without time zone not null,
     updater_id character varying(32) collate pg_catalog."default" not null,
@@ -68,3 +72,15 @@ comment on column public.vectortiles.is_deleted
 
 comment on column public.vectortiles.default_style
     is '默认样式';
+
+comment on column public.vectortiles.min_latitude
+    is '最小纬度';
+
+comment on column public.vectortiles.max_latitude
+    is '最大纬度';
+
+comment on column public.vectortiles.min_longitude
+    is '最小经度';
+
+comment on column public.vectortiles.max_longitude
+    is '最大经度';

@@ -23,28 +23,29 @@ export class ListComponent implements OnInit {
         this.loadData();
     }
 
-    public async loadData(): Promise<void> {
-        await this.vm.search();
+    public loadData(): void {
+        void this.vm.search();
     }
 
     public showDetail(id: string, editable: boolean): void {
-        this.router.navigate(
+        void this.router.navigate(
             ['./', id, { editable: editable }],
             { relativeTo: this.route, skipLocationChange: true }
         );
     }
 
-    public async delete(id: string): Promise<void> {
-        const deleted = await this.vm.delete(id);
-        if (deleted) {
-            this.vm.search();
-        }
+    public delete(id: string): void {
+        void this.vm.delete(id).then(deleted => {
+            if (deleted) {
+                void this.vm.search();
+            }
+        });
     }
 
-    public async resetSearch(): Promise<void> {
+    public resetSearch(): void {
         this.vm.searchModel.keywords = '';
         this.vm.searchModel.skip = 0;
-        this.vm.search();
+        void this.vm.search();
     }
 
 }

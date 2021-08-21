@@ -21,6 +21,17 @@ namespace Beginor.GisHub.TileMap.Models {
         public string DefaultStyle { get; set; }
         /// <summary>样式内容</summary>
         public string StyleContent { get; set; }
+        /// <summary>最小缩放级别</summary>
+        public short MinLevel { get; set; }
+        /// <summary>最大缩放级别</summary>
+        public short MaxLevel { get; set; }
+        /// <summary>最小纬度</summary>
+        public double MinLatitude { get; set; }
+        /// <summary>最大纬度</summary>
+        public double MaxLatitude { get; set; }
+        /// <summary>最小经度</summary>
+        public double MinLongitude { get; set; }
+        /// <summary>最大经度</summary>
     }
 
     /// <summary>矢量切片包搜索参数</summary>

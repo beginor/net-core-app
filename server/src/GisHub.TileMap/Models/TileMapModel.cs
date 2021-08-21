@@ -26,10 +26,18 @@ namespace Beginor.GisHub.TileMap.Models {
         public short MinLevel { get; set; }
         /// <summary>最大缩放级别</summary>
         public short MaxLevel { get; set; }
+        /// <summary>最小纬度</summary>
+        public double MinLatitude { get; set; }
+        /// <summary>最大纬度</summary>
+        public double MaxLatitude { get; set; }
+        /// <summary>最小经度</summary>
+        public double MinLongitude { get; set; }
+        /// <summary>最大经度</summary>
+        public double MaxLongitude { get; set; }
         /// <summary>创建时间</summary>
-        public virtual DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
         /// <summary>更新时间</summary>
-        public virtual DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
     }
 

@@ -30,6 +30,21 @@ namespace Beginor.GisHub.TileMap.Data {
 
         [Property(Name = "DefaultStyle", Column = "default_style", Type = "string", Length = 32, NotNull = false)]
         public virtual string DefaultStyle { get; set; }
+        /// <summary>最小纬度</summary>
+        [Property(Name = "MinLatitude", Column = "min_latitude", Type = "double", NotNull = false)]
+        public virtual double MinLatitude { get; set; }
+
+        /// <summary>最大纬度</summary>
+        [Property(Name = "MaxLatitude", Column = "max_latitude", Type = "double", NotNull = false)]
+        public virtual double MaxLatitude { get; set; }
+
+        /// <summary>最小经度</summary>
+        [Property(Name = "MinLongitude", Column = "min_longitude", Type = "double", NotNull = false)]
+        public virtual double MinLongitude { get; set; }
+
+        /// <summary>最大经度</summary>
+        [Property(Name = "MaxLongitude", Column = "max_longitude", Type = "double", NotNull = false)]
+        public virtual double MaxLongitude { get; set; }
 
         /// <summary>创建者id</summary>
         [Property(Name = "CreatorId", Column = "creator_id", Type = "string", NotNull = true, Length = 32)]
