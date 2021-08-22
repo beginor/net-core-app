@@ -10,6 +10,7 @@ using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using Beginor.GisHub.Common;
+using Beginor.GisHub.Geo.Esri;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.TileMap.Models;
 using NHibernate;
@@ -142,10 +143,10 @@ namespace Beginor.GisHub.TileMap.Data {
                 };
                 var extent = cachedItem.Extent;
                 if (extent != null) {
-                    cachedEntity.MinLongitude = extent[0];
-                    cachedEntity.MinLatitude = extent[1];
-                    cachedEntity.MaxLongitude = extent[2];
-                    cachedEntity.MaxLatitude = extent[3];
+                    cachedEntity.MinLongitude = extent.Xmin;
+                    cachedEntity.MinLatitude = extent.Ymin;
+                    cachedEntity.MaxLongitude = extent.Xmax;
+                    cachedEntity.MaxLatitude = extent.Ymax;
                 }
                 return cachedEntity;
             }
@@ -206,18 +207,26 @@ namespace Beginor.GisHub.TileMap.Data {
             return JsonDocument.Parse(stream).RootElement;
         }
 
-        private void WriteExtentToJson(Utf8JsonWriter writer, double[] extent) {
-            writer.WriteStartObject();
-            writer.WriteNumber("xmin", extent[0]);
-            writer.WriteNumber("ymin", extent[1]);
-            writer.WriteNumber("xmax", extent[2]);
-            writer.WriteNumber("ymax", extent[3]);
-            writer.WritePropertyName("spatialReference");
-            writer.WriteStartObject();
-            writer.WriteNumber("wkid", 4326);
-            writer.WriteNumber("latestWkid", 4326);
-            writer.WriteEndObject();
-            writer.WriteEndObject();
+        private void WriteExtentToJson(Utf8JsonWriter writer, AgsExtent extent) {
+            // JsonSerializer.Serialize(writer, extent, )
+            extent = (AgsExtent)WebMercator.FromWgs84(extent);
+            JsonSerializer.Serialize(
+                writer,
+                extent,
+            new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            // writer.WriteStartObject();
+            // writer.WriteNumber("xmin", extent.Xmin);
+            // writer.WriteNumber("ymin", extent.Ymin);
+            // writer.WriteNumber("xmax", extent.Xmax);
+            // writer.WriteNumber("ymax", extent.Ymax);
+            // writer.WritePropertyName("spatialReference");
+            // writer.WriteStartObject();
+            // writer.WriteNumber("wkid", extent.SpatialReference.Wkid);
+            // if (extent.SpatialReference.LatestWkid.HasValue) {
+            //     writer.WriteNumber("latestWkid", extent.SpatialReference.LatestWkid.Value);
+            // }
+            // writer.WriteEndObject();
+            // writer.WriteEndObject();
         }
 
         public async Task<DateTimeOffset?> GetTileModifiedTimeAsync(long id, int level, int row, int col) {

@@ -1,4 +1,5 @@
 using System;
+using Beginor.GisHub.Geo.Esri;
 
 namespace Beginor.GisHub.TileMap.Data {
 
@@ -11,7 +12,7 @@ namespace Beginor.GisHub.TileMap.Data {
         public bool IsBundled { get; set; }
         public short MinLevel { get; set; }
         public short MaxLevel { get; set; }
-        public double[] Extent { get; set; }
+        public AgsExtent Extent { get; set; }
     }
 
 }
