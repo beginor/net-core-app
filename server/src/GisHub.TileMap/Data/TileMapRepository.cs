@@ -23,15 +23,18 @@ namespace Beginor.GisHub.TileMap.Data {
 
         private IDistributedCache cache;
         private IServerFolderRepository serverFolderRepository;
+        private IAppJsonDataRepository jsonRepository;
 
         public TileMapRepository(
             ISession session,
             IMapper mapper,
             IDistributedCache cache,
-            IServerFolderRepository serverFolderRepository
+            IServerFolderRepository serverFolderRepository,
+            IAppJsonDataRepository jsonRepository
         ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
             this.serverFolderRepository = serverFolderRepository ?? throw new ArgumentNullException(nameof(serverFolderRepository));
+            this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
         }
 
         /// <summary>搜索 切片地图 ，返回分页结果。</summary>
@@ -94,6 +97,7 @@ namespace Beginor.GisHub.TileMap.Data {
             await Session.FlushAsync(token);
             Mapper.Map(entity, model);
             await cache.RemoveAsync(id.ToString(), token);
+            await jsonRepository.DeleteAsync(id);
         }
 
         public async Task DeleteAsync(
@@ -108,6 +112,7 @@ namespace Beginor.GisHub.TileMap.Data {
                 entity.IsDeleted = true;
                 await Session.UpdateAsync(entity, token);
                 await Session.FlushAsync(token);
+                await jsonRepository.DeleteAsync(id);
             }
             await cache.RemoveAsync(id.ToString(), token);
         }
@@ -131,49 +136,34 @@ namespace Beginor.GisHub.TileMap.Data {
             var key = id.ToString();
             var cachedItem = await cache.GetAsync<TileMapCacheItem>(key);
             if (cachedItem != null) {
-                var cachedEntity = new TileMapEntity {
-                    Id = id,
-                    Name = cachedItem.Name,
-                    CacheDirectory = cachedItem.CacheDirectory,
-                    MapTileInfoPath = cachedItem.MapTileInfoPath,
-                    ContentType = cachedItem.ContentType,
-                    IsBundled = cachedItem.IsBundled,
-                    MinLevel = cachedItem.MinLevel,
-                    MaxLevel = cachedItem.MaxLevel
-                };
-                var extent = cachedItem.Extent;
-                if (extent != null) {
-                    cachedEntity.MinLongitude = extent.Xmin;
-                    cachedEntity.MinLatitude = extent.Ymin;
-                    cachedEntity.MaxLongitude = extent.Xmax;
-                    cachedEntity.MaxLatitude = extent.Ymax;
-                }
-                return cachedEntity;
+                return cachedItem.ToEntity();
             }
-            var entity = await Session.Query<TileMapEntity>().FirstOrDefaultAsync(e => e.Id == id);
+            var entity = await Session.GetAsync<TileMapEntity>(id);
             if (entity == null) {
                 throw new TileNotFoundException($"Tilemap {id} doesn't exists in database.");
             }
-            entity.CacheDirectory = await serverFolderRepository.GetPhysicalPathAsync(entity.CacheDirectory);
-            entity.MapTileInfoPath = await serverFolderRepository.GetPhysicalPathAsync(entity.MapTileInfoPath);
-            var cacheItem = new TileMapCacheItem {
-                Name = entity.Name,
-                CacheDirectory = entity.CacheDirectory,
-                MapTileInfoPath = entity.MapTileInfoPath,
-                ContentType = entity.ContentType,
-                IsBundled = entity.IsBundled,
-                ModifiedTime = null,
-                MinLevel = entity.MinLevel,
-                MaxLevel = entity.MaxLevel,
-                Extent = entity.GetExtent()
-            };
+            var cacheDirectory = await serverFolderRepository.GetPhysicalPathAsync(entity.CacheDirectory);
+            var mapTileInfoPath = await serverFolderRepository.GetPhysicalPathAsync(entity.MapTileInfoPath);
+            var cacheItem = entity.ToCache();
+            cacheItem.CacheDirectory = cacheDirectory;
+            cacheItem.MapTileInfoPath = mapTileInfoPath;
             await cache.SetAsync(key, cacheItem);
-            return entity;
+            return cacheItem.ToEntity();
         }
 
         public async Task<JsonElement> GetTileMapInfoAsync(long id) {
-            // todo: 用 .net 6 重构
+            var tileMapInfo = await jsonRepository.GetValueByIdAsync(id);
+            if (tileMapInfo.ValueKind != JsonValueKind.Undefined) {
+                return tileMapInfo;
+            }
             var entity = await GetTileMapByIdAsync(id);
+            tileMapInfo = CreateTileMapInfo(entity);
+            await jsonRepository.SaveValueAsync(id, tileMapInfo);
+            return tileMapInfo;
+        }
+
+        private JsonElement CreateTileMapInfo(TileMapEntity entity) {
+            // todo: 用 .net 6 的 JsonNode 重构
             var text = File.ReadAllText(entity.MapTileInfoPath)
                 .Replace("#name#", entity.Name)
                 .Replace("#description#", $"{entity.Name} Tile Server")
@@ -189,44 +179,30 @@ namespace Beginor.GisHub.TileMap.Data {
             if (extent == null) {
                 return rootEl;
             }
+            // todo: 暂时只支持墨卡托坐标系的切片， 支持其它坐标系的切片的需要进一步重构。
+            extent = (AgsExtent)WebMercator.FromWgs84(extent);
             var stream = new MemoryStream();
             using var writer = new Utf8JsonWriter(stream);
             writer.WriteStartObject();
             foreach (var prop in rootEl.EnumerateObject()) {
                 if (prop.Name == "fullExtent" || prop.Name == "initialExtent") {
                     writer.WritePropertyName(prop.Name);
-                    WriteExtentToJson(writer, extent);
+                    JsonSerializer.Serialize(
+                        writer,
+                        extent,
+                        new JsonSerializerOptions(JsonSerializerDefaults.Web) {
+                            IgnoreNullValues = true
+                        }
+                    );
                 }
                 else {
                     prop.WriteTo(writer);
                 }
             }
             writer.WriteEndObject();
-            await writer.FlushAsync();
+            writer.Flush();
             stream.Seek(0, SeekOrigin.Begin);
             return JsonDocument.Parse(stream).RootElement;
-        }
-
-        private void WriteExtentToJson(Utf8JsonWriter writer, AgsExtent extent) {
-            // JsonSerializer.Serialize(writer, extent, )
-            extent = (AgsExtent)WebMercator.FromWgs84(extent);
-            JsonSerializer.Serialize(
-                writer,
-                extent,
-            new JsonSerializerOptions(JsonSerializerDefaults.Web));
-            // writer.WriteStartObject();
-            // writer.WriteNumber("xmin", extent.Xmin);
-            // writer.WriteNumber("ymin", extent.Ymin);
-            // writer.WriteNumber("xmax", extent.Xmax);
-            // writer.WriteNumber("ymax", extent.Ymax);
-            // writer.WritePropertyName("spatialReference");
-            // writer.WriteStartObject();
-            // writer.WriteNumber("wkid", extent.SpatialReference.Wkid);
-            // if (extent.SpatialReference.LatestWkid.HasValue) {
-            //     writer.WriteNumber("latestWkid", extent.SpatialReference.LatestWkid.Value);
-            // }
-            // writer.WriteEndObject();
-            // writer.WriteEndObject();
         }
 
         public async Task<DateTimeOffset?> GetTileModifiedTimeAsync(long id, int level, int row, int col) {

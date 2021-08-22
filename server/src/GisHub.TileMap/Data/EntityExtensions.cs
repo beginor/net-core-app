@@ -19,6 +19,41 @@ namespace Beginor.GisHub.TileMap.Data {
             return null;
         }
 
+        public static TileMapEntity ToEntity(this TileMapCacheItem cacheItem) {
+            var entity = new TileMapEntity {
+                Name = cacheItem.Name,
+                CacheDirectory = cacheItem.CacheDirectory,
+                MapTileInfoPath = cacheItem.MapTileInfoPath,
+                ContentType = cacheItem.ContentType,
+                IsBundled = cacheItem.IsBundled,
+                MinLevel = cacheItem.MinLevel,
+                MaxLevel = cacheItem.MaxLevel
+            };
+            var extent = cacheItem.Extent;
+            if (extent != null) {
+                entity.MinLongitude = extent.Xmin;
+                entity.MinLatitude = extent.Ymin;
+                entity.MaxLongitude = extent.Xmax;
+                entity.MaxLatitude = extent.Ymax;
+            }
+            return entity;
+        }
+
+        public static TileMapCacheItem ToCache(this TileMapEntity entity) {
+            var cacheItem = new TileMapCacheItem {
+                Name = entity.Name,
+                CacheDirectory = entity.CacheDirectory,
+                MapTileInfoPath = entity.MapTileInfoPath,
+                ContentType = entity.ContentType,
+                IsBundled = entity.IsBundled,
+                ModifiedTime = null,
+                MinLevel = entity.MinLevel,
+                MaxLevel = entity.MaxLevel,
+                Extent = entity.GetExtent()
+            };
+            return cacheItem;
+        }
+
     }
 
 }
