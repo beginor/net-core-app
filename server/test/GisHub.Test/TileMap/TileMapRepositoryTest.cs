@@ -31,6 +31,15 @@ namespace Beginor.GisHub.Test.TileMap {
             Assert.GreaterOrEqual(result.Take, result.Data.Count);
         }
 
+        [Test]
+        public async Task _03_CanGetMapInfo() {
+            var id = 1600409446764030070;
+            var info = await Target.GetTileMapInfoAsync(id);
+            var prop = info.GetProperty("fullExtent");
+            Assert.AreEqual(prop.ValueKind, System.Text.Json.JsonValueKind.Object);
+            Console.WriteLine(prop.ToString());
+        }
+
     }
 
 }

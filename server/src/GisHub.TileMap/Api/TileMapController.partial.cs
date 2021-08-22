@@ -31,7 +31,7 @@ namespace Beginor.GisHub.TileMap.Api {
         [Authorize("tilemaps.read_tile_content")]
         public async Task<ActionResult> GetTileMapInfo(long id) {
             try {
-                var tileMapInfo  = await repository.GetTileMapInfoAsync(id);
+                var tileMapInfo = await repository.GetTileMapInfoAsync(id);
                 var text = tileMapInfo.ToString();
                 var hasCallback = Request.Query.TryGetValue("callback", out var callback);
                 if (hasCallback) {

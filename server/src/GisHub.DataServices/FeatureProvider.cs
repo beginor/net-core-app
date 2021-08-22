@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using NetTopologySuite.IO;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Data;
-using Beginor.GisHub.DataServices.Esri;
-using Beginor.GisHub.DataServices.GeoJson;
+using Beginor.GisHub.Geo;
+using Beginor.GisHub.Geo.Esri;
+using Beginor.GisHub.Geo.GeoJson;
 using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices {

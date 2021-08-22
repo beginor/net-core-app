@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Beginor.GisHub.DataServices.Api;
-using Beginor.GisHub.DataServices.Esri;
+using Beginor.GisHub.Geo.Esri;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 

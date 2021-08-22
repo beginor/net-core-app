@@ -2,15 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>Beginor.GisHub.DataServices.PostGIS</AssemblyName>
-    <RootNamespace>Beginor.GisHub.DataServices.PostGIS</RootNamespace>
+    <AssemblyName>Beginor.GisHub.Geo</AssemblyName>
+    <RootNamespace>Beginor.GisHub.Geo</RootNamespace>
     <LangVersion>latest</LangVersion>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GisHub.DataServices\GisHub.DataServices.csproj" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <Import Project="../../package-references.props" />
+
+  <ItemGroup>
+    <PackageReference Include="NetTopologySuite" Version="2.3.0" />
   </ItemGroup>
 
 </Project>

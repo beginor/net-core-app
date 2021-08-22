@@ -34,10 +34,10 @@ namespace Beginor.GisHub.Entry {
                 ServiceLifetime.Scoped
             );
 
-            var coordinateConverter = new Beginor.GisHub.DataServices.CoordinateConverter();
+            var coordinateConverter = new Beginor.GisHub.Geo.CoordinateConverter();
             var coordinateSection = config.GetSection("coordinate");
             coordinateSection.Bind(coordinateConverter);
-            services.AddSingleton<Beginor.GisHub.DataServices.CoordinateConverter>(coordinateConverter);
+            services.AddSingleton<Beginor.GisHub.Geo.CoordinateConverter>(coordinateConverter);
             services.AddSingleton<Beginor.GisHub.DataServices.IDataServiceFactory, Beginor.GisHub.DataServices.DataServiceFactory>();
             services.AddSingleton<Beginor.GisHub.DataServices.JsonSerializerOptionsFactory>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider>();

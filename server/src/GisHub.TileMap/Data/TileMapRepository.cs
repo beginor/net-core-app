@@ -130,14 +130,24 @@ namespace Beginor.GisHub.TileMap.Data {
             var key = id.ToString();
             var cachedItem = await cache.GetAsync<TileMapCacheItem>(key);
             if (cachedItem != null) {
-                return new TileMapEntity {
+                var cachedEntity = new TileMapEntity {
                     Id = id,
                     Name = cachedItem.Name,
                     CacheDirectory = cachedItem.CacheDirectory,
                     MapTileInfoPath = cachedItem.MapTileInfoPath,
                     ContentType = cachedItem.ContentType,
-                    IsBundled = cachedItem.IsBundled
+                    IsBundled = cachedItem.IsBundled,
+                    MinLevel = cachedItem.MinLevel,
+                    MaxLevel = cachedItem.MaxLevel
                 };
+                var extent = cachedItem.Extent;
+                if (extent != null) {
+                    cachedEntity.MinLongitude = extent[0];
+                    cachedEntity.MinLatitude = extent[1];
+                    cachedEntity.MaxLongitude = extent[2];
+                    cachedEntity.MaxLatitude = extent[3];
+                }
+                return cachedEntity;
             }
             var entity = await Session.Query<TileMapEntity>().FirstOrDefaultAsync(e => e.Id == id);
             if (entity == null) {
@@ -145,7 +155,7 @@ namespace Beginor.GisHub.TileMap.Data {
             }
             entity.CacheDirectory = await serverFolderRepository.GetPhysicalPathAsync(entity.CacheDirectory);
             entity.MapTileInfoPath = await serverFolderRepository.GetPhysicalPathAsync(entity.MapTileInfoPath);
-            await cache.SetAsync(key, new TileMapCacheItem {
+            var cacheItem = new TileMapCacheItem {
                 Name = entity.Name,
                 CacheDirectory = entity.CacheDirectory,
                 MapTileInfoPath = entity.MapTileInfoPath,
@@ -153,18 +163,61 @@ namespace Beginor.GisHub.TileMap.Data {
                 IsBundled = entity.IsBundled,
                 ModifiedTime = null,
                 MinLevel = entity.MinLevel,
-                MaxLevel = entity.MaxLevel
-            });
+                MaxLevel = entity.MaxLevel,
+                Extent = entity.GetExtent()
+            };
+            await cache.SetAsync(key, cacheItem);
             return entity;
         }
 
         public async Task<JsonElement> GetTileMapInfoAsync(long id) {
+            // todo: 用 .net 6 重构
             var entity = await GetTileMapByIdAsync(id);
             var text = File.ReadAllText(entity.MapTileInfoPath)
                 .Replace("#name#", entity.Name)
                 .Replace("#description#", $"{entity.Name} Tile Server")
                 .Replace("#copyright#", $"{entity.Name} Tile Server by GISHub");
-            return JsonDocument.Parse(text).RootElement;
+            var jsonDoc = JsonDocument.Parse(
+                text,
+                new JsonDocumentOptions {
+                    CommentHandling = JsonCommentHandling.Skip
+                }
+            );
+            var rootEl = jsonDoc.RootElement;
+            var extent = entity.GetExtent();
+            if (extent == null) {
+                return rootEl;
+            }
+            var stream = new MemoryStream();
+            using var writer = new Utf8JsonWriter(stream);
+            writer.WriteStartObject();
+            foreach (var prop in rootEl.EnumerateObject()) {
+                if (prop.Name == "fullExtent" || prop.Name == "initialExtent") {
+                    writer.WritePropertyName(prop.Name);
+                    WriteExtentToJson(writer, extent);
+                }
+                else {
+                    prop.WriteTo(writer);
+                }
+            }
+            writer.WriteEndObject();
+            await writer.FlushAsync();
+            stream.Seek(0, SeekOrigin.Begin);
+            return JsonDocument.Parse(stream).RootElement;
+        }
+
+        private void WriteExtentToJson(Utf8JsonWriter writer, double[] extent) {
+            writer.WriteStartObject();
+            writer.WriteNumber("xmin", extent[0]);
+            writer.WriteNumber("ymin", extent[1]);
+            writer.WriteNumber("xmax", extent[2]);
+            writer.WriteNumber("ymax", extent[3]);
+            writer.WritePropertyName("spatialReference");
+            writer.WriteStartObject();
+            writer.WriteNumber("wkid", 4326);
+            writer.WriteNumber("latestWkid", 4326);
+            writer.WriteEndObject();
+            writer.WriteEndObject();
         }
 
         public async Task<DateTimeOffset?> GetTileModifiedTimeAsync(long id, int level, int row, int col) {

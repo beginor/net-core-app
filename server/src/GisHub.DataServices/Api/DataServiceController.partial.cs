@@ -9,8 +9,8 @@ using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Models;
-using Beginor.GisHub.DataServices.GeoJson;
-using Beginor.GisHub.DataServices.Esri;
+using Beginor.GisHub.Geo.GeoJson;
+using Beginor.GisHub.Geo.Esri;
 using Beginor.GisHub.DataServices.Filters;
 
 namespace Beginor.GisHub.DataServices.Api {

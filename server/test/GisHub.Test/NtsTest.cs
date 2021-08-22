@@ -5,8 +5,8 @@ using NUnit.Framework;
 using NetTopologySuite.Geometries;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Common;
-using Beginor.GisHub.DataServices;
-using Beginor.GisHub.DataServices.GeoJson;
+using Beginor.GisHub.Geo;
+using Beginor.GisHub.Geo.GeoJson;
 using NetTopologySuite.IO;
 
 namespace Beginor.GisHub.Test {

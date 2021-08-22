@@ -1,7 +1,8 @@
 using System;
 using System.Text.Json;
 using Beginor.GisHub.DataServices;
-using Beginor.GisHub.DataServices.Esri;
+using Beginor.GisHub.Geo;
+using Beginor.GisHub.Geo.Esri;
 using NUnit.Framework;
 
 namespace Beginor.GisHub.Test.DataServices {

@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Beginor.GisHub.DataServices;
 using Beginor.GisHub.DataServices.Data;
-using Beginor.GisHub.DataServices.Esri;
+using Beginor.GisHub.Geo.Esri;
 
 namespace Beginor.GisHub.Test.DataServices {
 

@@ -1,7 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Beginor.GisHub.DataServices.Esri;
-using Beginor.GisHub.DataServices.GeoJson;
+using Beginor.GisHub.Geo;
+using Beginor.GisHub.Geo.Esri;
+using Beginor.GisHub.Geo.GeoJson;
 
 namespace Beginor.GisHub.DataServices {
 
