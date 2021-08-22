@@ -9,13 +9,10 @@ namespace Beginor.GisHub.TileMap {
 
     public static class FileHelper {
 
-        private static Dictionary<string, string> ContentTypeMap = new Dictionary<string, string> {
+        private static Dictionary<string, string> ContentTypeMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
             [".png"] = "image/png",
-            [".PNG"] = "image/png",
             [".jpg"] = "image/jpeg",
-            [".JPG"] = "image/jpeg",
-            [".jpeg"] = "image/jpeg",
-            [".JPEG"] = "image/jpeg"
+            [".jpeg"] = "image/jpeg"
         };
 
         public static DateTimeOffset? GetTileModifiedTime(string tileFolder, int level, int row, int col) {
