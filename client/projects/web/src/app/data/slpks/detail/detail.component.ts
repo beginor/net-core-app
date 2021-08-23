@@ -4,9 +4,13 @@ import {
 } from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
+import {
+    ServerFolderBrowserComponent
+} from 'projects/web/src/app/common';
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import { SlpkService, SlpkModel } from '../slpks.service';
-import { ArcGisService } from '../../arcgis.service';
 
 @Component({
     selector: 'app-slpk-detail',
@@ -32,11 +36,11 @@ export class DetailComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private modal: NgbModal,
         public account: AccountService,
         public vm: SlpkService
     ) {
-        const id = route.snapshot.params.id;
-        const editable = route.snapshot.params.editable;
+        const { id, editable } = route.snapshot.params;
         if (id === '0') {
             this.title = '新建slpk 航拍模型';
             this.editable = true;
@@ -49,7 +53,7 @@ export class DetailComponent implements OnInit {
             this.title = '查看slpk 航拍模型';
             this.editable = false;
         }
-        this.id = id;
+        this.id = id as string;
     }
 
     public async ngOnInit(): Promise<void> {
@@ -65,7 +69,7 @@ export class DetailComponent implements OnInit {
         if (e.fromState === '' && e.toState === 'void') {
             await this.router.navigate(['../'], { relativeTo: this.route });
             if (this.reloadList) {
-                this.vm.search();
+                void this.vm.search();
             }
         }
     }
@@ -106,6 +110,26 @@ export class DetailComponent implements OnInit {
         }
         const idx = this.model.tags.indexOf(tag);
         this.model.tags?.splice(idx, 1);
+    }
+
+    public showFolderModal(): void {
+        const modalRef = this.modal.open(
+            ServerFolderBrowserComponent,
+            { size: 'xl', backdrop: 'static', keyboard: false }
+        );
+        const params = {
+            alias: 'gisdata',
+            path: '.',
+            filter: '*.*'
+        };
+        Object.assign(modalRef.componentInstance, {
+            title: '选择模型目录',
+            params
+        });
+        modalRef.result.then((path: string) => {
+            this.model.directory = `${params.alias}:${path}`;
+        })
+        .catch(_ => { /* ignore error. */ });
     }
 
 }

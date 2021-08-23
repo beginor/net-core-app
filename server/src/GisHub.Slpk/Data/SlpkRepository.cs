@@ -12,6 +12,7 @@ using NHibernate.Linq;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using Beginor.GisHub.Common;
+using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Slpk.Models;
 
 namespace Beginor.GisHub.Slpk.Data {
@@ -20,18 +21,22 @@ namespace Beginor.GisHub.Slpk.Data {
     public class SlpkRepository : HibernateRepository<SlpkEntity, SlpkModel, long>, ISlpkRepository {
 
         private IDistributedCache cache;
+        private IServerFolderRepository serverFolderRepository;
 
         public SlpkRepository(
             ISession session,
             IMapper mapper,
-            IDistributedCache cache
+            IDistributedCache cache,
+            IServerFolderRepository serverFolderRepository
         ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            this.serverFolderRepository = serverFolderRepository ?? throw new ArgumentNullException(nameof(serverFolderRepository));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 this.cache = null;
+                this.serverFolderRepository = null;
             }
         }
 
@@ -113,6 +118,7 @@ namespace Beginor.GisHub.Slpk.Data {
                 .Where(e => e.Id == id)
                 .Select(e => e.Directory)
                 .FirstOrDefaultAsync();
+            directory = await serverFolderRepository.GetPhysicalPathAsync(directory);
             await cache.SetAsync(key, new SlpkCacheItem { Id = id, Directory = directory });
             return directory;
         }

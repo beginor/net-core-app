@@ -50,8 +50,7 @@ export class DetailComponent implements OnInit, OnDestroy {
         public account: AccountService,
         public vm: VectortileService
     ) {
-        const id = route.snapshot.params.id;
-        const editable = route.snapshot.params.editable;
+        const { id, editable } = route.snapshot.params;
         if (id === '0') {
             this.title = '新建矢量切片包';
             this.editable = true;
@@ -64,7 +63,7 @@ export class DetailComponent implements OnInit, OnDestroy {
             this.title = '查看矢量切片包';
             this.editable = false;
         }
-        this.id = id;
+        this.id = id as string;
     }
 
     public async ngOnInit(): Promise<void> {

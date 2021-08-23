@@ -14,5 +14,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GisHub.Common\GisHub.Common.csproj" />
+    <ProjectReference Include="..\GisHub.Data\GisHub.Data.csproj" />
   </ItemGroup>
 </Project>

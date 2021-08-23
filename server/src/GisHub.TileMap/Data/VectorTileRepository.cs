@@ -36,6 +36,15 @@ namespace Beginor.GisHub.TileMap.Data {
             this.serverFolderRepository = serverFolderRepository ?? throw new ArgumentNullException(nameof(serverFolderRepository));
         }
 
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                this.cache = null;
+                this.serverFolderRepository = null;
+                this.jsonRepository = null;
+            }
+            base.Dispose(disposing);
+        }
+
         /// <summary>搜索 矢量切片包 ，返回分页结果。</summary>
         public async Task<PaginatedResponseModel<VectorTileModel>> SearchAsync(
             VectorTileSearchModel model

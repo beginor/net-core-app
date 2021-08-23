@@ -37,6 +37,15 @@ namespace Beginor.GisHub.TileMap.Data {
             this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
         }
 
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                this.cache = null;
+                this.serverFolderRepository = null;
+                this.jsonRepository = null;
+            }
+            base.Dispose(disposing);
+        }
+
         /// <summary>搜索 切片地图 ，返回分页结果。</summary>
         public async Task<PaginatedResponseModel<TileMapModel>> SearchAsync(
             TileMapSearchModel model
