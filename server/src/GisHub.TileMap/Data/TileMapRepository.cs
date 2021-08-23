@@ -136,7 +136,7 @@ namespace Beginor.GisHub.TileMap.Data {
             var key = id.ToString();
             var cachedItem = await cache.GetAsync<TileMapCacheItem>(key);
             if (cachedItem != null) {
-                return cachedItem.ToEntity();
+                return cachedItem.ToTileMapEntity();
             }
             var entity = await Session.GetAsync<TileMapEntity>(id);
             if (entity == null) {
@@ -148,7 +148,7 @@ namespace Beginor.GisHub.TileMap.Data {
             cacheItem.CacheDirectory = cacheDirectory;
             cacheItem.MapTileInfoPath = mapTileInfoPath;
             await cache.SetAsync(key, cacheItem);
-            return cacheItem.ToEntity();
+            return cacheItem.ToTileMapEntity();
         }
 
         public async Task<JsonElement> GetTileMapInfoAsync(long id) {

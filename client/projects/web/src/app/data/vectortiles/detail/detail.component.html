@@ -28,14 +28,23 @@
     </div>
     <div class="mb-3">
       <label class="form-label text-muted" for="directory">缓存目录  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="directory" name="directory"
-        placeholder="请输入矢量切片包缓存目录 ..." required
-        [disabled]="!editable"
-        [(ngModel)]="model.directory"
-        #directory="ngModel"
-        [class.is-invalid]="!(directory.valid || directory.pristine)"
-        [class.is-valid]="directory.valid"
-      />
+      <div class="input-group">
+        <input class="form-control" type="text" id="directory" name="directory"
+          placeholder="请选择矢量切片包缓存目录 ..." required
+          [disabled]="!editable"
+          [(ngModel)]="model.directory"
+          #directory="ngModel"
+          [class.is-invalid]="!(directory.valid || directory.pristine)"
+          [class.is-valid]="directory.valid"
+        />
+        <ng-container *ngIf="editable && info.privileges['server_folders.read_folder_content']">
+          <button class="btn btn-outline-secondary" type="button"
+            ngbTooltip="选择缓存目录" [openDelay]="300" container="body"
+            (click)="showCacheFolderModal()">
+            <svg-icon path="bi/search"></svg-icon>
+          </button>
+        </ng-container>
+      </div>
     </div>
     <hr class="mt-0 mb-2" />
     <div class="row">

@@ -22,15 +22,18 @@ namespace Beginor.GisHub.TileMap.Data {
 
         private IDistributedCache cache;
         private IAppJsonDataRepository jsonRepository;
+        private IServerFolderRepository serverFolderRepository;
 
         public VectorTileRepository(
             ISession session,
             IMapper mapper,
             IDistributedCache cache,
-            IAppJsonDataRepository jsonRepository
+            IAppJsonDataRepository jsonRepository,
+            IServerFolderRepository serverFolderRepository
         ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
             this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
+            this.serverFolderRepository = serverFolderRepository ?? throw new ArgumentNullException(nameof(serverFolderRepository));
         }
 
         /// <summary>搜索 矢量切片包 ，返回分页结果。</summary>
@@ -134,6 +137,7 @@ namespace Beginor.GisHub.TileMap.Data {
                 entity.UpdatedAt = DateTime.Now;
                 entity.UpdaterId = userId;
                 await Session.SaveAsync(entity, token);
+                await jsonRepository.DeleteAsync(id);
                 await Session.FlushAsync();
             }
         }
@@ -170,26 +174,21 @@ namespace Beginor.GisHub.TileMap.Data {
             var key = id.ToString();
             var cacheItem = await cache.GetAsync<TileMapCacheItem>(key);
             if (cacheItem != null) {
-                return new VectorTileEntity {
-                    Id = id,
-                    Name = cacheItem.Name,
-                    Directory = cacheItem.CacheDirectory
-                };
+                return cacheItem.ToVectorTileEntity();
             }
-            var entity = await Session.Query<VectorTileEntity>().FirstOrDefaultAsync(e => e.Id == id);
+            var entity = await Session.GetAsync<VectorTileEntity>(id);
             if (entity == null) {
                 throw new TileNotFoundException($"Vectortile {id} doesn't exists in database.");
             }
-
-            await cache.SetAsync(key, new TileMapCacheItem {
-                Name = entity.Name,
-                CacheDirectory = entity.Directory,
-                IsBundled = true,
-                ModifiedTime = null
-            });
-            return entity;
+            cacheItem = entity.ToCache();
+            cacheItem.CacheDirectory = await serverFolderRepository.GetPhysicalPathAsync(entity.Directory);
+            await cache.SetAsync(key, cacheItem);
+            return cacheItem.ToVectorTileEntity();
         }
 
+        public Task<JsonElement> GetStyleAsync(long id) {
+            return jsonRepository.GetValueByIdAsync(id);
+        }
 
     }
 

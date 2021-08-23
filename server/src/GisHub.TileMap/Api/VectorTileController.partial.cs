@@ -36,7 +36,7 @@ namespace Beginor.GisHub.TileMap.Api {
         [Authorize("vectortiles.read_tile_content")]
         public async Task<ActionResult> GetStyle(long id) {
             try {
-                var style = await jsonRepository.GetValueByIdAsync(id);
+                var style = await repository.GetStyleAsync(id);
                 if (style.ValueKind == JsonValueKind.Undefined) {
                     return NotFound();
                 }

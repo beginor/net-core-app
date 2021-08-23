@@ -35,7 +35,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
         if (!url) {
             return;
         }
-        this.arcgis.createVectorTileLayerPreview(
+        void this.arcgis.createVectorTileLayerPreview(
             this.mapElRef.nativeElement,
             this.vm.getVectorTileLayerStyleUrl(this.id)
         ).then(mapview => this.mapview = mapview);

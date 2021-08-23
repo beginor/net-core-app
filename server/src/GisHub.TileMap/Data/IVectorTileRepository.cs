@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
@@ -37,6 +38,8 @@ namespace Beginor.GisHub.TileMap.Data {
         Task<TileContentModel> GetTileContentAsync(long id, int level, int row, int col);
 
         Task<DateTimeOffset?> GetTileModifiedTimeAsync(long id, int level, int row, int col);
+
+        Task<JsonElement> GetStyleAsync(long id);
 
     }
 

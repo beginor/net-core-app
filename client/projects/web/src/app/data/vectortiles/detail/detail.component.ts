@@ -1,14 +1,19 @@
-import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild
+} from '@angular/core';
 import {
     trigger, transition, useAnimation, AnimationEvent
 } from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Style, Layer } from 'mapbox-gl';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
-import { UiService } from 'projects/web/src/app/common';
+import {
+    ServerFolderBrowserComponent, UiService
+} from 'projects/web/src/app/common';
 import { VectortileService, VectortileModel } from '../vectortiles.service';
 
 @Component({
@@ -39,6 +44,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private modal: NgbModal,
         private zone: NgZone,
         private ui: UiService,
         public account: AccountService,
@@ -88,7 +94,7 @@ export class DetailComponent implements OnInit, OnDestroy {
         if (e.fromState === '' && e.toState === 'void') {
             await this.router.navigate(['../'], { relativeTo: this.route });
             if (this.reloadList) {
-                this.vm.search();
+                void this.vm.search();
             }
         }
     }
@@ -98,6 +104,39 @@ export class DetailComponent implements OnInit, OnDestroy {
     }
 
     public async save(): Promise<void> {
+        if (!!this.model.styleContent) {
+            // fix layer source;
+            const style = JSON.parse(this.model.styleContent) as Style;
+            const assetsUrl = this.vm.getVectorTileAssetsUrl();
+            style.sprite = `${assetsUrl}sprite`;
+            style.glyphs = `${assetsUrl}glyphs/{fontstack}/{range}.pbf`;
+            const layerUrl = this.vm.getVectorTileLayerUrl(
+                this.model.id ?? '{id}'
+            );
+            style.sources = {
+                mapbox: {
+                    type: 'vector',
+                    tiles: [`${layerUrl}/tile/{z}/{y}/{x}`]
+                }
+            };
+            style.layers?.forEach((layer: Layer) => {
+                layer.source = 'mapbox';
+            });
+            // add extent to style metadata;
+            if (!!this.model.minLatitude && !!this.model.minLongitude
+                && !!this.model.maxLatitude && !!this.model.maxLongitude
+            ) {
+                const metadata = style.metadata || {};
+                metadata['mapbox:extent'] = [
+                    this.model.minLongitude,
+                    this.model.minLatitude,
+                    this.model.maxLongitude,
+                    this.model.maxLatitude
+                ];
+                style.metadata = metadata;
+            }
+            this.model.styleContent = JSON.stringify(style);
+        }
         if (this.id !== '0') {
             await this.vm.update(this.id, this.model);
         }
@@ -106,6 +145,26 @@ export class DetailComponent implements OnInit, OnDestroy {
         }
         this.reloadList = true;
         this.goBack();
+    }
+
+    public showCacheFolderModal(): void {
+        const modalRef = this.modal.open(
+            ServerFolderBrowserComponent,
+            { size: 'xl', backdrop: 'static', keyboard: false }
+        );
+        const params = {
+            alias: 'gisdata',
+            path: '.',
+            filter: '*.*'
+        };
+        Object.assign(modalRef.componentInstance, {
+            title: '选择缓存目录',
+            params
+        });
+        modalRef.result.then((path: string) => {
+            this.model.directory = `${params.alias}:${path}`;
+        })
+        .catch(_ => { /* ignore error. */ });
     }
 
     private async onStyleFileChange(e: Event): Promise<void> {
@@ -118,24 +177,12 @@ export class DetailComponent implements OnInit, OnDestroy {
             this.model.defaultStyle = file.name;
             try {
                 const text = await file.text();
-                const style = JSON.parse(text) as Style;
-                const assetsUrl = this.vm.getVectorTileAssetsUrl();
-                style.sprite = `${assetsUrl}sprite`;
-                style.glyphs = `${assetsUrl}glyphs/{fontstack}/{range}.pbf`;
-                const layerUrl = this.vm.getVectorTileLayerUrl(this.model.id || '{id}');
-                style.sources = {
-                    mapbox: {
-                        type: 'vector',
-                        tiles: [`${layerUrl}/tile/{z}/{y}/{x}`]
-                    }
-                };
-                style.layers?.forEach((layer: Layer) => {
-                    layer.source = 'mapbox';
-                });
-                this.model.styleContent = JSON.stringify(style);
+                this.model.styleContent = text;
             }
             catch (ex) {
-                this.ui.showAlert({ type: 'danger', message: '无法识别默认样式， 请重新选择一个！' });
+                this.ui.showAlert(
+                    { type: 'danger', message: '无法识别默认样式， 请重新选择！' }
+                );
                 console.error(ex);
             }
         }

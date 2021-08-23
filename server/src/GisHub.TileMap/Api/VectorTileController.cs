@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.TileMap.Models;
 using Beginor.GisHub.TileMap.Data;
 
@@ -20,23 +19,19 @@ namespace Beginor.GisHub.TileMap.Api {
 
         private ILogger<VectorTileController> logger;
         private IVectorTileRepository repository;
-        private IAppJsonDataRepository jsonRepository;
 
         public VectorTileController(
             ILogger<VectorTileController> logger,
-            IVectorTileRepository repository,
-            IAppJsonDataRepository jsonRepository
+            IVectorTileRepository repository
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 logger = null;
                 repository = null;
-                jsonRepository = null;
             }
             base.Dispose(disposing);
         }

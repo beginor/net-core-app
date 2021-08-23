@@ -17,7 +17,9 @@ export class ApiInterceptor implements HttpInterceptor {
         req: HttpRequest<any>,
         next: HttpHandler
     ): Observable<HttpEvent<any>> {
-        if (req.url.startsWith(this.apiRoot)) {
+        if (req.url.startsWith(this.apiRoot) ||
+            req.url.startsWith(`${location.protocol}//${location.host}${this.apiRoot}`)
+        ) {
             const setHeaders: { [key: string]: string } = {
                 'X-Requested-With': 'XMLHttpRequest'
             };

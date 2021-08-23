@@ -44,14 +44,14 @@
       <label class="form-label text-muted" for="cacheDirectory">缓存目录  <i class="text-danger">*</i> </label>
       <div class="input-group">
         <input class="form-control" type="text" id="cacheDirectory" name="cacheDirectory"
-          placeholder="请输入缓存目录 ..." [(ngModel)]="model.cacheDirectory"
+          placeholder="请选择缓存目录 ..." [(ngModel)]="model.cacheDirectory"
           [class.is-invalid]="!(cacheDirectory.valid || cacheDirectory.pristine)"
           [class.is-valid]="cacheDirectory.valid"
           required #cacheDirectory="ngModel" [disabled]="!editable"
         />
         <ng-container *ngIf="editable && info.privileges['server_folders.read_folder_content']">
           <button class="btn btn-outline-secondary" type="button"
-            ngbTooltip="选择缓存目录" [openDelay]="300"
+            ngbTooltip="选择缓存目录" [openDelay]="300" container="body"
             (click)="showCacheFolderModal()">
             <svg-icon path="bi/search"></svg-icon>
           </button>
@@ -63,7 +63,7 @@
       <label class="form-label text-muted" for="mapTileInfoPath">切片信息路径  <i class="text-danger">*</i> </label>
       <div class="input-group">
         <input class="form-control" type="text" id="mapTileInfoPath" name="mapTileInfoPath"
-          placeholder="请输入切片信息路径 ..." [(ngModel)]="model.mapTileInfoPath"
+          placeholder="请选择切片信息路径 ..." [(ngModel)]="model.mapTileInfoPath"
           [class.is-invalid]="!(mapTileInfoPath.valid || mapTileInfoPath.pristine)"
           [class.is-valid]="mapTileInfoPath.valid"
           required #mapTileInfoPath="ngModel" [disabled]="!editable"

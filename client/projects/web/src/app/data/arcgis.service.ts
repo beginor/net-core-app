@@ -55,17 +55,16 @@ export class ArcGisService {
         url: string
     ): Promise<__esri.MapView> {
         const mapView = await this.createMapView(container);
-        mapView.when().then(async () => {
-            const [TileLayer] = await loadModules<[
-                __esri.TileLayerConstructor
-            ]>([
-                'esri/layers/TileLayer'
-            ]);
-            const tileLayer = new TileLayer({ url });
-            await tileLayer.load();
-            mapView.map.add(tileLayer);
-            mapView.goTo(tileLayer.fullExtent);
-        });
+        await mapView.when();
+        const [TileLayer] = await loadModules<[
+            __esri.TileLayerConstructor
+        ]>([
+            'esri/layers/TileLayer'
+        ]);
+        const tileLayer = new TileLayer({ url });
+        await tileLayer.load();
+        mapView.map.add(tileLayer);
+        await mapView.goTo(tileLayer.fullExtent);
         return mapView;
     }
 
@@ -100,10 +99,9 @@ export class ArcGisService {
         });
         const fullscreen = new Fullscreen({ view: mapView });
         mapView.ui.add(fullscreen, 'top-right');
-        mapView.when().then(() => {
-            map.add(meshLayer);
-            mapView.goTo(meshLayer.fullExtent);
-        });
+        await mapView.when();
+        map.add(meshLayer);
+        await mapView.goTo(meshLayer.fullExtent);
         return mapView;
     }
 
@@ -137,21 +135,29 @@ export class ArcGisService {
         url: string
     ): Promise<__esri.MapView> {
         const mapview = await this.createMapView(container);
-        mapview.when().then(async () => {
-            const [VectorTileLayer] = await loadModules<[
-                __esri.VectorTileLayerConstructor
-            ]>([
-                'esri/layers/VectorTileLayer'
-            ]);
-            const vectorTileLayer = new VectorTileLayer({
-                style: url
-            });
-            // await vectorTileLayer.when();
-            // if (!!vectorTileLayer.fullExtent) {
-            //     mapview.goTo(vectorTileLayer.fullExtent);
-            // }
-            mapview.map.add(vectorTileLayer);
-        });
+        await mapview.when();
+        const [VectorTileLayer, Extent] = await loadModules<[
+            __esri.VectorTileLayerConstructor,
+            __esri.ExtentConstructor
+        ]>([
+            'esri/layers/VectorTileLayer',
+            'esri/geometry/Extent'
+        ]);
+        const style: any = await lastValueFrom(
+            this.http.get(url, { headers: { ['Authorization']: `Bearer ${this.account.token}` } }) // eslint-disable-line max-len
+        );
+        const vectorTileLayer = new VectorTileLayer({ style });
+        mapview.map.add(vectorTileLayer);
+        const extent: number[] = style.metadata?.['mapbox:extent'];
+        if (!!extent) {
+            await mapview.goTo(new Extent({
+                xmin: extent[0],
+                ymin: extent[1],
+                xmax: extent[2],
+                ymax: extent[3],
+                spatialReference: { wkid: 4326 }
+            }));
+        }
         return mapview;
     }
 
