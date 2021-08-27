@@ -26,7 +26,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: ServerFolderModel = { id: '', aliasName: '', rootFolder: '', readonly: false }; // eslint-disable-line max-len
+    public model: ServerFolderModel = { id: '', aliasName: '', rootFolder: '', readonly: true, roles: [] }; // eslint-disable-line max-len
 
     private id = '';
     private reloadList = false;
@@ -39,21 +39,22 @@ export class DetailComponent implements OnInit {
     ) {
         const { id, editable } = route.snapshot.params;
         if (id === '0') {
-            this.title = '新建服务器目录';
+            this.title = '新建存储目录';
             this.editable = true;
         }
         else if (editable === 'true') {
-            this.title = '编辑服务器目录';
+            this.title = '编辑存储目录';
             this.editable = true;
         }
         else {
-            this.title = '查看服务器目录';
+            this.title = '查看存储目录';
             this.editable = false;
         }
         this.id = id as string;
     }
 
     public async ngOnInit(): Promise<void> {
+        await this.vm.getAllRoles();
         if (this.id !== '0') {
             const model = await this.vm.getById(this.id);
             if (!!model) {
@@ -76,6 +77,9 @@ export class DetailComponent implements OnInit {
     }
 
     public async save(): Promise<void> {
+        if (this.model.roles?.length === 0) {
+            delete this.model.roles;
+        }
         if (this.id !== '0') {
             await this.vm.update(this.id, this.model);
         }
@@ -84,6 +88,26 @@ export class DetailComponent implements OnInit {
         }
         this.reloadList = true;
         this.goBack();
+    }
+
+    public isRoleChecked(role: string): boolean {
+        if (!this.model.roles) {
+            return false;
+        }
+        return this.model.roles.indexOf(role) > -1;
+    }
+
+    public toggleCheckedRole(role: string): void {
+        if (!this.model.roles) {
+            this.model.roles = [];
+        }
+        const idx = this.model.roles.indexOf(role);
+        if (idx > -1) {
+            this.model.roles.splice(idx, 1);
+        }
+        else {
+            this.model.roles.push(role);
+        }
     }
 
 }

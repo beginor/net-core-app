@@ -45,8 +45,7 @@ export class DetailComponent implements OnInit {
         public account: AccountService,
         public vm: NavItemsService
     ) {
-        const id = route.snapshot.params.id;
-        const editable = route.snapshot.params.editable;
+        const { id, editable } = route.snapshot.params;
         if (id === '0') {
             this.formTitle = '新建菜单项';
             this.editable = true;
@@ -59,7 +58,7 @@ export class DetailComponent implements OnInit {
             this.formTitle = '查看菜单项';
             this.editable = false;
         }
-        this.id = id;
+        this.id = id as string;
     }
 
     public async ngOnInit(): Promise<void> {
@@ -70,7 +69,6 @@ export class DetailComponent implements OnInit {
             if (!!model) {
                 this.model = model;
             }
-            this.selectedRoles = this.model.roles ?? [];
         }
     }
 
@@ -78,7 +76,7 @@ export class DetailComponent implements OnInit {
         if (e.fromState === '' && e.toState === 'void') {
             await this.router.navigate(['../'], { relativeTo: this.route });
             if (this.reloadList) {
-                this.vm.search();
+                await this.vm.search();
             }
         }
     }
@@ -107,7 +105,7 @@ export class DetailComponent implements OnInit {
 
     public toggleCheckedRole(role: string): void {
         if (!this.model.roles) {
-            return;
+            this.model.roles = [];
         }
         const idx = this.model.roles.indexOf(role);
         if (idx > -1) {
@@ -123,19 +121,21 @@ export class DetailComponent implements OnInit {
             ServerFolderBrowserComponent,
             { size: 'lg', backdrop: 'static', keyboard: false }
         );
-        modalRef.componentInstance.title = '选择图标';
-        modalRef.componentInstance.params = {
-            alias: 'icons',
-            path: '.',
-            filter: '*.svg'
-        };
+        Object.assign(modalRef.componentInstance, {
+            title: '选择图标',
+            params: {
+                alias: 'icons',
+                path: '.',
+                filter: '*.svg'
+            }
+        });
         modalRef.result.then((path: string) => {
             let icon = path;
             if (icon.endsWith('.svg')) {
                 icon = icon.substr(0, icon.length - 4);
                 this.model.icon = icon;
             }
-        }).catch(_ => { });
+        }).catch(ex => { console.error(ex); });
     }
 
 }

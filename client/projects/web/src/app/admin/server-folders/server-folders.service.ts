@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
+import { RolesService, AppRoleModel } from '../roles/roles.service';
 
 /** 服务器目录服务 */
 @Injectable({
@@ -18,15 +19,24 @@ export class ServerFolderService {
     public data = new BehaviorSubject<ServerFolderModel[]>([]);
     public loading = false;
     public showPagination = false;
+    public roles: AppRoleModel[] = [];
 
     private baseUrl = `${this.apiRoot}/server-folders`;
+    private rolesSvc: RolesService;
 
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService,
         private errorHandler: ErrorHandler
-    ) { }
+    ) {
+        this.rolesSvc = new RolesService(
+            http, apiRoot, ui, errorHandler
+        );
+        this.rolesSvc.data.subscribe(data => {
+            this.roles = data;
+        });
+    }
 
     /** 搜索服务器目录 */
     public async search(): Promise<void> {
@@ -150,6 +160,18 @@ export class ServerFolderService {
         }
     }
 
+    public async getAllRoles(): Promise<void> {
+        try {
+            this.rolesSvc.searchModel.skip = 0;
+            this.rolesSvc.searchModel.take = 999;
+            await this.rolesSvc.search();
+        }
+        catch (ex) {
+            this.errorHandler.handleError(ex);
+            this.ui.showAlert({ type: 'danger', message: '获取全部角色出错！' });
+        }
+    }
+
 }
 
 /** 服务器目录 */
@@ -173,6 +195,7 @@ export interface ServerFolderSearchModel {
     skip: number;
     /** 取多少条记录 */
     take: number;
+    keywords?: string;
 }
 
 /** 服务器目录 搜索结果 */

@@ -1,6 +1,8 @@
 import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import {
+    NgbDate, NgbCalendar, NgbDateParserFormatter
+} from '@ng-bootstrap/ng-bootstrap';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
@@ -14,7 +16,9 @@ export class AuditLogsService {
         skip: 0,
         take: 10
     };
-    public searchDate: NgbDate;
+    public startDate: NgbDate;
+    public endDate: NgbDate;
+    public maxDate:NgbDate;
     public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<AuditLogModel[]>([]);
     public loading = false;
@@ -26,19 +30,19 @@ export class AuditLogsService {
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService,
-        private errorHandler: ErrorHandler
+        private errorHandler: ErrorHandler,
+        private formatter: NgbDateParserFormatter,
+        calendar: NgbCalendar
     ) {
-        const today = new Date();
-        this.searchDate = new NgbDate(
-            today.getFullYear(),
-            today.getMonth() + 1,
-            today.getDate()
-        );
+        const today = calendar.getToday();
+        this.endDate = today;
+        this.maxDate = today;
+        this.startDate = calendar.getPrev(today, 'd', 3);
     }
 
     public async search(): Promise<void> {
-        const d = this.searchDate;
-        this.searchModel.requestDate = `${d.year}-${d.month}-${d.day}`;
+        this.searchModel.startDate = this.formatter.format(this.startDate);
+        this.searchModel.endDate = this.formatter.format(this.endDate);
         let params = new HttpParams();
         for (const key in this.searchModel) {
             if (this.searchModel.hasOwnProperty(key)) {
@@ -126,8 +130,10 @@ export interface AuditLogSearchModel {
     take: number;
     /** 用户名 */
     userName?: string;
-    /** 请求日期，精确到日 */
-    requestDate?: string;
+    /** 请求开始日期，精确到日 */
+    startDate?: string;
+    /** 请求结束日期， 精确到日 */
+    endDate?: string;
 }
 
 /** 审计日志搜索结果 */

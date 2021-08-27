@@ -1,8 +1,8 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a routerLink="/">首页</a></li>
-    <li class="breadcrumb-item"><a routerLink="/">填写合适的面包屑</a></li>
-    <li class="breadcrumb-item active" aria-current="page">服务器目录</li>
+    <li class="breadcrumb-item"><a routerLink="/admin">管理</a></li>
+    <li class="breadcrumb-item active" aria-current="page">存储管理</li>
   </ol>
 </nav>
 <div class="container-fluid">
@@ -10,12 +10,12 @@
     <div class="col-12">
       <div class="card" *ngIf="(account.info | async) as info">
         <div class="card-header d-flex justify-content-between">
-          <h5 class="card-title mb-0">服务器目录</h5>
+          <h5 class="card-title mb-0">存储管理</h5>
           <div class="btn-group btn-group-sm">
             <button *ngIf="info.privileges['server_folders.create']"
               type="button" class="btn btn-outline-primary"
               (click)="showDetail('0', true)">
-              <svg-icon path="bi/plus"></svg-icon> 新建(服务器目录)
+              <svg-icon path="bi/plus"></svg-icon> 新建存储目录
             </button>
             <button type="button" class="btn btn-outline-secondary"
               (click)="loadData()">
@@ -32,7 +32,7 @@
                 </label>
                 <div class="col-auto">
                   <select id="pageSize" name="pageSize"
-                    class="form-control form-control-sm"
+                    class="form-select form-select-sm"
                     [(ngModel)]="vm.searchModel.take"
                     (change)="vm.onPageSizeChange()">
                     <option [value]="10">10</option>
@@ -51,11 +51,23 @@
             </div>
             <div class="col-6">
               <div class="row g-0">
-                <div class="col-6">
-                  <span class="text-muted">其它工具栏</span>
+                <div class="col">
+                  <!-- <span class="text-muted">其它工具栏</span> -->
                 </div>
-                <div class="col-6">
-                  <span class="text-muted">其它工具栏</span>
+                <div class="col">
+                  <!-- <span class="text-muted">其它工具栏</span> -->
+                </div>
+                <div class="col">
+                  <div class="input-group input-group-sm">
+                    <input class="form-control form-control-sm" type="text"
+                      placeholder="搜索别名或者路径" name="keywords"
+                      [(ngModel)]="vm.searchModel.keywords"
+                      (keyup.enter)="onKeywordsChanged()">
+                    <button *ngIf="vm.searchModel.keywords" class="btn btn-outline-secondary" type="button"
+                      (click)="clearKeywords()">
+                      <svg-icon path="bi/x"></svg-icon>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -65,22 +77,20 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-center text-nowrap text-muted">#</th>
-                <th scope="col" class="text-center text-nowrap text-muted">服务器目录id</th>
-                <th scope="col" class="text-center text-nowrap text-muted">目录别名</th>
-                <th scope="col" class="text-center text-nowrap text-muted">根路径</th>
+                <th scope="col" class="text-end text-nowrap text-muted">#</th>
+                <th scope="col" class="text-start text-nowrap text-muted">别名</th>
+                <th scope="col" class="text-start text-nowrap text-muted">目录</th>
                 <th scope="col" class="text-center text-nowrap text-muted">是否只读</th>
-                <th scope="col" class="text-center text-nowrap text-muted">可访问此目录的角色</th>
+                <th scope="col" class="text-start text-nowrap text-muted">允许的角色</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">
               <tr *ngFor="let item of data; let i = index;">
                 <th scope="row" class="text-end text-muted">{{i+1+vm.searchModel.skip}}</th>
-                <td class='text-start'>{{item.id}}</td>
                 <td class='text-start'>{{item.aliasName}}</td>
                 <td class='text-start'>{{item.rootFolder}}</td>
-                <td class='text-start'>{{item.readonly}}</td>
+                <td class='text-center'>{{item.readonly === true ? '是' : '否'}}</td>
                 <td class='text-start'>{{item.roles}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
@@ -95,7 +105,7 @@
                       <svg-icon path="bi/pencil-square"></svg-icon>
                     </button>
                     <button *ngIf="info.privileges['server_folders.delete']"
-                        class="btn btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300" container="body"
+                      class="btn btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300" container="body"
                       (click)="delete(item.id)">
                       <svg-icon path="bi/trash"></svg-icon>
                     </button>

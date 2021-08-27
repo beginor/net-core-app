@@ -16,20 +16,9 @@
   </div>
   <div class="card-body">
     <div class="mb-3">
-      <label class="form-label text-muted" for="id">服务器目录id  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="id" name="id"
-        placeholder="请输入服务器目录id ..." required
-        [disabled]="!editable"
-        [(ngModel)]="model.id"
-        #id="ngModel"
-        [class.is-invalid]="!(id.valid || id.pristine)"
-        [class.is-valid]="id.valid"
-      />
-    </div>
-    <div class="mb-3">
-      <label class="form-label text-muted" for="aliasName">目录别名  <i class="text-danger">*</i> </label>
+      <label class="form-label text-muted" for="aliasName">别名  <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="aliasName" name="aliasName"
-        placeholder="请输入目录别名 ..." required
+        placeholder="请输入存储目录别名 ..." required
         [disabled]="!editable"
         [(ngModel)]="model.aliasName"
         #aliasName="ngModel"
@@ -38,9 +27,9 @@
       />
     </div>
     <div class="mb-3">
-      <label class="form-label text-muted" for="rootFolder">根路径  <i class="text-danger">*</i> </label>
+      <label class="form-label text-muted" for="rootFolder">目录  <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="rootFolder" name="rootFolder"
-        placeholder="请输入根路径 ..." required
+        placeholder="请输入存储目录路径 ..." required
         [disabled]="!editable"
         [(ngModel)]="model.rootFolder"
         #rootFolder="ngModel"
@@ -60,11 +49,15 @@
       </div>
     </div>
     <div class="mb-3">
-      <label class="form-label text-muted" for="roles">可访问此目录的角色 </label>
-      <input class="form-control" type="text" id="roles" name="roles"
-        placeholder="请输入可访问此目录的角色 ..."
-        [(ngModel)]="model.roles" [disabled]="!editable"
-      />
+      <label class="form-label text-muted" for="roles">允许的的角色 </label>
+      <div class="mt-0">
+        <div class="form-check form-check-inline form-switch" *ngFor="let role of vm.roles">
+          <input class="form-check-input" type="checkbox" [id]="role.id"
+            [name]="role.name" [disabled]="!editable" [value]="role.name"
+            [checked]="isRoleChecked(role.name)" (change)="toggleCheckedRole(role.name)" />
+          <label class="form-check-label text-muted" [for]="role.id">{{role.description}}</label>
+        </div>
+      </div>
     </div>
   </div>
   <div *ngIf="info.privileges['server_folders.update'] && editable"

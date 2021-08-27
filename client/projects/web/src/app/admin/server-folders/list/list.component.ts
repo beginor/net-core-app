@@ -42,4 +42,14 @@ export class ListComponent implements OnInit {
         });
     }
 
+    public onKeywordsChanged(): void {
+        this.vm.searchModel.skip = 0;
+        void this.vm.search();
+    }
+
+    public clearKeywords(): void {
+        this.vm.searchModel.keywords = '';
+        void this.vm.search();
+    }
+
 }

@@ -33,7 +33,12 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             ServerFolderSearchModel model
         ) {
             var query = Session.Query<ServerFolder>();
-            // todo: 添加自定义查询；
+            var keywords = model.Keywords;
+            if (keywords.IsNotNullOrEmpty()) {
+                query = query.Where(
+                    f => f.AliasName.Contains(keywords) || f.RootFolder.Contains(keywords)
+                );
+            }
             var total = await query.LongCountAsync();
             var data = await query.OrderByDescending(e => e.Id)
                 .Skip(model.Skip).Take(model.Take)

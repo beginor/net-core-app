@@ -22,7 +22,10 @@ namespace Beginor.NetCoreApp.Models {
     }
 
     /// <summary>服务器目录搜索参数</summary>
-    public partial class ServerFolderSearchModel : PaginatedRequestModel { }
+    public partial class ServerFolderSearchModel : PaginatedRequestModel {
+        /// <summary>搜索关键字</summary>
+        public string Keywords { get; set; }
+    }
 
     /// <summary>服务目录浏览模型</summary>
     public class ServerFolderBrowseModel {
