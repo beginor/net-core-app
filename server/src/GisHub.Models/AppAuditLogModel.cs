@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
 namespace Beginor.GisHub.Models {
@@ -34,8 +33,10 @@ namespace Beginor.GisHub.Models {
 
     /// <summary>审计日志搜索参数</summary>
     public partial class AppAuditLogSearchModel : PaginatedRequestModel {
-        /// <summary>请求日期，精确到日</summary>
-        public DateTime? RequestDate { get; set; } = DateTime.Today;
+        /// <summary>请求开始日期，精确到日</summary>
+        public DateTime? startDate { get; set; }
+        /// <summary>请求结束日期，精确到日</summary>
+        public DateTime? endDate { get; set; }
         /// <summary>用户名</summary>
         public string UserName { get; set; }
     }

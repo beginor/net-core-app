@@ -1,0 +1,74 @@
+<form class="card detail" *ngIf="(account.info | async) as info" #detailForm="ngForm"
+  [@animation]="animation" (@animation.done)="onAnimationEvent($event)">
+  <div class="card-header d-flex justify-content-between align-content-center">
+    <h5 class="card-title mb-0">{{title}}</h5>
+    <div class="btn-group btn-group-sm">
+      <button *ngIf="info.privileges['server_folders.update'] && editable"
+        type="button" class="btn btn-sm btn-outline-primary"
+        (click)="save()" [disabled]="!detailForm.valid">
+        <svg-icon path="bi/check"></svg-icon> 保存
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"
+        (click)="goBack()">
+        <svg-icon path="bi/x"></svg-icon> 取消
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="mb-3">
+      <label class="form-label text-muted" for="aliasName">别名  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="aliasName" name="aliasName"
+        placeholder="请输入存储目录别名 ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.aliasName"
+        #aliasName="ngModel"
+        [class.is-invalid]="!(aliasName.valid || aliasName.pristine)"
+        [class.is-valid]="aliasName.valid"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="rootFolder">目录  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="rootFolder" name="rootFolder"
+        placeholder="请输入存储目录路径 ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.rootFolder"
+        #rootFolder="ngModel"
+        [class.is-invalid]="!(rootFolder.valid || rootFolder.pristine)"
+        [class.is-valid]="rootFolder.valid"
+      />
+    </div>
+    <div class="mb-3">
+      <div class="form-check form-switch">
+        <input type="checkbox" class="form-check-input"
+          id="readonly" name="readonly"
+          [(ngModel)]="model.readonly" [disabled]="!editable">
+        <label class="form-check-label text-muted"
+          for="readonly">
+          是否只读
+        </label>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="roles">允许的的角色 </label>
+      <div class="mt-0">
+        <div class="form-check form-check-inline form-switch" *ngFor="let role of vm.roles">
+          <input class="form-check-input" type="checkbox" [id]="role.id"
+            [name]="role.name" [disabled]="!editable" [value]="role.name"
+            [checked]="isRoleChecked(role.name)" (change)="toggleCheckedRole(role.name)" />
+          <label class="form-check-label text-muted" [for]="role.id">{{role.description}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="info.privileges['server_folders.update'] && editable"
+    class="card-footer d-flex justify-content-between">
+    <button type="button" class="btn btn-sm btn-outline-primary"
+      (click)="save()" [disabled]="!detailForm.valid">
+      <svg-icon path="bi/check"></svg-icon> 保存
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary"
+      (click)="goBack()">
+      <svg-icon path="bi/x"></svg-icon> 取消
+    </button>
+  </div>
+</form>

@@ -20,20 +20,20 @@ namespace Beginor.GisHub.Data.Repositories {
         public async Task<PaginatedResponseModel<AppAuditLogModel>> SearchAsync(
             AppAuditLogSearchModel model
         ) {
-            var query = Session.Query<AppAuditLog>();
-            if (model.RequestDate.HasValue) {
-                var startTime = model.RequestDate.Value;
-                var endTime = startTime.AddDays(1);
-                query = query.Where(
-                    log => log.StartAt >= startTime && log.StartAt < endTime
-                );
-            }
+            var startDate = model.startDate.GetValueOrDefault(DateTime.Today);
+            var endDate = model.endDate.GetValueOrDefault(DateTime.Today).AddDays(1);
+            var query = Session.Query<AppAuditLog>().Where(
+                log => log.StartAt >= startDate && log.StartAt < endDate
+            );
+
             if (model.UserName.IsNotNullOrEmpty()) {
-                query = query.Where(log => log.UserName.Contains(model.UserName));
+                var userName = model.UserName;
+                query = query.Where(log => log.UserName.Contains(userName));
             }
             var total = await query.LongCountAsync();
-            var data = await query.OrderByDescending(e => e.Id)
-                .Skip(model.Skip).Take(model.Take)
+            var data = await query.OrderBy(e => e.StartAt)
+                .Skip(model.Skip)
+                .Take(model.Take)
                 .ToListAsync();
             return new PaginatedResponseModel<AppAuditLogModel> {
                 Total = total,

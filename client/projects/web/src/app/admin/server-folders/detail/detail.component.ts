@@ -3,16 +3,15 @@ import {
     trigger, transition, useAnimation, AnimationEvent
 } from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
+
 import {
-    NavItemsService, NavItemModel, MenuOption
-} from '../nav-items.service';
-import { ServerFolderBrowserComponent } from '../../../common';
+    ServerFolderService, ServerFolderModel
+} from '../server-folders.service';
 
 @Component({
-    selector: 'app-nav-item-detail',
+    selector: 'app-server-folder-detail',
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.scss'],
     animations: [
@@ -25,37 +24,30 @@ import { ServerFolderBrowserComponent } from '../../../common';
 export class DetailComponent implements OnInit {
 
     public animation = '';
-    public formTitle: string;
-    public editable: boolean;
-    public targets = [
-        { name: '当前窗口', value: '' },
-        { name: '内嵌窗口', value: '_iframe' }
-    ];
-    public model: NavItemModel = { id: '', target: '', roles: [] };
-    public selectedRoles: string[] = [];
-    public parents: MenuOption[] = [];
+    public title = '';
+    public editable = false;
+    public model: ServerFolderModel = { id: '', aliasName: '', rootFolder: '', readonly: true, roles: [] }; // eslint-disable-line max-len
 
-    private id: string;
+    private id = '';
     private reloadList = false;
 
     constructor(
         private router: Router,
-        private modal: NgbModal,
         private route: ActivatedRoute,
         public account: AccountService,
-        public vm: NavItemsService
+        public vm: ServerFolderService
     ) {
         const { id, editable } = route.snapshot.params;
         if (id === '0') {
-            this.formTitle = '新建菜单项';
+            this.title = '新建存储目录';
             this.editable = true;
         }
         else if (editable === 'true') {
-            this.formTitle = '编辑菜单项';
+            this.title = '编辑存储目录';
             this.editable = true;
         }
         else {
-            this.formTitle = '查看菜单项';
+            this.title = '查看存储目录';
             this.editable = false;
         }
         this.id = id as string;
@@ -63,7 +55,6 @@ export class DetailComponent implements OnInit {
 
     public async ngOnInit(): Promise<void> {
         await this.vm.getAllRoles();
-        this.parents = await this.vm.getMenuOptions();
         if (this.id !== '0') {
             const model = await this.vm.getById(this.id);
             if (!!model) {
@@ -76,7 +67,7 @@ export class DetailComponent implements OnInit {
         if (e.fromState === '' && e.toState === 'void') {
             await this.router.navigate(['../'], { relativeTo: this.route });
             if (this.reloadList) {
-                await this.vm.search();
+                void this.vm.search();
             }
         }
     }
@@ -86,6 +77,9 @@ export class DetailComponent implements OnInit {
     }
 
     public async save(): Promise<void> {
+        if (this.model.roles?.length === 0) {
+            delete this.model.roles;
+        }
         if (this.id !== '0') {
             await this.vm.update(this.id, this.model);
         }
@@ -114,28 +108,6 @@ export class DetailComponent implements OnInit {
         else {
             this.model.roles.push(role);
         }
-    }
-
-    public showIconDialog(): void {
-        const modalRef = this.modal.open(
-            ServerFolderBrowserComponent,
-            { size: 'lg', backdrop: 'static', keyboard: false }
-        );
-        Object.assign(modalRef.componentInstance, {
-            title: '选择图标',
-            params: {
-                alias: 'icons',
-                path: '.',
-                filter: '*.svg'
-            }
-        });
-        modalRef.result.then((path: string) => {
-            let icon = path;
-            if (icon.endsWith('.svg')) {
-                icon = icon.substr(0, icon.length - 4);
-                this.model.icon = icon;
-            }
-        }).catch(ex => { console.error(ex); });
     }
 
 }

@@ -45,20 +45,38 @@
             </div>
             <div class="col-6">
               <div class="row g-0">
-                <div class="col-4"></div>
                 <div class="col pe-2">
                   <div class="row g-0">
-                    <label for="requestDate" class="col-auto col-form-label col-form-label-sm">日期：</label>
+                    <label for="startDate" class="col-auto col-form-label col-form-label-sm">开始：</label>
                     <div class="col">
                       <div class="input-group input-group-sm">
-                        <input type="text" class="form-control form-control-sm"
-                          name="requestDate" id="requestDate" placeholder="yyyy-mm-dd"
-                          ngbDatepicker #d="ngbDatepicker"
-                          [(ngModel)]="vm.searchDate"
-                          [maxDate]="maxDate"
-                          (dateSelect)="onSelectDate($event)">
+                        <input class="form-control form-control-sm" type="text"
+                          name="startDate" id="startDate" ngbDatepicker #sd="ngbDatepicker"
+                          [(ngModel)]="vm.startDate"
+                          [maxDate]="vm.endDate"
+                          (dateSelect)="onSelectDate($event)" readonly />
                         <button class="btn btn-outline-secondary" type="button"
-                          (click)="d.toggle()">
+                          (click)="sd.toggle()">
+                          <svg-icon path="bi/calendar3"></svg-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col pe-2">
+                  <div class="row g-0">
+                    <label class="col-auto col-form-label col-form-label-sm" for="requestDate">结束：</label>
+                    <div class="col">
+                      <div class="input-group input-group-sm">
+                        <input class="form-control form-control-sm" type="text"
+                          name="requestDate" id="requestDate"
+                          ngbDatepicker #ed="ngbDatepicker"
+                          [(ngModel)]="vm.endDate"
+                          [minDate]="vm.startDate"
+                          [maxDate]="vm.maxDate"
+                          (dateSelect)="onSelectDate($event)" readonly />
+                        <button class="btn btn-outline-secondary" type="button"
+                          (click)="ed.toggle()">
                           <svg-icon path="bi/calendar3"></svg-icon>
                         </button>
                       </div>
@@ -71,9 +89,10 @@
                       placeholder="用户名搜索" name="userName"
                       [(ngModel)]="vm.searchModel.userName"
                       (keyup.enter)="onUserNameChanged()">
-                    <button class="btn btn-outline-secondary" type="button"
-                      (click)="onUserNameChanged()">
-                      <svg-icon path="bi/search"></svg-icon>
+                    <button *ngIf="!!vm.searchModel.userName"
+                      class="btn btn-outline-secondary" type="button"
+                      (click)="resetUsername()">
+                      <svg-icon path="bi/x"></svg-icon>
                     </button>
                   </div>
                 </div>

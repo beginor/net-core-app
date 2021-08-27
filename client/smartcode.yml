@@ -51,6 +51,8 @@ TableFilter:
     - aspnet_user_roles
     - aspnet_user_tokens
     - aspnet_users
+    - app_nav_items
+    - server_folders
     - slpks
     - tilemaps
     - connections

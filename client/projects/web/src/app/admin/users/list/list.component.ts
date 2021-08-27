@@ -78,12 +78,12 @@ export class ListComponent implements OnInit {
     public cleanUserSearch(): void {
         this.vm.searchModel.userName = '';
         this.vm.searchModel.skip = 0;
-        this.vm.search();
+        void this.vm.search();
     }
 
-    public searchByRole(): void {
+    public research(): void {
         this.vm.searchModel.skip = 0;
-        this.vm.search();
+        void this.vm.search();
     }
 
     public isLockout(user: UserModel): boolean {

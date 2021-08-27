@@ -10,18 +10,9 @@ import { AuditLogsService } from '../audit-logs.service';
 })
 export class ListComponent implements OnInit {
 
-    public maxDate: NgbDate;
-
     constructor(
         public vm: AuditLogsService
-    ) {
-        const today = new Date();
-        this.maxDate = new NgbDate(
-            today.getFullYear(),
-            today.getMonth() + 1,
-            today.getDate()
-        );
-    }
+    ) { }
 
     public async ngOnInit(): Promise<void> {
         await this.vm.search();
@@ -92,9 +83,14 @@ export class ListComponent implements OnInit {
         await this.vm.search();
     }
 
-    public async onUserNameChanged(): Promise<void> {
+    public onUserNameChanged(): void {
         this.vm.searchModel.skip = 0;
-        await this.vm.search();
+        void this.vm.search();
+    }
+
+    public resetUsername(): void {
+        this.vm.searchModel.userName = '';
+        void this.vm.search();
     }
 
 }
