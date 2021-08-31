@@ -23,7 +23,7 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Api.Controllers {
 
     /// <summary>账户 API</summary>
-    [Route("api/[controller]")]
+    [Route("api/account")]
     [ApiController]
     public class AccountController : Controller {
 

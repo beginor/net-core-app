@@ -10,18 +10,18 @@ using Beginor.NetCoreApp.Data.Repositories;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
-    partial class ServerFolderController {
+    partial class AppStorageController {
 
         [HttpGet("{alias}/browse")]
-        [Authorize("server_folders.read_folder_content")]
-        public async Task<ActionResult<ServerFolderBrowseModel>> GetFolderContent(
+        [Authorize("app_storages.read_folder_content")]
+        public async Task<ActionResult<AppStorageBrowseModel>> GetFolderContent(
             string alias,
             string path,
             string filter = "*.*"
         ) {
             try {
                 var model = await repository.GetFolderContentAsync(
-                    new ServerFolderBrowseModel {
+                    new AppStorageBrowseModel {
                         Alias = alias,
                         Path = path,
                         Filter = filter
@@ -39,7 +39,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         }
 
         [HttpGet("{alias}/file")]
-        [Authorize("server_folders.read_file_content")]
+        [Authorize("app_storages.read_file_content")]
         public async Task<ActionResult> GetFileContent(
             string alias,
             string path

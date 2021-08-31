@@ -1,36 +1,36 @@
--- table: public.server_folders
+-- table: public.app_storages
 
--- drop table public.server_folders;
+-- drop table public.app_storages;
 
-create table if not exists public.server_folders
+create table if not exists public.app_storages
 (
     id bigint not null default snow_flake_id(),
     alias_name character varying(32) collate pg_catalog."default" not null,
     root_folder character varying(128) collate pg_catalog."default" not null,
     readonly boolean not null default true,
     roles character varying(64)[] collate pg_catalog."default",
-    constraint pk_server_folders primary key (id)
+    constraint pk_app_storages primary key (id)
 )
 
 tablespace pg_default;
 
-alter table public.server_folders
+alter table public.app_storages
     owner to postgres;
 
-comment on table public.server_folders
-    is '服务器目录';
+comment on table public.app_storages
+    is '应用存储';
 
-comment on column public.server_folders.id
-    is '服务器目录id';
+comment on column public.app_storages.id
+    is '存储id';
 
-comment on column public.server_folders.alias_name
-    is '目录别名';
+comment on column public.app_storages.alias_name
+    is '存储别名';
 
-comment on column public.server_folders.root_folder
-    is '根路径';
+comment on column public.app_storages.root_folder
+    is '存储根路径';
 
-comment on column public.server_folders.readonly
+comment on column public.app_storages.readonly
     is '是否只读';
 
-comment on column public.server_folders.roles
-    is '可访问此目录的角色';
+comment on column public.app_storages.roles
+    is '可访问此存储的角色';

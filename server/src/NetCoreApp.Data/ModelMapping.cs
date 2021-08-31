@@ -41,7 +41,7 @@ namespace Beginor.NetCoreApp.Data {
             CreateMap<AppClientError, AppClientErrorModel>()
                 .ReverseMap()
                 .ForMember(dest => dest.Id, map => map.Ignore());
-            CreateMap<ServerFolder, ServerFolderModel>()
+            CreateMap<AppStorage, AppStorageModel>()
                 .ReverseMap()
                 .ForMember(dest => dest.Id, map => map.Ignore());
         }

@@ -10,9 +10,9 @@ using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Test.Data {
 
-    /// <summary>服务器目录仓储测试</summary>
+    /// <summary>应用存储仓储测试</summary>
     [TestFixture]
-    public class ServerFolderRepositoryTest : BaseTest<IServerFolderRepository> {
+    public class AppStorageRepositoryTest : BaseTest<IAppStorageRepository> {
 
         [Test]
         public void _01_CanResolveTarget() {
@@ -21,7 +21,7 @@ namespace Beginor.NetCoreApp.Test.Data {
 
         [Test]
         public async Task _02_CanDoSearchAsync() {
-            var searchModel = new ServerFolderSearchModel {
+            var searchModel = new AppStorageSearchModel {
                 Skip = 0,
                 Take = 10
             };
@@ -32,7 +32,7 @@ namespace Beginor.NetCoreApp.Test.Data {
 
         [Test]
         public async Task _03_GetFolderContentAsync() {
-            var faModel = new ServerFolderBrowseModel {
+            var faModel = new AppStorageBrowseModel {
                 Alias = "icons",
                 Path = "fa",
                 Filter = "*.*"
@@ -41,7 +41,7 @@ namespace Beginor.NetCoreApp.Test.Data {
             Assert.IsNotNull(result);
             Assert.IsNotEmpty(result.Folders);
             Assert.IsEmpty(result.Files);
-            var biModel = new ServerFolderBrowseModel {
+            var biModel = new AppStorageBrowseModel {
                 Alias = "icons",
                 Path = "bi",
                 Filter = "*.svg"

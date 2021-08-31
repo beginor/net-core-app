@@ -19,7 +19,7 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Api.Controllers {
 
     /// <summary>用户 API</summary>
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UsersController : Controller {
 
