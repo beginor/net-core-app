@@ -31,7 +31,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
                 query = query.Where(log => log.UserName.Contains(userName));
             }
             var total = await query.LongCountAsync();
-            var data = await query.OrderBy(e => e.StartAt)
+            var data = await query.OrderByDescending(e => e.Id)
                 .Skip(model.Skip)
                 .Take(model.Take)
                 .ToListAsync();

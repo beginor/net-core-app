@@ -93,7 +93,7 @@
               placeholder="请输入图标 ..." [(ngModel)]="model.icon"
               [disabled]="!editable"
             />
-            <ng-container *ngIf="editable && info.privileges['server_folders.read_folder_content']">
+            <ng-container *ngIf="editable && info.privileges['app_storages.read_folder_content']">
               <button class="btn btn-outline-secondary" type="button"
                 ngbTooltip="从图标库查找图标" [openDelay]="300"
                 (click)="showIconDialog()">
