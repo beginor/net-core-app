@@ -8,7 +8,7 @@ import {
 import { AppSharedModule } from 'app-shared';
 
 import { AppCommonModule } from 'projects/web/src/app/common';
-import { ServerFolderRoutingModule } from './server-folders-routing.module';
+import { AppStorageRoutingModule } from './storages-routing.module';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
 
@@ -24,7 +24,7 @@ import { DetailComponent } from './detail/detail.component';
         NgbTooltipModule,
         AppSharedModule,
         AppCommonModule,
-        ServerFolderRoutingModule
+        AppStorageRoutingModule
     ]
 })
-export class ServerFolderModule { }
+export class AppStorageModule { }

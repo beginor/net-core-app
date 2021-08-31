@@ -53,7 +53,7 @@ TableFilter:
     - aspnet_users
     - app_nav_items
   IncludeTables:
-    - server_folders
+    - app_storages
   IgnoreNoPKTable: true
   IgnoreView: true
 

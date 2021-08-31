@@ -5,23 +5,23 @@ import { BehaviorSubject, lastValueFrom } from 'rxjs';
 import { UiService } from 'projects/web/src/app/common';
 import { RolesService, AppRoleModel } from '../roles/roles.service';
 
-/** 服务器目录服务 */
+/** 应用存储服务 */
 @Injectable({
     providedIn: 'root'
 })
-export class ServerFolderService {
+export class AppStorageService {
 
-    public searchModel: ServerFolderSearchModel = {
+    public searchModel: AppStorageSearchModel = {
         skip: 0,
         take: 10
     };
     public total = new BehaviorSubject<number>(0);
-    public data = new BehaviorSubject<ServerFolderModel[]>([]);
+    public data = new BehaviorSubject<AppStorageModel[]>([]);
     public loading = false;
     public showPagination = false;
     public roles: AppRoleModel[] = [];
 
-    private baseUrl = `${this.apiRoot}/server-folders`;
+    private baseUrl = `${this.apiRoot}/storages`;
     private rolesSvc: RolesService;
 
     constructor(
@@ -38,7 +38,7 @@ export class ServerFolderService {
         });
     }
 
-    /** 搜索服务器目录 */
+    /** 搜索应用存储 */
     public async search(): Promise<void> {
         let params = new HttpParams();
         for (const key in this.searchModel) {
@@ -50,7 +50,7 @@ export class ServerFolderService {
         this.loading = true;
         try {
             const result = await lastValueFrom(
-                this.http.get<ServerFolderResultModel>(this.baseUrl, { params }) // eslint-disable-line max-len
+                this.http.get<AppStorageResultModel>(this.baseUrl, { params }) // eslint-disable-line max-len
             );
             const total = result.total ?? 0;
             const data = result.data ?? [];
@@ -63,7 +63,7 @@ export class ServerFolderService {
             this.total.next(0);
             this.data.next([]);
             this.ui.showAlert(
-                { type: 'danger', message: '加载服务器目录数据出错!'}
+                { type: 'danger', message: '加载应用存储数据出错!'}
             );
         }
         finally {
@@ -83,43 +83,43 @@ export class ServerFolderService {
         await this.search();
     }
 
-    /** 创建服务器目录 */
+    /** 创建应用存储 */
     public async create(
-        model: ServerFolderModel
-    ): Promise<ServerFolderModel | undefined> {
+        model: AppStorageModel
+    ): Promise<AppStorageModel | undefined> {
         try {
             const result = await lastValueFrom(
-                this.http.post<ServerFolderModel>(this.baseUrl, model) // eslint-disable-line max-len
+                this.http.post<AppStorageModel>(this.baseUrl, model) // eslint-disable-line max-len
             );
             return result;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '创建服务器目录出错！' }
+                { type: 'danger', message: '创建应用存储出错！' }
             );
             return;
         }
     }
 
-    /** 获取指定的服务器目录 */
-    public async getById(id: string): Promise<ServerFolderModel | undefined> {
+    /** 获取指定的应用存储 */
+    public async getById(id: string): Promise<AppStorageModel | undefined> {
         try {
             const result = await lastValueFrom(
-                this.http.get<ServerFolderModel>(`${this.baseUrl}/${id}`) // eslint-disable-line max-len
+                this.http.get<AppStorageModel>(`${this.baseUrl}/${id}`) // eslint-disable-line max-len
             );
             return result;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '获取指定的服务器目录出错！' }
+                { type: 'danger', message: '获取指定的应用存储出错！' }
             );
             return;
         }
     }
 
-    /** 删除服务器目录 */
+    /** 删除应用存储 */
     public async delete(id: string): Promise<boolean> {
         const confirm = await this.ui.showConfirm('确认删除么？');
         if (!confirm) {
@@ -134,27 +134,27 @@ export class ServerFolderService {
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '删除服务器目录出错！' }
+                { type: 'danger', message: '删除应用存储出错！' }
             );
             return false;
         }
     }
 
-    /** 更新服务器目录 */
+    /** 更新应用存储 */
     public async update(
         id: string,
-        model: ServerFolderModel
-    ): Promise<ServerFolderModel | undefined> {
+        model: AppStorageModel
+    ): Promise<AppStorageModel | undefined> {
         try {
             const result = await lastValueFrom(
-                this.http.put<ServerFolderModel>(`${this.baseUrl}/${id}`, model) // eslint-disable-line max-len
+                this.http.put<AppStorageModel>(`${this.baseUrl}/${id}`, model) // eslint-disable-line max-len
             );
             return result;
         }
         catch (ex) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
-                { type: 'danger', message: '更新服务器目录出错！' }
+                { type: 'danger', message: '更新应用存储出错！' }
             );
             return;
         }
@@ -174,22 +174,22 @@ export class ServerFolderService {
 
 }
 
-/** 服务器目录 */
-export interface ServerFolderModel {
-    /** 服务器目录id */
+/** 应用存储 */
+export interface AppStorageModel {
+    /** 应用存储id */
     id: string;
-    /** 目录别名 */
+    /** 存储别名 */
     aliasName: string;
-    /** 根路径 */
+    /** 存储根路径 */
     rootFolder: string;
     /** 是否只读 */
     readonly: boolean;
-    /** 可访问此目录的角色 */
+    /** 可访问此存储的角色 */
     roles?: string[];
 }
 
-/** 服务器目录 搜索参数 */
-export interface ServerFolderSearchModel {
+/** 应用存储 搜索参数 */
+export interface AppStorageSearchModel {
     [key: string]: undefined | number | string;
     /** 跳过的记录数 */
     skip: number;
@@ -198,8 +198,8 @@ export interface ServerFolderSearchModel {
     keywords?: string;
 }
 
-/** 服务器目录 搜索结果 */
-export interface ServerFolderResultModel {
+/** 应用存储 搜索结果 */
+export interface AppStorageResultModel {
     /** 请求跳过的记录数 */
     skip?: number;
     /** 请求多少条记录 */
@@ -207,5 +207,5 @@ export interface ServerFolderResultModel {
     /** 总记录数 */
     total?: number;
     /** 数据列表 */
-    data?: ServerFolderModel[];
+    data?: AppStorageModel[];
 }
