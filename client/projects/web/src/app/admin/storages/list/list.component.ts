@@ -6,7 +6,7 @@ import { AccountService } from 'app-shared';
 import { AppStorageService } from '../storages.service';
 
 @Component({
-    selector: 'app-server-folder-list',
+    selector: 'app-storage-list',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss']
 })

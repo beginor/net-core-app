@@ -11,7 +11,7 @@ import {
 } from '../storages.service';
 
 @Component({
-    selector: 'app-server-folder-detail',
+    selector: 'app-storage-detail',
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.scss'],
     animations: [
