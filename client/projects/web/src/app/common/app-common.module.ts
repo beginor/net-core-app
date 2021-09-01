@@ -18,6 +18,7 @@ import { IframeComponent } from './iframe/iframe.component';
 import {
     StorageBrowserComponent
 } from './storage-browser/storage-browser.component';
+import { NavCardComponent } from './nav-card/nav-card.component';
 
 @NgModule({
     declarations: [
@@ -26,7 +27,8 @@ import {
         NavSidebarComponent,
         NavItemComponent,
         IframeComponent,
-        StorageBrowserComponent
+        StorageBrowserComponent,
+        NavCardComponent
     ],
     imports: [
         CommonModule,
@@ -43,7 +45,8 @@ import {
     exports: [
         NavTopBarComponent,
         NavSidebarComponent,
-        IframeComponent
+        IframeComponent,
+        NavCardComponent
     ],
     entryComponents: [
         ConfirmComponent
