@@ -32,7 +32,7 @@
       "group": "none",
       "isBackground": true,
       "options": {
-        "cwd": "${workspaceRoot}/server/src/NetCoreApp.Entry"
+        "cwd": "${workspaceRoot}/server/src/GisHub.Entry"
       }
     },
     {
