@@ -6,48 +6,12 @@
 </nav>
 
 <div class="container-fluid">
-  <div class="row g-0" *ngIf="(account.info | async) as info">
-    <div class="col-md-6 col-lg-3" *ngIf="info.privileges['tilemaps.read']">
+  <div class="row g-0" *ngIf="(navigation.sidebarNodes | async) as nodes">
+    <div class="col-md-6 col-lg-3" *ngFor="let node of nodes">
       <div class="card m-2">
         <div class="card-body">
           <h5 class="card-title">
-            <a class="card-link" routerLink="../tilemaps">栅格切片包</a>
-          </h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-lg-3" *ngIf="info.privileges['vectortiles.read']">
-      <div class="card m-2">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a class="card-link" routerLink="../vectortiles">矢量切片包</a>
-          </h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-lg-3" *ngIf="info.privileges['slpks.read']">
-      <div class="card m-2">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a class="card-link" routerLink="../slpks">航拍模型</a>
-          </h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-lg-3" *ngIf="info.privileges['data_sources.read']">
-      <div class="card m-2">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a class="card-link" routerLink="../datasources">数据源</a>
-          </h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-lg-3" *ngIf="info.privileges['data_services.read']">
-      <div class="card m-2">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a class="card-link" routerLink="../dataservices">数据服务</a>
+            <a class="card-link" [routerLink]="node.url">{{node.title}}</a>
           </h5>
         </div>
       </div>
