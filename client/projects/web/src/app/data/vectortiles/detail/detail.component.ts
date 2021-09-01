@@ -12,7 +12,7 @@ import { Style, Layer } from 'mapbox-gl';
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
 import {
-    ServerFolderBrowserComponent, UiService
+    StorageBrowserComponent, UiService
 } from 'projects/web/src/app/common';
 import { VectortileService, VectortileModel } from '../vectortiles.service';
 
@@ -148,7 +148,7 @@ export class DetailComponent implements OnInit, OnDestroy {
 
     public showCacheFolderModal(): void {
         const modalRef = this.modal.open(
-            ServerFolderBrowserComponent,
+            StorageBrowserComponent,
             { size: 'xl', backdrop: 'static', keyboard: false }
         );
         const params = {

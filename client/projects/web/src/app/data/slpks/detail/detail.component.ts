@@ -7,7 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import {
-    ServerFolderBrowserComponent
+    StorageBrowserComponent
 } from 'projects/web/src/app/common';
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import { SlpkService, SlpkModel } from '../slpks.service';
@@ -114,7 +114,7 @@ export class DetailComponent implements OnInit {
 
     public showFolderModal(): void {
         const modalRef = this.modal.open(
-            ServerFolderBrowserComponent,
+            StorageBrowserComponent,
             { size: 'xl', backdrop: 'static', keyboard: false }
         );
         const params = {

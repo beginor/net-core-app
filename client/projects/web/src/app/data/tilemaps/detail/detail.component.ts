@@ -7,7 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import { TileMapService, TileMapModel } from '../tilemaps.service';
-import { ServerFolderBrowserComponent } from '../../../common';
+import { StorageBrowserComponent } from '../../../common';
 
 @Component({
     selector: 'app-tilemap-detail',
@@ -89,7 +89,7 @@ export class DetailComponent implements OnInit {
 
     public showCacheFolderModal(): void {
         const modalRef = this.modal.open(
-            ServerFolderBrowserComponent,
+            StorageBrowserComponent,
             { size: 'xl', backdrop: 'static', keyboard: false }
         );
         const params = {
@@ -109,7 +109,7 @@ export class DetailComponent implements OnInit {
 
     public showFolderDialog(): void {
         const modalRef = this.modal.open(
-            ServerFolderBrowserComponent,
+            StorageBrowserComponent,
             { size: 'xl', backdrop: 'static', keyboard: false }
         );
         const params = {
