@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { AccountService } from 'app-shared';
+import {NavigationService} from "../../common";
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -10,7 +11,8 @@ import { AccountService } from 'app-shared';
 export class DashboardComponent {
 
     constructor(
-        public account: AccountService
+        public account: AccountService,
+        public navigation: NavigationService
     ) { }
 
 }
