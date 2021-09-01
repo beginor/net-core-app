@@ -4,9 +4,9 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ServerFolderService, ServerFolderContent } from '../services/server-folder.service';
 
 @Component({
-    selector: 'app-server-folder-browser',
-    templateUrl: './server-folder-browser.component.html',
-    styleUrls: ['./server-folder-browser.component.scss']
+    selector: 'app-storage',
+    templateUrl: './storage.component.html',
+    styleUrls: ['./storage.component.scss']
 })
 export class ServerFolderBrowserComponent implements OnInit {
 
