@@ -3,10 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from 'app-shared';
 
-import { ServerFolderService } from '../server-folders.service';
+import { AppStorageService } from '../storages.service';
 
 @Component({
-    selector: 'app-server-folder-list',
+    selector: 'app-storage-list',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss']
 })
@@ -16,7 +16,7 @@ export class ListComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         public account: AccountService,
-        public vm: ServerFolderService
+        public vm: AppStorageService
     ) { }
 
     public ngOnInit(): void {

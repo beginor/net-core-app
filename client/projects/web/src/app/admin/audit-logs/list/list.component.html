@@ -104,18 +104,18 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-center text-nowrap text-muted border-left-0">#</th>
-                <th scope="col" class="text-center text-nowrap text-muted">IP地址</th>
-                <th scope="col" class="text-center text-nowrap text-muted">主机名</th>
-                <th scope="col" class="text-center text-nowrap text-muted">请求地址</th>
+                <th scope="col" class="text-end text-nowrap text-muted border-left-0">#</th>
+                <th scope="col" class="text-start text-nowrap text-muted">IP地址</th>
+                <th scope="col" class="text-start text-nowrap text-muted">主机名</th>
+                <th scope="col" class="text-start text-nowrap text-muted">请求地址</th>
                 <th scope="col" class="text-center text-nowrap text-muted">请求方法</th>
                 <th scope="col" class="text-center text-nowrap text-muted">用户名</th>
                 <th scope="col" class="text-center text-nowrap text-muted">开始时间</th>
-                <th scope="col" class="text-center text-nowrap text-muted">耗时</th>
-                <th scope="col" class="text-center text-nowrap text-muted">响应代码</th>
-                <th scope="col" class="text-center text-nowrap text-muted">控制器</th>
-                <th scope="col" class="text-center text-nowrap text-muted">动作名称</th>
-                <th scope="col" class="text-center text-nowrap text-muted">说明</th>
+                <th scope="col" class="text-end text-nowrap text-muted">耗时</th>
+                <th scope="col" class="text-end text-nowrap text-muted">响应代码</th>
+                <th scope="col" class="text-start text-nowrap text-muted">控制器</th>
+                <th scope="col" class="text-start text-nowrap text-muted">动作名称</th>
+                <th scope="col" class="text-start text-nowrap text-muted">说明</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">

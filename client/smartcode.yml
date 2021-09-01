@@ -52,7 +52,7 @@ TableFilter:
     - aspnet_user_tokens
     - aspnet_users
     - app_nav_items
-    - server_folders
+    - app_storages
     - slpks
     - tilemaps
     - connections

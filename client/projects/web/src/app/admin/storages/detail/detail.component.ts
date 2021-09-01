@@ -7,11 +7,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
 import {
-    ServerFolderService, ServerFolderModel
-} from '../server-folders.service';
+    AppStorageService, AppStorageModel
+} from '../storages.service';
 
 @Component({
-    selector: 'app-server-folder-detail',
+    selector: 'app-storage-detail',
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.scss'],
     animations: [
@@ -26,7 +26,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: ServerFolderModel = { id: '', aliasName: '', rootFolder: '', readonly: true, roles: [] }; // eslint-disable-line max-len
+    public model: AppStorageModel = { id: '', aliasName: '', rootFolder: '', readonly: true, roles: [] }; // eslint-disable-line max-len
 
     private id = '';
     private reloadList = false;
@@ -35,7 +35,7 @@ export class DetailComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         public account: AccountService,
-        public vm: ServerFolderService
+        public vm: AppStorageService
     ) {
         const { id, editable } = route.snapshot.params;
         if (id === '0') {

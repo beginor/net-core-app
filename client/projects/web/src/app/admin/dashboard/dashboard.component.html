@@ -6,57 +6,12 @@
 </nav>
 
 <div class="container-fluid">
-  <div class="row g-0" *ngIf="(account.info | async) as info">
-    <div class="col-md-6 col-lg-3" *ngIf="info.privileges['app_nav_items.read']">
+  <div class="row g-0" *ngIf="(navigation.sidebarNodes | async) as nodes">
+    <div class="col-md-6 col-lg-3" *ngFor="let node of nodes">
       <div class="card m-2">
         <div class="card-body">
           <h5 class="card-title">
-            <a class="card-link" routerLink="../nav-items">导航菜单</a>
-          </h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-lg-3" *ngIf="info.privileges['app_users.read']">
-      <div class="card m-2">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a class="card-link" routerLink="../users">用户管理</a>
-          </h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-lg-3" *ngIf="info.privileges['app_roles.read']">
-      <div class="card m-2">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a class="card-link" routerLink="../roles">角色管理</a>
-          </h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-lg-3" *ngIf="info.privileges['app_privileges.read']">
-      <div class="card m-2">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a class="card-link" routerLink="../privileges">权限管理</a>
-          </h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-lg-3" *ngIf="info.privileges['server_folders.read']">
-      <div class="card m-2">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a class="card-link" routerLink="../server-folders">存储管理</a>
-          </h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-lg-3" *ngIf="info.privileges['app_audit_logs.read']">
-      <div class="card m-2">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a class="card-link" routerLink="../audit-logs">审计日志</a>
+            <a class="card-link" [routerLink]="node.url">{{node.title}}</a>
           </h5>
         </div>
       </div>

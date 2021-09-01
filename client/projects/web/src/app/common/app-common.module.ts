@@ -16,8 +16,8 @@ import { NavSidebarComponent } from './nav-sidebar/nav-sidebar.component';
 import { NavItemComponent } from './nav-item/nav-item.component';
 import { IframeComponent } from './iframe/iframe.component';
 import {
-    ServerFolderBrowserComponent
-} from './server-folder-browser/server-folder-browser.component';
+    StorageBrowserComponent
+} from './storage-browser/storage-browser.component';
 
 @NgModule({
     declarations: [
@@ -26,7 +26,7 @@ import {
         NavSidebarComponent,
         NavItemComponent,
         IframeComponent,
-        ServerFolderBrowserComponent
+        StorageBrowserComponent
     ],
     imports: [
         CommonModule,

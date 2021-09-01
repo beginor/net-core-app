@@ -11,28 +11,28 @@ using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using NHibernate;
 using NHibernate.Linq;
-using Beginor.GisHub.Common;
-using Beginor.GisHub.Data.Entities;
-using Beginor.GisHub.Models;
+using Beginor.NetCoreApp.Common;
+using Beginor.NetCoreApp.Data.Entities;
+using Beginor.NetCoreApp.Models;
 
-namespace Beginor.GisHub.Data.Repositories {
+namespace Beginor.NetCoreApp.Data.Repositories {
 
-    /// <summary>服务器目录仓储实现</summary>
-    public partial class ServerFolderRepository : HibernateRepository<ServerFolder, ServerFolderModel, long>, IServerFolderRepository {
+    /// <summary>应用存储仓储实现</summary>
+    public partial class AppStorageRepository : HibernateRepository<AppStorage, AppStorageModel, long>, IAppStorageRepository {
 
         private readonly IDistributedCache cache;
         private readonly IWebHostEnvironment hostEnv;
 
-        public ServerFolderRepository(ISession session, IMapper mapper, IDistributedCache cache, IWebHostEnvironment hostEnv) : base(session, mapper) {
+        public AppStorageRepository(ISession session, IMapper mapper, IDistributedCache cache, IWebHostEnvironment hostEnv) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
             this.hostEnv = hostEnv ?? throw new ArgumentNullException(nameof(hostEnv));
         }
 
-        /// <summary>搜索 服务器目录 ，返回分页结果。</summary>
-        public async Task<PaginatedResponseModel<ServerFolderModel>> SearchAsync(
-            ServerFolderSearchModel model
+        /// <summary>搜索 应用存储 ，返回分页结果。</summary>
+        public async Task<PaginatedResponseModel<AppStorageModel>> SearchAsync(
+            AppStorageSearchModel model
         ) {
-            var query = Session.Query<ServerFolder>();
+            var query = Session.Query<AppStorage>();
             var keywords = model.Keywords;
             if (keywords.IsNotNullOrEmpty()) {
                 query = query.Where(
@@ -43,15 +43,15 @@ namespace Beginor.GisHub.Data.Repositories {
             var data = await query.OrderByDescending(e => e.Id)
                 .Skip(model.Skip).Take(model.Take)
                 .ToListAsync();
-            return new PaginatedResponseModel<ServerFolderModel> {
+            return new PaginatedResponseModel<AppStorageModel> {
                 Total = total,
-                Data = Mapper.Map<IList<ServerFolderModel>>(data),
+                Data = Mapper.Map<IList<AppStorageModel>>(data),
                 Skip = model.Skip,
                 Take = model.Take
             };
         }
 
-        public async Task<ServerFolderBrowseModel> GetFolderContentAsync(ServerFolderBrowseModel model) {
+        public async Task<AppStorageBrowseModel> GetFolderContentAsync(AppStorageBrowseModel model) {
             var folderItem = await GetByAlias(model.Alias);
             if (folderItem == null) {
                 return null;
@@ -103,18 +103,18 @@ namespace Beginor.GisHub.Data.Repositories {
             return File.OpenRead(physicalPath);
         }
 
-        private async Task<ServerFolder> GetByAlias(string alias) {
-            var folder = await Session.Query<ServerFolder>()
+        private async Task<AppStorage> GetByAlias(string alias) {
+            var folder = await Session.Query<AppStorage>()
                 .FirstOrDefaultAsync(x => x.AliasName == alias);
             return folder;
         }
 
-        private async Task<ServerFolderCacheItem> GetCacheItemAsync(long id) {
+        private async Task<AppStorageCacheItem> GetCacheItemAsync(long id) {
             var key = id.ToString();
-            var item = await cache.GetAsync<ServerFolderCacheItem>(key);
+            var item = await cache.GetAsync<AppStorageCacheItem>(key);
             if (item == null) {
-                var entity = await Session.LoadAsync<ServerFolder>(id);
-                item = new ServerFolderCacheItem {
+                var entity = await Session.LoadAsync<AppStorage>(id);
+                item = new AppStorageCacheItem {
                     Id = entity.Id,
                     AliasName = entity.AliasName,
                     Readonly = entity.Readonly,

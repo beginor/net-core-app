@@ -23,7 +23,7 @@ using Beginor.GisHub.Models;
 namespace Beginor.GisHub.Api.Controllers {
 
     /// <summary>账户 API</summary>
-    [Route("api/[controller]")]
+    [Route("api/account")]
     [ApiController]
     public class AccountController : Controller {
 

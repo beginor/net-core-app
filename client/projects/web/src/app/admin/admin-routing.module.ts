@@ -27,8 +27,8 @@ const routes: Routes = [
         loadChildren: () => import('./nav-items/nav-items.module').then(m => m.NavItemsModule)
     },
     {
-        path: 'server-folders',
-        loadChildren: () => import('./server-folders/server-folders.module').then(m => m.ServerFolderModule)
+        path: 'storages',
+        loadChildren: () => import('./storages/storages.module').then(m => m.AppStorageModule)
     }
 ];
 /* eslint-enable max-len */
