@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Models;
-using Beginor.NetCoreApp.Data.Repositories;
+using Beginor.GisHub.Models;
+using Beginor.GisHub.Data.Repositories;
 using Microsoft.AspNetCore.StaticFiles;
 
-namespace Beginor.NetCoreApp.Api.Controllers {
+namespace Beginor.GisHub.Api.Controllers {
 
     /// <summary>应用存储 服务接口</summary>
     [ApiController]

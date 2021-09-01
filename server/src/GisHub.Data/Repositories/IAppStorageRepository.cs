@@ -3,9 +3,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Models;
+using Beginor.GisHub.Models;
 
-namespace Beginor.NetCoreApp.Data.Repositories {
+namespace Beginor.GisHub.Data.Repositories {
 
     /// <summary>应用存储 仓储接口</summary>
     public partial interface IAppStorageRepository : IRepository<AppStorageModel, long> {

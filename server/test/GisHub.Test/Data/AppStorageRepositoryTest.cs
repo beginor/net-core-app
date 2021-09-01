@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using NHibernate;
 using NHibernate.NetCore;
 using NUnit.Framework;
-using Beginor.NetCoreApp.Data.Entities;
-using Beginor.NetCoreApp.Data.Repositories;
-using Beginor.NetCoreApp.Models;
+using Beginor.GisHub.Data.Entities;
+using Beginor.GisHub.Data.Repositories;
+using Beginor.GisHub.Models;
 
-namespace Beginor.NetCoreApp.Test.Data {
+namespace Beginor.GisHub.Test.Data {
 
     /// <summary>应用存储仓储测试</summary>
     [TestFixture]
