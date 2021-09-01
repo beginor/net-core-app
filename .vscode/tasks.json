@@ -24,6 +24,18 @@
       }
     },
     {
+      "label": "dotnet:run",
+      "command": "dotnet",
+      "type": "shell",
+      "args": ["run"],
+      "problemMatcher": ["$msCompile"],
+      "group": "none",
+      "isBackground": true,
+      "options": {
+        "cwd": "${workspaceRoot}/server/src/NetCoreApp.Entry"
+      }
+    },
+    {
       "label": "dotnet:watch-run",
       "command": "dotnet",
       "type": "shell",
