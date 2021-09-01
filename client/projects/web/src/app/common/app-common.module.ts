@@ -17,7 +17,7 @@ import { NavItemComponent } from './nav-item/nav-item.component';
 import { IframeComponent } from './iframe/iframe.component';
 import {
     ServerFolderBrowserComponent
-} from './storage/server-folder-browser.component';
+} from './storage/storage.component';
 
 @NgModule({
     declarations: [
