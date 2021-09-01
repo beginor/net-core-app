@@ -21,7 +21,7 @@ export class ServerFolderService {
         params: ServerFolderContent
     ): Promise<ServerFolderContent> {
         try {
-            const url = `${this.apiRoot}/server-folders/${params.alias}/browse`;
+            const url = `${this.apiRoot}/storages/${params.alias}/browse`;
             const httpParams = new HttpParams()
                 .set('path', params.path as string)
                 .set('filter', params.filter as string);
@@ -32,7 +32,7 @@ export class ServerFolderService {
         }
         catch (ex) {
             this.ui.showAlert(
-                { type: 'warning', message: '无法获取服务器目录内容！' }
+                { type: 'warning', message: '无法获取存储内容！' }
             );
             this.errorHandler.handleError(ex);
             return params;
