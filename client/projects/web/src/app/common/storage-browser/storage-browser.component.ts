@@ -8,7 +8,7 @@ import { StorageService, StorageContent } from '../services/storage.service';
     templateUrl: './storage-browser.component.html',
     styleUrls: ['./storage-browser.component.scss']
 })
-export class StorageComponent implements OnInit {
+export class StorageBrowserComponent implements OnInit {
 
     public title?: string;
     public params!: StorageContent;
