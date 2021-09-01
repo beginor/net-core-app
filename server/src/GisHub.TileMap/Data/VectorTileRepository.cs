@@ -22,24 +22,24 @@ namespace Beginor.GisHub.TileMap.Data {
 
         private IDistributedCache cache;
         private IAppJsonDataRepository jsonRepository;
-        private IServerFolderRepository serverFolderRepository;
+        private IAppStorageRepository storageRepository;
 
         public VectorTileRepository(
             ISession session,
             IMapper mapper,
             IDistributedCache cache,
             IAppJsonDataRepository jsonRepository,
-            IServerFolderRepository serverFolderRepository
+            IAppStorageRepository serverFolderRepository
         ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
             this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
-            this.serverFolderRepository = serverFolderRepository ?? throw new ArgumentNullException(nameof(serverFolderRepository));
+            this.storageRepository = serverFolderRepository ?? throw new ArgumentNullException(nameof(serverFolderRepository));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 this.cache = null;
-                this.serverFolderRepository = null;
+                this.storageRepository = null;
                 this.jsonRepository = null;
             }
             base.Dispose(disposing);
@@ -190,7 +190,7 @@ namespace Beginor.GisHub.TileMap.Data {
                 throw new TileNotFoundException($"Vectortile {id} doesn't exists in database.");
             }
             cacheItem = entity.ToCache();
-            cacheItem.CacheDirectory = await serverFolderRepository.GetPhysicalPathAsync(entity.Directory);
+            cacheItem.CacheDirectory = await storageRepository.GetPhysicalPathAsync(entity.Directory);
             await cache.SetAsync(key, cacheItem);
             return cacheItem.ToVectorTileEntity();
         }

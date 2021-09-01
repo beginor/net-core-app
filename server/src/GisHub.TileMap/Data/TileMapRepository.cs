@@ -22,25 +22,25 @@ namespace Beginor.GisHub.TileMap.Data {
     public partial class TileMapRepository : HibernateRepository<TileMapEntity, TileMapModel, long>, ITileMapRepository {
 
         private IDistributedCache cache;
-        private IServerFolderRepository serverFolderRepository;
+        private IAppStorageRepository storageRepository;
         private IAppJsonDataRepository jsonRepository;
 
         public TileMapRepository(
             ISession session,
             IMapper mapper,
             IDistributedCache cache,
-            IServerFolderRepository serverFolderRepository,
+            IAppStorageRepository serverFolderRepository,
             IAppJsonDataRepository jsonRepository
         ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
-            this.serverFolderRepository = serverFolderRepository ?? throw new ArgumentNullException(nameof(serverFolderRepository));
+            this.storageRepository = serverFolderRepository ?? throw new ArgumentNullException(nameof(serverFolderRepository));
             this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 this.cache = null;
-                this.serverFolderRepository = null;
+                this.storageRepository = null;
                 this.jsonRepository = null;
             }
             base.Dispose(disposing);
@@ -151,8 +151,8 @@ namespace Beginor.GisHub.TileMap.Data {
             if (entity == null) {
                 throw new TileNotFoundException($"Tilemap {id} doesn't exists in database.");
             }
-            var cacheDirectory = await serverFolderRepository.GetPhysicalPathAsync(entity.CacheDirectory);
-            var mapTileInfoPath = await serverFolderRepository.GetPhysicalPathAsync(entity.MapTileInfoPath);
+            var cacheDirectory = await storageRepository.GetPhysicalPathAsync(entity.CacheDirectory);
+            var mapTileInfoPath = await storageRepository.GetPhysicalPathAsync(entity.MapTileInfoPath);
             var cacheItem = entity.ToCache();
             cacheItem.CacheDirectory = cacheDirectory;
             cacheItem.MapTileInfoPath = mapTileInfoPath;

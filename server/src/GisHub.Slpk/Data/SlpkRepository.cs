@@ -21,22 +21,22 @@ namespace Beginor.GisHub.Slpk.Data {
     public class SlpkRepository : HibernateRepository<SlpkEntity, SlpkModel, long>, ISlpkRepository {
 
         private IDistributedCache cache;
-        private IServerFolderRepository serverFolderRepository;
+        private IAppStorageRepository storageRepository;
 
         public SlpkRepository(
             ISession session,
             IMapper mapper,
             IDistributedCache cache,
-            IServerFolderRepository serverFolderRepository
+            IAppStorageRepository serverFolderRepository
         ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
-            this.serverFolderRepository = serverFolderRepository ?? throw new ArgumentNullException(nameof(serverFolderRepository));
+            this.storageRepository = serverFolderRepository ?? throw new ArgumentNullException(nameof(serverFolderRepository));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 this.cache = null;
-                this.serverFolderRepository = null;
+                this.storageRepository = null;
             }
         }
 
@@ -118,7 +118,7 @@ namespace Beginor.GisHub.Slpk.Data {
                 .Where(e => e.Id == id)
                 .Select(e => e.Directory)
                 .FirstOrDefaultAsync();
-            directory = await serverFolderRepository.GetPhysicalPathAsync(directory);
+            directory = await storageRepository.GetPhysicalPathAsync(directory);
             await cache.SetAsync(key, new SlpkCacheItem { Id = id, Directory = directory });
             return directory;
         }
