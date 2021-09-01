@@ -1,17 +1,17 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ServerFolderService, ServerFolderContent } from '../services/storage.service';
+import { StorageService, StorageContent } from '../services/storage.service';
 
 @Component({
     selector: 'app-storage',
     templateUrl: './storage.component.html',
     styleUrls: ['./storage.component.scss']
 })
-export class ServerFolderBrowserComponent implements OnInit {
+export class StorageComponent implements OnInit {
 
     public title?: string;
-    public params!: ServerFolderContent;
+    public params!: StorageContent;
 
     public filteredItems: FolderItem[] = [];
     private allItems: FolderItem[] = [];
@@ -24,7 +24,7 @@ export class ServerFolderBrowserComponent implements OnInit {
 
     constructor(
         public modal: NgbActiveModal,
-        private service: ServerFolderService
+        private service: StorageService
     ) { }
 
     public async ngOnInit(): Promise<void> {

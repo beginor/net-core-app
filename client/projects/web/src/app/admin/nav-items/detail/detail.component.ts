@@ -9,7 +9,7 @@ import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 import {
     NavItemsService, NavItemModel, MenuOption
 } from '../nav-items.service';
-import { ServerFolderBrowserComponent } from '../../../common';
+import { StorageComponent } from '../../../common';
 
 @Component({
     selector: 'app-nav-item-detail',
@@ -118,7 +118,7 @@ export class DetailComponent implements OnInit {
 
     public showIconDialog(): void {
         const modalRef = this.modal.open(
-            ServerFolderBrowserComponent,
+            StorageComponent,
             { size: 'lg', backdrop: 'static', keyboard: false }
         );
         Object.assign(modalRef.componentInstance, {

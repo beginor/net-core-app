@@ -8,7 +8,7 @@ import { UiService } from './ui.service';
 @Injectable({
     providedIn: 'root'
 })
-export class ServerFolderService {
+export class StorageService {
 
     constructor(
         private http: HttpClient,
@@ -18,15 +18,15 @@ export class ServerFolderService {
     ) { }
 
     public async getFolderContent(
-        params: ServerFolderContent
-    ): Promise<ServerFolderContent> {
+        params: StorageContent
+    ): Promise<StorageContent> {
         try {
             const url = `${this.apiRoot}/storages/${params.alias}/browse`;
             const httpParams = new HttpParams()
                 .set('path', params.path as string)
                 .set('filter', params.filter as string);
             const result = await lastValueFrom(
-                this.http.get<ServerFolderContent>(url, { params: httpParams })
+                this.http.get<StorageContent>(url, { params: httpParams })
             );
             return result;
         }
@@ -41,7 +41,7 @@ export class ServerFolderService {
 
 }
 
-export interface ServerFolderContent {
+export interface StorageContent {
     alias: string;
     path: string;
     filter?: string;
