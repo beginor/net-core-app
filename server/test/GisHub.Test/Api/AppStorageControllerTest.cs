@@ -1,10 +1,10 @@
-using Beginor.GisHub.Api.Controllers;
+using Beginor.NetCoreApp.Api.Controllers;
 using NUnit.Framework;
 
-namespace Beginor.GisHub.Test.Api {
+namespace Beginor.NetCoreApp.Test.Api {
 
     [TestFixture]
-    public class ServerFolderControllerTest : BaseTest<AppStorageController> {
+    public class AppStorageControllerTest : BaseTest<AppStorageController> {
 
         [Test]
         public void _01_CanResolveTarget() {
