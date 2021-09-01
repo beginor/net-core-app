@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ServerFolderService, ServerFolderContent } from '../services/server-folder.service';
+import { ServerFolderService, ServerFolderContent } from '../services/storage.service';
 
 @Component({
     selector: 'app-storage',
