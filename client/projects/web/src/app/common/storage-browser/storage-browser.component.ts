@@ -4,9 +4,9 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { StorageService, StorageContent } from '../services/storage.service';
 
 @Component({
-    selector: 'app-storage',
-    templateUrl: './storage.component.html',
-    styleUrls: ['./storage.component.scss']
+    selector: 'app-storage-browser',
+    templateUrl: './storage-browser.component.html',
+    styleUrls: ['./storage-browser.component.scss']
 })
 export class StorageComponent implements OnInit {
 
