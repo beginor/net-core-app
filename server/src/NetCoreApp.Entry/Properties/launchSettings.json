@@ -10,7 +10,7 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_PATHBASE": "/net-core-app",
@@ -19,7 +19,7 @@
     },
     "Beginor.NetCoreApp.Entry": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_PATHBASE": "/net-core-app",
