@@ -53,7 +53,7 @@ TableFilter:
     - aspnet_users
     - app_client_errors
     - app_json_data
-    - server_folders
+    - app_storages
     - slpks
     - tilemaps
     - connections

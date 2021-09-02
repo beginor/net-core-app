@@ -37,7 +37,7 @@
           [class.is-invalid]="!(directory.valid || directory.pristine)"
           [class.is-valid]="directory.valid"
         />
-        <ng-container *ngIf="editable && info.privileges['server_folders.read_folder_content']">
+        <ng-container *ngIf="editable && info.privileges['app_storages.read_folder_content']">
           <button class="btn btn-outline-secondary" type="button"
             ngbTooltip="选择缓存目录" [openDelay]="300" container="body"
             (click)="showCacheFolderModal()">
