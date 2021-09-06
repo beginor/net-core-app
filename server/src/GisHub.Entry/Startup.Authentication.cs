@@ -90,6 +90,12 @@ namespace Beginor.GisHub.Entry {
                                 claims.Add(claim);
                             }
                         }
+                        if (token.Roles != null && token.Roles.Length > 0) {
+                            foreach (var role in token.Roles) {
+                                var claim = new Claim(ClaimTypes.Role, role);
+                                claims.Add(claim);
+                            }
+                        }
                         var identity = new ClaimsIdentity(claims, context.Scheme.Name);
                         var principal = new ClaimsPrincipal(identity);
                         context.Principal = principal;
