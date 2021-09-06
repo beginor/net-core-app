@@ -47,19 +47,6 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             if (token == null) {
                 token = await Session.Query<AppUserToken>()
                     .Where(tk => tk.Value == tokenValue)
-                    .Select(tk => new AppUserToken {
-                        Id = tk.Id,
-                        User = new AppUser {
-                            Id = tk.User.Id,
-                            UserName = tk.User.UserName
-                        },
-                        Name = tk.Name,
-                        Value = tk.Value,
-                        Privileges = tk.Privileges,
-                        Urls = tk.Urls,
-                        ExpiresAt = tk.ExpiresAt,
-                        UpdateTime = tk.UpdateTime
-                    })
                     .FirstOrDefaultAsync();
                 if (token != null) {
                     await cache.SetAsync<AppUserToken>(token.Value, token);
