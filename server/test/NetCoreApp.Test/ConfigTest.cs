@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
-using Beginor.NetCoreApp.Api.Middlewares;
+using Beginor.AspNetCore.Middlewares.CustomHeader;
+using Beginor.AspNetCore.Middlewares.SpaFailback;
 using Beginor.NetCoreApp.Common;
 
 namespace Beginor.NetCoreApp.Test {
@@ -53,7 +54,7 @@ namespace Beginor.NetCoreApp.Test {
             var section = Target.GetSection("spaFailback");
             var spaFailback = section.Get<SpaFailbackOptions>();
             Assert.IsNotNull(spaFailback);
-            Console.WriteLine(spaFailback.Failbacks.Count);
+            Console.WriteLine(spaFailback.Rules.Count);
         }
 
         [Test]

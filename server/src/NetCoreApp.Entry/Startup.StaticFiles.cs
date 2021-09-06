@@ -12,10 +12,8 @@ namespace Beginor.NetCoreApp.Entry {
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
-            services.Configure<SpaFailbackOptions>(
-                config.GetSection("spaFailback")
-            );
-            services.AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>();
+            services.ConfigureSpaFailback(config.GetSection("spaFailback"));
+            services.ConfigureGzipStatic();
 #if DEBUG
             services.AddDirectoryBrowser();
 #endif
