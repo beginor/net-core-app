@@ -14,8 +14,8 @@ namespace Beginor.NetCoreApp.Data.Entities {
         public override long Id { get { return base.Id; } set { base.Id = value; } }
 
         /// <summary>用户id</summary>
-        [Property(Name = "UserId", Column = "user_id", Type = "string", NotNull = true, Length = 32)]
-        public virtual string UserId { get; set; }
+        [ManyToOne(Name = "User", Column = "user_id", ClassType = typeof(AppUser), NotFound = NotFoundMode.Ignore)]
+        public virtual AppUser User { get; set; }
 
         /// <summary>凭证名称</summary>
         [Property(Name = "Name", Column = "name", Type = "string", NotNull = true, Length = 16)]
@@ -32,6 +32,10 @@ namespace Beginor.NetCoreApp.Data.Entities {
         /// <summary>允许的 url 地址</summary>
         [Property(Name = "Urls", Column = "urls", TypeType = typeof(StringArrayType), NotNull = false)]
         public virtual string[] Urls { get; set; }
+
+        /// <summary>过期时间</summary>
+        [Property(Name = "ExpiresAt", Column = "expires_at", Type = "datetime", NotNull = false)]
+        public virtual DateTime? ExpiresAt { get; set; }
 
         /// <summary>更新时间</summary>
         [Property(Name = "UpdateTime", Column = "update_time", Type = "datetime", NotNull = true)]

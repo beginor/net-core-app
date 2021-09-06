@@ -20,6 +20,8 @@ namespace Beginor.NetCoreApp.Models {
         public string[] Privileges { get; set; }
         /// <summary>允许的 url 地址</summary>
         public string[] Urls { get; set; }
+        /// <summary>过期时间</summary>
+        public DateTime? ExpiresAt { get; set; }
         /// <summary>更新时间</summary>
         [Required(ErrorMessage = "更新时间 必须填写！")]
         public DateTime UpdateTime { get; set; }

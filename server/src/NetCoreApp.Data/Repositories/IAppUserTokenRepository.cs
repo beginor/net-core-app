@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Data.Repositories {
@@ -13,6 +14,8 @@ namespace Beginor.NetCoreApp.Data.Repositories {
         Task<PaginatedResponseModel<AppUserTokenModel>> SearchAsync(
             AppUserTokenSearchModel model
         );
+
+        Task<AppUserToken> GetTokenByValue(string tokenValue);
 
     }
 
