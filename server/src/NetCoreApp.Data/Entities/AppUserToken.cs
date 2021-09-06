@@ -25,6 +25,10 @@ namespace Beginor.NetCoreApp.Data.Entities {
         [Property(Name = "Value", Column = "value", Type = "string", NotNull = true, Length = 32)]
         public virtual string Value { get; set; }
 
+        /// <summary>凭证角色</summary>
+        [Property(Name = "Roles", Column = "roles", TypeType = typeof(StringArrayType), NotNull = false)]
+        public virtual string[] Roles { get; set; }
+
         /// <summary>凭证权限</summary>
         [Property(Name = "Privileges", Column = "privileges", TypeType = typeof(StringArrayType), NotNull = false)]
         public virtual string[] Privileges { get; set; }

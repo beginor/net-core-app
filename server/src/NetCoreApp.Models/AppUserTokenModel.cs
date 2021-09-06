@@ -7,15 +7,14 @@ namespace Beginor.NetCoreApp.Models {
     /// <summary>用户凭证模型</summary>
     public partial class AppUserTokenModel : StringEntity {
 
-        /// <summary>用户id</summary>
-        [Required(ErrorMessage = "用户id 必须填写！")]
-        public string UserId { get; set; }
         /// <summary>凭证名称</summary>
         [Required(ErrorMessage = "凭证名称 必须填写！")]
         public string Name { get; set; }
         /// <summary>凭证值</summary>
         [Required(ErrorMessage = "凭证值 必须填写！")]
         public string Value { get; set; }
+        /// <summary>凭证角色</summary>
+        public string[] Roles { get; set; }
         /// <summary>凭证权限</summary>
         public string[] Privileges { get; set; }
         /// <summary>允许的 url 地址</summary>
