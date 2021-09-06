@@ -9,11 +9,11 @@ using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using NHibernate;
 using NHibernate.Linq;
-using Beginor.NetCoreApp.Common;
-using Beginor.NetCoreApp.Data.Entities;
-using Beginor.NetCoreApp.Models;
+using Beginor.GisHub.Common;
+using Beginor.GisHub.Data.Entities;
+using Beginor.GisHub.Models;
 
-namespace Beginor.NetCoreApp.Data.Repositories {
+namespace Beginor.GisHub.Data.Repositories {
 
     /// <summary>用户凭证仓储实现</summary>
     public partial class AppUserTokenRepository : HibernateRepository<AppUserToken, AppUserTokenModel, long>, IAppUserTokenRepository {

@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Data.Entities;
-using Beginor.NetCoreApp.Models;
+using Beginor.GisHub.Data.Entities;
+using Beginor.GisHub.Models;
 
-namespace Beginor.NetCoreApp.Data.Repositories {
+namespace Beginor.GisHub.Data.Repositories {
 
     /// <summary>用户凭证 仓储接口</summary>
     public partial interface IAppUserTokenRepository : IRepository<AppUserTokenModel, long> {

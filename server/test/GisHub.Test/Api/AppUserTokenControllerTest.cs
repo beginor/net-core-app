@@ -1,7 +1,7 @@
-using Beginor.NetCoreApp.Api.Controllers;
+using Beginor.GisHub.Api.Controllers;
 using NUnit.Framework;
 
-namespace Beginor.NetCoreApp.Test.Api {
+namespace Beginor.GisHub.Test.Api {
 
     [TestFixture]
     public class AppUserTokenControllerTest : BaseTest<AppUserTokenController> {

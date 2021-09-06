@@ -13,10 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Beginor.AppFx.Core;
 using Beginor.AspNetCore.Authentication.Token;
-using Beginor.NetCoreApp.Api.Authorization;
-using Beginor.NetCoreApp.Common;
 using Beginor.GisHub.Api.Authorization;
 using Beginor.GisHub.Common;
+using Beginor.GisHub.Data.Repositories;
 
 namespace Beginor.GisHub.Entry {
 

@@ -3,7 +3,7 @@ using Beginor.AppFx.Core;
 using NHibernate.Extensions.NpgSql;
 using NHibernate.Mapping.Attributes;
 
-namespace Beginor.NetCoreApp.Data.Entities {
+namespace Beginor.GisHub.Data.Entities {
 
     /// <summary>用户凭证</summary>
     [Class(Schema = "public", Table = "app_user_tokens")]
