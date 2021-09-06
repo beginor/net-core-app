@@ -16,7 +16,6 @@ using Beginor.AspNetCore.Authentication.Token;
 using Beginor.NetCoreApp.Api.Authorization;
 using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Repositories;
-using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Entry {
 
