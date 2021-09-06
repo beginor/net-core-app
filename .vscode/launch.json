@@ -19,6 +19,11 @@
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/server/src/NetCoreApp.Entry/Views"
       }
+    },
+    {
+      "name": "Attache Process (.Net)",
+      "type": "coreclr",
+      "request": "attach"
     }
   ]
 }
