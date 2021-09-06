@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -15,7 +12,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Net.Http.Headers;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
 
@@ -71,7 +67,6 @@ namespace Beginor.GisHub.Api.Middlewares {
                 HostName = context.Request.Host.Value,
                 RequestPath = context.Request.Path,
                 RequestMethod = context.Request.Method,
-                UserName = GetUserName(context),
                 StartAt = DateTime.Now,
             };
             var stopwatch = new Stopwatch();
@@ -85,6 +80,7 @@ namespace Beginor.GisHub.Api.Middlewares {
             }
             await next.Invoke(context);
             stopwatch.Stop();
+            auditLog.UserName = GetUserName(context);
             auditLog.Duration = stopwatch.ElapsedMilliseconds;
             auditLog.ResponseCode = context.Response.StatusCode;
             var action = GetMatchingAction(auditLog.RequestPath, auditLog.RequestMethod) as ControllerActionDescriptor;
@@ -194,27 +190,8 @@ namespace Beginor.GisHub.Api.Middlewares {
 
         private string GetUserName(HttpContext context) {
             var username = "anonymous";
-            var request = context.Request;
-            string authorization = request.Headers[HeaderNames.Authorization];
-            if (string.IsNullOrEmpty(authorization)) {
-                return username;
-            }
-            if (!authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase)) {
-                return username;
-            }
-            var token = authorization.Substring("Bearer ".Length).Trim();
-            if (string.IsNullOrEmpty(token)) {
-                return username;
-            }
-            var handler = new JwtSecurityTokenHandler();
-            if (handler.CanReadToken(token)) {
-                var jst = handler.ReadJwtToken(token);
-                var claim = jst.Claims.FirstOrDefault(
-                    c => c.Type == "name" || c.Type == "unique_name" || c.Type == ClaimTypes.Name
-                );
-                if (claim != null) {
-                    username = claim.Value;
-                }
+            if (context.User.Identity.IsAuthenticated) {
+                username = context.User.Identity.Name;
             }
             return username;
         }

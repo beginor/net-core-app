@@ -62,6 +62,11 @@
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    {
+      "name": "Attache Process (.Net)",
+      "type": "coreclr",
+      "request": "attach"
     }
   ]
 }

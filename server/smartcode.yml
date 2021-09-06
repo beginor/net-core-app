@@ -42,8 +42,6 @@ NamingConverter:
       Type: Pascal
 TableFilter:
   IgnoreTables:
-    - app_roles
-    - app_users
     - aspnet_role_claims
     - aspnet_roles
     - aspnet_user_claims
@@ -51,16 +49,19 @@ TableFilter:
     - aspnet_user_roles
     - aspnet_user_tokens
     - aspnet_users
+    - app_roles
+    - app_users
     - app_client_errors
     - app_json_data
     - app_storages
+    - app_user_tokens
     - slpks
     - tilemaps
     - connections
     - datasources
     - vectortiles
   IncludeTables:
-    - user_access_tokens
+    -  user_access_tokens
   IgnoreNoPKTable: true
   IgnoreView: true
 
