@@ -8,6 +8,7 @@ create table if not exists public.app_user_tokens
     user_id character varying(32) collate pg_catalog."default" not null,
     name character varying(16) collate pg_catalog."default" not null,
     value character varying(32) collate pg_catalog."default" not null,
+    roles character varying(64)[], collate pg_catalog."default"
     privileges character varying(64)[] collate pg_catalog."default",
     urls character varying(64)[] collate pg_catalog."default",
     expires_at timestamp without time zone,
@@ -48,5 +49,8 @@ comment on column public.app_user_tokens.urls
 comment on column public.app_user_tokens.privileges
     is '凭证权限';
 
-COMMENT ON COLUMN public.app_user_tokens.expires_at
-    IS '过期时间';
+comment on column public.app_user_tokens.expires_at
+    is '过期时间';
+
+comment on column public.app_user_tokens.roles
+    is '凭证代表的角色';
