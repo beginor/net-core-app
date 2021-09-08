@@ -58,7 +58,7 @@ namespace Beginor.NetCoreApp.Entry {
                 options.Events = new TokenEvents {
                     OnTokenReceived = async context => {
                         var repo = context.HttpContext.RequestServices.GetService<IAppUserTokenRepository>();
-                        var token = await repo.GetTokenByValue(context.Token);
+                        var token = await repo.GetTokenByValueAsync(context.Token);
                         if (token == null) {
                             context.Fail("Invalid token!");
                             return;

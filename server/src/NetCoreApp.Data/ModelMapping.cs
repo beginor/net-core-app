@@ -44,6 +44,10 @@ namespace Beginor.NetCoreApp.Data {
             CreateMap<AppStorage, AppStorageModel>()
                 .ReverseMap()
                 .ForMember(dest => dest.Id, map => map.Ignore());
+            CreateMap<AppUserToken, AppUserTokenModel>()
+                .ReverseMap()
+                .ForMember(dest => dest.Id, map => map.Ignore())
+                .ForMember(d => d.User, m => m.Ignore());
         }
 
     }

@@ -87,7 +87,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]JsonElement model
         ) {
             try {
-                var exists = await repository.ExitsAsync(id);
+                var exists = await repository.ExistAsync(id);
                 if (!exists) {
                     return NotFound();
                 }

@@ -127,7 +127,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppStorageModel model
         ) {
             try {
-                var exists = await repository.ExitsAsync(id);
+                var exists = await repository.ExistAsync(id);
                 if (!exists) {
                     return NotFound();
                 }

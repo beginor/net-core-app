@@ -124,7 +124,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AppPrivilegeModel model
         ) {
             try {
-                var exists = await repository.ExitsAsync(id);
+                var exists = await repository.ExistAsync(id);
                 if (!exists) {
                     return NotFound();
                 }
