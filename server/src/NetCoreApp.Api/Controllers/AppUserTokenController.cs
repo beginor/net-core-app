@@ -48,7 +48,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not search app_user_tokens with {model.ToJson()} .");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -66,7 +66,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not save {model.ToJson()} to app_user_tokens.");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -83,7 +83,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not delete app_user_tokens by id {id} .");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -105,7 +105,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get app_user_tokens by id {id}.");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -131,7 +131,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not update app_user_tokens by id {id} with {model.ToJson()} .");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 

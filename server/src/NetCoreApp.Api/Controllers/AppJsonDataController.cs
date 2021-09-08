@@ -48,7 +48,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not delete app_json_data by id {id} .");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -70,7 +70,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get app_json_data by id {id}.");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -96,7 +96,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not update app_json_data by id {id} with {model.ToJson()} .");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 

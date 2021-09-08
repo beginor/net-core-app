@@ -34,7 +34,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get folder content for {alias}:{path}, {filter} .", ex);
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -59,7 +59,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get file content for {alias}:{path} .", ex);
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
     }

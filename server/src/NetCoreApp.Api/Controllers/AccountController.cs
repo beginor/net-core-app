@@ -11,6 +11,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using AutoMapper;
 using NHibernate.Linq;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
@@ -25,7 +26,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
     /// <summary>账户 API</summary>
     [Route("api/account")]
     [ApiController]
-    public class AccountController : Controller {
+    public partial class AccountController : Controller {
 
         private ILogger<AccountController> logger;
         private UserManager<AppUser> userMgr;
@@ -33,6 +34,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         private JwtOption jwt;
         private IAppNavItemRepository navRepo;
         private IDistributedCache cache;
+        private IAppUserTokenRepository userTokenRepo;
+        private UsersController usersCtrl;
 
         public AccountController(
             ILogger<AccountController> logger,
@@ -40,7 +43,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             RoleManager<AppRole> roleMgr,
             IOptionsSnapshot<JwtOption> jwt,
             IAppNavItemRepository navRepo,
-            IDistributedCache cache
+            IDistributedCache cache,
+            IAppUserTokenRepository userTokenRepo,
+            UsersController usersCtrl
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
@@ -48,6 +53,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             this.jwt = jwt.Value ?? throw new ArgumentNullException(nameof(jwt));
             this.navRepo = navRepo ?? throw new ArgumentNullException(nameof(navRepo));
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            this.userTokenRepo = userTokenRepo ?? throw new ArgumentNullException(nameof(userTokenRepo));
+            this.usersCtrl = usersCtrl ?? throw new ArgumentNullException(nameof(usersCtrl));
         }
 
         protected override void Dispose(bool disposing) {
@@ -58,6 +65,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 jwt = null;
                 navRepo = null;
                 cache = null;
+                userTokenRepo = null;
+                usersCtrl = null;
             }
             base.Dispose(disposing);
         }
@@ -88,7 +97,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get user account info.");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -138,31 +147,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not signin user {model.ToJson()}.");
-                return this.InternalServerError(ex.GetOriginalMessage());
-            }
-        }
-
-        [HttpGet("menu")]
-        [ResponseCache(NoStore = true, Duration = 0)]
-        public async Task<MenuNodeModel> GetMenuAsync() {
-            try {
-                IList<string> roles;
-                if (!User.Identity.IsAuthenticated || User.HasClaim(ClaimTypes.NameIdentifier, string.Empty)) {
-                    roles = roleMgr.Roles
-                        .Where(role => role.IsAnonymous == true)
-                        .Select(role => role.Name)
-                        .ToList();
-                }
-                else {
-                    var user = await userMgr.FindByNameAsync(User.Identity.Name);
-                    roles = await userMgr.GetRolesAsync(user);
-                }
-                var menuModel = await navRepo.GetMenuAsync(roles.ToArray());
-                return menuModel;
-            }
-            catch (Exception ex) {
-                logger.LogError(ex, "Can not get menu!");
-                return new MenuNodeModel();
+                return this.InternalServerError(ex);
             }
         }
 
