@@ -126,6 +126,34 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         public ActionResult<string> NewTokenValue() {
             return Guid.NewGuid().ToString("N");
         }
+
+        /// <summary>获取用户的角色和权限</summary>
+        [HttpGet("roles-and-privileges")]
+        [Authorize]
+        public async Task<ActionResult> GetRolesAndPrivileges() {
+            var userId = User.GetUserId();
+            var user = await userMgr.FindByIdAsync(userId);
+            if (user == null) {
+                return Forbid();
+            }
+            var userRoles = await userMgr.GetRolesAsync(user);
+            var appRoles = await roleMgr.Roles
+                .Where(role => userRoles.Contains(role.Name))
+                .ToListAsync();
+            var privileges = new List<string>();
+            foreach (var role in appRoles) {
+                var roleClaims = await roleMgr.GetClaimsAsync(role);
+                var rolePrivileges = roleClaims.Where(claim => claim.Type == Consts.PrivilegeClaimType)
+                    .Select(claim => claim.Value);
+                privileges.AddRange(rolePrivileges);
+            }
+            var appPrivileges = await privilegeRepo.GetByNamesAsync(privileges);
+            var result = new Dictionary<string, object> {
+                ["roles"] = appRoles,
+                ["privileges"] = appPrivileges
+            };
+            return Ok(result);
+        }
     }
 
 }

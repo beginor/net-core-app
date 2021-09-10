@@ -36,6 +36,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         private IDistributedCache cache;
         private IAppUserTokenRepository userTokenRepo;
         private UsersController usersCtrl;
+        private IAppPrivilegeRepository privilegeRepo;
 
         public AccountController(
             ILogger<AccountController> logger,
@@ -45,7 +46,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             IAppNavItemRepository navRepo,
             IDistributedCache cache,
             IAppUserTokenRepository userTokenRepo,
-            UsersController usersCtrl
+            UsersController usersCtrl,
+            IAppPrivilegeRepository privilegeRepo
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
@@ -55,6 +57,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
             this.userTokenRepo = userTokenRepo ?? throw new ArgumentNullException(nameof(userTokenRepo));
             this.usersCtrl = usersCtrl ?? throw new ArgumentNullException(nameof(usersCtrl));
+            this.privilegeRepo = privilegeRepo ?? throw new ArgumentNullException(nameof(privilegeRepo));
         }
 
         protected override void Dispose(bool disposing) {
@@ -67,6 +70,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 cache = null;
                 userTokenRepo = null;
                 usersCtrl = null;
+                privilegeRepo = null;
             }
             base.Dispose(disposing);
         }
