@@ -52,8 +52,9 @@ TableFilter:
     - aspnet_user_tokens
     - aspnet_users
     - app_nav_items
-  IncludeTables:
     - app_storages
+  IncludeTables:
+    - app_user_tokens
   IgnoreNoPKTable: true
   IgnoreView: true
 

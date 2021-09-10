@@ -1,0 +1,113 @@
+<form class="card detail" *ngIf="(account.info | async) as info" #detailForm="ngForm"
+  [@animation]="animation" (@animation.done)="onAnimationEvent($event)">
+  <div class="card-header d-flex justify-content-between align-content-center">
+    <h5 class="card-title mb-0">{{title}}</h5>
+    <div class="btn-group btn-group-sm">
+      <button *ngIf="info.privileges['app_user_tokens.update'] && editable"
+        type="button" class="btn btn-sm btn-outline-primary"
+        (click)="save()" [disabled]="!detailForm.valid">
+        <svg-icon path="bi/check"></svg-icon> 保存
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"
+        (click)="goBack()">
+        <svg-icon path="bi/x"></svg-icon> 取消
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="mb-3">
+      <label class="form-label text-muted" for="id">凭证id  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="id" name="id"
+        placeholder="请输入凭证id ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.id"
+        #id="ngModel"
+        [class.is-invalid]="!(id.valid || id.pristine)"
+        [class.is-valid]="id.valid"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="userId">用户id  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="userId" name="userId"
+        placeholder="请输入用户id ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.userId"
+        #userId="ngModel"
+        [class.is-invalid]="!(userId.valid || userId.pristine)"
+        [class.is-valid]="userId.valid"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="name">凭证名称  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="name" name="name"
+        placeholder="请输入凭证名称 ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.name"
+        #name="ngModel"
+        [class.is-invalid]="!(name.valid || name.pristine)"
+        [class.is-valid]="name.valid"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="value">凭证值  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="value" name="value"
+        placeholder="请输入凭证值 ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.value"
+        #value="ngModel"
+        [class.is-invalid]="!(value.valid || value.pristine)"
+        [class.is-valid]="value.valid"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="privileges">凭证权限 </label>
+      <input class="form-control" type="text" id="privileges" name="privileges"
+        placeholder="请输入凭证权限 ..."
+        [(ngModel)]="model.privileges" [disabled]="!editable"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="urls">允许的 url 地址 </label>
+      <input class="form-control" type="text" id="urls" name="urls"
+        placeholder="请输入允许的 url 地址 ..."
+        [(ngModel)]="model.urls" [disabled]="!editable"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="updateTime">更新时间  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="updateTime" name="updateTime"
+        placeholder="请输入更新时间 ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.updateTime"
+        #updateTime="ngModel"
+        [class.is-invalid]="!(updateTime.valid || updateTime.pristine)"
+        [class.is-valid]="updateTime.valid"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="expiresAt">过期时间 </label>
+      <input class="form-control" type="text" id="expiresAt" name="expiresAt"
+        placeholder="请输入过期时间 ..."
+        [(ngModel)]="model.expiresAt" [disabled]="!editable"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="roles">凭证代表的角色 </label>
+      <input class="form-control" type="text" id="roles" name="roles"
+        placeholder="请输入凭证代表的角色 ..."
+        [(ngModel)]="model.roles" [disabled]="!editable"
+      />
+    </div>
+  </div>
+  <div *ngIf="info.privileges['app_user_tokens.update'] && editable"
+    class="card-footer d-flex justify-content-between">
+    <button type="button" class="btn btn-sm btn-outline-primary"
+      (click)="save()" [disabled]="!detailForm.valid">
+      <svg-icon path="bi/check"></svg-icon> 保存
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary"
+      (click)="goBack()">
+      <svg-icon path="bi/x"></svg-icon> 取消
+    </button>
+  </div>
+</form>
