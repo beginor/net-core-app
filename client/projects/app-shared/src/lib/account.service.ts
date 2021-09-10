@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 
 import { BehaviorSubject, Subscription, interval, lastValueFrom } from 'rxjs';
@@ -35,7 +35,7 @@ export class AccountService {
 
     public async getInfo(): Promise<AccountInfo> {
         try {
-            const url = this.apiRoot + '/account/info';
+            const url = `${this.apiRoot}/account`;
             const info = await lastValueFrom(this.http.get<AccountInfo>(url));
             if (!!info.token) {
                 this.saveToken(info.token);
@@ -82,6 +82,27 @@ export class AccountService {
         this.info.next({ id: '', roles: {}, privileges: {} });
     }
 
+    public async getUser(): Promise<UserInfo> {
+        const params = new HttpParams().set('_t', Date.now());
+        const userInfo = await lastValueFrom(
+            this.http.get<UserInfo>(
+                `${this.apiRoot}/account/user`,
+                { params, }
+            )
+        );
+        return userInfo;
+    }
+
+    public async updateUser(userInfo: UserInfo): Promise<UserInfo> {
+        const updatedUserInfo = await lastValueFrom(
+            this.http.put<UserInfo>(
+                `${this.apiRoot}/account/user`,
+                userInfo
+            )
+        );
+        return updatedUserInfo;
+    }
+
     private saveToken(token: string): void {
         localStorage.setItem(this.tokenKey, token);
     }
@@ -100,6 +121,45 @@ export interface AccountInfo {
     roles: { [key: string]: boolean };
     privileges: { [key: string]: boolean };
     token?: string;
+}
+
+export interface UserInfo {
+    /** 用户ID */
+    id: string;
+    /** 用户名 */
+    userName?: string;
+    /** 电子邮箱地址 */
+    email?: string;
+    /** 电子邮箱地址是否已确认 */
+    emailConfirmed?: boolean;
+    /** 电话号码 */
+    phoneNumber?: string;
+    /** 电话号码是否已经确认 */
+    phoneNumberConfirmed?: boolean;
+    /** 是否允许（自动）锁定 */
+    lockoutEnabled?: boolean;
+    /** 锁定结束时间 */
+    lockoutEnd?: string;
+    /** 登录失败次数 */
+    accessFailedCount?: number;
+    /** 是否启用两部认证 */
+    twoFactorEnabled?: boolean;
+    /** 创建时间 */
+    createTime?: string;
+    /** 最近登录时间 */
+    lastLogin?: string;
+    /** 登录次数 */
+    loginCount?: number;
+    /** 姓氏 */
+    surname?: string;
+    /** 名称 */
+    givenName?: string;
+    /** 出生日期 */
+    dateOfBirth?: string;
+    /** 性别 */
+    gender?: string;
+    /** 家庭地址 */
+    streetAddress?: string;
 }
 
 export interface LoginModel {

@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import {
     NgbAlertModule, NgbDropdownModule, NgbModalModule, NgbTooltipModule,
-    NgbCollapseModule
+    NgbCollapseModule, NgbNavModule, NgbDatepickerModule
 } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppSharedModule } from 'app-shared';
@@ -19,6 +19,14 @@ import {
     StorageBrowserComponent
 } from './storage-browser/storage-browser.component';
 import { NavCardComponent } from './nav-card/nav-card.component';
+import { AccountComponent } from './account/account.component';
+import { UserInfoComponent } from './user-info/user-info.component';
+import {
+    UserTokenListComponent
+} from './user-token-list/user-token-list.component';
+import {
+    UserTokenDetailComponent
+} from './user-token-detail/user-token-detail.component';
 
 @NgModule({
     declarations: [
@@ -28,7 +36,11 @@ import { NavCardComponent } from './nav-card/nav-card.component';
         NavItemComponent,
         IframeComponent,
         StorageBrowserComponent,
-        NavCardComponent
+        NavCardComponent,
+        AccountComponent,
+        UserInfoComponent,
+        UserTokenListComponent,
+        UserTokenDetailComponent
     ],
     imports: [
         CommonModule,
@@ -40,6 +52,8 @@ import { NavCardComponent } from './nav-card/nav-card.component';
         NgbModalModule,
         NgbTooltipModule,
         NgbCollapseModule,
+        NgbNavModule,
+        NgbDatepickerModule,
         AppSharedModule
     ],
     exports: [

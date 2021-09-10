@@ -13,26 +13,27 @@
   </button>
   <div class="collapse navbar-collapse" [ngbCollapse]="collapsed"
     *ngIf="account.info | async as info">
-    <ul class="navbar-nav modules mt-2 mt-lg-0 me-auto"
-    *ngIf="navigation.topbarNodes | async as nodes">
+    <ul class="modules navbar-nav mt-2 mt-lg-0 me-auto" *ngIf="navigation.topbarNodes | async as nodes">
       <li class="nav-item" routerLinkActive="active" *ngFor="let item of nodes">
         <a class="nav-link" [routerLink]="item.url" routerLinkActive="active" (click)="collapsed = true">{{item.title}}</a>
       </li>
     </ul>
-    <ul class="navbar-nav mt-2 mt-md-0 ms-auto">
-      <li *ngIf="!info.id;else userNavTpl" class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/login">登录</a>
-      </li>
-      <ng-template #userNavTpl>
-        <li class="nav-item" routerLinkActive="active"
-          ngbDropdown>
-          <a class="nav-link user-info-action" ngbDropdownToggle id="userDropDown"
-            role="button">
+    <ul class="navbar-nav mt-2 mt-lg-0 ms-auto">
+      <ng-container *ngIf="info.id; else loginTpl;">
+        <li class="nav-item" routerLinkActive="active" ngbDropdown> <!-- todl: container="body" doesn't work -->
+          <a class="nav-link user-info-action" ngbDropdownToggle id="userDropDown" role="button">
             {{account.fullName | async}}
           </a>
           <div ngbDropdownMenu aria-labelledby="userDropDown" class="dropdown-menu dropdown-menu-end">
+            <a class="dropdown-item" href="#" (click)="showAccountInfoModal($event)" >用户信息</a>
+            <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#" (click)="logout($event)">注销</a>
           </div>
+        </li>
+      </ng-container>
+      <ng-template #loginTpl>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="/login" routerLinkActive="active">登录</a>
         </li>
       </ng-template>
     </ul>

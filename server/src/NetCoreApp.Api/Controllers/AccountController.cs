@@ -76,7 +76,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         /// <response code="403">用户未登录</response>
         /// <response code="404">用户不存在</response>
         /// <response code="500">服务器内部错误</response>
-        [HttpGet("info")]
+        [HttpGet("")]
         [ResponseCache(NoStore = true, Duration = 0)]
         public async Task<ActionResult<AccountInfoModel>> GetInfo() {
             try {

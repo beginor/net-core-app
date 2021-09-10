@@ -5,7 +5,7 @@ import { AuthGuard } from 'app-shared';
 
 import { environment } from '../environments/environment';
 import { IframeComponent } from './common';
-
+/* eslint-disable max-len */
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     {
@@ -35,13 +35,13 @@ const routes: Routes = [
         canLoad: []
     }
 ];
-
+/* eslint-enable max-len */
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes, {
-            useHash: false,
-            enableTracing: !environment.production
-        })
+        RouterModule.forRoot(
+            routes,
+            { useHash: false, enableTracing: !environment.production }
+        )
     ],
     exports: [RouterModule]
 })
