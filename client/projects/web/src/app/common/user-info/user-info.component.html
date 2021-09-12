@@ -96,9 +96,13 @@
     </div>
   </div>
   <div class="card-footer d-flex justify-content-end">
+    <div class="me-auto" *ngIf="loading">
+      <svg-icon path="bi/arrow-repeat" iconClass="bi-spin"></svg-icon>
+      {{loadingMessage}}
+    </div>
     <button class="btn btn-sm btn-outline-primary" type="button"
-    (click)="saveUser()" [disabled]="!detailForm.valid">
-    <svg-icon path="bi/check"></svg-icon> 保存
-  </button>
+      (click)="saveUser()" [disabled]="!detailForm.valid || loading">
+      <svg-icon path="bi/check"></svg-icon> 保存
+    </button>
   </div>
 </form>
