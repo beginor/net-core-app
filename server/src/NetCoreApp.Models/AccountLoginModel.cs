@@ -59,6 +59,8 @@ namespace Beginor.NetCoreApp.Models {
         public string Target { get; set; }
         /** 内嵌窗口地址 */
         public string FrameUrl { get; set; }
+        /** 是否隐藏 */
+        public bool IsHidden { get; set; }
     }
 
 }

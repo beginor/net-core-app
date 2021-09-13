@@ -239,6 +239,8 @@ export interface NavItemModel {
     target?: string;
     /** 内嵌窗口地址 */
     frameUrl?: string;
+    /** 是否隐藏 */
+    isHidden?: boolean;
 }
 
 /** 导航节点（菜单） 搜索参数 */

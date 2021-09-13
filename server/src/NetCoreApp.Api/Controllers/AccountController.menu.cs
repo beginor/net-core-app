@@ -15,7 +15,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [ResponseCache(NoStore = true, Duration = 0)]
         public async Task<MenuNodeModel> GetMenuAsync() {
             try {
-                IList<string> roles;
+                List<string> roles;
                 if (!User.Identity.IsAuthenticated || User.HasClaim(ClaimTypes.NameIdentifier, string.Empty)) {
                     roles = roleMgr.Roles
                         .Where(role => role.IsAnonymous == true)
@@ -24,7 +24,10 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 }
                 else {
                     var user = await userMgr.FindByNameAsync(User.Identity.Name);
-                    roles = await userMgr.GetRolesAsync(user);
+                    roles = (await userMgr.GetRolesAsync(user)).ToList();
+                    roles.AddRange(
+                        roleMgr.Roles.Where(role => role.IsDefault == true).Select(role => role.Name)
+                    );
                 }
                 var menuModel = await navRepo.GetMenuAsync(roles.ToArray());
                 return menuModel;
