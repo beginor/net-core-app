@@ -1,25 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using NHibernate.Linq;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Api.Authorization;
-using Beginor.NetCoreApp.Common;
-using Beginor.NetCoreApp.Data;
-using Beginor.NetCoreApp.Data.Entities;
-using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
@@ -30,7 +15,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         [HttpGet("user")] // GET /api/account/user
         [Authorize]
         public async Task<ActionResult<AppUserModel>> GetUser() {
-            var userIdStr = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var userIdStr = User.GetUserId();
             if (userIdStr.IsNullOrEmpty()) {
                 return Forbid();
             }
@@ -40,12 +25,11 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             return await usersCtrl.GetById(userId);
         }
 
-        // PUT /api/account/user;
         /// <summary>更新当前用户信息</summary>
-        [HttpPut("user")]
+        [HttpPut("user")] // PUT /api/account/user;
         [Authorize]
         public async Task<ActionResult<AppUserModel>> UpdateUser([FromBody]AppUserModel model) {
-            var userIdStr = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var userIdStr = User.GetUserId();
             if (userIdStr.IsNullOrEmpty()) {
                 return Forbid();
             }
@@ -53,6 +37,34 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return Forbid();
             }
             return await usersCtrl.Update(userId, model);
+        }
+
+        /// <summary>修改当前账户密码</summary>
+        [HttpPut("password")] // PUT /api/account/password
+        [Authorize]
+        public async Task<ActionResult> ChangePassword([FromBody]ChangePasswordModel model) {
+            var userId = User.GetUserId();
+            var user = await userMgr.FindByIdAsync(userId);
+            if (user == null) {
+                return Forbid();
+            }
+            var isValid = await userMgr.CheckPasswordAsync(user, model.CurrentPassword);
+            if (!isValid) {
+                return BadRequest("Invalid current password!");
+            }
+            try {
+                var result = await userMgr.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                if (result.Succeeded) {
+                    return Ok();
+                }
+                else {
+                    return BadRequest(result.Errors);
+                }
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not change password for user {user.UserName} with {model.ToJson()} .");
+                return this.InternalServerError(ex);
+            }
         }
     }
 

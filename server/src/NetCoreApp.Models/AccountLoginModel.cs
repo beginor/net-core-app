@@ -63,4 +63,17 @@ namespace Beginor.NetCoreApp.Models {
         public bool IsHidden { get; set; }
     }
 
+    /// <summary>用户修改密码</summary>
+    public class ChangePasswordModel {
+        /// <summary>当前密码</summary>
+        [Required(ErrorMessage = "当前密码必须填写！")]
+        public string CurrentPassword { get; set; }
+        /// <summary>新密码</summary>
+        [Required(ErrorMessage = "新密码必须填写！")]
+        public string NewPassword { get; set; }
+        /// <summary>确认新密码</summary>
+        [Compare("NewPassword", ErrorMessage = "必须确认新密码！")]
+        public string ConfirmPassword { get; set; }
+    }
+
 }
