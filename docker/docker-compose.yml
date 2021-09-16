@@ -8,6 +8,7 @@ services:
     volumes:
       - ./log:/net-core-app/log
     environment:
+      TZ: Asia/Shanghai
       ASPNETCORE_ENVIRONMENT: Development
     restart: unless-stopped
 networks:

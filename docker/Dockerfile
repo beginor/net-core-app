@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/dotnet/runtime-deps:5.0
 ENV ASPNETCORE_PATHBASE=/net-core-app \
-    ASPNETCORE_URLS=http://+:5000
+    ASPNETCORE_URLS=http://+:5000 \
+    TZ=Asia/Shanghai
 ADD dist /net-core-app
 VOLUME [ "/net-core-app/config", "/net-core-app/log" ]
 WORKDIR /net-core-app
