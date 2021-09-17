@@ -96,6 +96,19 @@ export class AccountService {
         return updatedUserInfo;
     }
 
+    public async changePassword(model: ChangePasswordModel): Promise<void> {
+        await lastValueFrom(
+            this.http.put(
+                `${this.apiRoot}/account/password`,
+                {
+                    currentPassword: btoa(model.currentPassword),
+                    newPassword: btoa(model.newPassword),
+                    confirmPassword: btoa(model.confirmPassword)
+                }
+            )
+        );
+    }
+
     public async searchUserTokens(
         searchModel: UserTokenSearchModel
     ): Promise<UserTokenResultModel> {
@@ -283,4 +296,10 @@ export interface AppPrivilege {
 export interface RoleAndPrivilege {
     roles: AppRole[];
     privileges: AppPrivilege[];
+}
+
+export interface ChangePasswordModel {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
 }

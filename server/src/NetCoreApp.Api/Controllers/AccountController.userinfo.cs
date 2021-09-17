@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,11 +49,14 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             if (user == null) {
                 return Forbid();
             }
-            var isValid = await userMgr.CheckPasswordAsync(user, model.CurrentPassword);
-            if (!isValid) {
-                return BadRequest("Invalid current password!");
-            }
             try {
+                model.CurrentPassword = Encoding.UTF8.GetString(Convert.FromBase64String(model.CurrentPassword));
+                model.NewPassword = Encoding.UTF8.GetString(Convert.FromBase64String(model.NewPassword));
+                model.ConfirmPassword = Encoding.UTF8.GetString(Convert.FromBase64String(model.ConfirmPassword));
+                var isValid = await userMgr.CheckPasswordAsync(user, model.CurrentPassword);
+                if (!isValid) {
+                    return BadRequest("Invalid current password!");
+                }
                 var result = await userMgr.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
                 if (result.Succeeded) {
                     return Ok();

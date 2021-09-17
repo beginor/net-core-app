@@ -33,6 +33,11 @@ const routes: Routes = [
         path: 'iframe/:src',
         component: IframeComponent,
         canLoad: []
+    },
+    {
+        path: 'account',
+        loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
+        canLoad: [AuthGuard]
     }
 ];
 /* eslint-enable max-len */
