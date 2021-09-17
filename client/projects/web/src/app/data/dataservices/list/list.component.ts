@@ -23,7 +23,7 @@ export class ListComponent implements OnInit {
     ) { }
 
     public ngOnInit(): void {
-        this.loadData();
+        void this.loadData();
     }
 
     public async loadData(): Promise<void> {
@@ -31,7 +31,7 @@ export class ListComponent implements OnInit {
     }
 
     public showDetail(id: string, editable: boolean): void {
-        this.router.navigate(
+        void this.router.navigate(
             ['./', id, { editable: editable }],
             { relativeTo: this.route, skipLocationChange: true }
         );
@@ -40,14 +40,14 @@ export class ListComponent implements OnInit {
     public async delete(id: string): Promise<void> {
         const deleted = await this.vm.delete(id);
         if (deleted) {
-            this.vm.search();
+            void this.vm.search();
         }
     }
 
     public async resetSearch(): Promise<void> {
         this.vm.searchModel.keywords = '';
         this.vm.searchModel.skip = 0;
-        this.vm.search();
+        void this.vm.search();
     }
 
     public showPreview(ds: DataServiceModel): void {
@@ -55,7 +55,8 @@ export class ListComponent implements OnInit {
             PreviewComponent,
             { container: 'body', size: 'xl' }
         );
-        ref.componentInstance.ds = ds;
+        Object.assign(ref.componentInstance, { ds });
+        // ref.componentInstance.ds = ds;
     }
 
 }
