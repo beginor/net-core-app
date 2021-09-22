@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from 'app-shared';
 
-import { AppUserTokenService } from '../app-user-tokens.service';
+import { AppUserTokenService } from '../user-tokens.service';
 
 @Component({
     selector: 'app-user-token-list',

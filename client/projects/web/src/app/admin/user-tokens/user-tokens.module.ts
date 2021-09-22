@@ -8,7 +8,7 @@ import {
 import { AppSharedModule } from 'app-shared';
 
 import { AppCommonModule } from 'projects/web/src/app/common';
-import { AppUserTokenRoutingModule } from './app-user-tokens-routing.module';
+import { AppUserTokenRoutingModule } from './user-tokens-routing.module';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
 

@@ -157,17 +157,17 @@ export interface AppUserTokenModel {
     /** 凭证id */
     id: string;
     /** 用户id */
-    userId: string;
+    userId?: string;
     /** 凭证名称 */
-    name: string;
+    name?: string;
     /** 凭证值 */
-    value: string;
+    value?: string;
     /** 凭证权限 */
     privileges?: string[];
     /** 允许的 url 地址 */
     urls?: string[];
     /** 更新时间 */
-    updateTime: string;
+    updateTime?: string;
     /** 过期时间 */
     expiresAt?: string;
     /** 凭证代表的角色 */

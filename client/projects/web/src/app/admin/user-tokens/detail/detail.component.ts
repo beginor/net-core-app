@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
-import { AppUserTokenService, AppUserTokenModel } from '../app-user-tokens.service';
+import { AppUserTokenService, AppUserTokenModel } from '../user-tokens.service';
 
 @Component({
     selector: 'app-user-token-detail',
