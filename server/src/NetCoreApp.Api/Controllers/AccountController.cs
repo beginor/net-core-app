@@ -11,7 +11,6 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using AutoMapper;
 using NHibernate.Linq;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
