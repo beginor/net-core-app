@@ -126,7 +126,7 @@ namespace Beginor.GisHub.TileMap.Api {
             [FromBody]VectorTileModel model
         ) {
             try {
-                var exists = await repository.ExitsAsync(id);
+                var exists = await repository.ExistAsync(id);
                 if (!exists) {
                     return NotFound();
                 }

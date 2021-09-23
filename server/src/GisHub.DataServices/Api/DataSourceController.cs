@@ -137,7 +137,7 @@ namespace Beginor.GisHub.DataServices.Api {
             [FromBody]DataSourceModel model
         ) {
             try {
-                var exists = await repository.ExitsAsync(id);
+                var exists = await repository.ExistAsync(id);
                 if (!exists) {
                     return NotFound();
                 }

@@ -5,9 +5,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Beginor.NetCoreApp.Models;
+using Beginor.GisHub.Models;
 
-namespace Beginor.NetCoreApp.Api.Controllers {
+namespace Beginor.GisHub.Api.Controllers {
 
     partial class AccountController {
 
