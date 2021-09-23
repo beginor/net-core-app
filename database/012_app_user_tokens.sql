@@ -8,7 +8,7 @@ create table if not exists public.app_user_tokens
     user_id character varying(32) collate pg_catalog."default" not null,
     name character varying(16) collate pg_catalog."default" not null,
     value character varying(32) collate pg_catalog."default" not null,
-    roles character varying(64)[], collate pg_catalog."default"
+    roles character varying(64)[] collate pg_catalog."default",
     privileges character varying(64)[] collate pg_catalog."default",
     urls character varying(64)[] collate pg_catalog."default",
     expires_at timestamp without time zone,
@@ -19,11 +19,12 @@ create table if not exists public.app_user_tokens
         references public.app_users (id) match simple
         on update no action
         on delete no action
-        not valid
 )
+
 tablespace pg_default;
 
-alter table public.app_user_tokens owner to postgres;
+alter table public.app_user_tokens
+    owner to postgres;
 
 comment on table public.app_user_tokens
     is '用户凭证';
@@ -31,23 +32,23 @@ comment on table public.app_user_tokens
 comment on column public.app_user_tokens.id
     is '凭证id';
 
+comment on column public.app_user_tokens.user_id
+    is '用户id';
+
 comment on column public.app_user_tokens.name
     is '凭证名称';
 
 comment on column public.app_user_tokens.value
     is '凭证值';
 
-comment on column public.app_user_tokens.update_time
-    is '更新时间';
-
-comment on column public.app_user_tokens.user_id
-    is '用户id';
+comment on column public.app_user_tokens.privileges
+    is '凭证权限';
 
 comment on column public.app_user_tokens.urls
     is '允许的 url 地址';
 
-comment on column public.app_user_tokens.privileges
-    is '凭证权限';
+comment on column public.app_user_tokens.update_time
+    is '更新时间';
 
 comment on column public.app_user_tokens.expires_at
     is '过期时间';
