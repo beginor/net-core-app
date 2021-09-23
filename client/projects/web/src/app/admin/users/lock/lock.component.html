@@ -16,8 +16,7 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="mb-3" [class.is-valid]="lockoutEnd.valid"
-      [class.is-invalid]="!(lockoutEnd.valid || lockoutEnd.pristine)">
+    <div class="mb-3">
       <label class="form-label text-muted" for="lockoutEnd">锁定至 <i class="text-danger">*</i></label>
       <div class="input-group">
         <input class="form-control" type="text" id="lockoutEnd"
@@ -26,8 +25,7 @@
           [class.is-valid]="lockoutEnd.valid"
           ngbDatepicker container="body" #le="ngbDatepicker" [minDate]="calendar.getToday()"
           required />
-        <button class="btn btn-outline-secondary" type="button"
-          (click)="le.toggle()">
+        <button class="btn btn-outline-secondary" type="button" (click)="le.toggle()">
           <svg-icon path="bi/calendar3"></svg-icon>
         </button>
       </div>
