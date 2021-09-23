@@ -26,10 +26,17 @@ namespace Beginor.GisHub.Data.Repositories {
 
         /// <summary>搜索 用户凭证 ，返回分页结果。</summary>
         public async Task<PaginatedResponseModel<AppUserTokenModel>> SearchAsync(
-            AppUserTokenSearchModel model
+            AppUserTokenSearchModel model,
+            string userId = ""
         ) {
             var query = Session.Query<AppUserToken>();
-            // todo: 添加自定义查询；
+            if (userId.IsNotNullOrEmpty()) {
+                query = query.Where(e => e.User.Id == userId);
+            }
+            var keywords = model.Keywords;
+            if (keywords.IsNotNullOrEmpty()) {
+                query = query.Where(e => e.Name.Contains(keywords));
+            }
             var total = await query.LongCountAsync();
             var data = await query.OrderByDescending(e => e.Id)
                 .Skip(model.Skip).Take(model.Take)
@@ -42,17 +49,65 @@ namespace Beginor.GisHub.Data.Repositories {
             };
         }
 
-        public async Task<AppUserToken> GetTokenByValue(string tokenValue) {
-            var token = await cache.GetAsync<AppUserToken>(tokenValue);
-            if (token == null) {
-                token = await Session.Query<AppUserToken>()
-                    .Where(tk => tk.Value == tokenValue)
+        public async Task<AppUserToken> GetTokenByValueAsync(string tokenValue) {
+            var entity = await cache.GetAsync<AppUserToken>(tokenValue);
+            if (entity == null) {
+                entity = await Session.Query<AppUserToken>()
+                    .Where(tkn => tkn.Value == tokenValue)
                     .FirstOrDefaultAsync();
-                if (token != null) {
-                    await cache.SetAsync<AppUserToken>(token.Value, token);
+                if (entity != null) {
+                    await cache.SetAsync<AppUserToken>(entity.Value, entity);
                 }
             }
-            return token;
+            return entity;
+        }
+
+        public async Task<AppUserTokenModel> GetTokenForUserAsync(long id, string userId) {
+            var entity = await Session.Query<AppUserToken>()
+                .FirstOrDefaultAsync(tkn => tkn.Id == id && tkn.User.Id == userId);
+            return entity == null ? null : Mapper.Map<AppUserTokenModel>(entity);
+        }
+
+        public async Task SaveTokenForUserAsync(AppUserTokenModel model, AppUser user) {
+            var entity = Mapper.Map<AppUserToken>(model);
+            entity.User = user;
+            entity.UpdateTime = DateTime.Now;
+            await Session.SaveAsync(entity);
+            await Session.FlushAsync();
+            Session.Clear();
+            Mapper.Map(entity, model);
+        }
+
+        public async Task<bool> ExistsAsync(long id, string userId) {
+            return await Session.Query<AppUserToken>()
+                .AnyAsync(tkn => tkn.Id == id && tkn.User.Id == userId);
+        }
+
+        public async Task UpdateTokenForUserAsync(long id, AppUserTokenModel model, AppUser user) {
+            var entity = await Session.Query<AppUserToken>()
+                .FirstOrDefaultAsync(tkn => tkn.Id == id && tkn.User.Id == user.Id);
+            if (entity == null) {
+                throw new Exception($"entity AppUserToken with id {id} is null");
+            }
+            await cache.RemoveAsync(entity.Value);
+            Mapper.Map(model, entity);
+            entity.User = user;
+            entity.UpdateTime = DateTime.Now;
+            await Session.UpdateAsync(entity);
+            await Session.FlushAsync();
+            Session.Clear();
+            Mapper.Map(entity, model);
+        }
+
+        public async Task DeleteTokenForUserAsync(long id, string userId) {
+            var entity = await Session.Query<AppUserToken>()
+                .FirstOrDefaultAsync(tkn => tkn.Id == id && tkn.User.Id == userId);
+            if (entity != null) {
+                await cache.RemoveAsync(entity.Value);
+                await Session.DeleteAsync(entity);
+                await Session.FlushAsync();
+                Session.Clear();
+            }
         }
 
     }

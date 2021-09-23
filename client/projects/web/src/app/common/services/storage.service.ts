@@ -30,7 +30,7 @@ export class StorageService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.ui.showAlert(
                 { type: 'warning', message: '无法获取存储内容！' }
             );

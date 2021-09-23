@@ -136,7 +136,7 @@ export interface NavigationNode {
     title?: string;
     url?: string;
     tooltip?: string;
-    hidden?: boolean;
+    isHidden?: boolean;
     icon?: string;
     target?: string;
     frameUrl?: string;

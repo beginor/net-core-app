@@ -48,7 +48,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not save {model.ToJson()} to app_audit_logs.");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -66,7 +66,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not search app_audit_logs with {model.ToJson()}.");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -88,7 +88,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get app_audit_logs by id {id}.");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 

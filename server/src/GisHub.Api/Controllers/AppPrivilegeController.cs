@@ -50,7 +50,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not save {model.ToJson()} to app_privileges.", ex);
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -67,7 +67,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not delete app_privileges by id {id}.");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -85,7 +85,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not search app_privileges with {model.ToJson()} .");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -107,7 +107,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get app_privileges by id {id}.");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -124,7 +124,7 @@ namespace Beginor.GisHub.Api.Controllers {
             [FromBody]AppPrivilegeModel model
         ) {
             try {
-                var exists = await repository.ExitsAsync(id);
+                var exists = await repository.ExistAsync(id);
                 if (!exists) {
                     return NotFound();
                 }
@@ -134,7 +134,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not update app_privileges by {id} with {model.ToJson()} .");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -156,7 +156,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not sync required app_privileges.");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -172,7 +172,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get all modules.");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 

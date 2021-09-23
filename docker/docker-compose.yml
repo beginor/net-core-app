@@ -10,6 +10,7 @@ services:
       - ./log:/gishub/log
       - ./data:/gishub_data
     environment:
+      TZ: Asia/Shanghai
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:5000
       ASPNETCORE_PATHBASE: /gishub

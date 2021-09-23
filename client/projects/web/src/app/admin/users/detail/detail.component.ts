@@ -35,8 +35,7 @@ export class DetailComponent implements OnInit {
         public account: AccountService,
         public vm: UsersService
     ) {
-        const id = route.snapshot.params.id;
-        const editable = route.snapshot.params.editable;
+        const { id, editable } = route.snapshot.params;
         if (id === '0') {
             this.title = '新建用户';
             this.editable = true;
@@ -49,7 +48,7 @@ export class DetailComponent implements OnInit {
             this.title = '查看用户';
             this.editable = false;
         }
-        this.id = id;
+        this.id = id as string;
     }
 
     public async ngOnInit(): Promise<void> {

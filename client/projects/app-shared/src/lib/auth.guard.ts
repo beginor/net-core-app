@@ -30,7 +30,7 @@ export class AuthGuard implements CanLoad, CanActivate {
             const info = await this.accountSvc.getInfo();
             return !!info.id;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             return false;
         }

@@ -26,6 +26,8 @@ namespace Beginor.GisHub.Models {
         public string Target { get; set; }
         /// <summary>内嵌窗口地址</summary>
         public string FrameUrl { get; set; }
+        /// <summary>是否删除</summary>
+        public bool IsHidden { get; set; }
     }
 
     /// <summary>导航节点（菜单）搜索参数</summary>

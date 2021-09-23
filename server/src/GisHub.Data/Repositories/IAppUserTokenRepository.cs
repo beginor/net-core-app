@@ -12,10 +12,20 @@ namespace Beginor.GisHub.Data.Repositories {
 
         /// <summary>搜索 用户凭证 ，返回分页结果。</summary>
         Task<PaginatedResponseModel<AppUserTokenModel>> SearchAsync(
-            AppUserTokenSearchModel model
+            AppUserTokenSearchModel model, string userId = ""
         );
 
-        Task<AppUserToken> GetTokenByValue(string tokenValue);
+        Task<AppUserToken> GetTokenByValueAsync(string tokenValue);
+
+        Task<AppUserTokenModel> GetTokenForUserAsync(long id, string userId);
+
+        Task SaveTokenForUserAsync(AppUserTokenModel model, AppUser user);
+
+        Task<bool> ExistsAsync(long id, string userId);
+
+        Task UpdateTokenForUserAsync(long id, AppUserTokenModel model, AppUser user);
+
+        Task DeleteTokenForUserAsync(long id, string userId);
 
     }
 

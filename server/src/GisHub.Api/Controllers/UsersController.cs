@@ -86,7 +86,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not create user with {model.ToJson()}");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -111,7 +111,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not delete user by id {id} .");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -166,7 +166,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not search user with {model.ToJson()} .");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -188,7 +188,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get user with id {id}");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -219,7 +219,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not update user by id {id} with {model.ToJson()}");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -270,7 +270,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not reset password for user {id} with {model.ToJson()}");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -306,7 +306,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not Lock user by id {id} to {lockEndTime}");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -335,7 +335,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not unlock user by id {id}");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -365,7 +365,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get roles for user {id} .");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -402,7 +402,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not add user {id} to role {roleNames}", ex);
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -438,7 +438,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not remove user {id} from role {roleNames} .", ex);
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 

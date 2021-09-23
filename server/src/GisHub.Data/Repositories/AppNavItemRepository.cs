@@ -126,14 +126,14 @@ namespace Beginor.GisHub.Data.Repositories {
             var conn = Session.Connection;
             var sql = @"
                 with recursive cte as (
-                    select p.id, p.parent_id, p.title, p.tooltip, p.icon, p.url, p.sequence, p.roles, p.target, p.frame_url
+                    select p.id, p.parent_id, p.title, p.tooltip, p.icon, p.url, p.sequence, p.roles, p.target, p.frame_url, p.is_hidden
                     from public.app_nav_items p
                     where p.parent_id is null and p.is_deleted = false
                     union all
-                    select c.id, c.parent_id, c.title, c.tooltip, c.icon, c.url, c.sequence, c.roles, c.target, c.frame_url
+                    select c.id, c.parent_id, c.title, c.tooltip, c.icon, c.url, c.sequence, c.roles, c.target, c.frame_url, c.is_hidden
                     from public.app_nav_items c
                     inner join cte on cte.id = c.parent_id
-                    where c.is_deleted = false and c.roles && @roles::character varying[]
+                    where (c.is_deleted = false) and (c.roles && @roles::character varying[])
                 )
                 select * from cte;
             ";
@@ -145,6 +145,7 @@ namespace Beginor.GisHub.Data.Repositories {
                 Url = rootNavItem.Url,
                 Icon = rootNavItem.Icon,
                 Tooltip = rootNavItem.Tooltip,
+                IsHidden = false,
                 Children = FindChildrenRecursive(rootNavItem.Id, navItems)
             };
             return model;
@@ -165,6 +166,7 @@ namespace Beginor.GisHub.Data.Repositories {
                     Tooltip = item.Tooltip,
                     Target = item.Target,
                     FrameUrl = item.FrameUrl,
+                    IsHidden = item.IsHidden,
                     Children = FindChildrenRecursive(item.Id, items)
                 });
             return children.ToArray();

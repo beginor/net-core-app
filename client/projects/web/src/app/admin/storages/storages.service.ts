@@ -58,7 +58,7 @@ export class AppStorageService {
             this.data.next(data);
             this.showPagination = total > data.length;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
@@ -93,7 +93,7 @@ export class AppStorageService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '创建应用存储出错！' }
@@ -110,7 +110,7 @@ export class AppStorageService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取指定的应用存储出错！' }
@@ -131,7 +131,7 @@ export class AppStorageService {
             );
             return true;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '删除应用存储出错！' }
@@ -151,7 +151,7 @@ export class AppStorageService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '更新应用存储出错！' }
@@ -166,7 +166,7 @@ export class AppStorageService {
             this.rolesSvc.searchModel.take = 999;
             await this.rolesSvc.search();
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '获取全部角色出错！' });
         }

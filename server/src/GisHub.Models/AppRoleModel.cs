@@ -32,4 +32,16 @@ namespace Beginor.GisHub.Models {
         public string Name { get; set; }
     }
 
+    /// <summary>角色权限模型</summary>
+    public class AppRoleWithPrivilegesModel {
+        /// <summary>角色ID</summary>
+        public string Id { get; set; }
+        /// <summary>角色名称</summary>
+        public string Name { get; set; }
+        /// <summary>角色描述</summary>
+        public string Description { get; set; }
+        /// <summary>角色权限</summary>
+        public string[] Privileges { get; set; }
+    }
+
 }

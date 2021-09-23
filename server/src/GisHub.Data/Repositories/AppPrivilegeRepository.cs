@@ -97,6 +97,13 @@ namespace Beginor.GisHub.Data.Repositories {
             }
         }
 
+        public async Task<IList<AppPrivilegeModel>> GetByNamesAsync(IList<string> names) {
+            var entities = await Session.Query<AppPrivilege>()
+                .Where(p => names.Contains(p.Name))
+                .ToListAsync();
+            return Mapper.Map<IList<AppPrivilegeModel>>(entities);
+        }
+
     }
 
 }

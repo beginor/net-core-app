@@ -28,6 +28,9 @@ namespace Beginor.GisHub.Models {
     }
 
     /// <summary>用户凭证搜索参数</summary>
-    public partial class AppUserTokenSearchModel : PaginatedRequestModel { }
+    public partial class AppUserTokenSearchModel : PaginatedRequestModel {
+        /// <summary>查询关键字</summary>
+        public string Keywords { get; set; }
+    }
 
 }

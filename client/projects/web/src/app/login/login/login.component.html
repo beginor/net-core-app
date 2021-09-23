@@ -37,7 +37,7 @@
             </button>
           </div>
           <ngb-alert type="danger" *ngIf="(message | async) as msg"
-            (close)="clearMessage()">
+            (closed)="clearMessage()">
             {{ msg }}
           </ngb-alert>
         </div>

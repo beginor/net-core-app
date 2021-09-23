@@ -82,3 +82,9 @@ alter table public.app_nav_items
 
 comment on column public.app_nav_items.frame_url
     is '内嵌窗口地址';
+
+alter table public.app_nav_items
+    add column is_hidden boolean;
+
+comment on column public.app_nav_items.is_hidden
+    is '是否隐藏';

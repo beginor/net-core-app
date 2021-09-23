@@ -25,7 +25,7 @@ namespace Beginor.GisHub.Api.Controllers {
     /// <summary>账户 API</summary>
     [Route("api/account")]
     [ApiController]
-    public class AccountController : Controller {
+    public partial class AccountController : Controller {
 
         private ILogger<AccountController> logger;
         private UserManager<AppUser> userMgr;
@@ -33,6 +33,9 @@ namespace Beginor.GisHub.Api.Controllers {
         private JwtOption jwt;
         private IAppNavItemRepository navRepo;
         private IDistributedCache cache;
+        private IAppUserTokenRepository userTokenRepo;
+        private UsersController usersCtrl;
+        private IAppPrivilegeRepository privilegeRepo;
 
         public AccountController(
             ILogger<AccountController> logger,
@@ -40,7 +43,10 @@ namespace Beginor.GisHub.Api.Controllers {
             RoleManager<AppRole> roleMgr,
             IOptionsSnapshot<JwtOption> jwt,
             IAppNavItemRepository navRepo,
-            IDistributedCache cache
+            IDistributedCache cache,
+            IAppUserTokenRepository userTokenRepo,
+            UsersController usersCtrl,
+            IAppPrivilegeRepository privilegeRepo
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
@@ -48,6 +54,9 @@ namespace Beginor.GisHub.Api.Controllers {
             this.jwt = jwt.Value ?? throw new ArgumentNullException(nameof(jwt));
             this.navRepo = navRepo ?? throw new ArgumentNullException(nameof(navRepo));
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            this.userTokenRepo = userTokenRepo ?? throw new ArgumentNullException(nameof(userTokenRepo));
+            this.usersCtrl = usersCtrl ?? throw new ArgumentNullException(nameof(usersCtrl));
+            this.privilegeRepo = privilegeRepo ?? throw new ArgumentNullException(nameof(privilegeRepo));
         }
 
         protected override void Dispose(bool disposing) {
@@ -58,6 +67,9 @@ namespace Beginor.GisHub.Api.Controllers {
                 jwt = null;
                 navRepo = null;
                 cache = null;
+                userTokenRepo = null;
+                usersCtrl = null;
+                privilegeRepo = null;
             }
             base.Dispose(disposing);
         }
@@ -67,7 +79,7 @@ namespace Beginor.GisHub.Api.Controllers {
         /// <response code="403">用户未登录</response>
         /// <response code="404">用户不存在</response>
         /// <response code="500">服务器内部错误</response>
-        [HttpGet("info")]
+        [HttpGet("")]
         [ResponseCache(NoStore = true, Duration = 0)]
         public async Task<ActionResult<AccountInfoModel>> GetInfo() {
             try {
@@ -88,7 +100,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get user account info.");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
             }
         }
 
@@ -138,31 +150,7 @@ namespace Beginor.GisHub.Api.Controllers {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not signin user {model.ToJson()}.");
-                return this.InternalServerError(ex.GetOriginalMessage());
-            }
-        }
-
-        [HttpGet("menu")]
-        [ResponseCache(NoStore = true, Duration = 0)]
-        public async Task<MenuNodeModel> GetMenuAsync() {
-            try {
-                IList<string> roles;
-                if (!User.Identity.IsAuthenticated || User.HasClaim(ClaimTypes.NameIdentifier, string.Empty)) {
-                    roles = roleMgr.Roles
-                        .Where(role => role.IsAnonymous == true)
-                        .Select(role => role.Name)
-                        .ToList();
-                }
-                else {
-                    var user = await userMgr.FindByNameAsync(User.Identity.Name);
-                    roles = await userMgr.GetRolesAsync(user);
-                }
-                var menuModel = await navRepo.GetMenuAsync(roles.ToArray());
-                return menuModel;
-            }
-            catch (Exception ex) {
-                logger.LogError(ex, "Can not get menu!");
-                return new MenuNodeModel();
+                return this.InternalServerError(ex);
             }
         }
 

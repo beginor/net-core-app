@@ -63,7 +63,7 @@ export class UsersService {
             this.data.next(data);
             this.showPagination = total > data.length;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
@@ -98,7 +98,7 @@ export class UsersService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '创建用户出错！' }
@@ -115,7 +115,7 @@ export class UsersService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取指定的用户出错！' }
@@ -136,7 +136,7 @@ export class UsersService {
             );
             return true;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '删除用户出错！' }
@@ -156,7 +156,7 @@ export class UsersService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '更新用户出错！' }
@@ -176,7 +176,7 @@ export class UsersService {
             await this.search();
             return true;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '解锁用户失败！'}
@@ -192,7 +192,7 @@ export class UsersService {
             await this.search();
             return true;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '锁定用户失败！'}
@@ -214,7 +214,7 @@ export class UsersService {
             await lastValueFrom(this.http.put<ResetPasswordModel>(url, model));
             return true;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '重置用户密码失败！'}
@@ -230,7 +230,7 @@ export class UsersService {
             this.rolesSvc.searchModel.take = 999;
             await this.rolesSvc.search();
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取全部角色失败！' }
@@ -247,7 +247,7 @@ export class UsersService {
             );
             return roles.map(r => r.name);
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取用户角色失败！' }
@@ -273,7 +273,7 @@ export class UsersService {
                 await lastValueFrom(this.http.delete(url));
             }
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '保存用户角色失败！' }

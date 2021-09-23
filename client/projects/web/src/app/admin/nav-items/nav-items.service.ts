@@ -58,7 +58,7 @@ export class NavItemsService {
             this.data.next(data);
             this.showPagination = total > data.length;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
@@ -93,7 +93,7 @@ export class NavItemsService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.uiService.showAlert(
                 { type: 'danger', message: '创建导航节点（菜单）出错！' }
@@ -110,7 +110,7 @@ export class NavItemsService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.uiService.showAlert(
                 { type: 'danger', message: '获取指定的导航节点（菜单）出错！' }
@@ -131,7 +131,7 @@ export class NavItemsService {
             );
             return true;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.uiService.showAlert(
                 { type: 'danger', message: '删除导航节点（菜单）出错！' }
@@ -151,7 +151,7 @@ export class NavItemsService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.uiService.showAlert(
                 { type: 'danger', message: '更新导航节点（菜单）出错！' }
@@ -166,7 +166,7 @@ export class NavItemsService {
             this.rolesSvc.searchModel.take = 999;
             await this.rolesSvc.search();
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.uiService.showAlert({ type: 'danger', message: '获取全部角色出错！' });
         }
@@ -187,7 +187,7 @@ export class NavItemsService {
                 rootNode.children ?? []
             );
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.uiService.showAlert({ type: 'danger', message: '获取全部菜单出错！' });
         }
@@ -239,6 +239,8 @@ export interface NavItemModel {
     target?: string;
     /** 内嵌窗口地址 */
     frameUrl?: string;
+    /** 是否隐藏 */
+    isHidden?: boolean;
 }
 
 /** 导航节点（菜单） 搜索参数 */

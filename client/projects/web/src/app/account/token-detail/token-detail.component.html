@@ -1,0 +1,107 @@
+<form class="card detail" #detailForm="ngForm"
+  [@animation]="animation" (@animation.done)="onAnimationEvent($event)"
+>
+  <div class="card-header d-flex justify-content-between align-content-center">
+    <h5 class="card-title mb-0">{{title}}</h5>
+    <div class="btn-group btn-group-sm">
+      <button class="btn btn-sm btn-outline-primary" type="button" (click)="save()" [disabled]="!detailForm.valid">
+        <svg-icon path="bi/check"></svg-icon> 保存
+      </button>
+      <button class="btn btn-sm btn-outline-secondary" type="button" (click)="goBack()">
+        <svg-icon path="bi/x"></svg-icon> 取消
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="mb-3">
+      <label class="form-label text-muted" for="name">凭证名称 <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="name" name="name"
+        placeholder="请输入凭证名称 ..." required
+        [(ngModel)]="model.name"
+        #name="ngModel"
+        [class.is-invalid]="!(name.valid || name.pristine)"
+        [class.is-valid]="name.valid"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="value">凭证值 <i class="text-danger">*</i> </label>
+      <div class="input-group">
+        <input class="form-control" type="text" id="value" name="value"
+          placeholder="请输入凭证值 ..." required readonly
+          [(ngModel)]="model.value"
+          #value="ngModel"
+          [class.is-invalid]="!(value.valid || value.pristine)"
+          [class.is-valid]="value.valid"
+        />
+        <button class="btn btn-outline-secondary" type="button" ngbTooltip="刷新凭证值" container="body" (click)="newTokenValue()">
+          <svg-icon path="bi/arrow-repeat"></svg-icon>
+        </button>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="expiresAt">过期时间 </label>
+      <div class="input-group">
+        <input class="form-control" type="text" id="expiresAt" name="expiresAt"
+          placeholder="设置凭证的过期时间，否者将永不过期。" readonly
+          [(ngModel)]="tokenExpiresAt" ngbDatepicker #exp="ngbDatepicker" [minDate]="calendar.getToday()"
+        />
+        <button class="btn btn-outline-secondary" (click)="exp.toggle()">
+          <svg-icon path="bi/calendar3"></svg-icon>
+        </button>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted">凭证角色</label>
+      <div class="form-text">
+        <div class="form-check form-check-inline form-switch" *ngFor="let role of roles">
+          <input class="form-check-input" type="checkbox" [id]="role.id" [name]="role.name" [value]="role.name"
+            [checked]="isChecked(role.name, 'checkedRoles')" (change)="toggleChecked($event, role.name, 'checkedRoles')"
+          />
+          <label class="form-check-label" [for]="role.id">{{role.description}}</label>
+        </div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="privileges">凭证权限 </label>
+      <div class="form-text">
+        <div class="m-1" *ngFor="let mp of privileges">
+          <h6>{{mp.module}}</h6>
+          <div class="form-check form-check-inline" *ngFor="let p of mp.privileges">
+            <input class="form-check-input" type="checkbox" [id]="p.id" [name]="p.name" [value]="p.name"
+              [checked]="isChecked(p.name, 'checkedPrivileges')" (change)="toggleChecked($event, p.name, 'checkedPrivileges')"
+            />
+            <label class="form-check-label" [for]="p.id">{{p.description}}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="urls">允许的 url 地址 </label>
+      <div class="mx-2">
+        <div class="input-group mb-2">
+          <input class="form-control" type="text" id="newUrl" name="newUrl"
+            placeholder="http:// ..."
+            #newUrl
+          />
+          <button class="btn btn-outline-secondary" type="button" (click)="addTokenUrl(newUrl)">
+            <svg-icon path="bi/plus"></svg-icon>
+          </button>
+        </div>
+        <div class="input-group mb-1" *ngFor="let url of tokenUrls">
+          <input class="form-control" type="text" readonly [value]="url" />
+          <button class="btn btn-outline-secondary" type="button" (click)="removeTokenUrl(url)">
+            <svg-icon path="bi/x"></svg-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer d-flex justify-content-between">
+    <button type="button" class="btn btn-sm btn-outline-primary" (click)="save()" [disabled]="!detailForm.valid">
+      <svg-icon path="bi/check"></svg-icon> 保存
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" (click)="goBack()">
+      <svg-icon path="bi/x"></svg-icon> 取消
+    </button>
+  </div>
+</form>

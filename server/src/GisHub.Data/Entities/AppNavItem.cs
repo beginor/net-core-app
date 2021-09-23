@@ -57,6 +57,9 @@ namespace Beginor.GisHub.Data.Entities {
         /// <summary>内嵌窗口地址</summary>
         [Property(Name = "FrameUrl", Column = "frame_url", Type = "string", NotNull = false, Length = 256)]
         public virtual string FrameUrl { get; set; }
+        /// <summary>是否删除</summary>
+        [Property(Name = "IsHidden", Column = "is_hidden", Type = "bool", NotNull = true)]
+        public virtual bool IsHidden { get; set; }
     }
 
 }

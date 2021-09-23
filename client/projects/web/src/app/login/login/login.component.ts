@@ -28,15 +28,18 @@ export class LoginComponent {
             this.loading = true;
             await this.acntSvc.login(this.model);
             await this.acntSvc.getInfo();
-            const returnUrl = this.route.snapshot.params.returnUrl || 'home';
+            let returnUrl = this.route.snapshot.params.returnUrl as string;
+            if (!returnUrl) {
+                returnUrl = 'home';
+            }
             await this.router.navigate(
-                ['/' + returnUrl],
+                [`/${returnUrl}`],
                 { replaceUrl: true }
             );
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
-            const message = typeof ex.error === 'string' ? ex.error : '无法登录！';
+            const message = typeof ex.error === 'string' ? ex.error : '无法登录！'; // eslint-disable-line max-len, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
             this.message.next(message);
         }
         finally {

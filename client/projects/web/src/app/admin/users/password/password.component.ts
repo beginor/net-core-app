@@ -39,16 +39,16 @@ export class PasswordComponent {
     }
 
     private userId: string;
-
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         public account: AccountService,
         public vm: UsersService
     ) {
-        this.userId = route.snapshot.params.id;
-        const fullname = route.snapshot.params.fullname || '用户';
-        this.title = `重置 ${fullname} 的密码`;
+        const { userId, fullname } = route.snapshot.params;
+        this.userId = userId as string;
+        const username = fullname as string || '用户';
+        this.title = `重置 ${username} 的密码`;
         this.editable = true;
         this.form = new FormGroup({
             password: new FormControl(
