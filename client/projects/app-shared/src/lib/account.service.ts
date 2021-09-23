@@ -258,6 +258,7 @@ export interface UserTokenSearchModel {
     skip: number;
     /** 取多少条记录 */
     take: number;
+    keywords?: string;
 }
 
 /** 用户凭证 搜索结果 */
@@ -280,6 +281,8 @@ export interface AppRole {
     name: string;
     /** 角色描述 */
     description?: string;
+    /** 角色权限 */
+    privileges?: string[];
 }
 /** 系统权限 */
 export interface AppPrivilege {

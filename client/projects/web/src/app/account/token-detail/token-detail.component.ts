@@ -172,8 +172,8 @@ export class TokenDetailComponent implements OnInit {
         }
     }
 
-    public addTokenUrl(url: string): void {
-        url = url.trim();
+    public addTokenUrl(el: HTMLInputElement): void {
+        const url = el.value.trim();
         if (!url) {
             return;
         }
@@ -181,6 +181,7 @@ export class TokenDetailComponent implements OnInit {
         if (idx < 0) {
             this.tokenUrls.push(url);
         }
+        el.value = '';
     }
 
     public removeTokenUrl(url: string): void {

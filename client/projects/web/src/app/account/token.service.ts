@@ -14,7 +14,7 @@ export class TokenService {
     public tokens: UserTokenModel[] = [];
 
     public loading = false;
-    public model: UserTokenSearchModel = { skip: 0, take: 100 };
+    public model: UserTokenSearchModel = { skip: 0, take: 100, keywords: '' };
 
     constructor(
         private account: AccountService,
@@ -65,6 +65,23 @@ export class TokenService {
             this.ui.showAlert(
                 { type: 'danger', message: '更新凭证出错！' }
             );
+        }
+    }
+
+    public async delete(id: string): Promise<boolean> {
+        const confirm = await this.ui.showConfirm('确认删除凭证么？');
+        if (!confirm) {
+            return false;
+        }
+        try {
+            await this.account.deleteUserToken(id);
+            return true;
+        }
+        catch (ex: unknown) {
+            this.ui.showAlert(
+                { type: 'danger', message: '删除用户凭证出错！' }
+            );
+            return false;
         }
     }
 

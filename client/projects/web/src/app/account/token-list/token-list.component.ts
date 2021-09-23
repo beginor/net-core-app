@@ -17,8 +17,6 @@ export class TokenListComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private account: AccountService,
-        private ui: UiService,
         public vm: TokenService
     ) { }
 
@@ -33,8 +31,11 @@ export class TokenListComponent implements OnInit {
         );
     }
 
-    public deleteToken(id: string): void {
-        //
+    public async deleteToken(id: string): Promise<void> {
+        const deleted = await this.vm.delete(id);
+        if (deleted) {
+            void this.vm.loadTokens();
+        }
     }
 
     public isExpires(date?: string): boolean {
@@ -43,6 +44,11 @@ export class TokenListComponent implements OnInit {
         }
         const d = new Date(date);
         return d < new Date();
+    }
+
+    public resetSearch(): void {
+        this.vm.model.keywords = '';
+        void this.vm.loadTokens();
     }
 
 }

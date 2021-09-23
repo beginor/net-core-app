@@ -42,7 +42,7 @@
       <label class="form-label text-muted" for="expiresAt">过期时间 </label>
       <div class="input-group">
         <input class="form-control" type="text" id="expiresAt" name="expiresAt"
-          placeholder="请设置过期时间，否者将永不过期。" readonly
+          placeholder="设置凭证的过期时间，否者将永不过期。" readonly
           [(ngModel)]="tokenExpiresAt" ngbDatepicker #exp="ngbDatepicker" [minDate]="calendar.getToday()"
         />
         <button class="btn btn-outline-secondary" (click)="exp.toggle()">
@@ -83,7 +83,7 @@
             placeholder="http:// ..."
             #newUrl
           />
-          <button class="btn btn-outline-secondary" type="button" (click)="addTokenUrl(newUrl.value)">
+          <button class="btn btn-outline-secondary" type="button" (click)="addTokenUrl(newUrl)">
             <svg-icon path="bi/plus"></svg-icon>
           </button>
         </div>

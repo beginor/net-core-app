@@ -126,21 +126,30 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             if (user == null) {
                 return Forbid();
             }
-            var userRoles = await userMgr.GetRolesAsync(user);
-            var appRoles = await roleMgr.Roles
-                .Where(role => userRoles.Contains(role.Name))
+            var userRoleNames = await userMgr.GetRolesAsync(user);
+            var userRoles = await roleMgr.Roles
+                .Where(role => userRoleNames.Contains(role.Name))
                 .ToListAsync();
-            var privileges = new List<string>();
-            foreach (var role in appRoles) {
+            var userPrivilegeNames = new List<string>();
+            var rolesWithPrivileges = new List<AppRoleWithPrivilegesModel>();
+            foreach (var role in userRoles) {
                 var roleClaims = await roleMgr.GetClaimsAsync(role);
-                var rolePrivileges = roleClaims.Where(claim => claim.Type == Consts.PrivilegeClaimType)
+                var rolePrivilegeNames = roleClaims.Where(claim => claim.Type == Consts.PrivilegeClaimType)
                     .Select(claim => claim.Value);
-                privileges.AddRange(rolePrivileges);
+                userPrivilegeNames.AddRange(rolePrivilegeNames);
+                rolesWithPrivileges.Add(
+                    new AppRoleWithPrivilegesModel {
+                        Id = role.Id,
+                        Name = role.Name,
+                        Description = role.Description,
+                        Privileges = rolePrivilegeNames.ToArray()
+                    }
+                );
             }
-            var appPrivileges = await privilegeRepo.GetByNamesAsync(privileges);
+            var userPrivileges = await privilegeRepo.GetByNamesAsync(userPrivilegeNames);
             var result = new Dictionary<string, object> {
-                ["roles"] = appRoles,
-                ["privileges"] = appPrivileges
+                ["roles"] = rolesWithPrivileges,
+                ["privileges"] = userPrivileges
             };
             return Ok(result);
         }

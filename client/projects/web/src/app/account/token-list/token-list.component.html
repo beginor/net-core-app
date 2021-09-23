@@ -24,8 +24,11 @@
           </div>
           <div class="offset-4 col-2 d-flex justify-content-end">
             <div class="input-group input-group-sm">
-              <input class="form-control" name="keywords" type="text" placeholder="输入关键字进行搜索" />
-              <button class="btn btn-sm btn-outline-secondary" type="button">
+              <input class="form-control" name="keywords" type="text" placeholder="输入关键字进行搜索"
+                [(ngModel)]="vm.model.keywords" (keyup.enter)="vm.loadTokens()"
+              />
+              <button class="btn btn-sm btn-outline-secondary" type="button"
+                *ngIf="vm.model.keywords" (click)="resetSearch()">
                 <svg-icon path="bi/x"></svg-icon>
               </button>
             </div>
