@@ -2,8 +2,8 @@
 
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Beginor.AppFx.Api" Version="5.0.10" />
@@ -18,10 +18,10 @@
     <PackageReference Include="Dapper" Version="2.0.90" />
     <PackageReference Include="NHibernate" Version="5.3.9" />
     <PackageReference Include="NHibernate.Mapping.Attributes" Version="5.1.0" />
-    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="5.0.12" />
+    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="5.0.13" />
     <PackageReference Include="NHibernate.Extensions.NpgSql" Version="5.0.9" />
     <PackageReference Include="NHibernate.NetCore" Version="5.0.9" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
   </ItemGroup>
 
 </Project>
