@@ -48,7 +48,7 @@ export class AppUserTokenService {
             this.data.next(data);
             this.showPagination = total > data.length;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
@@ -83,7 +83,7 @@ export class AppUserTokenService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '创建用户凭证出错！' }
@@ -100,7 +100,7 @@ export class AppUserTokenService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取指定的用户凭证出错！' }
@@ -121,7 +121,7 @@ export class AppUserTokenService {
             );
             return true;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '删除用户凭证出错！' }
@@ -141,7 +141,7 @@ export class AppUserTokenService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '更新用户凭证出错！' }

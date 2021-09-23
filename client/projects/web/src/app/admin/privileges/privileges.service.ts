@@ -52,7 +52,7 @@ export class AppPrivilegeService {
             this.data.next(data);
             this.showPagination = total > data.length;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
@@ -85,7 +85,7 @@ export class AppPrivilegeService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '创建系统权限出错！' }
@@ -102,7 +102,7 @@ export class AppPrivilegeService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '加载系统权限数据出错！' }
@@ -123,7 +123,7 @@ export class AppPrivilegeService {
             );
             return true;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '删除系统权限出错！' }
@@ -143,7 +143,7 @@ export class AppPrivilegeService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '更新系统权限出错！' }
@@ -160,7 +160,7 @@ export class AppPrivilegeService {
             );
             this.modules.next(modules);
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '加载模块列表出错!'}

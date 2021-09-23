@@ -75,7 +75,7 @@ export class RolesService {
             this.data.next(data);
             this.showPagination = total > data.length;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
@@ -110,7 +110,7 @@ export class RolesService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '创建角色出错！' }
@@ -127,7 +127,7 @@ export class RolesService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取指定的角色出错！' }
@@ -148,7 +148,7 @@ export class RolesService {
             );
             return true;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '删除角色出错！' }
@@ -168,7 +168,7 @@ export class RolesService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '更新角色出错！' }
@@ -187,7 +187,7 @@ export class RolesService {
             this.privilegeService.searchModel.module = '';
             await this.privilegeService.search();
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert({ type: 'danger', message: '获取全部权限出错！' });
         }
@@ -204,7 +204,7 @@ export class RolesService {
                 this.rolePrivileges[p] = true;
             }
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取角色权限出错！' }
@@ -227,7 +227,7 @@ export class RolesService {
                 await lastValueFrom(this.http.delete(url));
                 this.rolePrivileges[privilege] = false;
             }
-            catch (ex) {
+            catch (ex: unknown) {
                 this.errorHandler.handleError(ex);
                 this.ui.showAlert(
                     { type: 'danger', message: '删除角色权限失败！' }
@@ -241,7 +241,7 @@ export class RolesService {
                 await lastValueFrom(this.http.post(url, null));
                 this.rolePrivileges[privilege] = true;
             }
-            catch (ex) {
+            catch (ex: unknown) {
                 this.errorHandler.handleError(ex);
                 this.ui.showAlert(
                     { type: 'danger', message: '添加角色权限失败！' }

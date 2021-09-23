@@ -36,7 +36,7 @@ export class LoginComponent {
                 { replaceUrl: true }
             );
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.snackBar.open(ex.error, '确定', { duration: 3000 });
         }

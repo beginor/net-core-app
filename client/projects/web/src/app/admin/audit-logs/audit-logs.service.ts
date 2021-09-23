@@ -64,7 +64,7 @@ export class AuditLogsService {
             this.showPagination = total > data.length;
             this.loading = false;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);

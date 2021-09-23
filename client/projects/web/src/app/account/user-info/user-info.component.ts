@@ -64,7 +64,7 @@ export class UserInfoComponent implements OnInit {
                 this.formatter.parse(user.dateOfBirth as string)
             ) as NgbDate;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.ui.showAlert(
                 { type: 'danger', message: '无法获取用户信息！' }
             );
@@ -85,7 +85,7 @@ export class UserInfoComponent implements OnInit {
             var user = await this.account.updateUser(this.user);
             this.user = user;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.ui.showAlert(
                 { type: 'danger', message: '无法更新用户信息！' }
             );
