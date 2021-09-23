@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import {
     AccountService, UserTokenModel, UserTokenSearchModel
@@ -14,6 +15,8 @@ import { TokenService } from '../token.service';
 export class TokenListComponent implements OnInit {
 
     constructor(
+        private router: Router,
+        private route: ActivatedRoute,
         private account: AccountService,
         private ui: UiService,
         public vm: TokenService
@@ -24,7 +27,10 @@ export class TokenListComponent implements OnInit {
     }
 
     public showDetail(id: string): void {
-        //
+        void this.router.navigate(
+            ['./', id],
+            { relativeTo: this.route, skipLocationChange: true }
+        );
     }
 
     public deleteToken(id: string): void {

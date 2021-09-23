@@ -1,10 +1,10 @@
 <div class="container mt-3 mb-5">
   <div class="row g-0">
-    <div class="card">
+    <div class="card border-bottom-0">
       <div class="card-header d-flex justify-content-between">
         <h5 class="card-title mb-0">我的凭证</h5>
         <div class="btn-group btn-group-sm">
-          <button class="btn btn-outline-primary" type="button">
+          <button class="btn btn-outline-primary" type="button" (click)="showDetail('0')">
             <svg-icon path="bi/plus"></svg-icon> 新建凭证
           </button>
           <button type="button" class="btn btn-outline-secondary" (click)="vm.loadTokens()">
@@ -79,4 +79,7 @@
       </div>
     </div>
   </div>
+</div>
+<div class="detail-container">
+  <router-outlet></router-outlet>
 </div>

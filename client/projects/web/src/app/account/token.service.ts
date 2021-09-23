@@ -28,7 +28,7 @@ export class TokenService {
             this.total = result.total ?? 0;
             this.tokens = result.data ?? [];
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.ui.showAlert(
                 { type: 'danger', message: '加载凭证列表出错！' }
             );
@@ -38,5 +38,34 @@ export class TokenService {
         }
     }
 
+    public getById(id: string): UserTokenModel | undefined {
+        const token = this.tokens.find(t => t.id === id);
+        if (!token) {
+            return;
+        }
+        return Object.assign({}, token);
+    }
+
+    public async create(model: UserTokenModel): Promise<void> {
+        try {
+            await this.account.createUserToken(model);
+        }
+        catch (ex: unknown) {
+            this.ui.showAlert(
+                { type: 'danger', message: '创建凭证出错！' }
+            );
+        }
+    }
+
+    public async update(id: string, model: UserTokenModel): Promise<void> {
+        try {
+            await this.account.updateUserToken(id, model);
+        }
+        catch (ex: unknown) {
+            this.ui.showAlert(
+                { type: 'danger', message: '更新凭证出错！' }
+            );
+        }
+    }
 
 }

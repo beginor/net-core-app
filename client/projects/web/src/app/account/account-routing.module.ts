@@ -7,8 +7,13 @@ import { TokenDetailComponent } from './token-detail/token-detail.component';
 const routes: Routes = [
     { path: '', redirectTo: 'info', pathMatch: 'full' },
     { path: 'info', component: UserInfoComponent },
-    { path: 'tokens', component: TokenListComponent },
-    { path: 'tokens/:id', component: TokenDetailComponent }
+    {
+        path: 'tokens',
+        component: TokenListComponent,
+        children: [
+            { path: ':id', component: TokenDetailComponent }
+        ]
+    },
 ];
 
 @NgModule({
