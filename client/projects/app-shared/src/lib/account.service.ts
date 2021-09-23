@@ -58,7 +58,7 @@ export class AccountService {
             }
             return info;
         }
-        catch (ex) {
+        catch (ex: any) {
             localStorage.removeItem(this.tokenKey);
             throw new Error('Can not get account info!');
         }
@@ -248,7 +248,7 @@ export interface UserTokenModel {
     /** 过期时间 */
     expiresAt?: string;
     /** 更新时间 */
-    updateTime: string;
+    updateTime?: string;
 }
 
 /** 用户凭证 搜索参数 */

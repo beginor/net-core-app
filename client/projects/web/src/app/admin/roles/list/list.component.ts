@@ -19,7 +19,7 @@ export class ListComponent implements OnInit, OnDestroy {
     ) { }
 
     public ngOnInit(): void {
-        this.loadData();
+        void this.loadData();
     }
 
     public ngOnDestroy(): void {
@@ -31,21 +31,21 @@ export class ListComponent implements OnInit, OnDestroy {
     }
 
     public showDetail(id: string, editable: boolean): void {
-        this.router.navigate(
+        void this.router.navigate(
             ['./', id, { editable: editable }],
             { relativeTo: this.route, skipLocationChange: true }
         );
     }
 
     public showUsers(role: AppRoleModel): void {
-        this.router.navigate(
+        void this.router.navigate(
             ['./', role.id, 'users', { desc: role.description }],
             { relativeTo: this.route, skipLocationChange: true }
         );
     }
 
     public showPrivileges(role: AppRoleModel): void {
-        this.router.navigate(
+        void this.router.navigate(
             ['./', role.id, 'privileges', { desc: role.description }],
             { relativeTo: this.route, skipLocationChange: true }
         );
@@ -54,7 +54,7 @@ export class ListComponent implements OnInit, OnDestroy {
     public async delete(id: string): Promise<void> {
         const deleted = await this.vm.delete(id);
         if (deleted) {
-            this.vm.search();
+            void this.vm.search();
         }
     }
 

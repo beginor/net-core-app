@@ -22,6 +22,10 @@
             "propertyDeclaration": true
           }
         ],
+        "@typescript-eslint/no-implicit-any-catch": [
+          "warn",
+          { "allowExplicitAny": true }
+        ],
         "@typescript-eslint/no-explicit-any": ["off"],
         "@typescript-eslint/no-unsafe-call": ["warn"],
         "@typescript-eslint/no-unsafe-assignment": ["warn"],
@@ -38,7 +42,7 @@
           }
         ],
         "@typescript-eslint/explicit-function-return-type": [
-          "off",
+          "warn",
           {
             "allowExpressions": false,
             "allowTypedFunctionExpressions": true,
