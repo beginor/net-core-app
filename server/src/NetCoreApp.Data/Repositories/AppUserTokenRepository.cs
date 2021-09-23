@@ -89,6 +89,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             if (entity == null) {
                 throw new Exception($"entity AppUserToken with id {id} is null");
             }
+            await cache.RemoveAsync(entity.Value);
             Mapper.Map(model, entity);
             entity.User = user;
             entity.UpdateTime = DateTime.Now;
@@ -102,6 +103,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             var entity = await Session.Query<AppUserToken>()
                 .FirstOrDefaultAsync(tkn => tkn.Id == id && tkn.User.Id == userId);
             if (entity != null) {
+                await cache.RemoveAsync(entity.Value);
                 await Session.DeleteAsync(entity);
                 await Session.FlushAsync();
                 Session.Clear();
