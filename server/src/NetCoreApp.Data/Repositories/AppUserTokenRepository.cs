@@ -71,6 +71,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
         public async Task SaveTokenForUserAsync(AppUserTokenModel model, AppUser user) {
             var entity = Mapper.Map<AppUserToken>(model);
             entity.User = user;
+            entity.UpdateTime = DateTime.Now;
             await Session.SaveAsync(entity);
             await Session.FlushAsync();
             Session.Clear();
@@ -90,6 +91,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             }
             Mapper.Map(model, entity);
             entity.User = user;
+            entity.UpdateTime = DateTime.Now;
             await Session.UpdateAsync(entity);
             await Session.FlushAsync();
             Session.Clear();
