@@ -19,8 +19,8 @@
     <PackageReference Include="NHibernate" Version="5.3.9" />
     <PackageReference Include="NHibernate.Mapping.Attributes" Version="5.1.0" />
     <PackageReference Include="NHibernate.AspNetCore.Identity" Version="5.0.13" />
-    <PackageReference Include="NHibernate.Extensions.NpgSql" Version="5.0.9" />
-    <PackageReference Include="NHibernate.NetCore" Version="5.0.9" />
+    <PackageReference Include="NHibernate.Extensions.NpgSql" Version="5.0.10" />
+    <PackageReference Include="NHibernate.NetCore" Version="5.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
   </ItemGroup>
 
