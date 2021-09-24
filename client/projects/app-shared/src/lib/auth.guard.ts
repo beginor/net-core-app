@@ -50,7 +50,7 @@ export class AuthGuard implements CanLoad, CanActivate {
     }
 
     private redirectToLogin(returnUrl?: string): void {
-        this.router.navigate(
+        void this.router.navigate(
             ['/login', { returnUrl }]
         );
     }
