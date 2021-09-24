@@ -36,9 +36,9 @@ export class LoginComponent {
                 { replaceUrl: true }
             );
         }
-        catch (ex: unknown) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
-            this.snackBar.open(ex.error, '确定', { duration: 3000 });
+            this.snackBar.open(ex.toString(), '确定', { duration: 3000 });
         }
         finally {
             this.loading = false;
