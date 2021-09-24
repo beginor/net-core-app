@@ -19,14 +19,6 @@ import {
     StorageBrowserComponent
 } from './storage-browser/storage-browser.component';
 import { NavCardComponent } from './nav-card/nav-card.component';
-import { AccountComponent } from './account/account.component';
-import { UserInfoComponent } from './user-info/user-info.component';
-import {
-    UserTokenListComponent
-} from './user-token-list/user-token-list.component';
-import {
-    UserTokenDetailComponent
-} from './user-token-detail/user-token-detail.component';
 
 @NgModule({
     declarations: [
@@ -36,11 +28,7 @@ import {
         NavItemComponent,
         IframeComponent,
         StorageBrowserComponent,
-        NavCardComponent,
-        AccountComponent,
-        UserInfoComponent,
-        UserTokenListComponent,
-        UserTokenDetailComponent
+        NavCardComponent
     ],
     imports: [
         CommonModule,
