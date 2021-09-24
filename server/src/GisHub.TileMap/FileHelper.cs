@@ -15,12 +15,21 @@ namespace Beginor.GisHub.TileMap {
             [".jpeg"] = "image/jpeg"
         };
 
-        public static DateTimeOffset? GetTileModifiedTime(string tileFolder, int level, int row, int col) {
-            return null;
+        public static DateTimeOffset? GetTileModifiedTime(string tileFolder, int level, int row, int col, string folderStructure = "esri") {
+            var filePath = folderStructure == "esri" ? GetEsriTilePath(tileFolder, level, row, col) : GetGdalTilePath(tileFolder, level, row, col);
+            if (filePath.IsNullOrEmpty()) {
+                return null;
+            }
+            if (!File.Exists(filePath)) {
+                return null;
+            }
+            var lastWriteTime = File.GetLastWriteTime(filePath);
+            var offset = new DateTimeOffset(lastWriteTime);
+            return offset;
         }
 
-        public static async Task<TileContentModel> ReadTileContentAsync(string tileFolder, int level, int row, int col) {
-            var filePath = GetTilePath(tileFolder, level, row, col);
+        public static async Task<TileContentModel> ReadTileContentAsync(string tileFolder, int level, int row, int col, string folderStructure = "esri") {
+            var filePath = folderStructure == "esri" ? GetEsriTilePath(tileFolder, level, row, col) : GetGdalTilePath(tileFolder, level, row, col);
             if (filePath.IsNullOrEmpty()) {
                 return TileContentModel.Empty;
             }
@@ -36,8 +45,19 @@ namespace Beginor.GisHub.TileMap {
             return tileContent;
         }
 
-        private static string GetTilePath(string tileFolder, int level, int row, int col) {
+        private static string GetEsriTilePath(string tileFolder, int level, int row, int col) {
             var tilePath = Path.Combine(tileFolder, level.ToString("D2"), row.ToString("X8"), col.ToString("X8"));
+            foreach (var ext in ContentTypeMap.Keys) {
+                var path = tilePath + ext;
+                if (File.Exists(path)) {
+                    return path;
+                }
+            }
+            return string.Empty;
+        }
+
+        private static string GetGdalTilePath(string tileFolder, int level, int row, int col) {
+            var tilePath = Path.Combine(tileFolder, level.ToString(), col.ToString(), row.ToString());
             foreach (var ext in ContentTypeMap.Keys) {
                 var path = tilePath + ext;
                 if (File.Exists(path)) {

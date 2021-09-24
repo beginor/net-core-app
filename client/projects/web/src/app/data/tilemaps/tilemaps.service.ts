@@ -176,6 +176,8 @@ export interface TileMapModel {
     cacheDirectory?: string;
     /** 切片信息路径 */
     mapTileInfoPath?: string;
+    /** 目录结构 */
+    folderStructure?: string;
     /** 内容类型 */
     contentType?: string;
     /** 是否为紧凑格式 */

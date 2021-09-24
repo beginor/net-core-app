@@ -77,6 +77,7 @@
                 <th scope="col" class="text-end text-nowrap text-muted">#</th>
                 <th scope="col" class="text-start text-nowrap text-muted">名称</th>
                 <th scope="col" class="text-start text-nowrap text-muted">缓存目录</th>
+                <th scope="col" class="text-center text-nowrap text-muted">目录格式</th>
                 <th scope="col" class="text-center text-nowrap text-muted">紧凑格式</th>
                 <th scope="col" class="text-center text-nowrap text-muted">创建时间</th>
                 <th scope="col" class="text-center text-nowrap text-muted">更新时间</th>
@@ -90,6 +91,7 @@
                   <a class="preview-link" (click)="showPreview(item)">{{item.name}}</a>
                 </td>
                 <td class='text-start'>{{item.cacheDirectory}}</td>
+                <td class='text-center'>{{item.folderStructure?.toUpperCase()}}</td>
                 <td class='text-center'>{{!!item.isBundled ? '是' : '否'}}</td>
                 <td class='text-center'>{{item.createdAt | date:'yyyy-MM-dd'}}</td>
                 <td class='text-center'>{{item.updatedAt | date:'yyyy-MM-dd'}}</td>

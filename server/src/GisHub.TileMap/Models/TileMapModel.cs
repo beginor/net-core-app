@@ -19,6 +19,8 @@ namespace Beginor.GisHub.TileMap.Models {
         /// <summary>内容类型</summary>
         [Required(ErrorMessage = "内容类型 必须填写！")]
         public string ContentType { get; set; }
+        /// <summary>目录结构</summary>
+        public string FolderStructure { get; set; }
         /// <summary>是否为紧凑格式</summary>
         [Required(ErrorMessage = "是否为紧凑格式 必须填写！")]
         public bool IsBundled { get; set; }

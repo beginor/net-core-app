@@ -136,7 +136,7 @@ namespace Beginor.GisHub.TileMap.Data {
                 bundleTile.ContentType = tilemap.ContentType;
                 return bundleTile;
             }
-            var fileTile = await FileHelper.ReadTileContentAsync(tilemap.CacheDirectory, level, row, col);
+            var fileTile = await FileHelper.ReadTileContentAsync(tilemap.CacheDirectory, level, row, col, tilemap.FolderStructure);
             fileTile.ContentType = tilemap.ContentType;
             return fileTile;
         }
@@ -226,7 +226,9 @@ namespace Beginor.GisHub.TileMap.Data {
             if (tilemap.CacheDirectory.IsNullOrEmpty() || !Directory.Exists(tilemap.CacheDirectory)) {
                 return null;
             }
-            var offset = BundleHelper.GetTileModifiedTime(tilemap.CacheDirectory, level, row, col);
+            DateTimeOffset? offset = tilemap.IsBundled
+                ? BundleHelper.GetTileModifiedTime(tilemap.CacheDirectory, level, row, col)
+                : FileHelper.GetTileModifiedTime(tilemap.CacheDirectory, level, row, col, tilemap.FolderStructure);
             if (offset != null ) {
                 var ci = await cache.GetAsync<TileMapCacheItem>(key);
                 if (ci != null) {

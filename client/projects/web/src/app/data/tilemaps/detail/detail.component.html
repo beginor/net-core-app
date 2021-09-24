@@ -29,13 +29,16 @@
       </div>
       <div class="col">
         <div class="mb-3">
-          <label class="form-label text-muted" for="contentType">内容类型  <i class="text-danger">*</i> </label>
-          <input class="form-control" type="text" id="contentType" name="contentType"
-            placeholder="请输入内容类型 ..." [(ngModel)]="model.contentType"
+          <label class="form-label text-muted" for="contentType">栅格数据格式  <i class="text-danger">*</i> </label>
+          <select class="form-select" id="contentType" name="contentType" [(ngModel)]="model.contentType"
             [class.is-invalid]="!(contentType.valid || contentType.pristine)"
             [class.is-valid]="contentType.valid"
             required #contentType="ngModel" [disabled]="!editable"
-          />
+          >
+            <option [ngValue]="undefined">选择栅格数据格式</option>
+            <option value="image/png">PNG</option>
+            <option value="image/jpg">JPEG</option>
+          </select>
         </div>
       </div>
     </div>
@@ -58,43 +61,51 @@
         </ng-container>
       </div>
     </div>
+    <div class="row">
+      <div class="col">
+        <div class="mb-3">
+          <label class="form-label text-muted" for="folderStructure">目录结构</label>
+          <select class="form-select" id="folderStructure" name="folderStructure" [(ngModel)]="model.folderStructure"
+            [class.is-invalid]="!(folderStructure.valid || folderStructure.pristine)"
+            [class.is-valid]="folderStructure.valid"
+            required #folderStructure="ngModel" [disabled]="!editable"
+          >
+            <option value="gdal">GDAL</option>
+            <option value="esri">ESRI</option>
+          </select>
+        </div>
+      </div>
+      <div class="col">
+        <div class="mb-3" *ngIf="model.folderStructure==='esri'">
+          <label class="form-label text-muted" for="isBundled">是否紧凑格式</label>
+          <div class="form-check mt-2">
+            <input type="checkbox" class="form-check-input" id="isBundled" name="isBundled"
+              [(ngModel)]="model.isBundled" [disabled]="!editable"
+            >
+            <label class="form-check-label text-muted" for="isBundled">
+              紧凑格式
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="mb-3" [class.is-valid]="mapTileInfoPath.valid"
       [class.is-invalid]="!(mapTileInfoPath.valid || mapTileInfoPath.pristine)">
-      <label class="form-label text-muted" for="mapTileInfoPath">切片信息路径  <i class="text-danger">*</i> </label>
+      <label class="form-label text-muted" for="mapTileInfoPath">切片服务信息模板  <i class="text-danger">*</i> </label>
       <div class="input-group">
         <input class="form-control" type="text" id="mapTileInfoPath" name="mapTileInfoPath"
-          placeholder="请选择切片信息路径 ..." [(ngModel)]="model.mapTileInfoPath"
+          placeholder="请输入切片服务信息模板路径 ..." [(ngModel)]="model.mapTileInfoPath"
           [class.is-invalid]="!(mapTileInfoPath.valid || mapTileInfoPath.pristine)"
           [class.is-valid]="mapTileInfoPath.valid"
           required #mapTileInfoPath="ngModel" [disabled]="!editable"
         />
         <ng-container *ngIf="editable && info.privileges['app_storages.read_folder_content']">
           <button class="btn btn-outline-secondary" type="button"
-            ngbTooltip="选择切片信息" [openDelay]="300"
+            ngbTooltip="选择切片服务信息模板" [openDelay]="300"
             (click)="showFolderDialog()">
             <svg-icon path="bi/search"></svg-icon>
           </button>
         </ng-container>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-auto">
-        <div class="mb-3 mb-1">
-          <div class="form-check form-switch">
-            <input type="checkbox" class="form-check-input"
-              id="isBundled" name="isBundled"
-              [(ngModel)]="model.isBundled" [disabled]="!editable">
-            <label class="form-check-label text-muted"
-              for="isBundled">
-              紧凑格式
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="col-auto" *ngIf="!editable">
-        <div class="mb-3 mb-1">
-          <div class="form-control-plaintext p-0">{{model.createdAt | date:'yyyy年M月d日'}}创建，{{model.updatedAt | date:'yyyy年M月d日'}}更新。</div>
-        </div>
       </div>
     </div>
     <hr class="mt-0 mb-2" />

@@ -28,6 +28,10 @@ namespace Beginor.GisHub.TileMap.Data {
         [Property(Name = "ContentType", Column = "content_type", Type = "string", NotNull = true, Length = 64)]
         public virtual string ContentType { get; set; }
 
+        /// <summary>目录结构</summary>
+        [Property(Name = "FolderStructure", Column = "folder_structure", Type = "string", NotNull = true, Length = 16)]
+        public virtual string FolderStructure { get; set; }
+
         /// <summary>是否为紧凑格式</summary>
         [Property(Name = "IsBundled", Column = "is_bundled", Type = "bool", NotNull = true)]
         public virtual bool IsBundled { get; set; }

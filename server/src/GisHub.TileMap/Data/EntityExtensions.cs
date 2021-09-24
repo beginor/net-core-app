@@ -40,6 +40,7 @@ namespace Beginor.GisHub.TileMap.Data {
                 CacheDirectory = cacheItem.CacheDirectory,
                 MapTileInfoPath = cacheItem.MapTileInfoPath,
                 ContentType = cacheItem.ContentType,
+                FolderStructure = cacheItem.FolderStructure,
                 IsBundled = cacheItem.IsBundled,
                 MinLevel = cacheItem.MinLevel,
                 MaxLevel = cacheItem.MaxLevel
@@ -60,6 +61,7 @@ namespace Beginor.GisHub.TileMap.Data {
                 CacheDirectory = entity.CacheDirectory,
                 MapTileInfoPath = entity.MapTileInfoPath,
                 ContentType = entity.ContentType,
+                FolderStructure = entity.FolderStructure,
                 IsBundled = entity.IsBundled,
                 ModifiedTime = null,
                 MinLevel = entity.MinLevel,

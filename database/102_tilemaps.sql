@@ -8,6 +8,7 @@ create table if not exists public.tilemaps
     name character varying(32) collate pg_catalog."default" not null,
     cache_directory character varying(512) collate pg_catalog."default" not null,
     map_tile_info_path character varying(512) collate pg_catalog."default" not null,
+    folder_structure character varying(16) collate pg_catalog."default" not null,
     content_type character varying(64) collate pg_catalog."default" not null,
     is_bundled boolean not null,
     min_level smallint not null default 0,
@@ -90,3 +91,6 @@ comment on column public.tilemaps.min_longitude
 
 comment on column public.tilemaps.max_longitude
     is '最大经度';
+
+comment on column public.tilemaps.folder_structure
+    is '目录结构';
