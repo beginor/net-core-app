@@ -23,11 +23,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                         .ToList();
                 }
                 else {
-                    var user = await userMgr.FindByNameAsync(User.Identity.Name);
-                    roles = (await userMgr.GetRolesAsync(user)).ToList();
-                    roles.AddRange(
-                        roleMgr.Roles.Where(role => role.IsDefault == true).Select(role => role.Name)
-                    );
+                    roles = User.Claims.Where(claim => claim.Type == ClaimTypes.Role)
+                        .Select(claim => claim.Value)
+                        .ToList();
                 }
                 var menuModel = await navRepo.GetMenuAsync(roles.ToArray());
                 return menuModel;
