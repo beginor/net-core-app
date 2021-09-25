@@ -42,7 +42,7 @@
         <div class="mb-3" [class.is-valid]="sequence.valid"
           [class.is-invalid]="!(sequence.valid || sequence.pristine)">
           <label class="form-label text-muted" for="sequence">顺序 <i class="text-danger">*</i></label>
-          <input class="form-control" type="number" id="sequence" name="sequence"
+          <input class="form-control text-end" type="number" id="sequence" name="sequence"
             placeholder="请输入顺序 ..." [(ngModel)]="model.sequence"
             [class.is-invalid]="!(sequence.valid || sequence.pristine)"
             [class.is-valid]="sequence.valid"
