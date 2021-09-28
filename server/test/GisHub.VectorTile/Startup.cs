@@ -28,6 +28,8 @@ namespace GisHub.VectorTile {
                 Configuration.GetSection("vectors")
             );
             services.AddSingleton<VectorTileProvider>();
+            var cacheOptions = Configuration.GetSection("cache").Get<CacheOptions>();
+            services.AddSingleton(cacheOptions);
             services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c => {

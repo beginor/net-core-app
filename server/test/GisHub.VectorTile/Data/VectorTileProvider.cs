@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;
@@ -12,13 +15,17 @@ namespace GisHub.VectorTile.Data {
 
         private Dictionary<string, string> connectionStrings;
         private Dictionary<string, VectorTileSource> vectorTileSources;
+        private CacheOptions cache;
+        private IWebHostEnvironment env;
 
         private ILogger<VectorTileProvider> logger;
 
         public VectorTileProvider(
+            IWebHostEnvironment env,
             ILogger<VectorTileProvider> logger,
             IOptionsMonitor<Dictionary<string, string>> connectionStringsMonitor,
-            IOptionsMonitor<Dictionary<string, VectorTileSource>> vectorTileSourcesMonitor
+            IOptionsMonitor<Dictionary<string, VectorTileSource>> vectorTileSourcesMonitor,
+            CacheOptions cache
         ) {
             this.logger = logger;
             connectionStrings = connectionStringsMonitor.CurrentValue;
@@ -32,6 +39,8 @@ namespace GisHub.VectorTile.Data {
                 vectorTileSources = value;
                 MergeConnectionStrings();
             });
+            this.cache = cache;
+            this.env = env;
         }
 
         private void MergeConnectionStrings() {
@@ -52,13 +61,71 @@ namespace GisHub.VectorTile.Data {
             if (!vectorTileSources.ContainsKey(source)) {
                 return null;
             }
+            var buffer = await GetTileContentFromCache(source, z, y, x);
+            if (buffer != null) {
+                return buffer;
+            }
             var vectorTileSource = vectorTileSources[source];
+            //
             var sql = BuildSqlForVectorSource(vectorTileSource, z, y, x);
             if (string.IsNullOrEmpty(sql)) {
                 return null;
             }
-            var result = await GetMvtBufferAsync(vectorTileSource, sql);
-            return result;
+            buffer = await GetMvtBufferAsync(vectorTileSource, sql);
+            await WriteTileCache(source, z, y, x, buffer);
+            return buffer;
+        }
+
+        private async Task<byte[]> GetTileContentFromCache(string source, int z, int y, int x) {
+            if (!cache.Enabled) {
+                return null;
+            }
+            var mvtPath = GetTileCachePath(source, z, y, x);
+            if (!File.Exists(mvtPath)) {
+                return null;
+            }
+            var lastWriteTime = File.GetLastWriteTime(mvtPath);
+            if ((DateTime.Now - lastWriteTime).TotalSeconds > cache.duration) {
+                File.Delete(mvtPath);
+                return null;
+            }
+            return await File.ReadAllBytesAsync(mvtPath);
+        }
+
+        private async Task WriteTileCache(string source, int z, int y, int x, byte[] bytes) {
+            if (!cache.Enabled) {
+                return;
+            }
+            var tilePath = GetTileCachePath(source, z, y, x);
+            if (File.Exists(tilePath)) {
+                File.Delete(tilePath);
+            }
+            else {
+                var tileDir = GetTileCacheDirectory(source, z, y);
+                if (!Directory.Exists(tileDir)) {
+                    Directory.CreateDirectory(tileDir);
+                }
+            }
+            await File.WriteAllBytesAsync(tilePath, bytes);
+        }
+
+        private string GetTileCacheDirectory(string source, int z, int y) {
+            var tileDirPath = Path.Combine(
+                env.ContentRootPath,
+                cache.Directory,
+                source,
+                z.ToString(),
+                y.ToString()
+            );
+            return tileDirPath;
+        }
+
+        private string GetTileCachePath(string source, int z, int y, int x) {
+            var tilePath = Path.Combine(
+                GetTileCacheDirectory(source, z, y),
+                x.ToString() + ".mvt"
+            );
+            return tilePath;
         }
 
         private string BuildSqlForVectorSource(VectorTileSource source, int z, int y, int x) {

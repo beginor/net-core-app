@@ -17,6 +17,7 @@ namespace GisHub.VectorTile.Data {
         public int Srid { get; set; }
         public int Minzoom { get; set; } = 1;
         public int Maxzoom { get; set; } = 19;
+        public int CacheDuration { get; set; } = 3600 * 24;
     }
 
 }
