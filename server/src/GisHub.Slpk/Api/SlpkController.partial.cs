@@ -47,6 +47,13 @@ namespace Beginor.GisHub.Slpk.Api {
             }
         }
 
+        /// <summary>获取 slpk 场景图层信息</summary>
+        [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/layers/0")]
+        [Authorize("slpks.read_slpk_scene")]
+        public Task<ActionResult> GetSlpkLayerInfo(long id) {
+            return GetSlpkInfo(id);
+        }
+
         /// <summary>获取 slpk 场景节点信息</summary>
         [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/layers/0/nodes/{node}")]
         [Authorize("slpks.read_slpk_scene")]
