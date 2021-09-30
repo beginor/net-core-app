@@ -210,8 +210,12 @@ export class UsersService {
             return false;
         }
         try {
+            const encryptModel: ResetPasswordModel = {
+                password: btoa(model.password),
+                confirmPassword: btoa(model.confirmPassword)
+            };
             const url = `${this.baseUrl}/${id}/reset-pass`;
-            await lastValueFrom(this.http.put<ResetPasswordModel>(url, model));
+            await lastValueFrom(this.http.put(url, encryptModel));
             return true;
         }
         catch (ex: unknown) {
