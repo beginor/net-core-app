@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -253,6 +254,8 @@ namespace Beginor.GisHub.Api.Controllers {
             [FromBody]ResetPasswordModel model
         ) {
             try {
+                model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
+                model.ConfirmPassword = Encoding.UTF8.GetString(Convert.FromBase64String(model.ConfirmPassword));
                 var user = await userMgr.FindByIdAsync(id.ToString());
                 if (user == null) {
                     return NotFound();

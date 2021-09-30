@@ -107,7 +107,7 @@
         <div class="col">
           <label class="form-label text-muted" for="currentPassword">当前密码 <i class="text-danger">*</i></label>
           <input class="form-control" type="password" id="currentPassword" name="currentPassword"
-            placeholder="请输入当前密码" required
+            placeholder="请输入当前密码" required autocomplete="current-password"
             formControlName="currentPassword"
             [class.is-valid]="currentPassword.valid"
             [class.is-invalid]="!(currentPassword.valid || currentPassword.pristine)"
@@ -118,7 +118,7 @@
         <div class="col">
           <label class="form-label text-muted" for="newPassword">新密码 <i class="text-danger">*</i></label>
           <input class="form-control" type="password" id="newPassword" name="newPassword"
-            placeholder="请输入新密码" required
+            placeholder="请输入新密码" required autocomplete="new-password"
             formControlName="newPassword"
             [class.is-valid]="newPassword.valid"
             [class.is-invalid]="!(newPassword.valid || newPassword.pristine)"
@@ -129,7 +129,7 @@
         <div class="col">
           <label class="form-label text-muted" for="confirmPassword">确认密码 <i class="text-danger">*</i></label>
           <input class="form-control" type="password" id="confirmPassword" name="confirmPassword"
-            placeholder="请再输入一次新密码以进行确认" required
+            placeholder="请再输入一次新密码以进行确认" required autocomplete="new-password"
             formControlName="confirmPassword"
             [class.is-valid]="confirmPassword.valid"
             [class.is-invalid]="!(confirmPassword.valid || confirmPassword.pristine)"
