@@ -132,7 +132,11 @@ namespace Beginor.GisHub.DataServices.Data {
                 PresetCriteria = ds.PresetCriteria,
                 DefaultOrder = ds.DefaultOrder,
                 Roles = ds.Roles,
-                Fields = ds.Fields
+                Fields = ds.Fields,
+                SupportMvt = ds.SupportMvt,
+                MvtMinZoom = ds.MvtMinZoom,
+                MvtMaxZoom = ds.MvtMaxZoom,
+                MvtCacheDuration = ds.MvtCacheDuration
             };
             var meta = factory.CreateMetadataProvider(item.DatabaseType);
             var model = Mapper.Map<DataSourceModel>(ds.DataSource);

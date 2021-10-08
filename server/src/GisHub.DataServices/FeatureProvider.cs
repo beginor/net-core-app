@@ -57,10 +57,17 @@ namespace Beginor.GisHub.DataServices {
                 result.Features.Add(feature);
             }
             result.Crs = new Crs {
-                Properties = new CrsProperties {
-                    Code = dataService.Srid
-                }
+                Type = "name",
+                Properties = new CrsProperties { Code = dataService.Srid }
             };
+            var crsName = "urn:ogc:def:crs:";
+            if (IsSupportedGeographicSrid(dataService.Srid)) {
+                crsName += "OGC::CRS84";
+            }
+            else {
+                crsName += $"EPSG::{dataService.Srid}";
+            }
+            result.Crs.Properties.Name = crsName;
             var total = await dsReader.CountAsync(dataService, new CountParam {Where = param.Where});
             result.ExceededTransferLimit = total > list.Count;
             if (param.ReturnBbox) {
@@ -348,10 +355,22 @@ namespace Beginor.GisHub.DataServices {
 
         public abstract Task<string> GetGeometryTypeAsync(DataServiceCacheItem dataService);
 
+        public abstract Task<bool> SupportVectorTile(DataServiceCacheItem dataService);
+
+        public abstract Task<byte[]> ReadAsMvtBuffer(DataServiceCacheItem dataService, int z, int y, int x);
+
         protected abstract AgsJsonParam ConvertQueryParams(DataServiceCacheItem dataService, AgsQueryParam queryParam);
 
         private static bool IsSupported(int srid) {
-            return GeographicSrids.Contains(srid) || MercatorSrids.Contains(srid);
+            return IsSupportedGeographicSrid(srid) || IsSupportedMercatorSrid(srid);
+        }
+
+        private static bool IsSupportedGeographicSrid(int srid) {
+            return GeographicSrids.Contains(srid);
+        }
+
+        private static bool IsSupportedMercatorSrid(int srid) {
+            return MercatorSrids.Contains(srid);
         }
 
         private async Task<AgsField[]> ConvertToFieldsAsync(

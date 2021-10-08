@@ -19,6 +19,10 @@ namespace Beginor.GisHub.DataServices.Data {
         public string GeometryType { get; set; }
         public string[] Roles { get; set; }
         public DataServiceField[] Fields { get; set; }
+        public bool SupportMvt { get; set; }
+        public int MvtMinZoom { get; set; }
+        public int MvtMaxZoom { get; set; }
+        public int MvtCacheDuration { get; set; }
 
         public bool HasGeometryColumn => GeometryColumn.IsNotNullOrEmpty();
 

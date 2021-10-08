@@ -17,6 +17,10 @@ create table public.data_services
     preset_criteria character varying(128) collate pg_catalog."default",
     default_order character varying(128) collate pg_catalog."default",
     tags character varying(16)[] collate pg_catalog."default",
+    support_mvt boolean,
+    mvt_min_zoom integer,
+    mvt_max_zoom integer,
+    mvt_cache_duration integer,
     roles character varying(64)[] collate pg_catalog."default",
     is_deleted boolean not null default false,
     constraint pk_data_services primary key (id),
@@ -90,3 +94,15 @@ comment on column public.data_services.description
 
 comment on column public.data_services.fields
     is '数据服务允许的的字段列表';
+
+comment on column public.data_services.support_mvt
+    is '是否支持矢量切片格式';
+
+comment on column public.data_services.mvt_min_zoom
+    is '矢量切片最小级别';
+
+comment on column public.data_services.mvt_max_zoom
+    is '矢量切片最大级别';
+
+comment on column public.data_services.mvt_cache_duration
+    is '矢量切片缓存时间(秒)';

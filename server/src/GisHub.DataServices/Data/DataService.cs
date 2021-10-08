@@ -68,6 +68,21 @@ namespace Beginor.GisHub.DataServices.Data {
         [Property(Name = "Roles", Column = "roles", TypeType = typeof(NHibernate.Extensions.NpgSql.StringArrayType), NotNull = false)]
         public virtual string[] Roles { get; set; }
 
+        /// <summary>是否支持矢量切片格式</summary>
+        [Property(Name = "SupportMvt", Column = "support_mvt", Type = "bool", NotNull = true)]
+        public virtual bool SupportMvt { get; set; }
+
+        /// <summary>矢量切片最小级别</summary>
+        [Property(Name = "MvtMinZoom", Column = "mvt_min_zoom", Type = "int", NotNull = true)]
+        public virtual int MvtMinZoom { get; set; }
+
+        /// <summary>矢量切片最大级别</summary>
+        [Property(Name = "MvtMaxZoom", Column = "mvt_max_zoom", Type = "int", NotNull = true)]
+        public virtual int MvtMaxZoom { get; set; }
+
+        /// <summary>矢量切片缓存时间(秒)</summary>
+        [Property(Name = "MvtCacheDuration", Column = "mvt_cache_duration", Type = "int", NotNull = true)]
+        public virtual int MvtCacheDuration { get; set; }
     }
 
     public class DataServiceField {

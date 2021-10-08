@@ -38,7 +38,14 @@ namespace Beginor.GisHub.DataServices.Models {
         public string[] Tags { get; set; }
         /// <summary>允许的角色</summary>
         public string[] Roles { get; set; }
-
+        /// <summary>是否支持矢量切片格式</summary>
+        public virtual bool SupportMvt { get; set; }
+        /// <summary>矢量切片最小级别</summary>
+        public virtual int MvtMinZoom { get; set; }
+        /// <summary>矢量切片最大级别</summary>
+        public virtual int MvtMaxZoom { get; set; }
+        /// <summary>矢量切片缓存时间(秒)</summary>
+        public virtual int MvtCacheDuration { get; set; }
     }
 
     /// <summary> 数据服务字段模型 </summary>

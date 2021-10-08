@@ -113,6 +113,17 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             return geoType.Substring(3).ToLowerInvariant();
         }
 
+        public override async Task<bool> SupportVectorTile(DataServiceCacheItem dataService) {
+            var sql = "select public.postgis_version() > '3.1';";
+            await using var conn = new NpgsqlConnection(dataService.ConnectionString);
+            var result = await conn.ExecuteScalarAsync<bool>(sql);
+            return result;
+        }
+
+        public override async Task<byte[]> ReadAsMvtBuffer(DataServiceCacheItem dataService, int z, int y, int x) {
+            return null;
+        }
+
         private string BuildWhere(DataServiceCacheItem dataService, AgsQueryParam queryParam) {
             var where = new List<string>();
             // query where
