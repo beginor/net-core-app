@@ -1,6 +1,6 @@
 {
-  "url": "https://app.gdeei.cn/arcgis-js-api/4.20/init.js",
-  "css": "https://app.gdeei.cn/arcgis-js-api/4.20/esri/themes/light/main.css",
+  "url": "https://app.gdeei.cn/arcgis-js-api/4.21/init.js",
+  "css": "https://app.gdeei.cn/arcgis-js-api/4.21/esri/themes/light/main.css",
   "dojoConfig": {
     "locale": "zh-cn",
     "async": true,
@@ -8,7 +8,7 @@
   },
   "esriConfig": {
     "locale": "zh-cn",
-    "assetsPath": "https://app.gdeei.cn/arcgis-js-api/4.20",
+    "assetsPath": "https://app.gdeei.cn/arcgis-js-api/4.21",
     "apiKey": "",
     "request": {
       "interceptors": []
