@@ -167,9 +167,9 @@ namespace Beginor.GisHub.DataServices {
             var layerDesc = new AgsLayerDescription {
                 CurrentVersion = 10.61,
                 Id = 0,
-                Name = dataService.DataSourceName,
+                Name = dataService.DataServiceName,
                 Type = "Feature Layer",
-                Description = $"Map Service for {dataService.DataSourceName}",
+                Description = $"Map Service for {dataService.DataServiceName}",
                 GeometryType = GetAgsGeometryType(dataService),
                 SourceSpatialReference = new AgsSpatialReference { Wkid = dataService.Srid },
                 ObjectIdField = dataService.PrimaryKeyColumn,
@@ -385,7 +385,7 @@ namespace Beginor.GisHub.DataServices {
             };
             var data = await reader.ReadDataAsync(dataService, param);
             if (data.Count < 1) {
-                throw new InvalidOperationException($"Datasource {dataService.DataSourceId} is empty !");
+                throw new InvalidOperationException($"Data service {dataService.DataServiceId} is empty !");
             }
             return ConvertToFields(dataService, columns, data[0]);
         }

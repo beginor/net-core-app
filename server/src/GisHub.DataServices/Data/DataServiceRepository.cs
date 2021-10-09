@@ -121,8 +121,8 @@ namespace Beginor.GisHub.DataServices.Data {
                 return null;
             }
             item = new DataServiceCacheItem {
-                DataSourceId = ds.Id,
-                DataSourceName = ds.Name,
+                DataServiceId = ds.Id,
+                DataServiceName = ds.Name,
                 DatabaseType = ds.DataSource.DatabaseType,
                 Schema = ds.Schema,
                 TableName = ds.TableName,

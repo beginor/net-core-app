@@ -3,9 +3,8 @@ using Beginor.AppFx.Core;
 namespace Beginor.GisHub.DataServices.Data {
 
     public class DataServiceCacheItem {
-
-        public long DataSourceId { get; set; }
-        public string DataSourceName { get; set; }
+        public long DataServiceId { get; set; }
+        public string DataServiceName { get; set; }
         public string DatabaseType { get; set; }
         public string ConnectionString { get; set; }
         public string Schema { get; set; }
