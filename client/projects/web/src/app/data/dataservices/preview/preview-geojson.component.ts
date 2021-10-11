@@ -2,9 +2,7 @@ import {
     Component, ElementRef, Input, OnDestroy, AfterViewInit, ViewChild,
     Output, EventEmitter
 } from '@angular/core';
-import {
-    CircleLayer, LineLayer, FillLayer, Map, LngLatBoundsLike, Popup
-} from 'mapbox-gl';
+import { Map, LngLatBoundsLike, Popup } from 'mapbox-gl';
 
 
 import { UiService } from '../../../common';
