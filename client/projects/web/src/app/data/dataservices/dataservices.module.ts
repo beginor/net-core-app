@@ -15,8 +15,13 @@ import { DetailComponent } from './detail/detail.component';
 import { PreviewComponent } from './preview/preview.component';
 import { PreviewDataComponent } from './preview/preview-data.component';
 import { PreviewGeoJsonComponent } from './preview/preview-geojson.component';
-import { PreviewFeatureSetComponent } from './preview/preview-featureset.component';
-import { PreviewMapServerComponent } from './preview/preview-mapserver.component';
+import {
+    PreviewFeatureSetComponent
+} from './preview/preview-featureset.component';
+import {
+    PreviewMapServerComponent
+} from './preview/preview-mapserver.component';
+import { PreviewMvtComponent } from './preview/preview-mvt.component';
 
 @NgModule({
     declarations: [
@@ -26,7 +31,8 @@ import { PreviewMapServerComponent } from './preview/preview-mapserver.component
         PreviewDataComponent,
         PreviewGeoJsonComponent,
         PreviewFeatureSetComponent,
-        PreviewMapServerComponent
+        PreviewMapServerComponent,
+        PreviewMvtComponent
     ],
     imports: [
         CommonModule,

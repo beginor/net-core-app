@@ -22,9 +22,15 @@
       </ng-template>
     </li>
     <li *ngIf="!!ds.geometryColumn" ngbNavItem="mapserver">
-      <a ngbNavLink>MapServer</a>
+      <a ngbNavLink>地图服务</a>
       <ng-template ngbNavContent>
         <app-dataservices-preview-mapserver [ds]="ds"></app-dataservices-preview-mapserver>
+      </ng-template>
+    </li>
+    <li *ngIf="ds.supportMvt && hasPrivilege('data_services.read_mvt')" ngbNavItem="mvt">
+      <a ngbNavLink>矢量切片</a>
+      <ng-template ngbNavContent>
+        <app-dataservices-preview-mvt [ds]="ds"></app-dataservices-preview-mvt>
       </ng-template>
     </li>
   </ul>

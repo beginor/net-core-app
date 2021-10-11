@@ -199,11 +199,15 @@ export class DataServiceService {
     }
 
     public getPreviewUrl(id: string, type: PreviewType): string {
-        if (type !== 'mapserver') {
-            let url = `${this.baseUrl}/${id}/${type}`;
-            if (url.startsWith('/')) {
-                url = `${location.protocol}//${location.host}${url}`;
-            }
+        let url = `${this.baseUrl}/${id}/${type}`;
+        if (url.startsWith('/')) {
+            url = `${location.protocol}//${location.host}${url}`;
+        }
+        if (type === 'geojson' || type === 'featureset') {
+            return url;
+        }
+        if (type === 'mvt') {
+            url += '/{z}/{y}/{x}';
             return url;
         }
         let url2 = this.apiRoot.substring(0, this.apiRoot.length - 3);
@@ -442,4 +446,4 @@ export interface DataServiceResultModel {
     data?: DataServiceModel[];
 }
 
-export type PreviewType = 'data' | 'geojson' | 'featureset' | 'mapserver';
+export type PreviewType = 'data' | 'geojson' | 'featureset' | 'mapserver' | 'mvt'; // eslint-disable-line max-len

@@ -44,8 +44,7 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
         @Inject(DOCUMENT) private doc: Document,
         private ui: UiService,
         private vm: DataServiceService
-    ) {
-    }
+    ) { }
 
     public async ngAfterViewInit(): Promise<void> {
         await this.loadMapStyle();
@@ -128,7 +127,7 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
                 for (const field of this.fields) {
                     html.push(`<tr><td>${field}</td><td>${feature.properties?.[field]}</td></tr>`); // eslint-disable-line max-len
                 }
-                html.push(`</tbody></table></div>`);
+                html.push('</tbody></table></div>');
                 this.popup.setHTML(html.join(''));
                 this.popup.addTo(this.map as Map);
             }
