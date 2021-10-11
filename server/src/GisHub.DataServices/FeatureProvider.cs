@@ -355,9 +355,9 @@ namespace Beginor.GisHub.DataServices {
 
         public abstract Task<string> GetGeometryTypeAsync(DataServiceCacheItem dataService);
 
-        public abstract Task<bool> SupportMvt(DataServiceCacheItem dataService);
+        public abstract Task<bool> SupportMvtAsync(DataServiceCacheItem dataService);
 
-        public abstract Task<byte[]> ReadAsMvtBuffer(DataServiceCacheItem dataService, int z, int y, int x);
+        public abstract Task<byte[]> ReadAsMvtBufferAsync(DataServiceCacheItem dataService, int z, int y, int x);
 
         protected abstract AgsJsonParam ConvertQueryParams(DataServiceCacheItem dataService, AgsQueryParam queryParam);
 

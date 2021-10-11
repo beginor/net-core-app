@@ -113,14 +113,14 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             return geoType.Substring(3).ToLowerInvariant();
         }
 
-        public override async Task<bool> SupportMvt(DataServiceCacheItem dataService) {
+        public override async Task<bool> SupportMvtAsync(DataServiceCacheItem dataService) {
             var sql = "select public.postgis_version() > '3.1';";
             await using var conn = new NpgsqlConnection(dataService.ConnectionString);
             var result = await conn.ExecuteScalarAsync<bool>(sql);
             return result;
         }
 
-        public override async Task<byte[]> ReadAsMvtBuffer(DataServiceCacheItem dataService, int z, int y, int x) {
+        public override async Task<byte[]> ReadAsMvtBufferAsync(DataServiceCacheItem dataService, int z, int y, int x) {
             var sql = BuildMvtSql(dataService, z, y, x);
             var conn = new NpgsqlConnection(dataService.ConnectionString);
             var buffer = await conn.ExecuteScalarAsync<byte[]>(sql);

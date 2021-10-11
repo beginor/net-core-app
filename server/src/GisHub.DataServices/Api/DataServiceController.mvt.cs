@@ -30,7 +30,7 @@ namespace Beginor.GisHub.DataServices.Api {
                     return NotFound();
                 }
                 var provider = factory.CreateFeatureProvider(ds.DatabaseType);
-                var buffer = await provider.ReadAsMvtBuffer(ds, z, y, x);
+                var buffer = await provider.ReadAsMvtBufferAsync(ds, z, y, x);
                 if (buffer == null || buffer.Length == 0) {
                     return NotFound();
                 }
@@ -54,7 +54,7 @@ namespace Beginor.GisHub.DataServices.Api {
                     return BadRequest();
                 }
                 var provider = factory.CreateFeatureProvider(ds.DatabaseType);
-                var supportMvt = await provider.SupportMvt(ds);
+                var supportMvt = await provider.SupportMvtAsync(ds);
                 return supportMvt;
             }
             catch (Exception ex) {
