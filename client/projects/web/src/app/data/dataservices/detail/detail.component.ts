@@ -53,12 +53,13 @@ export class DetailComponent implements OnInit {
     public tableInstance!: NgbTypeahead;
     public tableFocus$ = new Subject<string>();
     public tableClick$ = new Subject<string>();
+    public supportMvt = false;
 
     private id = '';
     private reloadList = false;
 
-    // tslint:disable: max-line-length
-    public searchSchema = (text$: Observable<string>) => {
+    /* eslint-disable max-len */
+    public searchSchema = (text$: Observable<string>): Observable<string[]> => {
         const debouncedText$ = text$.pipe(debounceTime(300), distinctUntilChanged());
         const clicksWithClosedPopup$ = this.schemaClick$.pipe(filter(() => !this.schemaInstance.isPopupOpen()));
         const inputFocus$ = this.schemaFocus$;
@@ -66,7 +67,7 @@ export class DetailComponent implements OnInit {
             map(term => term === '' ? this.schemas : this.schemas.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
         );
     }
-    public searchTable = (text$: Observable<string>) => {
+    public searchTable = (text$: Observable<string>): Observable<TableModel[]> => {
         const debouncedText$ = text$.pipe(debounceTime(300), distinctUntilChanged());
         const clicksWithClosedPopup$ = this.tableClick$.pipe(filter(() => !this.tableInstance.isPopupOpen()));
         const inputFocus$ = this.tableFocus$;
@@ -74,8 +75,8 @@ export class DetailComponent implements OnInit {
             map(term => term === '' ? this.tables.slice(0, 10) : this.tables.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
         );
     }
-    public tableFormatter = (t: TableModel | string) => typeof t === 'string' ? t : t.name;
-    // tslint:enable: max-line-length
+    public tableFormatter = (t: TableModel | string): string => typeof t === 'string' ? t : t.name;
+    /* eslint-enable: max-len */
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -85,8 +86,7 @@ export class DetailComponent implements OnInit {
         public account: AccountService,
         public vm: DataServiceService
     ) {
-        const id = route.snapshot.params.id;
-        const editable = route.snapshot.params.editable;
+        const { id, editable } = route.snapshot.params;
         if (id === '0') {
             this.title = '新建数据服务';
             this.editable = true;
@@ -99,7 +99,7 @@ export class DetailComponent implements OnInit {
             this.title = '查看数据服务';
             this.editable = false;
         }
-        this.id = id;
+        this.id = id as string;
     }
 
     public async ngOnInit(): Promise<void> {
@@ -116,9 +116,10 @@ export class DetailComponent implements OnInit {
                     cs => cs.id === model.dataSource?.id
                 );
                 this.table = { name: model.tableName as string };
-                this.loadSchemas()
+                void this.loadSchemas()
                     .then(() => this.loadTables())
                     .then(() => this.loadColumns());
+                this.supportMvt = await this.vm.supportMvt(this.id);
             }
         }
         else {
@@ -237,7 +238,6 @@ export class DetailComponent implements OnInit {
             editable: false
         };
         this.model.fields.push(field);
-        console.log(this.model);
     }
 
     public isFieldChecked(name: string): boolean {
@@ -298,6 +298,10 @@ export class DetailComponent implements OnInit {
             !!this.model.displayColumn &&
             !!this.model.fields &&
             this.model.fields.length > 0;
+    }
+
+    public hasGeoColumn(): boolean {
+        return  !!(this.model.fields?.find(x => x.type === 'geometry'));
     }
 
     private async loadSchemas(): Promise<void> {

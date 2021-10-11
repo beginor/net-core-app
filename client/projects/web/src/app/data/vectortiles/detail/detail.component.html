@@ -51,7 +51,7 @@
       <div class="col-6">
         <div class="mb-3">
           <label class="form-label text-muted" for="minZoom">最小缩放级别 </label>
-          <input class="form-control" type="number" step="1" id="minZoom" name="minZoom"
+          <input class="form-control text-end" type="number" step="1" id="minZoom" name="minZoom"
             placeholder="请输入最小缩放级别 ..."
             [(ngModel)]="model.minZoom" [disabled]="!editable"
           />
@@ -60,7 +60,7 @@
       <div class="col-6">
         <div class="mb-3">
           <label class="form-label text-muted" for="maxZoom">最大缩放级别 </label>
-          <input class="form-control" type="number" step="1" id="maxZoom" name="maxZoom"
+          <input class="form-control text-end" type="number" step="1" id="maxZoom" name="maxZoom"
             placeholder="请输入最大缩放级别 ..."
             [(ngModel)]="model.maxZoom" [disabled]="!editable"
           />

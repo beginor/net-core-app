@@ -169,6 +169,64 @@
         [disabled]="!editable"
       />
     </div>
+    <div class="mb-3" *ngIf="supportMvt && hasGeoColumn()">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="supportMvt" name="supportMvt"
+          [disabled]="!editable" [(ngModel)]="model.supportMvt"
+        />
+        <label class="form-check-label text-muted" for="supportMvt">矢量切片</label>
+      </div>
+    </div>
+    <div class="row" *ngIf="supportMvt">
+      <div class="col" *ngIf="model.supportMvt">
+        <div class="mb-3 ms-3">
+          <label class="form-label text-muted" for="mvtMinZoom">最小级别 </label>
+          <input class="form-control text-end" type="number" step="1" id="mvtMinZoom" name="mvtMinZoom"
+            placeholder="请输入缩放级别 ..."
+            [(ngModel)]="model.mvtMinZoom" [disabled]="!editable"
+          />
+        </div>
+      </div>
+      <div class="col" *ngIf="model.supportMvt">
+        <div class="mb-3 me-3">
+          <label class="form-label text-muted" for="mvtMaxZoom">最大级别 </label>
+          <input class="form-control text-end" type="number" step="1" id="mvtMaxZoom" name="mvtMaxZoom"
+            placeholder="请输入最大级别 ..."
+            [(ngModel)]="model.mvtMaxZoom" [disabled]="!editable"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3 mx-3" *ngIf="model.supportMvt">
+      <label class="form-label text-muted me-3">缓存时间 </label>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="mvtCacheDuration0" name="mvtCacheDuration"
+          [(ngModel)]="model.mvtCacheDuration" [value]="0" [attr.disabled]="editable ? null : true"/>
+        <label class="form-check-label text-muted" for="mvtCacheDuration0">无</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="mvtCacheDuration1" name="mvtCacheDuration"
+          [(ngModel)]="model.mvtCacheDuration" [value]="3600 * 24" [attr.disabled]="editable ? null : true"/>
+        <label class="form-check-label text-muted" for="mvtCacheDuration1" >1天</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="mvtCacheDuration2" name="mvtCacheDuration"
+          [(ngModel)]="model.mvtCacheDuration" [value]="3600 * 24 * 7" [attr.disabled]="editable ? null : true"/>
+        <label class="form-check-label text-muted" for="mvtCacheDuration2" >1周</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="mvtCacheDuration3" name="mvtCacheDuration"
+          [(ngModel)]="model.mvtCacheDuration" [value]="3600 * 24 * 30" [attr.disabled]="editable ? null : true"/>
+        <label class="form-check-label text-muted" for="mvtCacheDuration3" >1月</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="mvtCacheDuration4" name="mvtCacheDuration"
+          [(ngModel)]="model.mvtCacheDuration" [value]="3600 * 24 * 365" [attr.disabled]="editable ? null : true"/>
+        <label class="form-check-label text-muted" for="mvtCacheDuration4" >1年</label>
+      </div>
+    </div>
+
     <div class="mb-3">
       <label class="form-label text-muted">授权角色</label>
       <div class="form-text">

@@ -113,7 +113,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             return geoType.Substring(3).ToLowerInvariant();
         }
 
-        public override async Task<bool> SupportVectorTile(DataServiceCacheItem dataService) {
+        public override async Task<bool> SupportMvt(DataServiceCacheItem dataService) {
             var sql = "select public.postgis_version() > '3.1';";
             await using var conn = new NpgsqlConnection(dataService.ConnectionString);
             var result = await conn.ExecuteScalarAsync<bool>(sql);

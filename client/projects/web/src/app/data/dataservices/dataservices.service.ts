@@ -54,7 +54,7 @@ export class DataServiceService {
             this.data.next(data);
             this.showPagination = total > data.length;
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
@@ -89,7 +89,7 @@ export class DataServiceService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '创建数据服务出错！' }
@@ -106,7 +106,7 @@ export class DataServiceService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取指定的数据服务出错！' }
@@ -127,7 +127,7 @@ export class DataServiceService {
             );
             return true;
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '删除数据服务出错！' }
@@ -147,7 +147,7 @@ export class DataServiceService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '更新数据服务出错！' }
@@ -163,7 +163,7 @@ export class DataServiceService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取数据服务的列数据出错！' }
@@ -189,7 +189,7 @@ export class DataServiceService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取数据服务的数据出错！' }
@@ -228,7 +228,7 @@ export class DataServiceService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取数据服务的记录数出错！' }
@@ -305,11 +305,25 @@ export class DataServiceService {
             this.roleSvc.searchModel.take = 999;
             await this.roleSvc.search();
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取角色列表出错！' }
             );
+        }
+    }
+
+    public async supportMvt(id: string): Promise<boolean> {
+        try {
+            const result = await lastValueFrom(this.http.get<boolean>(`${this.baseUrl}/${id}/support-mvt`)); // eslint-disable-line max-len
+            return result;
+        }
+        catch (ex: any) {
+            this.errorHandler.handleError(ex);
+            this.ui.showAlert(
+                { type: 'danger', message: '' }
+            );
+            return false;
         }
     }
 
@@ -386,6 +400,14 @@ export interface DataServiceModel {
     isDeleted?: boolean;
     /** 允许的角色 */
     roles?: string[];
+    /** 支持矢量切片 */
+    supportMvt?: boolean;
+    /** 矢量切片缓存时间 */
+    mvtCacheDuration?: number;
+    /** 矢量切片最大级别 */
+    mvtMaxZoom?: number;
+    /** 矢量切片最小级别 */
+    mvtMinZoom?: number;
 }
 
 export interface DataServiceFieldModel {

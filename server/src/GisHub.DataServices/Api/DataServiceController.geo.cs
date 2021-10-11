@@ -16,6 +16,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
     partial class DataServiceController {
 
+        /// <summary>读取数据服务的空间数据(GeoJSON)</summary>
         [HttpGet("{id:long}/geojson")]
         [Authorize("data_services.read_geojson")]
         [DataServiceRolesFilter(IdParameterName = "id")]
@@ -52,6 +53,7 @@ namespace Beginor.GisHub.DataServices.Api {
             }
         }
 
+        /// <summary>读取数据服务的空间数据(EsriJSON)</summary>
         [HttpGet("{id:long}/featureset")]
         [Authorize("data_services.read_featureset")]
         [DataServiceRolesFilter(IdParameterName = "id")]

@@ -20,7 +20,7 @@ namespace Beginor.GisHub.DataServices {
 
         Task<string> GetGeometryTypeAsync(DataServiceCacheItem dataService);
 
-        Task<bool> SupportVectorTile(DataServiceCacheItem dataService);
+        Task<bool> SupportMvt(DataServiceCacheItem dataService);
 
         Task<byte[]> ReadAsMvtBuffer(DataServiceCacheItem dataService, int z, int y, int x);
 
