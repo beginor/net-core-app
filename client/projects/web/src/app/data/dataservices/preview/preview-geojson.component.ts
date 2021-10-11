@@ -1,18 +1,15 @@
 import {
-    Component, ElementRef, Inject, Input, OnDestroy, AfterViewInit, ViewChild,
+    Component, ElementRef, Input, OnDestroy, AfterViewInit, ViewChild,
     Output, EventEmitter
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import {
-    AnyLayer, CameraOptions, CircleLayer, Map, ScaleControl, NavigationControl,
-    LngLatBoundsLike, Popup
+    CircleLayer, LineLayer, FillLayer, Map, LngLatBoundsLike, Popup
 } from 'mapbox-gl';
 
-import { lastValueFrom } from 'rxjs';
 
 import { UiService } from '../../../common';
 import { DataServiceModel, DataServiceService } from '../dataservices.service';
+import { MapboxService } from '../../mapbox.service';
 
 @Component({
     selector: 'app-dataservices-preview-geojson',
@@ -32,41 +29,23 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
     public mapElRef!: ElementRef<HTMLDivElement>;
 
     private map?: Map;
-
-    private styleId = 'mapbox-gl-style';
     private geoJson?: GeoJSON.FeatureCollection;
-    private options!: MapboxGlOptions;
     private popup?: Popup;
     private fields: string[] = [];
 
     constructor(
-        private http: HttpClient,
-        @Inject(DOCUMENT) private doc: Document,
         private ui: UiService,
-        private vm: DataServiceService
+        private vm: DataServiceService,
+        private mapbox: MapboxService
     ) { }
 
     public async ngAfterViewInit(): Promise<void> {
-        await this.loadMapStyle();
-        this.options = await lastValueFrom(
-            this.http.get<MapboxGlOptions>('./assets/mapbox-gl.options.json')
+        const map = await this.mapbox.createPreviewMap(
+            this.mapElRef.nativeElement
         );
-        const map = new Map({
-            accessToken: this.options.accessToken,
-            style: this.options.style,
-            center: this.options.camera.center,
-            zoom: this.options.camera.zoom,
-            pitch: this.options.camera.pitch,
-            bearing: this.options.camera.bearing,
-            container: this.mapElRef.nativeElement,
-            attributionControl: false
-        });
-        map.addControl(new NavigationControl(), 'top-left');
-        map.addControl(new ScaleControl(), 'bottom-right');
         this.map = map;
-        await map.once('load');
-        await this.loadGeoJson();
-        this.addLayer();
+        await Promise.all([map.once('load'), this.loadGeoJson()])
+        void this.addGeoJsonLayer();
     }
 
     public ngOnDestroy(): void {
@@ -74,16 +53,12 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
             if (!!this.popup) {
                 this.popup.remove();
             }
-            this.map.remove();
-            const style = this.doc.head.querySelector(`#${this.styleId}`);
-            if (!!style) {
-                style.remove();
-            }
+            this.mapbox.destroyMap(this.map);
             this.map = undefined;
         }
     }
 
-    private addLayer(): void {
+    private async addGeoJsonLayer(): Promise<void> {
         if (!this.geoJson || this.geoJson.features.length <= 0) {
             return;
         }
@@ -92,24 +67,8 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
         }
         const geoType = this.geoJson.features[0].geometry.type;
         const id = this.ds.id as string;
-        if (geoType === 'Point' || geoType === 'MultiPoint') {
-            const circle = this.options.defaults['circle'] as CircleLayer;
-            circle.id = id;
-            circle.source = id;
-            this.map.addLayer(circle);
-        }
-        if (geoType === 'LineString' || geoType === 'MultiLineString') {
-            const line = this.options.defaults['line'] as CircleLayer;
-            line.id = id;
-            line.source = id;
-            this.map.addLayer(line);
-        }
-        if (geoType === 'Polygon' || geoType === 'MultiPolygon') {
-            const fill = this.options.defaults['fill'] as CircleLayer;
-            fill.id = id;
-            fill.source = id;
-            this.map.addLayer(fill);
-        }
+        const layer = await this.mapbox.createPreviewLayer(geoType, id, id);
+        this.map.addLayer(layer as any);
         this.map.on('click', id, e => {
             if (!!e.features && e.features.length > 0) {
                 const feature = e.features[0];
@@ -167,27 +126,4 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
         this.geoJson = geojson;
     }
 
-    private loadMapStyle(): Promise<void> {
-        const doc = this.doc;
-        const head = this.doc.head;
-        return new Promise((resolve, reject) => {
-            const styleLink = doc.createElement('link');
-            styleLink.setAttribute('rel', 'stylesheet');
-            styleLink.setAttribute('id', this.styleId);
-            styleLink.setAttribute('href', 'mapbox-gl.css');
-            head.appendChild(styleLink);
-            styleLink.onload = () => {
-                setTimeout(() => resolve(), 300);
-            };
-            styleLink.onerror = (ex) => reject(ex);
-        });
-    }
-
-}
-
-interface MapboxGlOptions {
-    accessToken: string;
-    style: string;
-    camera: CameraOptions;
-    defaults: { [key: string]: AnyLayer };
 }

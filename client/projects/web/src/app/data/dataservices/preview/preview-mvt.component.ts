@@ -13,6 +13,7 @@ import { lastValueFrom } from 'rxjs';
 
 import { UiService } from '../../../common';
 import { DataServiceModel, DataServiceService } from '../dataservices.service';
+import { MapboxService } from '../../mapbox.service';
 
 @Component({
     selector: 'app-dataservices-preview-mvt',
@@ -28,19 +29,34 @@ export class PreviewMvtComponent implements AfterViewInit, OnDestroy {
 
     @Input()
     public ds: DataServiceModel = { id: '' };
+    @ViewChild('mapEl')
+    public mapElRef!: ElementRef<HTMLDivElement>;
+
+    private map?: Map;
+    private popup?: Popup;
 
     constructor(
         private http: HttpClient,
         @Inject(DOCUMENT) private doc: Document,
         private ui: UiService,
-        private vm: DataServiceService
+        private vm: DataServiceService,
+        private mapbox: MapboxService
     ) { }
 
     public async ngAfterViewInit(): Promise<void> {
-        console.log('ngAfterViewInit');
+        const map = await this.mapbox.createPreviewMap(
+            this.mapElRef.nativeElement
+        );
+        this.map = map;
     }
 
     public ngOnDestroy(): void {
-        console.log('ngOnDestroy');
+        if (!!this.map) {
+            if (!!this.popup) {
+                this.popup.remove();
+            }
+            this.mapbox.destroyMap(this.map);
+            this.map = undefined;
+        }
     }
 }
