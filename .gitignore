@@ -34,6 +34,7 @@ testem.log
 typings
 yarn.lock
 package-lock.json
+pnpm-lock.yaml
 
 # e2e
 e2e/*.js
