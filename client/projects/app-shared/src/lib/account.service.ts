@@ -166,6 +166,12 @@ export class AccountService {
         );
     }
 
+    public addAuthTokenTo(headers: { [key: string]: any}): void {
+        if (!!this.token) {
+            headers['Authorization'] = `Bearer ${this.token}`
+        }
+    }
+
     private saveToken(token: string): void {
         localStorage.setItem(this.tokenKey, token);
     }

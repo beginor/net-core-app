@@ -24,7 +24,7 @@ export class ApiInterceptor implements HttpInterceptor {
                 'X-Requested-With': 'XMLHttpRequest'
             };
             if (!!this.account.token) {
-                setHeaders['Authorization'] = `Bearer ${this.account.token}`;
+                this.account.addAuthTokenTo(setHeaders);
             }
             req = req.clone({
                 // withCredentials: true
