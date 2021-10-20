@@ -55,16 +55,21 @@ export class PreviewMvtComponent implements AfterViewInit, OnDestroy {
             this.getLayerBounds(),
             map.once('load')
         ]);
-        if (!!this.ds.mvtMinZoom) {
+        const camera = map.cameraForBounds(bounds);
+        if (!!camera) {
+            let zoom = camera.zoom;
+            if (!!this.ds.mvtMinZoom) {
+                zoom = Math.max(zoom, this.ds.mvtMinZoom)
+            }
+            if (!!this.ds.mvtMaxZoom) {
+                zoom = Math.min(zoom, this.ds.mvtMaxZoom)
+            }
             map.flyTo({
-                zoom: this.ds.mvtMinZoom,
-                center: bounds.getCenter()
+                zoom: zoom,
+                center: camera.center
             });
         }
-        else {
-            map.fitBounds(bounds);
-        }
-        await map.once('idle');
+        // await map.once('idle');
         map.addSource(
             this.ds.id,
             {
@@ -74,17 +79,19 @@ export class PreviewMvtComponent implements AfterViewInit, OnDestroy {
                 maxzoom: this.ds.mvtMaxZoom,
                 bounds: [
                     bounds.getWest(),
-                    bounds.getNorth(),
+                    bounds.getSouth(),
                     bounds.getEast(),
-                    bounds.getSouth()
+                    bounds.getNorth()
                 ]
             }
         );
         const layer = await this.mapbox.createPreviewLayer(
             'Polygon',
             this.ds.id,
-            this.ds.id
+            this.ds.id,
         );
+        layer.minzoom = this.ds.mvtMinZoom;
+        layer.maxzoom = this.ds.mvtMaxZoom;
         layer['source-layer'] = this.ds.name;
         map.addLayer(layer as AnyLayer);
     }
