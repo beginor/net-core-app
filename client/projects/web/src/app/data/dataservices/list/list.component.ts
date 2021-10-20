@@ -53,7 +53,12 @@ export class ListComponent implements OnInit {
     public showPreview(ds: DataServiceModel): void {
         const ref = this.modal.open(
             PreviewComponent,
-            { container: 'body', size: 'xl' }
+            {
+                container: 'body',
+                size: 'xl',
+                keyboard: false,
+                backdrop: 'static'
+            }
         );
         Object.assign(ref.componentInstance, { ds });
         // ref.componentInstance.ds = ds;

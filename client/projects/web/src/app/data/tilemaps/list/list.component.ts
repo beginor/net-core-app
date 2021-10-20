@@ -52,7 +52,12 @@ export class ListComponent implements OnInit {
     public showPreview(model: TileMapModel): void {
         const modalRef = this.modal.open(
             PreviewComponent,
-            { container: 'body', size: 'xl' }
+            {
+                container: 'body',
+                size: 'xl',
+                keyboard: false,
+                backdrop: 'static'
+            }
         );
         const { id, name } = model;
         modalRef.componentInstance.id = id;
