@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -72,8 +73,19 @@ namespace GisHub.VectorTile.Data {
                 return null;
             }
             buffer = await GetMvtBufferAsync(vectorTileSource, sql);
+            buffer = await GzipBufferAsync(buffer);
             await WriteTileCache(source, z, y, x, buffer);
             return buffer;
+        }
+
+        private async Task<byte[]> GzipBufferAsync(byte[] buffer) {
+            using var output = new MemoryStream();
+            using var gzip = new GZipStream(output, CompressionMode.Compress);
+            using var input = new MemoryStream(buffer);
+            await input.CopyToAsync(gzip);
+            await gzip.FlushAsync();
+            var result = output.GetBuffer();
+            return result;
         }
 
         private async Task<byte[]> GetTileContentFromCache(string source, int z, int y, int x) {
@@ -198,6 +210,8 @@ namespace GisHub.VectorTile.Data {
             await conn.CloseAsync();
             return result as byte[];
         }
+
+
 
     }
 

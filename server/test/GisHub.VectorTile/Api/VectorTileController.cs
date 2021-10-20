@@ -32,6 +32,7 @@ namespace GisHub.VectorTile.Api {
                 if (buffer == null || buffer.Length == 0) {
                     return NotFound();
                 }
+                Response.Headers["Content-Encoding"] = "gzip";
                 return File(buffer, "application/vnd.mapbox-vector-tile");
             }
             catch (Exception ex) {

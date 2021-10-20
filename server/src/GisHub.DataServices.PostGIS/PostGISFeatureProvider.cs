@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -124,7 +126,12 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             var sql = BuildMvtSql(dataService, z, y, x);
             var conn = new NpgsqlConnection(dataService.ConnectionString);
             var buffer = await conn.ExecuteScalarAsync<byte[]>(sql);
-            return buffer;
+            using var input = new MemoryStream(buffer);
+            using var output = new MemoryStream();
+            using var gzip = new GZipStream(output, CompressionMode.Compress);
+            await input.CopyToAsync(gzip);
+            await gzip.FlushAsync();
+            return buffer = output.GetBuffer();
         }
 
         protected virtual string BuildMvtSql(DataServiceCacheItem layer, int z, int y, int x) {
