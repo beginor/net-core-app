@@ -12,7 +12,7 @@ import { DataServiceModel, DataServiceService } from '../dataservices.service';
 
 @Component({
     selector: 'app-dataservices-preview-featureset',
-    template: `<div #mapEl class="mapview"></div>`,
+    template: '<div #mapEl class="mapview"></div>',
     styles: [
         ':host { display: flex; height: 100%; }',
         'div.mapview { flex: 1; }'

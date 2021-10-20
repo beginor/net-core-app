@@ -3,7 +3,7 @@ import {
     Output, EventEmitter
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {
     AnyLayer, CameraOptions, CircleLayer, Map, ScaleControl, NavigationControl,
     LngLatBoundsLike, Popup
@@ -11,9 +11,11 @@ import {
 
 import { lastValueFrom } from 'rxjs';
 
+import { AccountService } from 'app-shared';
 import { UiService } from '../../../common';
 import { DataServiceModel, DataServiceService } from '../dataservices.service';
 import { MapboxService } from '../../mapbox.service';
+import * as mapboxgl from 'mapbox-gl';
 
 @Component({
     selector: 'app-dataservices-preview-mvt',
@@ -38,6 +40,7 @@ export class PreviewMvtComponent implements AfterViewInit, OnDestroy {
     constructor(
         private http: HttpClient,
         @Inject(DOCUMENT) private doc: Document,
+        private account: AccountService,
         private ui: UiService,
         private vm: DataServiceService,
         private mapbox: MapboxService
@@ -48,6 +51,42 @@ export class PreviewMvtComponent implements AfterViewInit, OnDestroy {
             this.mapElRef.nativeElement
         );
         this.map = map;
+        const [bounds] = await Promise.all([
+            this.getLayerBounds(),
+            map.once('load')
+        ]);
+        if (!!this.ds.mvtMinZoom) {
+            map.flyTo({
+                zoom: this.ds.mvtMinZoom,
+                center: bounds.getCenter()
+            });
+        }
+        else {
+            map.fitBounds(bounds);
+        }
+        await map.once('idle');
+        map.addSource(
+            this.ds.id,
+            {
+                type: 'vector',
+                tiles: [this.vm.getPreviewUrl(this.ds.id, 'mvt')],
+                minzoom: this.ds.mvtMinZoom,
+                maxzoom: this.ds.mvtMaxZoom,
+                bounds: [
+                    bounds.getWest(),
+                    bounds.getNorth(),
+                    bounds.getEast(),
+                    bounds.getSouth()
+                ]
+            }
+        );
+        const layer = await this.mapbox.createPreviewLayer(
+            'Polygon',
+            this.ds.id,
+            this.ds.id
+        );
+        layer['source-layer'] = this.ds.name;
+        map.addLayer(layer as AnyLayer);
     }
 
     public ngOnDestroy(): void {
@@ -58,5 +97,26 @@ export class PreviewMvtComponent implements AfterViewInit, OnDestroy {
             this.mapbox.destroyMap(this.map);
             this.map = undefined;
         }
+    }
+
+    private async getLayerBounds(): Promise<mapboxgl.LngLatBounds> {
+        const layerUrl = this.vm.getPreviewUrl(this.ds.id, 'mapserver');
+        const params = {
+            outSR: 4326,
+            returnExtentOnly: true
+        };
+        const headers = {
+            Authorization: `Bearer ${this.account.token}`
+         };
+        const result = await lastValueFrom(
+            this.http.get<{ extent: __esri.Extent}>(
+                `${layerUrl}/query`,
+                { params, headers }
+            )
+        );
+        const ext = result.extent;
+        return mapboxgl.LngLatBounds.convert(
+            [ext.xmin, ext.ymin, ext.xmax, ext.ymax]
+        );
     }
 }

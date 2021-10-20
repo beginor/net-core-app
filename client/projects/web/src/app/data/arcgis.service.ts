@@ -41,7 +41,7 @@ export class ArcGisService {
             before: param => {
                 const headers = param.requestOptions.headers || {};
                 headers['X-Requested-With'] = 'XMLHttpRequest';
-                headers['Authorization'] = `Bearer ${this.account.token}`
+                this.account.addAuthTokenTo(headers);
                 param.requestOptions.headers = headers;
             }
         });
@@ -143,8 +143,10 @@ export class ArcGisService {
             'esri/layers/VectorTileLayer',
             'esri/geometry/Extent'
         ]);
+        const headers: { [key: string]: any } = {};
+        this.account.addAuthTokenTo(headers);
         const style: any = await lastValueFrom(
-            this.http.get(url, { headers: { ['Authorization']: `Bearer ${this.account.token}` } }) // eslint-disable-line max-len
+            this.http.get(url, { headers }) // eslint-disable-line max-len
         );
         const vectorTileLayer = new VectorTileLayer({ style });
         mapview.map.add(vectorTileLayer);

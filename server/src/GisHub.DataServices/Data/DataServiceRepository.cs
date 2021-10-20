@@ -48,7 +48,7 @@ namespace Beginor.GisHub.DataServices.Data {
         ) {
             var query = Session.Query<DataService>();
             var totalSql = new StringBuilder(" select count(ds.*) ");
-            var dataSql = new StringBuilder(" select ds.id, ds.name, ds.description, ds.schema, ds.table_name, ds.primary_key_column, ds.display_column, ds.geometry_column, ds.support_mvt ");
+            var dataSql = new StringBuilder(" select ds.id, ds.name, ds.description, ds.schema, ds.table_name, ds.primary_key_column, ds.display_column, ds.geometry_column, ds.support_mvt, ds.mvt_min_zoom, ds.mvt_max_zoom ");
             var body = new StringBuilder();
             body.AppendLine(" from public.data_services as ds ");
             // body.AppendLine(" inner join connections c on c.id = ds.connection_id and c.is_deleted = false ");

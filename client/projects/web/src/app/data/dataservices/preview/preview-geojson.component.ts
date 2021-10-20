@@ -42,8 +42,9 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
             this.mapElRef.nativeElement
         );
         this.map = map;
-        await Promise.all([map.once('load'), this.loadGeoJson()])
-        void this.addGeoJsonLayer();
+        await map.once('load');
+        await this.loadGeoJson();
+        await this.addGeoJsonLayer();
     }
 
     public ngOnDestroy(): void {

@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import { lastValueFrom } from 'rxjs';
 import {
-    CameraOptions, Layer, Map, NavigationControl, ScaleControl
+    CameraOptions, Layer, Map, NavigationControl, ScaleControl,
+    RequestParameters
 } from 'mapbox-gl';
 
 import { AccountService } from 'app-shared';
@@ -40,7 +41,15 @@ export class MapboxService {
             pitch: this.options?.camera.pitch,
             bearing: this.options?.camera.bearing,
             container: container,
-            attributionControl: false
+            attributionControl: false,
+            transformRequest: (url): RequestParameters => {
+                const params: RequestParameters = { url };
+                if (url.includes(this.webRoot)) {
+                    params.headers = {};
+                    this.account.addAuthTokenTo(params.headers);
+                }
+                return params;
+            }
         });
         map.addControl(new NavigationControl(), 'top-left');
         map.addControl(new ScaleControl(), 'bottom-right');
