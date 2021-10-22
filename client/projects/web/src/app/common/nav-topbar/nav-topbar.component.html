@@ -22,13 +22,19 @@
     </ul>
     <ul class="navbar-nav mt-2 mt-lg-0 ms-auto">
       <ng-container *ngIf="info.id; else loginTpl;">
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="/account" routerLinkActive="active">{{account.fullName | async}}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" (click)="logout($event)">
-            <svg-icon path="bi/door-open"></svg-icon> 注销
-          </a>
+        <li class="nav-item" routerLinkActive="active" ngbDropdown>
+          <a class="nav-link" id="account-dropdown" style="cursor: pointer;" routerLinkActive="active" ngbDropdownToggle>{{account.fullName | async}}</a>
+          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="account-dropdown" ngbDropdownMenu>
+            <ng-container *ngIf="navigation.accountNodes | async as ans">
+              <a *ngFor="let n of ans" ngbDropdownItem [routerLink]="n.url">
+                <svg-icon [path]="n.icon"></svg-icon> {{n.title}}
+              </a>
+              <hr class="dropdown-divider" *ngIf="ans.length > 0" />
+            </ng-container>
+            <a style="cursor: pointer;" ngbDropdownItem (click)="logout($event)">
+              <svg-icon path="bi/door-open"></svg-icon> 注销
+            </a>
+          </div>
         </li>
       </ng-container>
       <ng-template #loginTpl>

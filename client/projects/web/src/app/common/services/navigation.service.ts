@@ -17,6 +17,7 @@ export class NavigationService {
     );
     public topbarNodes = new BehaviorSubject<NavigationNode[] | undefined>([]);
     public sidebarNodes = new BehaviorSubject<NavigationNode[] | undefined>([]);
+    public accountNodes = new BehaviorSubject<NavigationNode[]>([]);
     public initialized = false;
     public showSidebar = false;
 
@@ -66,11 +67,23 @@ export class NavigationService {
     private setupNavigationNodes(rootNode: NavigationNode): void {
         this.root.next(rootNode);
         this.topbarNodes.next(rootNode.children);
+        this.updateAccountNodes(rootNode);
         if (!!rootNode.children) {
             this.sidebarNodes.next(
                 this.findSidebarNavigationNodes(rootNode.children)
             );
         }
+    }
+
+    private updateAccountNodes(rootNode: NavigationNode): void {
+        if (!rootNode.children) {
+            return;
+        }
+        const account = rootNode.children.find(n => n.url === '/account');
+        if (!account) {
+            return;
+        }
+        this.accountNodes.next(account.children ?? []);
     }
 
     private updateSidebarNodes(): void {
