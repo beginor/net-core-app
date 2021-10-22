@@ -5,16 +5,16 @@
   "main": "src/index.html",
   "scripts": {
     "clean": "rm -rf dist",
-    "ngcc": "NG_PERSISTENT_BUILD_CACHE=1 ngcc",
+    "ngcc": "NG_PERSISTENT_BUILD_CACHE=1 ngcc --create-ivy-entry-points -l debug",
     "ng": "NG_PERSISTENT_BUILD_CACHE=1 ng",
-    "build": "npm run build-shared && npm run build-web && npm run build-handset",
+    "build": "pnpm run build-shared && pnpm run build-web && pnpm run build-handset",
     "build-shared": "NG_PERSISTENT_BUILD_CACHE=1 ng build app-shared --configuration production",
     "build-web": "NG_PERSISTENT_BUILD_CACHE=1 ng build web --configuration production --base-href=/gishub/web/",
     "build-handset": "NG_PERSISTENT_BUILD_CACHE=1 ng build handset --configuration production --base-href=/gishub/handset/",
     "watch-web": "NG_PERSISTENT_BUILD_CACHE=1 ng build web --watch --configuration development --base-href=/gishub/web/",
     "watch-handset": "NG_PERSISTENT_BUILD_CACHE=1 ng build handset --watch --configuration development --base-href=/gishub/handset/",
     "lint": "ng lint",
-    "start": "npm run watch-web"
+    "start": "pnpm run watch-web"
   },
   "repository": {
     "type": "git",
@@ -45,7 +45,7 @@
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4",
     "bootstrap": "^5.1.0",
-    "bootstrap-icons": "^1.5.0",
+    "bootstrap-icons": "^1.6.1",
     "@ng-bootstrap/ng-bootstrap": "^11.0.0-beta.2",
     "@fortawesome/fontawesome-free": "^5.15.0",
     "@angular/cdk": "~12.2.0",
@@ -56,9 +56,9 @@
     "mapbox-gl": "^2.5.1"
   },
   "devDependencies": {
-    "@angular/cli": "~12.2.9",
+    "@angular/cli": "~12.2.10",
     "@angular/compiler-cli": "~12.2.0",
-    "@angular-devkit/build-angular": "~12.2.9",
+    "@angular-devkit/build-angular": "~12.2.10",
     "ng-packagr": "^12.2.0",
     "eslint": "^7.26.0",
     "@typescript-eslint/eslint-plugin": "~4.28.2",

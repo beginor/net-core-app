@@ -4,7 +4,7 @@ import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppSharedModule, ApiInterceptor, HttpErrorHandler } from 'app-shared';
 
@@ -23,7 +23,7 @@ import { environment } from '../environments/environment';
         CommonModule,
         FormsModule,
         HttpClientModule,
-        NgbModule,
+        NgbAlertModule,
         AppSharedModule,
         AppCommonModule,
         AppRoutingModule
