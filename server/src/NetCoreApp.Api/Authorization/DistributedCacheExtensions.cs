@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -8,7 +9,10 @@ namespace Beginor.NetCoreApp.Api.Authorization {
 
     public static class DistributedCacheExtensions {
 
-        public static async Task<Claim[]> GetUserClaimsAsync(this IDistributedCache cache, string userId) {
+        public static async Task<Claim[]> GetUserClaimsAsync(
+            this IDistributedCache cache,
+            string userId
+        ) {
             var buffer = await cache.GetAsync(userId);
             if (buffer == null) {
                 return new Claim[0];
@@ -23,7 +27,12 @@ namespace Beginor.NetCoreApp.Api.Authorization {
             return claims;
         }
 
-        public static async Task SetUserClaimsAsync(this IDistributedCache cache, string userId, Claim[] claims) {
+        public static async Task SetUserClaimsAsync(
+            this IDistributedCache cache,
+            string userId,
+            Claim[] claims,
+            TimeSpan slidingExpiration
+        ) {
             await using var stream = new MemoryStream();
             var writer = new BinaryWriter(stream);
             writer.Write(claims.Length);
@@ -32,7 +41,11 @@ namespace Beginor.NetCoreApp.Api.Authorization {
             }
             writer.Flush();
             var buffer = stream.GetBuffer();
-            await cache.SetAsync(userId, buffer);
+            await cache.SetAsync(
+                userId,
+                buffer,
+                new DistributedCacheEntryOptions { SlidingExpiration = slidingExpiration }
+            );
         }
     }
 

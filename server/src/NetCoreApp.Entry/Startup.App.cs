@@ -1,16 +1,22 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Beginor.AppFx.DependencyInjection;
+using Beginor.NetCoreApp.Common;
 
 namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 
-        private static void ConfigureAppServices(
+        private void ConfigureAppServices(
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
+            var commonOption = new CommonOption();
+            var section = config.GetSection("common");
+            section.Bind(commonOption);
+            services.AddSingleton(commonOption);
             services.AddDistributedMemoryCache();
             services.AddServiceWithDefaultImplements(
                 typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly,

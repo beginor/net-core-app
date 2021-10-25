@@ -36,6 +36,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
         private IAppUserTokenRepository userTokenRepo;
         private UsersController usersCtrl;
         private IAppPrivilegeRepository privilegeRepo;
+        private CommonOption commonOption;
 
         public AccountController(
             ILogger<AccountController> logger,
@@ -46,7 +47,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             IDistributedCache cache,
             IAppUserTokenRepository userTokenRepo,
             UsersController usersCtrl,
-            IAppPrivilegeRepository privilegeRepo
+            IAppPrivilegeRepository privilegeRepo,
+            CommonOption commonOption
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
@@ -57,6 +59,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             this.userTokenRepo = userTokenRepo ?? throw new ArgumentNullException(nameof(userTokenRepo));
             this.usersCtrl = usersCtrl ?? throw new ArgumentNullException(nameof(usersCtrl));
             this.privilegeRepo = privilegeRepo ?? throw new ArgumentNullException(nameof(privilegeRepo));
+            this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
         }
 
         protected override void Dispose(bool disposing) {
@@ -70,6 +73,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 userTokenRepo = null;
                 usersCtrl = null;
                 privilegeRepo = null;
+                commonOption = null;
             }
             base.Dispose(disposing);
         }
@@ -216,7 +220,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                         claimsToCache.Add(roleClaim);
                     }
                 }
-                await cache.SetUserClaimsAsync(user.Id, claimsToCache.ToArray());
+                await cache.SetUserClaimsAsync(user.Id, claimsToCache.ToArray(), jwt.ExpireTimeSpan);
             }
             return identity;
         }
@@ -252,7 +256,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                     }
                 }
             }
-            await cache.SetUserClaimsAsync("anonymous", claimsToCache.ToArray());
+            await cache.SetUserClaimsAsync("anonymous", claimsToCache.ToArray(), jwt.ExpireTimeSpan);
             return identity;
         }
     }

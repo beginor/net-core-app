@@ -20,12 +20,29 @@ namespace Beginor.NetCoreApp.Data.Repositories {
     /// <summary>应用存储仓储实现</summary>
     public partial class AppStorageRepository : HibernateRepository<AppStorage, AppStorageModel, long>, IAppStorageRepository {
 
-        private readonly IDistributedCache cache;
-        private readonly IWebHostEnvironment hostEnv;
+        private IDistributedCache cache;
+        private IWebHostEnvironment hostEnv;
+        private CommonOption commonOption;
 
-        public AppStorageRepository(ISession session, IMapper mapper, IDistributedCache cache, IWebHostEnvironment hostEnv) : base(session, mapper) {
+        public AppStorageRepository(
+            ISession session,
+            IMapper mapper,
+            IDistributedCache cache,
+            IWebHostEnvironment hostEnv,
+            CommonOption commonOption
+        ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
             this.hostEnv = hostEnv ?? throw new ArgumentNullException(nameof(hostEnv));
+            this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
+        }
+
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                cache = null;
+                hostEnv = null;
+                commonOption = null;
+            }
+            base.Dispose(disposing);
         }
 
         /// <summary>搜索 应用存储 ，返回分页结果。</summary>
@@ -129,7 +146,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
                 }
                 rootFolder = Path.Combine(hostEnv.WebRootPath, rootFolder);
                 item.RootFolder = rootFolder;
-                await cache.SetAsync(key, item);
+                await cache.SetAsync(key, item, commonOption.Cache.MemoryExpiration);
             }
             return item;
         }
