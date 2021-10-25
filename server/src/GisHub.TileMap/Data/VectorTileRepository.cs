@@ -23,24 +23,27 @@ namespace Beginor.GisHub.TileMap.Data {
         private IDistributedCache cache;
         private IAppJsonDataRepository jsonRepository;
         private IAppStorageRepository storageRepository;
+        private CommonOption commonOption;
 
         public VectorTileRepository(
             ISession session,
             IMapper mapper,
             IDistributedCache cache,
             IAppJsonDataRepository jsonRepository,
-            IAppStorageRepository serverFolderRepository
+            IAppStorageRepository storageRepository,
+            CommonOption commonOption
         ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
             this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
-            this.storageRepository = serverFolderRepository ?? throw new ArgumentNullException(nameof(serverFolderRepository));
+            this.storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
+            this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                this.cache = null;
-                this.storageRepository = null;
-                this.jsonRepository = null;
+                cache = null;
+                storageRepository = null;
+                jsonRepository = null;
             }
             base.Dispose(disposing);
         }
@@ -173,7 +176,7 @@ namespace Beginor.GisHub.TileMap.Data {
                 var ci = await cache.GetAsync<TileMapCacheItem>(key);
                 if (ci != null) {
                     ci.ModifiedTime = offset;
-                    await cache.SetAsync(key, ci);
+                    await cache.SetAsync(key, ci, commonOption.Cache.MemoryExpiration);
                 }
             }
             return offset;
@@ -191,7 +194,7 @@ namespace Beginor.GisHub.TileMap.Data {
             }
             cacheItem = entity.ToCache();
             cacheItem.CacheDirectory = await storageRepository.GetPhysicalPathAsync(entity.Directory);
-            await cache.SetAsync(key, cacheItem);
+            await cache.SetAsync(key, cacheItem, commonOption.Cache.MemoryExpiration);
             return cacheItem.ToVectorTileEntity();
         }
 

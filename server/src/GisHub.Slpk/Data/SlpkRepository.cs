@@ -22,21 +22,25 @@ namespace Beginor.GisHub.Slpk.Data {
 
         private IDistributedCache cache;
         private IAppStorageRepository storageRepository;
+        private CommonOption commonOption;
 
         public SlpkRepository(
             ISession session,
             IMapper mapper,
             IDistributedCache cache,
-            IAppStorageRepository serverFolderRepository
+            IAppStorageRepository storageRepository,
+            CommonOption commonOption
         ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
-            this.storageRepository = serverFolderRepository ?? throw new ArgumentNullException(nameof(serverFolderRepository));
+            this.storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
+            this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                this.cache = null;
-                this.storageRepository = null;
+                cache = null;
+                storageRepository = null;
+                commonOption = null;
             }
         }
 
@@ -119,7 +123,11 @@ namespace Beginor.GisHub.Slpk.Data {
                 .Select(e => e.Directory)
                 .FirstOrDefaultAsync();
             directory = await storageRepository.GetPhysicalPathAsync(directory);
-            await cache.SetAsync(key, new SlpkCacheItem { Id = id, Directory = directory });
+            await cache.SetAsync(
+                key,
+                new SlpkCacheItem { Id = id, Directory = directory },
+                commonOption.Cache.MemoryExpiration
+            );
             return directory;
         }
 

@@ -24,24 +24,28 @@ namespace Beginor.GisHub.TileMap.Data {
         private IDistributedCache cache;
         private IAppStorageRepository storageRepository;
         private IAppJsonDataRepository jsonRepository;
+        private CommonOption commonOption;
 
         public TileMapRepository(
             ISession session,
             IMapper mapper,
             IDistributedCache cache,
-            IAppStorageRepository serverFolderRepository,
-            IAppJsonDataRepository jsonRepository
+            IAppStorageRepository storageRepository,
+            IAppJsonDataRepository jsonRepository,
+            CommonOption commonOption
         ) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
-            this.storageRepository = serverFolderRepository ?? throw new ArgumentNullException(nameof(serverFolderRepository));
+            this.storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
             this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
+            this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                this.cache = null;
-                this.storageRepository = null;
-                this.jsonRepository = null;
+                cache = null;
+                storageRepository = null;
+                jsonRepository = null;
+                commonOption = null;
             }
             base.Dispose(disposing);
         }
@@ -156,7 +160,7 @@ namespace Beginor.GisHub.TileMap.Data {
             var cacheItem = entity.ToCache();
             cacheItem.CacheDirectory = cacheDirectory;
             cacheItem.MapTileInfoPath = mapTileInfoPath;
-            await cache.SetAsync(key, cacheItem);
+            await cache.SetAsync(key, cacheItem, commonOption.Cache.MemoryExpiration);
             return cacheItem.ToTileMapEntity();
         }
 
@@ -233,7 +237,7 @@ namespace Beginor.GisHub.TileMap.Data {
                 var ci = await cache.GetAsync<TileMapCacheItem>(key);
                 if (ci != null) {
                     ci.ModifiedTime = offset;
-                    await cache.SetAsync(key, ci);
+                    await cache.SetAsync(key, ci, commonOption.Cache.MemoryExpiration);
                 }
             }
             return offset;

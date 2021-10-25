@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,15 +21,18 @@ namespace Beginor.GisHub.DataServices.Data {
 
         private IDistributedCache cache;
         private IDataServiceFactory factory;
+        private CommonOption commonOption;
 
         public DataServiceRepository(
             ISession session,
             IMapper mapper,
             IDistributedCache cache,
-            IDataServiceFactory factory
+            IDataServiceFactory factory,
+            CommonOption commonOption
         ) : base(session, mapper) {
-            this.cache = cache;
-            this.factory = factory;
+            this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            this.factory = factory?? throw new ArgumentNullException(nameof(factory));
+            this.commonOption = commonOption?? throw new ArgumentNullException(nameof(commonOption));
         }
 
         protected override void Dispose(
@@ -37,6 +41,7 @@ namespace Beginor.GisHub.DataServices.Data {
             if (disposing) {
                 cache = null;
                 factory = null;
+                commonOption = null;
             }
             base.Dispose(disposing);
         }
@@ -146,7 +151,7 @@ namespace Beginor.GisHub.DataServices.Data {
                 item.Srid = await featureProvider.GetSridAsync(item);
                 item.GeometryType = await featureProvider.GetGeometryTypeAsync(item);
             }
-            await cache.SetAsync(key, item);
+            await cache.SetAsync(key, item, commonOption.Cache.MemoryExpiration);
             return item;
         }
 
