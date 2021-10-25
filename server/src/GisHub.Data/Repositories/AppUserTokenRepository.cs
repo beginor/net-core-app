@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using AutoMapper;
@@ -19,9 +18,19 @@ namespace Beginor.GisHub.Data.Repositories {
     public partial class AppUserTokenRepository : HibernateRepository<AppUserToken, AppUserTokenModel, long>, IAppUserTokenRepository {
 
         private IDistributedCache cache;
+        private CommonOption commonOption;
 
-        public AppUserTokenRepository(ISession session, IMapper mapper, IDistributedCache cache) : base(session, mapper) {
+        public AppUserTokenRepository(ISession session, IMapper mapper, IDistributedCache cache, CommonOption commonOption) : base(session, mapper) {
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
+        }
+
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                cache = null;
+                commonOption = null;
+            }
+            base.Dispose(disposing);
         }
 
         /// <summary>搜索 用户凭证 ，返回分页结果。</summary>
@@ -56,7 +65,7 @@ namespace Beginor.GisHub.Data.Repositories {
                     .Where(tkn => tkn.Value == tokenValue)
                     .FirstOrDefaultAsync();
                 if (entity != null) {
-                    await cache.SetAsync<AppUserToken>(entity.Value, entity);
+                    await cache.SetAsync<AppUserToken>(entity.Value, entity, commonOption.Cache.MemoryExpiration);
                 }
             }
             return entity;

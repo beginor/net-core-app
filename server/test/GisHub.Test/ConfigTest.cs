@@ -3,7 +3,10 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using static NUnit.Framework.Assert;
+using Beginor.AppFx.Core;
 using Beginor.AspNetCore.Middlewares.CustomHeader;
 using Beginor.AspNetCore.Middlewares.SpaFailback;
 using Beginor.GisHub.Common;
@@ -77,6 +80,16 @@ namespace Beginor.GisHub.Test {
             Assert.AreEqual(shouldIgnore, !isMatch);
             var match = regex.Match(url);
             Console.WriteLine(match);
+        }
+
+        [Test]
+        public void _08_CanResolveCommonOption() {
+            var option = ServiceProvider.GetService<CommonOption>();
+            IsNotNull(option);
+            Console.WriteLine(option.Cache.Enabled);
+            Console.WriteLine(option.Cache.MemoryExpiration);
+            Console.WriteLine(option.Cache.FileExpiration);
+            Console.WriteLine(option.Cache.Directory);
         }
 
     }
