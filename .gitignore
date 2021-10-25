@@ -52,3 +52,6 @@ Thumbs.db
 obj
 bin
 *.user
+
+# app_cache folder
+app_cache
