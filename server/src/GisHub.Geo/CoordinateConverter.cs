@@ -29,10 +29,4 @@ namespace Beginor.GisHub.Geo {
 
     }
 
-    public class CoordinateOptions {
-
-
-
-    }
-
 }
