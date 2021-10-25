@@ -53,5 +53,5 @@ obj
 bin
 *.user
 
-# mvt_cache
-mvt_cache
+# app_cache folder
+app_cache
