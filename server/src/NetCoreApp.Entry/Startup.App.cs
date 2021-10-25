@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Beginor.AppFx.DependencyInjection;
-using Beginor.NetCoreApp.Common;
 
 namespace Beginor.NetCoreApp.Entry {
 
@@ -13,7 +12,7 @@ namespace Beginor.NetCoreApp.Entry {
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
-            var commonOption = new CommonOption();
+            var commonOption = new Beginor.NetCoreApp.Common.CommonOption();
             var section = config.GetSection("common");
             section.Bind(commonOption);
             services.AddSingleton(commonOption);
