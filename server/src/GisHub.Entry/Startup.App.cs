@@ -38,9 +38,6 @@ namespace Beginor.GisHub.Entry {
                 ServiceLifetime.Scoped
             );
 
-            var coordinateConverter = new Beginor.GisHub.Geo.CoordinateConverter();
-            coordinateConverter.Digits = commonOption.Output.Coordinate.Digits;
-            services.AddSingleton<Beginor.GisHub.Geo.CoordinateConverter>(coordinateConverter);
             services.AddSingleton<Beginor.GisHub.DataServices.IDataServiceFactory, Beginor.GisHub.DataServices.DataServiceFactory>();
             services.AddSingleton<Beginor.GisHub.DataServices.JsonSerializerOptionsFactory>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider>();
@@ -52,7 +49,6 @@ namespace Beginor.GisHub.Entry {
             IApplicationBuilder app,
             IWebHostEnvironment env
         ) {
-            // do nothing now.
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
         }
     }
