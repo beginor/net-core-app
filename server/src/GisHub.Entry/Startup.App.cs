@@ -12,6 +12,10 @@ namespace Beginor.GisHub.Entry {
             IServiceCollection services,
             IWebHostEnvironment env
         ) {
+            var commonOption = new Beginor.GisHub.Common.CommonOption();
+            var section = config.GetSection("common");
+            section.Bind(commonOption);
+            services.AddSingleton(commonOption);
             services.AddDistributedMemoryCache();
             services.AddServiceWithDefaultImplements(
                 typeof(Beginor.GisHub.Data.ModelMapping).Assembly,
@@ -35,8 +39,7 @@ namespace Beginor.GisHub.Entry {
             );
 
             var coordinateConverter = new Beginor.GisHub.Geo.CoordinateConverter();
-            var coordinateSection = config.GetSection("coordinate");
-            coordinateSection.Bind(coordinateConverter);
+            coordinateConverter.Digits = commonOption.Output.Coordinate.Digits;
             services.AddSingleton<Beginor.GisHub.Geo.CoordinateConverter>(coordinateConverter);
             services.AddSingleton<Beginor.GisHub.DataServices.IDataServiceFactory, Beginor.GisHub.DataServices.DataServiceFactory>();
             services.AddSingleton<Beginor.GisHub.DataServices.JsonSerializerOptionsFactory>();

@@ -20,7 +20,7 @@ namespace Beginor.GisHub.Common {
     }
 
     public class CoordinateOption {
-        public int digits { get; set; } = 6;
+        public int Digits { get; set; } = 6;
     }
 
 }
