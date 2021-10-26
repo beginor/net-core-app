@@ -55,3 +55,6 @@ bin
 
 # app_cache folder
 app_cache
+
+# global.json
+global.json
