@@ -1,8 +1,8 @@
-using Beginor.AppFx.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Beginor.AppFx.DependencyInjection;
 
 namespace Beginor.GisHub.Entry {
 
