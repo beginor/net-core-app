@@ -1,3 +1,4 @@
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +17,11 @@ namespace Beginor.NetCoreApp.Entry {
             var section = config.GetSection("common");
             section.Bind(commonOption);
             services.AddSingleton(commonOption);
+            var cacheFolder = Path.Combine(env.ContentRootPath, commonOption.Cache.Directory);
+            if (!Directory.Exists(cacheFolder)) {
+                logger.Error($"Cache directory {cacheFolder} does not exists, make sure your config is correct!");
+                Directory.CreateDirectory(cacheFolder);
+            }
             services.AddDistributedMemoryCache();
             services.AddServiceWithDefaultImplements(
                 typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly,
