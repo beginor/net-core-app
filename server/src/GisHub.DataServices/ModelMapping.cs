@@ -17,6 +17,9 @@ namespace Beginor.GisHub.DataServices {
                 .ForMember(dest => dest.Id, map => map.Ignore());
             CreateMap<DataServiceField, DataServiceFieldModel>()
                 .ReverseMap();
+            CreateMap<DataApi, DataApiModel>()
+                .ReverseMap()
+                .ForMember(dest => dest.Id, map => map.Ignore());
         }
 
     }

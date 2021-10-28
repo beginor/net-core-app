@@ -60,8 +60,9 @@ TableFilter:
     - connections
     - datasources
     - vectortiles
+    - user_access_tokens
   IncludeTables:
-    -  user_access_tokens
+    - data_apis
   IgnoreNoPKTable: true
   IgnoreView: true
 
