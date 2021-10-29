@@ -1,5 +1,7 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices.Data {
@@ -11,6 +13,12 @@ namespace Beginor.GisHub.DataServices.Data {
         Task<PaginatedResponseModel<DataApiModel>> SearchAsync(
             DataApiSearchModel model
         );
+
+        Task SaveAsync(DataApiModel model, AppUser user, CancellationToken token = default);
+
+        Task DeleteAsync(long id, AppUser user, CancellationToken token = default);
+
+        Task UpdateAsync(long id, DataApiModel model, AppUser user, CancellationToken token = default);
 
     }
 

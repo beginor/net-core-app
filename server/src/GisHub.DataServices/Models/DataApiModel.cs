@@ -23,27 +23,29 @@ namespace Beginor.GisHub.DataServices.Models {
         public string Statement { get; set; }
         /// <summary>参数定义</summary>
         [Required(ErrorMessage = "参数定义 必须填写！")]
-        public string Parameters { get; set; }
+        public DataApiParameterModel[] Parameters { get; set; }
         /// <summary>API 输出列的源数据</summary>
-        public string Columns { get; set; }
+        public DataServiceFieldModel[] Columns { get; set; }
         /// <summary>允许访问的角色</summary>
         public string[] Roles { get; set; }
-        /// <summary>创建者id</summary>
-        [Required(ErrorMessage = "创建者id 必须填写！")]
-        public string CreatorId { get; set; }
+        /// <summary>创建者</summary>
+        public StringIdNameEntity Creator { get; set; }
         /// <summary>创建时间</summary>
         [Required(ErrorMessage = "创建时间 必须填写！")]
         public DateTime CreatedAt { get; set; }
-        /// <summary>更新者id</summary>
-        [Required(ErrorMessage = "更新者id 必须填写！")]
-        public string UpdaterId { get; set; }
+        /// <summary>更新者</summary>
+        public StringIdNameEntity Updater { get; set; }
         /// <summary>更新时间</summary>
         [Required(ErrorMessage = "更新时间 必须填写！")]
         public DateTime UpdatedAt { get; set; }
-        /// <summary>是否删除</summary>
-        [Required(ErrorMessage = "是否删除 必须填写！")]
-        public bool IsDeleted { get; set; }
 
+    }
+
+    public class DataApiParameterModel {
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public string Source { get; set; }
+        public bool Required { get; set; }
     }
 
     /// <summary>数据API搜索参数</summary>

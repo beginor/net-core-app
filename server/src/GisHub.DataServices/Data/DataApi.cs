@@ -1,6 +1,7 @@
 using System;
-using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
+using Beginor.AppFx.Core;
+using Beginor.GisHub.Data.Entities;
 
 namespace Beginor.GisHub.DataServices.Data {
 
@@ -21,8 +22,8 @@ namespace Beginor.GisHub.DataServices.Data {
         public virtual string Description { get; set; }
 
         /// <summary>数据源ID</summary>
-        [Property(Name = "DataSourceId", Column = "data_source_id", Type = "long", NotNull = true)]
-        public virtual long DataSourceId { get; set; }
+        [ManyToOne(Name = "DataSource", Column = "data_source_id", ClassType = typeof(DataSource), NotFound = NotFoundMode.Ignore)]
+        public virtual DataSource DataSource { get; set; }
 
         /// <summary>是否向数据源写入数据</summary>
         [Property(Name = "WriteData", Column = "write_data", Type = "bool", NotNull = true)]
@@ -33,28 +34,28 @@ namespace Beginor.GisHub.DataServices.Data {
         public virtual string Statement { get; set; }
 
         /// <summary>参数定义</summary>
-        [Property(Name = "Parameters", Column = "parameters", Type = "string", NotNull = true, Length = -1)]
-        public virtual string Parameters { get; set; }
+        [Property(Name = "Parameters", Column = "parameters", TypeType = typeof(NHibernate.Extensions.NpgSql.JsonbType<DataApiParameter[]>), NotNull = false)]
+        public virtual DataApiParameter[] Parameters { get; set; }
 
         /// <summary>API 输出列的源数据</summary>
-        [Property(Name = "Columns", Column = "columns", Type = "string", NotNull = false, Length = -1)]
-        public virtual string Columns { get; set; }
+        [Property(Name = "Columns", Column = "columns", TypeType = typeof(NHibernate.Extensions.NpgSql.JsonbType<DataServiceField[]>), NotNull = false)]
+        public virtual DataServiceField[] Columns { get; set; }
 
         /// <summary>允许访问的角色</summary>
         [Property(Name = "Roles", Column = "roles", TypeType = typeof(NHibernate.Extensions.NpgSql.StringArrayType), NotNull = false)]
         public virtual string[] Roles { get; set; }
 
         /// <summary>创建者id</summary>
-        [Property(Name = "CreatorId", Column = "creator_id", Type = "string", NotNull = true, Length = 32)]
-        public virtual string CreatorId { get; set; }
+        [ManyToOne(Name = "Creator", Column = "creator_id", ClassType = typeof(AppUser), NotFound = NotFoundMode.Ignore)]
+        public virtual AppUser Creator { get; set; }
 
         /// <summary>创建时间</summary>
         [Property(Name = "CreatedAt", Column = "created_at", Type = "datetime", NotNull = true)]
         public virtual DateTime CreatedAt { get; set; }
 
         /// <summary>更新者id</summary>
-        [Property(Name = "UpdaterId", Column = "updater_id", Type = "string", NotNull = true, Length = 32)]
-        public virtual string UpdaterId { get; set; }
+        [ManyToOne(Name = "Updater", Column = "updater_id", ClassType = typeof(AppUser), NotFound = NotFoundMode.Ignore)]
+        public virtual AppUser Updater { get; set; }
 
         /// <summary>更新时间</summary>
         [Property(Name = "UpdatedAt", Column = "updated_at", Type = "datetime", NotNull = true)]
@@ -63,6 +64,13 @@ namespace Beginor.GisHub.DataServices.Data {
         /// <summary>是否删除</summary>
         [Property(Name = "IsDeleted", Column = "is_deleted", Type = "bool", NotNull = true)]
         public virtual bool IsDeleted { get; set; }
+    }
+
+    public class DataApiParameter {
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public string Source { get; set; }
+        public bool Required { get; set; }
     }
 
 }

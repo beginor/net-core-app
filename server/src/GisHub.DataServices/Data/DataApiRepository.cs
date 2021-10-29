@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -8,6 +9,7 @@ using Beginor.AppFx.Repository.Hibernate;
 using NHibernate;
 using NHibernate.Linq;
 using Beginor.GisHub.DataServices.Models;
+using Beginor.GisHub.Data.Entities;
 
 namespace Beginor.GisHub.DataServices.Data {
 
@@ -41,7 +43,42 @@ namespace Beginor.GisHub.DataServices.Data {
                 entity.IsDeleted = true;
                 await Session.SaveAsync(entity, token);
                 await Session.FlushAsync();
+                Session.Clear();
             }
+        }
+
+        public async Task DeleteAsync(long id, AppUser user, CancellationToken token = default) {
+            var entity = Session.Get<DataApi>(id);
+            if (entity != null) {
+                entity.IsDeleted = true;
+                entity.UpdatedAt = DateTime.Now;
+                entity.Updater = user;
+                await Session.SaveAsync(entity, token);
+                await Session.FlushAsync();
+                Session.Clear();
+            }
+        }
+
+        public async Task SaveAsync(DataApiModel model, AppUser user, CancellationToken token = default) {
+            var entity = Mapper.Map<DataApi>(model);
+            entity.Creator = user;
+            entity.CreatedAt = DateTime.Now;
+            entity.Updater = user;
+            entity.UpdatedAt = DateTime.Now;
+            await Session.SaveAsync(entity, token);
+            await Session.FlushAsync();
+            Session.Clear();
+            Mapper.Map(entity, model);
+        }
+
+        public async Task UpdateAsync(long id, DataApiModel model, AppUser user, CancellationToken token = default) {
+            var entity = await Session.LoadAsync<DataApi>(id);
+            Mapper.Map(model, entity);
+            entity.Updater = user;
+            entity.UpdatedAt = DateTime.Now;
+            await Session.UpdateAsync(entity, token);
+            await Session.FlushAsync();
+            Session.Clear();
         }
     }
 

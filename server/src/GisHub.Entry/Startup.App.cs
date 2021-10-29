@@ -43,12 +43,12 @@ namespace Beginor.GisHub.Entry {
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
-
             services.AddSingleton<Beginor.GisHub.DataServices.IDataServiceFactory, Beginor.GisHub.DataServices.DataServiceFactory>();
             services.AddSingleton<Beginor.GisHub.DataServices.JsonSerializerOptionsFactory>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGisDataServiceReader>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISFeatureProvider>();
+            services.AddSingleton<Beginor.GisHub.DynamicSql.IDynamicSqlProvider, Beginor.GisHub.DynamicSql.SmartSqlProvider>();
         }
 
         private void ConfigureApp(

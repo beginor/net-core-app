@@ -1,0 +1,156 @@
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Xml;
+using Microsoft.Extensions.Logging;
+using SmartSql;
+using SmartSql.Configuration;
+using SmartSql.Configuration.Tags;
+using SmartSql.DataSource;
+using SmartSql.Utils;
+
+namespace Beginor.GisHub.DynamicSql {
+
+    public class SmartSqlProvider : IDynamicSqlProvider {
+
+        private TagBuilderFactory tagBuilderFactory = new();
+        private Dictionary<string, SqlMap> sqlmaps = new(StringComparer.OrdinalIgnoreCase) {
+            ["postgis"] = new SqlMap {
+                SmartSqlConfig = new SmartSqlConfig {
+                    Settings = new Settings { IgnoreParameterCase = true, ParameterPrefix = "$" },
+                    Database = new Database { DbProvider = DbProviderManager.POSTGRESQL_DBPROVIDER },
+                    SqlParamAnalyzer = new SqlParamAnalyzer(true, "@")
+                }
+            },
+            ["postsde"] = new SqlMap {
+                SmartSqlConfig = new SmartSqlConfig {
+                    Settings = new Settings { IgnoreParameterCase = true, ParameterPrefix = "$" },
+                    Database = new Database { DbProvider = DbProviderManager.POSTGRESQL_DBPROVIDER },
+                    SqlParamAnalyzer = new SqlParamAnalyzer(true, "@")
+                }
+            },
+            ["mssql"] = new SqlMap {
+                SmartSqlConfig = new SmartSqlConfig {
+                    Settings = new Settings { IgnoreParameterCase = true, ParameterPrefix = "$" },
+                    Database = new Database { DbProvider = DbProviderManager.SQLSERVER_DBPROVIDER },
+                    SqlParamAnalyzer = new SqlParamAnalyzer(true, "@")
+                }
+            },
+            ["mysql"] = new SqlMap {
+                SmartSqlConfig = new SmartSqlConfig {
+                    Settings = new Settings { IgnoreParameterCase = true, ParameterPrefix = "$" },
+                    Database = new Database { DbProvider = DbProviderManager.MYSQL_DBPROVIDER },
+                    SqlParamAnalyzer = new SqlParamAnalyzer(true, "@")
+                }
+            }
+        };
+
+        private ILogger<SmartSqlProvider> logger;
+
+        public SmartSqlProvider(
+            ILogger<SmartSqlProvider> logger
+        ) {
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
+        public string BuildDynamicSql(
+            string databaseType,
+            string command,
+            IDictionary<string, object> parameters
+        ) {
+            if (string.IsNullOrEmpty(databaseType)) {
+                throw new ArgumentNullException(nameof(databaseType));
+            }
+            if (string.IsNullOrEmpty(command)) {
+                throw new ArgumentNullException(nameof(command));
+            }
+            if (parameters == null) {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+            if (!sqlmaps.TryGetValue(databaseType, out var sqlmap)) {
+                logger.LogError($"Unknown database type {databaseType} !");
+                throw new ArgumentOutOfRangeException(nameof(databaseType));
+            }
+            var statement = CreateStatement(command, sqlmap);
+            if (statement == null) {
+                throw new ArgumentException($"Can not create statement from {command} ");
+            }
+            var sql = BuildSql(statement, parameters);
+            return sql;
+        }
+
+        public DbProviderFactory GetDbProviderFactory(string databaseType) {
+            if (!sqlmaps.TryGetValue(databaseType, out var factory)) {
+                logger.LogError($"Unknown database type {databaseType} !");
+                throw new ArgumentOutOfRangeException(nameof(databaseType));
+            }
+            return factory.SmartSqlConfig.Database.DbProvider.Factory;
+        }
+
+        private Statement CreateStatement(string xml, SqlMap sqlmap) {
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+            var root = xmlDoc.DocumentElement;
+            if (root == null) {
+                return null;
+            }
+            root.Attributes.TryGetValueAsString("Id", out var id);
+            var statement = new Statement {
+                Id = id,
+                SqlMap = sqlmap,
+                SqlTags = new List<ITag>(),
+            };
+            // add tag
+            foreach (XmlNode node in root.ChildNodes) {
+                var tag = LoadTag(node, statement);
+                if (tag != null) {
+                    statement.SqlTags.Add(tag);
+                }
+            }
+            return statement;
+        }
+
+        private ITag LoadTag(XmlNode xmlNode, Statement stmt) {
+            if (xmlNode.Name == "#comment") {
+                return null;
+            }
+            var tag = tagBuilderFactory.Get(xmlNode.Name).Build(xmlNode, stmt);
+            foreach (XmlNode childNode in xmlNode) {
+                var childTag = LoadTag(childNode, stmt);
+                if (childTag == null) {
+                    continue;
+                }
+                childTag.Parent = tag;
+                ((Tag)tag).ChildTags.Add(childTag);
+            }
+            return tag;
+        }
+
+        private string BuildSql(
+            Statement statement,
+            IDictionary<string, object> parameters
+        ) {
+            var requestContext = new RequestContext<Dictionary<string, object>>();
+            SetExecutionContext(requestContext, statement.SqlMap.SmartSqlConfig);
+            requestContext.SetRequest(parameters);
+            requestContext.SetupParameters();
+            statement.BuildSql(requestContext);
+            return requestContext.SqlBuilder.ToString();
+        }
+
+        private static void SetExecutionContext(
+            AbstractRequestContext requestContext,
+            SmartSqlConfig config
+        ) {
+            // requestContext.ExecutionContext
+            var propInfo = requestContext.GetType().GetProperty("ExecutionContext");
+            var setter = propInfo.GetSetMethod(true);
+            var executionContext = new ExecutionContext {
+                Request = requestContext,
+                SmartSqlConfig = config
+            };
+            setter.Invoke(requestContext, new [] { executionContext });
+        }
+    }
+
+}

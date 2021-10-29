@@ -1,37 +1,43 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Beginor.GisHub.DataServices.Api {
 
     /// <summary>数据API 服务接口</summary>
     [ApiController]
     [Route("api/data-apis")]
-    public class DataApiController : Controller {
+    public partial class DataApiController : Controller {
 
         private ILogger<DataApiController> logger;
         private IDataApiRepository repository;
+        private UserManager<AppUser> userMgr;
 
         public DataApiController(
             ILogger<DataApiController> logger,
-            IDataApiRepository repository
+            IDataApiRepository repository,
+            UserManager<AppUser> userMgr
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 logger = null;
                 repository = null;
+                userMgr = null;
             }
             base.Dispose(disposing);
         }
@@ -63,7 +69,12 @@ namespace Beginor.GisHub.DataServices.Api {
             [FromBody]DataApiModel model
         ) {
             try {
-                await repository.SaveAsync(model);
+                var userId = this.GetUserId();
+                var user = await userMgr.FindByIdAsync(userId);
+                if (user == null) {
+                    return BadRequest("User is null!");
+                }
+                await repository.SaveAsync(model, user);
                 return model;
             }
             catch (Exception ex) {
@@ -80,7 +91,12 @@ namespace Beginor.GisHub.DataServices.Api {
         [Authorize("data_apis.delete")]
         public async Task<ActionResult> Delete(long id) {
             try {
-                await repository.DeleteAsync(id);
+                var userId = this.GetUserId();
+                var user = await userMgr.FindByIdAsync(userId);
+                if (user == null) {
+                    return BadRequest("User is null!");
+                }
+                await repository.DeleteAsync(id, user);
                 return NoContent();
             }
             catch (Exception ex) {
@@ -128,7 +144,12 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (!exists) {
                     return NotFound();
                 }
-                await repository.UpdateAsync(id, model);
+                var userId = this.GetUserId();
+                var user = await userMgr.FindByIdAsync(userId);
+                if (user == null) {
+                    return BadRequest("User is null!");
+                }
+                await repository.UpdateAsync(id, model, user);
                 return model;
             }
             catch (Exception ex) {
