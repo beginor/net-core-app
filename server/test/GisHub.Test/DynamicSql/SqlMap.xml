@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SmartSqlMap xmlns="http://SmartSql.net/schemas/SmartSqlMap.xsd"
+  Scope="DynamicSqlTest">
+  <Statements>
+    <Statement Id="is-not-empty">
+      select fid, id, name, area
+      from public.sr4326_cn_sar_dist
+      <Where>
+        <IsNotEmpty Property="id" Prepend="and">
+          id like @id || '%'
+        </IsNotEmpty>
+        <IsNotEmpty Prepend="or" Property="area">
+          area >= @area
+        </IsNotEmpty>
+      </Where>
+    </Statement>
+    <Statement Id="for">
+      select fid, id, name, area
+      from public.sr4326_cn_sar_dist
+      <Dynamic Prepend="where">
+        <IsNotEmpty Prepend="and" Property="area">
+          area >= @area
+        </IsNotEmpty>
+        <For Prepend="and" Key="key" Open="(" Close=")" Property="names" Separator="or">
+          name like Concat(@key,'%')
+        </For>
+      </Dynamic>
+    </Statement>
+  </Statements>
+</SmartSqlMap>

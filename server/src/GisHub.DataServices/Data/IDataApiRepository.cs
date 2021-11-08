@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
@@ -19,6 +20,10 @@ namespace Beginor.GisHub.DataServices.Data {
         Task DeleteAsync(long id, AppUser user, CancellationToken token = default);
 
         Task UpdateAsync(long id, DataApiModel model, AppUser user, CancellationToken token = default);
+
+        Task<IList<Dictionary<string, object>>> InvokeApi(long apiId, IDictionary<string, object> parameters);
+
+        Task<DataApiCacheItem> GetCacheItemByIdAsync(long apiId);
 
     }
 

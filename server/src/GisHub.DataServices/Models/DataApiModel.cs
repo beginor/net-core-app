@@ -44,6 +44,7 @@ namespace Beginor.GisHub.DataServices.Models {
     public class DataApiParameterModel {
         public string Name { get; set; }
         public string Type { get; set; }
+        public string Description { get; set; }
         public string Source { get; set; }
         public bool Required { get; set; }
     }

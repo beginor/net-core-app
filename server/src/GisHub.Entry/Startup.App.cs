@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Beginor.AppFx.DependencyInjection;
 
 namespace Beginor.GisHub.Entry {
@@ -49,6 +50,7 @@ namespace Beginor.GisHub.Entry {
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGisDataServiceReader>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISFeatureProvider>();
             services.AddSingleton<Beginor.GisHub.DynamicSql.IDynamicSqlProvider, Beginor.GisHub.DynamicSql.SmartSqlProvider>();
+            services.AddSingleton<Beginor.GisHub.DynamicSql.ParameterConverterFactory>();
         }
 
         private void ConfigureApp(

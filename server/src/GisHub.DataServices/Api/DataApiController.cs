@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Common;
 using Beginor.GisHub.Data.Entities;
-using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
-using Beginor.GisHub.Models;
+using Beginor.GisHub.DynamicSql;
 
 namespace Beginor.GisHub.DataServices.Api {
 
@@ -22,15 +22,24 @@ namespace Beginor.GisHub.DataServices.Api {
         private ILogger<DataApiController> logger;
         private IDataApiRepository repository;
         private UserManager<AppUser> userMgr;
+        private CommonOption commonOption;
+        private JsonSerializerOptionsFactory serializerOptionsFactory;
+        private ParameterConverterFactory parameterConverterFactory;
 
         public DataApiController(
             ILogger<DataApiController> logger,
             IDataApiRepository repository,
-            UserManager<AppUser> userMgr
+            UserManager<AppUser> userMgr,
+            CommonOption commonOption,
+            JsonSerializerOptionsFactory serializerOptionsFactory,
+            ParameterConverterFactory parameterConverterFactory
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
             this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
+            this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
+            this.serializerOptionsFactory = serializerOptionsFactory ?? throw new ArgumentNullException(nameof(serializerOptionsFactory));
+            this.parameterConverterFactory = parameterConverterFactory ?? throw new ArgumentNullException(nameof(parameterConverterFactory));
         }
 
         protected override void Dispose(bool disposing) {
@@ -38,6 +47,9 @@ namespace Beginor.GisHub.DataServices.Api {
                 logger = null;
                 repository = null;
                 userMgr = null;
+                commonOption = null;
+                serializerOptionsFactory = null;
+                parameterConverterFactory = null;
             }
             base.Dispose(disposing);
         }

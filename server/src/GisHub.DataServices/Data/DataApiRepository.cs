@@ -3,20 +3,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
 using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using NHibernate;
 using NHibernate.Linq;
+using Beginor.GisHub.Common;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.Data.Entities;
+using Beginor.GisHub.DynamicSql;
 
 namespace Beginor.GisHub.DataServices.Data {
 
     /// <summary>数据API仓储实现</summary>
     public partial class DataApiRepository : HibernateRepository<DataApi, DataApiModel, long>, IDataApiRepository {
 
-        public DataApiRepository(ISession session, IMapper mapper) : base(session, mapper) { }
+        private IDynamicSqlProvider dynamicSqlProvider;
+        private IDistributedCache cache;
+        private CommonOption commonOption;
+
+        public DataApiRepository(
+            ISession session,
+            IMapper mapper,
+            IDynamicSqlProvider dynamicSqlProvider,
+            IDistributedCache cache,
+            CommonOption commonOption
+        ) : base(session, mapper) {
+            this.dynamicSqlProvider = dynamicSqlProvider ?? throw new ArgumentNullException(nameof(dynamicSqlProvider));
+            this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
+        }
+
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                dynamicSqlProvider = null;
+                cache = null;
+                commonOption = null;
+            }
+            base.Dispose(disposing);
+        }
 
         /// <summary>搜索 数据API ，返回分页结果。</summary>
         public async Task<PaginatedResponseModel<DataApiModel>> SearchAsync(
@@ -80,6 +106,7 @@ namespace Beginor.GisHub.DataServices.Data {
             await Session.FlushAsync();
             Session.Clear();
         }
+
     }
 
 }
