@@ -1,0 +1,15 @@
+### 获取 API 生成的 SQL 语句
+GET {{host}}/gishub/api/data-apis/1635333566815030319/sql?$token={{token}}
+Referer: {{referer}}
+
+### 获取 API 生成的 SQL 语句
+GET {{host}}/gishub/api/data-apis/1635333566815030319/sql?$token={{token}}&id=4401
+Referer: {{referer}}
+
+### 获取 API 生成的 SQL 语句
+GET {{host}}/gishub/api/data-apis/1635333566815030319/sql?$token={{token}}&id=4401&area=1023.4
+Referer: {{referer}}
+
+### 获取 API 的输出字段信息
+GET {{host}}/gishub/api/data-apis/1635333566815030319/columns?$token={{token}}
+Referer: {{referer}}
