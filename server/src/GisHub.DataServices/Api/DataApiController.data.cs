@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Data;
+using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DynamicSql;
 using Microsoft.Extensions.Primitives;
 
@@ -26,12 +27,52 @@ namespace Beginor.GisHub.DataServices.Api {
                     return NotFound($"DataApi {id} does not exists.");
                 }
                 var parameters = GetParameters(Request, cacheItem.Parameters);
-                var result = repository.InvokeApi(id, parameters);
+                var result = await repository.InvokeApiAsync(cacheItem, parameters);
                 return Json(result, serializerOptionsFactory.JsonSerializerOptions);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not invoke api {id} .");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
+            }
+        }
+
+        /// <summary>测试数据API动态生成的sql语句</summary>
+        [Route("{id:long}/sql")]
+        [Authorize("data_apis.read-sql")]
+        [Consumes("application/x-www-form-urlencoded")]
+        public async Task<ActionResult> BuildSql(long id) {
+            try {
+                var cacheItem = await repository.GetCacheItemByIdAsync(id);
+                if (cacheItem == null) {
+                    return NotFound($"DataApi {id} does not exists.");
+                }
+                var parameters = GetParameters(Request, cacheItem.Parameters);
+                var sql = await repository.BuildSqlAsync(cacheItem, parameters);
+                return Ok(sql);
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not build sql for api {id}");
+                return this.InternalServerError(ex);
+            }
+        }
+
+        /// <summary>获取数据API的输出字段列表</summary>
+        [Route("{id:long}/columns")]
+        [Authorize("data_apis.read-columns")]
+        [Consumes("application/x-www-form-urlencoded")]
+        public async Task<ActionResult<DataServiceFieldModel>> GetColumns(long id) {
+            try {
+                var cacheItem = await repository.GetCacheItemByIdAsync(id);
+                if (cacheItem == null) {
+                    return NotFound($"DataApi {id} does not exists.");
+                }
+                var parameters = GetParameters(Request, cacheItem.Parameters);
+                var columns = await repository.GetColumnsAsync(cacheItem, parameters);
+                return Ok(columns);
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not get columns for api {id}");
+                return this.InternalServerError(ex);
             }
         }
 
@@ -39,7 +80,7 @@ namespace Beginor.GisHub.DataServices.Api {
             var result = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             foreach (var param in parameters) {
                 StringValues values;
-                if (!request.Query.TryGetValue(param.Name, out values) && !request.Form.TryGetValue(param.Name, out values)) {
+                if (!request.Query.TryGetValue(param.Name, out values) && request.HasFormContentType && !request.Form.TryGetValue(param.Name, out values)) {
                     continue;
                 }
                 if (string.IsNullOrEmpty(values)) {

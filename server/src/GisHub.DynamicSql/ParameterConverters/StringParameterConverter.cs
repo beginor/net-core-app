@@ -14,11 +14,7 @@ namespace Beginor.GisHub.DynamicSql.ParameterConverters {
         }
 
         public object ConvertParameter(string parameterValue) {
-            if (bool.TryParse(parameterValue, out var value)) {
-                return value;
-            }
-            logger.LogError($"Can not convert {parameterValue} to {ParameterType} , return value is null.");
-            return null;
+            return parameterValue;
         }
 
     }

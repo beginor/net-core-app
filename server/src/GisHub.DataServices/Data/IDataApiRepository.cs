@@ -11,9 +11,7 @@ namespace Beginor.GisHub.DataServices.Data {
     public partial interface IDataApiRepository : IRepository<DataApiModel, long> {
 
         /// <summary>搜索 数据API ，返回分页结果。</summary>
-        Task<PaginatedResponseModel<DataApiModel>> SearchAsync(
-            DataApiSearchModel model
-        );
+        Task<PaginatedResponseModel<DataApiModel>> SearchAsync(DataApiSearchModel model);
 
         Task SaveAsync(DataApiModel model, AppUser user, CancellationToken token = default);
 
@@ -21,7 +19,11 @@ namespace Beginor.GisHub.DataServices.Data {
 
         Task UpdateAsync(long id, DataApiModel model, AppUser user, CancellationToken token = default);
 
-        Task<IList<Dictionary<string, object>>> InvokeApi(long apiId, IDictionary<string, object> parameters);
+        Task<IList<Dictionary<string, object>>> InvokeApiAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
+
+        Task<string> BuildSqlAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
+
+        Task<DataServiceFieldModel[]> GetColumnsAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
 
         Task<DataApiCacheItem> GetCacheItemByIdAsync(long apiId);
 

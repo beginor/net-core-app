@@ -7,6 +7,7 @@ using SmartSql;
 using SmartSql.Configuration;
 using SmartSql.Configuration.Tags;
 using SmartSql.DataSource;
+using SmartSql.Reflection;
 using SmartSql.Utils;
 
 namespace Beginor.GisHub.DynamicSql {
@@ -80,11 +81,12 @@ namespace Beginor.GisHub.DynamicSql {
         }
 
         public DbProviderFactory GetDbProviderFactory(string databaseType) {
-            if (!sqlmaps.TryGetValue(databaseType, out var factory)) {
+            if (!sqlmaps.TryGetValue(databaseType, out var sqlmap)) {
                 logger.LogError($"Unknown database type {databaseType} !");
                 throw new ArgumentOutOfRangeException(nameof(databaseType));
             }
-            return factory.SmartSqlConfig.Database.DbProvider.Factory;
+            var dbProvider = sqlmap.SmartSqlConfig.Database.DbProvider;
+            return dbProvider.Factory ?? (dbProvider.Factory = DbProviderManager.Instance.GetDbProviderFactory(dbProvider.Type));
         }
 
         private Statement CreateStatement(string xml, SqlMap sqlmap) {

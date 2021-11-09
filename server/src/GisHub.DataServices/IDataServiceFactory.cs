@@ -1,3 +1,5 @@
+using System.Data.Common;
+
 namespace Beginor.GisHub.DataServices {
 
     public interface IDataServiceFactory {

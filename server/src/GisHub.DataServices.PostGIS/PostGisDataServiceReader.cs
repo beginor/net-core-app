@@ -102,6 +102,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
         }
 
         public override IDbConnection CreateConnection(DataServiceCacheItem dataService) {
+            Npgsql.NpgsqlFactory factory;
             return new NpgsqlConnection(dataService.ConnectionString);
         }
 

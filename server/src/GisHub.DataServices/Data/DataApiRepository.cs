@@ -13,6 +13,7 @@ using Beginor.GisHub.Common;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DynamicSql;
+using Microsoft.Extensions.Logging;
 
 namespace Beginor.GisHub.DataServices.Data {
 
@@ -22,17 +23,23 @@ namespace Beginor.GisHub.DataServices.Data {
         private IDynamicSqlProvider dynamicSqlProvider;
         private IDistributedCache cache;
         private CommonOption commonOption;
+        private IDataServiceFactory dataServiceFactory;
+        private ILogger<DataApiRepository> logger;
 
         public DataApiRepository(
             ISession session,
             IMapper mapper,
             IDynamicSqlProvider dynamicSqlProvider,
             IDistributedCache cache,
-            CommonOption commonOption
+            CommonOption commonOption,
+            IDataServiceFactory dataServiceFactory,
+            ILogger<DataApiRepository> logger
         ) : base(session, mapper) {
             this.dynamicSqlProvider = dynamicSqlProvider ?? throw new ArgumentNullException(nameof(dynamicSqlProvider));
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
             this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
+            this.dataServiceFactory = dataServiceFactory ?? throw new ArgumentNullException(nameof(dataServiceFactory));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         protected override void Dispose(bool disposing) {
@@ -40,6 +47,8 @@ namespace Beginor.GisHub.DataServices.Data {
                 dynamicSqlProvider = null;
                 cache = null;
                 commonOption = null;
+                dataServiceFactory = null;
+                logger = null;
             }
             base.Dispose(disposing);
         }
@@ -68,7 +77,7 @@ namespace Beginor.GisHub.DataServices.Data {
             if (entity != null) {
                 entity.IsDeleted = true;
                 await Session.SaveAsync(entity, token);
-                await Session.FlushAsync();
+                await Session.FlushAsync(token);
                 Session.Clear();
             }
         }
@@ -80,7 +89,7 @@ namespace Beginor.GisHub.DataServices.Data {
                 entity.UpdatedAt = DateTime.Now;
                 entity.Updater = user;
                 await Session.SaveAsync(entity, token);
-                await Session.FlushAsync();
+                await Session.FlushAsync(token);
                 Session.Clear();
             }
         }
@@ -92,18 +101,18 @@ namespace Beginor.GisHub.DataServices.Data {
             entity.Updater = user;
             entity.UpdatedAt = DateTime.Now;
             await Session.SaveAsync(entity, token);
-            await Session.FlushAsync();
+            await Session.FlushAsync(token);
             Session.Clear();
             Mapper.Map(entity, model);
         }
 
         public async Task UpdateAsync(long id, DataApiModel model, AppUser user, CancellationToken token = default) {
-            var entity = await Session.LoadAsync<DataApi>(id);
+            var entity = await Session.LoadAsync<DataApi>(id, token);
             Mapper.Map(model, entity);
             entity.Updater = user;
             entity.UpdatedAt = DateTime.Now;
             await Session.UpdateAsync(entity, token);
-            await Session.FlushAsync();
+            await Session.FlushAsync(token);
             Session.Clear();
         }
 
