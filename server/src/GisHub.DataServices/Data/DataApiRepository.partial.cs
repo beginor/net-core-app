@@ -64,7 +64,7 @@ namespace Beginor.GisHub.DataServices.Data {
             return cacheItem;
         }
 
-        public async Task<string> BuildSqlAsync(DataApiCacheItem cacheItem, IDictionary<string, object> parameters) {
+        public Task<string> BuildSqlAsync(DataApiCacheItem cacheItem, IDictionary<string, object> parameters) {
             // check parameters;
             if (cacheItem == null) {
                 throw new ArgumentNullException(nameof(cacheItem));
@@ -78,7 +78,7 @@ namespace Beginor.GisHub.DataServices.Data {
                 cacheItem.Statement,
                 parameters
             );
-            return sql;
+            return Task.FromResult(sql);
         }
 
         public async Task<DataServiceFieldModel[]> GetColumnsAsync(DataApiCacheItem cacheItem, IDictionary<string, object> parameters) {
