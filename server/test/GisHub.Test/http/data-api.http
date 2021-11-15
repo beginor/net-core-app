@@ -1,27 +1,27 @@
 ### 获取 API 生成的 SQL 语句
-GET {{host}}/gishub/api/data-apis/1635333566815030319/sql?$token={{token}}
+GET {{host}}/gishub/api/dataapis/1635333566815030319/sql?$token={{token}}
 Referer: {{referer}}
 
 ### 获取 API 生成的 SQL 语句
-GET {{host}}/gishub/api/data-apis/1635333566815030319/sql?$token={{token}}&id=4401
+GET {{host}}/gishub/api/dataapis/1635333566815030319/sql?$token={{token}}&id=4401
 Referer: {{referer}}
 
 ### 获取 API 生成的 SQL 语句
-GET {{host}}/gishub/api/data-apis/1635333566815030319/sql?$token={{token}}&id=4401&area=1023.4
+GET {{host}}/gishub/api/dataapis/1635333566815030319/sql?$token={{token}}&id=4401&area=1023.4
 Referer: {{referer}}
 
 ### 获取 API 的输出字段信息
-GET {{host}}/gishub/api/data-apis/1635333566815030319/columns?$token={{token}}
+GET {{host}}/gishub/api/dataapis/1635333566815030319/columns?$token={{token}}
 Referer: {{referer}}
 
 ### 获取 API 的输出字段信息
-GET {{host}}/gishub/api/data-apis/1635333566815030319/columns?$token={{token}}&id=410
+GET {{host}}/gishub/api/dataapis/1635333566815030319/columns?$token={{token}}&id=410
 Referer: {{referer}}
 
 ### 获取 API 的输出字段信息
-GET {{host}}/gishub/api/data-apis/1635333566815030319/columns?$token={{token}}&id=410&area=1000
+GET {{host}}/gishub/api/dataapis/1635333566815030319/columns?$token={{token}}&id=410&area=1000
 Referer: {{referer}}
 
 ### 调用 API
-GET {{host}}/gishub/api/data-apis/1635333566815030319/data?$token={{token}}&id=410&area=1000
+GET {{host}}/gishub/api/dataapis/1635333566815030319/data?$token={{token}}&id=410&area=1000
 Referer: {{referer}}

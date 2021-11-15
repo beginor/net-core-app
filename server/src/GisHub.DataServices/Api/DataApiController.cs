@@ -16,7 +16,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
     /// <summary>数据API 服务接口</summary>
     [ApiController]
-    [Route("api/data-apis")]
+    [Route("api/dataapis")]
     public partial class DataApiController : Controller {
 
         private ILogger<DataApiController> logger;

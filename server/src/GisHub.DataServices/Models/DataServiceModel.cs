@@ -12,8 +12,8 @@ namespace Beginor.GisHub.DataServices.Models {
         public string Name { get; set; }
         /// <summary>数据服务描述</summary>
         public string Description { get; set; }
-        /// <summary>数据库连接</summary>
-        [Required(ErrorMessage = "数据库连接 必须填写！")]
+        /// <summary>数据源</summary>
+        [Required(ErrorMessage = "数据源 必须填写！")]
         public StringIdNameEntity DataSource { get; set; }
         /// <summary>数据表/视图架构</summary>
         public string Schema { get; set; }

@@ -12,9 +12,9 @@ namespace Beginor.GisHub.DataServices.Models {
         public string Name { get; set; }
         /// <summary>数据API描述</summary>
         public string Description { get; set; }
-        /// <summary>数据源ID</summary>
-        [Required(ErrorMessage = "数据源ID 必须填写！")]
-        public string DataSourceId { get; set; }
+        /// <summary>数据源</summary>
+        [Required(ErrorMessage = "数据源 必须填写！")]
+        public StringIdNameEntity DataSource { get; set; }
         /// <summary>是否向数据源写入数据</summary>
         [Required(ErrorMessage = "是否向数据源写入数据 必须填写！")]
         public bool WriteData { get; set; }
