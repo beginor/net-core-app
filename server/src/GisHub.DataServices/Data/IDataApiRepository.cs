@@ -19,13 +19,13 @@ namespace Beginor.GisHub.DataServices.Data {
 
         Task UpdateAsync(long id, DataApiModel model, AppUser user, CancellationToken token = default);
 
-        Task<IList<Dictionary<string, object>>> InvokeApiAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
+        Task<IList<Dictionary<string, object>>> QueryAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
 
         Task<string> BuildSqlAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
 
         Task<DataServiceFieldModel[]> GetColumnsAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
 
-        Task<DataApiCacheItem> GetCacheItemByIdAsync(long apiId);
+        Task<DataApiCacheItem> GetDataApiCacheItemByIdAsync(long apiId);
 
     }
 

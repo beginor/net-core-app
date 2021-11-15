@@ -23,5 +23,5 @@ GET {{host}}/gishub/api/data-apis/1635333566815030319/columns?$token={{token}}&i
 Referer: {{referer}}
 
 ### 调用 API
-GET {{host}}/gishub/api/data-apis/1635333566815030319/invoke?$token={{token}}&id=410&area=1000
+GET {{host}}/gishub/api/data-apis/1635333566815030319/data?$token={{token}}&id=410&area=1000
 Referer: {{referer}}

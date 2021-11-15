@@ -16,53 +16,54 @@ namespace Beginor.GisHub.DataServices.Api {
 
     partial class DataApiController {
 
-        /// <summary>调用指定的数据API</summary>
-        [Route("{id:long}/invoke")]
-        [Authorize("data_apis.invoke")]
-        [Consumes("application/x-www-form-urlencoded")]
-        public async Task<ActionResult> InvokeApi(long id) {
-            try {
-                var cacheItem = await repository.GetCacheItemByIdAsync(id);
-                if (cacheItem == null) {
-                    return NotFound($"DataApi {id} does not exists.");
-                }
-                var parameters = GetParameters(Request, cacheItem.Parameters);
-                var result = await repository.InvokeApiAsync(cacheItem, parameters);
-                return Json(result, serializerOptionsFactory.JsonSerializerOptions);
-            }
-            catch (Exception ex) {
-                logger.LogError(ex, $"Can not invoke api {id} .");
-                return this.InternalServerError(ex);
-            }
+        /// <summary>调用指定的数据 API 查询数据</summary>
+        [HttpGet("{id:long}/data")]
+        [Authorize("data_apis.read_data")]
+        public Task<ActionResult> QueryByGet(long id) {
+            return QueryImpl(id);
         }
 
-        /// <summary>测试数据API动态生成的sql语句</summary>
-        [Route("{id:long}/sql")]
-        [Authorize("data_apis.read-sql")]
+        /// <summary>调用指定的数据 API 查询数据</summary>
+        [HttpPost("{id:long}/data")]
+        [Authorize("data_apis.read_data")]
         [Consumes("application/x-www-form-urlencoded")]
-        public async Task<ActionResult> BuildSql(long id) {
-            try {
-                var cacheItem = await repository.GetCacheItemByIdAsync(id);
-                if (cacheItem == null) {
-                    return NotFound($"DataApi {id} does not exists.");
-                }
-                var parameters = GetParameters(Request, cacheItem.Parameters);
-                var sql = await repository.BuildSqlAsync(cacheItem, parameters);
-                return Ok(sql);
-            }
-            catch (Exception ex) {
-                logger.LogError(ex, $"Can not build sql for api {id}");
-                return this.InternalServerError(ex);
-            }
+        public Task<ActionResult> QueryByPost(long id) {
+            return QueryImpl(id);
+        }
+
+        /// <summary>读取数据API动态生成的sql语句</summary>
+        [HttpGet("{id:long}/sql")]
+        [Authorize("data_apis.read_sql")]
+        public Task<ActionResult> BuildSqlByGet(long id) {
+            return BuildSqlImpl(id);
+        }
+
+        /// <summary>读取数据API动态生成的sql语句</summary>
+        [HttpPost("{id:long}/sql")]
+        [Authorize("data_apis.read_sql")]
+        [Consumes("application/x-www-form-urlencoded")]
+        public Task<ActionResult> BuildSqlByPost(long id) {
+            return BuildSqlImpl(id);
         }
 
         /// <summary>获取数据API的输出字段列表</summary>
-        [Route("{id:long}/columns")]
-        [Authorize("data_apis.read-columns")]
+        [HttpGet("{id:long}/columns")]
+        [Authorize("data_apis.read_columns")]
+        public Task<ActionResult<DataServiceFieldModel>> GetColumnsByGet(long id) {
+            return GetColumnsImpl(id);
+        }
+
+        /// <summary>获取数据API的输出字段列表</summary>
+        [HttpPost("{id:long}/columns")]
+        [Authorize("data_apis.read_columns")]
         [Consumes("application/x-www-form-urlencoded")]
-        public async Task<ActionResult<DataServiceFieldModel>> GetColumns(long id) {
+        public Task<ActionResult<DataServiceFieldModel>> GetColumnsByPost(long id) {
+            return GetColumnsImpl(id);
+        }
+
+        private async Task<ActionResult<DataServiceFieldModel>> GetColumnsImpl(long id) {
             try {
-                var cacheItem = await repository.GetCacheItemByIdAsync(id);
+                var cacheItem = await repository.GetDataApiCacheItemByIdAsync(id);
                 if (cacheItem == null) {
                     return NotFound($"DataApi {id} does not exists.");
                 }
@@ -72,6 +73,41 @@ namespace Beginor.GisHub.DataServices.Api {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get columns for api {id}");
+                return this.InternalServerError(ex);
+            }
+        }
+
+        private async Task<ActionResult> QueryImpl(long id) {
+            try {
+                var api = await repository.GetDataApiCacheItemByIdAsync(id);
+                if (api == null) {
+                    return NotFound($"DataApi {id} does not exists.");
+                }
+                if (api.WriteData) {
+                    return BadRequest($"DataApi {id} can not used for query!");
+                }
+                var parameters = GetParameters(Request, api.Parameters);
+                var result = await repository.QueryAsync(api, parameters);
+                return Json(result, serializerOptionsFactory.JsonSerializerOptions);
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not invoke api {id} .");
+                return this.InternalServerError(ex);
+            }
+        }
+
+        private async Task<ActionResult> BuildSqlImpl(long id) {
+            try {
+                var cacheItem = await repository.GetDataApiCacheItemByIdAsync(id);
+                if (cacheItem == null) {
+                    return NotFound($"DataApi {id} does not exists.");
+                }
+                var parameters = GetParameters(Request, cacheItem.Parameters);
+                var sql = await repository.BuildSqlAsync(cacheItem, parameters);
+                return Ok(sql);
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not build sql for api {id}");
                 return this.InternalServerError(ex);
             }
         }

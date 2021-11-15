@@ -11,7 +11,7 @@ namespace Beginor.GisHub.DataServices.Data {
 
     partial class DataApiRepository {
 
-        public async Task<IList<Dictionary<string, object>>> InvokeApiAsync(DataApiCacheItem cacheItem, IDictionary<string, object> parameters) {
+        public async Task<IList<Dictionary<string, object>>> QueryAsync(DataApiCacheItem cacheItem, IDictionary<string, object> parameters) {
             // check parameters;
             if (cacheItem == null) {
                 throw new ArgumentNullException(nameof(cacheItem));
@@ -29,6 +29,7 @@ namespace Beginor.GisHub.DataServices.Data {
             await using var conn = factory.CreateConnection();
             conn.ConnectionString = cacheItem.ConnectionString;
             var reader = await conn.ExecuteReaderAsync(sql, parameters);
+            var cmd = conn.CreateCommand();
             var result = new List<Dictionary<string, object>>();
             while (await reader.ReadAsync()) {
                 var dict = new Dictionary<string, object>();
@@ -45,7 +46,7 @@ namespace Beginor.GisHub.DataServices.Data {
             return result;
         }
 
-        public async Task<DataApiCacheItem> GetCacheItemByIdAsync(long apiId) {
+        public async Task<DataApiCacheItem> GetDataApiCacheItemByIdAsync(long apiId) {
             var key = apiId.ToString();
             var cacheItem = await cache.GetAsync<DataApiCacheItem>(key);
             if (cacheItem != null) {
