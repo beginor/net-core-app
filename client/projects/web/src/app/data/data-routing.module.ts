@@ -2,8 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashbordComponent } from './dashbord/dashbord.component';
 
-
-// tslint:disable:max-line-length
+/* eslint-disable max-len */
 const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'dashboard', component: DashbordComponent },
@@ -26,9 +25,13 @@ const routes: Routes = [
     {
         path: 'vectortiles',
         loadChildren: () => import('./vectortiles/vectortiles.module').then(m => m.VectortileModule)
+    },
+    {
+        path: 'dataapis',
+        loadChildren: () => import('./dataapis/dataapis.module').then(m => m.DataApiModule)
     }
 ];
-// tslint:enable:max-line-length
+/* eslint-enable max-len */
 @NgModule({
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
