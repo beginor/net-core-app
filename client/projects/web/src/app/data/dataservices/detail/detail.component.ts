@@ -10,12 +10,16 @@ import {
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
-import { DataServiceService, DataServiceModel, DataServiceFieldModel } from '../dataservices.service';
+import {
+    DataServiceService, DataServiceModel, DataServiceFieldModel
+} from '../dataservices.service';
 import { MetadataService, TableModel, ColumnModel } from '../metadata.service';
 import {
     DataSourceService, DataSourceModel
 } from '../../datasources/datasources.service';
-import { NgbTypeahead, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
+import {
+    NgbTypeahead, NgbTypeaheadSelectItemEvent
+} from '@ng-bootstrap/ng-bootstrap';
 import { UiService } from '../../../common';
 
 @Component({
@@ -80,7 +84,7 @@ export class DetailComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private conn: DataSourceService,
+        private dataSourceService: DataSourceService,
         private ui: UiService,
         public meta: MetadataService,
         public account: AccountService,
@@ -103,7 +107,7 @@ export class DetailComponent implements OnInit {
     }
 
     public async ngOnInit(): Promise<void> {
-        this.dataSources = await this.conn.getAll();
+        this.dataSources = await this.dataSourceService.getAll();
         await this.vm.getAllRoles();
         if (this.id !== '0') {
             const model = await this.vm.getById(this.id);
@@ -113,7 +117,7 @@ export class DetailComponent implements OnInit {
                 }
                 this.model = model;
                 this.dataSource = this.dataSources.find(
-                    cs => cs.id === model.dataSource?.id
+                    ds => ds.id === model.dataSource?.id
                 );
                 this.table = { name: model.tableName as string };
                 void this.loadSchemas()
@@ -132,7 +136,7 @@ export class DetailComponent implements OnInit {
         if (e.fromState === '' && e.toState === 'void') {
             await this.router.navigate(['../'], { relativeTo: this.route });
             if (this.reloadList) {
-                this.vm.search();
+                void this.vm.search();
             }
         }
     }
@@ -182,7 +186,7 @@ export class DetailComponent implements OnInit {
 
     public async onSelectSchema(e: NgbTypeaheadSelectItemEvent): Promise<void> {
         if (this.model.schema !== e.item as string) {
-            this.model.schema = e.item;
+            this.model.schema = e.item as string;
         }
         await this.loadTables();
     }

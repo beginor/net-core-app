@@ -39,7 +39,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet:build:Gmap",
-      "program": "${workspaceFolder}/server/test/GisHub.Gmap/bin/Debug/net5.0/Gmap.dll",
+      "program": "${workspaceFolder}/server/test/GisHub.Gmap/bin/Debug/net6.0/Gmap.dll",
       "args": [],
       "cwd": "${workspaceFolder}/server/test/GisHub.Gmap",
       "stopAtEntry": false,
