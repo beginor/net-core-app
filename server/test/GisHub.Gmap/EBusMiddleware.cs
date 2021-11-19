@@ -12,7 +12,7 @@ namespace Gmap {
 
         private readonly RequestDelegate next;
         private readonly ILogger<EBusMiddleware> logger;
-        private readonly YztService service;
+        protected readonly YztService service;
 
         public EBusMiddleware(
             RequestDelegate next,
@@ -24,7 +24,7 @@ namespace Gmap {
             this.service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
-        public async Task InvokeAsync(HttpContext context) {
+        public virtual async Task InvokeAsync(HttpContext context) {
             var req = context.Request;
             var res = context.Response;
             var reqPath = req.Path.ToString();
@@ -97,5 +97,4 @@ namespace Gmap {
         }
 
     }
-
 }

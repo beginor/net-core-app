@@ -21,6 +21,7 @@ namespace Gmap {
         public void ConfigureServices(IServiceCollection services) {
             services.Configure<EBusOptions>(config.GetSection("ebus"));
             services.AddSingleton<YztService>();
+            services.Configure<ApiProxyOptions>(config.GetSection("apiProxy"));
             var corsPolicy = config.GetSection("cors").Get<CorsPolicy>();
             services.AddCors(cors => {
                 cors.AddDefaultPolicy(corsPolicy);
@@ -34,6 +35,9 @@ namespace Gmap {
             app.UseCors();
             app.Map("/ebus", subApp => {
                 subApp.UseMiddleware<EBusMiddleware>();
+            });
+            app.Map("/proxy", subApp => {
+                subApp.UseMiddleware<ApiProxyMiddleware>();
             });
             app.UseRouting();
             app.UseEndpoints(endpoints => {

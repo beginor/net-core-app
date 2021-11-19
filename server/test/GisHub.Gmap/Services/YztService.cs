@@ -39,7 +39,11 @@ namespace Gmap.Services {
             return options.GatewayUrl + path;
         }
 
-        public HttpWebRequest CreateHttpRequest(string url,  string method) {
+        public string GetGatewayServiceUrl() {
+            return options.GatewayUrl;
+        }
+
+        public HttpWebRequest CreateHttpRequest(string url, string method) {
             var request = WebRequest.CreateHttp(url);
             request.Method = method;
             request.ServerCertificateValidationCallback = (s, cert, chain, sslErr) => true;
@@ -52,11 +56,24 @@ namespace Gmap.Services {
             return request;
         }
 
+        public HttpWebRequest CreateHttpRequest(string url, string method, string serviceId) {
+            var request = WebRequest.CreateHttp(url);
+            request.Method = method;
+            request.ServerCertificateValidationCallback = (s, cert, chain, sslErr) => true;
+            request.AutomaticDecompression = DecompressionMethods.All;
+            request.AllowAutoRedirect = false;
+            var headers = ComputeSignatureHeaders(serviceId);
+            foreach (var pair in headers) {
+                request.Headers.Add(pair.Key, pair.Value);
+            }
+            return request;
+        }
+
         public string ReplaceGatewayUrl(string content, string replacement) {
             return content.Replace(options.GatewayUrl, replacement, StringComparison.OrdinalIgnoreCase);
         }
 
-        public Dictionary<string, string> ComputeSignatureHeaders() {
+        public Dictionary<string, string> ComputeSignatureHeaders(string serviceId = "") {
             var headers = new Dictionary<string, string>();
             var now = DateTimeOffset.Now;
             var timestamp = now.ToUnixTimeSeconds().ToString();
@@ -66,6 +83,9 @@ namespace Gmap.Services {
             headers.Add("x-tif-timestamp", timestamp);
             headers.Add("x-tif-nonce", nonce);
             headers.Add("x-tif-signature", ToSha256(timestamp + options.PaasToken + nonce + timestamp));
+            if (!string.IsNullOrEmpty(serviceId) && options.Services.ContainsKey(serviceId)) {
+                headers.Add("x-tif-serviceId", serviceId);
+            }
             logger.LogInformation(System.Text.Json.JsonSerializer.Serialize(headers));
             return headers;
         }
