@@ -161,7 +161,7 @@ export interface DataApiModel {
     /** 数据API描述 */
     description?: string;
     /** 数据源 */
-    dataSource?: { id: string; name: string; };
+    dataSource?: { id?: string; name?: string; };
     /** 是否向数据源写入数据 */
     writeData?: boolean;
     /** 数据API调用的 XML + SQL 命令 */
@@ -173,11 +173,11 @@ export interface DataApiModel {
     /** 允许访问的角色 */
     roles?: string[];
     /** 创建者 */
-    creator?: { id: string; name: string; };
+    creator?: { id?: string; name?: string; };
     /** 创建时间 */
     createdAt?: string;
     /** 更新者 */
-    updater?: { id: string; name: string; };
+    updater?: { id?: string; name?: string; };
     /** 更新时间 */
     updatedAt?: string;
 }

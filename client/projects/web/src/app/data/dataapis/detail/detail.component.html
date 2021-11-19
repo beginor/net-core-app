@@ -16,20 +16,9 @@
   </div>
   <div class="card-body">
     <div class="mb-3">
-      <label class="form-label text-muted" for="id">数据API ID  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="id" name="id"
-        placeholder="请输入数据API ID ..." required
-        [disabled]="!editable"
-        [(ngModel)]="model.id"
-        #id="ngModel"
-        [class.is-invalid]="!(id.valid || id.pristine)"
-        [class.is-valid]="id.valid"
-      />
-    </div>
-    <div class="mb-3">
-      <label class="form-label text-muted" for="name">数据API名称  <i class="text-danger">*</i> </label>
+      <label class="form-label text-muted" for="name">接口名称 <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="name" name="name"
-        placeholder="请输入数据API名称 ..." required
+        placeholder="请输入接口名称 ..." required
         [disabled]="!editable"
         [(ngModel)]="model.name"
         #name="ngModel"
@@ -38,62 +27,84 @@
       />
     </div>
     <div class="mb-3">
-      <label class="form-label text-muted" for="description">数据API描述 </label>
+      <label class="form-label text-muted" for="description">接口描述 </label>
       <input class="form-control" type="text" id="description" name="description"
-        placeholder="请输入数据API描述 ..."
+        placeholder="请输入接口描述 ..."
         [(ngModel)]="model.description" [disabled]="!editable"
       />
     </div>
-    <div class="mb-3">
-      <label class="form-label text-muted" for="dataSourceId">数据源ID  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="dataSourceId" name="dataSourceId"
-        placeholder="请输入数据源ID ..." required
-        [disabled]="!editable"
-        [(ngModel)]="model.dataSource"
-        #dataSourceId="ngModel"
-        [class.is-invalid]="!(dataSourceId.valid || dataSourceId.pristine)"
-        [class.is-valid]="dataSourceId.valid"
-      />
-    </div>
-    <div class="mb-3">
-      <div class="form-check form-switch">
-        <input type="checkbox" class="form-check-input"
-          id="writeData" name="writeData"
-          [(ngModel)]="model.writeData" [disabled]="!editable">
-        <label class="form-check-label text-muted"
-          for="writeData">
-          是否向数据源写入数据
-        </label>
+    <div class="row">
+      <div class="col">
+        <div class="mb-3">
+          <label class="form-label text-muted" for="dataSource">数据源 <i class="text-danger">*</i> </label>
+          <select class="form-select" id="dataSource" name="dataSource" required
+            [disabled]="!editable"
+            [(ngModel)]="dataSource"
+            #ds="ngModel"
+            [class.is-invalid]="!(ds.valid || ds.pristine)"
+            [class.is-valid]="ds.valid"
+            (change)="onSelectDataSource()"
+            >
+            <option *ngFor="let s of dataSources" [ngValue]="s">
+              {{s.name}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col">
+        <div class="mb-3">
+          <label class="form-label text-muted" for="writeData">写入数据</label>
+          <div class="form-check form-switch mt-2">
+            <input type="checkbox" class="form-check-input"
+              id="writeData" name="writeData"
+              [(ngModel)]="model.writeData" [disabled]="!editable">
+            <label class="form-check-label" for="writeData">
+              此接口向数据源写入数据
+            </label>
+          </div>
+        </div>
       </div>
     </div>
     <div class="mb-3">
-      <label class="form-label text-muted" for="statement">数据API调用的 XML + SQL 命令  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="statement" name="statement"
-        placeholder="请输入数据API调用的 XML + SQL 命令 ..." required
+      <label class="form-label text-muted" for="statement">接口执行语句 <i class="text-danger">*</i> </label>
+      <textarea class="form-control" type="text" id="statement" name="statement"
+        placeholder="请输入接口要执行的语句 ..." required rows="10"
         [disabled]="!editable"
         [(ngModel)]="model.statement"
         #statement="ngModel"
         [class.is-invalid]="!(statement.valid || statement.pristine)"
         [class.is-valid]="statement.valid"
-      />
+      >
+      </textarea>
     </div>
     <div class="mb-3">
-      <label class="form-label text-muted" for="parameters">参数定义  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="parameters" name="parameters"
-        placeholder="请输入参数定义 ..." required
-        [disabled]="!editable"
-        [(ngModel)]="model.parameters"
-        #parameters="ngModel"
-        [class.is-invalid]="!(parameters.valid || parameters.pristine)"
-        [class.is-valid]="parameters.valid"
-      />
-    </div>
-    <div class="mb-3">
-      <label class="form-label text-muted" for="columns">API 输出列的源数据 </label>
-      <input class="form-control" type="text" id="columns" name="columns"
-        placeholder="请输入API 输出列的源数据 ..."
-        [(ngModel)]="model.columns" [disabled]="!editable"
-      />
+      <label class="form-label text-muted">接口参数 <i class="text-danger">*</i> </label>
+      <table class="table table-bordered table-sm">
+        <thead>
+          <tr>
+            <th scope="col" class="text-end text-muted">#</th>
+            <th scope="col" class="text-start text-muted">名称</th>
+            <th scope="col" class="text-start text-muted">类型</th>
+            <th scope="col" class="text-start text-muted">说明</th>
+            <th scope="col" class="text-center text-muted">是否必填</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of model.parameters,let i=index;">
+            <th scope="col" class="text-end text-muted">{{i}}</th>
+            <th scope="col" class="text-start text-muted">{{p.name}}</th>
+            <th scope="col" class="text-start text-muted">{{p.type}}</th>
+            <th scope="col" class="text-start text-muted">{{p.description}}</th>
+            <th scope="col" class="text-center text-muted">{{p.required}}</th>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td colspan="4">添加参数</td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
     <div class="mb-3">
       <label class="form-label text-muted" for="roles">允许访问的角色 </label>
@@ -103,47 +114,10 @@
       />
     </div>
     <div class="mb-3">
-      <label class="form-label text-muted" for="creatorId">创建者id  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="creatorId" name="creatorId"
-        placeholder="请输入创建者id ..." required
-        [disabled]="!editable"
-        [(ngModel)]="model.creator"
-        #creatorId="ngModel"
-        [class.is-invalid]="!(creatorId.valid || creatorId.pristine)"
-        [class.is-valid]="creatorId.valid"
-      />
-    </div>
-    <div class="mb-3">
-      <label class="form-label text-muted" for="createdAt">创建时间  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="createdAt" name="createdAt"
-        placeholder="请输入创建时间 ..." required
-        [disabled]="!editable"
-        [(ngModel)]="model.createdAt"
-        #createdAt="ngModel"
-        [class.is-invalid]="!(createdAt.valid || createdAt.pristine)"
-        [class.is-valid]="createdAt.valid"
-      />
-    </div>
-    <div class="mb-3">
-      <label class="form-label text-muted" for="updaterId">更新者id  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="updaterId" name="updaterId"
-        placeholder="请输入更新者id ..." required
-        [disabled]="!editable"
-        [(ngModel)]="model.updater"
-        #updaterId="ngModel"
-        [class.is-invalid]="!(updaterId.valid || updaterId.pristine)"
-        [class.is-valid]="updaterId.valid"
-      />
-    </div>
-    <div class="mb-3">
-      <label class="form-label text-muted" for="updatedAt">更新时间  <i class="text-danger">*</i> </label>
-      <input class="form-control" type="text" id="updatedAt" name="updatedAt"
-        placeholder="请输入更新时间 ..." required
-        [disabled]="!editable"
-        [(ngModel)]="model.updatedAt"
-        #updatedAt="ngModel"
-        [class.is-invalid]="!(updatedAt.valid || updatedAt.pristine)"
-        [class.is-valid]="updatedAt.valid"
+      <label class="form-label text-muted" for="columns">API 输出列的源数据 </label>
+      <input class="form-control" type="text" id="columns" name="columns"
+        placeholder="请输入API 输出列的源数据 ..."
+        [(ngModel)]="model.columns" [disabled]="!editable"
       />
     </div>
   </div>

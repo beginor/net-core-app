@@ -7,6 +7,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
 import { DataApiService, DataApiModel } from '../dataapis.service';
+import {
+    DataSourceService, DataSourceModel
+} from '../../datasources/datasources.service';
 
 @Component({
     selector: 'app-dataapi-detail',
@@ -25,6 +28,8 @@ export class DetailComponent implements OnInit {
     public title = '';
     public editable = false;
     public model: DataApiModel = { id: '' };
+    public dataSources: DataSourceModel[] = [];
+    public dataSource?: DataSourceModel;
 
     private id = '';
     private reloadList = false;
@@ -32,30 +37,38 @@ export class DetailComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private dataSourceService: DataSourceService,
         public account: AccountService,
         public vm: DataApiService
     ) {
         const { id, editable } = route.snapshot.params;
         if (id === '0') {
-            this.title = '新建数据API';
+            this.title = '新建数据接口';
             this.editable = true;
         }
         else if (editable === 'true') {
-            this.title = '编辑数据API';
+            this.title = '编辑数据接口';
             this.editable = true;
         }
         else {
-            this.title = '查看数据API';
+            this.title = '查看数据接口';
             this.editable = false;
         }
         this.id = id as string;
     }
 
     public async ngOnInit(): Promise<void> {
+        this.dataSources = await this.dataSourceService.getAll();
         if (this.id !== '0') {
             const model = await this.vm.getById(this.id);
             if (!!model) {
+                if (!model.roles) {
+                    model.roles = [];
+                }
                 this.model = model;
+                this.dataSource = this.dataSources.find(
+                    ds => ds.id === model.dataSource?.id
+                );
             }
         }
     }
@@ -82,6 +95,13 @@ export class DetailComponent implements OnInit {
         }
         this.reloadList = true;
         this.goBack();
+    }
+
+    public onSelectDataSource(): void {
+        this.model.dataSource = {
+            id: this.dataSource?.id,
+            name: this.dataSource?.name
+        };
     }
 
 }

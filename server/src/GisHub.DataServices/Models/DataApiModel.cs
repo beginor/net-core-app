@@ -24,7 +24,7 @@ namespace Beginor.GisHub.DataServices.Models {
         /// <summary>参数定义</summary>
         [Required(ErrorMessage = "参数定义 必须填写！")]
         public DataApiParameterModel[] Parameters { get; set; }
-        /// <summary>API 输出列的源数据</summary>
+        /// <summary>API 输出列的元数据</summary>
         public DataServiceFieldModel[] Columns { get; set; }
         /// <summary>允许访问的角色</summary>
         public string[] Roles { get; set; }

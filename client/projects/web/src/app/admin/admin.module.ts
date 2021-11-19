@@ -8,11 +8,11 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 @NgModule({
-  declarations: [DashboardComponent],
-  imports: [
-    CommonModule,
-    AppCommonModule,
-    AdminRoutingModule
-  ]
+    declarations: [DashboardComponent],
+    imports: [
+        CommonModule,
+        AppCommonModule,
+        AdminRoutingModule
+    ]
 })
 export class AdminModule { }
