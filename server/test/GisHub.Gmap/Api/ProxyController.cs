@@ -34,12 +34,18 @@ namespace Gmap.Api {
         }
 
         [HttpPost("{serviceId}")]
+        [EnableRequestBuffering]
+        [Consumes("application/xml", "text/xml")]
         public Task<ActionResult> InvokeByPost(string serviceId) {
+            if (Request.Body.CanSeek && Request.Body.Position != 0) {
+                Request.Body.Seek(0, SeekOrigin.Begin);
+            }
             return Invoke(serviceId);
         }
 
         private async Task<ActionResult> Invoke(string serviceId) {
-            if (!options.Services.ContainsKey(serviceId)) {
+            var svc = options.FindServiceById(serviceId);
+            if (svc == null) {
                 return BadRequest($"Unknown serviceId {serviceId}");
             }
             logger.LogInformation($"Request serviceId is: {serviceId}");
@@ -49,7 +55,7 @@ namespace Gmap.Api {
                 ProxyUtil.AddSignatureHeaders(proxyRequest.Headers, options.PaasId, options.PaasToken, serviceId, logger);
                 using var httpClient = CreateProxyClient(options.GatewayUrl);
                 // send request to proxy;
-                logger.LogInformation($"{proxyRequest.Method}:{proxyRequest.RequestUri}");
+                logger.LogInformation("{0}:{1}", proxyRequest.Method, proxyRequest.RequestUri);
                 var proxyResponse = await httpClient.SendAsync(proxyRequest);
                 CopyHeaderToResponse(proxyResponse.Headers, Response.Headers, "X-Application-Context", "task_id", "sender_id", "service_id");
                 // process response
@@ -58,7 +64,7 @@ namespace Gmap.Api {
                 var contentType = content.Headers.ContentType;
                 // replace proxy url;
                 string op = Request.Query["request"];
-                var mediaType = contentType.MediaType;
+                var mediaType = contentType?.MediaType;
                 if (ProxyUtil.NeedReplace(op, mediaType)) {
                     var replacement = Request.Scheme + "://" + Request.Host + Request.PathBase + Request.Path;
                     await ProxyUtil.ReplaceContent(await content.ReadAsStreamAsync(), contentStream, replacement);

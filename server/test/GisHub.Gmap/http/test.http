@@ -1,0 +1,20 @@
+### Json Request Body
+POST http://localhost:5800/api/proxy/YZT1597746948144/test
+Content-Type: application/json
+
+{ "message":  "hello, world!" }
+
+### form request body
+POST http://localhost:5800/api/proxy/YZT1597746948144/test
+Content-Type: application/x-www-form-urlencoded
+
+id=99&content=new-element
+
+### text xml body
+POST http://localhost:5800/api/proxy/YZT1597746948144?request=GetCapabilities
+Content-Type: application/xml
+
+<message>hello,world!</message>
+
+### get capabilities
+GET http://localhost:5800/api/proxy/YZT1597746948144?request=GetCapabilities
