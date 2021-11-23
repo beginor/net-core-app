@@ -1848,7 +1848,7 @@ GeoGlobe.loadScript = function(a) {
       b.onopen && b.onopen.apply(this, arguments);
       arguments.length > 4 ? this._object.open(a, f, j, q, r) : arguments.length > 3 ? this._object.open(a, f, j, q) : this._object.open(a, f, j);
       try {
-          this._object.responseType = "msxms-document"
+          this._object.responseType = "msxml-document"
       } catch (s) {}
       this.readyState = b.OPENED;
       c(this);

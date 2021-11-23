@@ -40,12 +40,13 @@ namespace Gmap {
             return svc;
         }
     }
-    
+
     public class ApiProxyService {
         public string Id { get; set; }
         public string Name { get; set; }
         public string PaasId { get; set; }
         public string PaasToken { get; set; }
         public string GatewayUrl { get; set; }
+        public string TileTemplate { get; set; }
     }
 }

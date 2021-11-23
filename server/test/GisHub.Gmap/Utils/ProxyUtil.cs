@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
@@ -9,19 +11,15 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 
 namespace Gmap.Utils {
 
     public static class ProxyUtil {
 
-        public static async Task<HttpRequestMessage> CreateProxyHttpRequestMessage(HttpRequest request, string proxyGateway) {
+        public static async Task<HttpRequestMessage> CreateHttpRequestMessage(HttpRequest request, Uri uri) {
             var method = new HttpMethod(request.Method);
-            var proxyUrl = proxyGateway;
-            if (request.QueryString.HasValue) {
-                proxyUrl += request.QueryString.ToString();
-            }
-            var proxyUri = new Uri(proxyUrl);
-            var requestMessage = new HttpRequestMessage(method, proxyUri);
+            var requestMessage = new HttpRequestMessage(method, uri);
             requestMessage.Headers.UserAgent.ParseAdd(request.Headers.UserAgent);
             requestMessage.Headers.Accept.ParseAdd(request.Headers.Accept);
             requestMessage.Headers.AcceptEncoding.ParseAdd(request.Headers.AcceptEncoding);
@@ -34,6 +32,16 @@ namespace Gmap.Utils {
                 requestMessage.Content = content;
             }
             return requestMessage;
+        }
+
+        public static HttpClient CreateHttpClient(string baseUrl) {
+            var handler = new HttpClientHandler() {
+                ServerCertificateCustomValidationCallback = (s, cert, chain, sslErr) => true,
+                AutomaticDecompression = DecompressionMethods.All,
+                AllowAutoRedirect = false,
+            };
+            var http = new HttpClient(handler);
+            return http;
         }
 
         public static Dictionary<string, string> ComputeSignatureHeaders(string paasId, string paasToken, string serviceId) {
@@ -80,6 +88,16 @@ namespace Gmap.Utils {
                 await writer.WriteLineAsync(line);
             }
             await writer.FlushAsync();
+        }
+
+        public static void CopyHeaderToResponse(HttpResponseHeaders proxyHeaders, IHeaderDictionary responseHeaders, ILogger logger, params string[] names) {
+            foreach (var name in names) {
+                if (proxyHeaders.TryGetValues(name, out var values)) {
+                    var headerValues = new StringValues(values.ToArray());
+                    logger.LogInformation($"{name}: headerValues");
+                    responseHeaders.Add(name, headerValues);
+                }
+            }
         }
 
         private static string ToSha256(string input) {
