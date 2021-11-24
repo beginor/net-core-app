@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
@@ -12,40 +13,31 @@ namespace Beginor.NetCoreApp.Entry {
     public class Program {
 
         public static void Main(string[] args) {
-            var host = CreateWebHostBuilder(args).Build();
-            host.Run();
-        }
-
-        private static IHostBuilder CreateWebHostBuilder(string[] args) {
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostContext, config) => {
-                    config.SetBasePath(Directory.GetCurrentDirectory());
-                    var env = hostContext.HostingEnvironment;
-                    config
-                        .AddJsonFile(Path.Combine("config", "appsettings.json"), true, true)
-                        .AddJsonFile(Path.Combine("config", $"appsettings.{env.EnvironmentName}.json"), true, true);
-                    config.AddEnvironmentVariables();
-                    if (args != null) {
-                        config.AddCommandLine(args);
-                    }
-                })
-                .ConfigureLogging(logging => {
-                    logging.ClearProviders();
-                    var path = Path.Combine("config", "log.config");
-                    logging.AddLog4net(path);
-                })
-                .ConfigureServices((context, services) => {
-                    var section = context.Configuration.GetSection("kestrel");
-                    if (section.Exists()) {
-                        services.Configure<KestrelServerOptions>(section);
-                    }
-                })
-                .ConfigureWebHostDefaults(webHost => {
-                    #if DEBUG
-                    webHost.UseWebRoot("../../../client/dist/");
-                    #endif
-                    webHost.UseStartup<Startup>();
-                });
+            var options = new WebApplicationOptions {
+                #if DEBUG
+                WebRootPath = "../../../client/dist/"
+                #endif
+            };
+            var builder = WebApplication.CreateBuilder(options);
+            var env = builder.Environment;
+            builder.Configuration
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(Path.Combine("config", "appsettings.json"), true, true)
+                .AddJsonFile(Path.Combine("config", $"appsettings.{env.EnvironmentName}.json"), true, true)
+                .AddEnvironmentVariables()
+                .AddCommandLine(args);
+            builder.Logging
+                .ClearProviders()
+                .AddLog4net(Path.Combine("config", "log.config"));
+            var section = builder.Configuration.GetSection("kestrel");
+            if (section.Exists()) {
+                builder.Services.Configure<KestrelServerOptions>(section);
+            }
+            var startup = new Startup(builder.Configuration, env);
+            startup.ConfigureServices(builder.Services);
+            var app = builder.Build();
+            startup.Configure(app);
+            app.Run();
         }
 
     }

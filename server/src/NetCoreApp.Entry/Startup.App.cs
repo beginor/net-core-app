@@ -9,10 +9,7 @@ namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 
-        private void ConfigureAppServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureAppServices(IServiceCollection services, IWebHostEnvironment env) {
             var commonOption = new Beginor.NetCoreApp.Common.CommonOption();
             var section = config.GetSection("common");
             section.Bind(commonOption);
@@ -30,12 +27,11 @@ namespace Beginor.NetCoreApp.Entry {
             );
         }
 
-        private static void ConfigureApp(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
+        private static void ConfigureApp(WebApplication app, IWebHostEnvironment env) {
             // do nothing now.
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+            System.AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            System.AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         }
     }
 

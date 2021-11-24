@@ -7,17 +7,11 @@ namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 
-        private void ConfigureMiddlewareServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureMiddlewareServices(IServiceCollection services, IWebHostEnvironment env) {
             // do nothing now.
         }
 
-        private void ConfigureMiddleware(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureMiddleware(WebApplication app, IWebHostEnvironment env) {
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseMiddleware<AuditLogMiddleware>();
         }

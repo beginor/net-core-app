@@ -7,10 +7,7 @@ namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 
-        private static void ConfigureAutoMapperServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private static void ConfigureAutoMapperServices(IServiceCollection services, IWebHostEnvironment env) {
             var mapperConfig = new MapperConfiguration(configure => {
                 configure.AddMaps(
                     typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly
@@ -20,10 +17,7 @@ namespace Beginor.NetCoreApp.Entry {
             services.AddSingleton(mapper);
         }
 
-        private static void ConfigureAutoMapper(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
+        private static void ConfigureAutoMapper(WebApplication app, IWebHostEnvironment env) {
             // do nothing now.
         }
     }

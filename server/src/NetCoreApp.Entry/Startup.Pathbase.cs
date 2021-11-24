@@ -7,17 +7,11 @@ namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 
-        private void ConfigurePathBaseServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigurePathBaseServices(IServiceCollection services, IWebHostEnvironment env) {
             // do nothing now.
         }
 
-        private void ConfigurePathBase(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigurePathBase(WebApplication app, IWebHostEnvironment env) {
             var pathbase = GetAppPathbase();
             if (string.IsNullOrEmpty(pathbase)) {
                 return;

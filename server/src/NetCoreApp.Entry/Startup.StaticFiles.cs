@@ -8,10 +8,7 @@ namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 
-        private void ConfigureStaticFilesServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureStaticFilesServices(IServiceCollection services, IWebHostEnvironment env) {
             services.ConfigureSpaFailback(config.GetSection("spaFailback"));
             services.ConfigureGzipStatic();
 #if DEBUG
@@ -19,10 +16,7 @@ namespace Beginor.NetCoreApp.Entry {
 #endif
         }
 
-        private void ConfigureStaticFiles(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureStaticFiles(WebApplication app, IWebHostEnvironment env) {
             app.UseDefaultFiles();
             app.UseGzipStatic();
             app.UseSpaFailback();

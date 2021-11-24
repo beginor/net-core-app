@@ -21,10 +21,7 @@ namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 
-        private void ConfigureAuthenticationServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureAuthenticationServices(IServiceCollection services, IWebHostEnvironment env) {
             var section = config.GetSection("jwt");
             services.Configure<JwtOption>(section);
             services.AddAuthentication(x => {
@@ -108,10 +105,7 @@ namespace Beginor.NetCoreApp.Entry {
             services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
         }
 
-        private void ConfigureAuthentication(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureAuthentication(WebApplication app, IWebHostEnvironment env) {
             app.UseAuthentication();
             app.UseAuthorization();
         }

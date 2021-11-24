@@ -11,10 +11,7 @@ namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 
-        private void ConfigureSwaggerServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureSwaggerServices(IServiceCollection services, IWebHostEnvironment env) {
             logger.Debug("Start add swagger related services...");
             services.AddSwaggerGen(opt => {
                 opt.SwaggerDoc("v1", new OpenApiInfo {
@@ -46,19 +43,14 @@ namespace Beginor.NetCoreApp.Entry {
                     SearchOption.AllDirectories
                 ).Select(f => f.FullName);
                 foreach (var xmlFile in xmlFiles) {
-                    logger.Debug(
-                        $"include xml comments {xmlFile} to swagger"
-                    );
-                    opt.IncludeXmlComments(xmlFile);
+                    logger.Debug($"include xml comments {xmlFile} to swagger");
+                    opt.IncludeXmlComments(xmlFile, true);
                 }
             });
             logger.Debug("Add swagger related service completed.");
         }
 
-        private void ConfigureSwagger(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureSwagger(WebApplication app, IWebHostEnvironment env) {
             app.UseSwagger().UseSwaggerUI(options => {
                 // options.RoutePrefix = pathbase;
                 options.UseRequestInterceptor("function (req) { if (req.url.endsWith('/api/account') && req.method === 'POST') { var param = JSON.parse(req.body); param.userName = btoa(param.userName); param.password = btoa(param.password); req.body = JSON.stringify(param); } return req; }");

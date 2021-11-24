@@ -6,19 +6,13 @@ namespace Beginor.NetCoreApp.Entry {
 
     partial class Startup {
 
-        private void ConfigureRoutingServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureRoutingServices(IServiceCollection services, IWebHostEnvironment env) {
             services.AddRouting(options => {
                 options.LowercaseUrls = true;
             });
         }
 
-        private void ConfigureRouting(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureRouting(WebApplication app, IWebHostEnvironment env) {
             app.UseRouting();
         }
 
