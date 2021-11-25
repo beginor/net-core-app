@@ -36,8 +36,7 @@ export class DetailComponent implements OnInit {
         public account: AccountService,
         public vm: DataSourceService
     ) {
-        const id = route.snapshot.params.id;
-        const editable = route.snapshot.params.editable;
+        const { id, editable } = route.snapshot.params;
         if (id === '0') {
             this.title = '新建数据源';
             this.editable = true;

@@ -37,8 +37,7 @@ export class DetailComponent implements OnInit {
         public account: AccountService,
         public vm: TileMapService
     ) {
-        const id = route.snapshot.params.id as string;
-        const editable = route.snapshot.params.editable as string;
+        const { id, editable } = route.snapshot.params;
         if (id === '0') {
             this.title = '新建栅格切片包';
             this.editable = true;
