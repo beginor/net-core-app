@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/runtime-deps:5.0
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0
 ENV ASPNETCORE_PATHBASE=/net-core-app \
     ASPNETCORE_URLS=http://+:5000 \
     TZ=Asia/Shanghai

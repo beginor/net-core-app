@@ -34,9 +34,9 @@ fi
 # Build client project;
 cd ../client
 rm -rf dist
-npm run build-shared
-npm run build-web
-npm run build-handset
+pnpm run build-shared
+pnpm run build-web
+pnpm run build-handset
 # Gzip static files (*.js, *.css).
 find dist -name "*.js" -print0 | xargs -0 gzip -k
 find dist -name "*.css" -print0 | xargs -0 gzip -k
