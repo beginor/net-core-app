@@ -10,10 +10,7 @@ namespace Beginor.GisHub.Entry {
 
     partial class Startup {
 
-        private void ConfigureAppServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureAppServices(IServiceCollection services, IWebHostEnvironment env) {
             var commonOption = new Beginor.GisHub.Common.CommonOption();
             var section = config.GetSection("common");
             section.Bind(commonOption);
@@ -53,11 +50,10 @@ namespace Beginor.GisHub.Entry {
             services.AddSingleton<Beginor.GisHub.DynamicSql.ParameterConverterFactory>();
         }
 
-        private void ConfigureApp(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureApp(WebApplication app, IWebHostEnvironment env) {
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+            System.AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            System.AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         }
     }
 
