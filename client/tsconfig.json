@@ -1,10 +1,18 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "app-shared": [
+        "dist/app-shared/app-shared",
+        "dist/app-shared"
+      ]
+    },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
@@ -16,15 +24,9 @@
     "target": "es2017",
     "module": "es2020",
     "lib": [
-      "es2018",
+      "es2020",
       "dom"
-    ],
-    "paths": {
-      "app-shared": [
-        "dist/app-shared/app-shared",
-        "dist/app-shared"
-      ]
-    }
+    ]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

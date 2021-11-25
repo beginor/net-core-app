@@ -33,9 +33,9 @@ export class RolesComponent implements OnInit {
         public account: AccountService,
         public vm: UsersService
     ) {
-        this.userId = route.snapshot.params.id;
-        const fullname = route.snapshot.params.fullname || '用户';
-        this.title = `设置 ${fullname} 的角色`;
+        const { userId, fullname } = route.snapshot.params;
+        this.userId = userId;
+        this.title = `设置 ${fullname || '用户'} 的角色`;
         this.editable = true;
     }
 

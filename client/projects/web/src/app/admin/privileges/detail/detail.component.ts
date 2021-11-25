@@ -34,8 +34,7 @@ export class DetailComponent implements OnInit {
         public account: AccountService,
         public vm: AppPrivilegeService
     ) {
-        const id = route.snapshot.params.id;
-        const editable = route.snapshot.params.editable;
+        const { id, editable } = route.snapshot.params;
         if (id === '0') {
             this.title = '新建系统权限';
             this.editable = true;

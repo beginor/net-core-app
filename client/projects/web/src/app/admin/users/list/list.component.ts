@@ -18,7 +18,7 @@ export class ListComponent implements OnInit {
         public account: AccountService,
         public vm: UsersService
     ) {
-        const roleName = route.snapshot.params.roleName;
+        const { roleName } = route.snapshot.params;
         if (!!roleName) {
             vm.searchModel.roleName = roleName;
         }
