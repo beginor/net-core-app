@@ -30,9 +30,12 @@ export class LoginComponent {
             this.loading = true;
             await this.accountSvc.login(this.model);
             await this.accountSvc.getInfo();
-            const returnUrl = this.route.snapshot.params.returnUrl || 'home';
-            this.router.navigate(
-                ['/' + returnUrl],
+            let returnUrl = this.route.snapshot.params['returnUrl'] as string;
+            if (!returnUrl) {
+                returnUrl = 'home';
+            }
+            void this.router.navigate(
+                [`/${returnUrl}`],
                 { replaceUrl: true }
             );
         }
