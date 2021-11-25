@@ -24,7 +24,7 @@ namespace Gmap {
             }
         }
 
-        public ApiProxyService? FindServiceById(string serviceId) {
+        public ApiProxyService FindServiceById(string serviceId) {
             var svc = Services.FirstOrDefault(s => serviceId.Equals(s.Id, StringComparison.OrdinalIgnoreCase));
             if (svc != null) {
                 if (string.IsNullOrEmpty(svc.PaasId)) {

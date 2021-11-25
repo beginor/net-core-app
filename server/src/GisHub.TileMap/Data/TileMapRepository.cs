@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
@@ -204,7 +205,7 @@ namespace Beginor.GisHub.TileMap.Data {
                         writer,
                         extent,
                         new JsonSerializerOptions(JsonSerializerDefaults.Web) {
-                            IgnoreNullValues = true
+                            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
                         }
                     );
                 }

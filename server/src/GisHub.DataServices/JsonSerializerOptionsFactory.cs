@@ -15,16 +15,16 @@ namespace Beginor.GisHub.DataServices {
             };
             JsonSerializerOptions = new(JsonSerializerDefaults.Web) {
                 DictionaryKeyPolicy = null,
-                IgnoreNullValues = true
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
             GeoJsonSerializerOptions = new(JsonSerializerDefaults.Web) {
                 DictionaryKeyPolicy = null,
-                IgnoreNullValues = true
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
             GeoJsonSerializerOptions.Converters.Add(new GeoJsonGeometryConverter(coordinateConverter));
             AgsJsonSerializerOptions = new(JsonSerializerDefaults.Web) {
                 DictionaryKeyPolicy = null,
-                IgnoreNullValues = true
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
             AgsJsonSerializerOptions.Converters.Add(new AgsGeometryConverter(coordinateConverter));
         }
