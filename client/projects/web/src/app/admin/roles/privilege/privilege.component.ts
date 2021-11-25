@@ -30,8 +30,7 @@ export class PrivilegeComponent implements OnInit {
         private route: ActivatedRoute,
         public vm: RolesService
     ) {
-        const id = route.snapshot.params.id;
-        const desc = route.snapshot.params.desc;
+        const { id, desc } = route.snapshot.params;
         this.id = id;
         this.title = `${desc}权限列表`;
     }

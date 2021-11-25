@@ -56,9 +56,7 @@ namespace Beginor.GisHub.Api.Middlewares {
 
     public static class RefererFilteringExtensions {
 
-        public static IApplicationBuilder UseRefererFiltering(
-            this IApplicationBuilder app
-        ) {
+        public static IApplicationBuilder UseRefererFiltering(this WebApplication app) {
             return app.UseMiddleware<RefererFilteringMiddleware>();
         }
 

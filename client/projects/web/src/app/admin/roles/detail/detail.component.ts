@@ -33,8 +33,7 @@ export class DetailComponent implements OnInit {
         private route: ActivatedRoute,
         public vm: RolesService
     ) {
-        const id = route.snapshot.params.id;
-        const editable = route.snapshot.params.editable;
+        const { id, editable } = route.snapshot.params;
         if (id === '0') {
             this.title = '新建角色';
             this.editable = true;

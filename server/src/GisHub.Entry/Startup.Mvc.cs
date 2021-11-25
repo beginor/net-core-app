@@ -8,10 +8,7 @@ namespace Beginor.GisHub.Entry {
 
     partial class Startup {
 
-        private void ConfigureMvcServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureMvcServices(IServiceCollection services, IWebHostEnvironment env) {
             services.AddControllers()
                 .ConfigureApplicationPartManager(manager => {
                     manager.ApplicationParts.Clear();
@@ -33,17 +30,11 @@ namespace Beginor.GisHub.Entry {
                     options.SuppressConsumesConstraintForFormFileParameters = false;
                     options.SuppressInferBindingSourcesForParameters = false;
                     options.SuppressModelStateInvalidFilter = false;
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Latest);
+                });
         }
 
-        private void ConfigureMvc(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
-            app.UseEndpoints(routes => {
-                routes.MapControllers();
-            });
+        private void ConfigureMvc(WebApplication app, IWebHostEnvironment env) {
+            app.MapControllers();
         }
     }
 

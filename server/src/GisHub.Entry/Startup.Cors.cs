@@ -10,10 +10,7 @@ namespace Beginor.GisHub.Entry {
 
     partial class Startup {
 
-        private void ConfigureCorsServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureCorsServices( IServiceCollection services, IWebHostEnvironment env) {
             var section = config.GetSection("cors");
             var corsPolicy = section.Get<CorsPolicy>();
             services.Configure<CorsPolicy>(section);
@@ -23,10 +20,7 @@ namespace Beginor.GisHub.Entry {
             });
         }
 
-        private void ConfigureCors(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureCors(WebApplication app, IWebHostEnvironment env) {
             app.UseCors();
             app.UseRefererFiltering();
         }

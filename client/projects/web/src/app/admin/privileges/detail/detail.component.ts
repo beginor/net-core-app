@@ -34,8 +34,7 @@ export class DetailComponent implements OnInit {
         public account: AccountService,
         public vm: AppPrivilegeService
     ) {
-        const id = route.snapshot.params.id;
-        const editable = route.snapshot.params.editable;
+        const { id, editable } = route.snapshot.params;
         if (id === '0') {
             this.title = '新建系统权限';
             this.editable = true;
@@ -48,7 +47,7 @@ export class DetailComponent implements OnInit {
             this.title = '查看系统权限';
             this.editable = false;
         }
-        this.id = id;
+        this.id = id as string;
     }
 
     public async ngOnInit(): Promise<void> {
@@ -64,7 +63,7 @@ export class DetailComponent implements OnInit {
         if (e.fromState === '' && e.toState === 'void') {
             await this.router.navigate(['../'], { relativeTo: this.route });
             if (this.reloadList) {
-                this.vm.search();
+                void this.vm.search();
             }
         }
     }

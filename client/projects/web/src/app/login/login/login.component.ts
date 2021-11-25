@@ -28,7 +28,7 @@ export class LoginComponent {
             this.loading = true;
             await this.acntSvc.login(this.model);
             await this.acntSvc.getInfo();
-            let returnUrl = this.route.snapshot.params.returnUrl as string;
+            let { returnUrl } = this.route.snapshot.params;
             if (!returnUrl) {
                 returnUrl = 'home';
             }

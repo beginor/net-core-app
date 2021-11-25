@@ -7,10 +7,7 @@ namespace Beginor.GisHub.Entry {
 
     partial class Startup {
 
-        private static void ConfigureAutoMapperServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private static void ConfigureAutoMapperServices(IServiceCollection services, IWebHostEnvironment env) {
             var mapperConfig = new MapperConfiguration(configure => {
                 configure.AddMaps(
                     typeof(Beginor.GisHub.Data.ModelMapping).Assembly,
@@ -23,10 +20,7 @@ namespace Beginor.GisHub.Entry {
             services.AddSingleton(mapper);
         }
 
-        private static void ConfigureAutoMapper(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
+        private static void ConfigureAutoMapper(WebApplication app, IWebHostEnvironment env) {
             // do nothing now.
         }
     }

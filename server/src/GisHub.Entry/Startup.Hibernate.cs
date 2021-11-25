@@ -13,16 +13,9 @@ namespace Beginor.GisHub.Entry {
 
     partial class Startup {
 
-        private void ConfigureHibernateServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureHibernateServices(IServiceCollection services, IWebHostEnvironment env) {
             var cfg = new Configuration();
-            var configFile = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "config",
-                "hibernate.config"
-            );
+            var configFile = Path.Combine("config", "hibernate.config");
             cfg.Configure(configFile);
             var isDevelopment = env.IsDevelopment().ToString();
             cfg.SetProperty(Environment.ShowSql, isDevelopment);
@@ -35,10 +28,7 @@ namespace Beginor.GisHub.Entry {
             services.AddHibernate(cfg);
         }
 
-        private void ConfigureHibernate(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureHibernate(WebApplication app, IWebHostEnvironment env) {
             // do nothing know
         }
 

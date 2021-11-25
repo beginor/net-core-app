@@ -50,15 +50,6 @@
             }
           },
           "defaultConfiguration": "production"
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/app-shared/**/*.ts",
-              "projects/app-shared/**/*.html"
-            ]
-          }
         }
       }
     },
@@ -172,15 +163,6 @@
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
             "browserTarget": "handset:build"
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/handset/**/*.ts",
-              "projects/handset/**/*.html"
-            ]
           }
         }
       }
@@ -300,15 +282,6 @@
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
             "browserTarget": "web:build"
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/web/**/*.ts",
-              "projects/web/**/*.html"
-            ]
           }
         }
       }

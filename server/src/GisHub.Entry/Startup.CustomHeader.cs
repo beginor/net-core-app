@@ -6,17 +6,11 @@ namespace Beginor.GisHub.Entry {
 
     partial class Startup {
 
-        private void ConfigureCustomHeaderServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureCustomHeaderServices(IServiceCollection services, IWebHostEnvironment env) {
             services.ConfigureCustomHeader(config.GetSection("customHeader"));
         }
 
-        private void ConfigureCustomHeader(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureCustomHeader(WebApplication app, IWebHostEnvironment env) {
             app.UseCustomHeader();
         }
     }

@@ -10,10 +10,7 @@ namespace Beginor.GisHub.Entry {
 
     partial class Startup {
 
-        private void ConfigureIdentityServices(
-            IServiceCollection services,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureIdentityServices(IServiceCollection services, IWebHostEnvironment env) {
             var identitySection = config.GetSection("identity");
             var identitySettings = identitySection.Get<IdentityOptions>();
             services
@@ -36,10 +33,7 @@ namespace Beginor.GisHub.Entry {
                 .AddHibernateStores();
         }
 
-        private void ConfigureIdentity(
-            IApplicationBuilder app,
-            IWebHostEnvironment env
-        ) {
+        private void ConfigureIdentity(WebApplication app, IWebHostEnvironment env) {
             // do nothing now
         }
 
