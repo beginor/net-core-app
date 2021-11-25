@@ -8,7 +8,7 @@ fi
 echo "Target runtime id is $1"
 rm -rf dist
 # Build server api image
-dotnet publish -r $1 -c Release \
+dotnet publish -r $1 --self-contained --configuration Release \
   -p:PublishSingleFile=true \
   -p:PublishTrimmed=false \
   -p:SelfContained=true \
