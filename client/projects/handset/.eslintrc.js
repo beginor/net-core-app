@@ -1,5 +1,5 @@
-{
-  "extends": "../.eslintrc.json",
+module.exports = {
+  "extends": "../.eslintrc.js",
   "ignorePatterns": [
     "!**/*"
   ],
@@ -10,8 +10,9 @@
       ],
       "parserOptions": {
         "project": [
-          "projects/handset/tsconfig.app.json"
+          "./tsconfig.app.json"
         ],
+        "tsconfigRootDir": __dirname,
         "createDefaultProgram": true
       },
       "rules": {

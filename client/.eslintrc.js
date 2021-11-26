@@ -1,4 +1,4 @@
-{
+module.exports = {
   "$schema": "https://json.schemastore.org/eslintrc",
   "root": true,
   "ignorePatterns": "projects/**/*",
@@ -6,7 +6,8 @@
     {
       "files":["*.ts"],
       "parserOptions": {
-        "project": ["tsconfig.json"],
+        "project": ["./tsconfig.json"],
+        "tsconfigRootDir": __dirname,
         "createDefaultProgram": true
       },
       "extends": [
