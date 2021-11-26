@@ -1,5 +1,5 @@
-{
-  "extends": "../.eslintrc.json",
+module.exports = {
+  "extends": "../.eslintrc.js",
   "ignorePatterns": [
     "!**/*"
   ],
@@ -10,8 +10,9 @@
       ],
       "parserOptions": {
         "project": [
-          "projects/handset/tsconfig.app.json"
+          "./tsconfig.lib.json"
         ],
+        "tsconfigRootDir": __dirname,
         "createDefaultProgram": true
       },
       "rules": {
@@ -19,7 +20,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "app",
+            "prefix": "lib",
             "style": "camelCase"
           }
         ],
@@ -27,7 +28,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "app",
+            "prefix": "lib",
             "style": "kebab-case"
           }
         ]

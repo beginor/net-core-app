@@ -1,5 +1,5 @@
-{
-  "extends": "../.eslintrc.json",
+module.exports = {
+  "extends": "../.eslintrc.js",
   "ignorePatterns": [
     "!**/*"
   ],
@@ -10,8 +10,9 @@
       ],
       "parserOptions": {
         "project": [
-          "projects/app-shared/tsconfig.lib.json"
+          "./tsconfig.app.json"
         ],
+        "tsconfigRootDir": __dirname,
         "createDefaultProgram": true
       },
       "rules": {
@@ -19,7 +20,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "lib",
+            "prefix": "app",
             "style": "camelCase"
           }
         ],
@@ -27,7 +28,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "lib",
+            "prefix": "app",
             "style": "kebab-case"
           }
         ]
