@@ -53,6 +53,7 @@ Thumbs.db
 obj
 bin
 *.user
+*.DotSettings
 
 # app_cache folder
 app_cache
