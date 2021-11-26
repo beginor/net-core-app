@@ -36,11 +36,12 @@ namespace Gmap.Utils {
 
         public static HttpClient CreateHttpClient(string baseUrl) {
             var handler = new HttpClientHandler() {
-                ServerCertificateCustomValidationCallback = (s, cert, chain, sslErr) => true,
+                ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
                 AutomaticDecompression = DecompressionMethods.All,
                 AllowAutoRedirect = false,
             };
             var http = new HttpClient(handler);
+            http.BaseAddress = new Uri(baseUrl);
             return http;
         }
 
@@ -79,7 +80,7 @@ namespace Gmap.Utils {
 
         private static Regex regex = new Regex("https://dc-gateway.gdgov.cn(.*?).(?=[\"?])");
 
-        public static async Task ReplaceContent(Stream orginal, Stream result, string replacement) {
+        public static async Task ReplaceInStream(Stream orginal, Stream result, string replacement) {
             using var reader = new StreamReader(orginal);
             var writer = new StreamWriter(result);
             string line;

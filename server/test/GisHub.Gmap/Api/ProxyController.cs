@@ -113,11 +113,8 @@ namespace Gmap.Api {
             }
             logger.LogInformation($"Request serviceId is: {serviceId}");
             try {
-                var proxyUrl = svc.GatewayUrl;
-                if (Request.QueryString.HasValue) {
-                    proxyUrl += Request.QueryString.ToString();
-                }
-                var proxyRequest = await ProxyUtil.CreateHttpRequestMessage(Request, new Uri(proxyUrl));
+                var serviceUrl = svc.GatewayUrl + Request.QueryString;
+                var proxyRequest = await ProxyUtil.CreateHttpRequestMessage(Request, new Uri(serviceUrl));
                 // add paas headers;
                 ProxyUtil.AddSignatureHeaders(proxyRequest.Headers, svc.PaasId, svc.PaasToken, serviceId, logger);
                 using var httpClient = ProxyUtil.CreateHttpClient(svc.GatewayUrl);
@@ -134,7 +131,7 @@ namespace Gmap.Api {
                 var mediaType = contentType?.MediaType;
                 if (ProxyUtil.NeedReplace(op, mediaType)) {
                     var replacement = Request.Scheme + "://" + Request.Host + Request.PathBase + Request.Path;
-                    await ProxyUtil.ReplaceContent(await content.ReadAsStreamAsync(), contentStream, replacement);
+                    await ProxyUtil.ReplaceInStream(await content.ReadAsStreamAsync(), contentStream, replacement);
                 }
                 else {
                     await content.CopyToAsync(contentStream);

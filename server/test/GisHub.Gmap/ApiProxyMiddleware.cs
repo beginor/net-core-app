@@ -57,34 +57,16 @@ namespace Gmap {
                     var svc = options.FindServiceById(serviceId);
                     if (svc == null) {
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        await response.WriteAsync("Unkonwn serviceId!");
+                        await response.WriteAsync("Unknown serviceId!");
                     }
                     else {
                         var reqMethod = request.Method;
-                        var queryString = request.QueryString;
-                        var servicePath = options.GatewayUrl;
-                        servicePath += queryString.Value;
-                        logger.LogInformation($"{reqMethod}: {servicePath}");
-                        var proxyRequest = new HttpRequestMessage();
-                        proxyRequest.Method = new HttpMethod(request.Method);
-                        proxyRequest.RequestUri = new Uri(servicePath);
+                        var serviceUrl = svc.GatewayUrl + request.QueryString;
+                        logger.LogInformation($"{reqMethod}: {serviceUrl}");
+                        var proxyRequest = await ProxyUtil.CreateHttpRequestMessage(request, new Uri(serviceUrl));
                         // add paas headers;
-                        var paasHeaders = ProxyUtil.ComputeSignatureHeaders(svc.PaasId, svc.PaasToken, svc.Id);
-                        foreach (var pair in paasHeaders) {
-                            proxyRequest.Headers.Add(pair.Key, pair.Value);
-                        }
-                        proxyRequest.Headers.UserAgent.ParseAdd(request.Headers.UserAgent);
-                        proxyRequest.Headers.Accept.ParseAdd(request.Headers.Accept);
-                        proxyRequest.Headers.AcceptEncoding.ParseAdd(request.Headers.AcceptEncoding);
-                        if (proxyRequest.Method == HttpMethod.Post) {
-                            var memoryStream = new MemoryStream();
-                            await request.BodyReader.CopyToAsync(memoryStream);
-                            memoryStream.Seek(0, SeekOrigin.Begin);
-                            var content = new StreamContent(memoryStream);
-                            content.Headers.ContentType = MediaTypeHeaderValue.Parse(request.Headers.ContentType);
-                            proxyRequest.Content = content;
-                        }
-                        //
+                        ProxyUtil.AddSignatureHeaders(proxyRequest.Headers, svc.PaasId, svc.PaasToken, serviceId, logger);
+                        // send proxy request
                         var proxyResponse = await http.SendAsync(proxyRequest);
                         response.StatusCode = (int)proxyResponse.StatusCode;
                         foreach (var header in proxyResponse.Headers) {
