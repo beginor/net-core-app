@@ -26,7 +26,7 @@
       border: 1px solid $gray-400;
       border-left: 0;
       border-radius: 0 3px 3px 0;
-      left: 220px;
+      left: var(--nav-sidebar-width);
     }
   }
 
@@ -42,7 +42,7 @@
     margin: 0;
 
     &.sidebar-collapsed {
-      left: 54px;
+      left: var(--nav-sidebar-collapsed-width);
     }
 
     .divider {
@@ -60,7 +60,7 @@
     color: $text-muted;
     white-space: nowrap;
     overflow: hidden;
-    height: 48px;
+    height: var(--nav-sidebar-item-height);
     margin-left: 0px;
     padding-left: 4px;
 
