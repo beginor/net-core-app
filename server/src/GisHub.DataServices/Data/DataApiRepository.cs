@@ -60,7 +60,20 @@ namespace Beginor.GisHub.DataServices.Data {
             var query = Session.Query<DataApi>();
             // todo: 添加自定义查询；
             var total = await query.LongCountAsync();
-            var data = await query.OrderByDescending(e => e.Id)
+            var data = await query.Select(x => new DataApi {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    DataSource = x.DataSource,
+                    WriteData = x.WriteData,
+                    Roles = x.Roles,
+                    Creator = x.Creator,
+                    CreatedAt = x.CreatedAt,
+                    Updater = x.Updater,
+                    UpdatedAt = x.UpdatedAt,
+                    IsDeleted = x.IsDeleted
+                })
+                .OrderByDescending(e => e.Id)
                 .Skip(model.Skip).Take(model.Take)
                 .ToListAsync();
             return new PaginatedResponseModel<DataApiModel> {

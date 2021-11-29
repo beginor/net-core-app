@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
+import { RolesService, AppRoleModel } from '../../admin/roles/roles.service';
 
 /** 数据API服务 */
 @Injectable({
@@ -18,15 +19,20 @@ export class DataApiService {
     public data = new BehaviorSubject<DataApiModel[]>([]);
     public loading = false;
     public showPagination = false;
+    public roles: AppRoleModel[] = [];
 
     private baseUrl = `${this.apiRoot}/dataapis`;
+    private rolesSvc: RolesService;
 
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService,
         private errorHandler: ErrorHandler
-    ) { }
+    ) {
+        this.rolesSvc = new RolesService(http, apiRoot, ui, errorHandler);
+        this.rolesSvc.data.subscribe(data => this.roles = data);
+    }
 
     /** 搜索数据API */
     public async search(): Promise<void> {
@@ -147,6 +153,20 @@ export class DataApiService {
                 { type: 'danger', message: '更新数据API出错！' }
             );
             return;
+        }
+    }
+
+    public async getAllRoles(): Promise<void> {
+        try {
+            this.rolesSvc.searchModel.skip = 0;
+            this.rolesSvc.searchModel.take = 999;
+            await this.rolesSvc.search();
+        }
+        catch (ex: any) {
+            this.errorHandler.handleError(ex);
+            this.ui.showAlert(
+                { type: 'danger', message: '获取角色列表出错！' }
+            );
         }
     }
 

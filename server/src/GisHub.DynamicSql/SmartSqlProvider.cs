@@ -7,7 +7,6 @@ using SmartSql;
 using SmartSql.Configuration;
 using SmartSql.Configuration.Tags;
 using SmartSql.DataSource;
-using SmartSql.Reflection;
 using SmartSql.Utils;
 
 namespace Beginor.GisHub.DynamicSql {

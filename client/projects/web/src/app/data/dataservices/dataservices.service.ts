@@ -22,7 +22,7 @@ export class DataServiceService {
     public roles: AppRoleModel[] = [];
 
     private baseUrl = `${this.apiRoot}/dataservices`;
-    private roleSvc: RolesService;
+    private rolesSvc: RolesService;
 
     constructor(
         private http: HttpClient,
@@ -30,8 +30,8 @@ export class DataServiceService {
         private ui: UiService,
         private errorHandler: ErrorHandler
     ) {
-        this.roleSvc = new RolesService(http, apiRoot, ui, errorHandler);
-        this.roleSvc.data.subscribe(data => { this.roles = data; });
+        this.rolesSvc = new RolesService(http, apiRoot, ui, errorHandler);
+        this.rolesSvc.data.subscribe(data => { this.roles = data; });
     }
 
     /** 搜索数据服务 */
@@ -305,9 +305,9 @@ export class DataServiceService {
 
     public async getAllRoles(): Promise<void> {
         try {
-            this.roleSvc.searchModel.skip = 0;
-            this.roleSvc.searchModel.take = 999;
-            await this.roleSvc.search();
+            this.rolesSvc.searchModel.skip = 0;
+            this.rolesSvc.searchModel.take = 999;
+            await this.rolesSvc.search();
         }
         catch (ex: any) {
             this.errorHandler.handleError(ex);

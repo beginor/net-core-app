@@ -9,11 +9,18 @@
         <IsNotEmpty Property="id" Prepend="and">
           id like @id || '%'
         </IsNotEmpty>
-        <IsNotEmpty Prepend="or" Property="area">
+        <IsNotEmpty Property="area" Prepend="or">
           area >= @area
+        </IsNotEmpty>
+        <IsEmpty Property="moniDate" Prepend="and">
+          moni_date = (select max(moni_date) from public.xxx where public.xxx.moni_date > now )
+        </IsEmpty>
+        <IsNotEmpty Property="moniDate" Prepend="and">
+          moni_date = @moniDate
         </IsNotEmpty>
       </Where>
     </Statement>
+
     <Statement Id="for">
       select fid, id, name, area
       from public.sr4326_cn_sar_dist

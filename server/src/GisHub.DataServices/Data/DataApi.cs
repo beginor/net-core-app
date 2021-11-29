@@ -1,4 +1,5 @@
 using System;
+using System.Xml;
 using NHibernate.Mapping.Attributes;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
@@ -30,8 +31,8 @@ namespace Beginor.GisHub.DataServices.Data {
         public virtual bool WriteData { get; set; }
 
         /// <summary>数据API调用的 XML + SQL 命令</summary>
-        [Property(Name = "Statement", Column = "statement", Type = "string", NotNull = true, Length = -1)]
-        public virtual string Statement { get; set; }
+        [Property(Name = "Statement", Column = "statement", Type = "xml", NotNull = true)]
+        public virtual XmlDocument Statement { get; set; }
 
         /// <summary>参数定义</summary>
         [Property(Name = "Parameters", Column = "parameters", TypeType = typeof(NHibernate.Extensions.NpgSql.JsonbType<DataApiParameter[]>), NotNull = false)]

@@ -12,7 +12,7 @@ namespace Beginor.GisHub.DataServices.Data {
                 DatabaseType = api.DataSource.DatabaseType,
                 ConnectionString = string.Empty,
                 WriteData = api.WriteData,
-                Statement = api.Statement,
+                Statement = api.Statement.OuterXml,
                 Parameters = api.Parameters,
                 Columns = api.Columns,
                 Roles = api.Roles
