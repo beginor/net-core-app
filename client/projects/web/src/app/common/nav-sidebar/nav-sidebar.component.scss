@@ -11,12 +11,12 @@
     flex: 1;
     display: block;
     // overflow-y: auto;
-    width: 220px;
+    width: var(--nav-sidebar-width);
   }
 
   .sidebar-toggler {
     cursor: pointer;
-    height: 48px;
+    height: var(--nav-sidebar-item-height);
     display: flex;
     align-items: center;
 
