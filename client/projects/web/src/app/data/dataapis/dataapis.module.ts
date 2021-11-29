@@ -11,11 +11,13 @@ import { AppCommonModule } from 'projects/web/src/app/common';
 import { DataApiRoutingModule } from './dataapis-routing.module';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
+import { StatementComponent } from './statement/statement.component';
 
 @NgModule({
     declarations: [
         ListComponent,
-        DetailComponent
+        DetailComponent,
+        StatementComponent
     ],
     imports: [
         CommonModule,
