@@ -42,4 +42,11 @@ export class ListComponent implements OnInit {
         });
     }
 
+    public showStatement(id: string): void {
+        void this.router.navigate(
+            ['./', id, 'statement'],
+            { relativeTo: this.route, skipLocationChange: true }
+        );
+    }
+
 }

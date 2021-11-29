@@ -53,6 +53,10 @@ import { environment } from '../environments/environment';
         {
             provide: ErrorHandler,
             useClass: HttpErrorHandler
+        },
+        {
+            provide: 'codeEditorUrl',
+            useFactory: () => environment.codeEditorUrl
         }
     ],
     bootstrap: [AppComponent]

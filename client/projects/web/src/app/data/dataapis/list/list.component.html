@@ -98,6 +98,12 @@
                       (click)="showDetail(item.id, true)">
                       <svg-icon path="bi/pencil-square"></svg-icon>
                     </button>
+                    <button class="btn btn-outline-secondary"
+                      *ngIf="info.privileges['data_apis.update']"
+                      ngbTooltip="编辑接口指令" placement="top" [openDelay]="300" container="body"
+                      (click)="showStatement(item.id)">
+                      <svg-icon path="bi/code-slash"></svg-icon>
+                    </button>
                     <button *ngIf="info.privileges['data_apis.delete']"
                         class="btn btn-outline-secondary" ngbTooltip="删除" placement="top" [openDelay]="300" container="body"
                       (click)="delete(item.id)">

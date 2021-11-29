@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
+import { StatementComponent } from "./statement/statement.component";
 
 const routes: Routes = [
     {
@@ -11,6 +12,10 @@ const routes: Routes = [
             {
                 path: ':id',
                 component: DetailComponent
+            },
+            {
+                path: ':id/statement',
+                component: StatementComponent
             }
         ]
     }
