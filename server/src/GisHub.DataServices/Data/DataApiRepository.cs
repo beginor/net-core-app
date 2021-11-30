@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using Microsoft.Extensions.Caching.Distributed;
 using AutoMapper;
 using Beginor.AppFx.Core;
@@ -122,6 +123,7 @@ namespace Beginor.GisHub.DataServices.Data {
         public async Task UpdateAsync(long id, DataApiModel model, AppUser user, CancellationToken token = default) {
             var entity = await Session.LoadAsync<DataApi>(id, token);
             Mapper.Map(model, entity);
+            entity.Statement.DocumentElement?.SetAttribute("Id", id.ToString());
             entity.Updater = user;
             entity.UpdatedAt = DateTime.Now;
             await Session.UpdateAsync(entity, token);

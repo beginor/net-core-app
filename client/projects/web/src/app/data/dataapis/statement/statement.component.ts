@@ -1,4 +1,7 @@
-import { Component, Inject, OnInit, ElementRef, ViewChild } from '@angular/core';
+import {
+    Component, Inject, OnInit, ElementRef, ViewChild, OnDestroy, NgZone
+} from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import {
     trigger, transition, useAnimation, AnimationEvent
 } from '@angular/animations';
@@ -7,7 +10,10 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
-import { DataApiService, DataApiModel } from '../dataapis.service';
+import { UiService } from '../../../common';
+import {
+    DataApiService, DataApiModel, DataApiParameterModel
+} from '../dataapis.service';
 
 @Component({
     selector: 'app-statement',
@@ -20,7 +26,7 @@ import { DataApiService, DataApiModel } from '../dataapis.service';
         ])
     ]
 })
-export class StatementComponent implements OnInit {
+export class StatementComponent implements OnInit, OnDestroy {
 
     public animation = '';
     public title = '';
@@ -32,19 +38,38 @@ export class StatementComponent implements OnInit {
     @ViewChild('#statementEditor', { static: false })
     public previewEditorRef!: ElementRef<HTMLIFrameElement>;
 
+    public newParam: DataApiParameterModel = { type: 'string' };
+    public paramTypes = [
+        'string', 'int', 'long', 'float', 'double', 'datetime', 'bool',
+        'string[]', 'int[]', 'long[]', 'float[]', 'double[]', 'datetime[]',
+        'bool[]'
+    ];
+
+    public updating = false;
+    public paramEditIndex = -1;
+    public showNewParamRow = false;
+
     private id: string;
+    private win: Window;
+    private receiveMessageHandler = this.onReceiveMessage.bind(this);
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
+        private zone: NgZone,
         public account: AccountService,
         public vm: DataApiService,
+        public ui: UiService,
         @Inject('codeEditorUrl') codeEditorUrl: string,
-        domSanitizer: DomSanitizer
+        domSanitizer: DomSanitizer,
+        @Inject(DOCUMENT) doc: Document
     ) {
         const { id } = route.snapshot.params;
-        this.id = id;
-        this.codeEditorUrl = domSanitizer.bypassSecurityTrustResourceUrl(codeEditorUrl);
+        this.id = id as string;
+        this.codeEditorUrl = domSanitizer.bypassSecurityTrustResourceUrl(
+            codeEditorUrl
+        );
+        this.win = doc.defaultView as Window;
     }
 
     public async ngOnInit(): Promise<void> {
@@ -53,6 +78,11 @@ export class StatementComponent implements OnInit {
             this.model = model;
             this.title = `编辑 ${model.name} 指令`;
         }
+        this.win.addEventListener('message', this.receiveMessageHandler);
+    }
+
+    public ngOnDestroy(): void {
+        this.win.removeEventListener('message', this.receiveMessageHandler);
     }
 
     public async onAnimationEvent(e: AnimationEvent): Promise<void> {
@@ -66,24 +96,65 @@ export class StatementComponent implements OnInit {
     }
 
     public async save(): Promise<void> {
-        //
+        this.updating = true;
+        this.getStatement();
     }
 
     public loadStatement(): void {
         if (!this.statementEditorRef) {
             return;
         }
-        const editorWindow = this.statementEditorRef.nativeElement.contentWindow;
-        if (!editorWindow) {
+        const editorWin = this.statementEditorRef.nativeElement.contentWindow;
+        if (!editorWin) {
             return;
         }
         if (!this.model.statement) {
             return;
         }
-        editorWindow.postMessage({
+        editorWin.postMessage({
             language: 'xml',
             value: this.model.statement
         }, '*');
+    }
+
+    public addParameter(): void {
+        if (!this.newParam.name) {
+            this.ui.showAlert({ type: 'danger', message: '请输入参数名称！' });
+            return;
+        }
+        if (!this.model.parameters) {
+            this.model.parameters = [];
+        }
+        this.model.parameters.push(this.newParam);
+        this.newParam = { type: 'string' };
+        this.showNewParamRow = false;
+    }
+
+    public removeParameter(idx: number): void {
+        this.model.parameters?.splice(idx, 1);
+    }
+
+    public async getColumns(): Promise<void> {
+        const columns = await this.vm.getColumns(this.id);
+        if (!!columns) {
+            var oldColumns = this.model.columns;
+            this.model.columns = columns;
+        }
+    }
+
+    private getStatement(): void {
+        const editorWin = this.statementEditorRef.nativeElement.contentWindow;
+        if (!editorWin) {
+            return;
+        }
+        editorWin.postMessage('getValue', '*');
+    }
+
+    private onReceiveMessage(e: MessageEvent<string>): void {
+        this.model.statement = e.data;
+        this.vm.update(this.id, this.model).finally(() => {
+            this.zone.run(() => this.updating = false);
+        });
     }
 
 }

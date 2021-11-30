@@ -170,6 +170,24 @@ export class DataApiService {
         }
     }
 
+    public async getColumns(
+        id: string
+    ): Promise<DataApiColumnModel[] | undefined> {
+        try {
+            const result = await lastValueFrom(
+                this.http.get<DataApiColumnModel[]>(`${this.baseUrl}/${id}/columns`) // eslint-disable-line max-len
+            );
+            return result;
+        }
+        catch (ex: any) {
+            this.errorHandler.handleError(ex);
+            this.ui.showAlert(
+                { type: 'danger', message: '获取接口输出字段出错！' }
+            );
+            return;
+        }
+    }
+
 }
 
 /** 数据API */

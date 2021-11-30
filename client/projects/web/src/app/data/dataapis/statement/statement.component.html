@@ -5,12 +5,12 @@
     <div class="btn-group btn-group-sm">
       <button *ngIf="info.privileges['data_apis.update']"
         type="button" class="btn btn-sm btn-outline-primary"
-        (click)="save()" [disabled]="!detailForm.valid">
+        (click)="save()" [disabled]="updating">
         <svg-icon path="bi/check"></svg-icon> 保存
       </button>
       <button type="button" class="btn btn-sm btn-outline-secondary"
         (click)="goBack()">
-        <svg-icon path="bi/x"></svg-icon> 取消
+        <svg-icon path="bi/x"></svg-icon> 关闭
       </button>
     </div>
   </div>
@@ -19,74 +19,151 @@
     </iframe>
     <div class="params-and-cols d-flex flex-column px-1">
       <div class="parameters">
-        <div class="d-flex justify-content-between align-content-center">
-          <div>参数列表</div>
-          <div class="btn-group btn-group-sm">
-            <button class="btn btn-outline-secondary" type="button">
-              <svg-icon path="bi/plus"></svg-icon>
-            </button>
-          </div>
-        </div>
+        <div class="fw-bold">参数列表</div>
         <table class="table table-sm table-striped">
           <thead class="text-muted">
             <tr>
-              <th class="text-end" scope="col">#</th>
-              <th class="text-start">名称</th>
-              <th class="text-start">类型</th>
-              <th class="text-start">说明</th>
-              <th class="text-center">操作</th>
+              <th class="text-end" scope="col" style="width: 20px;">#</th>
+              <th class="text-start" scope="col" style="width: 120px">名称</th>
+              <th class="text-start" scope="col" style="width: 120px">类型</th>
+              <th class="text-start" scope="col" style="width: auto;" >说明</th>
+              <th class="text-center" scope="col" style="width: 120px">操作</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let p of model.parameters; let i = index;">
               <th class="text-end" scope="row">{{i+1}}</th>
-              <td class="text-start">{{p.name}}</td>
-              <td class="text-start">{{p.type}}</td>
-              <td class="text-start">{{p.description}}</td>
+              <ng-container *ngIf="i === paramEditIndex; else paramViewTpl">
+                <td class="text-start">
+                  <input class="form-control form-control-sm"
+                    [name]="'p-name-' + i" type="text"
+                    [(ngModel)]="p.name" />
+                </td>
+                <td class="text-start">
+                  <select class="form-select form-select-sm"
+                    [name]="'p-type-' + i" type="text"
+                    [(ngModel)]="p.type">
+                    <option *ngFor="let pt of paramTypes" [value]="pt">{{pt}}</option>
+                  </select>
+                </td>
+                <td class="text-start">
+                  <input class="form-control form-control-sm"
+                    [name]="'p-desc-' + i" type="text"
+                    [(ngModel)]="p.description" />
+                </td>
+                <td class="text-center">
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary" type="button">
+                      <svg-icon path="bi/check"></svg-icon>
+                    </button>
+                    <button class="btn btn-outline-secondary" type="button"
+                      (click)="paramEditIndex=-1">
+                      <svg-icon path="bi/x"></svg-icon>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-template #paramViewTpl>
+                <td class="text-start">{{p.name}}</td>
+                <td class="text-start">{{p.type}}</td>
+                <td class="text-start">{{p.description}}</td>
+                <td class="text-center">
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-secondary" type="button"
+                      (click)="paramEditIndex = i">
+                      <svg-icon path="bi/pencil-square"></svg-icon>
+                    </button>
+                    <button class="btn btn-outline-secondary" type="button"
+                      (click)="removeParameter(i)">
+                      <svg-icon path="bi/trash"></svg-icon>
+                    </button>
+                  </div>
+                </td>
+              </ng-template>
+            </tr>
+            <tr *ngIf="showNewParamRow">
+              <td class="text-end text-warning" style="vertical-align: middle;">*</td>
+              <td class="text-start">
+                <input class="form-control form-control-sm"
+                  name="newParamName" type="text"
+                  placeholder="请输入参数名称"
+                  [(ngModel)]="newParam.name" />
+              </td>
+              <td class="text-start">
+                <select class="form-select form-select-sm"
+                  name="newParamType" type="text"
+                  [(ngModel)]="newParam.type">
+                  <option *ngFor="let pt of paramTypes" [value]="pt">{{pt}}</option>
+                </select>
+              </td>
+              <td class="text-start">
+                <input class="form-control form-control-sm"
+                  name="newParamDesc" type="text"
+                  placeholder="请输入参数描述"
+                  [(ngModel)]="newParam.description" />
+              </td>
               <td class="text-center">
                 <div class="btn-group btn-group-sm">
-                  <button class="btn btn-outline-secondary" type="button">
-                    <svg-icon path="bi/pencil-square"></svg-icon>
+                  <button class="btn btn-outline-primary" type="button"
+                    (click)="addParameter();" [disabled]="!newParam.name">
+                    <svg-icon path="bi/check"></svg-icon>
                   </button>
-                  <button class="btn btn-outline-secondary" type="button">
-                    <svg-icon path="bi/trash"></svg-icon>
+                  <button class="btn btn-outline-secondary" type="button"
+                    (click)="showNewParamRow=false">
+                    <svg-icon path="bi/x"></svg-icon>
                   </button>
                 </div>
               </td>
             </tr>
+          </tbody>
+          <tfoot *ngIf="!showNewParamRow">
             <tr>
-              <td class="text-end"></td>
+              <td colspan="5">
+                <div class="d-flex justify-content-between">
+                  <button class="btn btn-sm btn-outline-primary" type="button"
+                    (click)="showNewParamRow = true">
+                    <svg-icon path="bi/plus"></svg-icon> 添加参数
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary" type="button"
+                    (click)="getColumns()">
+                    <svg-icon path="bi/list-columns"></svg-icon> 获取输出字段
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="columns">
+        <div class="fw-bold">输出字段列表</div>
+        <table class="table table-sm table-striped">
+          <tbody>
+            <tr *ngFor="let col of model.columns; let i = index;">
+              <td class="text-end">{{i+1}}</td>
               <td class="text-start">
-                <input class="form-control form-control-sm" />
+                {{col.name}}
               </td>
               <td class="text-start">
-                <input class="form-control form-control-sm" />
+                {{col.type}}
               </td>
               <td class="text-start">
-                <input class="form-control form-control-sm" />
-              </td>
-              <td class="text-center">
-                <button class="btn btn-sm btn-outline-primary" type="button">
-                  <svg-icon path="bi/check"></svg-icon>
-                </button>
+                {{col.description}}
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <textarea id="columns" name="columns">{{model.columns | json}}</textarea>
     </div>
-    <iframe class="preview-result" #previewEditor [src]="codeEditorUrl"></iframe>
   </div>
   <div *ngIf="info.privileges['data_apis.update']"
     class="card-footer d-flex justify-content-between">
     <button type="button" class="btn btn-sm btn-outline-primary"
-      (click)="save()" [disabled]="!detailForm.valid">
+      (click)="save()" [disabled]="updating">
       <svg-icon path="bi/check"></svg-icon> 保存
     </button>
     <button type="button" class="btn btn-sm btn-outline-secondary"
       (click)="goBack()">
-      <svg-icon path="bi/x"></svg-icon> 取消
+      <svg-icon path="bi/x"></svg-icon> 关闭
     </button>
   </div>
 </form>

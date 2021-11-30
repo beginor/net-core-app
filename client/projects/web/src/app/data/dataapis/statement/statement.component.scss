@@ -15,13 +15,11 @@
       overflow-y: auto;
 
       .statement-editor {
-        flex: 30;
+        flex: 1;
       }
       .params-and-cols {
-        flex:30
-      }
-      .preview-result {
-        flex: 40;
+        flex: 1;
+        overflow-y: auto;
       }
     }
   }
