@@ -140,7 +140,10 @@ export class StatementComponent implements OnInit, OnDestroy {
         this.updatingColumns = true;
         const columns = await this.vm.getColumns(this.id);
         if (!!columns) {
-            var oldColumns = this.model.columns;
+            var oc = this.model.columns;
+            columns.forEach(col => {
+                col.description = oc?.find(c => c.name == col.name)?.description
+            });
             this.model.columns = columns;
         }
         this.updatingColumns = false;
