@@ -41,6 +41,11 @@ namespace Beginor.GisHub.Entry {
                 t => t.Name.EndsWith("Repository"),
                 ServiceLifetime.Scoped
             );
+            services.AddServiceWithDefaultImplements(
+                typeof(Beginor.GisHub.DynamicSql.ModelMapping).Assembly,
+                t => t.Name.EndsWith("Repository"),
+                ServiceLifetime.Scoped
+            );
             services.AddSingleton<Beginor.GisHub.DataServices.IDataServiceFactory, Beginor.GisHub.DataServices.DataServiceFactory>();
             services.AddSingleton<Beginor.GisHub.DataServices.JsonSerializerOptionsFactory>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider>();

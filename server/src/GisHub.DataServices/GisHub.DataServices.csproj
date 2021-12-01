@@ -16,7 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\GisHub.Data\GisHub.Data.csproj" />
     <ProjectReference Include="..\GisHub.Geo\GisHub.Geo.csproj" />
-    <ProjectReference Include="..\GisHub.DynamicSql\GisHub.DynamicSql.csproj" />
   </ItemGroup>
 
 </Project>

@@ -25,6 +25,7 @@ namespace Beginor.GisHub.Entry {
             cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Slpk.ModelMapping).Assembly);
             cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.TileMap.ModelMapping).Assembly);
             cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.DataServices.ModelMapping).Assembly);
+            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.DynamicSql.ModelMapping).Assembly);
             services.AddHibernate(cfg);
         }
 

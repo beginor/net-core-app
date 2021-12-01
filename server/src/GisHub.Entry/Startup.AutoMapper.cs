@@ -13,7 +13,8 @@ namespace Beginor.GisHub.Entry {
                     typeof(Beginor.GisHub.Data.ModelMapping).Assembly,
                     typeof(Beginor.GisHub.Slpk.ModelMapping).Assembly,
                     typeof(Beginor.GisHub.TileMap.ModelMapping).Assembly,
-                    typeof(Beginor.GisHub.DataServices.ModelMapping).Assembly
+                    typeof(Beginor.GisHub.DataServices.ModelMapping).Assembly,
+                    typeof(Beginor.GisHub.DynamicSql.ModelMapping).Assembly
                 );
             });
             var mapper = mapperConfig.CreateMapper();
