@@ -93,6 +93,7 @@ namespace Beginor.GisHub.DataServices.Data {
                 await Session.SaveAsync(entity, token);
                 await Session.FlushAsync(token);
                 Session.Clear();
+                await cache.RemoveAsync(id.ToString());
             }
         }
 
@@ -105,6 +106,7 @@ namespace Beginor.GisHub.DataServices.Data {
                 await Session.SaveAsync(entity, token);
                 await Session.FlushAsync(token);
                 Session.Clear();
+                await cache.RemoveAsync(id.ToString());
             }
         }
 
@@ -129,6 +131,7 @@ namespace Beginor.GisHub.DataServices.Data {
             await Session.UpdateAsync(entity, token);
             await Session.FlushAsync(token);
             Session.Clear();
+            await cache.RemoveAsync(id.ToString());
         }
 
     }
