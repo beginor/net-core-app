@@ -51,6 +51,9 @@ namespace Beginor.GisHub.Entry {
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGisDataServiceReader>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISFeatureProvider>();
+            services.AddScoped<Beginor.GisHub.DataServices.MySql.MySqlMetaDataProvider>();
+            services.AddScoped<Beginor.GisHub.DataServices.MySql.MySqlDataServiceReader>();
+            services.AddScoped<Beginor.GisHub.DataServices.MySql.MySqlFeatureProvider>();
             services.AddSingleton<Beginor.GisHub.DynamicSql.IDynamicSqlProvider, Beginor.GisHub.DynamicSql.SmartSqlProvider>();
             services.AddSingleton<Beginor.GisHub.DynamicSql.ParameterConverterFactory>();
         }

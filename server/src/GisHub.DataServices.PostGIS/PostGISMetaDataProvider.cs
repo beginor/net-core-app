@@ -28,7 +28,8 @@ namespace Beginor.GisHub.DataServices.PostGIS {
                 Database = model.DatabaseName,
                 Username = model.Username,
                 Password = model.Password,
-                CommandTimeout = model.Timeout
+                CommandTimeout = model.Timeout,
+                Timeout = model.Timeout
             };
             return builder.ConnectionString;
         }

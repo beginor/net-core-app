@@ -13,20 +13,14 @@ namespace Beginor.GisHub.DataServices.PostGIS {
 
     public class PostGisDataServiceReader : DataServiceReader {
 
-        // private ILogger<PostGISDataSourceReader> logger;
-
         public PostGisDataServiceReader(
             IDataServiceFactory factory,
             IDataServiceRepository dataServiceRepo,
             IDataSourceRepository dataSourceRepo,
             ILogger<PostGisDataServiceReader> logger
-        ) : base(factory, dataServiceRepo, dataSourceRepo, logger) {
-            // this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
+        ) : base(factory, dataServiceRepo, dataSourceRepo, logger) { }
 
-        protected override void Dispose(
-            bool disposing
-        ) {
+        protected override void Dispose(bool disposing) {
             if (disposing) {
                 // logger = null;
             }
