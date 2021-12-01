@@ -49,7 +49,7 @@ namespace Beginor.GisHub.Entry {
             services.AddSingleton<Beginor.GisHub.DataServices.IDataServiceFactory, Beginor.GisHub.DataServices.DataServiceFactory>();
             services.AddSingleton<Beginor.GisHub.DataServices.JsonSerializerOptionsFactory>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider>();
-            services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGisDataServiceReader>();
+            services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISDataServiceReader>();
             services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISFeatureProvider>();
             services.AddScoped<Beginor.GisHub.DataServices.MySql.MySqlMetaDataProvider>();
             services.AddScoped<Beginor.GisHub.DataServices.MySql.MySqlDataServiceReader>();

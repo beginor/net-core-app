@@ -11,13 +11,13 @@ using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices.PostGIS {
 
-    public class PostGisDataServiceReader : DataServiceReader {
+    public class PostGISDataServiceReader : DataServiceReader {
 
-        public PostGisDataServiceReader(
+        public PostGISDataServiceReader(
             IDataServiceFactory factory,
             IDataServiceRepository dataServiceRepo,
             IDataSourceRepository dataSourceRepo,
-            ILogger<PostGisDataServiceReader> logger
+            ILogger<PostGISDataServiceReader> logger
         ) : base(factory, dataServiceRepo, dataSourceRepo, logger) { }
 
         protected override void Dispose(bool disposing) {

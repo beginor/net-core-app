@@ -12,7 +12,7 @@ using Beginor.GisHub.DataServices.PostGIS;
 namespace Beginor.GisHub.Test.DataServices.PostGIS {
 
     [TestFixture]
-    public class PostGISDataSourceReaderTest : BaseTest<PostGisDataServiceReader> {
+    public class PostGISDataSourceReaderTest : BaseTest<PostGISDataServiceReader> {
 
         [Test]
         public void _01_CanResolveTarget() {
