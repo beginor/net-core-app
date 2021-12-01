@@ -68,10 +68,6 @@
           <label class="form-check-label text-muted" [htmlFor]="role.id">{{role.description}}</label>
         </div>
       </div>
-      <input class="form-control" type="text" id="roles" name="roles"
-        placeholder="请输入允许访问的角色 ..."
-        [(ngModel)]="model.roles" [disabled]="!editable"
-      />
     </div>
   </div>
   <div *ngIf="info.privileges['data_apis.update'] && editable"
