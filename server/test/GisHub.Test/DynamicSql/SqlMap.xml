@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<SmartSqlMap xmlns="http://SmartSql.net/schemas/SmartSqlMap.xsd"
+<SmartSqlMap xmlns="http://SmartSql.net/schemas/SmartSqlMap.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://SmartSql.net/schemas/SmartSqlMap.xsd xsd/SmartSqlMap.xsd"
   Scope="DynamicSqlTest">
   <Statements>
     <Statement Id="is-not-empty">
@@ -26,10 +26,13 @@
       from public.sr4326_cn_sar_dist
       <Dynamic Prepend="where">
         <IsNotEmpty Prepend="and" Property="area">
-          area >= @area
+          <![CDATA[area >= @area]]>
         </IsNotEmpty>
         <For Prepend="and" Key="key" Open="(" Close=")" Property="names" Separator="or">
           name like Concat(@key,'%')
+        </For>
+        <For Property="idArr" Open="id in (" Separator="," Close=")" Key="idArr">
+          @idArr
         </For>
       </Dynamic>
     </Statement>

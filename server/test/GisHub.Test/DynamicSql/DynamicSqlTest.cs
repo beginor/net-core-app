@@ -60,7 +60,7 @@ namespace Beginor.GisHub.Test.DynamicSql {
         }
 
         [Test]
-        public void _03_CanUseFor() {
+        public void _03_CanUseFor_01() {
             string command = GetStatement("for");
             IsNotEmpty(command);
             var databaseType = "postgis";
@@ -71,6 +71,18 @@ namespace Beginor.GisHub.Test.DynamicSql {
             WriteLine(sql);
             parameters["area"] = 123.0;
             sql = Target.BuildDynamicSql(databaseType, command, parameters);
+            IsNotEmpty(sql);
+            WriteLine(sql);
+        }
+
+        [Test]
+        public void _04_CanUseFor() {
+            string command = GetStatement("for");
+            IsNotEmpty(command);
+            var databaseType = "postgis";
+            var parameters = new Dictionary<string, object>();
+            parameters["idArr"] = new[] { "440100", "4402", "4403", "4406" };
+            var sql = Target.BuildDynamicSql(databaseType, command, parameters);
             IsNotEmpty(sql);
             WriteLine(sql);
         }

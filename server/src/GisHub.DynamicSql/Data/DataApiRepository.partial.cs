@@ -29,7 +29,6 @@ namespace Beginor.GisHub.DynamicSql.Data {
             await using var conn = factory.CreateConnection();
             conn.ConnectionString = cacheItem.ConnectionString;
             var reader = await conn.ExecuteReaderAsync(sql, parameters);
-            var cmd = conn.CreateCommand();
             var result = new List<Dictionary<string, object>>();
             while (await reader.ReadAsync()) {
                 var dict = new Dictionary<string, object>();

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Beginor.AppFx.Api;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DynamicSql.Data;
+using Beginor.GisHub.DynamicSql.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -85,7 +86,8 @@ namespace Beginor.GisHub.DynamicSql.Api {
                     return BadRequest($"DataApi {id} can not used for query!");
                 }
                 var parameters = GetParameters(Request, api.Parameters);
-                var result = await repository.QueryAsync(api, parameters);
+                var data = await repository.QueryAsync(api, parameters);
+                var result = new DataApiResultModel { Data = data };
                 return Json(result, serializerOptionsFactory.JsonSerializerOptions);
             }
             catch (Exception ex) {

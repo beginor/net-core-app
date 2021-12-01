@@ -39,7 +39,7 @@ namespace Beginor.GisHub.DataServices {
         public IDataServiceReader CreateDataSourceReader(string databaseType) {
             string typeName;
             if (databaseType.Equals("postgis", StringComparison.OrdinalIgnoreCase)) {
-                typeName = "Beginor.GisHub.DataServices.PostGIS.PostGisDataServiceReader,Beginor.GisHub.DataServices.PostGIS";
+                typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISDataServiceReader,Beginor.GisHub.DataServices.PostGIS";
             }
             else {
                 throw new NotSupportedException($"Unsupported database type {databaseType}!");

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Models;
@@ -53,4 +54,8 @@ namespace Beginor.GisHub.DynamicSql.Models {
     /// <summary>数据API搜索参数</summary>
     public partial class DataApiSearchModel : PaginatedRequestModel { }
 
+    /// <summary>数据API结果</summary>
+    public partial class DataApiResultModel {
+        public IList<Dictionary<string, object>> Data { get; set; }
+    }
 }

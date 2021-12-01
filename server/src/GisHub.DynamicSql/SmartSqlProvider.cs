@@ -53,11 +53,7 @@ namespace Beginor.GisHub.DynamicSql {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public string BuildDynamicSql(
-            string databaseType,
-            string command,
-            IDictionary<string, object> parameters
-        ) {
+        public string BuildDynamicSql(string databaseType, string command, IDictionary<string, object> parameters) {
             if (string.IsNullOrEmpty(databaseType)) {
                 throw new ArgumentNullException(nameof(databaseType));
             }
@@ -75,8 +71,13 @@ namespace Beginor.GisHub.DynamicSql {
             if (statement == null) {
                 throw new ArgumentException($"Can not create statement from {command} ");
             }
-            var sql = BuildSql(statement, parameters);
-            return sql;
+            var context = BuildSqlRequestContext(statement, parameters);
+            foreach (var (key, value) in context.Parameters) {
+                if (!parameters.ContainsKey(key)) {
+                    parameters.Add(key, value.Value);
+                }
+            }
+            return context.SqlBuilder.ToString();
         }
 
         public DbProviderFactory GetDbProviderFactory(string databaseType) {
@@ -127,16 +128,13 @@ namespace Beginor.GisHub.DynamicSql {
             return tag;
         }
 
-        private string BuildSql(
-            Statement statement,
-            IDictionary<string, object> parameters
-        ) {
-            var requestContext = new RequestContext<Dictionary<string, object>>();
+        private static RequestContext<T> BuildSqlRequestContext<T>(Statement statement, T parameters) where T : class {
+            var requestContext = new RequestContext<T>();
             SetExecutionContext(requestContext, statement.SqlMap.SmartSqlConfig);
             requestContext.SetRequest(parameters);
             requestContext.SetupParameters();
             statement.BuildSql(requestContext);
-            return requestContext.SqlBuilder.ToString();
+            return requestContext;
         }
 
         private static void SetExecutionContext(
