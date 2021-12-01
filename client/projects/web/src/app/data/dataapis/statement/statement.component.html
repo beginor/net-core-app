@@ -23,63 +23,59 @@
         <table class="table table-sm table-striped">
           <thead class="text-muted">
             <tr>
-              <th class="text-end" scope="col" style="width: 20px;">#</th>
+              <th class="text-end" scope="col" style="width: 32px;">#</th>
               <th class="text-start" scope="col" style="width: 120px">名称</th>
               <th class="text-start" scope="col" style="width: 120px">类型</th>
               <th class="text-start" scope="col" style="width: auto;" >说明</th>
-              <th class="text-center" scope="col" style="width: 120px">操作</th>
+              <th class="text-center" scope="col" style="width: 80px">操作</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let p of model.parameters; let i = index;">
               <th class="text-end" scope="row">{{i+1}}</th>
-              <ng-container *ngIf="i === paramEditIndex; else paramViewTpl">
-                <td class="text-start">
-                  <input class="form-control form-control-sm"
-                    [name]="'p-name-' + i" type="text"
-                    [(ngModel)]="p.name" />
-                </td>
-                <td class="text-start">
-                  <select class="form-select form-select-sm"
-                    [name]="'p-type-' + i" type="text"
-                    [(ngModel)]="p.type">
-                    <option *ngFor="let pt of paramTypes" [value]="pt">{{pt}}</option>
-                  </select>
-                </td>
-                <td class="text-start">
-                  <input class="form-control form-control-sm"
-                    [name]="'p-desc-' + i" type="text"
-                    [(ngModel)]="p.description" />
-                </td>
-                <td class="text-center">
-                  <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-primary" type="button">
-                      <svg-icon path="bi/check"></svg-icon>
-                    </button>
-                    <button class="btn btn-outline-secondary" type="button"
-                      (click)="paramEditIndex=-1">
-                      <svg-icon path="bi/x"></svg-icon>
-                    </button>
-                  </div>
-                </td>
-              </ng-container>
-              <ng-template #paramViewTpl>
-                <td class="text-start">{{p.name}}</td>
-                <td class="text-start">{{p.type}}</td>
-                <td class="text-start">{{p.description}}</td>
-                <td class="text-center">
-                  <div class="btn-group btn-group-sm">
+              <td class="text-start">
+                <input class="form-control form-control-sm"
+                  *ngIf="paramEditIndex === i; else paramNameViewTpl"
+                  [name]="'p-name-' + i" type="text"
+                  [(ngModel)]="p.name" />
+                <ng-template #paramNameViewTpl>{{p.name}}</ng-template>
+              </td>
+              <td class="text-start">
+                <select class="form-select form-select-sm"
+                  *ngIf="paramEditIndex === i; else paramTypeViewTpl"
+                  [name]="'p-type-' + i" type="text"
+                  [(ngModel)]="p.type">
+                  <option *ngFor="let pt of paramTypes" [value]="pt">{{pt}}</option>
+                </select>
+                <ng-template #paramTypeViewTpl>{{p.type}}</ng-template>
+              </td>
+              <td class="text-start">
+                <input class="form-control form-control-sm"
+                  *ngIf="paramEditIndex === i; else paramDescViewTpl"
+                  [name]="'p-desc-' + i" type="text"
+                  [(ngModel)]="p.description" />
+                <ng-template #paramDescViewTpl>{{p.description}}</ng-template>
+              </td>
+              <td class="text-center">
+                <div class="btn-group btn-group-sm">
+                  <button class="btn btn-outline-primary" type="button"
+                    *ngIf="paramEditIndex === i; else paramEditBtnTpl"
+                    (click)="paramEditIndex=-1">
+                    <svg-icon path="bi/check"></svg-icon>
+                  </button>
+                  <ng-template #paramEditBtnTpl>
                     <button class="btn btn-outline-secondary" type="button"
                       (click)="paramEditIndex = i">
                       <svg-icon path="bi/pencil-square"></svg-icon>
                     </button>
-                    <button class="btn btn-outline-secondary" type="button"
-                      (click)="removeParameter(i)">
-                      <svg-icon path="bi/trash"></svg-icon>
-                    </button>
-                  </div>
-                </td>
-              </ng-template>
+                  </ng-template>
+                  <button class="btn btn-outline-secondary" type="button"
+                    [disabled]="paramEditIndex === i"
+                    (click)="removeParameter(i)">
+                    <svg-icon path="bi/trash"></svg-icon>
+                  </button>
+                </div>
+              </td>
             </tr>
             <tr *ngIf="showNewParamRow">
               <td class="text-end text-warning" style="vertical-align: middle;">*</td>
@@ -125,8 +121,8 @@
                     <svg-icon path="bi/plus"></svg-icon> 添加参数
                   </button>
                   <button class="btn btn-sm btn-outline-secondary" type="button"
-                    (click)="getColumns()">
-                    <svg-icon path="bi/list-columns"></svg-icon> 获取输出字段
+                    (click)="getColumns()" [disabled]="updatingColumns">
+                    <svg-icon path="bi/lightning"></svg-icon> 获取输出字段
                   </button>
                 </div>
               </td>
@@ -137,6 +133,15 @@
       <div class="columns">
         <div class="fw-bold">输出字段列表</div>
         <table class="table table-sm table-striped">
+          <thead class="text-muted">
+            <tr>
+              <th class="text-end" scope="col" style="width: 32px;">#</th>
+              <th class="text-start" scope="col" style="width: 120px;">名称</th>
+              <th class="text-start" scope="col" style="width: 180px;">类型</th>
+              <th class="text-start" scope="col" style="width: auto;">说明</th>
+              <th class="text-center" scope="col" style="width: 46px">操作</th>
+            </tr>
+          </thead>
           <tbody>
             <tr *ngFor="let col of model.columns; let i = index;">
               <td class="text-end">{{i+1}}</td>
@@ -147,7 +152,25 @@
                 {{col.type}}
               </td>
               <td class="text-start">
-                {{col.description}}
+                <input class="form-control form-control-sm" type="text"
+                  *ngIf="columnEditIndex === i; else colDescViewTpl"
+                  [name]="'col-desc-' + i" [(ngModel)]="col.description" />
+                <ng-template #colDescViewTpl>
+                  {{col.description}}
+                </ng-template>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-primary" type="button"
+                  *ngIf="columnEditIndex === i; else descEditBtnTpl "
+                  (click)="columnEditIndex = -1">
+                  <svg-icon path="bi/check"></svg-icon>
+                </button>
+                <ng-template #descEditBtnTpl>
+                  <button class="btn btn-sm btn-outline-secondary" type="button"
+                    (click)="columnEditIndex = i">
+                    <svg-icon path="bi/pencil-square"></svg-icon>
+                  </button>
+                </ng-template>
               </td>
             </tr>
           </tbody>

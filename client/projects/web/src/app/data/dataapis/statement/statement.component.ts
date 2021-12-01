@@ -48,6 +48,8 @@ export class StatementComponent implements OnInit, OnDestroy {
     public updating = false;
     public paramEditIndex = -1;
     public showNewParamRow = false;
+    public updatingColumns = false;
+    public columnEditIndex = -1;
 
     private id: string;
     private win: Window;
@@ -135,11 +137,13 @@ export class StatementComponent implements OnInit, OnDestroy {
     }
 
     public async getColumns(): Promise<void> {
+        this.updatingColumns = true;
         const columns = await this.vm.getColumns(this.id);
         if (!!columns) {
             var oldColumns = this.model.columns;
             this.model.columns = columns;
         }
+        this.updatingColumns = false;
     }
 
     private getStatement(): void {
