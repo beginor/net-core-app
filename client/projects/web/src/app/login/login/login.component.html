@@ -26,7 +26,7 @@
           </div>
           <div class="mb-3 d-grid gap-3">
             <button [disabled]="(!loginForm.valid) || loading"
-              class="btn btn-sm btn-outline-primary"
+              class="btn btn-outline-primary"
               type="button" (click)="login()">
               <ng-container *ngIf="loading; else loginTpl;">
                 <svg-icon path="bi/arrow-repeat" iconClass="bi-spin"></svg-icon> 登录中 ...
