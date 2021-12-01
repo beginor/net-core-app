@@ -16,9 +16,9 @@ namespace Beginor.GisHub.DynamicSql.ParameterConverters {
 
         public object ConvertParameter(string parameterValue) {
             var arr = parameterValue.Split(",", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-            var result = new List<int>();
+            var result = new List<long>();
             foreach (var str in arr) {
-                if (int.TryParse(str, out var value)) {
+                if (long.TryParse(str, out var value)) {
                     result.Add(value);
                 }
             }
