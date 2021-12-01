@@ -1,18 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Beginor.AppFx.Api;
+using Beginor.GisHub.DataServices.Models;
+using Beginor.GisHub.DynamicSql.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Beginor.AppFx.Api;
-using Beginor.AppFx.Core;
-using Beginor.GisHub.DataServices.Data;
-using Beginor.GisHub.DataServices.Models;
-using Beginor.GisHub.DynamicSql;
 using Microsoft.Extensions.Primitives;
 
-namespace Beginor.GisHub.DataServices.Api {
+namespace Beginor.GisHub.DynamicSql.Api {
 
     partial class DataApiController {
 

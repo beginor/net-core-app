@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DataServices.Models;
+using Beginor.GisHub.DynamicSql.Models;
 
-namespace Beginor.GisHub.DataServices.Data {
+namespace Beginor.GisHub.DynamicSql.Data {
 
     /// <summary>数据API 仓储接口</summary>
     public partial interface IDataApiRepository : IRepository<DataApiModel, long> {

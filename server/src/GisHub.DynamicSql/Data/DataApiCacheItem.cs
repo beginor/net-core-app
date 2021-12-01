@@ -1,4 +1,6 @@
-namespace Beginor.GisHub.DataServices.Data {
+using Beginor.GisHub.DataServices.Data;
+
+namespace Beginor.GisHub.DynamicSql.Data {
 
     public class DataApiCacheItem {
         public long DataApiId { get; set; }

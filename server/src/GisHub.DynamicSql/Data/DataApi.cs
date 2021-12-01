@@ -1,10 +1,11 @@
 using System;
 using System.Xml;
-using NHibernate.Mapping.Attributes;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
+using Beginor.GisHub.DataServices.Data;
+using NHibernate.Mapping.Attributes;
 
-namespace Beginor.GisHub.DataServices.Data {
+namespace Beginor.GisHub.DynamicSql.Data {
 
     /// <summary>数据API</summary>
     [Class(Schema = "public", Table = "data_apis", Where = "is_deleted = false")]

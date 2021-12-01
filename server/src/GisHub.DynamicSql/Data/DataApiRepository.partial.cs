@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Dapper;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Common;
 using Beginor.GisHub.DataServices.Models;
+using Dapper;
 using Microsoft.Extensions.Logging;
 
-namespace Beginor.GisHub.DataServices.Data {
+namespace Beginor.GisHub.DynamicSql.Data {
 
     partial class DataApiRepository {
 

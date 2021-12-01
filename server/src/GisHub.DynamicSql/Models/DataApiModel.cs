@@ -1,8 +1,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.DataServices.Models {
+namespace Beginor.GisHub.DynamicSql.Models {
 
     /// <summary>数据API模型</summary>
     public partial class DataApiModel : StringEntity {

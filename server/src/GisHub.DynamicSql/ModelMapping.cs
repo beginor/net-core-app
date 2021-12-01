@@ -1,6 +1,8 @@
 using System.Xml;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
+using Beginor.GisHub.DynamicSql.Data;
+using Beginor.GisHub.DynamicSql.Models;
 
 namespace Beginor.GisHub.DynamicSql {
 

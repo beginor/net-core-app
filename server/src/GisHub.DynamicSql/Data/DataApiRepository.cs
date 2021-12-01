@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
-using Microsoft.Extensions.Caching.Distributed;
 using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
+using Beginor.GisHub.Common;
+using Beginor.GisHub.Data.Entities;
+using Beginor.GisHub.DataServices;
+using Beginor.GisHub.DynamicSql.Models;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Linq;
-using Beginor.GisHub.Common;
-using Beginor.GisHub.DataServices.Models;
-using Beginor.GisHub.Data.Entities;
-using Beginor.GisHub.DynamicSql;
-using Microsoft.Extensions.Logging;
 
-namespace Beginor.GisHub.DataServices.Data {
+namespace Beginor.GisHub.DynamicSql.Data {
 
     /// <summary>数据API仓储实现</summary>
     public partial class DataApiRepository : HibernateRepository<DataApi, DataApiModel, long>, IDataApiRepository {

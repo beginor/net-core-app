@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
+using Beginor.GisHub.DynamicSql.Data;
+using Beginor.GisHub.DynamicSql.Models;
 using NUnit.Framework;
 
 namespace Beginor.GisHub.Test.DataServices {

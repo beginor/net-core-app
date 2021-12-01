@@ -1,18 +1,18 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Common;
 using Beginor.GisHub.Data.Entities;
-using Beginor.GisHub.DataServices.Data;
-using Beginor.GisHub.DataServices.Models;
-using Beginor.GisHub.DynamicSql;
+using Beginor.GisHub.DataServices;
+using Beginor.GisHub.DynamicSql.Data;
+using Beginor.GisHub.DynamicSql.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
-namespace Beginor.GisHub.DataServices.Api {
+namespace Beginor.GisHub.DynamicSql.Api {
 
     /// <summary>数据API 服务接口</summary>
     [ApiController]
