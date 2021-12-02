@@ -9,6 +9,7 @@ using Beginor.AppFx.Repository.Hibernate;
 using Beginor.GisHub.Common;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DataServices;
+using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DynamicSql.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
@@ -123,6 +124,9 @@ namespace Beginor.GisHub.DynamicSql.Data {
 
         public async Task UpdateAsync(long id, DataApiModel model, AppUser user, CancellationToken token = default) {
             var entity = await Session.LoadAsync<DataApi>(id, token);
+            if (entity.DataSource.Id.ToString() != model.DataSource.Id) {
+                entity.DataSource = Mapper.Map<DataSource>(model.DataSource);
+            }
             Mapper.Map(model, entity);
             entity.Statement.DocumentElement?.SetAttribute("Id", id.ToString());
             entity.Updater = user;

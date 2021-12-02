@@ -97,8 +97,15 @@ namespace Beginor.GisHub.DataServices.Data {
             DataServiceModel model,
             CancellationToken token = default
         ) {
+            var entity = await Session.LoadAsync<DataService>(id, token);
+            if (entity.DataSource.Id.ToString() != model.DataSource.Id) {
+                entity.DataSource = Mapper.Map<DataSource>(model.DataSource);
+            }
+            Mapper.Map(model, entity);
+            await Session.UpdateAsync(entity, token);
+            await Session.FlushAsync(token);
+            Session.Clear();
             await cache.RemoveAsync(id.ToString(), token);
-            await base.UpdateAsync(id, model, token);
         }
 
         public override async Task DeleteAsync(long id, CancellationToken token = default) {
