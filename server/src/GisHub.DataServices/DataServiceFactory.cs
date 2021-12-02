@@ -25,6 +25,9 @@ namespace Beginor.GisHub.DataServices {
             if (databaseType.Equals("postgis", StringComparison.OrdinalIgnoreCase)) {
                 typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider,Beginor.GisHub.DataServices.PostGIS";
             }
+            else if (databaseType.Equals("mysql", StringComparison.OrdinalIgnoreCase)) {
+                typeName = "Beginor.GisHub.DataServices.MySql.MySqlMetaDataProvider,Beginor.GisHub.DataServices.MySql";
+            }
             else {
                 throw new NotSupportedException($"Unsupported database type {databaseType}!");
             }
@@ -41,6 +44,9 @@ namespace Beginor.GisHub.DataServices {
             if (databaseType.Equals("postgis", StringComparison.OrdinalIgnoreCase)) {
                 typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISDataServiceReader,Beginor.GisHub.DataServices.PostGIS";
             }
+            else if (databaseType.Equals("mysql", StringComparison.OrdinalIgnoreCase)) {
+                typeName = "Beginor.GisHub.DataServices.MySql.MySqlDataServiceReader,Beginor.GisHub.DataServices.MySql";
+            }
             else {
                 throw new NotSupportedException($"Unsupported database type {databaseType}!");
             }
@@ -56,6 +62,9 @@ namespace Beginor.GisHub.DataServices {
             string typeName;
             if (databaseType.Equals("postgis", StringComparison.OrdinalIgnoreCase)) {
                 typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISFeatureProvider,Beginor.GisHub.DataServices.PostGIS";
+            }
+            else if (databaseType.Equals("mysql", StringComparison.OrdinalIgnoreCase)) {
+                typeName = "Beginor.GisHub.DataServices.MySql.MySqlFeatureProvider,Beginor.GisHub.DataServices.MySql";
             }
             else {
                 throw new NotSupportedException($"Unsupported database type {databaseType}!");
