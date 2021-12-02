@@ -44,10 +44,10 @@ export class LockComponent {
         public account: AccountService,
         public vm: UsersService
     ) {
-        const { fullname, userId } = route.snapshot.params;
+        const { id, fullname } = route.snapshot.params;
         this.title = `锁定 ${fullname || '用户'}`;
         this.editable = true;
-        this.userId = userId;
+        this.userId = id as string;
         //
         const nextDay = calendar.getNext(calendar.getToday(), 'd', 1);
         this.lockForm  = new FormGroup({

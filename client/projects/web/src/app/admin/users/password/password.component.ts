@@ -45,8 +45,8 @@ export class PasswordComponent {
         public account: AccountService,
         public vm: UsersService
     ) {
-        const { userId, fullname } = route.snapshot.params;
-        this.userId = userId as string;
+        const { id, fullname } = route.snapshot.params;
+        this.userId = id as string;
         const username = fullname as string || '用户';
         this.title = `重置 ${username} 的密码`;
         this.editable = true;
