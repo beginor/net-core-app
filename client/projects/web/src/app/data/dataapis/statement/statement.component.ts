@@ -54,6 +54,7 @@ export class StatementComponent implements OnInit, OnDestroy {
     private id: string;
     private win: Window;
     private receiveMessageHandler = this.onReceiveMessage.bind(this);
+    private statementLoadedToEditor = false;
 
     constructor(
         private router: Router,
@@ -79,6 +80,9 @@ export class StatementComponent implements OnInit, OnDestroy {
         if (!!model) {
             this.model = model;
             this.title = `编辑 ${model.name} 指令`;
+            if (!this.statementLoadedToEditor) {
+                this.loadStatement();
+            }
         }
         this.win.addEventListener('message', this.receiveMessageHandler);
     }
@@ -117,6 +121,7 @@ export class StatementComponent implements OnInit, OnDestroy {
             language: 'xml',
             value: this.model.statement
         }, '*');
+        this.statementLoadedToEditor = true;
     }
 
     public addParameter(): void {
