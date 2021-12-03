@@ -37,7 +37,8 @@ namespace Beginor.GisHub.DataServices.Data {
                     DatabaseName = e.DatabaseName,
                     Username = e.Username,
                     // Password = e.Password,
-                    Timeout = e.Timeout
+                    Timeout = e.Timeout,
+                    UseSsl = e.UseSsl
                 })
                 .Skip(model.Skip).Take(model.Take)
                 .ToListAsync();

@@ -23,6 +23,9 @@ namespace Beginor.GisHub.DataServices.MySql {
                 AllowUserVariables = true,
                 CharacterSet = "utf8"
             };
+            if (model.UseSsl) {
+                builder.SslMode = MySqlSslMode.Required;
+            }
             return builder.ConnectionString;
         }
 

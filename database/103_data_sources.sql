@@ -13,6 +13,7 @@ create table public.data_sources
     username character varying(64) collate pg_catalog."default",
     password character varying(256) collate pg_catalog."default",
     timeout integer,
+    use_ssl boolean not null default false,
     is_deleted boolean not null default false,
     constraint pk_data_sources primary key (id)
 )
@@ -56,3 +57,6 @@ comment on column public.data_sources.timeout
 
 comment on column public.data_sources.is_deleted
     is '是否删除';
+
+comment on column public.data_sources.use_ssl
+    is '使用 ssl 安全连接';

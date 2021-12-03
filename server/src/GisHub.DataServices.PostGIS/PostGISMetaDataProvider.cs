@@ -31,6 +31,10 @@ namespace Beginor.GisHub.DataServices.PostGIS {
                 CommandTimeout = model.Timeout,
                 Timeout = model.Timeout
             };
+            if (model.UseSsl) {
+                builder.SslMode = SslMode.Require;
+                builder.TrustServerCertificate = true;
+            }
             return builder.ConnectionString;
         }
 

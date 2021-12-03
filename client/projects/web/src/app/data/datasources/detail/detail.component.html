@@ -105,10 +105,16 @@
     </div>
     <div class="mb-3">
       <label class="form-label text-muted" for="timeout">连接超时时间（秒） </label>
-      <input class="form-control text-end" type="text" id="timeout" name="timeout"
+      <input class="form-control text-end" type="number" id="timeout" name="timeout"
         placeholder="请输入连接超时时间 ..." [(ngModel)]="model.timeout"
-        [disabled]="!editable"
-      />
+        [disabled]="!editable" />
+    </div>
+    <div class="mb-3">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="useSsl" name="useSsl"
+          [(ngModel)]="model.useSsl" [disabled]="!editable" />
+        <label class="form-check-label" for="useSsl">使用 SSL 安全连接</label>
+      </div>
     </div>
   </div>
   <div *ngIf="info.privileges['data_sources.update'] && editable"

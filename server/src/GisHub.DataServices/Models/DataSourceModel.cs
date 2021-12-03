@@ -27,6 +27,8 @@ namespace Beginor.GisHub.DataServices.Models {
         public string Password { get; set; }
         /// <summary> 超时时间（秒） </summary>
         public int Timeout { get; set; }
+        /// <summary>使用 ssl 安全连接</summary>
+        public virtual bool UseSsl { get; set; }
 
     }
 

@@ -44,6 +44,10 @@ namespace Beginor.GisHub.DataServices.Data {
         [Property(Name = "Timeout", Column = "timeout", Type = "int", NotNull = false)]
         public virtual int Timeout { get; set; }
 
+        /// <summary>使用 ssl 安全连接</summary>
+        [Property(Name = "UseSsl", Column = "use_ssl", Type = "bool", NotNull = true)]
+        public virtual bool UseSsl { get; set; }
+
         /// <summary>是否删除</summary>
         [Property(Name = "IsDeleted", Column = "is_deleted", Type = "bool", NotNull = true)]
         public virtual bool IsDeleted { get; set; }

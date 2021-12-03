@@ -190,6 +190,8 @@ export interface DataSourceModel {
     password?: string;
     /** 超时时间（秒） */
     timeout?: number;
+    /** 使用 ssl 安全连接 */
+    useSsl?: boolean;
 }
 
 /** 数据源 搜索参数 */
