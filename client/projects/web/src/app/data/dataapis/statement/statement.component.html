@@ -1,14 +1,23 @@
 <form class="card detail" *ngIf="(account.info | async) as info" #detailForm="ngForm"
   [@animation]="animation" (@animation.done)="onAnimationEvent($event)">
-  <div class="card-header d-flex justify-content-between align-content-center">
+  <div class="card-header d-flex justify-content-start align-content-center">
     <h5 class="card-title mb-0">{{title}}</h5>
+
+    <div class="btn-group btn-group-sm ms-auto me-5" *ngIf="canDoTest()">
+      <button class="btn" type="button"
+        [ngClass]="{ 'btn-outline-danger': !testing, 'btn-danger': testing }"
+        (click)="testing = !testing">
+        <svg-icon path="bi/play"></svg-icon> 测试
+      </button>
+    </div>
+
     <div class="btn-group btn-group-sm">
       <button *ngIf="info.privileges['data_apis.update']"
         type="button" class="btn btn-sm btn-outline-primary"
         (click)="save()" [disabled]="updating">
         <svg-icon path="bi/check"></svg-icon> 保存
       </button>
-      <button type="button" class="btn btn-sm btn-outline-secondary"
+      <button type="button" class="btn btn-sm btn-outline-dark"
         (click)="goBack()">
         <svg-icon path="bi/x"></svg-icon> 关闭
       </button>

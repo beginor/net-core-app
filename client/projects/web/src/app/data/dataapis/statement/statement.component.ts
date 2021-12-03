@@ -50,6 +50,7 @@ export class StatementComponent implements OnInit, OnDestroy {
     public showNewParamRow = false;
     public updatingColumns = false;
     public columnEditIndex = -1;
+    public testing = false;
 
     private id: string;
     private win: Window;
@@ -152,6 +153,22 @@ export class StatementComponent implements OnInit, OnDestroy {
             this.model.columns = columns;
         }
         this.updatingColumns = false;
+    }
+
+    public canDoTest(): boolean {
+        const stmt = this.model.statement;
+        if (!stmt) {
+            return false;
+        }
+        const params = this.model.statement;
+        if (!params || params.length === 0) {
+            return false;
+        }
+        const cols = this.model.columns;
+        if (!cols || cols.length === 0) {
+            return false;
+        }
+        return true;
     }
 
     private getStatement(): void {
