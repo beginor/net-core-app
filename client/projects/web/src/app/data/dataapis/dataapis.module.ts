@@ -12,12 +12,16 @@ import { DataApiRoutingModule } from './dataapis-routing.module';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
 import { StatementComponent } from './statement/statement.component';
+import { ParamColsComponent } from './param-cols/param-cols.component';
+import { DebugComponent } from './debug/debug.component';
 
 @NgModule({
     declarations: [
         ListComponent,
         DetailComponent,
-        StatementComponent
+        StatementComponent,
+        ParamColsComponent,
+        DebugComponent
     ],
     imports: [
         CommonModule,

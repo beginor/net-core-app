@@ -35,21 +35,9 @@ export class StatementComponent implements OnInit, OnDestroy {
 
     @ViewChild('statementEditor', { static: false })
     public statementEditorRef!: ElementRef<HTMLIFrameElement>;
-    @ViewChild('#statementEditor', { static: false })
-    public previewEditorRef!: ElementRef<HTMLIFrameElement>;
-
-    public newParam: DataApiParameterModel = { type: 'string' };
-    public paramTypes = [
-        'string', 'int', 'long', 'float', 'double', 'datetime', 'bool',
-        'string[]', 'int[]', 'long[]', 'float[]', 'double[]', 'datetime[]',
-        'bool[]'
-    ];
 
     public updating = false;
-    public paramEditIndex = -1;
-    public showNewParamRow = false;
     public updatingColumns = false;
-    public columnEditIndex = -1;
     public testing = false;
 
     private id: string;
@@ -77,6 +65,16 @@ export class StatementComponent implements OnInit, OnDestroy {
     }
 
     public async ngOnInit(): Promise<void> {
+        await this.loadData();
+        this.win.addEventListener('message', this.receiveMessageHandler);
+    }
+
+    public ngOnDestroy(): void {
+        this.win.removeEventListener('message', this.receiveMessageHandler);
+    }
+
+    public async loadData(): Promise<void> {
+        this.updating = true;
         const model = await this.vm.getById(this.id);
         if (!!model) {
             this.model = model;
@@ -85,11 +83,7 @@ export class StatementComponent implements OnInit, OnDestroy {
                 this.loadStatement();
             }
         }
-        this.win.addEventListener('message', this.receiveMessageHandler);
-    }
-
-    public ngOnDestroy(): void {
-        this.win.removeEventListener('message', this.receiveMessageHandler);
+        this.updating = false;
     }
 
     public async onAnimationEvent(e: AnimationEvent): Promise<void> {
@@ -123,23 +117,6 @@ export class StatementComponent implements OnInit, OnDestroy {
             value: this.model.statement
         }, '*');
         this.statementLoadedToEditor = true;
-    }
-
-    public addParameter(): void {
-        if (!this.newParam.name) {
-            this.ui.showAlert({ type: 'danger', message: '请输入参数名称！' });
-            return;
-        }
-        if (!this.model.parameters) {
-            this.model.parameters = [];
-        }
-        this.model.parameters.push(this.newParam);
-        this.newParam = { type: 'string' };
-        this.showNewParamRow = false;
-    }
-
-    public removeParameter(idx: number): void {
-        this.model.parameters?.splice(idx, 1);
     }
 
     public async getColumns(): Promise<void> {

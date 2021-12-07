@@ -12,6 +12,10 @@
     </div>
 
     <div class="btn-group btn-group-sm">
+      <button class="btn btn-outline-info" type="button" [disabled]="updating"
+        (click)="loadData()">
+        <svg-icon path="bi/arrow-repeat"></svg-icon> 刷新
+      </button>
       <button *ngIf="info.privileges['data_apis.update']"
         type="button" class="btn btn-sm btn-outline-primary"
         (click)="save()" [disabled]="updating">
@@ -26,166 +30,17 @@
   <div class="card-body d-flex flex-row px-1">
     <iframe class="statement-editor" #statementEditor [src]="codeEditorUrl" (load)="loadStatement()">
     </iframe>
-    <div class="params-and-cols d-flex flex-column px-1">
-      <div class="parameters">
-        <div class="fw-bold">参数列表</div>
-        <table class="table table-sm table-striped">
-          <thead class="text-muted">
-            <tr>
-              <th class="text-end" scope="col" style="width: 32px;">#</th>
-              <th class="text-start" scope="col" style="width: 120px">名称</th>
-              <th class="text-start" scope="col" style="width: 120px">类型</th>
-              <th class="text-start" scope="col" style="width: auto;" >说明</th>
-              <th class="text-center" scope="col" style="width: 80px">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let p of model.parameters; let i = index;">
-              <th class="text-end" scope="row">{{i+1}}</th>
-              <td class="text-start">
-                <input class="form-control form-control-sm"
-                  *ngIf="paramEditIndex === i; else paramNameViewTpl"
-                  [name]="'p-name-' + i" type="text"
-                  [(ngModel)]="p.name" />
-                <ng-template #paramNameViewTpl>{{p.name}}</ng-template>
-              </td>
-              <td class="text-start">
-                <select class="form-select form-select-sm"
-                  *ngIf="paramEditIndex === i; else paramTypeViewTpl"
-                  [name]="'p-type-' + i" type="text"
-                  [(ngModel)]="p.type">
-                  <option *ngFor="let pt of paramTypes" [value]="pt">{{pt}}</option>
-                </select>
-                <ng-template #paramTypeViewTpl>{{p.type}}</ng-template>
-              </td>
-              <td class="text-start">
-                <input class="form-control form-control-sm"
-                  *ngIf="paramEditIndex === i; else paramDescViewTpl"
-                  [name]="'p-desc-' + i" type="text"
-                  [(ngModel)]="p.description" />
-                <ng-template #paramDescViewTpl>{{p.description}}</ng-template>
-              </td>
-              <td class="text-center">
-                <div class="btn-group btn-group-sm">
-                  <button class="btn btn-outline-primary" type="button"
-                    *ngIf="paramEditIndex === i; else paramEditBtnTpl"
-                    (click)="paramEditIndex=-1">
-                    <svg-icon path="bi/check"></svg-icon>
-                  </button>
-                  <ng-template #paramEditBtnTpl>
-                    <button class="btn btn-outline-secondary" type="button"
-                      (click)="paramEditIndex = i">
-                      <svg-icon path="bi/pencil-square"></svg-icon>
-                    </button>
-                  </ng-template>
-                  <button class="btn btn-outline-secondary" type="button"
-                    [disabled]="paramEditIndex === i"
-                    (click)="removeParameter(i)">
-                    <svg-icon path="bi/trash"></svg-icon>
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <tr *ngIf="showNewParamRow">
-              <td class="text-end text-warning" style="vertical-align: middle;">*</td>
-              <td class="text-start">
-                <input class="form-control form-control-sm"
-                  name="newParamName" type="text"
-                  placeholder="请输入参数名称"
-                  [(ngModel)]="newParam.name" />
-              </td>
-              <td class="text-start">
-                <select class="form-select form-select-sm"
-                  name="newParamType" type="text"
-                  [(ngModel)]="newParam.type">
-                  <option *ngFor="let pt of paramTypes" [value]="pt">{{pt}}</option>
-                </select>
-              </td>
-              <td class="text-start">
-                <input class="form-control form-control-sm"
-                  name="newParamDesc" type="text"
-                  placeholder="请输入参数描述"
-                  [(ngModel)]="newParam.description" />
-              </td>
-              <td class="text-center">
-                <div class="btn-group btn-group-sm">
-                  <button class="btn btn-outline-primary" type="button"
-                    (click)="addParameter();" [disabled]="!newParam.name">
-                    <svg-icon path="bi/check"></svg-icon>
-                  </button>
-                  <button class="btn btn-outline-secondary" type="button"
-                    (click)="showNewParamRow=false">
-                    <svg-icon path="bi/x"></svg-icon>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot *ngIf="!showNewParamRow">
-            <tr>
-              <td colspan="5">
-                <div class="d-flex justify-content-between">
-                  <button class="btn btn-sm btn-outline-primary" type="button"
-                    (click)="showNewParamRow = true">
-                    <svg-icon path="bi/plus"></svg-icon> 添加参数
-                  </button>
-                  <button class="btn btn-sm btn-outline-secondary" type="button"
-                    (click)="getColumns()" [disabled]="updatingColumns">
-                    <svg-icon path="bi/lightning"></svg-icon> 获取输出字段
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-      <div class="columns">
-        <div class="fw-bold">输出字段列表</div>
-        <table class="table table-sm table-striped">
-          <thead class="text-muted">
-            <tr>
-              <th class="text-end" scope="col" style="width: 32px;">#</th>
-              <th class="text-start" scope="col" style="width: 120px;">名称</th>
-              <th class="text-start" scope="col" style="width: 180px;">类型</th>
-              <th class="text-start" scope="col" style="width: auto;">说明</th>
-              <th class="text-center" scope="col" style="width: 46px">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let col of model.columns; let i = index;">
-              <td class="text-end">{{i+1}}</td>
-              <td class="text-start">
-                {{col.name}}
-              </td>
-              <td class="text-start">
-                {{col.type}}
-              </td>
-              <td class="text-start">
-                <input class="form-control form-control-sm" type="text"
-                  *ngIf="columnEditIndex === i; else colDescViewTpl"
-                  [name]="'col-desc-' + i" [(ngModel)]="col.description" />
-                <ng-template #colDescViewTpl>
-                  {{col.description}}
-                </ng-template>
-              </td>
-              <td class="text-center">
-                <button class="btn btn-sm btn-outline-primary" type="button"
-                  *ngIf="columnEditIndex === i; else descEditBtnTpl "
-                  (click)="columnEditIndex = -1">
-                  <svg-icon path="bi/check"></svg-icon>
-                </button>
-                <ng-template #descEditBtnTpl>
-                  <button class="btn btn-sm btn-outline-secondary" type="button"
-                    (click)="columnEditIndex = i">
-                    <svg-icon path="bi/pencil-square"></svg-icon>
-                  </button>
-                </ng-template>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <app-dataapi-debug class="params-and-cols d-flex flex-column px-1"
+      *ngIf="testing;else paramColsTpl"></app-dataapi-debug>
+    <ng-template #paramColsTpl>
+      <app-dataapi-param-cols class="params-and-cols d-flex flex-column px-1"
+        [parameters]="model.parameters || []" [columns]="model.columns || []">
+        <button class="btn btn-sm btn-outline-secondary" type="button"
+          (click)="getColumns()" [disabled]="updatingColumns">
+          <svg-icon path="bi/lightning"></svg-icon> 刷新输出字段
+        </button>
+      </app-dataapi-param-cols>
+    </ng-template>
   </div>
   <div *ngIf="info.privileges['data_apis.update']"
     class="card-footer d-flex justify-content-between">
