@@ -2,6 +2,7 @@ import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
+import { makeAbsoluteUrl } from 'app-shared';
 import { UiService } from 'projects/web/src/app/common';
 import { RolesService, AppRoleModel } from '../../admin/roles/roles.service';
 
@@ -188,7 +189,14 @@ export class DataApiService {
         }
     }
 
+    public getApiUrl(id: string, type: ResultType): string {
+        const url = `${this.baseUrl}/${id}/${type}`;
+        return makeAbsoluteUrl(url);
+    }
+
 }
+
+export type ResultType = 'data' | 'columns' | 'sql';
 
 /** 数据API */
 export interface DataApiModel {

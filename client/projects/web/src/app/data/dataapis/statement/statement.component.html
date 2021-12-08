@@ -7,7 +7,7 @@
       <button class="btn" type="button"
         [ngClass]="{ 'btn-outline-danger': !testing, 'btn-danger': testing }"
         (click)="testing = !testing">
-        <svg-icon path="bi/play"></svg-icon> 测试
+        <svg-icon [path]="testing ? 'bi/stop' : 'bi/play'"></svg-icon> 测试
       </button>
     </div>
 

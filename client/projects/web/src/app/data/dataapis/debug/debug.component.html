@@ -13,37 +13,42 @@
     <tbody>
       <tr class="align-middle" *ngFor="let p of parameters">
         <th scope="row">
-          <input class="form-check" type="checkbox" [checked]="true" />
+          <input class="form-check" name="paramNames" type="checkbox"
+            [id]="'param-name-' + p.name"
+            [(ngModel)]="paramNames[p.name!]" />
         </th>
-        <td class="text-start">{{p.name}}</td>
+        <td class="text-start"><label [for]="'param-name-' + p.name">{{p.name}}</label></td>
         <td class="text-start">{{p.type}}</td>
         <td class="text-start">
           <input class="form-control form-control-sm" type="text"
-            [placeholder]="p.type?.endsWith('[]') ? '请输入参数值，逗号分隔': '请输入参数值'" />
+            [placeholder]="p.type?.endsWith('[]') ? '请输入参数值，逗号分隔': '请输入参数值'"
+            [disabled]="!paramNames[p.name!]"
+            [(ngModel)]="paramValues[p.name!]" />
         </td>
         <td class="text-start text-muted">{{p.description}}</td>
       </tr>
     </tbody>
   </table>
 </div>
-<div>
-  <span class="text-muted">API地址：</span>
-  <span class="text-info">{{id}}</span>
+<div class="input-group input-group-sm mb-1">
+  <span class="input-group-text">API地址：</span>
+  <input class="form-control form-control-sm" type="text" readonly [value]="getApiUrl()" />
+  <button class="btn btn-outline-secondary" type="button" [disabled]="loading"
+    (click)="sendRequest()">
+    <svg-icon [path]="loading ? 'bi/arrow-repeat': 'bi/arrow-right-short'" class="d-inline-block" [class.bi-spin]="loading"></svg-icon>
+  </button>
 </div>
-<div class="d-flex justify-content-start align-content-center mb-1">
-  <div class="btn-group btn-group-sm">
-    <button class="btn btn-outline-primary">发送</button>
-  </div>
+<div class="d-flex justify-content-end align-content-center mb-1">
   <div class="text-muted ms-auto">
     返回结果为:
     <div class="form-check form-check-inline">
       <input class="form-check-input" type="radio" id="result-type-sql"
-        name="result-type" value="sql" />
+        name="result-type" value="sql" [(ngModel)]="resultType" />
       <label for="result-type-sql">SQL 语句</label>
     </div>
     <div class="form-check form-check-inline">
       <input class="form-check-input" type="radio" id="result-type-json"
-        name="result-type" value="json" />
+        name="result-type" value="data" [(ngModel)]="resultType" />
       <label for="result-type-json">JSON 数据</label>
     </div>
   </div>
