@@ -1,0 +1,13 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.parameters-form {
+  overflow-y: auto;
+  max-height: 500vh;
+}
+
+.preview-frame {
+  flex: 1;
+}

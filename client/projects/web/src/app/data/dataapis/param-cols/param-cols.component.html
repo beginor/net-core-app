@@ -1,6 +1,6 @@
 <div class="parameters">
   <div class="fw-bold">参数列表</div>
-  <table class="table table-sm table-striped">
+  <table class="table table-sm table-striped mb-1">
     <thead class="text-muted">
       <tr>
         <th class="text-end" scope="col" style="width: 32px;">#</th>
@@ -11,7 +11,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let p of parameters; let i = index;">
+      <tr class="align-middle" *ngFor="let p of parameters; let i = index;">
         <th class="text-end" scope="row">{{i+1}}</th>
         <td class="text-start">
           <input class="form-control form-control-sm"
@@ -57,7 +57,7 @@
           </div>
         </td>
       </tr>
-      <tr *ngIf="showNewParamRow">
+      <tr class="align-middle" *ngIf="showNewParamRow">
         <td class="text-end text-warning" style="vertical-align: middle;">*</td>
         <td class="text-start">
           <input class="form-control form-control-sm"
@@ -93,7 +93,7 @@
       </tr>
     </tbody>
     <tfoot *ngIf="!showNewParamRow">
-      <tr>
+      <tr class="align-middle">
         <td colspan="5">
           <div class="d-flex justify-content-between">
             <button class="btn btn-sm btn-outline-primary" type="button"
@@ -101,12 +101,6 @@
               <svg-icon path="bi/plus"></svg-icon> 添加参数
             </button>
             <ng-content></ng-content>
-            <!--
-            <button class="btn btn-sm btn-outline-secondary" type="button"
-              (click)="getColumns()" [disabled]="updatingColumns">
-              <svg-icon path="bi/lightning"></svg-icon> 获取输出字段
-            </button>
-            -->
           </div>
         </td>
       </tr>
@@ -116,8 +110,8 @@
 <div class="columns">
   <div class="fw-bold">输出字段列表</div>
   <table class="table table-sm table-striped">
-    <thead class="text-muted">
-      <tr>
+    <thead>
+      <tr class="align-middle text-muted">
         <th class="text-end" scope="col" style="width: 32px;">#</th>
         <th class="text-start" scope="col" style="width: 120px;">名称</th>
         <th class="text-start" scope="col" style="width: 180px;">类型</th>
@@ -126,7 +120,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let col of columns; let i = index;">
+      <tr class="align-middle" *ngFor="let col of columns; let i = index;">
         <td class="text-end">{{i+1}}</td>
         <td class="text-start">
           {{col.name}}

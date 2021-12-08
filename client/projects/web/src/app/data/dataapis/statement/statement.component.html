@@ -30,10 +30,13 @@
   <div class="card-body d-flex flex-row px-1">
     <iframe class="statement-editor" #statementEditor [src]="codeEditorUrl" (load)="loadStatement()">
     </iframe>
-    <app-dataapi-debug class="params-and-cols d-flex flex-column px-1"
-      *ngIf="testing;else paramColsTpl"></app-dataapi-debug>
+    <app-dataapi-debug class="debug-control px-1"
+      *ngIf="testing;else paramColsTpl"
+      [parameters]="model.parameters || []"
+      [id]="model.id"
+      ></app-dataapi-debug>
     <ng-template #paramColsTpl>
-      <app-dataapi-param-cols class="params-and-cols d-flex flex-column px-1"
+      <app-dataapi-param-cols class="params-and-cols px-1"
         [parameters]="model.parameters || []" [columns]="model.columns || []">
         <button class="btn btn-sm btn-outline-secondary" type="button"
           (click)="getColumns()" [disabled]="updatingColumns">
