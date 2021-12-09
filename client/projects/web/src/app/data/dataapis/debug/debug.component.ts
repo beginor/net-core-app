@@ -37,8 +37,8 @@ export class DebugComponent implements OnInit {
 
     constructor(
         public vm: DataApiService,
+        public account: AccountService,
         private http: HttpClient,
-        private account: AccountService,
         @Inject(DOCUMENT) private doc: Document,
         @Inject('codeEditorUrl') codeEditorUrl: string,
         domSanitizer: DomSanitizer

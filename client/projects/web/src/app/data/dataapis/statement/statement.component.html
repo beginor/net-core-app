@@ -3,7 +3,8 @@
   <div class="card-header d-flex justify-content-start align-content-center">
     <h5 class="card-title mb-0">{{title}}</h5>
 
-    <div class="btn-group btn-group-sm ms-auto me-5" *ngIf="canDoTest()">
+    <div class="btn-group btn-group-sm ms-auto me-5"
+      *ngIf="info.privileges['data_apis.read_data'] && info.privileges['data_apis.read_sql'] && canDoTest()">
       <button class="btn" type="button"
         [ngClass]="{ 'btn-outline-danger': !testing, 'btn-danger': testing }"
         (click)="testing = !testing">
