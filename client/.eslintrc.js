@@ -1,3 +1,4 @@
+/** @type {import('@typescript-eslint/experimental-utils').TSESLint.Linter.Config} */
 module.exports = {
   "$schema": "https://json.schemastore.org/eslintrc",
   "root": true,
