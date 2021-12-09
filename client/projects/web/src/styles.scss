@@ -70,7 +70,7 @@ body {
 
 .breadcrumb {
   padding: .75rem 1rem;
-  // background-color: var(--bs-gray-200);
+  margin-bottom: 0 !important;
 }
 
 .form-check.form-switch > input[type=checkbox].form-check-input {
