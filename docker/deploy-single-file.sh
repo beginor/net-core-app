@@ -16,6 +16,6 @@ then
   rm -rf dist/config
 fi
 
-scp -r dist/* $2
+rsync -avh dist/* $2
 
 rm -rf dist
