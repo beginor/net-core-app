@@ -14,6 +14,7 @@ import { DetailComponent } from './detail/detail.component';
 import { StatementComponent } from './statement/statement.component';
 import { ParamColsComponent } from './param-cols/param-cols.component';
 import { DebugComponent } from './debug/debug.component';
+import { PreviewComponent } from './preview/preview.component';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { DebugComponent } from './debug/debug.component';
         DetailComponent,
         StatementComponent,
         ParamColsComponent,
-        DebugComponent
+        DebugComponent,
+        PreviewComponent
     ],
     imports: [
         CommonModule,

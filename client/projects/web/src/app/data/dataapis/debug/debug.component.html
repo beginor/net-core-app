@@ -1,10 +1,18 @@
+<div class="input-group input-group-sm mb-1" *ngIf="(account.info | async) as user">
+  <span class="input-group-text">API地址：</span>
+  <input class="form-control form-control-sm" type="text" readonly [value]="getApiUrl()" />
+  <button class="btn btn-outline-secondary" type="button" [disabled]="loading"
+    *ngIf="user.privileges['data_apis.read_data'] || user.privileges['data_apis.read_sql']"
+    (click)="sendRequest()">
+    <svg-icon [path]="loading ? 'bi/arrow-repeat': 'bi/arrow-right-short'" class="d-inline-block" [class.bi-spin]="loading"></svg-icon>
+  </button>
+</div>
 <div class="parameters-form">
-  <div class="fw-bold">参数列表</div>
   <table class="table table-sm table-striped mb-1">
     <thead>
       <tr class="text-muted">
         <th scope="col" style="width: 24px;"></th>
-        <th class="text-start" scope="col" style="width: 120px">名称</th>
+        <th class="text-start" scope="col" style="width: 120px">参数名称</th>
         <th class="text-start" scope="col" style="width: 60px">类型</th>
         <th class="text-start" scope="col" style="width: 180px">值</th>
         <th class="text-start" scope="col" style="width: auto;" >说明</th>
@@ -30,28 +38,19 @@
     </tbody>
   </table>
 </div>
-<div class="input-group input-group-sm mb-1" *ngIf="(account.info | async) as user">
-  <span class="input-group-text">API地址：</span>
-  <input class="form-control form-control-sm" type="text" readonly [value]="getApiUrl()" />
-  <button class="btn btn-outline-secondary" type="button" [disabled]="loading"
-    *ngIf="user.privileges['data_apis.read_data'] || user.privileges['data_apis.read_sql']"
-    (click)="sendRequest()">
-    <svg-icon [path]="loading ? 'bi/arrow-repeat': 'bi/arrow-right-short'" class="d-inline-block" [class.bi-spin]="loading"></svg-icon>
-  </button>
-</div>
 <div class="d-flex justify-content-end align-content-center mb-1"
   *ngIf="(account.info | async) as user">
   <div class="text-muted ms-auto">
     返回结果为:
-    <div class="form-check form-check-inline" *ngIf="user.privileges['data_apis.read_sql']">
-      <input class="form-check-input" type="radio" id="result-type-sql"
-        name="result-type" value="sql" [(ngModel)]="resultType" />
-      <label for="result-type-sql">SQL 语句</label>
-    </div>
     <div class="form-check form-check-inline" *ngIf="user.privileges['data_apis.read_data']">
       <input class="form-check-input" type="radio" id="result-type-json"
         name="result-type" value="data" [(ngModel)]="resultType" />
       <label for="result-type-json">JSON 数据</label>
+    </div>
+    <div class="form-check form-check-inline" *ngIf="user.privileges['data_apis.read_sql']">
+      <input class="form-check-input" type="radio" id="result-type-sql"
+        name="result-type" value="sql" [(ngModel)]="resultType" />
+      <label for="result-type-sql">SQL 语句</label>
     </div>
   </div>
 </div>

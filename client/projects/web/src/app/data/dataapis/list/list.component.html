@@ -79,7 +79,12 @@
             <tbody *ngIf="(vm.data | async) as data">
               <tr *ngFor="let item of data; let i = index;">
                 <th scope="row" class="text-end text-muted">{{i+1+vm.searchModel.skip}}</th>
-                <td class='text-start'>{{item.name}}</td>
+                <td class='text-start'>
+                  <a class="preview-link"
+                    *ngIf="(info.privileges['data_apis.read_data'] || info.privileges['data_apis.read_sql']);else apiNameTpl"
+                    (click)="showPreview(item)">{{item.name}}</a>
+                  <ng-template #apiNameTpl>{{item.name}}</ng-template>
+                </td>
                 <td class='text-start'>{{item.description}}</td>
                 <td class='text-start'>{{item.dataSource?.name}}</td>
                 <td class='text-start' [class.text-danger]="item.writeData">{{item.writeData ? '是' : '否'}}</td>

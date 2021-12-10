@@ -8,6 +8,10 @@
   overflow-y: auto;
   background-color: var(--bs-light);
 
+  .preview-link {
+    cursor: pointer;
+  }
+
   ngb-pagination ::ng-deep ul.pagination {
     margin-bottom: 0 !important;
   }

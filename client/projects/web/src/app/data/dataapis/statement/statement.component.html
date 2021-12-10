@@ -4,7 +4,7 @@
     <h5 class="card-title mb-0">{{title}}</h5>
 
     <div class="btn-group btn-group-sm ms-auto me-5"
-      *ngIf="info.privileges['data_apis.read_data'] && info.privileges['data_apis.read_sql'] && canDoTest()">
+      *ngIf="(info.privileges['data_apis.read_data'] || info.privileges['data_apis.read_sql']) && canDoTest()">
       <button class="btn" type="button"
         [ngClass]="{ 'btn-outline-danger': !testing, 'btn-danger': testing }"
         (click)="testing = !testing">
@@ -22,8 +22,7 @@
         (click)="save()" [disabled]="updating">
         <svg-icon path="bi/check"></svg-icon> 保存
       </button>
-      <button type="button" class="btn btn-sm btn-outline-dark"
-        (click)="goBack()">
+      <button type="button" class="btn btn-sm btn-outline-dark" (click)="goBack()">
         <svg-icon path="bi/x"></svg-icon> 关闭
       </button>
     </div>

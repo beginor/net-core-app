@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
 
-import { DataApiService } from '../dataapis.service';
+import { DataApiService, DataApiModel } from '../dataapis.service';
+import { PreviewComponent } from '../preview/preview.component';
 
 @Component({
     selector: 'app-dataapi-list',
@@ -16,6 +18,7 @@ export class ListComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         public account: AccountService,
+        private modal: NgbModal,
         public vm: DataApiService
     ) { }
 
@@ -47,6 +50,19 @@ export class ListComponent implements OnInit {
             ['./', id, 'statement'],
             { relativeTo: this.route, skipLocationChange: true }
         );
+    }
+
+    public showPreview(api: DataApiModel): void {
+        const ref = this.modal.open(
+            PreviewComponent,
+            {
+                container: 'body',
+                size: 'xl',
+                keyboard: false,
+                backdrop: 'static'
+            }
+        );
+        Object.assign(ref.componentInstance, { id: api.id, title: api.name });
     }
 
 }
