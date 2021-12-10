@@ -75,7 +75,11 @@ export class DetailComponent implements OnInit {
         else {
             const roles = this.account.info.getValue().roles;
             this.model.roles = Object.keys(roles);
-            this.model.statement = `<Statement Id=""></Statement>`;
+            this.model.statement = [
+                '<Statement Id="">',
+                '  <!-- 动态 SQL 标签请参考 https://smartsql.net/config/sqlmap.html#statement-筛选子标签 -->', // eslint-disable-line max-len
+                '</Statement>'
+            ].join('\n');
             this.model.columns = [];
             this.model.parameters = [];
         }

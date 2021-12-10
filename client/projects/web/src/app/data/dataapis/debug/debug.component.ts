@@ -1,12 +1,13 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import {
-    Component, ElementRef, Inject, Input, OnInit, ViewChild
+    Component, ElementRef, ErrorHandler, Inject, Input, OnInit, ViewChild
 } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { lastValueFrom } from 'rxjs';
 
 import { AccountService } from 'app-shared';
+import { UiService } from '../../../common'
 
 import {
     DataApiService,
@@ -39,6 +40,8 @@ export class DebugComponent implements OnInit {
         public vm: DataApiService,
         public account: AccountService,
         private http: HttpClient,
+        private ui: UiService,
+        private errorHandler: ErrorHandler,
         @Inject(DOCUMENT) private doc: Document,
         @Inject('codeEditorUrl') codeEditorUrl: string,
         domSanitizer: DomSanitizer
@@ -94,23 +97,33 @@ export class DebugComponent implements OnInit {
         const editorWin = this.previewFrameRef.nativeElement.contentWindow;
         const headers = {};
         this.account.addAuthTokenTo(headers);
-        let value = await lastValueFrom(
-            this.http.get(
-                url,
-                {
-                    responseType: 'text',
-                    headers
-                }
-            )
-        );
-        if (this.resultType != 'sql') {
-            value = JSON.stringify(JSON.parse(value));
+        try {
+            let value = await lastValueFrom(
+                this.http.get(
+                    url,
+                    {
+                        responseType: 'text',
+                        headers
+                    }
+                )
+            );
+            if (this.resultType != 'sql') {
+                value = JSON.stringify(JSON.parse(value));
+            }
+            editorWin?.postMessage(
+                { language: this.resultType === 'sql' ? 'sql' : 'json', value },
+                '*'
+            );
         }
-        editorWin?.postMessage(
-            { language: this.resultType === 'sql' ? 'sql' : 'json', value },
-            '*'
-        );
-        this.loading = false;
+        catch (ex: unknown) {
+            this.ui.showAlert(
+                { type: 'danger', 'message': '调用 API 出错！' }
+            );
+            this.errorHandler.handleError(ex);
+        }
+        finally {
+            this.loading = false;
+        }
     }
 
 }

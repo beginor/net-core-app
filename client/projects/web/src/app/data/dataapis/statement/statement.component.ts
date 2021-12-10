@@ -112,6 +112,7 @@ export class StatementComponent implements OnInit, OnDestroy {
         if (!this.model.statement) {
             return;
         }
+        editorWin.postMessage('addSmartSqlSupport', '*');
         editorWin.postMessage({
             language: 'xml',
             value: this.model.statement
