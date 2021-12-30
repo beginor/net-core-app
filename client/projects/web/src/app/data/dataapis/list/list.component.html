@@ -55,7 +55,17 @@
                   <!-- <span class="text-muted">其它工具栏</span> -->
                 </div>
                 <div class="col">
-                  <!-- <span class="text-muted">其它工具栏</span> -->
+                  <div class="input-group input-group-sm">
+                    <input class="form-control" type="text" name="keywords"
+                           placeholder="搜索数据接口"
+                           [(ngModel)]="vm.searchModel.keywords"
+                           (keyup.enter)="vm.search()" />
+                      <button class="btn btn-outline-secondary" type="button"
+                              *ngIf="vm.searchModel.keywords"
+                              (click)="resetSearch()">
+                        <svg-icon path="bi/x"></svg-icon>
+                      </button>
+                  </div>
                 </div>
               </div>
             </div>

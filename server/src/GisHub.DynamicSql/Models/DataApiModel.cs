@@ -52,7 +52,10 @@ namespace Beginor.GisHub.DynamicSql.Models {
     }
 
     /// <summary>数据API搜索参数</summary>
-    public partial class DataApiSearchModel : PaginatedRequestModel { }
+    public partial class DataApiSearchModel : PaginatedRequestModel {
+        /// <summary>搜索关键字</summary>
+        public string Keywords { get; set; }
+    }
 
     /// <summary>数据API结果</summary>
     public partial class DataApiResultModel {

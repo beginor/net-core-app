@@ -65,4 +65,10 @@ export class ListComponent implements OnInit {
         Object.assign(ref.componentInstance, { id: api.id, title: api.name });
     }
 
+    public resetSearch(): void {
+        this.vm.searchModel.keywords = '';
+        this.vm.searchModel.skip = 0;
+        void this.vm.search();
+    }
+
 }

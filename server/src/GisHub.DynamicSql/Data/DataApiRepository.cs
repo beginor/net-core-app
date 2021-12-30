@@ -59,6 +59,17 @@ namespace Beginor.GisHub.DynamicSql.Data {
             DataApiSearchModel model
         ) {
             var query = Session.Query<DataApi>();
+            if (model.Keywords.IsNotNullOrEmpty()) {
+                var keywords = model.Keywords;
+                if (long.TryParse(keywords, out var id)) {
+                    query = query.Where(e => e.Id == id);
+                }
+                else {
+                    query = query.Where(
+                        e => e.Name.Contains(keywords) || e.Description.Contains(keywords)
+                    );
+                }
+            }
             // todo: 添加自定义查询；
             var total = await query.LongCountAsync();
             var data = await query.Select(x => new DataApi {

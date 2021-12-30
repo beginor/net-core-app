@@ -235,6 +235,8 @@ export interface DataApiSearchModel {
     skip: number;
     /** 取多少条记录 */
     take: number;
+    /** 搜索关键字 */
+    keywords?: string;
 }
 
 /** 数据API 搜索结果 */
