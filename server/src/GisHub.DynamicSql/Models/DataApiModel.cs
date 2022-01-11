@@ -59,6 +59,6 @@ namespace Beginor.GisHub.DynamicSql.Models {
 
     /// <summary>数据API结果</summary>
     public partial class DataApiResultModel {
-        public IList<Dictionary<string, object>> Data { get; set; }
+        public IList<IDictionary<string, object>> Data { get; set; }
     }
 }

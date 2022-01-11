@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Common;
 using Beginor.GisHub.DataServices.Models;
+using Beginor.GisHub.Geo.GeoJson;
 using Dapper;
 using Microsoft.Extensions.Logging;
 
@@ -11,38 +12,51 @@ namespace Beginor.GisHub.DynamicSql.Data {
 
     partial class DataApiRepository {
 
-        public async Task<IList<Dictionary<string, object>>> QueryAsync(DataApiCacheItem cacheItem, IDictionary<string, object> parameters) {
+        public async Task<IList<IDictionary<string, object>>> QueryAsync(DataApiCacheItem api, IDictionary<string, object> parameters) {
             // check parameters;
-            if (cacheItem == null) {
-                throw new ArgumentNullException(nameof(cacheItem));
+            if (api == null) {
+                throw new ArgumentNullException(nameof(api));
             }
             if (parameters == null) {
                 throw new ArgumentNullException(nameof(parameters));
             }
             // build sql first;
-            var sql = dynamicSqlProvider.BuildDynamicSql(cacheItem.DatabaseType, cacheItem.Statement, parameters);
+            var sql = dynamicSqlProvider.BuildDynamicSql(api.DatabaseType, api.Statement, parameters);
             if (sql.IsNullOrEmpty()) {
                 throw new InvalidOperationException("Sql is empty!");
             }
             logger.LogInformation(sql);
-            var factory = dynamicSqlProvider.GetDbProviderFactory(cacheItem.DatabaseType);
-            await using var conn = factory.CreateConnection();
-            conn.ConnectionString = cacheItem.ConnectionString;
+            var dsReader = dataServiceFactory.CreateDataSourceReader(api.DatabaseType);
+            var conn = dsReader.CreateConnection(api.ConnectionString);
             var reader = await conn.ExecuteReaderAsync(sql, parameters);
-            var result = new List<Dictionary<string, object>>();
-            while (await reader.ReadAsync()) {
-                var dict = new Dictionary<string, object>();
-                for (var i = 0; i < reader.FieldCount; i++) {
-                    if (await reader.IsDBNullAsync(i)) {
-                        continue;
-                    }
-                    var key = reader.GetName(i);
-                    var val = reader.GetValue(i);
-                    dict[key] = val;
-                }
-                result.Add(dict);
-            }
+            var result = await dsReader.ReadDataAsync(reader);
             return result;
+        }
+
+        public async Task<IList<GeoJsonFeature>> QueryGeoJsonAsync(DataApiCacheItem api, IDictionary<string, object> parameters) {
+            // check parameters;
+            if (api == null) {
+                throw new ArgumentNullException(nameof(api));
+            }
+            if (parameters == null) {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+            // build sql first;
+            var sql = dynamicSqlProvider.BuildDynamicSql(api.DatabaseType, api.Statement, parameters);
+            if (sql.IsNullOrEmpty()) {
+                throw new InvalidOperationException("Sql is empty!");
+            }
+            logger.LogInformation(sql);
+            var dsReader = dataServiceFactory.CreateDataSourceReader(api.DatabaseType);
+            var conn = dsReader.CreateConnection(api.ConnectionString);
+            var reader = await conn.ExecuteReaderAsync(sql, parameters);
+            var data = await dsReader.ReadDataAsync(reader);
+            var featureReader = dataServiceFactory.CreateFeatureProvider(api.DatabaseType);
+            // todo: id column, geometry column;
+            var idField = "id"; // api.IdColumn;
+            var geoField = "geom"; // api.GeometryColumn;
+            var features = featureReader.ConvertToGeoJson(data, idField, geoField);
+            return features;
         }
 
         public async Task<DataApiCacheItem> GetDataApiCacheItemByIdAsync(long apiId) {

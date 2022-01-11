@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -41,24 +42,11 @@ namespace Beginor.GisHub.DataServices {
             };
             var list = await dsReader.ReadDataAsync(dataService, rdp);
             var result = new GeoJsonFeatureCollection {
-                Features = new List<GeoJsonFeature>(list.Count)
-            };
-            foreach (var dict in list) {
-                var id = dict[dataService.PrimaryKeyColumn];
-                var wkt = (string) dict[dataService.GeometryColumn];
-                dict.Remove(dataService.GeometryColumn);
-                var feature = new GeoJsonFeature {
-                    Id = id,
-                    Properties = dict
-                };
-                var reader = new WKTReader();
-                var geom = reader.Read(wkt);
-                feature.Geometry = geom.ToGeoJson();
-                result.Features.Add(feature);
-            }
-            result.Crs = new Crs {
-                Type = "name",
-                Properties = new CrsProperties { Code = dataService.Srid }
+                Features = ConvertToGeoJson(list, dataService.PrimaryKeyColumn, dataService.GeometryColumn),
+                Crs = new Crs {
+                    Type = "name",
+                    Properties = new CrsProperties { Code = dataService.Srid }
+                }
             };
             var crsName = "urn:ogc:def:crs:";
             if (IsSupportedGeographicSrid(dataService.Srid)) {
@@ -76,6 +64,35 @@ namespace Beginor.GisHub.DataServices {
                 result.Bbox = new double[] { ext.Xmin, ext.Ymin, ext.Xmax, ext.Ymax };
             }
             return result;
+        }
+
+        public async Task<IList<GeoJsonFeature>> ReadAsGeoJsonAsync(
+            string databaseType,
+            DbDataReader reader,
+            string idField,
+            string geoField
+        ) {
+            var dsReader = DataServiceFactory.CreateDataSourceReader(databaseType);
+            var data = await dsReader.ReadDataAsync(reader);
+            return ConvertToGeoJson(data, idField, geoField);
+        }
+
+        public IList<GeoJsonFeature> ConvertToGeoJson(IList<IDictionary<string, object>> data, string idField, string geoField) {
+            var features = new List<GeoJsonFeature>();
+            foreach (var dict in data) {
+                var id = dict[idField];
+                var wkt = (string) dict[geoField];
+                dict.Remove(geoField);
+                var feature = new GeoJsonFeature {
+                    Id = id,
+                    Properties = dict
+                };
+                var wktReader = new WKTReader();
+                var geom = wktReader.Read(wkt);
+                feature.Geometry = geom.ToGeoJson();
+                features.Add(feature);
+            }
+            return features;
         }
 
         public async Task<AgsFeatureSet> ReadAsFeatureSetAsync(DataServiceCacheItem dataService, AgsJsonParam param) {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -85,7 +86,20 @@ namespace Beginor.GisHub.DataServices {
             return ReadScalarAsync<T>(dataService, sql);
         }
 
-        public abstract IDbConnection CreateConnection(DataServiceCacheItem dataService);
+        public async Task<IList<IDictionary<string, object>>> ReadDataAsync(DbDataReader reader) {
+            var result = new List<IDictionary<string, object>>();
+            while (await reader.ReadAsync()) {
+                var row = new Dictionary<string, object>();
+                for (var i = 0; i < reader.FieldCount; i++) {
+                    var (key, value) = ReadField(reader, i);
+                    row.Add(key, value);
+                }
+                result.Add(row);
+            }
+            return result;
+        }
+
+        public abstract DbConnection CreateConnection(string connectionString);
 
         protected abstract string BuildReadDataSql(DataServiceCacheItem dataService, ReadDataParam param);
 
@@ -104,23 +118,15 @@ namespace Beginor.GisHub.DataServices {
         }
 
         protected virtual async Task<IList<IDictionary<string, object>>> ReadDataAsync(DataServiceCacheItem dataService, string sql) {
-            using var conn = CreateConnection(dataService);
+            using var conn = CreateConnection(dataService.ConnectionString);
             logger.LogInformation(sql);
             var reader = await conn.ExecuteReaderAsync(sql);
-            var result = new List<IDictionary<string, object>>();
-            while (reader.Read()) {
-                var row = new Dictionary<string, object>();
-                for (var i = 0; i < reader.FieldCount; i++) {
-                    var pair = ReadField(reader, i);
-                    row.Add(pair.Key, pair.Value);
-                }
-                result.Add(row);
-            }
+            var result = await ReadDataAsync(reader);
             return result;
         }
 
         protected virtual async Task<T> ReadScalarAsync<T>(DataServiceCacheItem dataService, string sql) {
-            using var conn = CreateConnection(dataService);
+            using var conn = CreateConnection(dataService.ConnectionString);
             logger.LogInformation(sql);
             var value = await conn.ExecuteScalarAsync<T>(sql);
             return value;

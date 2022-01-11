@@ -5,6 +5,7 @@ using Beginor.AppFx.Api;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DynamicSql.Data;
 using Beginor.GisHub.DynamicSql.Models;
+using Beginor.GisHub.Geo.GeoJson;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,19 @@ namespace Beginor.GisHub.DynamicSql.Api {
         [Consumes("application/x-www-form-urlencoded")]
         public Task<ActionResult> QueryByPost(long id) {
             return QueryImpl(id);
+        }
+
+        [HttpGet("{id:long}/geojson")]
+        [Authorize("data_apis.read_data")]
+        public Task<ActionResult<GeoJsonFeatureCollection>> QueryGenJsonByGet(long id) {
+            return QueryGeoJsonImpl(id);
+        }
+
+        [HttpPost("{id:long}/geojson")]
+        [Authorize("data_apis.read_data")]
+        [Consumes("application/x-www-form-urlencoded")]
+        public Task<ActionResult<GeoJsonFeatureCollection>> QueryGeoJsonByPost(long id) {
+            return QueryGeoJsonImpl(id);
         }
 
         /// <summary>读取数据API动态生成的sql语句</summary>
@@ -76,6 +90,25 @@ namespace Beginor.GisHub.DynamicSql.Api {
             }
         }
 
+        private async Task<ActionResult<GeoJsonFeatureCollection>> QueryGeoJsonImpl(long id) {
+            try {
+                var api = await repository.GetDataApiCacheItemByIdAsync(id);
+                if (api == null) {
+                    return NotFound($"DataApi {id} does not exists.");
+                }
+                if (api.WriteData) {
+                    return BadRequest($"DataApi {id} can not used for query!");
+                }
+                var parameters = GetParameters(Request, api.Parameters);
+                var features = await repository.QueryGeoJsonAsync(api, parameters);
+                var result = new GeoJsonFeatureCollection { Features = features };
+                return Json(result, serializerOptionsFactory.GeoJsonSerializerOptions);
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not invoke api {id} .");
+                return this.InternalServerError(ex);
+            }
+        }
         private async Task<ActionResult> QueryImpl(long id) {
             try {
                 var api = await repository.GetDataApiCacheItemByIdAsync(id);

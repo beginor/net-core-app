@@ -5,6 +5,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DynamicSql.Models;
+using Beginor.GisHub.Geo.GeoJson;
 
 namespace Beginor.GisHub.DynamicSql.Data {
 
@@ -20,7 +21,9 @@ namespace Beginor.GisHub.DynamicSql.Data {
 
         Task UpdateAsync(long id, DataApiModel model, AppUser user, CancellationToken token = default);
 
-        Task<IList<Dictionary<string, object>>> QueryAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
+        Task<IList<IDictionary<string, object>>> QueryAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
+
+        Task<IList<GeoJsonFeature>> QueryGeoJsonAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
 
         Task<string> BuildSqlAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
 

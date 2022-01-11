@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
@@ -95,8 +95,8 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             return sql.ToString();
         }
 
-        public override IDbConnection CreateConnection(DataServiceCacheItem dataService) {
-            return new NpgsqlConnection(dataService.ConnectionString);
+        public override DbConnection CreateConnection(string connectionString) {
+            return new NpgsqlConnection(connectionString);
         }
 
         protected override string BuildReadDataSql(DataServiceCacheItem dataService, ReadDataParam param) {

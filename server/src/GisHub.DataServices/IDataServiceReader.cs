@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Data;
+using System.Data.Common;
 using System.Threading.Tasks;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
@@ -28,7 +28,8 @@ namespace Beginor.GisHub.DataServices {
         /// </summary>
         Task<IList<IDictionary<string, object>>> PivotData(DataServiceCacheItem dataService, PivotParam param);
         Task<T> ReadScalarAsync<T>(DataServiceCacheItem dataService, ReadDataParam param);
-        IDbConnection CreateConnection(DataServiceCacheItem dataService);
+        DbConnection CreateConnection(string connectionString);
+        Task<IList<IDictionary<string, object>>> ReadDataAsync(DbDataReader reader);
     }
 
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
@@ -20,8 +20,8 @@ namespace Beginor.GisHub.DataServices.MySql {
             ILogger<DataServiceReader> logger
         ) : base(factory, dataServiceRepo, dataSourceRepo, logger) { }
 
-        public override IDbConnection CreateConnection(DataServiceCacheItem dataService) {
-            return new MySqlConnection(dataService.ConnectionString);
+        public override DbConnection CreateConnection(string connectionString) {
+            return new MySqlConnection(connectionString);
         }
 
         protected override string BuildReadDataSql(DataServiceCacheItem dataService, ReadDataParam param) {
