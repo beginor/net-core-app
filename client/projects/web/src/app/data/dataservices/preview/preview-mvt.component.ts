@@ -51,10 +51,8 @@ export class PreviewMvtComponent implements AfterViewInit, OnDestroy {
             this.mapElRef.nativeElement
         );
         this.map = map;
-        const [bounds] = await Promise.all([
-            this.getLayerBounds(),
-            map.once('load')
-        ]);
+        const bounds = await this.getLayerBounds();
+        await map.once('load');
         const camera = map.cameraForBounds(bounds);
         if (!!camera) {
             let zoom = camera.zoom;
