@@ -1,13 +1,9 @@
 import {
-    Component, ElementRef, Inject, Input, OnDestroy, AfterViewInit, ViewChild,
-    Output, EventEmitter
+    Component, ElementRef, Inject, Input, OnDestroy, AfterViewInit, ViewChild
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import {
-    AnyLayer, CameraOptions, CircleLayer, Map, ScaleControl, NavigationControl,
-    LngLatBoundsLike, Popup
-} from 'mapbox-gl';
+import { HttpClient} from '@angular/common/http';
+import { AnyLayer, Map, Popup, LngLatBounds } from 'mapbox-gl';
 
 import { lastValueFrom } from 'rxjs';
 
@@ -15,7 +11,6 @@ import { AccountService } from 'app-shared';
 import { UiService } from '../../../common';
 import { DataServiceModel, DataServiceService } from '../dataservices.service';
 import { MapboxService } from '../../mapbox.service';
-import * as mapboxgl from 'mapbox-gl';
 
 @Component({
     selector: 'app-dataservices-preview-mvt',
@@ -104,7 +99,7 @@ export class PreviewMvtComponent implements AfterViewInit, OnDestroy {
         }
     }
 
-    private async getLayerBounds(): Promise<mapboxgl.LngLatBounds> {
+    private async getLayerBounds(): Promise<LngLatBounds> {
         const layerUrl = this.vm.getPreviewUrl(this.ds.id, 'mapserver');
         const params = {
             outSR: 4326,
@@ -112,7 +107,7 @@ export class PreviewMvtComponent implements AfterViewInit, OnDestroy {
         };
         const headers = {
             Authorization: `Bearer ${this.account.token}`
-         };
+        };
         const result = await lastValueFrom(
             this.http.get<{ extent: __esri.Extent}>(
                 `${layerUrl}/query`,
@@ -120,7 +115,7 @@ export class PreviewMvtComponent implements AfterViewInit, OnDestroy {
             )
         );
         const ext = result.extent;
-        return mapboxgl.LngLatBounds.convert(
+        return LngLatBounds.convert(
             [ext.xmin, ext.ymin, ext.xmax, ext.ymax]
         );
     }
