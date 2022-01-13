@@ -214,8 +214,12 @@ export interface DataApiModel {
     statement?: string;
     /** 参数定义 */
     parameters?: DataApiParameterModel[];
-    /** API 输出列的源数据 */
+    /** API 输出列的元数据 */
     columns?: DataApiColumnModel[];
+    /** 输出列中的标识列 */
+    idColumn?: string;
+    /** 输出列中的空间列 */
+    geometryColumn?: string;
     /** 允许访问的角色 */
     roles?: string[];
     /** 创建者 */

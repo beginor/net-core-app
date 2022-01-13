@@ -15,6 +15,8 @@ namespace Beginor.GisHub.DynamicSql.Data {
                 Statement = api.Statement.OuterXml,
                 Parameters = api.Parameters,
                 Columns = api.Columns,
+                IdColumn = api.IdColumn,
+                GeometryColumn = api.GeometryColumn,
                 Roles = api.Roles
             };
         }

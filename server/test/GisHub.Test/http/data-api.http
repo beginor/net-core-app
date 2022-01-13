@@ -25,3 +25,7 @@ Referer: {{referer}}
 ### 调用 API
 GET {{host}}/gishub/api/dataapis/1635333566815030319/data?$token={{token}}&id=410&area=1000
 Referer: {{referer}}
+
+### GeoJson
+GET {{host}}/gishub/api/dataapis/1641969344850030799/geojson?$token={{token}}&parentId=434
+Referer: {{referer}}

@@ -12,6 +12,8 @@ namespace Beginor.GisHub.DynamicSql.Data {
         public string Statement { get; set; }
         public DataApiParameter[] Parameters { get; set; }
         public DataServiceField[] Columns { get; set; }
+        public string IdColumn { get; set; }
+        public string GeometryColumn { get; set; }
         public string[] Roles { get; set; }
     }
 

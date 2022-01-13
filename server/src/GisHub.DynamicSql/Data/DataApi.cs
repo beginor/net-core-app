@@ -39,9 +39,17 @@ namespace Beginor.GisHub.DynamicSql.Data {
         [Property(Name = "Parameters", Column = "parameters", TypeType = typeof(NHibernate.Extensions.NpgSql.JsonbType<DataApiParameter[]>), NotNull = false)]
         public virtual DataApiParameter[] Parameters { get; set; }
 
-        /// <summary>API 输出列的源数据</summary>
+        /// <summary>API 输出列的元数据</summary>
         [Property(Name = "Columns", Column = "columns", TypeType = typeof(NHibernate.Extensions.NpgSql.JsonbType<DataServiceField[]>), NotNull = false)]
         public virtual DataServiceField[] Columns { get; set; }
+
+        /// <summary>输出字段中的标识列</summary>
+        [Property(Name = "IdColumn", Column = "id_column", Type = "string", NotNull = false, Length = 256)]
+        public virtual string IdColumn { get; set; }
+
+        /// <summary>输出字段中的空间列</summary>
+        [Property(Name = "GeometryColumn", Column = "geometry_column", Type = "string", NotNull = false, Length = 256)]
+        public virtual string GeometryColumn { get; set; }
 
         /// <summary>允许访问的角色</summary>
         [Property(Name = "Roles", Column = "roles", TypeType = typeof(NHibernate.Extensions.NpgSql.StringArrayType), NotNull = false)]

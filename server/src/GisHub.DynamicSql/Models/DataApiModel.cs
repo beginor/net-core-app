@@ -28,6 +28,10 @@ namespace Beginor.GisHub.DynamicSql.Models {
         public DataApiParameterModel[] Parameters { get; set; }
         /// <summary>API 输出列的元数据</summary>
         public DataServiceFieldModel[] Columns { get; set; }
+        /// <summary>输出字段中的标识列</summary>
+        public string IdColumn { get; set; }
+        /// <summary>输出字段中的空间列</summary>
+        public string GeometryColumn { get; set; }
         /// <summary>允许访问的角色</summary>
         public string[] Roles { get; set; }
         /// <summary>创建者</summary>

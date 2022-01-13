@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Beginor.AppFx.Api;
-using Beginor.GisHub.DataServices.Models;
-using Beginor.GisHub.DynamicSql.Data;
-using Beginor.GisHub.DynamicSql.Models;
-using Beginor.GisHub.Geo.GeoJson;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
+using Beginor.AppFx.Api;
+using Beginor.GisHub.DataServices.Models;
+using Beginor.GisHub.DynamicSql.Data;
+using Beginor.GisHub.DynamicSql.Models;
+using Beginor.GisHub.Geo.GeoJson;
 
 namespace Beginor.GisHub.DynamicSql.Api {
 
@@ -102,7 +104,11 @@ namespace Beginor.GisHub.DynamicSql.Api {
                 var parameters = GetParameters(Request, api.Parameters);
                 var features = await repository.QueryGeoJsonAsync(api, parameters);
                 var result = new GeoJsonFeatureCollection { Features = features };
-                return Json(result, serializerOptionsFactory.GeoJsonSerializerOptions);
+                var json = JsonSerializer.Serialize(
+                    result,
+                    serializerOptionsFactory.GeoJsonSerializerOptions
+                );
+                return Content(json, "application/geo+json", Encoding.UTF8);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not invoke api {id} .");

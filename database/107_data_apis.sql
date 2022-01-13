@@ -12,6 +12,8 @@ create table if not exists public.data_apis
     statement xml not null,
     parameters json not null,
     columns json,
+    id_column character varying(256),
+    geometry_column character varying(256),
     roles character varying(32)[] collate pg_catalog."default",
     creator_id character varying(32) collate pg_catalog."default" not null,
     created_at timestamp without time zone not null,
@@ -64,7 +66,13 @@ comment on column public.data_apis.parameters
     is '参数定义';
 
 comment on column public.data_apis.columns
-    is 'api 输出列的源数据';
+    is 'api 输出列的元数据';
+
+comment on column public.data_apis.id_column
+    is '输出字段中的标识列';
+
+comment on column public.data_apis.geometry_column
+    is '输出字段中的空间列';
 
 comment on column public.data_apis.roles
     is '允许访问的角色';
