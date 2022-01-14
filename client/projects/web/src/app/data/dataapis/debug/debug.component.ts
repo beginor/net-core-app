@@ -29,8 +29,10 @@ export class DebugComponent implements OnInit {
     @Input()
     public hasGeoColumn = false;
 
-    @ViewChild('previewFrame', { static: true })
-    public previewFrameRef!: ElementRef<HTMLIFrameElement>;
+    @ViewChild('previewFrame', { static: false })
+    public previewFrameRef?: ElementRef<HTMLIFrameElement>;
+    @ViewChild('previewMap', { static: false })
+    public previewMapRef?: ElementRef<HTMLDivElement>;
 
     public codeEditorUrl: SafeUrl;
     public resultType: ResultType = 'data';
@@ -65,7 +67,7 @@ export class DebugComponent implements OnInit {
     }
 
     public initPreview(): void {
-        const editorWin = this.previewFrameRef.nativeElement.contentWindow;
+        const editorWin = this.previewFrameRef?.nativeElement.contentWindow;
         editorWin?.postMessage(
             { language: 'txt', value: '请设置参数并调用！' },
             '*'
@@ -96,7 +98,6 @@ export class DebugComponent implements OnInit {
     public async sendRequest(): Promise<void> {
         this.loading = true;
         const url = this.getApiUrl();
-        const editorWin = this.previewFrameRef.nativeElement.contentWindow;
         const headers = {};
         this.account.addAuthTokenTo(headers);
         try {
@@ -112,6 +113,7 @@ export class DebugComponent implements OnInit {
             if (this.resultType != 'sql') {
                 value = JSON.stringify(JSON.parse(value));
             }
+            const editorWin = this.previewFrameRef?.nativeElement.contentWindow;
             editorWin?.postMessage(
                 { language: this.resultType === 'sql' ? 'sql' : 'json', value },
                 '*'

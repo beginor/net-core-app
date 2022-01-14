@@ -15,6 +15,7 @@ import { StatementComponent } from './statement/statement.component';
 import { ParamColsComponent } from './param-cols/param-cols.component';
 import { DebugComponent } from './debug/debug.component';
 import { PreviewComponent } from './preview/preview.component';
+import { PreviewGeoJsonComponent } from './preview/preview-geojson.component';
 
 @NgModule({
     declarations: [
@@ -23,7 +24,8 @@ import { PreviewComponent } from './preview/preview.component';
         StatementComponent,
         ParamColsComponent,
         DebugComponent,
-        PreviewComponent
+        PreviewComponent,
+        PreviewGeoJsonComponent
     ],
     imports: [
         CommonModule,

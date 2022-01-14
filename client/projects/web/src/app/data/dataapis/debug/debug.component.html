@@ -59,6 +59,11 @@
     </div>
   </div>
 </div>
-<iframe class="preview-frame" #previewFrame [src]="codeEditorUrl"
-  (load)="initPreview()">
-</iframe>
+<app-dataapis-preview-geojson class="preview-frame" #previewMap *ngIf="resultType === 'geojson';else previewFrameTpl">
+  Preview Map
+</app-dataapis-preview-geojson>
+<ng-template #previewFrameTpl>
+  <iframe class="preview-frame" #previewFrame [src]="codeEditorUrl"
+    (load)="initPreview()">
+  </iframe>
+</ng-template>
