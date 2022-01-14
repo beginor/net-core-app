@@ -2,17 +2,13 @@
   [@animation]="animation" (@animation.done)="onAnimationEvent($event)">
   <div class="card-header d-flex justify-content-start align-content-center">
     <h5 class="card-title mb-0">{{title}}</h5>
-
-    <div class="btn-group btn-group-sm ms-auto me-5"
-      *ngIf="(info.privileges['data_apis.read_data'] || info.privileges['data_apis.read_sql']) && canDoTest()">
+    <div class="btn-group btn-group-sm ms-auto">
       <button class="btn" type="button"
+        *ngIf="(info.privileges['data_apis.read_data'] || info.privileges['data_apis.read_sql']) && canDoTest()"
         [ngClass]="{ 'btn-outline-danger': !testing, 'btn-danger': testing }"
         (click)="testing = !testing">
         <svg-icon [path]="testing ? 'bi/stop' : 'bi/play'"></svg-icon> 测试
       </button>
-    </div>
-
-    <div class="btn-group btn-group-sm ms-auto">
       <button class="btn btn-outline-info" type="button" [disabled]="updating"
         (click)="loadData()">
         <svg-icon path="bi/arrow-repeat"></svg-icon> 刷新
@@ -36,8 +32,7 @@
       [id]="model.id"
       ></app-dataapi-debug>
     <ng-template #paramColsTpl>
-      <app-dataapi-param-cols class="params-and-cols px-1"
-        [parameters]="model.parameters || []" [columns]="model.columns || []">
+      <app-dataapi-param-cols class="params-and-cols px-1" [model]="model">
         <button class="btn btn-sm btn-outline-secondary" type="button"
           (click)="getColumns()" [disabled]="updatingColumns">
           <svg-icon path="bi/lightning"></svg-icon> 刷新输出字段

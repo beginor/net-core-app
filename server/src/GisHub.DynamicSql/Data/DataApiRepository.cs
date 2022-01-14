@@ -77,6 +77,8 @@ namespace Beginor.GisHub.DynamicSql.Data {
                     Name = x.Name,
                     Description = x.Description,
                     DataSource = x.DataSource,
+                    IdColumn = x.IdColumn,
+                    GeometryColumn = x.GeometryColumn,
                     WriteData = x.WriteData,
                     Roles = x.Roles,
                     Creator = x.Creator,

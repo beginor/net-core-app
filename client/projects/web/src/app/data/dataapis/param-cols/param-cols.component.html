@@ -11,7 +11,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="align-middle" *ngFor="let p of parameters; let i = index;">
+      <tr class="align-middle" *ngFor="let p of model.parameters; let i = index;">
         <th class="text-end" scope="row">{{i+1}}</th>
         <td class="text-start">
           <input class="form-control form-control-sm"
@@ -81,7 +81,7 @@
         <td class="text-center">
           <div class="btn-group btn-group-sm">
             <button class="btn btn-outline-primary" type="button"
-              (click)="addParameter();" [disabled]="!newParam.name">
+              (click)="addParameter()" [disabled]="!newParam.name">
               <svg-icon path="bi/check"></svg-icon>
             </button>
             <button class="btn btn-outline-secondary" type="button"
@@ -116,17 +116,27 @@
         <th class="text-start" scope="col" style="width: 120px;">名称</th>
         <th class="text-start" scope="col" style="width: 180px;">类型</th>
         <th class="text-start" scope="col" style="width: auto;">说明</th>
-        <th class="text-center" scope="col" style="width: 46px">操作</th>
+        <th class="text-center" scope="col" style="width: 80px">操作</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="align-middle" *ngFor="let col of columns; let i = index;">
+      <tr class="align-middle" *ngFor="let col of model.columns; let i = index;">
         <td class="text-end">{{i+1}}</td>
         <td class="text-start">
-          {{col.name}}
+          <input class="form-control form-control-sm" type="text"
+            *ngIf="columnEditIndex === i; else colNameViewTpl"
+            [name]="'col-name-' + i" [(ngModel)]="col.name" />
+          <ng-template #colNameViewTpl>
+            {{col.name}}
+          </ng-template>
         </td>
         <td class="text-start">
-          {{col.type}}
+          <input class="form-control form-control-sm" type="text"
+            *ngIf="columnEditIndex === i; else colTypeViewTpl"
+            [name]="'col-type-' + i" [(ngModel)]="col.type" />
+          <ng-template #colTypeViewTpl>
+            {{col.type}}
+          </ng-template>
         </td>
         <td class="text-start">
           <input class="form-control form-control-sm" type="text"
@@ -137,19 +147,101 @@
           </ng-template>
         </td>
         <td class="text-center">
-          <button class="btn btn-sm btn-outline-primary" type="button"
-            *ngIf="columnEditIndex === i; else descEditBtnTpl "
-            (click)="columnEditIndex = -1">
-            <svg-icon path="bi/check"></svg-icon>
-          </button>
-          <ng-template #descEditBtnTpl>
-            <button class="btn btn-sm btn-outline-secondary" type="button"
-              (click)="columnEditIndex = i">
-              <svg-icon path="bi/pencil-square"></svg-icon>
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-sm btn-outline-primary" type="button"
+              *ngIf="columnEditIndex === i; else descEditBtnTpl "
+              (click)="columnEditIndex = -1">
+              <svg-icon path="bi/check"></svg-icon>
             </button>
-          </ng-template>
+            <ng-template #descEditBtnTpl>
+              <button class="btn btn-sm btn-outline-secondary" type="button"
+                (click)="columnEditIndex = i">
+                <svg-icon path="bi/pencil-square"></svg-icon>
+              </button>
+            </ng-template>
+            <button class="btn btn-outline-secondary" type="button"
+              [disabled]="columnEditIndex === i"
+              (click)="removeColumn(i)">
+              <svg-icon path="bi/trash"></svg-icon>
+            </button>
+          </div>
+        </td>
+      </tr>
+      <tr class="align-middle" *ngIf="showNewColRow">
+        <td class="text-end text-warning">*</td>
+        <td class="text-start">
+          <input class="form-control form-control-sm" type="text"
+            name="newColName" placeholder="请输入字段名称"
+            [(ngModel)]="newCol.name" />
+        </td>
+        <td class="text-start">
+          <input class="form-control form-control-sm" type="text"
+            name="newColType" placeholder="请输入字段类型"
+            [(ngModel)]="newCol.type" />
+        </td>
+        <td class="text-start">
+          <input class="form-control form-control-sm" type="text"
+            name="newColDesc" placeholder="请输入字段说明"
+            [(ngModel)]="newCol.description" />
+        </td>
+        <td class="text-center">
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-outline-primary" type="button"
+              (click)="addNewCol()"
+              [disabled]="!newCol.name || !newCol.type">
+              <svg-icon path="bi/check"></svg-icon>
+            </button>
+            <button class="btn btn-outline-secondary" type="button"
+              (click)="showNewColRow=false">
+              <svg-icon path="bi/x"></svg-icon>
+            </button>
+          </div>
         </td>
       </tr>
     </tbody>
+    <tfoot *ngIf="!showNewColRow">
+      <tr class="align-middle">
+        <td colspan="5">
+          <button class="btn btn-sm btn-outline-secondary"
+            (click)="showNewColRow=true">
+            <svg-icon path="bi/plus"></svg-icon> 添加输出字段
+          </button>
+          <div class="d-inline-block ms-2">
+            <div class="input-group input-group-sm">
+              <label class="input-group-text">
+                唯一字段
+                <input class="form-check mt-0 ms-1" type="checkbox"
+                  name="hasIdCol" [(ngModel)]="hasIdCol"
+                  (change)="checkIdCol()" />
+              </label>
+              <select class="form-select form-select-sm"
+                name="pkCol" [(ngModel)]="model.idColumn"
+                [disabled]="!hasIdCol">
+                <option *ngFor="let c of model.columns" [value]="c.name">
+                  {{c.name}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="d-inline-block ms-1">
+            <div class="input-group input-group-sm">
+              <label class="input-group-text">
+                空间字段
+                <input class="form-check mt-0 ms-1" type="checkbox"
+                  name="hasGeoCol" [(ngModel)]="hasGeoCol"
+                  (change)="checkGeoCol()"/>
+              </label>
+              <select class="form-select form-select-sm"
+                name="geoCol" [(ngModel)]="model.geometryColumn"
+                [disabled]="!hasGeoCol">
+                <option *ngFor="let c of model.columns" [value]="c.name">
+                  {{c.name}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
   </table>
 </div>

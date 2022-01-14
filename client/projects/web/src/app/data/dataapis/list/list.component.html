@@ -92,8 +92,14 @@
                 <td class='text-start'>
                   <a class="preview-link"
                     *ngIf="(info.privileges['data_apis.read_data'] || info.privileges['data_apis.read_sql']);else apiNameTpl"
-                    (click)="showPreview(item)">{{item.name}}</a>
-                  <ng-template #apiNameTpl>{{item.name}}</ng-template>
+                    (click)="showPreview(item)">
+                    <svg-icon [path]="!!item.geometryColumn ? 'bi/globe' : 'bi/table'"></svg-icon>
+                    {{item.name}}
+                  </a>
+                  <ng-template #apiNameTpl>
+                    <svg-icon [path]="!!item.geometryColumn ? 'bi/globe' : 'bi/table'"></svg-icon>
+                    {{item.name}}
+                  </ng-template>
                 </td>
                 <td class='text-start'>{{item.description}}</td>
                 <td class='text-start'>{{item.dataSource?.name}}</td>

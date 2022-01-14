@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { UiService } from '../../../common';
 import {
     DataApiColumnModel as ColumnModel,
-    DataApiParameterModel as ParameterModel
+    DataApiParameterModel as ParameterModel,
+    DataApiModel
 } from '../dataapis.service';
 
 @Component({
@@ -13,14 +14,29 @@ import {
 })
 export class ParamColsComponent {
 
+    private apiModel!: DataApiModel;
+
     @Input()
-    public parameters: ParameterModel[] = [];
-    @Input()
-    public columns: ColumnModel[] = [];
+    public get model(): DataApiModel {
+        return this.apiModel;
+    }
+    public set model(val: DataApiModel) {
+        this.apiModel = val;
+        if (!!val?.idColumn) {
+            this.hasIdCol = true;
+        }
+        if (!!val?.geometryColumn) {
+            this.hasGeoCol = true;
+        }
+    }
 
     public paramEditIndex = -1;
     public showNewParamRow = false;
     public columnEditIndex = -1;
+    public showNewColRow = false;
+
+    public hasIdCol = false;
+    public hasGeoCol = false;
 
     public newParam: ParameterModel = { type: 'string' };
     public paramTypes = [
@@ -29,6 +45,7 @@ export class ParamColsComponent {
         'bool[]'
     ];
 
+    public newCol: ColumnModel = { type: 'varchar' };
 
     constructor(private ui: UiService) { }
 
@@ -37,16 +54,54 @@ export class ParamColsComponent {
             this.ui.showAlert({ type: 'danger', message: '请输入参数名称！' });
             return;
         }
-        if (!this.parameters) {
-            this.parameters = [];
+        if (!this.model.parameters) {
+            this.model.parameters = [];
         }
-        this.parameters.push(this.newParam);
+        this.model.parameters.push(this.newParam);
         this.newParam = { type: 'string' };
         this.showNewParamRow = false;
     }
 
-    public removeParameter(idx: number): void {
-        this.parameters.splice(idx, 1);
+    public async removeParameter(idx: number): Promise<void> {
+        const confirmed = await this.ui.showConfirm('确认删除么？');
+        if (confirmed) {
+            this.model.parameters?.splice(idx, 1);
+        }
+    }
+
+    public async removeColumn(idx: number): Promise<void> {
+        const confirmed = await this.ui.showConfirm('确认删除么？');
+        if (confirmed) {
+            this.model.columns?.splice(idx, 1);
+        }
+    }
+
+    public addNewCol(): void {
+        if (!this.newCol.name) {
+            this.ui.showAlert({ type: 'danger', message: '请输入字段名称!' });
+            return;
+        }
+        if (!this.newCol.type) {
+            this.ui.showAlert({ type: 'danger', message: '请输入字段类型' });
+        }
+        if (!this.model.columns) {
+            this.model.columns = [];
+        }
+        this.model.columns.push(this.newCol);
+        this.newCol = { type: 'varchar' };
+        this.showNewColRow = false;
+    }
+
+    public checkIdCol(): void {
+        if (!this.hasIdCol) {
+            this.model.idColumn = undefined;
+        }
+    }
+
+    public checkGeoCol(): void {
+        if (!this.hasGeoCol) {
+            this.model.geometryColumn = undefined;
+        }
     }
 
 }
