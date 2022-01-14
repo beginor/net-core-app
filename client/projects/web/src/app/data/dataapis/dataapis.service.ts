@@ -196,7 +196,7 @@ export class DataApiService {
 
 }
 
-export type ResultType = 'data' | 'columns' | 'sql';
+export type ResultType = 'data' | 'columns' | 'sql' | 'geojson';
 
 /** 数据API */
 export interface DataApiModel {

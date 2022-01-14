@@ -10,8 +10,9 @@ import { DataApiService } from '../dataapis.service';
 })
 export class PreviewComponent {
 
-    public id: string = '';
-    public title: string = '';
+    public id = '';
+    public title = '';
+    public hasGeoColumn = false;
 
     constructor(
         public activeModal: NgbActiveModal,

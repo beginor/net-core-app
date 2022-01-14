@@ -47,6 +47,11 @@
         name="result-type" value="data" [(ngModel)]="resultType" />
       <label for="result-type-json">JSON 数据</label>
     </div>
+    <div class="form-check form-check-inline" *ngIf="hasGeoColumn && user.privileges['data_apis.read_data']">
+      <input class="form-check-input" type="radio" id="result-type-geojson"
+        name="result-type" value="geojson" [(ngModel)]="resultType" />
+      <label for="result-type-geojson">GeoJSON 数据</label>
+    </div>
     <div class="form-check form-check-inline" *ngIf="user.privileges['data_apis.read_sql']">
       <input class="form-check-input" type="radio" id="result-type-sql"
         name="result-type" value="sql" [(ngModel)]="resultType" />

@@ -30,6 +30,7 @@
       *ngIf="testing;else paramColsTpl"
       [parameters]="model.parameters || []"
       [id]="model.id"
+      [hasGeoColumn]="!!model.geometryColumn"
       ></app-dataapi-debug>
     <ng-template #paramColsTpl>
       <app-dataapi-param-cols class="params-and-cols px-1" [model]="model">

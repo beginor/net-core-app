@@ -106,6 +106,7 @@ namespace Beginor.GisHub.DynamicSql.Api {
                 var result = new GeoJsonFeatureCollection { Features = features };
                 var json = JsonSerializer.Serialize(
                     result,
+                    typeof(GeoJsonFeatureCollection),
                     serializerOptionsFactory.GeoJsonSerializerOptions
                 );
                 return Content(json, "application/geo+json", Encoding.UTF8);

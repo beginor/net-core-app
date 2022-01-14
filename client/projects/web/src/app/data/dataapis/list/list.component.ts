@@ -62,7 +62,10 @@ export class ListComponent implements OnInit {
                 backdrop: 'static'
             }
         );
-        Object.assign(ref.componentInstance, { id: api.id, title: api.name });
+        Object.assign(
+            ref.componentInstance,
+            { id: api.id, title: api.name, hasGeoColumn: !!api.geometryColumn }
+        );
     }
 
     public resetSearch(): void {

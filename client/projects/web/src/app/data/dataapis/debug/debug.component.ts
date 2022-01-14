@@ -26,6 +26,8 @@ export class DebugComponent implements OnInit {
     public parameters: ParameterModel[] = [];
     @Input()
     public id: string = '';
+    @Input()
+    public hasGeoColumn = false;
 
     @ViewChild('previewFrame', { static: true })
     public previewFrameRef!: ElementRef<HTMLIFrameElement>;
