@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { lastValueFrom } from 'rxjs';
+import { Map as MapboxMap } from 'mapbox-gl';
 
 import { AccountService } from 'app-shared';
 import { UiService } from '../../../common'
@@ -14,6 +15,7 @@ import {
     DataApiParameterModel as ParameterModel,
     ResultType
 } from '../dataapis.service';
+import { PreviewGeoJsonComponent } from '../preview/preview-geojson.component';
 
 @Component({
     selector: 'app-dataapi-debug',
@@ -31,8 +33,8 @@ export class DebugComponent implements OnInit {
 
     @ViewChild('previewFrame', { static: false })
     public previewFrameRef?: ElementRef<HTMLIFrameElement>;
-    @ViewChild('previewMap', { static: false })
-    public previewMapRef?: ElementRef<HTMLDivElement>;
+    @ViewChild(PreviewGeoJsonComponent, { static: false })
+    public previewMapRef?: PreviewGeoJsonComponent;
 
     public codeEditorUrl: SafeUrl;
     public resultType: ResultType = 'data';
@@ -110,14 +112,19 @@ export class DebugComponent implements OnInit {
                     }
                 )
             );
-            if (this.resultType != 'sql') {
+            if (this.resultType === 'geojson') {
+                this.previewMapRef?.setData(JSON.parse(value));
+                return;
+            }
+            if (this.resultType !== 'sql') {
                 value = JSON.stringify(JSON.parse(value));
             }
-            const editorWin = this.previewFrameRef?.nativeElement.contentWindow;
-            editorWin?.postMessage(
+            const prvFrame = this.previewFrameRef?.nativeElement.contentWindow;
+            prvFrame?.postMessage(
                 { language: this.resultType === 'sql' ? 'sql' : 'json', value },
                 '*'
             );
+
         }
         catch (ex: unknown) {
             this.ui.showAlert(
@@ -128,6 +135,10 @@ export class DebugComponent implements OnInit {
         finally {
             this.loading = false;
         }
+    }
+
+    public onMapLoaded(map: MapboxMap): void {
+
     }
 
 }

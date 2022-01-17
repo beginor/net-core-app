@@ -59,8 +59,9 @@
     </div>
   </div>
 </div>
-<app-dataapis-preview-geojson class="preview-frame" #previewMap *ngIf="resultType === 'geojson';else previewFrameTpl">
-  Preview Map
+<app-dataapis-preview-geojson class="preview-frame" #previewMap
+  *ngIf="resultType === 'geojson';else previewFrameTpl"
+  (mapLoaded)="onMapLoaded($event)">
 </app-dataapis-preview-geojson>
 <ng-template #previewFrameTpl>
   <iframe class="preview-frame" #previewFrame [src]="codeEditorUrl"
