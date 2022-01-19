@@ -3,6 +3,6 @@ ENV ASPNETCORE_PATHBASE=/gishub \
     ASPNETCORE_URLS=http://+:5000 \
     TZ=Asia/Shanghai
 ADD dist /gishub
-VOLUME [ "/gishub/config", "/gishub/log" ]
+VOLUME [ "/gishub/config", "/gishub/log", "/gishub/wwwroot", "/gishub/app_cache" ]
 WORKDIR /gishub
 ENTRYPOINT ["./GisHub"]
