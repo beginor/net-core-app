@@ -25,6 +25,7 @@ find . -name '*.bak' -delete
 git add *
 git commit -m "Rename to ${COMPANY_NAME}.${PROJ_NAME}"
 # 修改客户端相关文件
+sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/package.json
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/angular.json
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/web/src/environments/environment.ts
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/web/src/environments/environment.prod.ts
