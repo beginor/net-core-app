@@ -9,10 +9,10 @@
     "ng": "ng",
     "build": "pnpm run build-shared && pnpm run build-web && pnpm run build-handset",
     "build-shared": "ng build app-shared --configuration production",
-    "build-web": "ng build web --configuration production --base-href=/net-core-app/web/",
-    "build-handset": "ng build handset --configuration production --base-href=/net-core-app/handset/",
-    "watch-web": "ng build web --watch --configuration development --base-href=/net-core-app/web/",
-    "watch-handset": "ng build handset --watch --configuration development --base-href=/net-core-app/handset/",
+    "build-web": "ng build web --configuration production",
+    "build-handset": "ng build handset --configuration production",
+    "watch-web": "ng build web --watch --configuration development",
+    "watch-handset": "ng build handset --watch --configuration development",
     "start": "pnpm run watch-web"
   },
   "repository": {
