@@ -91,7 +91,7 @@
           "options": {
             "outputPath": "dist/handset",
             "index": "projects/handset/src/index.html",
-            "baseHref": "/net-core-app/handset/",
+            "baseHref": "/gishub/handset/",
             "main": "projects/handset/src/main.ts",
             "polyfills": "projects/handset/src/polyfills.ts",
             "tsConfig": "projects/handset/tsconfig.app.json",
@@ -206,7 +206,7 @@
           "options": {
             "outputPath": "dist/web",
             "index": "projects/web/src/index.html",
-            "baseHref": "/net-core-app/web/",
+            "baseHref": "/gishub/web/",
             "main": "projects/web/src/main.ts",
             "polyfills": "projects/web/src/polyfills.ts",
             "tsConfig": "projects/web/tsconfig.app.json",
