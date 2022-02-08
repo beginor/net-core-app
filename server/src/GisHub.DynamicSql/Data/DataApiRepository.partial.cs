@@ -52,10 +52,7 @@ namespace Beginor.GisHub.DynamicSql.Data {
             var reader = await conn.ExecuteReaderAsync(sql, parameters);
             var data = await dsReader.ReadDataAsync(reader);
             var featureReader = dataServiceFactory.CreateFeatureProvider(api.DatabaseType);
-            // todo: id column, geometry column;
-            var idField = "id"; // api.IdColumn;
-            var geoField = "geom"; // api.GeometryColumn;
-            var features = featureReader.ConvertToGeoJson(data, idField, geoField);
+            var features = featureReader.ConvertToGeoJson(data, api.IdColumn, api.GeometryColumn);
             return features;
         }
 
@@ -107,6 +104,7 @@ namespace Beginor.GisHub.DynamicSql.Data {
                 throw new InvalidOperationException("Sql is empty!");
             }
             logger.LogInformation(sql);
+            // todo: change to use regex expression (?<=(from|join)\s+)(\w*\.\w*|\w*)
             var factory = dynamicSqlProvider.GetDbProviderFactory(cacheItem.DatabaseType);
             await using var conn = factory.CreateConnection();
             conn.ConnectionString = cacheItem.ConnectionString;

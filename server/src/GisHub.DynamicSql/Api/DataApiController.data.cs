@@ -101,12 +101,14 @@ namespace Beginor.GisHub.DynamicSql.Api {
                 if (api.WriteData) {
                     return BadRequest($"DataApi {id} can not used for query!");
                 }
+                if (string.IsNullOrEmpty(api.IdColumn) || string.IsNullOrEmpty(api.GeometryColumn)) {
+                    return BadRequest($"DataApi {id} doesn't define id column and geometry column, can not query as geojson!");
+                }
                 var parameters = GetParameters(Request, api.Parameters);
                 var features = await repository.QueryGeoJsonAsync(api, parameters);
                 var result = new GeoJsonFeatureCollection { Features = features };
                 var json = JsonSerializer.Serialize(
                     result,
-                    typeof(GeoJsonFeatureCollection),
                     serializerOptionsFactory.GeoJsonSerializerOptions
                 );
                 return Content(json, "application/geo+json", Encoding.UTF8);
