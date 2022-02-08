@@ -13,8 +13,8 @@
     <ApplicationURL>http://+:5800;https://+:5843</ApplicationURL>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta11" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.0.0" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13" />
     <PackageReference Include="System.IO.Pipelines" Version="6.0.1" />
     <PackageReference Include="Beginor.AppFx.Logging.Log4net" Version="6.0.1" />
     <PackageReference Include="log4net" Version="2.0.14" />

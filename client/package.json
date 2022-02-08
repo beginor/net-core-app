@@ -52,8 +52,8 @@
     "@angular/material": "~13.2.0",
     "hammerjs": "^2.0.8",
     "material-design-icons": "^3.0.1",
-    "esri-loader": "^3.3.0",
-    "mapbox-gl": "^2.6.1",
+    "esri-loader": "^3.4.0",
+    "mapbox-gl": "^2.7.0",
     "@turf/bbox": "6.5.0"
   },
   "devDependencies": {
@@ -72,6 +72,6 @@
     "ng-packagr": "^13.2.0",
     "typescript": "~4.5.2",
     "@types/arcgis-js-api": "^4.22.0",
-    "@types/mapbox-gl": "^2.6.0"
+    "@types/mapbox-gl": "^2.6.1"
   }
 }
