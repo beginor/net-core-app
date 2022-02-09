@@ -35,6 +35,9 @@ namespace Beginor.GisHub.DataServices.PostGIS {
                 builder.SslMode = SslMode.Require;
                 builder.TrustServerCertificate = true;
             }
+            else {
+                builder.SslMode = SslMode.Disable;
+            }
             return builder.ConnectionString;
         }
 
