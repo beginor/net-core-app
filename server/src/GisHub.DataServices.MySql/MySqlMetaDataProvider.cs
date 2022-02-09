@@ -23,27 +23,68 @@ namespace Beginor.GisHub.DataServices.MySql {
                 AllowUserVariables = true,
                 CharacterSet = "utf8"
             };
-            if (model.UseSsl) {
-                builder.SslMode = MySqlSslMode.Required;
-            }
+            builder.SslMode = model.UseSsl ? MySqlSslMode.Required : MySqlSslMode.None;
             return builder.ConnectionString;
         }
 
-        public Task GetStatus(DataSourceModel model) {
-            throw new NotImplementedException();
+        public async Task GetStatus(DataSourceModel model) {
+            var connStr = BuildConnectionString(model);
+            await using var conn = new MySqlConnection(connStr);
+            await conn.ExecuteScalarAsync<DateTime>("select now();");
         }
 
         public Task<IList<string>> GetSchemasAsync(DataSourceModel model) {
-            throw new NotImplementedException();
+            throw new NotSupportedException("MySQL does not database schema");
         }
 
-        public Task<IList<TableModel>> GetTablesAsync(DataSourceModel model, string schema
-        ) {
-            throw new NotImplementedException();
+        public async Task<IList<TableModel>> GetTablesAsync(DataSourceModel model, string schema) {
+            var connStr = BuildConnectionString(model);
+            await using var conn = new MySqlConnection(connStr);
+            var sql = ""
+                + " select"
+                + " t.table_schema as `schema`,"
+                + " t.table_name as `name`,"
+                + " t.table_comment as `description`,"
+                + " t.table_type as `type`"
+                + " from information_schema.tables t"
+                + " where t.table_type <> 'SYSTEM VIEW'"
+                + " and t.table_schema = @database"
+                + " order by t.table_name";
+            var meta = await conn.QueryAsync<TableModel>(
+                sql,
+                new {
+                    database = model.DatabaseName
+                }
+            );
+            return meta.ToList();
         }
 
-        public Task<IList<ColumnModel>> GetColumnsAsync(DataSourceModel model, string schema, string tableName) {
-            throw new NotImplementedException();
+        public async Task<IList<ColumnModel>> GetColumnsAsync(DataSourceModel model, string schema, string tableName) {
+            var connStr = BuildConnectionString(model);
+            await using var conn = new MySqlConnection(connStr);
+            var sql = ""
+                + " select"
+                + " col.TABLE_SCHEMA as `schema`,"
+                + " col.table_name as `table`,"
+                + " col.column_name as `name`,"
+                + " col.column_comment as `description`,"
+                + " col.data_type as `type`,"
+                + " (case when col.numeric_precision is not null then (col.numeric_precision+1)"
+                + " when col.character_maximum_length is not null then col.character_maximum_length"
+                + " else null end) as `length`,"
+                + " ( case when col.is_nullable = 'no' then 0 else 1 end ) `nullable`"
+                + " from information_schema.columns as col"
+                + " where col.table_schema= @database"
+                + " and col.table_name=@tableName"
+                + " order by col.ordinal_position asc";
+            var columns = await conn.QueryAsync<ColumnModel>(
+                sql,
+                new {
+                    database = model.DatabaseName,
+                    tableName
+                }
+            );
+            return columns.ToList();
         }
 
     }
