@@ -1,5 +1,7 @@
 import { Injectable, Inject, ErrorHandler } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+    HttpClient, HttpErrorResponse, HttpParams
+} from '@angular/common/http';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { UiService } from 'projects/web/src/app/common';
@@ -49,7 +51,7 @@ export class DataSourceService {
             this.data.next(data);
             this.showPagination = total > data.length;
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
@@ -70,7 +72,7 @@ export class DataSourceService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '加载全部数据源出错！' }
@@ -101,7 +103,7 @@ export class DataSourceService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '创建数据源出错！' }
@@ -118,7 +120,7 @@ export class DataSourceService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取指定的数据源出错！' }
@@ -139,7 +141,7 @@ export class DataSourceService {
             );
             return true;
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '删除数据源出错！' }
@@ -159,13 +161,30 @@ export class DataSourceService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: any) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '更新数据源出错！' }
             );
             return;
         }
+    }
+
+    public checkStatus(model: DataSourceModel): Promise<StatusResult> {
+        return new Promise<StatusResult>((resolve) => {
+            const url = this.baseUrl + '-status';
+            this.http.post<any>(url, model).subscribe({
+                next: () => {
+                    resolve({ status: 'success', message: '连接成功！' });
+                },
+                error: (res: HttpErrorResponse) => {
+                    resolve({
+                        status: res.status === 400 ? 'warning' : 'danger',
+                        message: res.error as string
+                    });
+                }
+            });
+        });
     }
 
 }
@@ -214,4 +233,9 @@ export interface DataSourceResultModel {
     total?: number;
     /** 数据列表 */
     data?: DataSourceModel[];
+}
+
+export interface StatusResult {
+    status: 'info' | 'danger' | 'success' | 'warning';
+    message: string;
 }

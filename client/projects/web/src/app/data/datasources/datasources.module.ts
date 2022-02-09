@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
-    NgbPaginationModule, NgbTooltipModule
+    NgbPaginationModule, NgbTooltipModule, NgbAlertModule
 } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppSharedModule } from 'app-shared';
@@ -22,6 +22,7 @@ import { DetailComponent } from './detail/detail.component';
         FormsModule,
         NgbPaginationModule,
         NgbTooltipModule,
+        NgbAlertModule,
         AppSharedModule,
         AppCommonModule,
         DataSourceRoutingModule

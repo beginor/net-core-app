@@ -116,6 +116,20 @@
         <label class="form-check-label" for="useSsl">使用 SSL 安全连接</label>
       </div>
     </div>
+    <div class="mb-3" *ngIf="editable">
+      <button class="btn btn-outline-info" type="button"
+        *ngIf="showCheckButton && canCheckStatus(); else checkingStatusTpl"
+        (click)="checkStatus()">
+        <svg-icon path="bi/plug"></svg-icon> 连接测试
+      </button>
+      <ng-template #checkingStatusTpl>
+        <ngb-alert [type]="checkResult.status" (closed)="onCheckAlertClosed()">
+          <svg-icon [path]="checkingStatus ? 'bi/arrow-repeat' : (checkResult.status === 'success' ? 'bi/check' : 'bi/exclamation')"
+            [iconClass]="checkingStatus ? 'bi-spin' : ''"></svg-icon>
+          {{checkResult.message}}
+        </ngb-alert>
+      </ng-template>
+    </div>
   </div>
   <div *ngIf="info.privileges['data_sources.update'] && editable"
     class="card-footer d-flex justify-content-between">

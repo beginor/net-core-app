@@ -18,19 +18,23 @@ namespace Beginor.GisHub.DataServices.Api {
 
         private ILogger<DataSourceController> logger;
         private IDataSourceRepository repository;
+        private IDataServiceFactory factory;
 
         public DataSourceController(
             ILogger<DataSourceController> logger,
-            IDataSourceRepository repository
+            IDataSourceRepository repository,
+            IDataServiceFactory factory
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 logger = null;
                 repository = null;
+                factory = null;
             }
             base.Dispose(disposing);
         }
@@ -146,7 +150,30 @@ namespace Beginor.GisHub.DataServices.Api {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not update datasource by id {id} with {model.ToJson()} .");
-                return this.InternalServerError(ex.GetOriginalMessage());
+                return this.InternalServerError(ex);
+            }
+        }
+
+        [HttpPost("~/api/datasources-status")]
+        [Authorize("data_sources.read")]
+        public async Task<ActionResult> CheckStatus(
+            [FromBody]DataSourceModel model
+        ) {
+            try {
+                var metadataProvider = factory.CreateMetadataProvider(model.DatabaseType);
+                await metadataProvider.GetStatus(model);
+                try {
+                    await metadataProvider.GetTablesAsync(model, string.Empty);
+                    return Ok();
+                }
+                catch (Exception ex) {
+                    logger.LogError(ex, $"Can not get tables for datasource {model.ToJson()}");
+                    return BadRequest("权限不足，无法读取元数据！");
+                }
+            }
+            catch (Exception ex) {
+                logger.LogError(ex, $"Can not check status for datasource {model.ToJson()}");
+                return this.InternalServerError(ex);
             }
         }
 

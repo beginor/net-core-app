@@ -6,7 +6,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
-import { DataSourceService, DataSourceModel } from '../datasources.service';
+import {
+    DataSourceService, DataSourceModel, StatusResult
+} from '../datasources.service';
 
 @Component({
     selector: 'app-datasources-detail',
@@ -26,6 +28,9 @@ export class DetailComponent implements OnInit {
     public editable = false;
     public model: DataSourceModel = { id: '' };
     public showPass = false;
+    public checkingStatus = false;
+    public showCheckButton = true;
+    public checkResult!: StatusResult;
 
     private id = '';
     private reloadList = false;
@@ -49,7 +54,8 @@ export class DetailComponent implements OnInit {
             this.title = '查看数据源';
             this.editable = false;
         }
-        this.id = id;
+        this.id = id as string;
+        this.resetStatusResult();
     }
 
     public async ngOnInit(): Promise<void> {
@@ -65,7 +71,7 @@ export class DetailComponent implements OnInit {
         if (e.fromState === '' && e.toState === 'void') {
             await this.router.navigate(['../'], { relativeTo: this.route });
             if (this.reloadList) {
-                this.vm.search();
+                void this.vm.search();
             }
         }
     }
@@ -83,6 +89,34 @@ export class DetailComponent implements OnInit {
         }
         this.reloadList = true;
         this.goBack();
+    }
+
+    public canCheckStatus(): boolean {
+        return !!this.model.databaseType
+            && !!this.model.serverAddress
+            && !!this.model.serverPort
+            && !!this.model.databaseName
+            && !!this.model.username
+            && !!this.model.password
+            && !!this.model.timeout;
+    }
+
+    public async checkStatus(): Promise<void> {
+        this.showCheckButton = false;
+        this.resetStatusResult();
+        this.checkingStatus = true;
+        const result = await this.vm.checkStatus(this.model);
+        this.checkingStatus = false;
+        this.checkResult = result;
+    }
+
+    public onCheckAlertClosed(): void {
+        this.showCheckButton = true;
+        this.resetStatusResult();
+    }
+
+    private resetStatusResult(): void {
+        this.checkResult = { status: 'info', message: '测试中 ...' };
     }
 
 }
