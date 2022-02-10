@@ -150,6 +150,11 @@ namespace Beginor.GisHub.DynamicSql.Data {
             await cache.RemoveAsync(id.ToString());
         }
 
+        public async Task<string[]> GetRolesAsync(object id) {
+            var api = await GetDataApiCacheItemByIdAsync((long)id);
+            return api.Roles;
+        }
+
     }
 
 }

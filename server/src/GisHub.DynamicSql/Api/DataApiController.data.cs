@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Beginor.AppFx.Api;
+using Beginor.GisHub.Common;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DynamicSql.Data;
 using Beginor.GisHub.DynamicSql.Models;
@@ -21,6 +22,7 @@ namespace Beginor.GisHub.DynamicSql.Api {
         /// <summary>调用指定的数据 API 查询数据</summary>
         [HttpGet("{id:long}/data")]
         [Authorize("data_apis.read_data")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataApiRepository))]
         public Task<ActionResult> QueryByGet(long id) {
             return QueryImpl(id);
         }
@@ -28,6 +30,7 @@ namespace Beginor.GisHub.DynamicSql.Api {
         /// <summary>调用指定的数据 API 查询数据</summary>
         [HttpPost("{id:long}/data")]
         [Authorize("data_apis.read_data")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataApiRepository))]
         [Consumes("application/x-www-form-urlencoded")]
         public Task<ActionResult> QueryByPost(long id) {
             return QueryImpl(id);
@@ -35,12 +38,14 @@ namespace Beginor.GisHub.DynamicSql.Api {
 
         [HttpGet("{id:long}/geojson")]
         [Authorize("data_apis.read_data")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataApiRepository))]
         public Task<ActionResult<GeoJsonFeatureCollection>> QueryGenJsonByGet(long id) {
             return QueryGeoJsonImpl(id);
         }
 
         [HttpPost("{id:long}/geojson")]
         [Authorize("data_apis.read_data")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataApiRepository))]
         [Consumes("application/x-www-form-urlencoded")]
         public Task<ActionResult<GeoJsonFeatureCollection>> QueryGeoJsonByPost(long id) {
             return QueryGeoJsonImpl(id);
@@ -49,6 +54,7 @@ namespace Beginor.GisHub.DynamicSql.Api {
         /// <summary>读取数据API动态生成的sql语句</summary>
         [HttpGet("{id:long}/sql")]
         [Authorize("data_apis.read_sql")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataApiRepository))]
         public Task<ActionResult> BuildSqlByGet(long id) {
             return BuildSqlImpl(id);
         }
@@ -56,6 +62,7 @@ namespace Beginor.GisHub.DynamicSql.Api {
         /// <summary>读取数据API动态生成的sql语句</summary>
         [HttpPost("{id:long}/sql")]
         [Authorize("data_apis.read_sql")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataApiRepository))]
         [Consumes("application/x-www-form-urlencoded")]
         public Task<ActionResult> BuildSqlByPost(long id) {
             return BuildSqlImpl(id);
@@ -64,6 +71,7 @@ namespace Beginor.GisHub.DynamicSql.Api {
         /// <summary>获取数据API的输出字段列表</summary>
         [HttpGet("{id:long}/columns")]
         [Authorize("data_apis.read_columns")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataApiRepository))]
         public Task<ActionResult<DataServiceFieldModel>> GetColumnsByGet(long id) {
             return GetColumnsImpl(id);
         }
@@ -71,6 +79,7 @@ namespace Beginor.GisHub.DynamicSql.Api {
         /// <summary>获取数据API的输出字段列表</summary>
         [HttpPost("{id:long}/columns")]
         [Authorize("data_apis.read_columns")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataApiRepository))]
         [Consumes("application/x-www-form-urlencoded")]
         public Task<ActionResult<DataServiceFieldModel>> GetColumnsByPost(long id) {
             return GetColumnsImpl(id);
