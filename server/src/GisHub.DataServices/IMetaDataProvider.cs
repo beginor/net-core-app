@@ -8,13 +8,15 @@ namespace Beginor.GisHub.DataServices {
 
         string BuildConnectionString(DataSourceModel model);
 
-        Task GetStatus(DataSourceModel model);
+        Task GetStatusAsync(DataSourceModel model);
 
         Task<IList<string>> GetSchemasAsync(DataSourceModel model);
 
         Task<IList<TableModel>> GetTablesAsync(DataSourceModel model, string schema);
 
         Task<IList<ColumnModel>> GetColumnsAsync(DataSourceModel model, string schema, string tableName);
+
+        string GetDefaultSchema();
 
     }
 

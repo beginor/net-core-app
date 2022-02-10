@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Common;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.Geo.GeoJson;
 using Dapper;
-using Microsoft.Extensions.Logging;
 
 namespace Beginor.GisHub.DynamicSql.Data {
 
@@ -104,7 +106,11 @@ namespace Beginor.GisHub.DynamicSql.Data {
                 throw new InvalidOperationException("Sql is empty!");
             }
             logger.LogInformation(sql);
-            // todo: change to use regex expression (?<=(from|join)\s+)(\w*\.\w*|\w*)
+            var tables = FindTableNames(sql);
+            var api = await Session.GetAsync<DataApi>(cacheItem.DataApiId);
+            var dataSource = Mapper.Map<DataSourceModel>(api.DataSource);
+            var dbColumns = await GetColumnsFromDataSourceAsync(dataSource, tables);
+            //
             var factory = dynamicSqlProvider.GetDbProviderFactory(cacheItem.DatabaseType);
             await using var conn = factory.CreateConnection();
             conn.ConnectionString = cacheItem.ConnectionString;
@@ -112,15 +118,53 @@ namespace Beginor.GisHub.DynamicSql.Data {
             await reader.ReadAsync();
             var columns = new DataServiceFieldModel[reader.FieldCount];
             for (var i = 0; i < reader.FieldCount; i++) {
+                var name = reader.GetName(i);
+                var descs = dbColumns
+                    .Where(col => col.Name.EqualsOrdinalIgnoreCase(name))
+                    .Select(col => col.Description).ToArray();
                 columns[i] = new DataServiceFieldModel {
-                    Name = reader.GetName(i),
-                    Description = reader.GetName(i),
+                    Name = name,
+                    Description = descs.Length > 0 ? string.Join(";", descs) : reader.GetName(i),
                     Editable = false,
                     Type = reader.GetDataTypeName(i)
                 };
             }
             await reader.CloseAsync();
             return columns;
+        }
+
+        private IList<string> FindTableNames(string sql) {
+            var regex = new Regex(@"(?<=(from|join)\s+)(\w*\.\w*|\w*)");
+            return regex.Matches(sql).Select(match => match.Value).ToList();
+        }
+
+        private async Task<IList<DataServiceFieldModel>> GetColumnsFromDataSourceAsync(DataSourceModel dataSource, IList<string> tableNames) {
+            var metadata = dataServiceFactory.CreateMetadataProvider(dataSource.DatabaseType);
+            var result = new List<DataServiceFieldModel>();
+            foreach (var tableName in tableNames) {
+                var parts = tableName.Split('.');
+                string schema;
+                string table;
+                if (parts.Length == 0) {
+                    schema = metadata.GetDefaultSchema();
+                    table = parts[0];
+                }
+                else {
+                    schema = parts[0];
+                    table = parts[1];
+                }
+                var columns = await metadata.GetColumnsAsync(dataSource, schema, table);
+                var fields = columns.Select(col => new DataServiceFieldModel {
+                    Name = col.Name,
+                    Description = col.Description,
+                    Type = col.Type,
+                    Length = col.Length,
+                    Nullable = col.Nullable,
+                    Editable = false
+                });
+                result.AddRange(fields);
+            }
+            return result;
         }
 
     }

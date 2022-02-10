@@ -45,7 +45,7 @@ namespace Beginor.GisHub.DataServices.Api {
                     return NotFound();
                 }
                 var provider = factory.CreateMetadataProvider(model.DatabaseType);
-                await provider.GetStatus(model);
+                await provider.GetStatusAsync(model);
                 return Ok();
             }
             catch (Exception ex) {

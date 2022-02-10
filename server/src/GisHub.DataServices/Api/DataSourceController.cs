@@ -161,7 +161,7 @@ namespace Beginor.GisHub.DataServices.Api {
         ) {
             try {
                 var metadataProvider = factory.CreateMetadataProvider(model.DatabaseType);
-                await metadataProvider.GetStatus(model);
+                await metadataProvider.GetStatusAsync(model);
                 try {
                     await metadataProvider.GetTablesAsync(model, string.Empty);
                     return Ok();

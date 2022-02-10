@@ -28,7 +28,7 @@ public class MySqlMetaDataProviderTest : BaseTest<MySqlMetaDataProvider> {
     [Test]
     public async Task _03_CanGetStatus() {
         var dataSource = CreateTestDataSource();
-        await Target.GetStatus(dataSource);
+        await Target.GetStatusAsync(dataSource);
     }
 
     [Test]

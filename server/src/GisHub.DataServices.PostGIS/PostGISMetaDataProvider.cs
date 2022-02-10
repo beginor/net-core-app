@@ -41,7 +41,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             return builder.ConnectionString;
         }
 
-        public async Task GetStatus(DataSourceModel model) {
+        public async Task GetStatusAsync(DataSourceModel model) {
             var connStr = BuildConnectionString(model);
             await using var conn = new NpgsqlConnection(connStr);
             await conn.ExecuteScalarAsync<DateTime>("select now();");
@@ -113,6 +113,8 @@ namespace Beginor.GisHub.DataServices.PostGIS {
             );
             return columns.ToList();
         }
+
+        public string GetDefaultSchema() => "public";
 
     }
 

@@ -126,7 +126,10 @@ export class StatementComponent implements OnInit, OnDestroy {
         if (!!columns) {
             var oc = this.model.columns;
             columns.forEach(col => {
-                col.description = oc?.find(c => c.name == col.name)?.description
+                const desc = oc?.find(c => c.name == col.name)?.description;
+                if (!!desc && !col.description) {
+                    col.description = desc;
+                }
             });
             this.model.columns = columns;
         }
