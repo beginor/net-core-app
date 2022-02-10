@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Common;
+using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.Geo.GeoJson;
 using Beginor.GisHub.Geo.Esri;
-using Beginor.GisHub.DataServices.Filters;
 
 namespace Beginor.GisHub.DataServices.Api {
 
@@ -19,7 +20,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <summary>读取数据服务的空间数据(GeoJSON)</summary>
         [HttpGet("{id:long}/geojson")]
         [Authorize("data_services.read_geojson")]
-        [DataServiceRolesFilter(IdParameterName = "id")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult<GeoJsonFeatureCollection>> ReadAsGeoJson(
             [FromRoute] long id,
             [FromQuery] GeoJsonParam param
@@ -56,7 +57,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <summary>读取数据服务的空间数据(EsriJSON)</summary>
         [HttpGet("{id:long}/featureset")]
         [Authorize("data_services.read_featureset")]
-        [DataServiceRolesFilter(IdParameterName = "id")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult<AgsFeatureSet>> ReadAsFeatureSet(
             [FromRoute] long id,
             [FromQuery] AgsJsonParam param

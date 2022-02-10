@@ -118,9 +118,7 @@ namespace Beginor.GisHub.DataServices.Data {
             }
         }
 
-        public async Task<DataServiceCacheItem> GetCacheItemByIdAsync(
-            long id
-        ) {
+        public async Task<DataServiceCacheItem> GetCacheItemByIdAsync(long id) {
             var key = id.ToString();
             var item = await cache.GetAsync<DataServiceCacheItem>(key);
             if (item != null) {
@@ -160,6 +158,11 @@ namespace Beginor.GisHub.DataServices.Data {
             }
             await cache.SetAsync(key, item, commonOption.Cache.MemoryExpiration);
             return item;
+        }
+
+        public async Task<string[]> GetRolesAsync(object id) {
+            var cachedItem = await GetCacheItemByIdAsync((long)id);
+            return cachedItem.Roles;
         }
 
     }

@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Core;
-using Beginor.GisHub.DataServices.Filters;
+using Beginor.GisHub.Common;
+using Beginor.GisHub.DataServices.Data;
 
 namespace Beginor.GisHub.DataServices.Api {
 
@@ -13,7 +14,7 @@ namespace Beginor.GisHub.DataServices.Api {
         /// <summary>读取数据服务的空间数据(矢量切片形式)</summary>
         [HttpGet("{id:long}/mvt/{z:int}/{y:int}/{x:int}")]
         [Authorize("data_services.read_mvt")]
-        [DataServiceRolesFilter(IdParameterName = "id")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult> ReadAsMvt(long id, int z, int y, int x) {
             try {
                 var ds = await repository.GetCacheItemByIdAsync(id);

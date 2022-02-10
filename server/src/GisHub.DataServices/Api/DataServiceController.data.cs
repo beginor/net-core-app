@@ -1,17 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Common;
+using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
-using Beginor.GisHub.Geo.GeoJson;
-using Beginor.GisHub.Geo.Esri;
-using Beginor.GisHub.DataServices.Filters;
 
 namespace Beginor.GisHub.DataServices.Api {
 
@@ -19,7 +16,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         [HttpGet("{id:long}/columns")]
         [Authorize("data_services.read_data")]
-        [DataServiceRolesFilter(IdParameterName = "id")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult<List<ColumnModel>>> GetColumns(
             long id
         ) {
@@ -40,7 +37,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         [HttpGet("{id:long}/count")]
         [Authorize("data_services.read_data")]
-        [DataServiceRolesFilter(IdParameterName = "id")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult<long>> Count(
             [FromRoute]long id,
             [FromQuery]CountParam param
@@ -65,7 +62,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         [HttpGet("{id:long}/data")]
         [Authorize("data_services.read_data")]
-        [DataServiceRolesFilter(IdParameterName = "id")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult> ReadData(
             [FromRoute] long id,
             [FromQuery] ReadDataParam param
@@ -103,7 +100,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         [HttpGet("{id:long}/distinct")]
         [Authorize("data_services.read_data")]
-        [DataServiceRolesFilter(IdParameterName = "id")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult> ReadDistinctData(
             [FromRoute] long id,
             [FromQuery] DistinctParam param
@@ -134,7 +131,7 @@ namespace Beginor.GisHub.DataServices.Api {
 
         [HttpGet("{id:long}/pivot")]
         [Authorize("data_services.read_data")]
-        [DataServiceRolesFilter(IdParameterName = "id")]
+        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult> PivotData(
             long id,
             [FromQuery]PivotParam param
