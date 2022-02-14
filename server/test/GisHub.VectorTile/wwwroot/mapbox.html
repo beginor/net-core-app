@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mapbox Demo</title>
   <style>html,body,#viewDiv { padding: 0; margin: 0; height: 100%; width: 100%; overflow: hidden; }</style>
-  <script src='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
-<link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css' rel='stylesheet' />
 </head>
 <body>
   <div id="viewDiv">
@@ -53,7 +53,7 @@
             {
                 type: 'vector',
                 scheme: 'xyz',
-                tiles: [`${location.protocol}//${location.host}/api/vectortiles/test1/{z}/{y}/{x}`],
+                tiles: [`${location.protocol}//${location.host}/vector-tiles/api/vectortiles/test1/{z}/{y}/{x}`],
                 minzoom: 9,
                 maxzoom: 17
             }
