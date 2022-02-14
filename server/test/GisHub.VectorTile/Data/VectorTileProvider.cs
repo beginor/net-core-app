@@ -31,6 +31,8 @@ namespace GisHub.VectorTile.Data {
             this.logger = logger;
             connectionStrings = connectionStringsMonitor.CurrentValue;
             vectorTileSources = vectorTileSourcesMonitor.CurrentValue;
+            this.cache = cache;
+            this.env = env;
             MergeConnectionStrings();
             connectionStringsMonitor.OnChange(value => {
                 connectionStrings = value;
@@ -40,8 +42,7 @@ namespace GisHub.VectorTile.Data {
                 vectorTileSources = value;
                 MergeConnectionStrings();
             });
-            this.cache = cache;
-            this.env = env;
+
         }
 
         private void MergeConnectionStrings() {
@@ -54,6 +55,9 @@ namespace GisHub.VectorTile.Data {
             foreach (var source in vectorTileSources.Values) {
                 if (connectionStrings.ContainsKey(source.ConnectionString)) {
                     source.ConnectionString = connectionStrings[source.ConnectionString];
+                }
+                if (source.CacheDuration == 0) {
+                    source.CacheDuration = cache.Duration;
                 }
             }
         }
@@ -97,7 +101,7 @@ namespace GisHub.VectorTile.Data {
                 return null;
             }
             var lastWriteTime = File.GetLastWriteTime(mvtPath);
-            if ((DateTime.Now - lastWriteTime).TotalSeconds > cache.duration) {
+            if ((DateTime.Now - lastWriteTime).TotalSeconds > vectorTileSources[source].CacheDuration) {
                 File.Delete(mvtPath);
                 return null;
             }

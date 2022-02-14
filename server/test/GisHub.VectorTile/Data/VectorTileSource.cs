@@ -4,6 +4,7 @@ namespace GisHub.VectorTile.Data {
 
     public class VectorTileSource {
         public string ConnectionString { get; set; }
+        public int CacheDuration { get; set; }
         public IList<VectorTileLayer> Layers { get; set; } = new List<VectorTileLayer>();
     }
 
