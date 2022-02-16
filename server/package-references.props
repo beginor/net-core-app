@@ -3,7 +3,7 @@
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="Beginor.AppFx.Api" Version="6.0.1" />
@@ -18,7 +18,7 @@
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="NHibernate" Version="5.3.10" />
     <PackageReference Include="NHibernate.Mapping.Attributes" Version="5.1.0" />
-    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="6.0.1" />
+    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="6.0.2" />
     <PackageReference Include="NHibernate.Extensions.NpgSql" Version="6.0.2" />
     <PackageReference Include="NHibernate.NetCore" Version="6.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
