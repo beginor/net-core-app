@@ -11,6 +11,8 @@ dotnet publish -r linux-x64 --self-contained \
   -p:DebugType=None \
   -o bin/Publish/linux-x64
 
+cp run.sh bin/Publish/linux-x64
+
 dotnet publish -r win-x64 -c Release \
   -p:PublishSingleFile=true \
   -p:PublishTrimmed=true \
@@ -19,6 +21,8 @@ dotnet publish -r win-x64 -c Release \
   -p:DebugType=None \
   -o bin/Publish/win-x64
 
+cp run.bat bin/Publish/linux-x64
+
 dotnet publish -r osx-x64 -c Release \
   -p:PublishSingleFile=true \
   -p:PublishTrimmed=true \
@@ -26,3 +30,5 @@ dotnet publish -r osx-x64 -c Release \
   -p:PublishReadyToRun=false \
   -p:DebugType=None \
   -o bin/Publish/osx-x64
+
+cp run.sh bin/Publish/linux-x64
