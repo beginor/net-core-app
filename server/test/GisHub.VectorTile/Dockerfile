@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/dotnet/runtime-deps:5.0
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0
 
-ENV ASPNETCORE_PATHBASE=/l3a1/vector \
+ENV ASPNETCORE_PATHBASE=/vector \
     ASPNETCORE_URLS=http://+:5000
 
-ADD dist /vector
+ADD bin/Publish/linux-x64 /vector
 
 VOLUME [ "/vector/config", "/vector/log", "/vector/wwwroot" ]
 WORKDIR /vector
