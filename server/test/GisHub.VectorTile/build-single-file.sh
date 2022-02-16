@@ -2,13 +2,14 @@
 
 rm -rf dist
 
-dotnet publish -r linux-x64 -c Release \
+dotnet publish -r linux-x64 --self-contained \
+  -c Release \
   -p:PublishSingleFile=true \
   -p:PublishTrimmed=true \
-  -p:SelfContained=true \
+  -p:EnableCompressionInSingleFile=true \
   -p:PublishReadyToRun=false \
   -p:DebugType=None \
-  -o ./dist/linux-x64
+  -o bin/Publish/linux-x64
 
 dotnet publish -r win-x64 -c Release \
   -p:PublishSingleFile=true \
@@ -16,8 +17,7 @@ dotnet publish -r win-x64 -c Release \
   -p:SelfContained=true \
   -p:PublishReadyToRun=false \
   -p:DebugType=None \
-  -o ./dist/win-x64
-rm -rf ./dist/win-x64/dist
+  -o bin/Publish/win-x64
 
 dotnet publish -r osx-x64 -c Release \
   -p:PublishSingleFile=true \
@@ -25,5 +25,4 @@ dotnet publish -r osx-x64 -c Release \
   -p:SelfContained=true \
   -p:PublishReadyToRun=false \
   -p:DebugType=None \
-  -o ./dist/osx-x64
-rm -rf ./dist/osx-x64/dist
+  -o bin/Publish/osx-x64
