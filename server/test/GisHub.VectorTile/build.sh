@@ -1,23 +1,15 @@
 #!/bin/bash -e
 
-dotnet publish -r linux-x64 -c Release \
+dotnet publish -r linux-x64 --self-contained \
+  -c Release \
   -p:PublishSingleFile=true \
   -p:PublishTrimmed=true \
-  -p:SelfContained=true \
+  -p:EnableCompressionInSingleFile=true \
   -p:PublishReadyToRun=false \
   -p:DebugType=None \
-  -p:TrimMode=link \
-  -p:DebuggerSupport=false \
-  -p:EnableUnsafeBinaryFormatterSerialization=false \
-  -p:EnableUnsafeUTF7Encoding=false \
-  -p:EventSourceSupport=false \
-  -p:HttpActivityPropagationSupport=false \
-  -p:InvariantGlobalization=true \
-  -p:UseSystemResourceKeys=true \
-  -p:TrimmerRemoveSymbols=true \
-  -o ./dist
+  -o bin/Publish/linux-x64
 
-rm -rf dist/wwwroot dist/config
+rm -rf bin/Publish/linux-x64/wwwroot bin/Publish/linux-x64/config
 
 docker build --no-cache --rm -t huitian/l3a1/vector .
 
