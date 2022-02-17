@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
+using Beginor.GisHub.Common;
 
 namespace Beginor.GisHub.TileMap.Api {
 
@@ -37,7 +38,7 @@ namespace Beginor.GisHub.TileMap.Api {
                 if (hasCallback) {
                     text = $"{callback.First()}({text})";
                 }
-                return Content(text, hasCallback ? "text/javascript" : "application/json");
+                return this.CompressedContent(text, hasCallback ? "text/javascript" : "application/json");
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get tilemap info for {id}!");
@@ -66,10 +67,10 @@ namespace Beginor.GisHub.TileMap.Api {
                 if (content.Content.Length == 0) {
                     return NotFound();
                 }
-                Response.Headers["Cache-Control"] = "no-cache";
-                Response.Headers["ETag"] = fileEtag;
+                Response.Headers.CacheControl = "no-cache";
+                Response.Headers.ETag = fileEtag;
                 if (!content.ContentType.StartsWith("image", StringComparison.OrdinalIgnoreCase)) {
-                    Response.Headers["Content-Encoding"] = "gzip";
+                    Response.Headers.ContentEncoding = "gzip";
                 }
                 return File(content.Content, content.ContentType);
             }

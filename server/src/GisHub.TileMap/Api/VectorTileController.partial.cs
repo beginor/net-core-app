@@ -69,9 +69,9 @@ namespace Beginor.GisHub.TileMap.Api {
                 if (content.Content.Length == 0) {
                     return NotFound();
                 }
-                Response.Headers["Cache-Control"] = "no-cache";
-                Response.Headers["ETag"] = fileEtag;
-                Response.Headers["Content-Encoding"] = "gzip";
+                Response.Headers.CacheControl = "no-cache";
+                Response.Headers.ETag = fileEtag;
+                Response.Headers.ContentEncoding = "gzip";
                 return File(content.Content, content.ContentType);
             }
             catch (Exception ex) {

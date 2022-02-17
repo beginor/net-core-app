@@ -120,7 +120,7 @@ namespace Beginor.GisHub.DynamicSql.Api {
                     result,
                     serializerOptionsFactory.GeoJsonSerializerOptions
                 );
-                return Content(json, "application/geo+json", Encoding.UTF8);
+                return this.CompressedContent(json, "application/geo+json", Encoding.UTF8);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not invoke api {id} .");
@@ -139,7 +139,7 @@ namespace Beginor.GisHub.DynamicSql.Api {
                 var parameters = GetParameters(Request, api.Parameters);
                 var data = await repository.QueryAsync(api, parameters);
                 var result = new DataApiResultModel { Data = data };
-                return Json(result, serializerOptionsFactory.JsonSerializerOptions);
+                return this.CompressedJson(result, serializerOptionsFactory.JsonSerializerOptions);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not invoke api {id} .");

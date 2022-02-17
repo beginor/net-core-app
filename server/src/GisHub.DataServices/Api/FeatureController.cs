@@ -67,14 +67,14 @@ namespace Beginor.GisHub.DataServices.Api {
                 var serializerOptions = serializerOptionsFactory.AgsJsonSerializerOptions;
                 var jsonElement = await jsonRepository.GetValueByIdAsync(id);
                 if (jsonElement.ValueKind != JsonValueKind.Undefined) {
-                    return Json(jsonElement, serializerOptions);
+                    return this.CompressedJson(jsonElement, serializerOptions);
                 }
                 var featureProvider = factory.CreateFeatureProvider(dataSource.DatabaseType);
                 var layerDesc = await featureProvider.GetLayerDescriptionAsync(dataSource);
                 var json = layerDesc.ToJson(serializerOptions);
                 jsonElement = JsonDocument.Parse(json).RootElement;
                 await jsonRepository.SaveValueAsync(id, jsonElement);
-                return Content(json, "application/json", Encoding.UTF8);
+                return this.CompressedContent(json, "application/json");
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get layer description from datasource {id} .");
@@ -95,7 +95,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 if (featureSet == null) {
                     return NotFound($"Datasource {id} does not exist !");
                 }
-                return Json(featureSet, serializerOptionsFactory.AgsJsonSerializerOptions);
+                return this.CompressedJson(featureSet, serializerOptionsFactory.AgsJsonSerializerOptions);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson()}");

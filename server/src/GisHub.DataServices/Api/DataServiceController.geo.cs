@@ -46,7 +46,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 var featureProvider = factory.CreateFeatureProvider(ds.DatabaseType);
                 var featureCollection = await featureProvider.ReadAsFeatureCollectionAsync(ds, param);
                 var json = JsonSerializer.Serialize(featureCollection, typeof(GeoJsonFeatureCollection), serializerOptionsFactory.GeoJsonSerializerOptions);
-                return Content(json, "application/geo+json", Encoding.UTF8);
+                return this.CompressedContent(json, "application/geo+json", Encoding.UTF8);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not read data as geojson from data service {id} with {param.ToJson()} .");
@@ -81,8 +81,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 }
                 var featureProvider = factory.CreateFeatureProvider(ds.DatabaseType);
                 var featureSet = await featureProvider.ReadAsFeatureSetAsync(ds, param);
-                var json = JsonSerializer.Serialize(featureSet, typeof(object), serializerOptionsFactory.AgsJsonSerializerOptions);
-                return Content(json, "application/json", Encoding.UTF8);
+                return this.CompressedJson(featureSet, serializerOptionsFactory.AgsJsonSerializerOptions);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not read data as FeatureSet from data service {id} with {param.ToJson()} .");

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 }
                 var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
                 var columns = await reader.GetColumnsAsync(dataSource);
-                return Json(columns, serializerOptionsFactory.JsonSerializerOptions);
+                return this.CompressedJson(columns, serializerOptionsFactory.JsonSerializerOptions);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get columns of datasource {id} .");
@@ -90,7 +91,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 var result = new PaginatedResponseModel<IDictionary<string, object>> {
                     Total = total, Data = data, Skip = param.Skip, Take = param.Take
                 };
-                return Json(result, serializerOptionsFactory.JsonSerializerOptions);
+                return this.CompressedJson(result, serializerOptionsFactory.JsonSerializerOptions);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not read data from datasource {id} with {param.ToJson()} .");
@@ -121,7 +122,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 }
                 var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
                 var data = await reader.ReadDistinctDataAsync(dataSource, param);
-                return Json(data, serializerOptionsFactory.JsonSerializerOptions);
+                return this.CompressedJson(data, serializerOptionsFactory.JsonSerializerOptions);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not read distinct data from datasource {id} with {param.ToJson()} .");
@@ -161,7 +162,7 @@ namespace Beginor.GisHub.DataServices.Api {
                 }
                 var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
                 var data = await reader.PivotData(dataSource, param);
-                return Json(data, serializerOptionsFactory.JsonSerializerOptions);
+                return this.CompressedJson(data, serializerOptionsFactory.JsonSerializerOptions);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not pivot data from datasource {id} with {param.ToJson()} .");

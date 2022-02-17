@@ -66,7 +66,7 @@ namespace Beginor.GisHub.Entry {
                         }
                         if (token.Urls != null && token.Urls.Length > 0) {
                             var req = context.Request;
-                            string referer = req.Headers[HeaderNames.Referer];
+                            string referer = req.Headers.Referer;
                             if (referer.IsNullOrEmpty()) {
                                 context.Fail("No referer provided");
                                 return;

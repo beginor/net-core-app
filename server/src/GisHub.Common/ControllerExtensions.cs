@@ -1,6 +1,7 @@
 using System.IO;
 using System.IO.Compression;
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
@@ -63,6 +64,15 @@ public static class ControllerExtensions {
         var result = new FileContentResult(output.GetBuffer(), contentType);
         controller.Response.Headers.ContentEncoding = "gzip";
         return result;
+    }
+
+    public static ActionResult CompressedJson<TValue>(
+        this ControllerBase controller,
+        TValue obj,
+        JsonSerializerOptions options
+    ) {
+        var json = JsonSerializer.Serialize(obj, options);
+        return CompressedContent(controller, json, "application/json");
     }
 
 }

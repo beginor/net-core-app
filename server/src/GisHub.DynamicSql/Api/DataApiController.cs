@@ -22,7 +22,6 @@ namespace Beginor.GisHub.DynamicSql.Api {
         private ILogger<DataApiController> logger;
         private IDataApiRepository repository;
         private UserManager<AppUser> userMgr;
-        private CommonOption commonOption;
         private JsonSerializerOptionsFactory serializerOptionsFactory;
         private ParameterConverterFactory parameterConverterFactory;
 
@@ -30,14 +29,12 @@ namespace Beginor.GisHub.DynamicSql.Api {
             ILogger<DataApiController> logger,
             IDataApiRepository repository,
             UserManager<AppUser> userMgr,
-            CommonOption commonOption,
             JsonSerializerOptionsFactory serializerOptionsFactory,
             ParameterConverterFactory parameterConverterFactory
         ) {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
             this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
-            this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
             this.serializerOptionsFactory = serializerOptionsFactory ?? throw new ArgumentNullException(nameof(serializerOptionsFactory));
             this.parameterConverterFactory = parameterConverterFactory ?? throw new ArgumentNullException(nameof(parameterConverterFactory));
         }
@@ -47,7 +44,6 @@ namespace Beginor.GisHub.DynamicSql.Api {
                 logger = null;
                 repository = null;
                 userMgr = null;
-                commonOption = null;
                 serializerOptionsFactory = null;
                 parameterConverterFactory = null;
             }

@@ -193,16 +193,16 @@ namespace Beginor.GisHub.Slpk.Api {
             }
             var fileInfo = new FileInfo(filePath);
             var fileTime = fileInfo.LastWriteTimeUtc.ToFileTime().ToString("x");
-            var etag = Request.Headers["If-None-Match"].ToString();
+            var etag = Request.Headers.IfNoneMatch.ToString();
             if (fileTime.Equals(etag, StringComparison.OrdinalIgnoreCase)) {
                 return StatusCode(StatusCodes.Status304NotModified);
             }
-            Response.Headers["Cache-Control"] = "no-cache";
-            Response.Headers["ETag"] = fileTime;
+            Response.Headers.CacheControl = "no-cache";
+            Response.Headers.ETag = fileTime;
             var fileName = fileInfo.Name;
             string contentType = string.Empty;
             if (fileName.EndsWith(".gz")) {
-                Response.Headers["Content-Encoding"] = "gzip";
+                Response.Headers.ContentEncoding = "gzip";
                 provider.TryGetContentType(
                     fileName.Substring(0, fileName.Length - 3),
                     out contentType

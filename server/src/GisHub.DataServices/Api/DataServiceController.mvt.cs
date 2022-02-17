@@ -31,11 +31,13 @@ namespace Beginor.GisHub.DataServices.Api {
                     return NotFound();
                 }
                 var provider = factory.CreateFeatureProvider(ds.DatabaseType);
+                // todo: mvt cache
+
                 var buffer = await provider.ReadAsMvtBufferAsync(ds, z, y, x);
                 if (buffer == null || buffer.Length == 0) {
                     return NotFound();
                 }
-                Response.Headers["Content-Encoding"] = "gzip";
+                Response.Headers.ContentEncoding = "gzip";
                 return File(buffer, "application/vnd.mapbox-vector-tile");
             }
             catch (Exception ex) {
