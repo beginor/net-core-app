@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 
-namespace Gmap.Utils {
+namespace Beginor.GisHub.Gmap.Utils {
 
     public static class ProxyUtil {
 

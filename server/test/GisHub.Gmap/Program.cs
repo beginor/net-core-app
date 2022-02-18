@@ -4,18 +4,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Logging.Log4net;
-using Gmap.Services;
+using Beginor.GisHub.Gmap.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 
-namespace Gmap {
+namespace Beginor.GisHub.Gmap {
 
     public class Program {
 
         public static void Main(string[] args) {
             System.ComponentModel.TypeDescriptor.AddAttributes(
                 typeof(System.Net.IPAddress),
-                new System.ComponentModel.TypeConverterAttribute(typeof(Gmap.IPAddressConverter))
+                new System.ComponentModel.TypeConverterAttribute(typeof(IPAddressConverter))
             );
             var builder = WebApplication.CreateBuilder(args);
             // logging

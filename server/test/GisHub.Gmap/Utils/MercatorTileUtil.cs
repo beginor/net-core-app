@@ -1,6 +1,6 @@
 using System;
 
-namespace Gmap.Utils {
+namespace Beginor.GisHub.Gmap.Utils {
 
     /// <summary>墨卡托切片工具类</summary>
     public static class MercatorTileUtil {

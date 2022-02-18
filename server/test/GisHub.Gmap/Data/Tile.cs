@@ -1,4 +1,4 @@
-namespace Gmap.Data {
+namespace Beginor.GisHub.Gmap.Data {
 
     public class Tile {
 

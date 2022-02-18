@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Gmap</RootNamespace>
+    <RootNamespace>Beginor.GisHub.Gmap</RootNamespace>
     <AssemblyName>gmap</AssemblyName>
     <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'gmap' ">

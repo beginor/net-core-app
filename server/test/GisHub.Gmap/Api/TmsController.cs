@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Gmap.Api {
+namespace Beginor.GisHub.Gmap.Api {
 
     /// <summary>
     /// Convert tile schema from tms to xyz.

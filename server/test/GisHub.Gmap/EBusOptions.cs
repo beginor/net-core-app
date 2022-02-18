@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Gmap {
+namespace Beginor.GisHub.Gmap {
 
     public class EBusOptions {
         public string PaasId { get; set; }

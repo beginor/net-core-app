@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Gmap {
+namespace Beginor.GisHub.Gmap {
 
     public class ApiProxyOptions {
         public string PaasId { get; set; }

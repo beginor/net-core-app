@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Gmap.Data;
-using Gmap.Services;
-using Gmap.Utils;
+using Beginor.GisHub.Gmap.Data;
+using Beginor.GisHub.Gmap.Services;
+using Beginor.GisHub.Gmap.Utils;
 
-namespace Gmap.Api {
+namespace Beginor.GisHub.Gmap.Api {
 
     [Route("api/wmts")]
     public class WmtsController : Controller {

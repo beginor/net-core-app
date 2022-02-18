@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Net;
 
-namespace Gmap {
+namespace Beginor.GisHub.Gmap {
 
     public class IPAddressConverter : TypeConverter {
 

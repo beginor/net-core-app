@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
-using Gmap.Utils;
+using Beginor.GisHub.Gmap.Utils;
 
-namespace Gmap {
+namespace Beginor.GisHub.Gmap {
 
     public class ApiProxyMiddleware {
 

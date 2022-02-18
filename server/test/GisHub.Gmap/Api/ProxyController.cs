@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Gmap.Data;
-using Gmap.Utils;
+using Beginor.GisHub.Gmap.Data;
+using Beginor.GisHub.Gmap.Utils;
 
-namespace Gmap.Api {
+namespace Beginor.GisHub.Gmap.Api {
 
     [Route("api/proxy")]
     public class ProxyController : Controller {

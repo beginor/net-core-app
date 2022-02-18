@@ -4,9 +4,9 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Gmap.Services;
+using Beginor.GisHub.Gmap.Services;
 
-namespace Gmap {
+namespace Beginor.GisHub.Gmap {
 
     public class EBusMiddleware {
 

@@ -4,9 +4,9 @@ using System.IO;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using Gmap.Data;
+using Beginor.GisHub.Gmap.Data;
 
-namespace Gmap.Utils {
+namespace Beginor.GisHub.Gmap.Utils {
 
     /// <summary>粤政图切片工具类</summary>
     public static class YztTileUtil {
