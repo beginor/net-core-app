@@ -6,7 +6,7 @@
       "launchBrowser": false,
       "launchUrl": "/",
       "environmentVariables": {
-        "ASPNETCORE_PATHBASE": "/net-core-app",
+        "ASPNETCORE_PATHBASE": "/gishub",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://+:5000"
