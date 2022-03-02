@@ -119,12 +119,14 @@ namespace Beginor.GisHub.DynamicSql.Data {
             var columns = new DataServiceFieldModel[reader.FieldCount];
             for (var i = 0; i < reader.FieldCount; i++) {
                 var name = reader.GetName(i);
-                var descs = dbColumns
-                    .Where(col => col.Name.EqualsOrdinalIgnoreCase(name))
-                    .Select(col => col.Description).ToArray();
+                var description = dbColumns
+                    .Where(col => col.Name.EqualsOrdinalIgnoreCase(name) && !string.IsNullOrEmpty(col.Description))
+                    .Select(col => col.Description)
+                    .Aggregate(string.Empty, (current, next) => $"{current};{next}")
+                    .Trim(';');
                 columns[i] = new DataServiceFieldModel {
                     Name = name,
-                    Description = descs.Length > 0 ? string.Join(";", descs) : reader.GetName(i),
+                    Description = string.IsNullOrEmpty(description) ? name : description,
                     Editable = false,
                     Type = reader.GetDataTypeName(i)
                 };
@@ -134,8 +136,15 @@ namespace Beginor.GisHub.DynamicSql.Data {
         }
 
         private IList<string> FindTableNames(string sql) {
-            var regex = new Regex(@"(?<=(from|join)\s+)(\w*\.\w*|\w*)");
-            return regex.Matches(sql).Select(match => match.Value).ToList();
+            var regex = new Regex(
+                @"(?<=(from|join)\s+)(\w*\.\w*|\w*)",
+                RegexOptions.IgnoreCase
+            );
+            return regex.Matches(sql)
+                .Select(match => match.Value)
+                .Where(val => !string.IsNullOrEmpty(val))
+                .Distinct()
+                .ToList();
         }
 
         private async Task<IList<DataServiceFieldModel>> GetColumnsFromDataSourceAsync(DataSourceModel dataSource, IList<string> tableNames) {
@@ -145,7 +154,7 @@ namespace Beginor.GisHub.DynamicSql.Data {
                 var parts = tableName.Split('.');
                 string schema;
                 string table;
-                if (parts.Length == 0) {
+                if (parts.Length == 1) {
                     schema = metadata.GetDefaultSchema();
                     table = parts[0];
                 }
