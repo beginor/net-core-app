@@ -324,9 +324,9 @@ export class DataServiceService {
         }
         catch (ex: any) {
             this.errorHandler.handleError(ex);
-            this.ui.showAlert(
-                { type: 'danger', message: '' }
-            );
+            // this.ui.showAlert(
+            //     { type: 'danger', message: '' }
+            // );
             return false;
         }
     }
