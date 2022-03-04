@@ -182,8 +182,13 @@ export class DataApiService {
         }
         catch (ex: any) {
             this.errorHandler.handleError(ex);
+            let message = '获取接口输出字段出错！';
+            const { error } = ex;
+            if (!!error) {
+                message += `错误信息为： ${error}`;
+            }
             this.ui.showAlert(
-                { type: 'danger', message: '获取接口输出字段出错！' }
+                { type: 'danger', message }
             );
             return;
         }

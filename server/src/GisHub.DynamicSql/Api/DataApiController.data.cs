@@ -178,7 +178,7 @@ namespace Beginor.GisHub.DynamicSql.Api {
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not get columns for api {id}");
-                return this.InternalServerError(ex);
+                return this.InternalServerError(ex.GetOriginalMessage());
             }
         }
 
