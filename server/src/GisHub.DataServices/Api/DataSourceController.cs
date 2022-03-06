@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
@@ -168,12 +169,12 @@ namespace Beginor.GisHub.DataServices.Api {
                 }
                 catch (Exception ex) {
                     logger.LogError(ex, $"Can not get tables for datasource {model.ToJson()}");
-                    return BadRequest("权限不足，无法读取元数据！");
+                    return StatusCode(StatusCodes.Status400BadRequest, ex.GetOriginalMessage());
                 }
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not check status for datasource {model.ToJson()}");
-                return this.InternalServerError(ex);
+                return StatusCode(StatusCodes.Status400BadRequest, ex.GetOriginalMessage());
             }
         }
 
