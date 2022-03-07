@@ -44,7 +44,7 @@ namespace Beginor.NetCoreApp.Data.Repositories {
             }
             var keywords = model.Keywords;
             if (keywords.IsNotNullOrEmpty()) {
-                query = query.Where(e => e.Name.Contains(keywords));
+                query = query.Where(e => e.Name.Contains(keywords) || e.Value == keywords);
             }
             var total = await query.LongCountAsync();
             var data = await query.OrderByDescending(e => e.Id)
