@@ -26,10 +26,11 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: DataSourceModel = { id: '' };
+    public model: DataSourceModel = { id: '', timeout: 10 };
     public showPass = false;
     public checkingStatus = false;
     public showCheckButton = true;
+    public showCheckResult = false;
     public checkResult!: StatusResult;
 
     private id = '';
@@ -92,17 +93,19 @@ export class DetailComponent implements OnInit {
     }
 
     public canCheckStatus(): boolean {
-        return !!this.model.databaseType
-            && !!this.model.serverAddress
-            && !!this.model.serverPort
-            && !!this.model.databaseName
-            && !!this.model.username
-            && !!this.model.password
-            && !!this.model.timeout;
+        const canCheck = this.showCheckButton && (!!this.model.databaseType) &&
+            (!!this.model.serverAddress) &&
+            (!!this.model.serverPort) &&
+            (!!this.model.databaseName) &&
+            (!!this.model.username) &&
+            (!!this.model.password) &&
+            (!!this.model.timeout);
+        return canCheck;
     }
 
     public async checkStatus(): Promise<void> {
         this.showCheckButton = false;
+        this.showCheckResult = true;
         this.resetStatusResult();
         this.checkingStatus = true;
         const result = await this.vm.checkStatus(this.model);
@@ -112,6 +115,7 @@ export class DetailComponent implements OnInit {
 
     public onCheckAlertClosed(): void {
         this.showCheckButton = true;
+        this.showCheckResult = false;
         this.resetStatusResult();
     }
 
