@@ -118,7 +118,7 @@ namespace Beginor.GisHub.DataServices {
         }
 
         protected virtual async Task<IList<IDictionary<string, object>>> ReadDataAsync(DataServiceCacheItem dataService, string sql) {
-            using var conn = CreateConnection(dataService.ConnectionString);
+            await using var conn = CreateConnection(dataService.ConnectionString);
             logger.LogInformation(sql);
             var reader = await conn.ExecuteReaderAsync(sql);
             var result = await ReadDataAsync(reader);
@@ -126,7 +126,7 @@ namespace Beginor.GisHub.DataServices {
         }
 
         protected virtual async Task<T> ReadScalarAsync<T>(DataServiceCacheItem dataService, string sql) {
-            using var conn = CreateConnection(dataService.ConnectionString);
+            await using var conn = CreateConnection(dataService.ConnectionString);
             logger.LogInformation(sql);
             var value = await conn.ExecuteScalarAsync<T>(sql);
             return value;

@@ -29,7 +29,7 @@ namespace Beginor.GisHub.DynamicSql.Data {
             }
             logger.LogInformation(sql);
             var dsReader = dataServiceFactory.CreateDataSourceReader(api.DatabaseType);
-            var conn = dsReader.CreateConnection(api.ConnectionString);
+            await using var conn = dsReader.CreateConnection(api.ConnectionString);
             var reader = await conn.ExecuteReaderAsync(sql, parameters);
             var result = await dsReader.ReadDataAsync(reader);
             return result;
@@ -50,7 +50,7 @@ namespace Beginor.GisHub.DynamicSql.Data {
             }
             logger.LogInformation(sql);
             var dsReader = dataServiceFactory.CreateDataSourceReader(api.DatabaseType);
-            var conn = dsReader.CreateConnection(api.ConnectionString);
+            await using var conn = dsReader.CreateConnection(api.ConnectionString);
             var reader = await conn.ExecuteReaderAsync(sql, parameters);
             var data = await dsReader.ReadDataAsync(reader);
             var featureReader = dataServiceFactory.CreateFeatureProvider(api.DatabaseType);

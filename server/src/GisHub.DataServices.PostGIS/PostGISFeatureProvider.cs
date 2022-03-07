@@ -124,7 +124,7 @@ namespace Beginor.GisHub.DataServices.PostGIS {
 
         public override async Task<byte[]> ReadAsMvtBufferAsync(DataServiceCacheItem dataService, int z, int y, int x) {
             var sql = BuildMvtSql(dataService, z, y, x);
-            var conn = new NpgsqlConnection(dataService.ConnectionString);
+            await using var conn = new NpgsqlConnection(dataService.ConnectionString);
             var buffer = await conn.ExecuteScalarAsync<byte[]>(sql);
             using var input = new MemoryStream(buffer);
             using var output = new MemoryStream();
