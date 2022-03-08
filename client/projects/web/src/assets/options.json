@@ -1,0 +1,84 @@
+{
+  "arcgis-js-api": {
+    "url": "https://app.gdeei.cn/arcgis-js-api/4.22/init.js",
+    "css": "https://app.gdeei.cn/arcgis-js-api/4.22/esri/themes/light/main.css",
+    "dojoConfig": {
+      "locale": "zh-cn",
+      "async": true,
+      "packages": []
+    },
+    "esriConfig": {
+      "locale": "zh-cn",
+      "assetsPath": "https://app.gdeei.cn/arcgis-js-api/4.22",
+      "apiKey": "",
+      "request": {
+        "interceptors": []
+      }
+    },
+    "center": {
+      "x": 108.445,
+      "y": 33.935,
+      "spatialReference": { "wkid": 4326 }
+    },
+    "zoom": 3
+  },
+  "mapbox-gl": {
+    "accessToken": "pk.eyJ1IjoiYmVnaW5vciIsImEiOiJja2pmMWNkbXg4azcyMzVwZHFraGc1cjYzIn0.xo0073v7zQfAicAPsr0CHQ",
+    "style": "mapbox://styles/beginor/ckkf3glod0g1m17my2wh0s74q",
+    "camera": {
+      "center": { "lng": 108.445, "lat": 33.935 },
+      "zoom": 3,
+      "pitch": 0,
+      "bearing": 0
+    },
+    "defaults": {
+      "circle": {
+        "type": "circle",
+        "layout": {
+          "visibility": "visible"
+        },
+        "paint": {
+          "circle-radius": 4,
+          "circle-color": "rgb(255, 0, 0)",
+          "circle-stroke-color": "rgb(0, 0, 0)",
+          "circle-stroke-width": 1.0
+        }
+      },
+      "line": {
+        "type": "line",
+        "layout": {
+          "line-join": "round",
+          "visibility": "visible"
+        },
+        "paint": {
+          "line-color": "rgb(255, 0, 0)",
+          "line-width": 2
+        }
+      },
+      "fill": {
+        "type": "fill",
+        "layout": {
+          "visibility": "visible"
+        },
+        "paint": {
+          "fill-antialias": true,
+          "fill-outline-color": "rgb(0, 0, 0)",
+          "fill-color": "rgb(255, 0, 0)",
+          "fill-opacity": 1.0
+        }
+      },
+      "label": {
+        "type": "symbol",
+        "layout": {
+          "visibility": "visible",
+          "text-offset": [0, -1.2]
+        },
+        "paint": {
+          "text-color": "rgb(255, 0, 0)",
+          "text-halo-color": "rgb(0, 0, 0)",
+          "text-halo-width": 2
+        }
+      }
+    }
+  }
+}

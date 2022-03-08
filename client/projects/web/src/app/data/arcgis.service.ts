@@ -2,12 +2,11 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { lastValueFrom } from 'rxjs';
+import { isLoaded, loadScript, loadModules } from 'esri-loader';
 
 import { AccountService } from 'app-shared';
 
-import {
-    isLoaded, loadScript, loadModules, ILoadScriptOptions
-} from 'esri-loader';
+import { OptionsService, ArcGisJsApiOptions } from './options.service';
 
 @Injectable({
     providedIn: 'root'
@@ -19,16 +18,15 @@ export class ArcGisService {
     constructor(
         private http: HttpClient,
         @Inject('webRoot') private webRoot: string,
-        private account: AccountService
+        private account: AccountService,
+        private options: OptionsService
     ) { }
 
     public async loadJsApi(): Promise<void> {
         if (isLoaded()) {
             return;
         }
-        const opts = await lastValueFrom(this.http.get<ArcGisJsApiOptions>(
-            'assets/arcgis-js-api.options.json'
-        ));
+        const opts = await this.options.loadArcGisJsApiOptions();
         this.opts = opts;
         const dojoConfig = opts.dojoConfig;
         Object.assign(window, { dojoConfig });
@@ -163,11 +161,4 @@ export class ArcGisService {
         return mapview;
     }
 
-}
-
-interface ArcGisJsApiOptions extends ILoadScriptOptions {
-    dojoConfig: Object;
-    esriConfig: __esri.config;
-    center: number[];
-    zoom: number;
 }

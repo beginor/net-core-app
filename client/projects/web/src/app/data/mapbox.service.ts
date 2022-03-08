@@ -9,11 +9,13 @@ import {
 
 import { AccountService } from 'app-shared';
 
+import { OptionsService, MapboxGlOptions } from './options.service';
+
 @Injectable({ providedIn: 'root' })
 export class MapboxService {
 
     private styleId = 'mapbox-gl-style';
-    private options!: MapboxGlOptions;
+    private mapboxOptions!: MapboxGlOptions;
     private layerTypeMap: { [key: string]: string } = {
         Point: 'circle',
         MultiPoint: 'circle',
@@ -28,18 +30,19 @@ export class MapboxService {
         @Inject('webRoot') private webRoot: string,
         private account: AccountService,
         @Inject(DOCUMENT) private doc: Document,
+        private options: OptionsService
     ) { }
 
     public async createPreviewMap(container: HTMLElement): Promise<Map> {
         await this.loadMapCss();
         await this.loadMapOptions();
         const map = new Map({
-            accessToken: this.options?.accessToken,
-            style: this.options?.style,
-            center: this.options?.camera.center,
-            zoom: this.options?.camera.zoom,
-            pitch: this.options?.camera.pitch,
-            bearing: this.options?.camera.bearing,
+            accessToken: this.mapboxOptions?.accessToken,
+            style: this.mapboxOptions?.style,
+            center: this.mapboxOptions?.camera.center,
+            zoom: this.mapboxOptions?.camera.zoom,
+            pitch: this.mapboxOptions?.camera.pitch,
+            bearing: this.mapboxOptions?.camera.bearing,
             container: container,
             attributionControl: false,
             transformRequest: (url): RequestParameters => {
@@ -71,7 +74,7 @@ export class MapboxService {
         if (!layerType) {
             throw new Error(`Invalid geometry type ${geoType}`);
         }
-        const layer = this.options.defaults[layerType];
+        const layer = this.mapboxOptions.defaults[layerType];
         if (!layer) {
             throw new Error(`Default style for ${layerType} is not defined!`);
         }
@@ -105,18 +108,10 @@ export class MapboxService {
     }
 
     private async loadMapOptions(): Promise<void> {
-        if (!!this.options) {
+        if (!!this.mapboxOptions) {
             return;
         }
-        this.options = await lastValueFrom(
-            this.http.get<MapboxGlOptions>('./assets/mapbox-gl.options.json')
-        );
+        this.mapboxOptions = await this.options.loadMapboxGlOptions();
     }
 }
 
-export interface MapboxGlOptions {
-    accessToken: string;
-    style: string;
-    camera: CameraOptions;
-    defaults: { [key: string]: Layer };
-}
