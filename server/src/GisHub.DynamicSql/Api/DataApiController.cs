@@ -16,8 +16,10 @@ namespace Beginor.GisHub.DynamicSql.Api {
 
     /// <summary>数据API 服务接口</summary>
     [ApiController]
-    [Route("api/dataapis")]
+    [Route(RouteTemplate)]
     public partial class DataApiController : Controller {
+
+        private const string RouteTemplate = "api/dataapis";
 
         private ILogger<DataApiController> logger;
         private IDataApiRepository repository;
