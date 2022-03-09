@@ -19,8 +19,8 @@ find dist -name "*.js" -print0 | xargs -0 gzip -k
 find dist -name "*.css" -print0 | xargs -0 gzip -k
 
 # gzip client
-cd wwwroot
-tar -zcf wwwroot.tar.gz wwwroot
-mv wwwroot.tar.gz ..
-cd ..
-rm -rf dist
+# cd wwwroot
+# tar -zcf wwwroot.tar.gz wwwroot
+# mv wwwroot.tar.gz ..
+# cd ..
+# rm -rf dist
