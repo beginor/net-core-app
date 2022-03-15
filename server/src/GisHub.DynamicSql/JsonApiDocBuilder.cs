@@ -42,11 +42,11 @@ public class JsonApiDocBuilder : IApiDocBuilder {
         };
         var items = new JsonArray();
         foreach (var model in models) {
-            var jsonUri = new Uri(baseUrl + "/json");
+            var jsonUri = new Uri($"{baseUrl}/{model.Id}/data");
             var jsonItem = BuildJsonDocForModel(model, jsonUri, referer);
             items.Add(jsonItem);
             if (model.GeometryColumn.IsNotNullOrEmpty()) {
-                var geojsonUrl = new Uri(baseUrl + "/geojson");
+                var geojsonUrl = new Uri($"{baseUrl}/{model.Id}/geojson");
                 model.Name += " (GeoJson)";
                 var geojsonItem = BuildJsonDocForModel(model, geojsonUrl, referer);
                 items.Add(geojsonItem);

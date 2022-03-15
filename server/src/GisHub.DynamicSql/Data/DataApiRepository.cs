@@ -155,6 +155,31 @@ namespace Beginor.GisHub.DynamicSql.Data {
             return api.Roles;
         }
 
+        public async Task<IList<DataApiModel>> GetByIdArray(long[] idArray) {
+            var data = await Session.Query<DataApi>()
+                .Where(api => idArray.Contains(api.Id))
+                .Select(x => new DataApi {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    // DataSource = x.DataSource,
+                    IdColumn = x.IdColumn,
+                    GeometryColumn = x.GeometryColumn,
+                    WriteData = x.WriteData,
+                    Columns = x.Columns,
+                    Parameters = x.Parameters,
+                    // Roles = x.Roles,
+                    // Creator = x.Creator,
+                    // CreatedAt = x.CreatedAt,
+                    // Updater = x.Updater,
+                    // UpdatedAt = x.UpdatedAt,
+                    // IsDeleted = x.IsDeleted
+                })
+                .ToListAsync();
+            var models = Mapper.Map<IList<DataApiModel>>(data);
+            return models;
+        }
+
     }
 
 }

@@ -32,6 +32,8 @@ namespace Beginor.GisHub.DynamicSql.Data {
 
         Task<DataApiCacheItem> GetDataApiCacheItemByIdAsync(long apiId);
 
+        Task<IList<DataApiModel>> GetByIdArray(long[] idArray);
+
     }
 
 }

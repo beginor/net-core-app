@@ -87,28 +87,28 @@ namespace Beginor.GisHub.DynamicSql.Api {
         }
 
         /// <summary>获取数据API的说明文档</summary>
-        [HttpGet(template: "{id:long}/doc")]
-        [Authorize(policy: "data_apis.read_doc")]
-        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataApiRepository))]
-        public async Task<ActionResult> GetApiDocs(long id) {
+        [HttpGet($"~/{RouteTemplate}-doc")]
+        [Authorize("data_apis.read_doc")]
+        public async Task<ActionResult> GetApiDocs([FromQuery] DataApiDocModel model) {
             try {
-                var api = await repository.GetByIdAsync(id: id);
-                if (api == null) {
-                    return NotFound(value: $"DataApi {id} does not exists.");
+                var apis = await repository.GetByIdArray(model.Id);
+                if (apis == null) {
+                    return NotFound($"DataApi for {string.Join(",",model.Id)} does not exists.");
                 }
-                IApiDocBuilder builder = new MarkdownApiDocBuilder();
+                var isMarkdown = model.Format.EqualsOrdinalIgnoreCase("markdown");
+                IApiDocBuilder builder = isMarkdown ? new MarkdownApiDocBuilder() : new JsonApiDocBuilder();
                 var doc = builder.BuildApiDoc(
-                    pageTitle: "GisHub API",
-                    baseUrl: $"{Request.Scheme}://{Request.Host}{Request.PathBase}/{RouteTemplate}",
-                    models: new[] { api },
-                    token: "Token_value",
-                    referer: ""
+                    model.Title,
+                    $"{Request.Scheme}://{Request.Host}{Request.PathBase}/{RouteTemplate}",
+                    apis,
+                    model.Token,
+                    model.Referer
                 );
-                return Ok(value: doc);
+                return Content(doc, isMarkdown ? "text/markdown" : "application/json");
             }
             catch (Exception ex) {
-                logger.LogError(exception: ex, message: $"Can not get api doc for api {id} .");
-                return this.InternalServerError(error: ex);
+                logger.LogError(ex, $"Can not get api doc for api {model.ToJson()} .");
+                return this.InternalServerError(ex);
             }
         }
 
