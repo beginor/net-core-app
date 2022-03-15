@@ -40,8 +40,7 @@ public class MarkdownApiDocBuilder : IApiDocBuilder {
         // url
         doc.AppendLine("### 地址");
         doc.AppendLine();
-        var jsonUrl = $"{baseUrl}/{api.Id}/data";
-        var geoJsonUrl = $"{baseUrl}/{api.Id}/geojson";
+        var (jsonUrl, geoJsonUrl) = BuildApiUrls(baseUrl, api.Id);
         doc.AppendLine($"- JSON 数据 <{jsonUrl}>");
         if (api.GeometryColumn.IsNotNullOrEmpty()) {
             doc.AppendLine($"- GeoJSON 数据 <{geoJsonUrl}>");
@@ -51,7 +50,7 @@ public class MarkdownApiDocBuilder : IApiDocBuilder {
         doc.AppendLine("### 输出字段");
         doc.AppendLine();
         doc.AppendLine("| 名称 | 类型 | 说明 |");
-        doc.AppendLine("| :-- | :-- | :-- |");
+        doc.AppendLine("| :---- | :---- | :---- |");
         var geoColType = (DataServiceFieldModel f) => f.Name.EqualsOrdinalIgnoreCase(api.GeometryColumn) ? "空间坐标" : f.Type;
         foreach (var col in api.Columns) {
             doc.AppendLine($"| {col.Name} | {geoColType(col)} | {col.Description} |");
@@ -61,7 +60,7 @@ public class MarkdownApiDocBuilder : IApiDocBuilder {
         doc.AppendLine("### 参数");
         doc.AppendLine();
         doc.AppendLine("| 名称 | 类型 | 说明 | 是否必须 |");
-        doc.AppendLine("| :-- | :-- | :-- | :----- |");
+        doc.AppendLine("| :---- | :---- | :---- | :---- |");
         doc.AppendLine("| $token | string | 访问凭证 | 是 |");
         var yesOrNo = (bool required) =>  required ? "是" : "否";
         foreach (var param in api.Parameters) {
@@ -84,7 +83,7 @@ public class MarkdownApiDocBuilder : IApiDocBuilder {
             doc.AppendLine("请求 GeoJSON 格式数据");
             doc.AppendLine();
             doc.AppendLine("```http");
-            doc.AppendLine($"{geoJsonUrl}?$token=API_TOKEN&{api.Parameters[0].Name}=");
+            doc.AppendLine($"{geoJsonUrl}?$token={token}&{api.Parameters[0].Name}=");
             doc.AppendLine("Referer: http://localhost:3000");
             doc.AppendLine("```");
             doc.AppendLine();
