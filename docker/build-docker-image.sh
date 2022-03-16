@@ -7,9 +7,8 @@ rm -rf dist/wwwroot
 
 # Build docker image
 docker buildx build --pull --rm \
-  --platform linux/arm64 \
   --platform linux/amd64 \
-  -t 192.168.1.13:5000/beginor/gishub \
-  --push .
+  -t beginor/gishub \
+  --output type=image .
 
 rm -rf dist
