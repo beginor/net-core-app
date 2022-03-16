@@ -8,7 +8,7 @@ rm -rf dist/wwwroot
 # Build docker image
 docker buildx build --pull --rm \
   --platform linux/amd64 \
-  -t 192.168.1.13:5000/beginor/net-core-app \
-  --push .
+  -t beginor/net-core-app \
+  --output type=image .
 
 rm -rf dist
