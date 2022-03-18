@@ -1,6 +1,6 @@
-<div class="modal-header pb-0">
+<div class="modal-header">
   <h5 class="modal-title">{{ds.name}} 数据预览</h5>
-  <ul class="nav-tabs ms-auto" ngbNav #nav="ngbNav" [(activeId)]="previewType">
+  <ul class="nav-tabs ms-auto" style="margin-bottom: -1rem;" ngbNav #nav="ngbNav" [(activeId)]="previewType">
     <li *ngIf="hasPrivilege('data_services.read_data')" ngbNavItem="data">
       <a ngbNavLink>属性数据</a>
       <ng-template ngbNavContent>

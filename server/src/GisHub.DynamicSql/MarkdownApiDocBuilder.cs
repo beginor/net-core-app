@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Models;
@@ -10,15 +8,19 @@ namespace Beginor.GisHub.DynamicSql;
 
 public class MarkdownApiDocBuilder : IApiDocBuilder {
 
-    public string BuildApiDoc(string pageTitle, string baseUrl, IEnumerable<DataApiModel> models, string token, string referer) {
-        Argument.NotNullOrEmpty(pageTitle, nameof(pageTitle));
+    public string BuildApiDoc(string title, string description, string baseUrl, IEnumerable<DataApiModel> models, string token, string referer) {
+        Argument.NotNullOrEmpty(title, nameof(title));
         Argument.NotNullOrEmpty(baseUrl, nameof(baseUrl));
         Argument.NotNullOrEmpty(models, nameof(models));
         Argument.NotNullOrEmpty(token, nameof(token));
         //
         var doc = new StringBuilder();
-        doc.AppendLine($"# {pageTitle}");
+        doc.AppendLine($"# {title}");
         doc.AppendLine();
+        if (description.IsNotNullOrEmpty()) {
+            doc.AppendLine(description);
+            doc.AppendLine();
+        }
         foreach (var model in models) {
             BuildApiDocForModel(doc, baseUrl, model, token, referer);
         }

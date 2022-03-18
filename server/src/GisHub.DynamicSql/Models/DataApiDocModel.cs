@@ -11,6 +11,9 @@ public class DataApiDocModel {
     public string Title { get; set; }
 
     // [FromQuery]
+    public string Description { get; set; }
+
+    // [FromQuery]
     public string Token { get; set; }
 
     // [FromQuery]

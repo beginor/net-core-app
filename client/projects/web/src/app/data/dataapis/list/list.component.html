@@ -25,7 +25,7 @@
         </div>
         <form class="p-2 bg-light">
           <div class="row">
-            <div class="col-6">
+            <div class="col-5">
               <div class="row g-0 align-items-center">
                 <label for="pageSize" class="col-auto col-form-label col-form-label-sm">
                   显示：
@@ -49,12 +49,37 @@
                 </div>
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-7">
               <div class="row g-0">
-                <div class="col">
-                  <!-- <span class="text-muted">其它工具栏</span> -->
+                <div class="col-8">
+                  <div class="input-group input-group-sm" *ngIf="exportingApiDoc; else exportBtnTpl">
+                    <label class="input-group-text">选择要导出的API，然后点击确定按钮</label>
+                    <!-- <label class="input-group-text" for="doc-format">格式</label>
+                    <select class="form-select" id="doc-format">
+                      <option value="json">PostMan 集合</option>
+                      <option value="markdown">Markdown 文档</option>
+                    </select>
+                    <label class="input-group-text" for="token">凭证</label>
+                    <select class="form-select" id="token">
+                      <option [value]="token.id" *ngFor="let token of (vm.tokens | async)">{{token.name}}</option>
+                    </select> -->
+                    <button class="btn btn-outline-primary" type="button" [disabled]="selectedApis.length === 0"
+                      (click)="exportApiDoc()">
+                      <svg-icon path="bi/check"></svg-icon> 确定
+                    </button>
+                    <button class="btn btn-outline-danger me-2" type="button" (click)="exportingApiDoc = false">
+                      <svg-icon path="bi/x"></svg-icon>
+                    </button>
+                  </div>
+                  <ng-template #exportBtnTpl>
+                    <button class="btn btn-sm btn-outline-secondary" type="button"
+                      (click)="exportingApiDoc = true" ngbTooltip="导出接口文档" container="body">
+                      <svg-icon path="bi/share"></svg-icon>
+                      接口文档
+                    </button>
+                  </ng-template>
                 </div>
-                <div class="col">
+                <div class="col-4">
                   <div class="input-group input-group-sm">
                     <input class="form-control" type="text" name="keywords"
                            placeholder="搜索数据接口"
@@ -75,7 +100,13 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-end text-nowrap text-muted">#</th>
+                <th scope="col" class="text-end text-nowrap text-muted">
+                  <div *ngIf="exportingApiDoc;else rowNumHeaderTpl">
+                    <input class="form-check-input" type="checkbox"
+                      [checked]="isAllSelected()" (change)="toggleSelectAll()"/>
+                  </div>
+                  <ng-template #rowNumHeaderTpl>#</ng-template>
+                </th>
                 <th scope="col" class="text-start text-nowrap text-muted">名称</th>
                 <th scope="col" class="text-start text-nowrap text-muted">描述</th>
                 <th scope="col" class="text-start text-nowrap text-muted">数据源</th>
@@ -88,7 +119,16 @@
             </thead>
             <tbody *ngIf="(vm.data | async) as data">
               <tr *ngFor="let item of data; let i = index;">
-                <th scope="row" class="text-end text-muted">{{i+1+vm.searchModel.skip}}</th>
+                <th scope="row" class="text-end text-muted">
+                  <div *ngIf="exportingApiDoc;else rowNumTpl">
+                    <input class="form-check-input" type="checkbox"
+                      [value]="item.id" [checked]="isSelected(item.id)"
+                      (change)="toggleSelected(item.id)" />
+                  </div>
+                  <ng-template #rowNumTpl>
+                    {{i+1+vm.searchModel.skip}}
+                  </ng-template>
+                </th>
                 <td class='text-start'>
                   <a class="preview-link"
                     *ngIf="(info.privileges['data_apis.read_data'] || info.privileges['data_apis.read_sql']);else apiNameTpl"

@@ -2,7 +2,7 @@ import { Injectable, Inject, ErrorHandler } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
-import { makeAbsoluteUrl } from 'app-shared';
+import { AccountService, makeAbsoluteUrl, UserTokenModel } from 'app-shared';
 import { UiService } from 'projects/web/src/app/common';
 import { RolesService, AppRoleModel } from '../../admin/roles/roles.service';
 
@@ -21,6 +21,7 @@ export class DataApiService {
     public loading = false;
     public showPagination = false;
     public roles: AppRoleModel[] = [];
+    public tokens = new BehaviorSubject<UserTokenModel[]>([]);
 
     private baseUrl = `${this.apiRoot}/dataapis`;
     private rolesSvc: RolesService;
@@ -28,6 +29,7 @@ export class DataApiService {
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
+        private account: AccountService,
         private ui: UiService,
         private errorHandler: ErrorHandler
     ) {
@@ -199,6 +201,63 @@ export class DataApiService {
         return makeAbsoluteUrl(url);
     }
 
+    public async loadTokens(): Promise<void> {
+        try {
+            const result = await this.account.searchUserTokens(
+                { skip: 0, take: 999 }
+            );
+            this.tokens.next(result.data ?? []);
+        }
+        catch (ex: any) {
+            this.tokens.next([]);
+            this.ui.showAlert(
+                { type: 'danger', message: '获取用户凭证出错！' }
+            );
+            this.errorHandler.handleError(ex);
+            console.error(ex, '获取用户凭证出错！');
+        }
+    }
+
+    public async exportApiDoc(model: DataApiDocModel): Promise<string> {
+        let httpParams = new HttpParams()
+            .set('title', model.title)
+            .set('format', model.format)
+            .set('token', model.token);
+        for (const id of model.apis) {
+            httpParams = httpParams.append('id', id);
+        }
+        if (!!model.description) {
+            httpParams = httpParams.set('description', model.description);
+        }
+        if (!!model.referer) {
+            httpParams = httpParams.set('referer', model.referer)
+        }
+        try {
+            const url = `${this.baseUrl}-doc?${httpParams.toString()}`;
+            const result = await lastValueFrom(
+                this.http.get(url, { responseType: 'text'})
+            )
+            return result;
+        }
+        catch (ex: any) {
+            this.ui.showAlert(
+                { type: 'danger', message: '导出接口文档出错！' }
+            );
+            this.errorHandler.handleError(ex);
+            console.error(ex);
+            return '';
+        }
+    }
+
+}
+
+export interface DataApiDocModel {
+    title: string,
+    description?: string;
+    apis: string[],
+    format: string;
+    token: string;
+    referer?: string;
 }
 
 export type ResultType = 'data' | 'columns' | 'sql' | 'geojson';

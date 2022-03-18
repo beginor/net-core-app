@@ -1,0 +1,57 @@
+<div class="modal-header">
+  <h5 class="modal-title">导出接口文档</h5>
+  <button type="button" class="btn-close" aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"></button>
+</div>
+<form class="modal-body" #exportForm="ngForm">
+  <div class="mb-3">
+    <label class="form-label text-muted" for="title">文档标题 <span class="text-danger">*</span></label>
+    <input class="form-control" id="title" name="title" required
+      placeholder="请输入文档标题 ..." [(ngModel)]="model.title" #title="ngModel"
+      [class.is-invalid]="!(title.valid || title.pristine)"
+      [class.is-valid]="title.valid" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label text-muted" for="description">文档说明</label>
+    <textarea class="form-control" name="description" id="description"
+      placeholder="请输入文档说明 ..." [(ngModel)]="model.description"></textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label text-muted" for="format">选择文档格式 <span class="text-danger">*</span></label>
+    <select class="form-select" id="format" name="format" required
+      [(ngModel)]="model.format" #formatModel="ngModel"
+      [class.is-invalid]="!(formatModel.valid || formatModel.pristine)"
+      [class.is-valid]="formatModel.valid">
+      <option value="json">Postman 集合</option>
+      <option value="markdown">Markdown 文档</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label text-muted" for="token">选择访问凭证 <span class="text-danger">*</span></label>
+    <select class="form-select" id="token" name="token" required
+      [(ngModel)]="token" #tokenModel="ngModel"
+      [class.is-invalid]="!(tokenModel.valid || tokenModel.pristine)"
+      [class.is-valid]="tokenModel.valid">
+      <option [ngValue]="token" *ngFor="let token of (vm.tokens | async);">{{token.name}}</option>
+    </select>
+  </div>
+  <div class="mb-3" *ngIf="token.urls!.length > 0">
+    <label class="form-label text-muted" for="referer">选择允许的URL地址 <span class="text-danger">*</span></label>
+    <select class="form-select" id="referer" name="referer" required
+      [(ngModel)]="model.referer" #refererModel="ngModel"
+      [class.is-invalid]="!(refererModel.valid || refererModel.pristine)"
+      [class.is-valid]="refererModel.valid">
+      <option [value]="url" *ngFor="let url of token.urls">{{url}}</option>
+    </select>
+  </div>
+</form>
+<div class="modal-footer justify-content-between">
+  <button class="btn btn-sm btn-outline-primary" type="button"
+    [disabled]="!exportForm.valid" (click)="exportApiDoc()">
+    <svg-icon path="bi/check"></svg-icon> 确定
+  </button>
+  <button class="btn btn-sm btn-outline-secondary" type="button"
+    (click)="activeModal.dismiss('cancel')">
+    <svg-icon path="bi/x"></svg-icon> 取消
+  </button>
+</div>

@@ -5,6 +5,6 @@ namespace Beginor.GisHub.DynamicSql;
 
 public interface IApiDocBuilder {
 
-    string BuildApiDoc(string pageTitle, string baseUrl, IEnumerable<DataApiModel> models, string token, string referer);
+    string BuildApiDoc(string title, string description, string baseUrl, IEnumerable<DataApiModel> models, string token, string referer);
 
 }

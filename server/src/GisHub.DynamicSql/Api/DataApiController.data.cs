@@ -99,6 +99,7 @@ namespace Beginor.GisHub.DynamicSql.Api {
                 IApiDocBuilder builder = isMarkdown ? new MarkdownApiDocBuilder() : new JsonApiDocBuilder();
                 var doc = builder.BuildApiDoc(
                     model.Title,
+                    model.Description,
                     $"{Request.Scheme}://{Request.Host}{Request.PathBase}/{RouteTemplate}",
                     apis,
                     model.Token,

@@ -12,13 +12,14 @@ namespace Beginor.GisHub.DynamicSql;
 public class JsonApiDocBuilder : IApiDocBuilder {
 
     public string BuildApiDoc(
-        string pageTitle,
+        string title,
+        string description,
         string baseUrl,
         IEnumerable<DataApiModel> models,
         string token,
         string referer
     ) {
-        Argument.NotNullOrEmpty(pageTitle, nameof(pageTitle));
+        Argument.NotNullOrEmpty(title, nameof(title));
         Argument.NotNullOrEmpty(baseUrl, nameof(baseUrl));
         Argument.NotNullOrEmpty(models, nameof(models));
         Argument.NotNullOrEmpty(token, nameof(token));
@@ -27,8 +28,8 @@ public class JsonApiDocBuilder : IApiDocBuilder {
             ["$schema"] = "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
             ["info"] = new JsonObject {
                 ["_postman_id"] = Guid.NewGuid().ToString("D"),
-                ["name"] = pageTitle,
-                ["description"] = pageTitle,
+                ["name"] = title,
+                ["description"] = description.IsNullOrEmpty() ? title : description,
                 ["schema"] = "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
             },
             ["variable"] = new JsonArray {

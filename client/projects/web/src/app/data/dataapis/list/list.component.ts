@@ -6,6 +6,7 @@ import { AccountService } from 'app-shared';
 
 import { DataApiService, DataApiModel } from '../dataapis.service';
 import { PreviewComponent } from '../preview/preview.component';
+import { ExportComponent } from '../export/export.component';
 
 @Component({
     selector: 'app-dataapi-list',
@@ -14,12 +15,15 @@ import { PreviewComponent } from '../preview/preview.component';
 })
 export class ListComponent implements OnInit {
 
+    public exportingApiDoc = false;
+    public selectedApis: string[] = [];
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        public account: AccountService,
         private modal: NgbModal,
-        public vm: DataApiService
+        public account: AccountService,
+        public vm: DataApiService,
     ) { }
 
     public ngOnInit(): void {
@@ -73,5 +77,48 @@ export class ListComponent implements OnInit {
         this.vm.searchModel.skip = 0;
         void this.vm.search();
     }
+
+    public isSelected(apiId: string): boolean {
+        return this.selectedApis.indexOf(apiId) !== -1;
+    }
+
+    public toggleSelected(apiId: string): void {
+        const idx = this.selectedApis.indexOf(apiId);
+        if (idx === -1) {
+            this.selectedApis.push(apiId);
+        }
+        else {
+            this.selectedApis.splice(idx, 1);
+        }
+    }
+
+    public isAllSelected(): boolean {
+        return this.selectedApis.length == this.vm.data.getValue().length;
+    }
+
+    public toggleSelectAll(): void {
+        if (this.selectedApis.length > 0) {
+            this.selectedApis = [];
+        }
+        else {
+            this.selectedApis = this.vm.data.getValue().map(item => item.id);
+        }
+    }
+
+    public async exportApiDoc(): Promise<void> {
+        const ref = this.modal.open(ExportComponent, {
+            container: 'body',
+            size: 'md',
+            keyboard: false,
+            backdrop: 'static',
+            scrollable: true
+        });
+        const comp = ref.componentInstance as ExportComponent;
+        comp.model.apis = this.selectedApis;
+        void ref.result.then(_ => {
+            this.selectedApis = [];
+            this.exportingApiDoc = false;
+        });
+    };
 
 }
