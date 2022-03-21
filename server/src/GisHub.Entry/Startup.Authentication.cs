@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Net.Http.Headers;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +16,7 @@ using Beginor.GisHub.Api.Authorization;
 using Beginor.GisHub.Common;
 using Beginor.GisHub.Data.Repositories;
 
-namespace Beginor.GisHub.Entry; 
+namespace Beginor.NetCoreApp.Entry;
 
 partial class Startup {
 
@@ -66,7 +65,7 @@ partial class Startup {
                     }
                     if (token.Urls != null && token.Urls.Length > 0) {
                         var req = context.Request;
-                        string referer = req.Headers[HeaderNames.Referer];
+                        string referer = req.Headers.Referer;
                         if (referer.IsNullOrEmpty()) {
                             context.Fail("No referer provided");
                             return;
