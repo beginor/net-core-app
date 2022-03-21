@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace Beginor.NetCoreApp.Common;
+namespace Beginor.GisHub.Common;
 
 public static class Base64UrlEncoder {
 

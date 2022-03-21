@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Common;
+using Beginor.GisHub.Common;
 using NHibernate.AspNetCore.Identity;
 using NHibernate.Linq;
 using Beginor.GisHub.Data;
