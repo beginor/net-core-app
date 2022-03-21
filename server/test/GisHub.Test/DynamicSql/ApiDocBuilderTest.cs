@@ -18,6 +18,7 @@ public class ApiDocBuilderTest : BaseTest {
         IApiDocBuilder builder = new MarkdownApiDocBuilder();
         var markdown = builder.BuildApiDoc(
             "GIS Hub API Doc Demo",
+            "test description",
             "http://localhost:5000/gishub/api/dataapis",
             apis,
             "9fffa2bf2d30412c8977a42bd937e5ff",
@@ -33,6 +34,7 @@ public class ApiDocBuilderTest : BaseTest {
         IApiDocBuilder builder = new JsonApiDocBuilder();
         var json = builder.BuildApiDoc(
             "GIS Hub API Doc Demo",
+            "test description",
             "http://localhost:5000/gishub/api/dataapis",
             apis,
             "9fffa2bf2d30412c8977a42bd937e5ff",
