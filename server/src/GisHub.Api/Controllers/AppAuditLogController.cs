@@ -8,7 +8,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Models;
 
-namespace Beginor.NetCoreApp.Api.Controllers; 
+namespace Beginor.GisHub.Api.Controllers;
 
 /// <summary>审计日志服务接口</summary>
 [Route("api/audit-logs")]
