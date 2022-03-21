@@ -4,29 +4,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Beginor.NetCoreApp.Entry {
+namespace Beginor.NetCoreApp.Entry; 
 
-    partial class Startup {
+partial class Startup {
 
-        private void ConfigureMvcServices(IServiceCollection services, IWebHostEnvironment env) {
-            services.AddControllers()
-                .ConfigureApplicationPartManager(manager => {
-                    manager.ApplicationParts.Clear();
-                    manager.ApplicationParts.Add(
-                        new AssemblyPart(typeof(Beginor.NetCoreApp.Api.Controllers.AccountController).Assembly)
-                    );
-                })
-                .AddControllersAsServices()
-                .ConfigureApiBehaviorOptions(options => {
-                    options.SuppressConsumesConstraintForFormFileParameters = false;
-                    options.SuppressInferBindingSourcesForParameters = false;
-                    options.SuppressModelStateInvalidFilter = false;
-                });
-        }
-
-        private void ConfigureMvc(WebApplication app, IWebHostEnvironment env) {
-            app.MapControllers();
-        }
+    private void ConfigureMvcServices(IServiceCollection services, IWebHostEnvironment env) {
+        services.AddControllers()
+            .ConfigureApplicationPartManager(manager => {
+                manager.ApplicationParts.Clear();
+                manager.ApplicationParts.Add(
+                    new AssemblyPart(typeof(Beginor.NetCoreApp.Api.Controllers.AccountController).Assembly)
+                );
+            })
+            .AddControllersAsServices()
+            .ConfigureApiBehaviorOptions(options => {
+                options.SuppressConsumesConstraintForFormFileParameters = false;
+                options.SuppressInferBindingSourcesForParameters = false;
+                options.SuppressModelStateInvalidFilter = false;
+            });
     }
 
+    private void ConfigureMvc(WebApplication app, IWebHostEnvironment env) {
+        app.MapControllers();
+    }
 }

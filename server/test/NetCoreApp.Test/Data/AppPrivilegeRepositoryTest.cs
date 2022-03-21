@@ -7,16 +7,14 @@ using NHibernate;
 using NHibernate.NetCore;
 using NUnit.Framework;
 
-namespace Beginor.NetCoreApp.Test.Data {
+namespace Beginor.NetCoreApp.Test.Data; 
 
-    [TestFixture]
-    public class AppPrivilegeRepositoryTest : BaseTest<IAppPrivilegeRepository> {
+[TestFixture]
+public class AppPrivilegeRepositoryTest : BaseTest<IAppPrivilegeRepository> {
 
-        [Test]
-        public void _01_CanResolveTarget() {
-            Assert.IsNotNull(Target);
-        }
-
+    [Test]
+    public void _01_CanResolveTarget() {
+        Assert.IsNotNull(Target);
     }
 
 }

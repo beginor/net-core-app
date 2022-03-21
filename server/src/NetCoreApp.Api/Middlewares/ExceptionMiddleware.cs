@@ -6,39 +6,37 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Beginor.NetCoreApp.Api.Middlewares {
+namespace Beginor.NetCoreApp.Api.Middlewares; 
 
-    public class ExceptionMiddleware {
+public class ExceptionMiddleware {
 
-        private readonly RequestDelegate next;
-        private readonly IWebHostEnvironment env;
+    private readonly RequestDelegate next;
+    private readonly IWebHostEnvironment env;
 
-        private readonly ILogger<ExceptionMiddleware> logger;
+    private readonly ILogger<ExceptionMiddleware> logger;
 
-        public ExceptionMiddleware(
-            RequestDelegate next,
-            IWebHostEnvironment env,
-            ILogger<ExceptionMiddleware> logger
-        ) {
-            this.next = next ?? throw new ArgumentNullException(nameof(next));
-            this.env = env ?? throw new ArgumentNullException(nameof(env));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
-
-        public Task InvokeAsync(HttpContext context) {
-            try {
-                return next(context);
-            }
-            catch (Exception ex) {
-                var message = $"Unhandled Exception with {context.Request.Method} {context.Request.Path} .";
-                logger.LogError(ex, message);
-                context.Response.StatusCode = 500;
-                return context.Response.WriteAsync(
-                    env.IsDevelopment() ? ex.ToString() : message,
-                    Encoding.UTF8
-                );
-            }
-        }
+    public ExceptionMiddleware(
+        RequestDelegate next,
+        IWebHostEnvironment env,
+        ILogger<ExceptionMiddleware> logger
+    ) {
+        this.next = next ?? throw new ArgumentNullException(nameof(next));
+        this.env = env ?? throw new ArgumentNullException(nameof(env));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    public Task InvokeAsync(HttpContext context) {
+        try {
+            return next(context);
+        }
+        catch (Exception ex) {
+            var message = $"Unhandled Exception with {context.Request.Method} {context.Request.Path} .";
+            logger.LogError(ex, message);
+            context.Response.StatusCode = 500;
+            return context.Response.WriteAsync(
+                env.IsDevelopment() ? ex.ToString() : message,
+                Encoding.UTF8
+            );
+        }
+    }
 }

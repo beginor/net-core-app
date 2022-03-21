@@ -1,16 +1,14 @@
 using Beginor.NetCoreApp.Api.Controllers;
 using NUnit.Framework;
 
-namespace Beginor.NetCoreApp.Test.Api {
+namespace Beginor.NetCoreApp.Test.Api; 
 
-    [TestFixture]
-    public class AppStorageControllerTest : BaseTest<AppStorageController> {
+[TestFixture]
+public class AppStorageControllerTest : BaseTest<AppStorageController> {
 
-        [Test]
-        public void _01_CanResolveTarget() {
-            Assert.IsNotNull(Target);
-        }
-
+    [Test]
+    public void _01_CanResolveTarget() {
+        Assert.IsNotNull(Target);
     }
 
 }

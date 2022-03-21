@@ -10,31 +10,29 @@ using NHibernate.Linq;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Data.Repositories {
+namespace Beginor.NetCoreApp.Data.Repositories; 
 
-    /// <summary>附件表仓储实现</summary>
-    public partial class AppAttachmentRepository : HibernateRepository<AppAttachment, AppAttachmentModel, long>, IAppAttachmentRepository {
+/// <summary>附件表仓储实现</summary>
+public partial class AppAttachmentRepository : HibernateRepository<AppAttachment, AppAttachmentModel, long>, IAppAttachmentRepository {
 
-        public AppAttachmentRepository(ISession session, IMapper mapper) : base(session, mapper) { }
+    public AppAttachmentRepository(ISession session, IMapper mapper) : base(session, mapper) { }
 
-        /// <summary>附件表搜索，返回分页结果。</summary>
-        public async Task<PaginatedResponseModel<AppAttachmentModel>> SearchAsync(
-            AppAttachmentSearchModel model
-        ) {
-            var query = Session.Query<AppAttachment>();
-            // todo: add custom query here;
-            var total = await query.LongCountAsync();
-            var data = await query.OrderByDescending(e => e.Id)
-                .Skip(model.Skip).Take(model.Take)
-                .ToListAsync();
-            return new PaginatedResponseModel<AppAttachmentModel> {
-                Total = total,
-                Data = Mapper.Map<IList<AppAttachmentModel>>(data),
-                Skip = model.Skip,
-                Take = model.Take
-            };
-        }
-
+    /// <summary>附件表搜索，返回分页结果。</summary>
+    public async Task<PaginatedResponseModel<AppAttachmentModel>> SearchAsync(
+        AppAttachmentSearchModel model
+    ) {
+        var query = Session.Query<AppAttachment>();
+        // todo: add custom query here;
+        var total = await query.LongCountAsync();
+        var data = await query.OrderByDescending(e => e.Id)
+            .Skip(model.Skip).Take(model.Take)
+            .ToListAsync();
+        return new PaginatedResponseModel<AppAttachmentModel> {
+            Total = total,
+            Data = Mapper.Map<IList<AppAttachmentModel>>(data),
+            Skip = model.Skip,
+            Take = model.Take
+        };
     }
 
 }
