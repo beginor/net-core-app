@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
+import { Base64UrlService } from 'app-shared';
 import { UiService } from 'projects/web/src/app/common';
 import { RolesService, AppRoleModel } from '../roles/roles.service';
 
@@ -35,7 +36,8 @@ export class UsersService {
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService,
-        private errorHandler: ErrorHandler
+        private errorHandler: ErrorHandler,
+        private base64Url: Base64UrlService
     ) {
         this.searchModel.sortBy = this.sortMethods[0].value;
         this.rolesSvc = new RolesService(http, apiRoot, ui, errorHandler);
@@ -211,8 +213,8 @@ export class UsersService {
         }
         try {
             const encryptModel: ResetPasswordModel = {
-                password: btoa(model.password),
-                confirmPassword: btoa(model.confirmPassword)
+                password: this.base64Url.encode(model.password),
+                confirmPassword: this.base64Url.encode(model.confirmPassword)
             };
             const url = `${this.baseUrl}/${id}/reset-pass`;
             await lastValueFrom(this.http.put(url, encryptModel));

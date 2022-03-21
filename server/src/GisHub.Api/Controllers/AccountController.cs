@@ -19,6 +19,7 @@ using Beginor.GisHub.Common;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Models;
+using Base64UrlEncoder = Beginor.GisHub.Common.Base64UrlEncoder;
 
 namespace Beginor.GisHub.Api.Controllers {
 
@@ -117,8 +118,8 @@ namespace Beginor.GisHub.Api.Controllers {
             [FromBody]AccountLoginModel model
         ) {
             try {
-                model.UserName = Encoding.UTF8.GetString(Convert.FromBase64String(model.UserName));
-                model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
+                model.UserName = Base64UrlEncoder.Decode(model.UserName);
+                model.Password = Base64UrlEncoder.Decode(model.Password);
                 var user = await userMgr.FindByNameAsync(model.UserName);
                 if (user == null) {
                     return BadRequest($"登录失败， 请重试!");

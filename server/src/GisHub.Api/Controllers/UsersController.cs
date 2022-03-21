@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Common;
 using NHibernate.AspNetCore.Identity;
 using NHibernate.Linq;
 using Beginor.GisHub.Data;
@@ -254,8 +255,8 @@ namespace Beginor.GisHub.Api.Controllers {
             [FromBody]ResetPasswordModel model
         ) {
             try {
-                model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
-                model.ConfirmPassword = Encoding.UTF8.GetString(Convert.FromBase64String(model.ConfirmPassword));
+                model.Password = Base64UrlEncoder.Decode(model.Password);
+                model.ConfirmPassword = Base64UrlEncoder.Decode(model.ConfirmPassword);
                 var user = await userMgr.FindByIdAsync(id.ToString());
                 if (user == null) {
                     return NotFound();
