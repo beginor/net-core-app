@@ -4,27 +4,26 @@ using Microsoft.Extensions.DependencyInjection;
 using Beginor.GisHub.Api.Middlewares;
 using Microsoft.AspNetCore.StaticFiles;
 
-namespace Beginor.GisHub.Entry {
+namespace Beginor.GisHub.Entry; 
 
-    partial class Startup {
+partial class Startup {
 
-        private void ConfigureStaticFilesServices(IServiceCollection services, IWebHostEnvironment env) {
-            services.ConfigureSpaFailback(config.GetSection("spaFailback"));
-            services.ConfigureGzipStatic();
-#if DEBUG
-            services.AddDirectoryBrowser();
-#endif
-        }
-
-        private void ConfigureStaticFiles(WebApplication app, IWebHostEnvironment env) {
-            app.UseDefaultFiles();
-            app.UseGzipStatic();
-            app.UseSpaFailback();
-            app.UseStaticFiles();
-#if DEBUG
-            app.UseDirectoryBrowser();
-#endif
-        }
-
+    private void ConfigureStaticFilesServices(IServiceCollection services, IWebHostEnvironment env) {
+        services.ConfigureSpaFailback(config.GetSection("spaFailback"));
+        services.ConfigureGzipStatic();
+        #if DEBUG
+        services.AddDirectoryBrowser();
+        #endif
     }
+
+    private void ConfigureStaticFiles(WebApplication app, IWebHostEnvironment env) {
+        app.UseDefaultFiles();
+        app.UseGzipStatic();
+        app.UseSpaFailback();
+        app.UseStaticFiles();
+        #if DEBUG
+        app.UseDirectoryBrowser();
+        #endif
+    }
+
 }

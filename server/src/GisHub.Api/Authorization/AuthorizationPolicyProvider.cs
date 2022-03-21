@@ -5,25 +5,23 @@ using Microsoft.Extensions.Options;
 using Beginor.AspNetCore.Authentication.Token;
 using Beginor.GisHub.Common;
 
-namespace Beginor.GisHub.Api.Authorization {
+namespace Beginor.GisHub.Api.Authorization; 
 
-    public class AuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider {
+public class AuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider {
 
-        public AuthorizationPolicyProvider(
-            IOptions<AuthorizationOptions> options
-        ) : base(options) { }
+    public AuthorizationPolicyProvider(
+        IOptions<AuthorizationOptions> options
+    ) : base(options) { }
 
-        public override Task<AuthorizationPolicy> GetPolicyAsync(string policyName) {
-            var builder = new AuthorizationPolicyBuilder();
-            builder.RequireAuthenticatedUser()
-                .RequireClaim(Consts.PrivilegeClaimType, policyName)
-                .AddAuthenticationSchemes(
-                    JwtBearerDefaults.AuthenticationScheme,
-                    TokenOptions.DefaultSchemaName
-                );
-            return Task.FromResult(builder.Build());
-        }
-
+    public override Task<AuthorizationPolicy> GetPolicyAsync(string policyName) {
+        var builder = new AuthorizationPolicyBuilder();
+        builder.RequireAuthenticatedUser()
+            .RequireClaim(Consts.PrivilegeClaimType, policyName)
+            .AddAuthenticationSchemes(
+                JwtBearerDefaults.AuthenticationScheme,
+                TokenOptions.DefaultSchemaName
+            );
+        return Task.FromResult(builder.Build());
     }
 
 }

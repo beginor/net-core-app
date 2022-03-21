@@ -10,38 +10,36 @@ using NHibernate.Linq;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Data.Repositories {
+namespace Beginor.GisHub.Data.Repositories; 
 
-    /// <summary>审计日志仓储实现</summary>
-    public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, AppAuditLogModel, long>, IAppAuditLogRepository {
+/// <summary>审计日志仓储实现</summary>
+public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, AppAuditLogModel, long>, IAppAuditLogRepository {
 
-        public AppAuditLogRepository(ISession session, IMapper mapper) : base(session, mapper) { }
+    public AppAuditLogRepository(ISession session, IMapper mapper) : base(session, mapper) { }
 
-        public async Task<PaginatedResponseModel<AppAuditLogModel>> SearchAsync(
-            AppAuditLogSearchModel model
-        ) {
-            var startDate = model.startDate.GetValueOrDefault(DateTime.Today);
-            var endDate = model.endDate.GetValueOrDefault(DateTime.Today).AddDays(1);
-            var query = Session.Query<AppAuditLog>().Where(
-                log => log.StartAt >= startDate && log.StartAt < endDate
-            );
+    public async Task<PaginatedResponseModel<AppAuditLogModel>> SearchAsync(
+        AppAuditLogSearchModel model
+    ) {
+        var startDate = model.startDate.GetValueOrDefault(DateTime.Today);
+        var endDate = model.endDate.GetValueOrDefault(DateTime.Today).AddDays(1);
+        var query = Session.Query<AppAuditLog>().Where(
+            log => log.StartAt >= startDate && log.StartAt < endDate
+        );
 
-            if (model.UserName.IsNotNullOrEmpty()) {
-                var userName = model.UserName;
-                query = query.Where(log => log.UserName.Contains(userName));
-            }
-            var total = await query.LongCountAsync();
-            var data = await query.OrderByDescending(e => e.Id)
-                .Skip(model.Skip)
-                .Take(model.Take)
-                .ToListAsync();
-            return new PaginatedResponseModel<AppAuditLogModel> {
-                Total = total,
-                Data = Mapper.Map<IList<AppAuditLogModel>>(data),
-                Skip = model.Skip,
-                Take = model.Take
-            };
+        if (model.UserName.IsNotNullOrEmpty()) {
+            var userName = model.UserName;
+            query = query.Where(log => log.UserName.Contains(userName));
         }
+        var total = await query.LongCountAsync();
+        var data = await query.OrderByDescending(e => e.Id)
+            .Skip(model.Skip)
+            .Take(model.Take)
+            .ToListAsync();
+        return new PaginatedResponseModel<AppAuditLogModel> {
+            Total = total,
+            Data = Mapper.Map<IList<AppAuditLogModel>>(data),
+            Skip = model.Skip,
+            Take = model.Take
+        };
     }
-
 }

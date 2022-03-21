@@ -9,43 +9,41 @@ using NHibernate.Cfg;
 using NHibernate.Mapping.Attributes;
 using NHibernate.NetCore;
 
-namespace Beginor.GisHub.Entry {
+namespace Beginor.GisHub.Entry; 
 
-    partial class Startup {
+partial class Startup {
 
-        private void ConfigureHibernateServices(IServiceCollection services, IWebHostEnvironment env) {
-            var cfg = new Configuration();
-            var configFile = Path.Combine("config", "hibernate.config");
-            cfg.Configure(configFile);
-            var isDevelopment = env.IsDevelopment().ToString();
-            cfg.SetProperty(Environment.ShowSql, isDevelopment);
-            cfg.SetProperty(Environment.FormatSql, isDevelopment);
-            cfg.AddIdentityMappings();
-            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Data.ModelMapping).Assembly);
-            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Slpk.ModelMapping).Assembly);
-            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.TileMap.ModelMapping).Assembly);
-            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.DataServices.ModelMapping).Assembly);
-            cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.DynamicSql.ModelMapping).Assembly);
-            services.AddHibernate(cfg);
-        }
-
-        private void ConfigureHibernate(WebApplication app, IWebHostEnvironment env) {
-            // do nothing know
-        }
-
+    private void ConfigureHibernateServices(IServiceCollection services, IWebHostEnvironment env) {
+        var cfg = new Configuration();
+        var configFile = Path.Combine("config", "hibernate.config");
+        cfg.Configure(configFile);
+        var isDevelopment = env.IsDevelopment().ToString();
+        cfg.SetProperty(Environment.ShowSql, isDevelopment);
+        cfg.SetProperty(Environment.FormatSql, isDevelopment);
+        cfg.AddIdentityMappings();
+        cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Data.ModelMapping).Assembly);
+        cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Slpk.ModelMapping).Assembly);
+        cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.TileMap.ModelMapping).Assembly);
+        cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.DataServices.ModelMapping).Assembly);
+        cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.DynamicSql.ModelMapping).Assembly);
+        services.AddHibernate(cfg);
     }
 
-    public static class ConfigurationExtensions {
+    private void ConfigureHibernate(WebApplication app, IWebHostEnvironment env) {
+        // do nothing know
+    }
 
-        public static Configuration AddAttributeMappingAssembly(this Configuration cfg, Assembly assembly) {
-            HbmSerializer.Default.Validate = true;
-            var stream = HbmSerializer.Default.Serialize(assembly);
-            using var reader = new StreamReader(stream);
-            var xml = reader.ReadToEnd();
-            cfg.AddXml(xml);
-            return cfg;
-        }
+}
 
+public static class ConfigurationExtensions {
+
+    public static Configuration AddAttributeMappingAssembly(this Configuration cfg, Assembly assembly) {
+        HbmSerializer.Default.Validate = true;
+        var stream = HbmSerializer.Default.Serialize(assembly);
+        using var reader = new StreamReader(stream);
+        var xml = reader.ReadToEnd();
+        cfg.AddXml(xml);
+        return cfg;
     }
 
 }

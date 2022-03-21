@@ -3,24 +3,22 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Beginor.GisHub.Entry {
+namespace Beginor.GisHub.Entry; 
 
-    partial class Startup {
+partial class Startup {
 
-        private void ConfigurePathBaseServices(IServiceCollection services, IWebHostEnvironment env) {
-            // do nothing now.
+    private void ConfigurePathBaseServices(IServiceCollection services, IWebHostEnvironment env) {
+        // do nothing now.
+    }
+
+    private void ConfigurePathBase(WebApplication app, IWebHostEnvironment env) {
+        var pathbase = GetAppPathbase();
+        if (string.IsNullOrEmpty(pathbase)) {
+            return;
         }
-
-        private void ConfigurePathBase(WebApplication app, IWebHostEnvironment env) {
-            var pathbase = GetAppPathbase();
-            if (string.IsNullOrEmpty(pathbase)) {
-                return;
-            }
-            app.UsePathBase(new PathString(pathbase));
-            var message = "Hosting pathbase: " + pathbase;
-            logger.Info(message);
-        }
-
+        app.UsePathBase(new PathString(pathbase));
+        var message = "Hosting pathbase: " + pathbase;
+        logger.Info(message);
     }
 
 }
