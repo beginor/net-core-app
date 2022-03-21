@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -62,9 +61,7 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 if (result.Succeeded) {
                     return Ok();
                 }
-                else {
-                    return BadRequest(result.Errors);
-                }
+                return BadRequest(result.Errors);
             }
             catch (Exception ex) {
                 logger.LogError(ex, $"Can not change password for user {user.UserName} with {model.ToJson()} .");
