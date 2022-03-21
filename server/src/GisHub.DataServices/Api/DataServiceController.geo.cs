@@ -23,7 +23,7 @@ namespace Beginor.GisHub.DataServices.Api {
         [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult<GeoJsonFeatureCollection>> ReadAsGeoJson(
             [FromRoute] long id,
-            [FromQuery] GeoJsonParam param
+            [ModelBinder(BinderType = typeof(EncryptedModelBinder))] GeoJsonParam param
         ) {
             try {
                 var ds = await repository.GetCacheItemByIdAsync(id);
@@ -60,7 +60,7 @@ namespace Beginor.GisHub.DataServices.Api {
         [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult<AgsFeatureSet>> ReadAsFeatureSet(
             [FromRoute] long id,
-            [FromQuery] AgsJsonParam param
+            [ModelBinder(BinderType = typeof(EncryptedModelBinder))] AgsJsonParam param
         ) {
             try {
                 var ds = await repository.GetCacheItemByIdAsync(id);

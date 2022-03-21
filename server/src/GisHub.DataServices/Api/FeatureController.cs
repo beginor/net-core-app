@@ -88,7 +88,7 @@ namespace Beginor.GisHub.DataServices.Api {
         [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult<AgsFeatureSet>> QueryFeaturesByGetAsync(
             [FromRoute]long id,
-            [FromQuery]AgsQueryParam param
+            [ModelBinder(BinderType = typeof(EncryptedModelBinder))]AgsQueryParam param
         ) {
             try {
                 var featureSet = await QueryFeaturesAsync(id, param);
@@ -110,7 +110,7 @@ namespace Beginor.GisHub.DataServices.Api {
         [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult<AgsFeatureSet>> QueryFeaturesByPostAsync(
             [FromRoute]long id,
-            [ModelBinder(BinderType = typeof(AgsQueryParamsBinder))]AgsQueryParam param
+            [ModelBinder(BinderType = typeof(EncryptedModelBinder))]AgsQueryParam param
         ) {
             try {
                 var featureSet = await QueryFeaturesAsync(id, param);

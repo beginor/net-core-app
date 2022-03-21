@@ -18,9 +18,7 @@ namespace Beginor.GisHub.DataServices.Api {
         [HttpGet("{id:long}/columns")]
         [Authorize("data_services.read_data")]
         [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
-        public async Task<ActionResult<List<ColumnModel>>> GetColumns(
-            long id
-        ) {
+        public async Task<ActionResult<List<ColumnModel>>> GetColumns(long id) {
             try {
                 var dataSource = await repository.GetCacheItemByIdAsync(id);
                 if (dataSource == null) {
@@ -41,7 +39,7 @@ namespace Beginor.GisHub.DataServices.Api {
         [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult<long>> Count(
             [FromRoute]long id,
-            [FromQuery]CountParam param
+            [ModelBinder(BinderType = typeof(EncryptedModelBinder))]CountParam param
         ) {
             try {
                 var dataSource = await repository.GetCacheItemByIdAsync(id);
@@ -66,7 +64,7 @@ namespace Beginor.GisHub.DataServices.Api {
         [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult> ReadData(
             [FromRoute] long id,
-            [FromQuery] ReadDataParam param
+            [ModelBinder(BinderType = typeof(EncryptedModelBinder))] ReadDataParam param
         ) {
             try {
                 var dataSource = await repository.GetCacheItemByIdAsync(id);
@@ -104,7 +102,7 @@ namespace Beginor.GisHub.DataServices.Api {
         [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult> ReadDistinctData(
             [FromRoute] long id,
-            [FromQuery] DistinctParam param
+            [ModelBinder(BinderType = typeof(EncryptedModelBinder))] DistinctParam param
         ) {
             try {
                 var dataSource = await repository.GetCacheItemByIdAsync(id);
@@ -135,7 +133,7 @@ namespace Beginor.GisHub.DataServices.Api {
         [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
         public async Task<ActionResult> PivotData(
             long id,
-            [FromQuery]PivotParam param
+            [ModelBinder(BinderType = typeof(EncryptedModelBinder))]PivotParam param
         ) {
             try {
                 var dataSource = await repository.GetCacheItemByIdAsync(id);

@@ -8,19 +8,11 @@ namespace Beginor.GisHub.Geo {
 
         public int Digits { get; set; } = 6;
 
-        public override double Read(
-            ref Utf8JsonReader reader,
-            Type typeToConvert,
-            JsonSerializerOptions options
-        ) {
+        public override double Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
             return reader.GetDouble();
         }
 
-        public override void Write(
-            Utf8JsonWriter writer,
-            double value,
-            JsonSerializerOptions options
-        ) {
+        public override void Write(Utf8JsonWriter writer, double value, JsonSerializerOptions options) {
             if (!double.IsNaN(value)) {
                 value = Math.Round(value, Digits);
             }
