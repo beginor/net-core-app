@@ -19,6 +19,7 @@ using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
+using Base64UrlEncoder = Beginor.NetCoreApp.Common.Base64UrlEncoder;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
 
@@ -117,8 +118,8 @@ namespace Beginor.NetCoreApp.Api.Controllers {
             [FromBody]AccountLoginModel model
         ) {
             try {
-                model.UserName = Encoding.UTF8.GetString(Convert.FromBase64String(model.UserName));
-                model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
+                model.UserName = Base64UrlEncoder.Decode(model.UserName);
+                model.Password = Base64UrlEncoder.Decode(model.Password);
                 var user = await userMgr.FindByNameAsync(model.UserName);
                 if (user == null) {
                     return BadRequest($"登录失败， 请重试!");

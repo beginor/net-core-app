@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 
 import { BehaviorSubject, Subscription, interval, lastValueFrom } from 'rxjs';
+import { Base64UrlService } from './base64-url.service';
 
 @Injectable({
     providedIn: 'root'
@@ -26,7 +27,8 @@ export class AccountService {
 
     constructor(
         private http: HttpClient,
-        @Inject('apiRoot') private apiRoot: string
+        @Inject('apiRoot') private apiRoot: string,
+        private base64Url: Base64UrlService
     ) {
         this.interval$ = interval(1000 * 60 * 5).subscribe(
             () => void this.getInfo()
@@ -67,8 +69,8 @@ export class AccountService {
     public async login(model: LoginModel): Promise<void> {
         const url = this.apiRoot + '/account';
         const loginModel: LoginModel = {
-            userName: btoa(model.userName as string),
-            password: btoa(model.password as string),
+            userName: this.base64Url.encode(model.userName as string),
+            password: this.base64Url.encode(model.password as string),
             isPersistent: model.isPersistent
         };
         const token = await lastValueFrom(
@@ -101,9 +103,9 @@ export class AccountService {
             this.http.put(
                 `${this.apiRoot}/account/password`,
                 {
-                    currentPassword: btoa(model.currentPassword),
-                    newPassword: btoa(model.newPassword),
-                    confirmPassword: btoa(model.confirmPassword)
+                    currentPassword: this.base64Url.encode(model.currentPassword), // eslint-disable-line max-len
+                    newPassword: this.base64Url.encode(model.newPassword),
+                    confirmPassword: this.base64Url.encode(model.confirmPassword) // eslint-disable-line max-len
                 }
             )
         );

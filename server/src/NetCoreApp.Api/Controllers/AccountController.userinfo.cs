@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Api.Controllers {
@@ -50,9 +51,9 @@ namespace Beginor.NetCoreApp.Api.Controllers {
                 return Forbid();
             }
             try {
-                model.CurrentPassword = Encoding.UTF8.GetString(Convert.FromBase64String(model.CurrentPassword));
-                model.NewPassword = Encoding.UTF8.GetString(Convert.FromBase64String(model.NewPassword));
-                model.ConfirmPassword = Encoding.UTF8.GetString(Convert.FromBase64String(model.ConfirmPassword));
+                model.CurrentPassword = Base64UrlEncoder.Decode(model.CurrentPassword);
+                model.NewPassword = Base64UrlEncoder.Decode(model.NewPassword);
+                model.ConfirmPassword = Base64UrlEncoder.Decode(model.ConfirmPassword);
                 var isValid = await userMgr.CheckPasswordAsync(user, model.CurrentPassword);
                 if (!isValid) {
                     return BadRequest("Invalid current password!");
