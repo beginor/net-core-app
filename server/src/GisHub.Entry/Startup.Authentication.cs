@@ -16,7 +16,7 @@ using Beginor.GisHub.Api.Authorization;
 using Beginor.GisHub.Common;
 using Beginor.GisHub.Data.Repositories;
 
-namespace Beginor.NetCoreApp.Entry;
+namespace Beginor.GisHub.Entry;
 
 partial class Startup {
 

@@ -11,139 +11,137 @@ using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 using Dapper;
 
-namespace Beginor.GisHub.DataServices {
+namespace Beginor.GisHub.DataServices; 
 
-    public abstract class DataServiceReader : Disposable, IDataServiceReader {
+public abstract class DataServiceReader : Disposable, IDataServiceReader {
 
-        private ILogger<DataServiceReader> logger;
+    private ILogger<DataServiceReader> logger;
 
-        protected IDataServiceFactory Factory { get; private set; }
-        protected IDataServiceRepository DataServiceRepo { get; private set; }
-        protected IDataSourceRepository DataSourceRepo { get; private set; }
+    protected IDataServiceFactory Factory { get; private set; }
+    protected IDataServiceRepository DataServiceRepo { get; private set; }
+    protected IDataSourceRepository DataSourceRepo { get; private set; }
 
-        protected DataServiceReader(
-            IDataServiceFactory factory,
-            IDataServiceRepository dataServiceRepo,
-            IDataSourceRepository dataSourceRepo,
-            ILogger<DataServiceReader> logger
-        ) {
-            Factory = factory ?? throw new ArgumentNullException(nameof(factory));
-            DataServiceRepo = dataServiceRepo ?? throw new ArgumentNullException(nameof(dataServiceRepo));
-            DataSourceRepo = dataSourceRepo ?? throw new ArgumentNullException(nameof(dataSourceRepo));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    protected DataServiceReader(
+        IDataServiceFactory factory,
+        IDataServiceRepository dataServiceRepo,
+        IDataSourceRepository dataSourceRepo,
+        ILogger<DataServiceReader> logger
+    ) {
+        Factory = factory ?? throw new ArgumentNullException(nameof(factory));
+        DataServiceRepo = dataServiceRepo ?? throw new ArgumentNullException(nameof(dataServiceRepo));
+        DataSourceRepo = dataSourceRepo ?? throw new ArgumentNullException(nameof(dataSourceRepo));
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+    protected override void Dispose(
+        bool disposing
+    ) {
+        if (disposing) {
+            Factory = null;
+            DataServiceRepo = null;
+            DataSourceRepo = null;
+            logger = null;
         }
+        base.Dispose(disposing);
+    }
 
-        protected override void Dispose(
-            bool disposing
-        ) {
-            if (disposing) {
-                Factory = null;
-                DataServiceRepo = null;
-                DataSourceRepo = null;
-                logger = null;
+    public Task<long> CountAsync(DataServiceCacheItem dataService, CountParam param) {
+        var sql = BuildCountSql(dataService, param);
+        return ReadScalarAsync<long>(dataService, sql);
+    }
+
+    public virtual Task<IList<ColumnModel>> GetColumnsAsync(DataServiceCacheItem dataService) {
+        var columns = from field in dataService.Fields
+            select new ColumnModel {
+                Name = field.Name,
+                Description = field.Description,
+                Length = field.Length,
+                Nullable = field.Nullable,
+                Type = field.Type
+            };
+        IList<ColumnModel> result = columns.ToList();
+        return Task.FromResult(result);
+    }
+
+    public virtual Task<IList<IDictionary<string, object>>> PivotData(DataServiceCacheItem dataService, PivotParam param) {
+        var sql = BuildPivotSql(dataService, param);
+        return ReadDataAsync(dataService, sql);
+    }
+
+    public Task<IList<IDictionary<string, object>>> ReadDataAsync(
+        DataServiceCacheItem dataService,
+        ReadDataParam param
+    ) {
+        var sql = BuildReadDataSql(dataService, param);
+        return ReadDataAsync(dataService, sql);
+    }
+
+    public Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(DataServiceCacheItem dataService, DistinctParam param) {
+        var sql = BuildDistinctSql(dataService, param);
+        return ReadDataAsync(dataService, sql);
+    }
+
+    public Task<T> ReadScalarAsync<T>(DataServiceCacheItem dataService, ReadDataParam param) {
+        var sql = BuildScalarSql(dataService, param);
+        return ReadScalarAsync<T>(dataService, sql);
+    }
+
+    public async Task<IList<IDictionary<string, object>>> ReadDataAsync(DbDataReader reader) {
+        var result = new List<IDictionary<string, object>>();
+        while (await reader.ReadAsync()) {
+            var row = new Dictionary<string, object>();
+            for (var i = 0; i < reader.FieldCount; i++) {
+                var (key, value) = ReadField(reader, i);
+                row.Add(key, value);
             }
-            base.Dispose(disposing);
+            result.Add(row);
         }
+        return result;
+    }
 
-        public Task<long> CountAsync(DataServiceCacheItem dataService, CountParam param) {
-            var sql = BuildCountSql(dataService, param);
-            return ReadScalarAsync<long>(dataService, sql);
-        }
+    public abstract DbConnection CreateConnection(string connectionString);
 
-        public virtual Task<IList<ColumnModel>> GetColumnsAsync(DataServiceCacheItem dataService) {
-            var columns = from field in dataService.Fields
-                select new ColumnModel {
-                    Name = field.Name,
-                    Description = field.Description,
-                    Length = field.Length,
-                    Nullable = field.Nullable,
-                    Type = field.Type
-                };
-            IList<ColumnModel> result = columns.ToList();
-            return Task.FromResult(result);
-        }
+    protected abstract string BuildReadDataSql(DataServiceCacheItem dataService, ReadDataParam param);
 
-        public virtual Task<IList<IDictionary<string, object>>> PivotData(DataServiceCacheItem dataService, PivotParam param) {
-            var sql = BuildPivotSql(dataService, param);
-            return ReadDataAsync(dataService, sql);
-        }
+    protected abstract string BuildCountSql(DataServiceCacheItem dataService, CountParam param);
 
-        public Task<IList<IDictionary<string, object>>> ReadDataAsync(
-            DataServiceCacheItem dataService,
-            ReadDataParam param
-        ) {
-            var sql = BuildReadDataSql(dataService, param);
-            return ReadDataAsync(dataService, sql);
-        }
+    protected abstract string BuildDistinctSql(DataServiceCacheItem dataService, DistinctParam param);
 
-        public Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(DataServiceCacheItem dataService, DistinctParam param) {
-            var sql = BuildDistinctSql(dataService, param);
-            return ReadDataAsync(dataService, sql);
-        }
+    protected abstract string BuildPivotSql(DataServiceCacheItem dataService, PivotParam param);
 
-        public Task<T> ReadScalarAsync<T>(DataServiceCacheItem dataService, ReadDataParam param) {
-            var sql = BuildScalarSql(dataService, param);
-            return ReadScalarAsync<T>(dataService, sql);
-        }
+    protected abstract string BuildScalarSql(DataServiceCacheItem dataService, ReadDataParam param);
 
-        public async Task<IList<IDictionary<string, object>>> ReadDataAsync(DbDataReader reader) {
-            var result = new List<IDictionary<string, object>>();
-            while (await reader.ReadAsync()) {
-                var row = new Dictionary<string, object>();
-                for (var i = 0; i < reader.FieldCount; i++) {
-                    var (key, value) = ReadField(reader, i);
-                    row.Add(key, value);
-                }
-                result.Add(row);
-            }
-            return result;
-        }
+    protected virtual KeyValuePair<string, object> ReadField(IDataReader dataReader, int fieldIndex) {
+        var name = dataReader.GetName(fieldIndex);
+        var value = dataReader.IsDBNull(fieldIndex) ? null : dataReader.GetValue(fieldIndex);
+        return new KeyValuePair<string, object>(name, value);
+    }
 
-        public abstract DbConnection CreateConnection(string connectionString);
+    protected virtual async Task<IList<IDictionary<string, object>>> ReadDataAsync(DataServiceCacheItem dataService, string sql) {
+        await using var conn = CreateConnection(dataService.ConnectionString);
+        logger.LogInformation(sql);
+        var reader = await conn.ExecuteReaderAsync(sql);
+        var result = await ReadDataAsync(reader);
+        return result;
+    }
 
-        protected abstract string BuildReadDataSql(DataServiceCacheItem dataService, ReadDataParam param);
+    protected virtual async Task<T> ReadScalarAsync<T>(DataServiceCacheItem dataService, string sql) {
+        await using var conn = CreateConnection(dataService.ConnectionString);
+        logger.LogInformation(sql);
+        var value = await conn.ExecuteScalarAsync<T>(sql);
+        return value;
+    }
 
-        protected abstract string BuildCountSql(DataServiceCacheItem dataService, CountParam param);
-
-        protected abstract string BuildDistinctSql(DataServiceCacheItem dataService, DistinctParam param);
-
-        protected abstract string BuildPivotSql(DataServiceCacheItem dataService, PivotParam param);
-
-        protected abstract string BuildScalarSql(DataServiceCacheItem dataService, ReadDataParam param);
-
-        protected virtual KeyValuePair<string, object> ReadField(IDataReader dataReader, int fieldIndex) {
-            var name = dataReader.GetName(fieldIndex);
-            var value = dataReader.IsDBNull(fieldIndex) ? null : dataReader.GetValue(fieldIndex);
-            return new KeyValuePair<string, object>(name, value);
-        }
-
-        protected virtual async Task<IList<IDictionary<string, object>>> ReadDataAsync(DataServiceCacheItem dataService, string sql) {
-            await using var conn = CreateConnection(dataService.ConnectionString);
-            logger.LogInformation(sql);
-            var reader = await conn.ExecuteReaderAsync(sql);
-            var result = await ReadDataAsync(reader);
-            return result;
-        }
-
-        protected virtual async Task<T> ReadScalarAsync<T>(DataServiceCacheItem dataService, string sql) {
-            await using var conn = CreateConnection(dataService.ConnectionString);
-            logger.LogInformation(sql);
-            var value = await conn.ExecuteScalarAsync<T>(sql);
-            return value;
-        }
-
-        protected void AppendWhere(StringBuilder sql, string presetCriteria, string where) {
-            if (presetCriteria.IsNotNullOrEmpty()) {
-                sql.AppendLine($" where ({presetCriteria}) ");
-                if (where.IsNotNullOrEmpty()) {
-                    sql.Append($" and ({where}) ");
-                }
-            }
-            else if (where.IsNotNullOrEmpty()) {
-                sql.AppendLine($" where {where} ");
+    protected void AppendWhere(StringBuilder sql, string presetCriteria, string where) {
+        if (presetCriteria.IsNotNullOrEmpty()) {
+            sql.AppendLine($" where ({presetCriteria}) ");
+            if (where.IsNotNullOrEmpty()) {
+                sql.Append($" and ({where}) ");
             }
         }
-
+        else if (where.IsNotNullOrEmpty()) {
+            sql.AppendLine($" where {where} ");
+        }
     }
 
 }

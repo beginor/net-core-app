@@ -13,133 +13,131 @@ using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Geo.Esri;
 using Beginor.GisHub.DataServices.Data;
 
-namespace Beginor.GisHub.DataServices.Api {
+namespace Beginor.GisHub.DataServices.Api; 
 
-    /// <summary>要素服务接口</summary>
-    [ApiController]
-    [Route("rest/services/features")]
-    public class FeatureController : Controller {
+/// <summary>要素服务接口</summary>
+[ApiController]
+[Route("rest/services/features")]
+public class FeatureController : Controller {
 
-        private ILogger<FeatureController> logger;
-        private IDataServiceRepository repository;
-        private IDataServiceFactory factory;
-        private IAppJsonDataRepository jsonRepository;
-        private JsonSerializerOptionsFactory serializerOptionsFactory;
+    private ILogger<FeatureController> logger;
+    private IDataServiceRepository repository;
+    private IDataServiceFactory factory;
+    private IAppJsonDataRepository jsonRepository;
+    private JsonSerializerOptionsFactory serializerOptionsFactory;
 
-        public FeatureController(
-            ILogger<FeatureController> logger,
-            IDataServiceRepository repository,
-            IDataServiceFactory factory,
-            IAppJsonDataRepository jsonRepository,
-            JsonSerializerOptionsFactory serializerOptionsFactory
-        ) {
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
-            this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
-            this.serializerOptionsFactory = serializerOptionsFactory ?? throw new ArgumentNullException(nameof(serializerOptionsFactory));
+    public FeatureController(
+        ILogger<FeatureController> logger,
+        IDataServiceRepository repository,
+        IDataServiceFactory factory,
+        IAppJsonDataRepository jsonRepository,
+        JsonSerializerOptionsFactory serializerOptionsFactory
+    ) {
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
+        this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
+        this.serializerOptionsFactory = serializerOptionsFactory ?? throw new ArgumentNullException(nameof(serializerOptionsFactory));
+    }
+
+    protected override void Dispose(bool disposing) {
+        if (disposing) {
+            logger = null;
+            repository = null;
+            factory = null;
+            jsonRepository = null;
+            serializerOptionsFactory = null;
         }
+        base.Dispose(disposing);
+    }
 
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                logger = null;
-                repository = null;
-                factory = null;
-                jsonRepository = null;
-                serializerOptionsFactory = null;
-            }
-            base.Dispose(disposing);
-        }
-
-        /// <summary>读取要素服务信息</summary>
-        [HttpGet("{id:long}/MapServer/0")]
-        [Authorize("features.get_layer_info")]
-        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
-        public async Task<ActionResult<AgsLayerDescription>> GetLayerDescriptionAsync(
-            [FromRoute]long id,
-            [FromQuery]AgsCommonParams param
-        ) {
-            try {
-                var dataSource = await repository.GetCacheItemByIdAsync(id);
-                if (dataSource == null) {
-                    return NotFound($"Datasource {id} does not exist !");
-                }
-                var serializerOptions = serializerOptionsFactory.AgsJsonSerializerOptions;
-                var jsonElement = await jsonRepository.GetValueByIdAsync(id);
-                if (jsonElement.ValueKind != JsonValueKind.Undefined) {
-                    return this.CompressedJson(jsonElement, serializerOptions);
-                }
-                var featureProvider = factory.CreateFeatureProvider(dataSource.DatabaseType);
-                var layerDesc = await featureProvider.GetLayerDescriptionAsync(dataSource);
-                var json = layerDesc.ToJson(serializerOptions);
-                jsonElement = JsonDocument.Parse(json).RootElement;
-                await jsonRepository.SaveValueAsync(id, jsonElement);
-                return this.CompressedContent(json, "application/json");
-            }
-            catch (Exception ex) {
-                logger.LogError(ex, $"Can not get layer description from datasource {id} .");
-                return this.InternalServerError(ex.GetOriginalMessage());
-            }
-        }
-
-        /// <summary>查询空间要素</summary>
-        [HttpGet("{id:long}/MapServer/0/query")]
-        [Authorize("features.query")]
-        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
-        public async Task<ActionResult<AgsFeatureSet>> QueryFeaturesByGetAsync(
-            [FromRoute]long id,
-            [ModelBinder(BinderType = typeof(EncryptedModelBinder))]AgsQueryParam param
-        ) {
-            try {
-                var featureSet = await QueryFeaturesAsync(id, param);
-                if (featureSet == null) {
-                    return NotFound($"Datasource {id} does not exist !");
-                }
-                return this.CompressedJson(featureSet, serializerOptionsFactory.AgsJsonSerializerOptions);
-            }
-            catch (Exception ex) {
-                logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson()}");
-                return this.InternalServerError(ex.GetOriginalMessage());
-            }
-        }
-
-        /// <summary>查询空间要素</summary>
-        [HttpPost("{id:long}/MapServer/0/query")]
-        [Consumes("application/x-www-form-urlencoded")]
-        [Authorize("features.query")]
-        [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
-        public async Task<ActionResult<AgsFeatureSet>> QueryFeaturesByPostAsync(
-            [FromRoute]long id,
-            [ModelBinder(BinderType = typeof(EncryptedModelBinder))]AgsQueryParam param
-        ) {
-            try {
-                var featureSet = await QueryFeaturesAsync(id, param);
-                if (featureSet == null) {
-                    return NotFound($"Datasource {id} does not exist !");
-                }
-                return Json(featureSet, serializerOptionsFactory.AgsJsonSerializerOptions);
-            }
-            catch (Exception ex) {
-                logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson()}");
-                return this.InternalServerError(ex.GetOriginalMessage());
-            }
-        }
-
-        private async Task<AgsFeatureSet> QueryFeaturesAsync(
-            long id,
-            AgsQueryParam param
-        ) {
+    /// <summary>读取要素服务信息</summary>
+    [HttpGet("{id:long}/MapServer/0")]
+    [Authorize("features.get_layer_info")]
+    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    public async Task<ActionResult<AgsLayerDescription>> GetLayerDescriptionAsync(
+        [FromRoute]long id,
+        [FromQuery]AgsCommonParams param
+    ) {
+        try {
             var dataSource = await repository.GetCacheItemByIdAsync(id);
             if (dataSource == null) {
-                return null;
+                return NotFound($"Datasource {id} does not exist !");
             }
-            if (param.OutFields.Trim() == "*") {
-                param.OutFields = string.Join(",", dataSource.Fields.Select(f => f.Name));
+            var serializerOptions = serializerOptionsFactory.AgsJsonSerializerOptions;
+            var jsonElement = await jsonRepository.GetValueByIdAsync(id);
+            if (jsonElement.ValueKind != JsonValueKind.Undefined) {
+                return this.CompressedJson(jsonElement, serializerOptions);
             }
             var featureProvider = factory.CreateFeatureProvider(dataSource.DatabaseType);
-            var featureSet = await featureProvider.QueryAsync(dataSource, param);
-            return featureSet;
+            var layerDesc = await featureProvider.GetLayerDescriptionAsync(dataSource);
+            var json = layerDesc.ToJson(serializerOptions);
+            jsonElement = JsonDocument.Parse(json).RootElement;
+            await jsonRepository.SaveValueAsync(id, jsonElement);
+            return this.CompressedContent(json, "application/json");
+        }
+        catch (Exception ex) {
+            logger.LogError(ex, $"Can not get layer description from datasource {id} .");
+            return this.InternalServerError(ex.GetOriginalMessage());
         }
     }
 
+    /// <summary>查询空间要素</summary>
+    [HttpGet("{id:long}/MapServer/0/query")]
+    [Authorize("features.query")]
+    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    public async Task<ActionResult<AgsFeatureSet>> QueryFeaturesByGetAsync(
+        [FromRoute]long id,
+        [ModelBinder(BinderType = typeof(EncryptedModelBinder))]AgsQueryParam param
+    ) {
+        try {
+            var featureSet = await QueryFeaturesAsync(id, param);
+            if (featureSet == null) {
+                return NotFound($"Datasource {id} does not exist !");
+            }
+            return this.CompressedJson(featureSet, serializerOptionsFactory.AgsJsonSerializerOptions);
+        }
+        catch (Exception ex) {
+            logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson()}");
+            return this.InternalServerError(ex.GetOriginalMessage());
+        }
+    }
+
+    /// <summary>查询空间要素</summary>
+    [HttpPost("{id:long}/MapServer/0/query")]
+    [Consumes("application/x-www-form-urlencoded")]
+    [Authorize("features.query")]
+    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    public async Task<ActionResult<AgsFeatureSet>> QueryFeaturesByPostAsync(
+        [FromRoute]long id,
+        [ModelBinder(BinderType = typeof(EncryptedModelBinder))]AgsQueryParam param
+    ) {
+        try {
+            var featureSet = await QueryFeaturesAsync(id, param);
+            if (featureSet == null) {
+                return NotFound($"Datasource {id} does not exist !");
+            }
+            return Json(featureSet, serializerOptionsFactory.AgsJsonSerializerOptions);
+        }
+        catch (Exception ex) {
+            logger.LogError(ex, $"Can not query features from datasource {id} with params {param.ToJson()}");
+            return this.InternalServerError(ex.GetOriginalMessage());
+        }
+    }
+
+    private async Task<AgsFeatureSet> QueryFeaturesAsync(
+        long id,
+        AgsQueryParam param
+    ) {
+        var dataSource = await repository.GetCacheItemByIdAsync(id);
+        if (dataSource == null) {
+            return null;
+        }
+        if (param.OutFields.Trim() == "*") {
+            param.OutFields = string.Join(",", dataSource.Fields.Select(f => f.Name));
+        }
+        var featureProvider = factory.CreateFeatureProvider(dataSource.DatabaseType);
+        var featureSet = await featureProvider.QueryAsync(dataSource, param);
+        return featureSet;
+    }
 }

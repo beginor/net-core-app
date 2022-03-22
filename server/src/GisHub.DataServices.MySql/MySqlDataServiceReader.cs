@@ -9,41 +9,39 @@ using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 using MySql.Data.MySqlClient;
 
-namespace Beginor.GisHub.DataServices.MySql {
+namespace Beginor.GisHub.DataServices.MySql; 
 
-    public class MySqlDataServiceReader : DataServiceReader {
+public class MySqlDataServiceReader : DataServiceReader {
 
-        public MySqlDataServiceReader(
-            IDataServiceFactory factory,
-            IDataServiceRepository dataServiceRepo,
-            IDataSourceRepository dataSourceRepo,
-            ILogger<DataServiceReader> logger
-        ) : base(factory, dataServiceRepo, dataSourceRepo, logger) { }
+    public MySqlDataServiceReader(
+        IDataServiceFactory factory,
+        IDataServiceRepository dataServiceRepo,
+        IDataSourceRepository dataSourceRepo,
+        ILogger<DataServiceReader> logger
+    ) : base(factory, dataServiceRepo, dataSourceRepo, logger) { }
 
-        public override DbConnection CreateConnection(string connectionString) {
-            return new MySqlConnection(connectionString);
-        }
+    public override DbConnection CreateConnection(string connectionString) {
+        return new MySqlConnection(connectionString);
+    }
 
-        protected override string BuildReadDataSql(DataServiceCacheItem dataService, ReadDataParam param) {
-            throw new NotImplementedException();
-        }
+    protected override string BuildReadDataSql(DataServiceCacheItem dataService, ReadDataParam param) {
+        throw new NotImplementedException();
+    }
 
-        protected override string BuildCountSql(DataServiceCacheItem dataService, CountParam param) {
-            throw new NotImplementedException();
-        }
+    protected override string BuildCountSql(DataServiceCacheItem dataService, CountParam param) {
+        throw new NotImplementedException();
+    }
 
-        protected override string BuildDistinctSql(DataServiceCacheItem dataService, DistinctParam param) {
-            throw new NotImplementedException();
-        }
+    protected override string BuildDistinctSql(DataServiceCacheItem dataService, DistinctParam param) {
+        throw new NotImplementedException();
+    }
 
-        protected override string BuildPivotSql(DataServiceCacheItem dataService, PivotParam param) {
-            throw new NotImplementedException();
-        }
+    protected override string BuildPivotSql(DataServiceCacheItem dataService, PivotParam param) {
+        throw new NotImplementedException();
+    }
 
-        protected override string BuildScalarSql(DataServiceCacheItem dataService, ReadDataParam param) {
-            throw new NotImplementedException();
-        }
-
+    protected override string BuildScalarSql(DataServiceCacheItem dataService, ReadDataParam param) {
+        throw new NotImplementedException();
     }
 
 }

@@ -1,16 +1,16 @@
 using System.Text.Json.Serialization;
 
-namespace Beginor.GisHub.Geo.Esri {
-    public class AgsOutputStatistic {
+namespace Beginor.GisHub.Geo.Esri; 
 
-        [JsonPropertyName("statisticType")]
-        public string Type { get; set; }
+public class AgsOutputStatistic {
 
-        [JsonPropertyName("onStatisticField")]
-        public string OnField { get; set; }
+    [JsonPropertyName("statisticType")]
+    public string Type { get; set; }
 
-        [JsonPropertyName("outStatisticFieldName")]
-        public string OutFieldName { get; set; }
+    [JsonPropertyName("onStatisticField")]
+    public string OnField { get; set; }
 
-    }
+    [JsonPropertyName("outStatisticFieldName")]
+    public string OutFieldName { get; set; }
+
 }

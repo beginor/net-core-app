@@ -9,37 +9,35 @@ using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.TileMap.Models;
 using Beginor.GisHub.TileMap.Data;
 
-namespace Beginor.GisHub.Test.TileMap {
+namespace Beginor.GisHub.Test.TileMap; 
 
-    /// <summary>切片地图仓储测试</summary>
-    [TestFixture]
-    public class TileMapRepositoryTest : BaseTest<ITileMapRepository> {
+/// <summary>切片地图仓储测试</summary>
+[TestFixture]
+public class TileMapRepositoryTest : BaseTest<ITileMapRepository> {
 
-        [Test]
-        public void _01_CanResolveTarget() {
-            Assert.IsNotNull(Target);
-        }
+    [Test]
+    public void _01_CanResolveTarget() {
+        Assert.IsNotNull(Target);
+    }
 
-        [Test]
-        public async Task _02_CanDoSearchAsync() {
-            var searchModel = new TileMapSearchModel {
-                Skip = 0,
-                Take = 10
-            };
-            var result = await Target.SearchAsync(searchModel);
-            Assert.GreaterOrEqual(result.Total, 0);
-            Assert.GreaterOrEqual(result.Take, result.Data.Count);
-        }
+    [Test]
+    public async Task _02_CanDoSearchAsync() {
+        var searchModel = new TileMapSearchModel {
+            Skip = 0,
+            Take = 10
+        };
+        var result = await Target.SearchAsync(searchModel);
+        Assert.GreaterOrEqual(result.Total, 0);
+        Assert.GreaterOrEqual(result.Take, result.Data.Count);
+    }
 
-        [Test]
-        public async Task _03_CanGetMapInfo() {
-            var id = 1600409446764030070;
-            var info = await Target.GetTileMapInfoAsync(id);
-            var prop = info.GetProperty("fullExtent");
-            Assert.AreEqual(prop.ValueKind, System.Text.Json.JsonValueKind.Object);
-            Console.WriteLine(prop.ToString());
-        }
-
+    [Test]
+    public async Task _03_CanGetMapInfo() {
+        var id = 1600409446764030070;
+        var info = await Target.GetTileMapInfoAsync(id);
+        var prop = info.GetProperty("fullExtent");
+        Assert.AreEqual(prop.ValueKind, System.Text.Json.JsonValueKind.Object);
+        Console.WriteLine(prop.ToString());
     }
 
 }

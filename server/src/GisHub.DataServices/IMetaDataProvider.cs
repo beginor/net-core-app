@@ -2,22 +2,20 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.DataServices {
+namespace Beginor.GisHub.DataServices; 
 
-    public interface IMetaDataProvider {
+public interface IMetaDataProvider {
 
-        string BuildConnectionString(DataSourceModel model);
+    string BuildConnectionString(DataSourceModel model);
 
-        Task GetStatusAsync(DataSourceModel model);
+    Task GetStatusAsync(DataSourceModel model);
 
-        Task<IList<string>> GetSchemasAsync(DataSourceModel model);
+    Task<IList<string>> GetSchemasAsync(DataSourceModel model);
 
-        Task<IList<TableModel>> GetTablesAsync(DataSourceModel model, string schema);
+    Task<IList<TableModel>> GetTablesAsync(DataSourceModel model, string schema);
 
-        Task<IList<ColumnModel>> GetColumnsAsync(DataSourceModel model, string schema, string tableName);
+    Task<IList<ColumnModel>> GetColumnsAsync(DataSourceModel model, string schema, string tableName);
 
-        string GetDefaultSchema();
-
-    }
+    string GetDefaultSchema();
 
 }

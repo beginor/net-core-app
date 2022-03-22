@@ -1,10 +1,8 @@
-namespace Beginor.GisHub.Geo.GeoJson {
+namespace Beginor.GisHub.Geo.GeoJson; 
 
-    public class GeoJsonMultiPolygon : GeoJsonGeometry {
+public class GeoJsonMultiPolygon : GeoJsonGeometry {
 
-        public override string Type => GeoJsonGeometryType.MultiPolygon;
+    public override string Type => GeoJsonGeometryType.MultiPolygon;
 
-        public double[][][][] Coordinates { get; set; }
-    }
-
+    public double[][][][] Coordinates { get; set; }
 }

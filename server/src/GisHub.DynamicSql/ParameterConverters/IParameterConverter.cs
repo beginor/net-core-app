@@ -1,11 +1,9 @@
-namespace Beginor.GisHub.DynamicSql.ParameterConverters {
+namespace Beginor.GisHub.DynamicSql.ParameterConverters; 
 
-    public interface IParameterConverter {
+public interface IParameterConverter {
 
-        string ParameterType { get; }
+    string ParameterType { get; }
 
-        object ConvertParameter(string parameterValue);
-
-    }
+    object ConvertParameter(string parameterValue);
 
 }
