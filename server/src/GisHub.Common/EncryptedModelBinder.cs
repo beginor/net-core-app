@@ -64,7 +64,7 @@ public class EncryptedModelBinder : IModelBinder {
                 var pair = paires.First(a => a.Key.Equals(attr.Name, StringComparison.OrdinalIgnoreCase));
                 var val = pair.Value.ToString();
                 if (encrypted) {
-                    val = Encoding.UTF8.GetString(Convert.FromBase64String(val));
+                    val = Base64UrlEncoder.Decode(val);
                 }
                 var converter = TypeDescriptor.GetConverter(prop.PropertyType);
                 if (converter != null && converter.CanConvertFrom(typeof(string))) {
