@@ -1,7 +1,7 @@
-using Beginor.NetCoreApp.Common;
+using Beginor.GisHub.Common;
 using NUnit.Framework;
 
-namespace Beginor.NetCoreApp.Test.Common;
+namespace Beginor.GisHub.Test.Common;
 
 [TestFixture]
 public class Base64UrlEncoderTest {
