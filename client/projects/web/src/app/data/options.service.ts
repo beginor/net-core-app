@@ -22,6 +22,11 @@ export class OptionsService {
         return this.options['mapbox-gl'];
     }
 
+    public async loadEditorOptions(): Promise<CodeEditorOptions> {
+        await this.loadOptions();
+        return this.options['code-editor'];
+    }
+
     private async loadOptions(): Promise<void> {
         if (!this.options) {
             const options = await lastValueFrom(
@@ -35,6 +40,7 @@ export class OptionsService {
 export interface Options {
     'arcgis-js-api': ArcGisJsApiOptions;
     'mapbox-gl': MapboxGlOptions;
+    'code-editor': CodeEditorOptions;
 }
 
 export interface ArcGisJsApiOptions extends ILoadScriptOptions {
@@ -49,4 +55,9 @@ export interface MapboxGlOptions {
     style: string;
     camera: CameraOptions;
     defaults: { [key: string]: Layer };
+}
+
+export interface CodeEditorOptions {
+    url: string;
+    settings: { [key: string]: string | number | boolean }
 }

@@ -59,7 +59,7 @@
     </div>
   </div>
 </div>
-<app-dataapis-preview-geojson class="preview-frame" #previewMap
+<app-dataapis-preview-geojson class="preview-frame d-flex" #previewMap
   *ngIf="resultType === 'geojson';else previewFrameTpl"
   (mapLoaded)="onMapLoaded($event)">
 </app-dataapis-preview-geojson>

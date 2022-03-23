@@ -80,5 +80,8 @@
         }
       }
     }
+  },
+  "code-editor": {
+    "url": "http://81.71.93.249/monaco-editor/index.html"
   }
 }

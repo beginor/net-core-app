@@ -9,6 +9,7 @@ import { Map as MapboxMap } from 'mapbox-gl';
 
 import { AccountService } from 'app-shared';
 import { UiService } from '../../../common'
+import { OptionsService } from "../../options.service";
 
 import {
     DataApiService,
@@ -49,12 +50,18 @@ export class DebugComponent implements OnInit {
         private ui: UiService,
         private errorHandler: ErrorHandler,
         @Inject(DOCUMENT) private doc: Document,
-        @Inject('codeEditorUrl') codeEditorUrl: string,
-        domSanitizer: DomSanitizer
+        domSanitizer: DomSanitizer,
+        options: OptionsService
     ) {
-        this.codeEditorUrl = domSanitizer.bypassSecurityTrustResourceUrl(
-            codeEditorUrl
-        );
+        this.codeEditorUrl = domSanitizer.bypassSecurityTrustResourceUrl('');
+        void options.loadEditorOptions().then(editor => {
+            this.codeEditorUrl = domSanitizer.bypassSecurityTrustResourceUrl(
+                editor.url
+            );
+        }).catch(ex => {
+            ui.showAlert({ type: 'danger', message: '加载编辑器配置出错！' });
+            console.error(ex);
+        });
     }
 
     public async ngOnInit(): Promise<void> {

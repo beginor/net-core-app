@@ -11,8 +11,9 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { slideInRight, slideOutRight, AccountService } from 'app-shared';
 
 import { UiService } from '../../../common';
+import { OptionsService } from "../../options.service";
 import {
-    DataApiService, DataApiModel, DataApiParameterModel
+    DataApiService, DataApiModel
 } from '../dataapis.service';
 
 @Component({
@@ -52,15 +53,21 @@ export class StatementComponent implements OnInit, OnDestroy {
         public account: AccountService,
         public vm: DataApiService,
         public ui: UiService,
-        @Inject('codeEditorUrl') codeEditorUrl: string,
         domSanitizer: DomSanitizer,
-        @Inject(DOCUMENT) doc: Document
+        @Inject(DOCUMENT) doc: Document,
+        options: OptionsService,
     ) {
         const { id } = route.snapshot.params;
         this.id = id as string;
-        this.codeEditorUrl = domSanitizer.bypassSecurityTrustResourceUrl(
-            codeEditorUrl
-        );
+        this.codeEditorUrl = domSanitizer.bypassSecurityTrustResourceUrl('');
+        void options.loadEditorOptions().then(editor => {
+            this.codeEditorUrl = domSanitizer.bypassSecurityTrustResourceUrl(
+                editor.url
+            );
+        }).catch(ex => {
+            ui.showAlert({ type: 'danger', message: '加载编辑器配置出错！' });
+            console.error(ex);
+        });
         this.win = doc.defaultView as Window;
     }
 
