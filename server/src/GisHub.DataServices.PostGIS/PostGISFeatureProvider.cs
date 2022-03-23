@@ -12,7 +12,7 @@ using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.Geo.Esri;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.DataServices.PostGIS; 
+namespace Beginor.GisHub.DataServices.PostGIS;
 
 public class PostGISFeatureProvider : FeatureProvider {
 
@@ -126,12 +126,12 @@ public class PostGISFeatureProvider : FeatureProvider {
         var sql = BuildMvtSql(dataService, z, y, x);
         await using var conn = new NpgsqlConnection(dataService.ConnectionString);
         var buffer = await conn.ExecuteScalarAsync<byte[]>(sql);
-        using var input = new MemoryStream(buffer);
-        using var output = new MemoryStream();
-        using var gzip = new GZipStream(output, CompressionMode.Compress);
+        await using var input = new MemoryStream(buffer);
+        await using var output = new MemoryStream();
+        await using var gzip = new GZipStream(output, CompressionMode.Compress);
         await input.CopyToAsync(gzip);
         await gzip.FlushAsync();
-        return buffer = output.GetBuffer();
+        return output.GetBuffer();
     }
 
     protected virtual string BuildMvtSql(DataServiceCacheItem layer, int z, int y, int x) {

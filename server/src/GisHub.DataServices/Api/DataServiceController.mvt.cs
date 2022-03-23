@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Common;
 using Beginor.GisHub.DataServices.Data;
 
-namespace Beginor.GisHub.DataServices.Api; 
+namespace Beginor.GisHub.DataServices.Api;
 
 partial class DataServiceController {
 
@@ -30,15 +31,23 @@ partial class DataServiceController {
             if (z < ds.MvtMinZoom || z > ds.MvtMaxZoom) {
                 return NotFound();
             }
+            var contentType = "application/vnd.mapbox-vector-tile";
+            var cachePath = Path.Combine($"{ds.DataServiceId}", $"{z}", $"{y}", $"{x}.mvt");
+            if (ds.MvtCacheDuration > 0) {
+                var cachedBuffer = await fileCache.GetContentAsync(cachePath, ds.MvtCacheDuration);
+                if (cachedBuffer != null) {
+                    Response.Headers.ContentEncoding = "gzip";
+                    return File(cachedBuffer, contentType);
+                }
+            }
             var provider = factory.CreateFeatureProvider(ds.DatabaseType);
-            // todo: mvt cache
-
             var buffer = await provider.ReadAsMvtBufferAsync(ds, z, y, x);
             if (buffer == null || buffer.Length == 0) {
                 return NotFound();
             }
+            await fileCache.SetContent(cachePath, buffer);
             Response.Headers.ContentEncoding = "gzip";
-            return File(buffer, "application/vnd.mapbox-vector-tile");
+            return File(buffer, contentType);
         }
         catch (Exception ex) {
             logger.LogError(ex, $"Can not read data as mvt from datasservice {id}");

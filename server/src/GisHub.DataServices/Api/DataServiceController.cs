@@ -7,11 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Common;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DataServices.Data;
 
-namespace Beginor.GisHub.DataServices.Api; 
+namespace Beginor.GisHub.DataServices.Api;
 
 /// <summary>数据服务 服务接口</summary>
 [ApiController]
@@ -23,19 +24,22 @@ public partial class DataServiceController : Controller {
     private IDataServiceFactory factory;
     private IAppJsonDataRepository jsonRepository;
     private JsonSerializerOptionsFactory serializerOptionsFactory;
+    private IFileCacheProvider fileCache;
 
     public DataServiceController(
         ILogger<DataServiceController> logger,
         IDataServiceRepository repository,
         IDataServiceFactory factory,
         IAppJsonDataRepository jsonRepository,
-        JsonSerializerOptionsFactory serializerOptionsFactory
+        JsonSerializerOptionsFactory serializerOptionsFactory,
+        IFileCacheProvider fileCache
     ) {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
         this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
         this.serializerOptionsFactory = serializerOptionsFactory ?? throw new ArgumentNullException(nameof(serializerOptionsFactory));
+        this.fileCache = fileCache ?? throw new ArgumentNullException(nameof(fileCache));
     }
 
     protected override void Dispose(bool disposing) {
@@ -45,6 +49,7 @@ public partial class DataServiceController : Controller {
             factory = null;
             jsonRepository = null;
             serializerOptionsFactory = null;
+            fileCache = null;
         }
         base.Dispose(disposing);
     }

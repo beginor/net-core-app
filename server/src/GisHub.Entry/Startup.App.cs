@@ -20,6 +20,7 @@ partial class Startup {
             Directory.CreateDirectory(cacheFolder);
         }
         services.AddDistributedMemoryCache();
+        services.AddSingleton<Beginor.GisHub.Common.IFileCacheProvider, Beginor.GisHub.Common.FileCacheProvider>();
         services.AddServiceWithDefaultImplements(
             typeof(Beginor.GisHub.Data.ModelMapping).Assembly,
             t => t.Name.EndsWith("Repository"),
