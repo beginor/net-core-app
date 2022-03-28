@@ -16,8 +16,10 @@ namespace Beginor.GisHub.DataServices.Api;
 
 /// <summary>数据服务 服务接口</summary>
 [ApiController]
-[Route("api/dataservices")]
+[Route(RouteTemplate)]
 public partial class DataServiceController : Controller {
+
+    private const string RouteTemplate = "api/dataservices";
 
     private ILogger<DataServiceController> logger;
     private IDataServiceRepository repository;

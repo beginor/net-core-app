@@ -9,7 +9,7 @@ import { lastValueFrom } from 'rxjs';
 
 import { AccountService } from 'app-shared';
 import { UiService } from '../../../common';
-import { DataServiceModel, DataServiceService } from '../dataservices.service';
+import { DataServiceModel, DataServiceService, MvtInfo } from '../dataservices.service';
 import { MapboxService } from '../../mapbox.service';
 
 @Component({
@@ -46,47 +46,12 @@ export class PreviewMvtComponent implements AfterViewInit, OnDestroy {
             this.mapElRef.nativeElement
         );
         this.map = map;
-        const bounds = await this.getLayerBounds();
         await map.once('load');
-        const camera = map.cameraForBounds(bounds);
-        if (!!camera) {
-            let zoom = camera.zoom;
-            if (!!this.ds.mvtMinZoom) {
-                zoom = Math.max(zoom, this.ds.mvtMinZoom)
-            }
-            if (!!this.ds.mvtMaxZoom) {
-                zoom = Math.min(zoom, this.ds.mvtMaxZoom)
-            }
-            map.flyTo({
-                zoom: zoom,
-                center: camera.center
-            });
+        const mvtInfo = await this.vm.getMvtInfo(this.ds.id);
+        if (!mvtInfo) {
+            return;
         }
-        // await map.once('idle');
-        map.addSource(
-            this.ds.id,
-            {
-                type: 'vector',
-                tiles: [this.vm.getPreviewUrl(this.ds.id, 'mvt')],
-                minzoom: this.ds.mvtMinZoom,
-                maxzoom: this.ds.mvtMaxZoom,
-                bounds: [
-                    bounds.getWest(),
-                    bounds.getSouth(),
-                    bounds.getEast(),
-                    bounds.getNorth()
-                ]
-            }
-        );
-        const layer = await this.mapbox.createPreviewLayer(
-            'Polygon',
-            this.ds.id,
-            this.ds.id,
-        );
-        layer.minzoom = this.ds.mvtMinZoom;
-        layer.maxzoom = this.ds.mvtMaxZoom;
-        layer['source-layer'] = this.ds.name;
-        map.addLayer(layer as AnyLayer);
+        this.addVectorTileLayer(mvtInfo);
     }
 
     public ngOnDestroy(): void {
@@ -99,24 +64,57 @@ export class PreviewMvtComponent implements AfterViewInit, OnDestroy {
         }
     }
 
-    private async getLayerBounds(): Promise<LngLatBounds> {
-        const layerUrl = this.vm.getPreviewUrl(this.ds.id, 'mapserver');
-        const params = {
-            outSR: 4326,
-            returnExtentOnly: true
-        };
-        const headers = {
-            Authorization: `Bearer ${this.account.token}`
-        };
-        const result = await lastValueFrom(
-            this.http.get<{ extent: __esri.Extent}>(
-                `${layerUrl}/query`,
-                { params, headers }
-            )
+    private async addVectorTileLayer(mvtInfo: MvtInfo): Promise<void> {
+        if (!this.map) {
+            return;
+        }
+        const bounds = mvtInfo.bounds;
+        this.map.flyTo({
+            zoom: mvtInfo.minzoom,
+            center: [(bounds[0] + bounds[2])/2.0, (bounds[1] + bounds[3])/2.0]
+        });
+        this.map.addSource(
+            this.ds.id,
+            {
+                type: 'vector',
+                tiles: [mvtInfo.url],
+                minzoom: this.ds.mvtMinZoom,
+                maxzoom: this.ds.mvtMaxZoom,
+                bounds: mvtInfo.bounds
+            }
         );
-        const ext = result.extent;
-        return LngLatBounds.convert(
-            [ext.xmin, ext.ymin, ext.xmax, ext.ymax]
+        const layer = await this.mapbox.createPreviewLayer(
+            mvtInfo.geometryType,
+            this.ds.id,
+            this.ds.id,
         );
+        layer.minzoom = this.ds.mvtMinZoom;
+        layer.maxzoom = this.ds.mvtMaxZoom;
+        layer['source-layer'] = this.ds.name;
+        this.map.addLayer(layer as AnyLayer);
+        this.map.on('click', this.ds.id, e => {
+            if (!e.features || e.features.length === 0) {
+                return;
+            }
+            const feature = e.features[0];
+            if (!this.popup) {
+                this.popup = new Popup({
+                    closeButton: true,
+                    closeOnClick: true
+                });
+            }
+            this.popup.setLngLat(e.lngLat);
+            const html = [
+                '<div style="max-height: 200px; overflow: auto;">',
+                '<table class="table table-bordered table-striped table-sm m-0"><tbody>', // eslint-disable-line max-len
+            ];
+            const fields = Object.keys(feature.properties as any)
+            for (const field of fields) {
+                html.push(`<tr><td>${field}</td><td>${feature.properties?.[field]}</td></tr>`); // eslint-disable-line max-len
+            }
+            html.push('</tbody></table></div>');
+            this.popup.setHTML(html.join(''));
+            this.popup.addTo(this.map as Map);
+        });
     }
 }

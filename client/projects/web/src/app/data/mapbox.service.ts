@@ -17,12 +17,12 @@ export class MapboxService {
     private styleId = 'mapbox-gl-style';
     private mapboxOptions!: MapboxGlOptions;
     private layerTypeMap: { [key: string]: string } = {
-        Point: 'circle',
-        MultiPoint: 'circle',
-        LineString: 'line',
-        MultiLineString: 'line',
-        Polygon: 'fill',
-        MultiPolygon: 'fill'
+        point: 'circle',
+        multipoint: 'circle',
+        linestring: 'line',
+        multilinestring: 'line',
+        polygon: 'fill',
+        multipolygon: 'fill'
     };
 
     constructor(
@@ -70,7 +70,7 @@ export class MapboxService {
         sourceId: string
     ): Promise<Layer> {
         await this.loadMapOptions();
-        const layerType = this.layerTypeMap[geoType];
+        const layerType = this.layerTypeMap[geoType.toLowerCase()];
         if (!layerType) {
             throw new Error(`Invalid geometry type ${geoType}`);
         }
@@ -114,4 +114,3 @@ export class MapboxService {
         this.mapboxOptions = await this.options.loadMapboxGlOptions();
     }
 }
-

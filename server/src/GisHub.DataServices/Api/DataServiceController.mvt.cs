@@ -7,10 +7,56 @@ using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Common;
 using Beginor.GisHub.DataServices.Data;
+using Beginor.GisHub.DataServices.Models;
+using Beginor.GisHub.Geo.Esri;
 
 namespace Beginor.GisHub.DataServices.Api;
 
 partial class DataServiceController {
+
+    /// <summary>读取图层的适量切片信息</summary>
+    [HttpGet("{id:long}/mvt/info")]
+    [Authorize("data_services.read_mvt")]
+    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    public async Task<ActionResult<MvtInfoModel>> GetMvtInfo(long id) {
+        try {
+            var ds = await repository.GetCacheItemByIdAsync(id);
+            if (ds == null) {
+                return NotFound();
+            }
+            if (ds.GeometryColumn.IsNullOrEmpty()) {
+                return BadRequest($"Data service {id} does not have geometry column!");
+            }
+            if (!ds.SupportMvt) {
+                return BadRequest($"Data service {id} does not support mvt output.");
+            }
+            var model = new MvtInfoModel {
+                LayerName = ds.DataServiceName,
+                Description = ds.DataServiceDescription,
+                GeometryType = ds.GeometryType,
+                Minzoom = ds.MvtMinZoom,
+                Maxzoom = ds.MvtMaxZoom,
+                Url = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/{RouteTemplate}/{id}/mvt/{{z}}/{{y}}/{{x}}",
+            };
+            var featureProvider = factory.CreateFeatureProvider(ds.DatabaseType);
+            var fs = await featureProvider.QueryAsync(
+                ds,
+                new AgsQueryParam {
+                    ReturnExtentOnly = true,
+                    OutSR = 4326
+                }
+            );
+            var ext = fs.Extent;
+            if (ext != null) {
+                model.Bounds = new[] { ext.Xmin, ext.Ymin, ext.Xmax, ext.Ymax };
+            }
+            return model;
+        }
+        catch (Exception ex) {
+            logger.LogError(ex, $"Can not read mvt info from datasservice {id}");
+            return StatusCode(500);
+        }
+    }
 
     /// <summary>读取数据服务的空间数据(矢量切片形式)</summary>
     [HttpGet("{id:long}/mvt/{z:int}/{y:int}/{x:int}")]

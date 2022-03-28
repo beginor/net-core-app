@@ -60,7 +60,7 @@ public class PostGISFeatureProvider : FeatureProvider {
     protected override ReadDataParam ConvertExtentQueryParam(DataServiceCacheItem dataService, AgsQueryParam queryParam) {
         var result = new ReadDataParam();
         var sql = new StringBuilder("st_astext(st_extent(");
-        if (queryParam.OutSR != dataService.Srid) {
+        if (queryParam.OutSR > 0 && queryParam.OutSR != dataService.Srid) {
             sql.Append("st_transform(");
         }
         sql.Append(dataService.GeometryColumn);
@@ -68,7 +68,7 @@ public class PostGISFeatureProvider : FeatureProvider {
             sql.Append($", {queryParam.OutSR})");
         }
         sql.Append($")::geometry) as {dataService.GeometryColumn}");
-        result.Select = sql.ToString(); // $"st_astext(st_extent({dataService.GeometryColumn})::geometry) as {dataService.GeometryColumn}";
+        result.Select = sql.ToString();
         result.Where = BuildWhere(dataService, queryParam);
         result.CheckGeometry = false;
         return result;
@@ -157,7 +157,7 @@ public class PostGISFeatureProvider : FeatureProvider {
         sqlBuilder.AppendLine($"      ST_TileEnvelope({z}, {x}, {y}),");
         sqlBuilder.AppendLine("      extent => 4096, buffer => 64");
         sqlBuilder.AppendLine($"    ) as {layer.GeometryColumn},");
-        sqlBuilder.AppendLine($"    {string.Join(',', layer.Fields.Select(f => f.Name))}");
+        sqlBuilder.AppendLine($"    {string.Join(',', layer.Fields.Where(f => f.Name != layer.GeometryColumn).Select(f => f.Name))}");
         sqlBuilder.AppendLine($"  from {layer.Schema}.{layer.TableName}");
         sqlBuilder.AppendLine($"  where ");
         if (layer.PresetCriteria.IsNotNullOrEmpty()) {

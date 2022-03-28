@@ -203,7 +203,7 @@ export class DataServiceService {
         if (url.startsWith('/')) {
             url = `${location.protocol}//${location.host}${url}`;
         }
-        if (type === 'geojson' || type === 'featureset') {
+        if (type === 'geojson' || type === 'featureset' || type === 'data') {
             return url;
         }
         if (type === 'mvt') {
@@ -331,6 +331,33 @@ export class DataServiceService {
         }
     }
 
+    public async getMvtInfo(id: string): Promise<MvtInfo | undefined> {
+        try {
+            const result = await lastValueFrom(
+                this.http.get<MvtInfo>(`${this.baseUrl}/${id}/mvt/info`)
+            );
+            return result;
+        }
+        catch (ex: any) {
+            this.errorHandler.handleError(ex);
+            this.ui.showAlert({
+                type: 'danger',
+                message: '获取图层的矢量切片信息出错！'
+            });
+            return;
+        }
+    }
+
+}
+
+export interface MvtInfo {
+    layerName: string;
+    description: string;
+    geometryType: string;
+    minzoom: number;
+    maxzoom: number;
+    bounds: number[];
+    url: string;
 }
 
 export interface CountParam {

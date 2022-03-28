@@ -14,7 +14,7 @@ using NHibernate.Linq;
 using Beginor.GisHub.Common;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.DataServices.Data; 
+namespace Beginor.GisHub.DataServices.Data;
 
 /// <summary>数据源（数据表或视图）仓储实现</summary>
 public partial class DataServiceRepository : HibernateRepository<DataService, DataServiceModel, long>, IDataServiceRepository {
@@ -133,6 +133,7 @@ public partial class DataServiceRepository : HibernateRepository<DataService, Da
         item = new DataServiceCacheItem {
             DataServiceId = ds.Id,
             DataServiceName = ds.Name,
+            DataServiceDescription = ds.Description,
             DatabaseType = ds.DataSource.DatabaseType,
             Schema = ds.Schema,
             TableName = ds.TableName,
