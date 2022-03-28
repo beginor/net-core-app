@@ -5,10 +5,12 @@ namespace Beginor.GisHub.Common;
 
 public interface IFileCacheProvider {
 
-    Task SetContent(string path, byte[] content);
+    Task SetContentAsync(string path, byte[] content);
 
     Task<byte[]> GetContentAsync(string path, int duration);
 
     FileInfo GetFileInfo(string path);
+
+    Task DeleteAsync(string path);
 
 }

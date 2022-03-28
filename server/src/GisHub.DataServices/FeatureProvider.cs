@@ -12,7 +12,7 @@ using Beginor.GisHub.Geo.Esri;
 using Beginor.GisHub.Geo.GeoJson;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.DataServices; 
+namespace Beginor.GisHub.DataServices;
 
 public abstract class FeatureProvider : IFeatureProvider {
 
@@ -279,16 +279,14 @@ public abstract class FeatureProvider : IFeatureProvider {
         var wkt = await reader.ReadScalarAsync<string>(dataService, param);
         if (wkt != null) {
             var wktReader = new WKTReader();
-            var geometry = wktReader.Read(wkt.ToString());
+            var geometry = wktReader.Read(wkt);
             var envelop = geometry.EnvelopeInternal;
             var extent = new AgsExtent {
                 Xmin = envelop.MinX,
                 Ymin = envelop.MinY,
                 Xmax = envelop.MaxX,
                 Ymax = envelop.MaxY,
-                SpatialReference = new AgsSpatialReference {
-                    Wkid = dataService.Srid
-                }
+                SpatialReference = queryParam.OutSRValue
             };
             result.Extent = extent;
         }

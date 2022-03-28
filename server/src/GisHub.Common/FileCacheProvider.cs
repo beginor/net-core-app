@@ -36,8 +36,10 @@ public class FileCacheProvider : IFileCacheProvider {
             return null;
         }
         await using var stream = new MemoryStream();
-        await fileInfo.OpenRead().CopyToAsync(stream);
-        return stream.GetBuffer();
+        await using var fileStream = fileInfo.OpenRead();
+        await fileStream.CopyToAsync(stream);
+        var buffer = stream.GetBuffer();
+        return buffer;
     }
 
     private void DeleteObsoletedFile(FileInfo fileInfo) {
@@ -60,10 +62,11 @@ public class FileCacheProvider : IFileCacheProvider {
             throw new InvalidOperationException("Rooted path is not supported!");
         }
         var fullPath = Path.Combine(host.ContentRootPath, option.Cache.Directory, path!);
-        return new FileInfo(fullPath);
+        var fileInfo = new FileInfo(fullPath);
+        return fileInfo;
     }
 
-    public async Task SetContent(string path, byte[] content) {
+    public async Task SetContentAsync(string path, byte[] content) {
         if (path.IsNullOrEmpty()) {
             throw new ArgumentNullException(nameof(path));
         }
@@ -85,6 +88,17 @@ public class FileCacheProvider : IFileCacheProvider {
         await fs.WriteAsync(content);
         await fs.FlushAsync();
         fs.Close();
+    }
+
+    public Task DeleteAsync(string path) {
+        var fileInfo = GetFileInfo(path);
+        if (fileInfo.Exists) {
+            fileInfo.Delete();
+        }
+        else if (Directory.Exists(fileInfo.FullName)) {
+            Directory.Delete(fileInfo.FullName, true);
+        }
+        return Task.CompletedTask;
     }
 
 }

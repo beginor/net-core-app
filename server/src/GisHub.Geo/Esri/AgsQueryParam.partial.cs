@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Beginor.AppFx.Core;
 
-namespace Beginor.GisHub.Geo.Esri; 
+namespace Beginor.GisHub.Geo.Esri;
 
 partial class AgsQueryParam {
 
@@ -21,7 +21,19 @@ partial class AgsQueryParam {
             return geometry;
         }
         if (GeometryType == AgsGeometryType.Envelope) {
-            geometry = JsonSerializer.Deserialize<AgsExtent>(Geometry, options);
+            if (Geometry.StartsWith("{")) {
+                geometry = JsonSerializer.Deserialize<AgsExtent>(Geometry, options);
+            }
+            else {
+                var arr = Geometry.Split(',');
+                geometry = new AgsExtent {
+                    Xmin = double.Parse(arr[0]),
+                    Ymin = double.Parse(arr[1]),
+                    Xmax = double.Parse(arr[2]),
+                    Ymax = double.Parse(arr[3]),
+                    SpatialReference = OutSRValue
+                };
+            }
         }
         if (GeometryType == AgsGeometryType.Point) {
             geometry = JsonSerializer.Deserialize<AgsPoint>(Geometry, options);

@@ -59,7 +59,16 @@ public class PostGISFeatureProvider : FeatureProvider {
 
     protected override ReadDataParam ConvertExtentQueryParam(DataServiceCacheItem dataService, AgsQueryParam queryParam) {
         var result = new ReadDataParam();
-        result.Select = $"st_astext(st_extent({dataService.GeometryColumn})::geometry) as {dataService.GeometryColumn}";
+        var sql = new StringBuilder("st_astext(st_extent(");
+        if (queryParam.OutSR != dataService.Srid) {
+            sql.Append("st_transform(");
+        }
+        sql.Append(dataService.GeometryColumn);
+        if (queryParam.OutSR != dataService.Srid) {
+            sql.Append($", {queryParam.OutSR})");
+        }
+        sql.Append($")::geometry) as {dataService.GeometryColumn}");
+        result.Select = sql.ToString(); // $"st_astext(st_extent({dataService.GeometryColumn})::geometry) as {dataService.GeometryColumn}";
         result.Where = BuildWhere(dataService, queryParam);
         result.CheckGeometry = false;
         return result;

@@ -45,7 +45,7 @@ partial class DataServiceController {
             if (buffer == null || buffer.Length == 0) {
                 return NotFound();
             }
-            await fileCache.SetContent(cachePath, buffer);
+            await fileCache.SetContentAsync(cachePath, buffer);
             Response.Headers.ContentEncoding = "gzip";
             return File(buffer, contentType);
         }

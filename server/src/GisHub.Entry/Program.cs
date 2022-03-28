@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Logging.Log4net;
 
-namespace Beginor.GisHub.Entry; 
+namespace Beginor.GisHub.Entry;
 
 public class Program {
 
