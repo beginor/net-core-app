@@ -101,4 +101,16 @@ public class FileCacheProvider : IFileCacheProvider {
         return Task.CompletedTask;
     }
 
+    public DirectoryInfo GetDirectoryInfo(string path) {
+        if (path.IsNullOrEmpty()) {
+            throw new ArgumentNullException(nameof(path));
+        }
+        if (Path.IsPathRooted(path)) {
+            throw new InvalidOperationException("Rooted path is not supported!");
+        }
+        var fullPath = Path.Combine(host.ContentRootPath, option.Cache.Directory, path!);
+        var dirInfo = new DirectoryInfo(fullPath);
+        return dirInfo;
+    }
+
 }

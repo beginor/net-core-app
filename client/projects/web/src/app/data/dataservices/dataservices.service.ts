@@ -319,7 +319,7 @@ export class DataServiceService {
 
     public async supportMvt(id: string): Promise<boolean> {
         try {
-            const result = await lastValueFrom(this.http.get<boolean>(`${this.baseUrl}/${id}/support-mvt`)); // eslint-disable-line max-len
+            const result = await lastValueFrom(this.http.get<boolean>(`${this.baseUrl}/${id}/mvt/support`)); // eslint-disable-line max-len
             return result;
         }
         catch (ex: any) {

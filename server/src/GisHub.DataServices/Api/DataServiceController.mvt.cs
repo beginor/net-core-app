@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Beginor.AppFx.Api;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,7 +16,7 @@ namespace Beginor.GisHub.DataServices.Api;
 
 partial class DataServiceController {
 
-    /// <summary>读取图层的适量切片信息</summary>
+    /// <summary>读取图层的矢量切片信息</summary>
     [HttpGet("{id:long}/mvt/info")]
     [Authorize("data_services.read_mvt")]
     [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
@@ -96,13 +98,15 @@ partial class DataServiceController {
             return File(buffer, contentType);
         }
         catch (Exception ex) {
-            logger.LogError(ex, $"Can not read data as mvt from datasservice {id}");
+            logger.LogError(ex, $"Can not read data as mvt from data service {id}");
             return StatusCode(500);
         }
     }
 
-    [HttpGet("{id:long}/support-mvt")]
+    /// <summary>判断图层是否支持矢量切片</summary>
+    [HttpGet("{id:long}/mvt/support")]
     [Authorize("data_services.read_mvt")]
+    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
     public async Task<ActionResult<bool>> SupportMvt(long id) {
         try {
             var ds = await repository.GetCacheItemByIdAsync(id);
@@ -117,9 +121,62 @@ partial class DataServiceController {
             return supportMvt;
         }
         catch (Exception ex) {
-            logger.LogError(ex, $"Can not check mvt support for datasservice {id}");
+            logger.LogError(ex, $"Can not check mvt support for data service {id}");
             return StatusCode(500);
         }
     }
 
+    /// <summary>获取图层矢量切片缓存的大小</summary>
+    [HttpGet("{id:long}/mvt/cache")]
+    [Authorize("data_services.read_mvt")]
+    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    public async Task<ActionResult<long>> GetCacheSize(long id) {
+        try {
+            var ds = await repository.GetCacheItemByIdAsync(id);
+            if (ds == null) {
+                return NotFound();
+            }
+            if (ds.GeometryColumn.IsNullOrEmpty()) {
+                return BadRequest();
+            }
+            var dirInfo = fileCache.GetDirectoryInfo(id.ToString());
+            if (!dirInfo.Exists) {
+                return 0L;
+            }
+            var dirSize = dirInfo.EnumerateFiles("*.mvt", SearchOption.AllDirectories).Aggregate(
+                0L,
+                (size, fi) => size + fi.Length
+            );
+            return Ok(dirSize);
+        }
+        catch (Exception ex) {
+            logger.LogError(ex, $"Can not get mvt cache size for data service {id}");
+            return this.InternalServerError(ex);
+        }
+    }
+
+    /// <summary>删除图层的矢量切片缓存</summary>
+    [HttpDelete("{id:long}/mvt/cache")]
+    [ProducesResponseType(204)]
+    [Authorize("data_services.update")]
+    public async Task<ActionResult> DeleteMvtCache(long id) {
+        var ds = await repository.GetCacheItemByIdAsync(id);
+        if (ds == null) {
+            return NotFound();
+        }
+        if (ds.GeometryColumn.IsNullOrEmpty()) {
+            return BadRequest();
+        }
+        try {
+            var dirInfo = fileCache.GetDirectoryInfo(ds.DataServiceId.ToString());
+            if (dirInfo.Exists) {
+                dirInfo.Delete(true);
+            }
+            return NoContent();
+        }
+        catch (Exception ex) {
+            logger.LogError(ex, $"Can not delete mvt cache for data service {id}");
+            return this.InternalServerError(ex);
+        }
+    }
 }

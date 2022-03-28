@@ -11,6 +11,8 @@ public interface IFileCacheProvider {
 
     FileInfo GetFileInfo(string path);
 
+    DirectoryInfo GetDirectoryInfo(string path);
+
     Task DeleteAsync(string path);
 
 }
