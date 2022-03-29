@@ -61,7 +61,7 @@ export class MapboxService {
 
     public destroyMap(map: Map): void {
         map.remove();
-        this.removeMapCss();
+        // this.removeMapCss();
     }
 
     public async createPreviewLayer(
@@ -74,7 +74,7 @@ export class MapboxService {
         if (!layerType) {
             throw new Error(`Invalid geometry type ${geoType}`);
         }
-        const layer = this.mapboxOptions.defaults[layerType];
+        const layer = JSON.parse(JSON.stringify(this.mapboxOptions.defaults[layerType]));
         if (!layer) {
             throw new Error(`Default style for ${layerType} is not defined!`);
         }

@@ -47,6 +47,7 @@ export class PreviewMvtComponent implements AfterViewInit, OnDestroy {
         );
         this.map = map;
         await map.once('load');
+        map.resize();
         const mvtInfo = await this.vm.getMvtInfo(this.ds.id);
         if (!mvtInfo) {
             return;

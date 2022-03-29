@@ -43,6 +43,7 @@ export class PreviewGeoJsonComponent implements AfterViewInit, OnDestroy {
         );
         this.map = map;
         await map.once('load');
+        map.resize();
         await this.loadGeoJson();
         await this.addGeoJsonLayer();
     }

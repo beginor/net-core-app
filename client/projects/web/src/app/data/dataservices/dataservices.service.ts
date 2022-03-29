@@ -324,9 +324,6 @@ export class DataServiceService {
         }
         catch (ex: any) {
             this.errorHandler.handleError(ex);
-            // this.ui.showAlert(
-            //     { type: 'danger', message: '' }
-            // );
             return false;
         }
     }
@@ -348,6 +345,41 @@ export class DataServiceService {
         }
     }
 
+    public async getMvtCache(id: string): Promise<number> {
+        try {
+            const cacheSize = await lastValueFrom(
+                this.http.get<number>(`${this.baseUrl}/${id}/mvt/cache`)
+            );
+            return cacheSize;
+        }
+        catch (ex: any) {
+            this.errorHandler.handleError(ex);
+            this.ui.showAlert(
+                { type: 'danger', message: '获取图层的矢量切片缓存信息出错！' }
+            );
+            return 0;
+        }
+    }
+
+    public async deleteMvtCache(id: string): Promise<boolean> {
+        const confirm = await this.ui.showConfirm('确认删除矢量切片缓存么？');
+        if (!confirm) {
+            return false;
+        }
+        try {
+            await lastValueFrom(
+                this.http.delete(`${this.baseUrl}/${id}/mvt/cache`)
+            );
+            return true;
+        }
+        catch (ex: any) {
+            this.errorHandler.handleError(ex);
+            this.ui.showAlert(
+                { type: 'danger', message: '删除数据服务出错！' }
+            );
+            return false;
+        }
+    }
 }
 
 export interface MvtInfo {

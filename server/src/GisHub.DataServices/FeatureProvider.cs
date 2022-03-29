@@ -532,4 +532,8 @@ public abstract class FeatureProvider : IFeatureProvider {
         }
         return null;
     }
+
+    protected static bool NeedTransform(int sourceSrId, int targetSrId) {
+        return sourceSrId > 0 && targetSrId > 0 && sourceSrId != targetSrId;
+    }
 }

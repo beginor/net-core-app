@@ -58,6 +58,7 @@ export class DetailComponent implements OnInit {
     public tableFocus$ = new Subject<string>();
     public tableClick$ = new Subject<string>();
     public supportMvt = false;
+    public cacheSize = 0;
 
     private id = '';
     private reloadList = false;
@@ -124,6 +125,9 @@ export class DetailComponent implements OnInit {
                     .then(() => this.loadTables())
                     .then(() => this.loadColumns());
                 this.supportMvt = await this.vm.supportMvt(this.id);
+                if (this.supportMvt) {
+                    void this.getMvtCacheSize();
+                }
             }
         }
         else {
@@ -306,6 +310,20 @@ export class DetailComponent implements OnInit {
 
     public hasGeoColumn(): boolean {
         return  !!(this.model.fields?.find(x => x.type === 'geometry'));
+    }
+
+    public async deleteMvtCache(): Promise<void> {
+        if (!this.supportMvt) {
+            return;
+        }
+        const deleted = await this.vm.deleteMvtCache(this.id);
+        if (deleted) {
+            await this.getMvtCacheSize();
+        }
+    }
+
+    private async getMvtCacheSize(): Promise<void> {
+        this.cacheSize = await this.vm.getMvtCache(this.id)
     }
 
     private async loadSchemas(): Promise<void> {

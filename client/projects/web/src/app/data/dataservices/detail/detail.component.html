@@ -227,6 +227,15 @@
       </div>
     </div>
 
+    <div class="mb-3 mx-3" *ngIf="model.supportMvt">
+      <div class="input-group">
+        <div class="input-group-text">缓存占用空间</div>
+        <input class="form-control text-end" disabled type="text" [value]="cacheSize | fileSize" />
+        <button class="btn btn-outline-secondary" type="button"
+          *ngIf="editable" (click)="deleteMvtCache()">清除缓存</button>
+      </div>
+    </div>
+
     <div class="mb-3">
       <label class="form-label text-muted">授权角色</label>
       <div class="form-text">
