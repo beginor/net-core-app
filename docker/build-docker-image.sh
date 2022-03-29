@@ -6,7 +6,7 @@ rm -rf dist/wwwroot
 ./build-client.sh
 
 # Build docker image
-docker buildx build --pull --rm \
+docker buildx build \
   --platform linux/amd64 \
   -t beginor/gishub \
   --output type=image .
