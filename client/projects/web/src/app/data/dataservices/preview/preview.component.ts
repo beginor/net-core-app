@@ -1,9 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
 
-import { DataServiceService, DataServiceModel, PreviewType } from '../dataservices.service';
+import {
+    DataServiceService, DataServiceModel, PreviewType
+} from '../dataservices.service';
 
 @Component({
     selector: 'app-dataservices-preview',

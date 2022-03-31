@@ -97,11 +97,11 @@ export class ListComponent implements OnInit {
     }
 
     public toggleSelectAll(): void {
-        if (this.selectedApis.length > 0) {
-            this.selectedApis = [];
+        if (this.selectedApis.length < this.vm.data.getValue().length) {
+            this.selectedApis = this.vm.data.getValue().map(item => item.id);
         }
         else {
-            this.selectedApis = this.vm.data.getValue().map(item => item.id);
+            this.selectedApis = [];
         }
     }
 
