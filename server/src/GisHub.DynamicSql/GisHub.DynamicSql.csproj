@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SmartSql" Version="4.1.57" />
+    <PackageReference Include="SmartSql" Version="4.1.59" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\GisHub.DataServices\GisHub.DataServices.csproj" />
   </ItemGroup>
