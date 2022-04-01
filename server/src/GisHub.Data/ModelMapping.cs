@@ -3,7 +3,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Data; 
+namespace Beginor.GisHub.Data;
 
 public class ModelMapping : AutoMapper.Profile {
 
@@ -48,6 +48,9 @@ public class ModelMapping : AutoMapper.Profile {
             .ReverseMap()
             .ForMember(dest => dest.Id, map => map.Ignore())
             .ForMember(d => d.User, m => m.Ignore());
+        CreateMap<Category, CategoryModel>()
+            .ReverseMap()
+            .ForMember(dest => dest.Id, map => map.Ignore());
     }
 
 }

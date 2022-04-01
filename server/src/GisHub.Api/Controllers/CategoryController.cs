@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,20 +36,19 @@ public class CategoryController : Controller {
         base.Dispose(disposing);
     }
 
-    /// <summary>搜索 数据类别 ， 分页返回结果</summary>
-    /// <response code="200">成功, 分页返回结果</response>
+    /// <summary>获取全部 数据类别 。</summary>
+    /// <response code="200">成功, 返回全部数据类别</response>
     /// <response code="500">服务器内部错误</response>
     [HttpGet("")]
     [Authorize("categories.read")]
-    public async Task<ActionResult<PaginatedResponseModel<CategoryModel>>> Search(
-        [FromQuery]CategorySearchModel model
+    public async Task<ActionResult<List<CategoryModel>>> GetAll(
     ) {
         try {
-            var result = await repository.SearchAsync(model);
-            return result;
+            var result = await repository.GetAllAsync();
+            return result.ToList();
         }
         catch (Exception ex) {
-            logger.LogError(ex, $"Can not search categories with {model.ToJson()} .");
+            logger.LogError(ex, "Can not get all categories .");
             return this.InternalServerError(ex);
         }
     }

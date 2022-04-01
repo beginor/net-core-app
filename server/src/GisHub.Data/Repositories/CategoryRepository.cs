@@ -36,4 +36,13 @@ public partial class CategoryRepository : HibernateRepository<Category, Category
         };
     }
 
+    public override async Task<IList<CategoryModel>> GetAllAsync(CancellationToken token = new()) {
+        var query = Session.Query<Category>()
+            .OrderBy(e => e.Id)
+            .ThenBy(e => e.ParentId)
+            .ThenBy(e => e.Sequence);
+        var data = await query.ToListAsync(token);
+        return Mapper.Map<IList<CategoryModel>>(data);
+    }
+
 }
