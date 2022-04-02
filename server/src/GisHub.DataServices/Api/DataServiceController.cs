@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -105,6 +106,7 @@ public partial class DataServiceController : Controller {
         try {
             await repository.DeleteAsync(id);
             await jsonRepository.DeleteAsync(id);
+            await fileCache.DeleteAsync(id.ToString());
             return NoContent();
         }
         catch (Exception ex) {
@@ -154,6 +156,10 @@ public partial class DataServiceController : Controller {
             }
             await repository.UpdateAsync(id, model);
             await jsonRepository.DeleteAsync(id);
+            var infoPath = Path.Combine(id.ToString(), "info.json");
+            if (model.SupportMvt) {
+                await fileCache.DeleteAsync(infoPath);
+            }
             return model;
         }
         catch (Exception ex) {

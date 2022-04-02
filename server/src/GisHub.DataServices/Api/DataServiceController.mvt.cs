@@ -1,6 +1,9 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Beginor.AppFx.Api;
 using Microsoft.AspNetCore.Authorization;
@@ -32,13 +35,30 @@ partial class DataServiceController {
             if (!ds.SupportMvt) {
                 return BadRequest($"Data service {id} does not support mvt output.");
             }
-            var model = new MvtInfoModel {
+            var infoPath = Path.Combine(id.ToString(), "info.json");
+            var fileInfo = fileCache.GetFileInfo(infoPath);
+            var url = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/{RouteTemplate}/{id}/mvt/{{z}}/{{y}}/{{x}}";
+            MvtInfoModel infoModel;
+            if (fileInfo.Exists) {
+                try {
+                    using var reader = fileInfo.OpenText();
+                    var text = await reader.ReadToEndAsync();
+                    infoModel = JsonSerializer.Deserialize<MvtInfoModel>(text);
+                    if (infoModel != null) {
+                        infoModel.Url = url;
+                        return infoModel;
+                    }
+                }
+                catch (Exception ex) {
+                    logger.LogError(ex, $"Can not deserialize {fileInfo.FullName} to {typeof(MvtInfoModel)} !");
+                }
+            }
+            infoModel = new MvtInfoModel {
                 LayerName = ds.DataServiceName,
                 Description = ds.DataServiceDescription,
                 GeometryType = ds.GeometryType,
                 Minzoom = ds.MvtMinZoom,
-                Maxzoom = ds.MvtMaxZoom,
-                Url = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/{RouteTemplate}/{id}/mvt/{{z}}/{{y}}/{{x}}",
+                Maxzoom = ds.MvtMaxZoom
             };
             var featureProvider = factory.CreateFeatureProvider(ds.DatabaseType);
             var fs = await featureProvider.QueryAsync(
@@ -50,9 +70,18 @@ partial class DataServiceController {
             );
             var ext = fs.Extent;
             if (ext != null) {
-                model.Bounds = new[] { ext.Xmin, ext.Ymin, ext.Xmax, ext.Ymax };
+                infoModel.Bounds = new[] { ext.Xmin, ext.Ymin, ext.Xmax, ext.Ymax };
             }
-            return model;
+            var serializerOptions = new JsonSerializerOptions {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            };
+            await fileCache.SetContentAsync(
+                infoPath,
+                Encoding.UTF8.GetBytes(infoModel.ToJson(serializerOptions))
+            );
+            infoModel.Url = url;
+            return infoModel;
         }
         catch (Exception ex) {
             logger.LogError(ex, $"Can not read mvt info from datasservice {id}");
