@@ -39,8 +39,13 @@
 <div class="modal-body p-1" [ngbNavOutlet]="nav">
 </div>
 <div class="modal-footer justify-content-start p-1">
-  <div class="text-muted" style="font-size: 0.6rem;">
-    服务地址：<a [href]="getPreviewUrl()" target="_blank">{{getPreviewUrl()}}</a>
+  <div style="font-size: 0.6rem;">
+    <span class="text-muted">服务地址：</span>
+    <span class="text-primary" style="cursor: pointer;"
+      [cdkCopyToClipboard]="getPreviewUrl()"
+      ngbTooltip="点击复制服务地址" container="body">
+      {{getPreviewUrl()}}
+    </span>
   </div>
   <ngb-progressbar *ngIf="canShowProgress()" class="ms-auto" style="width: 100px;" [showValue]="true"
     type="success" [max]="100" [value]="downloadProgress">

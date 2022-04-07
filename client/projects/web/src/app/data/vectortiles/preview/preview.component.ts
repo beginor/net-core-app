@@ -54,4 +54,12 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
         return this.vm.getVectorTileLayerUrl(this.id);
     }
 
+    public getTileUrlFormat(): string {
+        const layerUrl = this.getVectorTileLayerUrl();
+        if (!layerUrl) {
+            return '';
+        }
+        return layerUrl + '/tiles/{z}/{y}/{x}'
+    }
+
 }

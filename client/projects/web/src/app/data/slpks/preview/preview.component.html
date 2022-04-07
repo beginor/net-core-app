@@ -5,7 +5,12 @@
 </div>
 <div class="modal-body p-1">
   <div class="slpk-preview-map border border-darken-1" #mapPreView></div>
-  <div class="text-muted py-2" style="font-size: .6rem;">
-    服务地址：<a [href]="getSlpkLayerUrl()">{{getSlpkLayerUrl()}}</a> .
+  <div class="py-1" style="font-size: .6rem;">
+    <span class="text-muted">服务地址：</span>
+    <span class="text-primary" style="cursor: pointer;"
+      [cdkCopyToClipboard]="getSlpkLayerUrl()"
+      ngbTooltip="点击复制服务地址" container="body">
+      {{getSlpkLayerUrl()}}
+    </span>
   </div>
 </div>

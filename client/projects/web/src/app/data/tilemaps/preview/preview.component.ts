@@ -53,4 +53,12 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
         return this.vm.getTileLayerUrl(this.id);
     }
 
+    public getTileUrlFormat(): string {
+        const layerUrl = this.getTileLayerUrl();
+        if (!layerUrl) {
+            return '';
+        }
+        return layerUrl + '/tiles/{z}/{y}/{x}'
+    }
+
 }

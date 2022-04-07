@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+
 import {
     NgbPaginationModule, NgbTooltipModule, NgbTypeaheadModule, NgbModalModule,
     NgbNavModule, NgbProgressbarModule
@@ -37,6 +39,7 @@ import { PreviewMvtComponent } from './preview/preview-mvt.component';
     imports: [
         CommonModule,
         FormsModule,
+        ClipboardModule,
         NgbPaginationModule,
         NgbTooltipModule,
         NgbTypeaheadModule,

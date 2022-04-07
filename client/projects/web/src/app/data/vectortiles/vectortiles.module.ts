@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 import {
     NgbPaginationModule, NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap';
@@ -22,6 +23,7 @@ import { PreviewComponent } from './preview/preview.component';
     imports: [
         CommonModule,
         FormsModule,
+        ClipboardModule,
         NgbPaginationModule,
         NgbTooltipModule,
         AppSharedModule,
