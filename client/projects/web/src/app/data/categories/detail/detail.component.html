@@ -1,0 +1,70 @@
+<form class="card detail" *ngIf="(account.info | async) as info" #detailForm="ngForm"
+  [@animation]="animation" (@animation.done)="onAnimationEvent($event)">
+  <div class="card-header d-flex justify-content-between align-content-center">
+    <h5 class="card-title mb-0">{{title}}</h5>
+    <div class="btn-group btn-group-sm">
+      <button *ngIf="info.privileges['categories.update'] && editable"
+        type="button" class="btn btn-sm btn-outline-primary"
+        (click)="save()" [disabled]="!detailForm.valid">
+        <svg-icon path="bi/check"></svg-icon> 保存
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"
+        (click)="goBack()">
+        <svg-icon path="bi/x"></svg-icon> 取消
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="mb-3">
+      <label class="form-label text-muted" for="id">类别ID  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="id" name="id"
+        placeholder="请输入类别ID ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.id"
+        #id="ngModel"
+        [class.is-invalid]="!(id.valid || id.pristine)"
+        [class.is-valid]="id.valid"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="name">类别名称  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="name" name="name"
+        placeholder="请输入类别名称 ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.name"
+        #name="ngModel"
+        [class.is-invalid]="!(name.valid || name.pristine)"
+        [class.is-valid]="name.valid"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="parentId">父类ID </label>
+      <input class="form-control" type="text" id="parentId" name="parentId"
+        placeholder="请输入父类ID ..."
+        [(ngModel)]="model.parentId" [disabled]="!editable"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="sequence">顺序号  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="sequence" name="sequence"
+        placeholder="请输入顺序号 ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.sequence"
+        #sequence="ngModel"
+        [class.is-invalid]="!(sequence.valid || sequence.pristine)"
+        [class.is-valid]="sequence.valid"
+      />
+    </div>
+  </div>
+  <div *ngIf="info.privileges['categories.update'] && editable"
+    class="card-footer d-flex justify-content-between">
+    <button type="button" class="btn btn-sm btn-outline-primary"
+      (click)="save()" [disabled]="!detailForm.valid">
+      <svg-icon path="bi/check"></svg-icon> 保存
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary"
+      (click)="goBack()">
+      <svg-icon path="bi/x"></svg-icon> 取消
+    </button>
+  </div>
+</form>
