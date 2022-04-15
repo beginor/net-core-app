@@ -76,3 +76,7 @@ body {
 .form-check.form-switch > input[type=checkbox].form-check-input {
   border-radius: $form-switch-border-radius;
 }
+
+.clickable {
+  cursor: pointer;
+}

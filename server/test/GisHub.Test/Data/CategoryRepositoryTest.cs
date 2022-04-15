@@ -40,4 +40,17 @@ public class CategoryRepositoryTest : BaseTest<ICategoryRepository> {
         Console.WriteLine(result.ToJson(new JsonSerializerOptions { WriteIndented = true, Encoder = new JavaScriptTestEncoder() }));
     }
 
+    [Test]
+    public async Task _04_CanFindMaxSequence() {
+        var result = await Target.FindMaxSequenceAsync(null);
+        Assert.GreaterOrEqual(result, 0f);
+        Console.WriteLine(result);
+        result = await Target.FindMaxSequenceAsync(1648801206962030840);
+        Assert.GreaterOrEqual(result, 0f);
+        Console.WriteLine(result);
+        result = await Target.FindMaxSequenceAsync(1648797531061030822);
+        Assert.GreaterOrEqual(result, 0f);
+        Console.WriteLine(result);
+    }
+
 }

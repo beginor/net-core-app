@@ -14,4 +14,6 @@ public partial interface ICategoryRepository : IRepository<CategoryModel, long> 
         CategorySearchModel model
     );
 
+    ValueTask<float> FindMaxSequenceAsync(long? parentId);
+
 }

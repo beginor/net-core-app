@@ -105,7 +105,7 @@
                 <th scope="row" class="text-end">{{i + 1}}</th>
                 <td class="text-start">
                   {{getFullname(item)}}
-                  <svg-icon class="text-danger" style="cursor: pointer;" path="bi/lock-fill"
+                  <svg-icon class="text-danger clickable" path="bi/lock-fill"
                     *ngIf="isLockout(item)" ngbTooltip="该用户已经被锁定！"></svg-icon>
                 </td>
                 <td class="text-center">{{item.phoneNumber}}</td>

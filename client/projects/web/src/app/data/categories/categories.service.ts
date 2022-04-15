@@ -10,14 +10,9 @@ import { UiService } from 'projects/web/src/app/common';
 })
 export class CategoryService {
 
-    public searchModel: CategorySearchModel = {
-        skip: 0,
-        take: 10
-    };
-    public total = new BehaviorSubject<number>(0);
     public data = new BehaviorSubject<CategoryModel[]>([]);
     public loading = false;
-    public showPagination = false;
+    public nodes = new BehaviorSubject<CategoryNode[]>([]);
 
     private baseUrl = `${this.apiRoot}/categories`;
 
@@ -28,32 +23,30 @@ export class CategoryService {
         private errorHandler: ErrorHandler
     ) { }
 
-    /** 搜索数据类别 */
-    public async search(): Promise<void> {
-        let params = new HttpParams();
-        for (const key in this.searchModel) {
-            if (this.searchModel.hasOwnProperty(key)) {
-                const val = this.searchModel[key] as string;
-                params = params.set(key, val);
-            }
-        }
+    /** 获取全部数据类别 */
+    public async getAll(): Promise<void> {
         this.loading = true;
         try {
-            const result = await lastValueFrom(
-                this.http.get<CategoryResultModel>(this.baseUrl, { params }) // eslint-disable-line max-len
+            const models = await lastValueFrom(
+                this.http.get<CategoryModel[]>(this.baseUrl) // eslint-disable-line max-len
             );
-            const total = result.total ?? 0;
-            const data = result.data ?? [];
-            this.total.next(total);
-            this.data.next(data);
-            this.showPagination = total > data.length;
+            const roots = models.filter(x => !x.parentId)
+                .map<CategoryNode>(x => ({
+                    id: x.id,
+                    name: x.name,
+                    parentId: x.parentId,
+                    sequence: x.sequence,
+                    children: []
+                }));
+            roots.forEach(x => this.findChildren(x, models));
+            this.data.next(models);
+            this.nodes.next(roots);
         }
         catch (ex: unknown) {
             this.errorHandler.handleError(ex);
-            this.total.next(0);
             this.data.next([]);
             this.ui.showAlert(
-                { type: 'danger', message: '加载数据类别数据出错!'}
+                { type: 'danger', message: '加载数据类别出错!'}
             );
         }
         finally {
@@ -61,17 +54,21 @@ export class CategoryService {
         }
     }
 
-    /** 更改页码分页查询 */
-    public async onPageChange(p: number): Promise<void> {
-        this.searchModel.skip = (p - 1) * this.searchModel.take;
-        await this.search();
-    }
-
-    /** 更改分页大小 */
-    public async onPageSizeChange(): Promise<void> {
-        this.searchModel.skip = 0;
-        await this.search();
-    }
+    private findChildren(parent: CategoryNode, models: CategoryModel[]): void {
+        parent.children = models.filter(x => x.parentId === parent.id)
+            .map<CategoryNode>(x => ({
+                id: x.id,
+                name: x.name,
+                parentId: x.parentId,
+                sequence: x.sequence,
+                children: []
+            }));
+        if (parent.children.length > 0) {
+            parent.children.forEach(x => {
+                this.findChildren(x, models);
+            });
+        }
+    };
 
     /** 创建数据类别 */
     public async create(
@@ -150,6 +147,10 @@ export class CategoryService {
         }
     }
 
+    public createEmptyNode(): CategoryNode {
+        return { children: [] } as unknown as CategoryNode;
+    }
+
 }
 
 /** 数据类别 */
@@ -164,23 +165,10 @@ export interface CategoryModel {
     sequence: number;
 }
 
-/** 数据类别 搜索参数 */
-export interface CategorySearchModel {
-    [key: string]: undefined | number | string;
-    /** 跳过的记录数 */
-    skip: number;
-    /** 取多少条记录 */
-    take: number;
-}
-
-/** 数据类别 搜索结果 */
-export interface CategoryResultModel {
-    /** 请求跳过的记录数 */
-    skip?: number;
-    /** 请求多少条记录 */
-    take?: number;
-    /** 总记录数 */
-    total?: number;
-    /** 数据列表 */
-    data?: CategoryModel[];
+export interface CategoryNode {
+    id?: string;
+    name: string;
+    parentId?: string;
+    sequence: number;
+    children: CategoryNode[];
 }

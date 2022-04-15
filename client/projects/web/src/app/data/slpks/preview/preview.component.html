@@ -7,7 +7,7 @@
   <div class="slpk-preview-map border border-darken-1" #mapPreView></div>
   <div class="py-1" style="font-size: .6rem;">
     <span class="text-muted">服务地址：</span>
-    <span class="text-primary" style="cursor: pointer;"
+    <span class="text-primary clickable"
       [cdkCopyToClipboard]="getSlpkLayerUrl()"
       ngbTooltip="点击复制服务地址" container="body">
       {{getSlpkLayerUrl()}}

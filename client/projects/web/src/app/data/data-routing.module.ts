@@ -7,6 +7,10 @@ const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'dashboard', component: DashbordComponent },
     {
+        path: 'categories',
+        loadChildren: () => import('./categories/categories.module').then(m => m.CategoryModule)
+    },
+    {
         path: 'slpks',
         loadChildren: () => import('./slpks/slpks.module').then(m => m.SlpkModule)
     },

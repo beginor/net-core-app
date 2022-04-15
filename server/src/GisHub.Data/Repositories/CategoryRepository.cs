@@ -38,11 +38,37 @@ public partial class CategoryRepository : HibernateRepository<Category, Category
 
     public override async Task<IList<CategoryModel>> GetAllAsync(CancellationToken token = new()) {
         var query = Session.Query<Category>()
-            .OrderBy(e => e.Id)
-            .ThenBy(e => e.ParentId)
+            .OrderBy(e => e.ParentId)
             .ThenBy(e => e.Sequence);
         var data = await query.ToListAsync(token);
         return Mapper.Map<IList<CategoryModel>>(data);
+    }
+
+    public override async Task SaveAsync(CategoryModel model, CancellationToken token = new ()) {
+        long? parentId = null;
+        if (long.TryParse(model.ParentId, out long pid)) {
+            parentId = pid;
+        }
+        var maxSeqInDb = await FindMaxSequenceAsync(parentId);
+        model.Sequence = (maxSeqInDb + 1.0f);
+        var entity = Mapper.Map<Category>(model);
+        await Session.SaveAsync(entity, token);
+        await Session.FlushAsync(token);
+        Mapper.Map(entity, model);
+    }
+
+    public async ValueTask<float> FindMaxSequenceAsync(long? parentId) {
+        var query = Session.Query<Category>();
+        if (parentId.HasValue) {
+            var parentIdVal = parentId.Value;
+            query = query.Where(x => x.ParentId == parentIdVal);
+        }
+        else {
+            query = query.Where(x => x.ParentId == null);
+        }
+        query = query.OrderByDescending(x => x.Sequence);
+        var entity = await query.FirstOrDefaultAsync();
+        return entity?.Sequence ?? 0f;
     }
 
 }

@@ -1,1 +1,50 @@
-<p>tree works!</p>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">首页</a></li>
+    <li class="breadcrumb-item"><a routerLink="/data">数据</a></li>
+    <li class="breadcrumb-item active" aria-current="page">数据类别</li>
+  </ol>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="card" *ngIf="account.info | async as info">
+        <div class="card-header d-flex justify-content-between">
+          <h5 class="card-title mb-0">数据类别</h5>
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-outline-primary" type="button"
+              [ngbPopover]="newCategoryTpl" [autoClose]="'outside'"
+              container="body"
+              #newCatPopover="ngbPopover" [placement]="'bottom-right'">
+              <svg-icon path="bi/plus"></svg-icon> 新建类别
+            </button>
+            <button type="button" class="btn btn-outline-secondary"
+              (click)="loadData()">
+              <svg-icon path="bi/arrow-repeat"></svg-icon> 刷新
+            </button>
+          </div>
+        </div>
+        <ng-template #newCategoryTpl>
+          <app-data-categories-tree-item-edit [compact]="true"
+            (cancel)="onNewCategoryCancel(newCatPopover)"
+            (updated)="onNewCategoryAdded(newCatPopover)">
+          </app-data-categories-tree-item-edit>
+        </ng-template>
+        <div class="card-body">
+          <div class="row">
+            <div class="offset-lg-2 col-lg-8">
+              <app-data-categories-tree-item
+                *ngFor="let node of vm.nodes | async as nodes; let i = index"
+                [node]="node" [canEdit]="info.privileges['categories.update']"
+                [canDelete]="info.privileges['categories.delete']"
+                [canAddChild]="info.privileges['categories.create']"
+              >
+              </app-data-categories-tree-item>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<form [class]="getFormClass()" #editForm="ngForm">
+  <ng-container *ngIf="compact; then compactTpl; else normalTpl;">
+  </ng-container>
+  <ng-template #compactTpl>
+    <div class="input-group input-group-sm">
+      <input class="form-control" type="text" id="cat-name"
+        name="cat-name" placeholder="请输入类别名称" required
+        [(ngModel)]="node.name" #catNameModel="ngModel"
+        [class.is-invalid]="!(catNameModel.valid || catNameModel.pristine)"
+        [class.is-valid]="catNameModel.valid"/>
+      <button class="btn btn-sm btn-outline-primary" type="button"
+              [disabled]="editForm.invalid" (click)="saveOrUpdate(node)">
+        <svg-icon path="bi/check"></svg-icon>
+      </button>
+      <button class="btn btn-sm btn-outline-secondary" type="button"
+              (click)="cancel.next()">
+        <svg-icon path="bi/x"></svg-icon>
+      </button>
+    </div>
+  </ng-template>
+  <ng-template #normalTpl>
+    <div class="input-group input-group-sm">
+      <span class="input-group-text">类别名称 <b class="text-danger">*</b></span>
+      <input class="form-control" type="text" name="name" required
+        placeholder="请输入类别名称！"
+        [(ngModel)]="node.name" #nameModel="ngModel"
+        [class.is-invalid]="!(nameModel.valid || nameModel.pristine)"
+        [class.is-valid]="nameModel.valid"
+        (keyup.enter)="editForm.valid && saveOrUpdate(node)"
+      />
+      <button class="btn btn-sm btn-outline-primary" type="button"
+        [disabled]="editForm.invalid" (click)="saveOrUpdate(node)">
+        <svg-icon path="bi/check"></svg-icon> 确定
+      </button>
+      <button class="btn btn-outline-secondary" type="button"
+        (click)="cancel.next()">
+        <svg-icon path="bi/x"></svg-icon> 取消
+      </button>
+    </div>
+  </ng-template>
+</form>
