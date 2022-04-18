@@ -2,15 +2,15 @@
 
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.16.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="AutoMapper" Version="11.0.1" />
-    <PackageReference Include="Beginor.AppFx.Api" Version="6.0.4" />
-    <PackageReference Include="Beginor.AppFx.Core" Version="6.0.4" />
-    <PackageReference Include="Beginor.AppFx.DependencyInjection" Version="6.0.4" />
-    <PackageReference Include="Beginor.AppFx.Logging.Log4net" Version="6.0.4" />
-    <PackageReference Include="Beginor.AppFx.Repository.Hibernate" Version="6.0.4" />
+    <PackageReference Include="Beginor.AppFx.Api" Version="6.0.5" />
+    <PackageReference Include="Beginor.AppFx.Core" Version="6.0.5" />
+    <PackageReference Include="Beginor.AppFx.DependencyInjection" Version="6.0.5" />
+    <PackageReference Include="Beginor.AppFx.Logging.Log4net" Version="6.0.5" />
+    <PackageReference Include="Beginor.AppFx.Repository.Hibernate" Version="6.0.5" />
     <PackageReference Include="Beginor.AspNetCore.Authentication.Token" Version="6.0.1" />
     <PackageReference Include="Beginor.AspNetCore.Middlewares.CustomHeader" Version="6.0.2" />
     <PackageReference Include="Beginor.AspNetCore.Middlewares.GzipStatic" Version="6.0.2" />
@@ -18,9 +18,9 @@
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="NHibernate" Version="5.3.11" />
     <PackageReference Include="NHibernate.Mapping.Attributes" Version="5.1.0" />
-    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="6.0.4" />
-    <PackageReference Include="NHibernate.Extensions.NpgSql" Version="6.0.5" />
-    <PackageReference Include="NHibernate.NetCore" Version="6.0.5" />
+    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="6.0.5" />
+    <PackageReference Include="NHibernate.Extensions.NpgSql" Version="6.0.6" />
+    <PackageReference Include="NHibernate.NetCore" Version="6.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
 
