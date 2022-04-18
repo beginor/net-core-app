@@ -22,7 +22,7 @@ export class TreeItemComponent implements OnInit {
     @Input()
     public canAddChild = false;
 
-    public showAddChildUI = false;
+    public status: Status = 'view';
 
     constructor(
         private vm: CategoryService
@@ -41,21 +41,40 @@ export class TreeItemComponent implements OnInit {
     }
 
     public onEditUpdated(newNode: CategoryNode): void {
-        this.showAddChildUI = false;
+        this.status = 'view';
         if (newNode.parentId == this.node.id) {
             this.node.children.push(newNode);
         }
     }
 
     public onEditCancel(): void {
-        this.showAddChildUI = false;
+        this.status = 'view';
     }
 
-    public async deleteNode(id: string): Promise<void> {
-        const deleted = await this.vm.delete(id);
+    public async deleteNode(): Promise<void> {
+        const deleted = await this.vm.delete(this.node.id as string);
         if (deleted) {
-            await this.vm.getAll();
+            const parent = this.vm.findParent(this.node);
+            if (!!parent) {
+                const index = parent.children.indexOf(this.node);
+                parent.children.splice(index, 1);
+            }
+            else {
+                const roots = this.vm.nodes.getValue();
+                const index = roots.indexOf(this.node);
+                roots.splice(index, 1);
+            }
         }
     }
 
+    public startEdit(): void {
+        this.status = 'edit';
+    }
+
+    public toggleAdd(): void {
+        this.status = this.status === 'add' ? 'view' : 'add';
+    }
+
 }
+
+export type Status = 'view' | 'edit' | 'add';

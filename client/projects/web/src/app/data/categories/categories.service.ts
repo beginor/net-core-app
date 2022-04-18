@@ -1,8 +1,8 @@
-import { Injectable, Inject, ErrorHandler } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { ErrorHandler, Inject, Injectable } from '@angular/core';
 
 import { UiService } from 'projects/web/src/app/common';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 /** 数据类别服务 */
 @Injectable({
@@ -149,6 +149,30 @@ export class CategoryService {
 
     public createEmptyNode(): CategoryNode {
         return { children: [] } as unknown as CategoryNode;
+    }
+
+    public findParent(node: CategoryNode): CategoryNode | undefined {
+        if (!node.parentId) {
+            return undefined;
+        }
+        return this._findParentNode(this.nodes.getValue(), node);
+    }
+
+    private _findParentNode(nodes: CategoryNode[], child: CategoryNode): CategoryNode | undefined {
+        for (const node of nodes) {
+            if (child.parentId === node.id) {
+                return node;
+            }
+        }
+        for (const node of nodes) {
+            if (node.children.length > 0) {
+                const parent = this._findParentNode(node.children, child);
+                if (!!parent) {
+                    return parent;
+                }
+            }
+        }
+        return undefined;
     }
 
 }

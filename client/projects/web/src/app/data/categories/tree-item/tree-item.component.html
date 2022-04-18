@@ -2,17 +2,24 @@
   <div class="p-2 clickable" (click)="toggleExpand()">
     <svg-icon [path]="getTreeNodeIcon()"></svg-icon>
   </div>
-  <div class="p-2 bg-white border border-1 flex-grow-1 d-flex flex-row align-items-center">
-    <div class="flex-grow-1">{{node.name}}</div>
-    <div class="btn-group btn-group-sm" *ngIf="canEdit || canDelete">
-      <button class="btn btn-outline-secondary" *ngIf="canEdit">
-        <svg-icon path="bi/pencil"></svg-icon>
-      </button>
-      <button class="btn btn-outline-danger" *ngIf="canDelete">
-        <svg-icon path="bi/trash"></svg-icon>
-      </button>
+  <ng-container *ngTemplateOutlet="status === 'edit' ? editTemplate : displayTpl; context:{ ctxNode: node }">
+  </ng-container>
+  <ng-template #displayTpl let-ctxNode="ctxNode">
+    <div class="p-2 bg-white border border-1 flex-grow-1 d-flex flex-row align-items-center">
+      <div class="flex-grow-1">{{ctxNode.name}}</div>
+      <div class="btn-group btn-group-sm" *ngIf="(canEdit || canDelete) && status === 'view'">
+        <button class="btn btn-outline-secondary" *ngIf="canEdit"
+          ngbTooltip="编辑" container="body"
+          (click)="startEdit()">
+          <svg-icon path="bi/pencil"></svg-icon>
+        </button>
+        <button class="btn btn-outline-danger" *ngIf="canDelete"
+          ngbTooltip="删除" container="body" (click)="deleteNode()">
+          <svg-icon path="bi/trash"></svg-icon>
+        </button>
+      </div>
     </div>
-  </div>
+  </ng-template>
 </div>
 <div class="ms-4" *ngIf="node.children.length > 0 && expanded">
   <app-data-categories-tree-item
@@ -25,11 +32,11 @@
   <div class="d-flex flex-row align-items-center">
     <div class="p-2 clickable"
       [ngbTooltip]="'在 ' + node.name + ' 下添加新类别'"
-      placement="right" container="body" (click)="showAddChildUI = !showAddChildUI">
+      placement="right" container="body" (click)="toggleAdd()">
       <svg-icon path="bi/plus-square-dotted"></svg-icon>
     </div>
     <ng-container
-      *ngTemplateOutlet="showAddChildUI === true ? editTemplate : null; context: { ctxNode: { parentId: node.id } }">
+      *ngTemplateOutlet="status === 'add' ? editTemplate : null; context: { ctxNode: { parentId: node.id } }">
     </ng-container>
   </div>
 </div>

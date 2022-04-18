@@ -44,6 +44,7 @@ export class TreeItemEditComponent {
             model = await this.vm.update(node.id, node as CategoryModel);
         }
         if (!!model) {
+            this.node.name = '';
             this.node = this.vm.createEmptyNode();
             const newNode = model as CategoryNode;
             newNode.children = [];

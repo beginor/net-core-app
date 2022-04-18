@@ -12,15 +12,19 @@
       <div class="card" *ngIf="account.info | async as info">
         <div class="card-header d-flex justify-content-between">
           <h5 class="card-title mb-0">数据类别</h5>
+          <div *ngIf="vm.loading">
+            <svg-icon path="bi/arrow-repeat" iconClass="bi-spin"></svg-icon> 加载中...
+          </div>
           <div class="btn-group btn-group-sm">
             <button class="btn btn-outline-primary" type="button"
               [ngbPopover]="newCategoryTpl" [autoClose]="'outside'"
               container="body"
-              #newCatPopover="ngbPopover" [placement]="'bottom-right'">
+              #newCatPopover="ngbPopover" placement="bottom-right"
+              [disabled]="vm.loading">
               <svg-icon path="bi/plus"></svg-icon> 新建类别
             </button>
             <button type="button" class="btn btn-outline-secondary"
-              (click)="loadData()">
+              (click)="loadData()" [disabled]="vm.loading">
               <svg-icon path="bi/arrow-repeat"></svg-icon> 刷新
             </button>
           </div>
@@ -28,7 +32,7 @@
         <ng-template #newCategoryTpl>
           <app-data-categories-tree-item-edit [compact]="true"
             (cancel)="onNewCategoryCancel(newCatPopover)"
-            (updated)="onNewCategoryAdded(newCatPopover)">
+            (updated)="onNewCategoryAdded($event, newCatPopover)">
           </app-data-categories-tree-item-edit>
         </ng-template>
         <div class="card-body">
@@ -38,8 +42,7 @@
                 *ngFor="let node of vm.nodes | async as nodes; let i = index"
                 [node]="node" [canEdit]="info.privileges['categories.update']"
                 [canDelete]="info.privileges['categories.delete']"
-                [canAddChild]="info.privileges['categories.create']"
-              >
+                [canAddChild]="info.privileges['categories.create']">
               </app-data-categories-tree-item>
             </div>
           </div>
