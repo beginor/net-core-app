@@ -20,7 +20,7 @@ partial class Startup {
         var isDevelopment = env.IsDevelopment().ToString();
         cfg.SetProperty(Environment.ShowSql, isDevelopment);
         cfg.SetProperty(Environment.FormatSql, isDevelopment);
-        cfg.AddIdentityMappings();
+        cfg.AddIdentityMappingsForPostgres();
         cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Data.ModelMapping).Assembly);
         cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.Slpk.ModelMapping).Assembly);
         cfg.AddAttributeMappingAssembly(typeof(Beginor.GisHub.TileMap.ModelMapping).Assembly);
