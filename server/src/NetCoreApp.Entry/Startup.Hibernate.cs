@@ -9,7 +9,7 @@ using NHibernate.Cfg;
 using NHibernate.Mapping.Attributes;
 using NHibernate.NetCore;
 
-namespace Beginor.NetCoreApp.Entry; 
+namespace Beginor.NetCoreApp.Entry;
 
 partial class Startup {
 
@@ -20,7 +20,7 @@ partial class Startup {
         var isDevelopment = env.IsDevelopment().ToString();
         cfg.SetProperty(Environment.ShowSql, isDevelopment);
         cfg.SetProperty(Environment.FormatSql, isDevelopment);
-        cfg.AddIdentityMappings();
+        cfg.AddIdentityMappingsForPostgres();
         cfg.AddAttributeMappingAssembly(typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly);
         services.AddHibernate(cfg);
     }
