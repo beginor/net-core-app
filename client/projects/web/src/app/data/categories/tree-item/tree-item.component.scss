@@ -1,0 +1,12 @@
+@import "../../../../variables";
+
+.cdk-drag-preview {
+  background-color: var(--bs-white);
+  @include box-shadow(0 0 4px 0 $dark);
+}
+
+.cdk-drag-placeholder {
+  background: var(--bs-light);
+  border: dotted 2px var(--bs-secondary);
+  min-height: 3.4rem;
+}

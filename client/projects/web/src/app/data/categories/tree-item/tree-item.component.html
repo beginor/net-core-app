@@ -1,3 +1,5 @@
+<div class="" cdkDrag [cdkDragData]="node">
+<div class="cdk-drag-placeholder" *cdkDragPlaceholder></div>
 <div class="d-flex flex-row align-items-center mb-3">
   <div class="p-2 clickable" (click)="toggleExpand()">
     <svg-icon [path]="getTreeNodeIcon()"></svg-icon>
@@ -6,14 +8,21 @@
   </ng-container>
   <ng-template #displayTpl let-ctxNode="ctxNode">
     <div class="p-2 bg-white border border-1 flex-grow-1 d-flex flex-row align-items-center">
-      <div class="flex-grow-1">{{ctxNode.name}}</div>
+      <div class="flex-grow-1">
+        {{ctxNode.name}}
+      </div>
       <div class="btn-group btn-group-sm" *ngIf="(canEdit || canDelete) && status === 'view'">
-        <button class="btn btn-outline-secondary" *ngIf="canEdit"
+        <button class="btn btn-outline-secondary" type="button"
+          *ngIf="canEdit && status === 'view'" cdkDragHandle
+          ngbTooltip="拖动此按钮调整顺序" container="body">
+          <svg-icon path="bi/arrow-down-up"></svg-icon>
+        </button>
+        <button class="btn btn-outline-secondary" type="button" *ngIf="canEdit"
           ngbTooltip="编辑" container="body"
           (click)="startEdit()">
           <svg-icon path="bi/pencil"></svg-icon>
         </button>
-        <button class="btn btn-outline-danger" *ngIf="canDelete"
+        <button class="btn btn-outline-danger" type="button" *ngIf="canDelete"
           ngbTooltip="删除" container="body" (click)="deleteNode()">
           <svg-icon path="bi/trash"></svg-icon>
         </button>
@@ -21,7 +30,9 @@
     </div>
   </ng-template>
 </div>
-<div class="ms-4" *ngIf="node.children.length > 0 && expanded">
+<div class="ms-4" *ngIf="node.children.length > 0 && expanded"
+  cdkDropList [cdkDropListData]="node.children"
+  (cdkDropListDropped)="vm.handleDrop($event)">
   <app-data-categories-tree-item
     *ngFor="let child of node.children"
     [node]="child" [canEdit]="canEdit" [canDelete]="canDelete"
@@ -49,3 +60,4 @@
     (updated)="onEditUpdated($event)">
   </app-data-categories-tree-item-edit>
 </ng-template>
+</div>

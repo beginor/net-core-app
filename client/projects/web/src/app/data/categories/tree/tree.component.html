@@ -37,12 +37,15 @@
         </ng-template>
         <div class="card-body">
           <div class="row">
-            <div class="offset-lg-2 col-lg-8">
+            <div class="offset-lg-2 col-lg-8"
+              *ngIf="vm.nodes | async as nodes"
+              cdkDropList [cdkDropListData]="nodes" (cdkDropListDropped)="vm.handleDrop($event)">
               <app-data-categories-tree-item
-                *ngFor="let node of vm.nodes | async as nodes; let i = index"
+                *ngFor="let node of nodes; let i = index"
                 [node]="node" [canEdit]="info.privileges['categories.update']"
                 [canDelete]="info.privileges['categories.delete']"
-                [canAddChild]="info.privileges['categories.create']">
+                [canAddChild]="info.privileges['categories.create']"
+                >
               </app-data-categories-tree-item>
             </div>
           </div>

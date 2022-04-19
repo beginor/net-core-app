@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { ErrorHandler, Inject, Injectable } from '@angular/core';
-
-import { UiService } from 'projects/web/src/app/common';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
+
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { UiService } from 'projects/web/src/app/common';
 
 /** 数据类别服务 */
 @Injectable({
@@ -158,7 +159,10 @@ export class CategoryService {
         return this._findParentNode(this.nodes.getValue(), node);
     }
 
-    private _findParentNode(nodes: CategoryNode[], child: CategoryNode): CategoryNode | undefined {
+    private _findParentNode(
+        nodes: CategoryNode[],
+        child: CategoryNode
+    ): CategoryNode | undefined {
         for (const node of nodes) {
             if (child.parentId === node.id) {
                 return node;
@@ -173,6 +177,31 @@ export class CategoryService {
             }
         }
         return undefined;
+    }
+
+    public async handleDrop(
+        e: CdkDragDrop<CategoryNode[], CategoryNode[], CategoryNode>
+    ): Promise<void> {
+        const nodes = e.container.data;
+        const currentNode = nodes[e.currentIndex];
+        let sequence: number;
+        if (e.currentIndex === 0) {
+            sequence = currentNode.sequence / 2.0;
+        }
+        else if (e.currentIndex === nodes.length - 1) {
+            sequence = currentNode.sequence * 2.0;
+        }
+        else {
+            const previousNode = nodes[e.currentIndex - 1];
+            sequence = (currentNode.sequence + previousNode.sequence) / 2;
+        }
+        e.item.data.sequence = sequence;
+        const model = await this.update(
+            e.item.data.id as string, e.item.data as CategoryModel
+        );
+        if (!!model) {
+            moveItemInArray(nodes, e.previousIndex, e.currentIndex);
+        }
     }
 
 }

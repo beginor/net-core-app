@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Component, OnInit, Input } from '@angular/core';
 
 import {
@@ -25,7 +26,7 @@ export class TreeItemComponent implements OnInit {
     public status: Status = 'view';
 
     constructor(
-        private vm: CategoryService
+        public vm: CategoryService
     ) { }
 
     public ngOnInit(): void {

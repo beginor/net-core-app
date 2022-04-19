@@ -1,9 +1,12 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
 
-import {CategoryNode, CategoryService} from '../categories.service';
+import {
+    CategoryModel, CategoryNode, CategoryService
+} from '../categories.service';
 
 @Component({
     selector: 'app-data-categories-tree',
@@ -31,11 +34,11 @@ export class TreeComponent implements OnInit {
         }
     }
 
-    public onNewCategoryAdded(newNode: CategoryNode, popover?: NgbPopover): void {
-        if (!!popover) {
-            popover.close();
+    public onNewCategoryAdded(node: CategoryNode, pop?: NgbPopover): void {
+        if (!!pop) {
+            pop.close();
         }
-        this.vm.nodes.getValue().push(newNode);
+        this.vm.nodes.getValue().push(node);
     }
 
 }
