@@ -1,11 +1,10 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
 
 import {
-    CategoryModel, CategoryNode, CategoryService
+    CategoryNode, CategoryService
 } from '../categories.service';
 
 @Component({

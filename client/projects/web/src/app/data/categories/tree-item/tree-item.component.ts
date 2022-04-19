@@ -1,8 +1,7 @@
-import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Component, OnInit, Input } from '@angular/core';
 
 import {
-    CategoryModel, CategoryNode, CategoryService
+    CategoryNode, CategoryService
 } from '../categories.service';
 
 @Component({
