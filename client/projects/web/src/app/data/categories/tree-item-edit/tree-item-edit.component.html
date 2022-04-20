@@ -9,11 +9,11 @@
         [class.is-invalid]="!(catNameModel.valid || catNameModel.pristine)"
         [class.is-valid]="catNameModel.valid"/>
       <button class="btn btn-sm btn-outline-primary" type="button"
-              [disabled]="editForm.invalid" (click)="saveOrUpdate(node)">
+        [disabled]="editForm.invalid" (click)="saveOrUpdate(node)">
         <svg-icon path="bi/check"></svg-icon>
       </button>
       <button class="btn btn-sm btn-outline-secondary" type="button"
-              (click)="cancel.next()">
+        (click)="cancel.next()">
         <svg-icon path="bi/x"></svg-icon>
       </button>
     </div>
