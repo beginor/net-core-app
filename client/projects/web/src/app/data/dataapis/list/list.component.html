@@ -7,7 +7,11 @@
 </nav>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-12">
+    <div class="col-auto">
+      <app-category-tree-view (itemClick)="onTreeItemClick($event)">
+      </app-category-tree-view>
+    </div>
+    <div class="col">
       <div class="card" *ngIf="(account.info | async) as info">
         <div class="card-header d-flex justify-content-between">
           <h5 class="card-title mb-0">数据接口</h5>

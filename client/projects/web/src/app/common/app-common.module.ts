@@ -19,6 +19,10 @@ import {
     StorageBrowserComponent
 } from './storage-browser/storage-browser.component';
 import { NavCardComponent } from './nav-card/nav-card.component';
+import {
+    CategoryTreeViewComponent
+} from './category-tree-view/category-tree-view.component';
+import { CategoryTreeViewItemComponent } from './category-tree-view-item/category-tree-view-item.component';
 
 @NgModule({
     declarations: [
@@ -28,7 +32,9 @@ import { NavCardComponent } from './nav-card/nav-card.component';
         NavItemComponent,
         IframeComponent,
         StorageBrowserComponent,
-        NavCardComponent
+        NavCardComponent,
+        CategoryTreeViewComponent,
+        CategoryTreeViewItemComponent
     ],
     imports: [
         CommonModule,
@@ -48,7 +54,8 @@ import { NavCardComponent } from './nav-card/nav-card.component';
         NavTopBarComponent,
         NavSidebarComponent,
         IframeComponent,
-        NavCardComponent
+        NavCardComponent,
+        CategoryTreeViewComponent
     ],
     entryComponents: [
         ConfirmComponent

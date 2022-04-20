@@ -1,0 +1,14 @@
+<form class="p-1 border border-1 border-gray bg-body d-flex justify-content-end">
+  <div class="btn-group btn-group-sm">
+    <button class="btn btn-outline-secondary" type="button" [disabled]="vm.loading"
+      (click)="refresh()">
+      <svg-icon path="bi/arrow-repeat" [iconClass]="vm.loading ? 'bi': 'bi-spin'"></svg-icon>
+    </button>
+  </div>
+</form>
+<div class="mt-1 p-1 border border-1 border-gray bg-body">
+  <ng-container *ngFor="let node of vm.nodes | async">
+    <app-category-tree-view-item class="my-1 ms-1" [node]="node" (itemClick)="onItemClick($event)">
+    </app-category-tree-view-item>
+  </ng-container>
+</div>

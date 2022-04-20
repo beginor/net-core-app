@@ -1,0 +1,13 @@
+<div class="d-flex flex-row justify-content-start align-items-center">
+  <svg-icon class="clickable" [path]="getIconPath()" style="opacity: 100%;"
+    (click)="toggleExpand()"></svg-icon>
+  <div class="p-1 clickable" (click)="onItemClick(node)">{{node.name}}</div>
+  <div class="p-1 text-info ms-auto" *ngIf="!!node.resourceCount">
+    {{node.resourceCount}}
+  </div>
+</div>
+<div class="ps-2" *ngIf="node.children.length > 0 && expanded">
+  <app-category-tree-view-item class="my-1 ms-1" *ngFor="let child of node.children"
+    [node]="child" [level]="level + 1">
+  </app-category-tree-view-item>
+</div>

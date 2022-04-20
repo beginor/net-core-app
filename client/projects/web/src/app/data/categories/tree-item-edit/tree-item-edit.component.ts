@@ -2,9 +2,7 @@ import {
     Component, Input, Output, EventEmitter
 } from '@angular/core';
 
-import {
-    CategoryModel, CategoryNode, CategoryService
-} from '../categories.service';
+import { CategoryNode, CategoryService, CategoryModel } from '../../../common';
 
 @Component({
     selector: 'app-data-categories-tree-item-edit',
@@ -32,7 +30,7 @@ export class TreeItemEditComponent {
 
     public getFormClass(): string {
         return this.compact ? ''
-            : 'p-2 bg-white border border-1 flex-grow-1 d-flex flex-row align-items-center';
+            : 'p-2 bg-white border border-1 flex-grow-1 d-flex flex-row align-items-center'; // eslint-disable-line max-len
     }
 
     public async saveOrUpdate(node: CategoryNode): Promise<void> {

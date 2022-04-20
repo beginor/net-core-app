@@ -3,7 +3,7 @@ import { ErrorHandler, Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { UiService } from 'projects/web/src/app/common';
+import { UiService } from './ui.service';
 
 /** 数据类别服务 */
 @Injectable({
@@ -224,4 +224,5 @@ export interface CategoryNode {
     parentId?: string;
     sequence: number;
     children: CategoryNode[];
+    resourceCount?: number;
 }

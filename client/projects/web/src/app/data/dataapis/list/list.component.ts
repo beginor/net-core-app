@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
+import { CategoryNode } from '../../../common';
 
 import { DataApiService, DataApiModel } from '../dataapis.service';
 import { PreviewComponent } from '../preview/preview.component';
@@ -120,5 +121,9 @@ export class ListComponent implements OnInit {
             this.exportingApiDoc = false;
         });
     };
+    
+    public onTreeItemClick(node: CategoryNode): void {
+        console.log(node);
+    }
 
 }

@@ -1,8 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import {
-    CategoryNode, CategoryService
-} from '../categories.service';
+import { CategoryNode, CategoryService  } from '../../../common';
 
 @Component({
     selector: 'app-data-categories-tree-item',

@@ -3,9 +3,7 @@ import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
 
-import {
-    CategoryNode, CategoryService
-} from '../categories.service';
+import { CategoryNode, CategoryService  } from '../../../common';
 
 @Component({
     selector: 'app-data-categories-tree',
