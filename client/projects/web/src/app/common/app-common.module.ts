@@ -19,6 +19,7 @@ import {
     StorageBrowserComponent
 } from './storage-browser/storage-browser.component';
 import { NavCardComponent } from './nav-card/nav-card.component';
+import { HighlightDirective } from './highlight.directive';
 
 @NgModule({
     declarations: [
@@ -28,7 +29,8 @@ import { NavCardComponent } from './nav-card/nav-card.component';
         NavItemComponent,
         IframeComponent,
         StorageBrowserComponent,
-        NavCardComponent
+        NavCardComponent,
+        HighlightDirective
     ],
     imports: [
         CommonModule,
@@ -48,7 +50,8 @@ import { NavCardComponent } from './nav-card/nav-card.component';
         NavTopBarComponent,
         NavSidebarComponent,
         IframeComponent,
-        NavCardComponent
+        NavCardComponent,
+        HighlightDirective
     ],
     entryComponents: [
         ConfirmComponent
