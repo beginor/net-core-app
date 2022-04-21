@@ -1,14 +1,17 @@
-<form class="p-1 border border-1 border-gray bg-body d-flex justify-content-end">
-  <div class="btn-group btn-group-sm">
-    <button class="btn btn-outline-secondary" type="button" [disabled]="vm.loading"
-      (click)="refresh()">
-      <svg-icon path="bi/arrow-repeat" [iconClass]="vm.loading ? 'bi': 'bi-spin'"></svg-icon>
-    </button>
+<form class="card">
+  <div class="card-header d-flex justify-content-between">
+    <h5 class="card-title mb-0">数据类别</h5>
+    <div class="btn-group btn-group-sm">
+      <button class="btn btn-outline-secondary" type="button" [disabled]="vm.loading"
+        (click)="refresh()">
+        <svg-icon path="bi/arrow-repeat" [iconClass]="vm.loading ? 'bi': 'bi-spin'"></svg-icon>
+      </button>
+    </div>
+  </div>
+  <div class="card-body p-1">
+    <ng-container *ngFor="let node of vm.nodes | async">
+      <app-category-tree-view-item class="my-1 ms-1" [node]="node">
+      </app-category-tree-view-item>
+    </ng-container>
   </div>
 </form>
-<div class="mt-1 p-1 border border-1 border-gray bg-body">
-  <ng-container *ngFor="let node of vm.nodes | async">
-    <app-category-tree-view-item class="my-1 ms-1" [node]="node">
-    </app-category-tree-view-item>
-  </ng-container>
-</div>
