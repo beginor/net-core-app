@@ -1,7 +1,10 @@
 import {
     trigger, animate, style, state, transition, AnimationEvent
 } from '@angular/animations';
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnDestroy } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { NavigationService } from '../services/navigation.service';
 
@@ -18,15 +21,36 @@ import { NavigationService } from '../services/navigation.service';
         ])
     ]
 })
-export class NavSidebarComponent {
+export class NavSidebarComponent implements OnDestroy {
 
-    public status = 'expanded';
-    public collapsed = false;
+    public status = 'collapsed';
+    public collapsed = true;
     public onToggle = new EventEmitter<boolean>(true);
+    
+    private destroyed = new Subject<void>();
 
     constructor(
+        private bpo: BreakpointObserver,
         public navigation: NavigationService
-    ) { }
+    ) {
+        this.bpo.observe(Breakpoints.XLarge)
+            .pipe(takeUntil(this.destroyed))
+            .subscribe(result => {
+                if (result.matches) {
+                    this.status = 'expanded';
+                    this.collapsed = false;
+                }
+                else {
+                    this.status = 'collapsed';
+                    this.collapsed = true;
+                }
+            })
+    }
+    
+    public ngOnDestroy(): void {
+        this.destroyed.next();
+        this.destroyed.complete();
+    }
 
     public toggle(): void {
         if (this.status === 'collapsed') {

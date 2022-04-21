@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { LayoutModule } from '@angular/cdk/layout';
+
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import {
     NgbAlertModule, NgbDropdownModule, NgbModalModule, NgbTooltipModule,
@@ -22,7 +24,10 @@ import { NavCardComponent } from './nav-card/nav-card.component';
 import {
     CategoryTreeViewComponent
 } from './category-tree-view/category-tree-view.component';
-import { CategoryTreeViewItemComponent } from './category-tree-view-item/category-tree-view-item.component';
+import {
+    CategoryTreeViewItemComponent
+} from './category-tree-view-item/category-tree-view-item.component';
+import { HighlightDirective } from './highlight.directive';
 
 @NgModule({
     declarations: [
@@ -34,12 +39,14 @@ import { CategoryTreeViewItemComponent } from './category-tree-view-item/categor
         StorageBrowserComponent,
         NavCardComponent,
         CategoryTreeViewComponent,
-        CategoryTreeViewItemComponent
+        CategoryTreeViewItemComponent,
+        HighlightDirective
     ],
     imports: [
         CommonModule,
         FormsModule,
         RouterModule,
+        LayoutModule,
         ScrollingModule,
         NgbAlertModule,
         NgbDropdownModule,
@@ -55,7 +62,8 @@ import { CategoryTreeViewItemComponent } from './category-tree-view-item/categor
         NavSidebarComponent,
         IframeComponent,
         NavCardComponent,
-        CategoryTreeViewComponent
+        CategoryTreeViewComponent,
+        HighlightDirective
     ],
     entryComponents: [
         ConfirmComponent
