@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { LayoutModule } from '@angular/cdk/layout';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import {
     NgbAlertModule, NgbDropdownModule, NgbModalModule, NgbTooltipModule,
@@ -36,6 +37,7 @@ import { HighlightDirective } from './highlight.directive';
         CommonModule,
         FormsModule,
         RouterModule,
+        LayoutModule,
         ScrollingModule,
         NgbAlertModule,
         NgbDropdownModule,
