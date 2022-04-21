@@ -8,7 +8,7 @@
 </form>
 <div class="mt-1 p-1 border border-1 border-gray bg-body">
   <ng-container *ngFor="let node of vm.nodes | async">
-    <app-category-tree-view-item class="my-1 ms-1" [node]="node" (itemClick)="onItemClick($event)">
+    <app-category-tree-view-item class="my-1 ms-1" [node]="node">
     </app-category-tree-view-item>
   </ng-container>
 </div>

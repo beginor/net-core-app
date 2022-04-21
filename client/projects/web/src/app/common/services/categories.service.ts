@@ -14,6 +14,9 @@ export class CategoryService {
     public data = new BehaviorSubject<CategoryModel[]>([]);
     public loading = false;
     public nodes = new BehaviorSubject<CategoryNode[]>([]);
+    public currentNode = new BehaviorSubject<CategoryNode | undefined>(
+        undefined
+    );
 
     private baseUrl = `${this.apiRoot}/categories`;
 

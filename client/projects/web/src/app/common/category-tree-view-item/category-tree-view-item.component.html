@@ -1,9 +1,19 @@
 <div class="d-flex flex-row justify-content-start align-items-center">
-  <svg-icon class="clickable" [path]="getIconPath()" style="opacity: 100%;"
-    (click)="toggleExpand()"></svg-icon>
-  <div class="p-1 clickable" (click)="onItemClick(node)">{{node.name}}</div>
-  <div class="p-1 text-info ms-auto" *ngIf="!!node.resourceCount">
-    {{node.resourceCount}}
+  <ng-container *ngIf="hasChildren(); else leafNodeTpl">
+    <svg-icon class="clickable" [path]="getIconPath()"
+      (click)="toggleExpand()">
+    </svg-icon>
+  </ng-container>
+  <ng-template #leafNodeTpl>
+    <svg-icon path="bi/stop" style="opacity: 0;"></svg-icon>
+  </ng-template>
+  <div class="tree-node-info"
+    (click)="onItemClick(node)" [class.selected]="isSelected(node)"
+    [appHighlight]="'bg-light'">
+    <div class="p-1 clickable">{{node.name}}</div>
+    <div class="p-1 text-info ms-auto" *ngIf="!!node.resourceCount">
+      {{node.resourceCount}}
+    </div>
   </div>
 </div>
 <div class="ps-2" *ngIf="node.children.length > 0 && expanded">
