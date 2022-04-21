@@ -29,8 +29,6 @@ export class NavSidebarComponent implements OnDestroy {
     
     private destroyed = new Subject<void>();
 
-    private destroyed = new Subject<void>();
-
     constructor(
         private bpo: BreakpointObserver,
         public navigation: NavigationService
