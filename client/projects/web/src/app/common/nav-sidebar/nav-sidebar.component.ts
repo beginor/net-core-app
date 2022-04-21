@@ -29,6 +29,8 @@ export class NavSidebarComponent implements OnDestroy {
     
     private destroyed = new Subject<void>();
 
+    private destroyed = new Subject<void>();
+
     constructor(
         private bpo: BreakpointObserver,
         public navigation: NavigationService
@@ -46,7 +48,7 @@ export class NavSidebarComponent implements OnDestroy {
                 }
             })
     }
-    
+
     public ngOnDestroy(): void {
         this.destroyed.next();
         this.destroyed.complete();
