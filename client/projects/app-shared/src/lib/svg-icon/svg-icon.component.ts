@@ -38,7 +38,7 @@ export class SvgIconComponent implements AfterViewInit {
             return;
         }
         const svg = this.el.nativeElement.firstChild as SVGElement;
-        if (!svg) {
+        if (!!svg) {
             this.removeClasses(svg, oldClasses);
             this.addClasses(svg, val);
         }
