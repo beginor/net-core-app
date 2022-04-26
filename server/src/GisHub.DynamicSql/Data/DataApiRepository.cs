@@ -98,7 +98,6 @@ public partial class DataApiRepository : HibernateRepository<DataApi, DataApiMod
         };
     }
 
-
     public override async Task DeleteAsync(long id, CancellationToken token = default) {
         var entity = Session.Get<DataApi>(id);
         if (entity != null) {

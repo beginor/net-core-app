@@ -1,8 +1,11 @@
 using System;
+using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DynamicSql.Data;
 using Beginor.GisHub.DynamicSql.Models;
+using NHibernate;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
 
@@ -31,6 +34,13 @@ public class MappingTest : BaseTest<AutoMapper.IMapper> {
         var api = Target.Map<DataApi>(model);
         IsNotNull(api);
         IsNotNull(api.Statement);
+    }
+    
+    [Test]
+    public void _02_CanQueryApi() {
+        using var session = ServiceProvider.GetService<ISession>();
+        var query = session.Query<DataApi>().FirstOrDefault();
+        IsNotNull(query);
     }
 
 }

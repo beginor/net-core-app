@@ -6,9 +6,11 @@ create table if not exists public.base_resources
 (
     id bigint not null default snow_flake_id(),
     name character varying(32) collate pg_catalog."default",
+    description character varying(256) collate pg_catalog."default",
     category_id bigint not null,
     type character varying(64) collate pg_catalog."default" not null,
     tags character varying(32)[] collate pg_catalog."default",
+    roles character varying(32)[] collate pg_catalog."default",
     creator_id character varying(32) collate pg_catalog."default" not null,
     created_at timestamp without time zone not null,
     updater_id character varying(32) collate pg_catalog."default" not null,
@@ -44,11 +46,17 @@ comment on column public.base_resources.id
 comment on column public.base_resources.name
     is '资源名称';
 
+comment on column public.base_resources.description
+    is '资源描述';
+
 comment on column public.base_resources.type
     is '资源类型';
 
 comment on column public.base_resources.tags
     is '资源标签';
+
+comment on column public.base_resources.roles
+    is '允许访问的角色';
 
 comment on column public.base_resources.category_id
     is '资源类别id';

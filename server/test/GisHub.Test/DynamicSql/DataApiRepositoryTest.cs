@@ -1,9 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Beginor.AppFx.Core;
 using Beginor.GisHub.DynamicSql.Data;
 using Beginor.GisHub.DynamicSql.Models;
+using Microsoft.Extensions.DependencyInjection;
+using NHibernate;
 using NUnit.Framework;
 using static System.Console;
 using static NUnit.Framework.Assert;
@@ -63,6 +67,16 @@ public class DataApiRepositoryTest : BaseTest<IDataApiRepository> {
         foreach (var match in matches) {
             WriteLine(match);
         }
+    }
+    
+    [Test]
+    public void _05_CanGetById() {
+        var id = 1646193841190030916L;
+        var session = ServiceProvider.GetService<ISession>();
+        var entity = session.Query<DataApi>().FirstOrDefault(x => x.Id == id);
+        IsNotNull(entity.Statement);
+        // var model = Target.GetById(id);
+        // Assert.IsNotNull(model.Statement);
     }
 
 }

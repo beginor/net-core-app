@@ -27,7 +27,7 @@ public class HibernateTest : BaseTest<ISessionFactory> {
     [Test]
     public void _03_CanQueryBaseResource() {
         using var session = Target.OpenSession();
-        var query = session.Query<BaseResource>().Where(r => r.Type == "slpk");
+        var query = session.Query<BaseResource>().Where(r => r.Type == "data_api");
         var data = query.ToList();
         Console.WriteLine(data.ToJson());
     }
