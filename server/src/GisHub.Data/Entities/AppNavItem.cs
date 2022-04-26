@@ -3,18 +3,14 @@ using Beginor.AppFx.Core;
 using NHibernate.Extensions.NpgSql;
 using NHibernate.Mapping.Attributes;
 
-namespace Beginor.GisHub.Data.Entities; 
+namespace Beginor.GisHub.Data.Entities;
 
 /// <summary>导航节点（菜单）</summary>
 [Class(Schema = "public", Table = "app_nav_items", Where = "is_deleted = false")]
 public partial class AppNavItem : BaseEntity<long> {
-
     /// <summary>导航节点（菜单）ID</summary>
     [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]
-    public override long Id {
-        get { return base.Id; }
-        set { base.Id = value; }
-    }
+    public override long Id { get { return base.Id; } set { base.Id = value; } }
     /// <summary>父节点ID</summary>
     [Property(Name = "ParentId", Column = "parent_id", Type = "long", NotNull = false)]
     public virtual long? ParentId { get; set; }
