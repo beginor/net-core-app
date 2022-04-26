@@ -62,8 +62,9 @@ TableFilter:
     - vectortiles
     - user_access_tokens
     - data_apis
-  IncludeTables:
     - categories
+  IncludeTables:
+    - base_resources
   IgnoreNoPKTable: true
   IgnoreView: true
 
