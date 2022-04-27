@@ -43,6 +43,8 @@ public abstract class BaseTest {
         startup.ConfigureServices(services);
         ServiceProvider = services.BuildServiceProvider(false);
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+        System.AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        System.AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
     }
 
 }

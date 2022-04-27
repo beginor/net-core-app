@@ -13,7 +13,8 @@ public class ModelMapping : AutoMapper.Profile {
             .ReverseMap()
             .ForMember(dest => dest.Id, map => map.Ignore())
             // .ForMember(dest => dest.Statement, opt => opt.ConvertUsing(new StringToXmlConverter(), src => src.Statement));
-            .ForMember(dest => dest.Statement, map => map.Ignore()).AfterMap((apiModel, api) => api.Statement = StringToXmlDoc(apiModel.Statement));
+            .ForMember(dest => dest.Statement, map => map.Ignore())
+            .AfterMap((apiModel, api) => api.Statement = StringToXmlDoc(apiModel.Statement));
         CreateMap<DataApiParameter, DataApiParameterModel>()
             .ReverseMap();
     }

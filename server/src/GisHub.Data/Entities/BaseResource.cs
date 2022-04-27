@@ -6,7 +6,6 @@ namespace Beginor.GisHub.Data.Entities;
 
 /// <summary>数据资源的基类</summary>
 [Class(Schema = "public", Table = "base_resources", Where = "is_deleted = false")]
-[Discriminator(Column = "type")]
 public partial class BaseResource : BaseEntity<long> {
     /// <summary>资源ID</summary>
     [Id(Name = nameof(Id), Column = "id", Type = "long", Generator = "trigger-identity")]
@@ -25,7 +24,7 @@ public partial class BaseResource : BaseEntity<long> {
     public virtual Category Category { get; set; }
 
     /// <summary>资源类型</summary>
-    [Property(Name = nameof(Type), Column = "type", Type = "string", NotNull = true, Length = 64, Insert = false, Update = false)]
+    [Property(Name = nameof(Type), Column = "type", Type = "string", NotNull = true, Length = 64, Insert = true, Update = false)]
     public virtual string Type { get; set; }
 
     /// <summary>资源标签</summary>

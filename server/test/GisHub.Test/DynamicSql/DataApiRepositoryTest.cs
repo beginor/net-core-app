@@ -1,9 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Data.Entities;
+using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DynamicSql.Data;
 using Beginor.GisHub.DynamicSql.Models;
 using Microsoft.Extensions.DependencyInjection;
@@ -77,6 +81,68 @@ public class DataApiRepositoryTest : BaseTest<IDataApiRepository> {
         IsNotNull(entity.Statement);
         // var model = Target.GetById(id);
         // Assert.IsNotNull(model.Statement);
+    }
+    
+    [Test]
+    public void _06_CanQueryBaseResource() {
+        var session = ServiceProvider.GetService<ISession>();
+        var query = session.Query<BaseResource>()
+            .Where(x => x.Type == "data_api")
+            .Select(x => new BaseResource {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                Category = new Category {
+                    Id = x.Category.Id,
+                    Name = x.Category.Name
+                },
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt
+            });
+        var data = query.ToList();
+        IsNotEmpty(data);
+        WriteLine(data.Count);
+    }
+    
+    [Test]
+    public void _07_CanSaveDataApi() {
+        var session = ServiceProvider.GetService<ISession>();
+        IsNotNull(session);
+        var user = session.Query<AppUser>().First(u => u.UserName == "admin");
+        IsNotNull(user);
+        var category = session.Query<Category>().First();
+        IsNotNull(category);
+        var datasource = session.Query<DataSource>().First();
+        var statement = new XmlDocument();
+        statement.LoadXml("<Statement></Statement>");
+        var api = new DataApi {
+            Name = "test-api",
+            Description = "test create api",
+            Category = category,
+            Creator = user,
+            CreatedAt = DateTime.Now,
+            Updater = user,
+            UpdatedAt = DateTime.Now,
+            Tags = new []{"test"},
+            Roles = new []{"roles"},
+            DataSource = datasource,
+            WriteData = false,
+            Statement = statement,
+            Parameters = new DataApiParameter[0],
+            Columns = new DataServiceField[0],
+            GeometryColumn = "geom",
+            IdColumn = "fid"
+        };
+        AreEqual("data_api", api.Type);
+        session.Save(api);
+        session.Flush();
+        session.Clear();
+        Greater(api.Id, 0);
+        var entity = session.Query<DataApi>().FirstOrDefault(x => x.Id == api.Id);
+        IsNotNull(entity);
+        session.Delete(entity);
+        session.Flush();
+        session.Clear();
     }
 
 }
