@@ -51,6 +51,7 @@ public class ModelMapping : AutoMapper.Profile {
         CreateMap<Category, CategoryModel>()
             .ReverseMap()
             .ForMember(dest => dest.Id, map => map.Ignore());
+        CreateMap<BaseResource, BaseResourceModel>();
     }
 
 }
