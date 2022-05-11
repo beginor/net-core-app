@@ -1,7 +1,7 @@
 {
   "arcgis-js-api": {
-    "url": "https://app.gdeei.cn/arcgis-js-api/4.22/init.js",
-    "css": "https://app.gdeei.cn/arcgis-js-api/4.22/esri/themes/light/main.css",
+    "url": "http://81.71.93.249/dist/libs/arcgis-js-api/4.22/init.js",
+    "css": "http://81.71.93.249/dist/libs/arcgis-js-api/4.22/esri/themes/light/main.css",
     "dojoConfig": {
       "locale": "zh-cn",
       "async": true,
@@ -9,7 +9,7 @@
     },
     "esriConfig": {
       "locale": "zh-cn",
-      "assetsPath": "https://app.gdeei.cn/arcgis-js-api/4.22",
+      "assetsPath": "http://81.71.93.249/dist/libs/arcgis-js-api/4.22",
       "apiKey": "",
       "request": {
         "interceptors": []
@@ -82,6 +82,6 @@
     }
   },
   "code-editor": {
-    "url": "http://81.71.93.249/monaco-editor/index.html"
+    "url": "http://81.71.93.249/dist/libs/monaco-editor/index.html"
   }
 }
