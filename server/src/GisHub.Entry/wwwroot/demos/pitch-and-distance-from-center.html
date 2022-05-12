@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Filter symbols based on pitch and distance</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+</head>
+<body>
+<style>
+    body {
+        overflow: hidden;
+    }
+
+    body * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+</style>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.css" type="text/css">
+<div id="comparison-container">
+    <div id="before" class="map"></div>
+    <div id="after" class="map"></div>
+</div>
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiYmVnaW5vciIsImEiOiJja2pmMWNkbXg4azcyMzVwZHFraGc1cjYzIn0.xo0073v7zQfAicAPsr0CHQ';
+    const beforeMap = new mapboxgl.Map({
+        container: 'before',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [-77.01866, 38.888],
+        pitch: 75,
+        zoom: 15
+    });
+
+    const afterMap = new mapboxgl.Map({
+        container: 'after',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [-77.01866, 38.888],
+        pitch: 75,
+        zoom: 15
+    });
+    
+    beforeMap.once('load', () => {
+        const pointLayers = beforeMap.getStyle().layers.filter(l => l.type === 'symbol').map(l => l.id);
+        for (const layerId of pointLayers) {
+            let currFilter = beforeMap.getFilter(layerId);
+            
+            if (!currFilter) {
+                currFilter = ['==', 1, 1]
+            }
+            
+            const distance = [
+                'case',
+                ['<=', ['distance-from-center'], 1.5],
+                true,
+                false
+            ];
+            
+            const updatedFilter =  [
+                'all',
+                currFilter,
+                distance
+            ];
+            beforeMap.setFilter(layerId, updatedFilter);
+        }
+    });
+
+    afterMap.once('load', () => {
+        const poiLayers = afterMap.getStyle().layers.filter(l => l.type === 'symbol').map(l => l.id);
+
+        for (const layerId of poiLayers) {
+            const currFilter = afterMap.getFilter(layerId);
+            // Add in an additional condition for filtering based on ["pitch"] and ["distance-from-center"]
+            const updatedFilter = [
+                'all',
+                currFilter,
+                [
+                    'case',
+                    // Always show the symbol when pitch <= 60
+                    ['<=', ['pitch'], 60],
+                    true,
+                    // When pitch > 60, show the symbol only when it is close to the camera ( distance <= 2 )
+                    [
+                        'all',
+                        ['<=', ['distance-from-center'], 0.5],
+                        ['>', ['pitch'], 60]
+                    ],
+                    true,
+                    // Hide in the remaining case, far and high pitch
+                    false
+                ]
+            ];
+
+            afterMap.setFilter(layerId, updatedFilter);
+        }
+    });
+    const map = new mapboxgl.Compare(
+        beforeMap,
+        afterMap,
+        '#comparison-container'
+    );
+</script>
+
+</body>
+</html>
