@@ -2,18 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Models;
 using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DynamicSql.Models; 
 
 /// <summary>数据API模型</summary>
-public partial class DataApiModel : StringEntity {
-
-    /// <summary>数据API名称</summary>
-    [Required(ErrorMessage = "数据API名称 必须填写！")]
-    public string Name { get; set; }
-    /// <summary>数据API描述</summary>
-    public string Description { get; set; }
+public partial class DataApiModel : BaseResourceModel {
     /// <summary>数据源</summary>
     [Required(ErrorMessage = "数据源 必须填写！")]
     public StringIdNameEntity DataSource { get; set; }
@@ -32,19 +27,6 @@ public partial class DataApiModel : StringEntity {
     public string IdColumn { get; set; }
     /// <summary>输出字段中的空间列</summary>
     public string GeometryColumn { get; set; }
-    /// <summary>允许访问的角色</summary>
-    public string[] Roles { get; set; }
-    /// <summary>创建者</summary>
-    public StringIdNameEntity Creator { get; set; }
-    /// <summary>创建时间</summary>
-    [Required(ErrorMessage = "创建时间 必须填写！")]
-    public DateTime CreatedAt { get; set; }
-    /// <summary>更新者</summary>
-    public StringIdNameEntity Updater { get; set; }
-    /// <summary>更新时间</summary>
-    [Required(ErrorMessage = "更新时间 必须填写！")]
-    public DateTime UpdatedAt { get; set; }
-
 }
 
 public class DataApiParameterModel {

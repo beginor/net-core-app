@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
 namespace Beginor.GisHub.Models;
@@ -9,10 +7,12 @@ namespace Beginor.GisHub.Models;
 public partial class BaseResourceModel : StringEntity {
     /// <summary>资源名称</summary>
     public string Name { get; set; }
-    /// <summary>资源类别ID</summary>
-    public string CategoryId { get; set; }
-    /// <summary>资源类型</summary>
-    public string Type { get; set; }
+    /// <summary>资源描述</summary>
+    public string Description { get; set; }
+    /// <summary>资源类别</summary>
+    public StringIdNameEntity Category { get; set; }
+    /// <summary>允许访问的角色</summary>
+    public string[] Roles { get; set; }
     /// <summary>资源标签</summary>
     public string[] Tags { get; set; }
     /// <summary>创建者</summary>
@@ -23,10 +23,8 @@ public partial class BaseResourceModel : StringEntity {
     public StringIdNameEntity Updater { get; set; }
     /// <summary>更新时间</summary>
     public DateTime UpdatedAt { get; set; }
-    /// <summary>资源描述</summary>
-    public string Description { get; set; }
-    /// <summary>允许访问的角色</summary>
-    public string[] Roles { get; set; }
+    /// <summary>资源类型</summary>
+    public string Type { get; set; }
 }
 
 /// <summary>数据资源的基类搜索参数</summary>
