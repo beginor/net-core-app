@@ -29,6 +29,9 @@ import {
 } from './category-tree-view-item/category-tree-view-item.component';
 import { TagsEditorComponent } from './tags-editor/tags-editor.component';
 import { RolesEditorComponent } from './roles-editor/roles-editor.component';
+import {
+    CategoryEditorComponent
+} from './category-editor/category-editor.component';
 
 @NgModule({
     declarations: [
@@ -43,7 +46,8 @@ import { RolesEditorComponent } from './roles-editor/roles-editor.component';
         CategoryTreeViewComponent,
         CategoryTreeViewItemComponent,
         TagsEditorComponent,
-        RolesEditorComponent
+        RolesEditorComponent,
+        CategoryEditorComponent,
     ],
     imports: [
         CommonModule,
@@ -68,10 +72,8 @@ import { RolesEditorComponent } from './roles-editor/roles-editor.component';
         HighlightDirective,
         CategoryTreeViewComponent,
         TagsEditorComponent,
-        RolesEditorComponent
-    ],
-    entryComponents: [
-        ConfirmComponent
+        RolesEditorComponent,
+        CategoryEditorComponent
     ]
 })
 export class AppCommonModule { }

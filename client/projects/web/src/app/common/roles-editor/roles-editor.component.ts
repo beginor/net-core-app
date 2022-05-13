@@ -16,6 +16,9 @@ export class RolesEditorComponent implements OnInit {
     @Input()
     public set roles(val: string[]) {
         this._roles = val;
+        if (!val) {
+            return;
+        }
         if (val.length === 0) {
             this.addDefaultRoles();
         }
@@ -32,12 +35,18 @@ export class RolesEditorComponent implements OnInit {
         this.vm.searchModel.skip = 0;
         this.vm.searchModel.take = 999;
         await this.vm.search();
+        if (!this.roles) {
+            return;
+        }
         if (this.roles.length == 0) {
             this.addDefaultRoles();
         }
     }
     
     public isRoleChecked(role: string): boolean {
+        if (!this.roles) {
+            return false;
+        }
         return this.roles.indexOf(role) > -1;
     }
 

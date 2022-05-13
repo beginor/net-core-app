@@ -84,6 +84,8 @@
         </ng-container>
       </div>
     </div>
+    <app-tags-editor class="mb-3" [tags]="model.tags!" [editable]="editable">
+    </app-tags-editor>
   </div>
   <div *ngIf="info.privileges['app_privileges.update'] && editable"
     class="card-footer d-flex justify-content-between">

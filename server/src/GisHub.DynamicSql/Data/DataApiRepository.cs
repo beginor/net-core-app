@@ -139,6 +139,9 @@ public partial class DataApiRepository : HibernateRepository<DataApi, DataApiMod
         if (entity.DataSource.Id.ToString() != model.DataSource.Id) {
             entity.DataSource = Mapper.Map<DataSource>(model.DataSource);
         }
+        if (entity.Category.Id.ToString() != model.DataSource.Id) {
+            entity.Category = Mapper.Map<Category>(model.Category);
+        }
         Mapper.Map(model, entity);
         entity.Statement.DocumentElement?.SetAttribute("Id", id.ToString());
         entity.Updater = user;

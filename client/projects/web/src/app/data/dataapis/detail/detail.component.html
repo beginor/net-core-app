@@ -33,6 +33,12 @@
         [(ngModel)]="model.description" [disabled]="!editable"
       ></textarea>
     </div>
+    <app-category-editor class="mb-3" [category]="model.category!" [editable]="editable">
+    </app-category-editor>
+    <app-roles-editor class="mb-3" [roles]="model.roles!" [editable]="editable">
+    </app-roles-editor>
+    <app-tags-editor class="mb-3" [tags]="model.tags!" [editable]="editable">
+    </app-tags-editor>
     <div class="mb-3">
       <label class="form-label text-muted" for="dataSource">数据源 <i class="text-danger">*</i> </label>
       <select class="form-select" id="dataSource" name="dataSource" required
@@ -56,17 +62,6 @@
         <label class="form-check-label" for="writeData">
           此接口向数据源写入数据
         </label>
-      </div>
-    </div>
-    <div class="mb-3">
-      <label class="form-label text-muted" for="roles">允许访问的角色 </label>
-      <div class="form-text">
-        <div class="form-check form-check-inline form-switch" *ngFor="let role of vm.roles">
-          <input class="form-check-input" type="checkbox" [id]="role.id"
-            [name]="role.name" [disabled]="!editable" [value]="role.name"
-            [checked]="isRoleChecked(role.name)" (change)="toggleCheckedRole(role.name)" />
-          <label class="form-check-label text-muted" [htmlFor]="role.id">{{role.description}}</label>
-        </div>
       </div>
     </div>
   </div>

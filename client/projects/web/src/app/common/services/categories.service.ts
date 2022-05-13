@@ -40,7 +40,8 @@ export class CategoryService {
                     name: x.name,
                     parentId: x.parentId,
                     sequence: x.sequence,
-                    children: []
+                    children: [],
+                    level: 0
                 }));
             roots.forEach(x => this.findChildren(x, models));
             this.data.next(models);
@@ -65,7 +66,8 @@ export class CategoryService {
                 name: x.name,
                 parentId: x.parentId,
                 sequence: x.sequence,
-                children: []
+                children: [],
+                level: parent.level + 1
             }));
         if (parent.children.length > 0) {
             parent.children.forEach(x => {
@@ -206,6 +208,24 @@ export class CategoryService {
             moveItemInArray(nodes, e.previousIndex, e.currentIndex);
         }
     }
+    
+    public getFlattenNodes(nodes: CategoryNode[]): CategoryNode[] {
+        const result: CategoryNode[] = [];
+        this.flattenNodes(nodes, result);
+        return result;
+    }
+
+    private flattenNodes(
+        source: CategoryNode[],
+        target: CategoryNode[]
+    ): void {
+        for (const node of source) {
+            target.push(node);
+            if (!!node.children && node.children.length > 0) {
+                this.flattenNodes(node.children, target);
+            }
+        }
+    }
 
 }
 
@@ -228,4 +248,5 @@ export interface CategoryNode {
     sequence: number;
     children: CategoryNode[];
     resourceCount?: number;
+    level: number;
 }

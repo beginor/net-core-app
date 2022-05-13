@@ -61,6 +61,9 @@ export class DetailComponent implements OnInit {
             const model = await this.vm.getById(this.id);
             if (!!model) {
                 this.model = model;
+                if (this.editable && !model.tags) {
+                    model.tags = [];
+                }
             }
         }
     }

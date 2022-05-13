@@ -14,7 +14,11 @@ public class ModelMapping : AutoMapper.Profile {
             .ForMember(dest => dest.Id, map => map.Ignore())
             // .ForMember(dest => dest.Statement, opt => opt.ConvertUsing(new StringToXmlConverter(), src => src.Statement));
             .ForMember(dest => dest.Statement, map => map.Ignore())
-            .AfterMap((apiModel, api) => api.Statement = StringToXmlDoc(apiModel.Statement));
+            .AfterMap((apiModel, api) => {
+                    api.Statement = StringToXmlDoc(apiModel.Statement);
+                    api.Type = "data_api";
+                }
+            );
         CreateMap<DataApiParameter, DataApiParameterModel>()
             .ReverseMap();
     }

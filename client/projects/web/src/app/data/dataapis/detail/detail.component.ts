@@ -27,7 +27,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: DataApiModel = { id: '' };
+    public model: DataApiModel = { id: '', roles: [], tags: [], category: {} };
     public dataSources: DataSourceModel[] = [];
     public dataSource?: DataSourceModel;
 
@@ -66,6 +66,12 @@ export class DetailComponent implements OnInit {
                 if (!model.roles) {
                     model.roles = [];
                 }
+                if (!model.tags) {
+                    model.tags = [];
+                }
+                if (!model.category) {
+                    model.category = {};
+                }
                 this.model = model;
                 this.dataSource = this.dataSources.find(
                     ds => ds.id === model.dataSource?.id
@@ -73,8 +79,7 @@ export class DetailComponent implements OnInit {
             }
         }
         else {
-            const roles = this.account.info.getValue().roles;
-            this.model.roles = Object.keys(roles);
+            this.model.roles = [];
             this.model.statement = [
                 '<Statement Id="">',
                 '  <!-- 动态 SQL 标签请参考 https://smartsql.net/config/sqlmap.html#statement-筛选子标签 -->', // eslint-disable-line max-len
