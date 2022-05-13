@@ -1,0 +1,15 @@
+<label class="form-label text-muted">标签</label>
+<div class="input-group">
+  <div class="input-group">
+    <button class="btn btn-outline-secondary" type="button"
+      *ngFor="let t of tags" ngbTooltip="点击删除这个标签" container="body"
+      [disabled]="!editable" (click)="delTag(t)">{{t}}</button>
+    <input class="form-control" type="text" id="newTag" name="newTag"
+      placeholder="请输入新标签 ..." *ngIf="editable" [(ngModel)]="newTag" />
+    <ng-container *ngIf="!!newTag">
+      <button class="btn btn-outline-secondary" (click)="addNewTag()">
+        <svg-icon path="bi/plus"></svg-icon>
+      </button>
+    </ng-container>
+  </div>
+</div>

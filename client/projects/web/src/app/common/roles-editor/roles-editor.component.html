@@ -1,0 +1,9 @@
+<label class="form-label text-muted">允许访问的角色</label>
+<div class="form-text">
+  <div class="form-check form-check-inline form-switch" *ngFor="let role of vm.data | async">
+    <input class="form-check-input" type="checkbox" [id]="role.id"
+      [name]="role.name" [disabled]="!editable" [value]="role.name"
+      [checked]="isRoleChecked(role.name)" (change)="toggleCheckedRole(role.name)" />
+    <label class="form-check-label text-muted" [htmlFor]="role.id">{{role.description}}</label>
+  </div>
+</div>
