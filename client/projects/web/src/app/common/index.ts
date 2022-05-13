@@ -7,3 +7,4 @@ export * from './services/storage.service';
 export * from './nav-card/nav-card.component';
 export * from './highlight.directive';
 export * from './services/categories.service';
+export * from './services/resorces.service';

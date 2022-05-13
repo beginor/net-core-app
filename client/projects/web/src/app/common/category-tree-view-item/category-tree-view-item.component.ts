@@ -34,7 +34,13 @@ export class CategoryTreeViewItemComponent {
     }
     
     public onItemClick(node: CategoryNode): void {
-        this.vm.currentNode.next(node);
+        const currNode = this.vm.currentNode.getValue();
+        if (!currNode || currNode.id != node.id) {
+            this.vm.currentNode.next(node);
+        }
+        else {
+            this.vm.currentNode.next(undefined);
+        }
     }
     
     public isSelected(node: CategoryNode): boolean {

@@ -8,7 +8,9 @@
 <div class="container-fluid">
   <div class="row g-0">
     <div class="col-auto pe-1">
-      <app-category-tree-view (itemClick)="onTreeItemClick($event)">
+      <app-category-tree-view
+        resourceType="data_api"
+        (itemClick)="onTreeItemClick($event)">
       </app-category-tree-view>
     </div>
     <div class="col ps-1">

@@ -1,5 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { CategoryNode, CategoryService } from '../services/categories.service';
 
@@ -8,10 +7,8 @@ import { CategoryNode, CategoryService } from '../services/categories.service';
     templateUrl: './category-editor.component.html',
     styleUrls: ['./category-editor.component.scss']
 })
-export class CategoryEditorComponent implements OnInit, OnDestroy {
-    
-    private node$: Subscription;
-    
+export class CategoryEditorComponent implements OnInit {
+
     @Input()
     public category: { id?: string, name?: string; } = {};
     @Input()
@@ -22,13 +19,11 @@ export class CategoryEditorComponent implements OnInit, OnDestroy {
     constructor(
         public vm: CategoryService
     ) {
-        this.node$ = this.vm.nodes.subscribe(nodes => {
-            this.nodes = this.vm.getFlattenNodes(nodes);
-        });
+        const nodes = this.vm.nodes.getValue();
+        this.nodes = this.vm.getFlattenNodes(nodes);
     }
 
     public async ngOnInit(): Promise<void> {
-        await this.vm.getAll()
         if (!this.category) {
             return;
         }
@@ -36,10 +31,6 @@ export class CategoryEditorComponent implements OnInit, OnDestroy {
             this.category.id = this.nodes[0].id;
             this.category.name = this.nodes[0].name;
         }
-    }
-    
-    public ngOnDestroy(): void {
-        this.node$.unsubscribe();
     }
     
     public getStyle(level: number): { [key: string]: string } {

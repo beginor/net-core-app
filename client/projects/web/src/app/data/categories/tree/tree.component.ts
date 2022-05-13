@@ -18,11 +18,11 @@ export class TreeComponent implements OnInit {
     ) { }
 
     public async ngOnInit(): Promise<void> {
-        await this.vm.getAll();
+        await this.loadData();
     }
 
-    public loadData(): void {
-        void this.vm.getAll();
+    public async loadData(): Promise<void> {
+        await this.vm.getAll();
     }
 
     public onNewCategoryCancel(popover?: NgbPopover): void {

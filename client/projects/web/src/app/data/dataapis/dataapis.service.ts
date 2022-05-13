@@ -307,6 +307,7 @@ export interface DataApiSearchModel {
     take: number;
     /** 搜索关键字 */
     keywords?: string;
+    category?: string;
 }
 
 /** 数据API 搜索结果 */

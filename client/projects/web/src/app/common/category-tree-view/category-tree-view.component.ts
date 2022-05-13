@@ -1,4 +1,6 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+    Component, EventEmitter, Input, OnDestroy, OnInit, Output
+} from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -10,7 +12,8 @@ import { CategoryNode, CategoryService } from '../services/categories.service';
     styleUrls: ['./category-tree-view.component.scss']
 })
 export class CategoryTreeViewComponent implements OnInit, OnDestroy {
-    
+    @Input()
+    public resourceType?: string
     @Output()
     public itemClick = new EventEmitter<CategoryNode>();
     
@@ -29,7 +32,7 @@ export class CategoryTreeViewComponent implements OnInit, OnDestroy {
             this.itemClick.next(node!);
         });
         if (this.vm.nodes.getValue().length === 0) {
-            void this.vm.getAll();
+            void this.loadData();
         }
     }
     
@@ -40,12 +43,16 @@ export class CategoryTreeViewComponent implements OnInit, OnDestroy {
     }
 
     public refresh(): void {
-        void this.vm.getAll();
+        void this.loadData();
     }
     
     public onItemClick(node: CategoryNode): void {
         this.currentNode = node;
         this.itemClick.next(node);
+    }
+    
+    private async loadData(): Promise<void> {
+        await this.vm.getAll(this.resourceType);
     }
 
 }

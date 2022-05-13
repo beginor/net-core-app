@@ -123,7 +123,13 @@ export class ListComponent implements OnInit {
     };
     
     public onTreeItemClick(node: CategoryNode): void {
-        console.log(node);
+        if (!node) {
+            delete this.vm.searchModel.category;
+        }
+        else {
+            this.vm.searchModel.category = node.id;
+        }
+        void this.loadData();
     }
 
 }

@@ -70,7 +70,9 @@ public partial class DataApiRepository : HibernateRepository<DataApi, DataApiMod
                 );
             }
         }
-        // todo: 添加自定义查询；
+        if (model.Category > 0) {
+            query = query.Where(e => e.Category.Id == model.Category);
+        }
         var total = await query.LongCountAsync();
         var data = await query.Select(x => new DataApi {
                 Id = x.Id,

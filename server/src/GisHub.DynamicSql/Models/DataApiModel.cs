@@ -41,6 +41,8 @@ public class DataApiParameterModel {
 public partial class DataApiSearchModel : PaginatedRequestModel {
     /// <summary>搜索关键字</summary>
     public string Keywords { get; set; }
+    /// <summary>资源类别</summary>
+    public long Category { get; set; }
 }
 
 /// <summary>数据API结果</summary>

@@ -10,6 +10,13 @@
     <div class="p-2 bg-white border border-1 flex-grow-1 d-flex flex-row align-items-center">
       <div class="flex-grow-1">
         {{ctxNode.name}}
+        <ng-container *ngIf="ctxNode.resourceCount">
+          <span class="text-info clickable"
+            [ngbTooltip]=" ctxNode.name + '有' + ctxNode.resourceCount + '项数据'"
+            placement="right" container="body">
+            {{ctxNode.resourceCount}}
+          </span>
+        </ng-container>
       </div>
       <div class="btn-group btn-group-sm" *ngIf="(canEdit || canDelete) && status === 'view'">
         <button class="btn btn-outline-secondary" type="button"
@@ -23,7 +30,8 @@
           <svg-icon path="bi/pencil"></svg-icon>
         </button>
         <button class="btn btn-outline-danger" type="button" *ngIf="canDelete"
-          ngbTooltip="删除" container="body" (click)="deleteNode()">
+          ngbTooltip="删除" container="body" (click)="deleteNode()"
+          [disabled]="ctxNode.resourceCount > 0">
           <svg-icon path="bi/trash"></svg-icon>
         </button>
       </div>

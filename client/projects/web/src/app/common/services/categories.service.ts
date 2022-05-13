@@ -1,14 +1,13 @@
-import { HttpClient } from '@angular/common/http';
 import { ErrorHandler, Inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CategoryCountModel, ResourceService } from './resorces.service';
 import { UiService } from './ui.service';
 
 /** 数据类别服务 */
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CategoryService {
 
     public data = new BehaviorSubject<CategoryModel[]>([]);
@@ -24,11 +23,12 @@ export class CategoryService {
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService,
-        private errorHandler: ErrorHandler
+        private errorHandler: ErrorHandler,
+        private resource: ResourceService
     ) { }
 
     /** 获取全部数据类别 */
-    public async getAll(): Promise<void> {
+    public async getAll(resourceType?: string): Promise<void> {
         this.loading = true;
         try {
             const models = await lastValueFrom(
@@ -46,6 +46,7 @@ export class CategoryService {
             roots.forEach(x => this.findChildren(x, models));
             this.data.next(models);
             this.nodes.next(roots);
+            await this.getResourceCount(resourceType);
         }
         catch (ex: unknown) {
             this.errorHandler.handleError(ex);
@@ -213,6 +214,29 @@ export class CategoryService {
         const result: CategoryNode[] = [];
         this.flattenNodes(nodes, result);
         return result;
+    }
+    
+    private async getResourceCount(type?: string): Promise<void> {
+        const countModels = await this.resource.getResourceCount(type);
+        this.updateResourceCount(
+            this.nodes.getValue(),
+            countModels
+        )
+    }
+    
+    private updateResourceCount(
+        nodes: CategoryNode[],
+        countModels: CategoryCountModel[]
+    ): void {
+        for (const node of nodes) {
+            const countModel = countModels.find(c => c.categoryId === node.id);
+            if (!!countModel) {
+                node.resourceCount = countModel.count;
+            }
+            if (!!node.children && node.children.length > 0) {
+                this.updateResourceCount(node.children, countModels);
+            }
+        }
     }
 
     private flattenNodes(
