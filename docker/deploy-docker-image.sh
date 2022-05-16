@@ -9,7 +9,7 @@ docker tag beginor/gishub 81.71.93.249:5000/beginor/gishub \
 # Deploy to server
 ssh lighthouse -t '
 cd docker/gishub
-docker-compose down
+docker compose down
 docker rmi 127.0.0.1:5000/beginor/gishub
-docker-compose up -d
+docker compose up -d
 '
