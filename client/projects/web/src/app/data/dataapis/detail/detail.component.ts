@@ -59,7 +59,6 @@ export class DetailComponent implements OnInit {
 
     public async ngOnInit(): Promise<void> {
         this.dataSources = await this.dataSourceService.getAll();
-        await this.vm.getAllRoles();
         if (this.id !== '0') {
             const model = await this.vm.getById(this.id);
             if (!!model) {
@@ -119,26 +118,6 @@ export class DetailComponent implements OnInit {
             id: this.dataSource?.id,
             name: this.dataSource?.name
         };
-    }
-
-    public isRoleChecked(role: string): boolean {
-        if (!this.model.roles) {
-            return false;
-        }
-        return this.model.roles.indexOf(role) > -1;
-    }
-
-    public toggleCheckedRole(role: string): void {
-        if (!this.model.roles) {
-            return;
-        }
-        const idx = this.model.roles.indexOf(role);
-        if (idx > -1) {
-            this.model.roles.splice(idx, 1);
-        }
-        else {
-            this.model.roles.push(role);
-        }
     }
 
 }
