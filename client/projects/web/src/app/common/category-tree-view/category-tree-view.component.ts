@@ -51,7 +51,7 @@ export class CategoryTreeViewComponent implements OnInit, OnDestroy {
         this.itemClick.next(node);
     }
     
-    private async loadData(): Promise<void> {
+    public async loadData(): Promise<void> {
         await this.vm.getAll(this.resourceType);
     }
 

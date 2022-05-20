@@ -8,3 +8,4 @@ export * from './nav-card/nav-card.component';
 export * from './highlight.directive';
 export * from './services/categories.service';
 export * from './services/resorces.service';
+export * from './category-tree-view/category-tree-view.component';
