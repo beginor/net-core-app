@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
-import { CategoryNode } from '../../../common';
+import { CategoryNode, CategoryTreeViewComponent } from '../../../common';
 
 import { DataApiService, DataApiModel } from '../dataapis.service';
 import { PreviewComponent } from '../preview/preview.component';
@@ -18,6 +18,9 @@ export class ListComponent implements OnInit {
 
     public exportingApiDoc = false;
     public selectedApis: string[] = [];
+    
+    @ViewChild('categoryTreeView', { static: true })
+    public categoryTreeView!: CategoryTreeViewComponent;
 
     constructor(
         private router: Router,
@@ -27,8 +30,9 @@ export class ListComponent implements OnInit {
         public vm: DataApiService,
     ) { }
 
-    public ngOnInit(): void {
-        void this.loadData();
+    public async ngOnInit(): Promise<void> {
+        await this.categoryTreeView.loadData();
+        this.loadData();
     }
 
     public loadData(): void {
