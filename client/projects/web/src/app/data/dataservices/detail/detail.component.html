@@ -16,7 +16,7 @@
   </div>
   <div class="card-body">
     <div class="mb-3">
-      <label class="form-label text-muted" for="name">名称 <i class="text-danger">*</i> </label>
+      <label class="form-label text-muted" for="name">服务名称 <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="name" name="name"
         placeholder="请输入数据服务名称 ..." required
         [disabled]="!editable"
@@ -27,13 +27,19 @@
       />
     </div>
     <div class="mb-3">
-      <label class="form-label text-muted" for="description">描述 </label>
+      <label class="form-label text-muted" for="description">服务描述 </label>
       <input class="form-control" type="text" id="description" name="description"
         placeholder="请输入数据服务描述 ..."
         [disabled]="!editable"
         [(ngModel)]="model.description"
       />
     </div>
+    <app-category-editor class="mb-3" [category]="model.category!" [editable]="editable">
+    </app-category-editor>
+    <app-roles-editor class="mb-3" [roles]="model.roles!" [editable]="editable">
+    </app-roles-editor>
+    <app-tags-editor class="mb-3" [tags]="model.tags!" [editable]="editable">
+    </app-tags-editor>
     <div class="row">
       <div class="col">
         <div class="mb-3">

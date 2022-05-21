@@ -439,6 +439,12 @@ export interface DataServiceModel {
     name?: string;
     /** 数据服务描述 */
     description?: string;
+    /** 类别 */
+    category?: { id?: string; name?: string };
+    /** 允许的角色 */
+    roles?: string[];
+    /** 标签 */
+    tags?: string[];
     /** 数据源 */
     dataSource?: { id?: string; name?: string };
     /** 数据表/视图架构 */
@@ -457,12 +463,6 @@ export interface DataServiceModel {
     presetCriteria?: string;
     /** 默认排序 */
     defaultOrder?: string;
-    /** 标签 */
-    tags?: string[];
-    /** 是否删除 */
-    isDeleted?: boolean;
-    /** 允许的角色 */
-    roles?: string[];
     /** 支持矢量切片 */
     supportMvt?: boolean;
     /** 矢量切片缓存时间 */
@@ -491,6 +491,8 @@ export interface DataServiceSearchModel {
     take: number;
     /** 数据服务名称或者数据表关键字 */
     keywords?: string;
+    /** 类别 */
+    category?: string;
 }
 
 /** 数据服务 搜索结果 */

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
+import { CategoryNode, CategoryTreeViewComponent } from '../../../common';
 
 import { DataServiceModel, DataServiceService } from '../dataservices.service';
 import { PreviewComponent } from '../preview/preview.component';
@@ -13,6 +14,9 @@ import { PreviewComponent } from '../preview/preview.component';
     styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
+    
+    @ViewChild('categoryTreeView', { static: true })
+    public categoryTreeView!: CategoryTreeViewComponent;
 
     constructor(
         private router: Router,
@@ -22,8 +26,9 @@ export class ListComponent implements OnInit {
         public vm: DataServiceService
     ) { }
 
-    public ngOnInit(): void {
-        void this.loadData();
+    public async ngOnInit(): Promise<void> {
+        await this.categoryTreeView.loadData();
+        await this.loadData();
     }
 
     public async loadData(): Promise<void> {
@@ -62,6 +67,16 @@ export class ListComponent implements OnInit {
         );
         Object.assign(ref.componentInstance, { ds });
         // ref.componentInstance.ds = ds;
+    }
+    
+    public onTreeItemClick(node: CategoryNode): void {
+        if (!node) {
+            delete this.vm.searchModel.category;
+        }
+        else {
+            this.vm.searchModel.category = node.id;
+        }
+        void this.loadData();
     }
 
 }
