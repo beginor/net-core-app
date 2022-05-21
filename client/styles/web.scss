@@ -2,9 +2,9 @@ $enable-shadows: true;
 $enable-rounded: true;
 $enable-caret: true;
 
-$border-radius: 2px;
-$border-radius-sm: 2px;
-$border-radius-lg: 2px;
+$border-radius: 0.375rem;
+$border-radius-sm: 0.25rem;
+$border-radius-lg: 0.5rem;
 
 @import '../node_modules/bootstrap/scss/bootstrap';
 
@@ -47,5 +47,8 @@ $border-radius-lg: 2px;
   --#{$variable-prefix}font-weight-bold: #{$font-weight-bold};
   --#{$variable-prefix}border-width: #{$border-width};
   --#{$variable-prefix}border-color: #{$border-color};
-  --#{$variable-prefix}navbar-dark-active-color: #{$navbar-dark-active-color}
+  --#{$variable-prefix}navbar-dark-active-color: #{$navbar-dark-active-color};
+  --#{$variable-prefix}border-radius: #{$border-radius};
+  --#{$variable-prefix}border-radius-sm: #{$border-radius-sm};
+  --#{$variable-prefix}border-radius-lg: #{$border-radius-lg};
 }

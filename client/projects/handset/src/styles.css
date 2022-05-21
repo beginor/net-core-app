@@ -1,56 +1,40 @@
-@import "variables";
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/reboot";
-@import "~bootstrap/scss/grid";
-@import "~bootstrap/scss/utilities";
-@import "reset";
-
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import "~material-design-icons/iconfont/material-icons.css";
-
-html {
-  @include full-width-height();
-  @include no-margin-padding();
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
   overflow: hidden;
 }
 
-body {
-  @extend html;
+.app-root {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
-  .app-root {
-    display: block;
-    @include full-width-height();
-    @include no-margin-padding();
+.loading-indicator {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 200px;
+  height: 48px;
+  margin-left: -100px;
+  margin-top: -50px;
+  text-align: center;
+  line-height: 48px;
+}
 
-    .loading-indicator {
-      position: fixed;
-      left: 50%;
-      top: 50%;
-      width: 200px;
-      height: 48px;
-      margin-left: -100px;
-      margin-top: -50px;
-      text-align: center;
-      line-height: 48px;
-    }
-  }
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
 
-  .toolbar-spacer {
-    flex: 1 1 auto;
-  }
+.mat-icon-spinner {
+  animation: mat-icon-spin 2s infinite linear;
+}
 
-  .mat-icon-spinner {
-    animation: mat-icon-spin 2s infinite linear;
-  }
-
-  @keyframes mat-icon-spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(1turn);
-    }
-  }
+@keyframes mat-icon-spin {
+  0% { transform: rotate(0deg); }
+  to { transform: rotate(1turn); }
 }

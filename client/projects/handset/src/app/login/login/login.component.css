@@ -1,16 +1,12 @@
 :host {
+  display: block;
+}
 
-  .login-form {
+.login-form .form-field {
+  width: 100%;
+}
 
-    .form-field {
-      width: 100%;
-    }
-
-    .login-button {
-      width: 100%;
-      margin-top: 1rem;
-    }
-
-  }
-
+.login-form .login-button {
+  width: 100%;
+  margin-top: 1rem;
 }

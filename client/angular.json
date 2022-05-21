@@ -117,7 +117,11 @@
               }
             ],
             "styles": [
-              "styles/handset.css",
+              {
+                "input": "styles/handset.css",
+                "bundleName": "handset",
+                "inject": true
+              },
               "projects/handset/src/styles.css"
             ],
             "scripts": []

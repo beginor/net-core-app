@@ -8,12 +8,12 @@
 .sidebar-body {
   flex: 1;
   display: block;
-  width: var(--nav-sidebar-width);
+  width: var(--app-nav-sidebar-width);
 }
 
 .sidebar-toggler {
   cursor: pointer;
-  height: var(--nav-sidebar-item-height);
+  height: var(--app-nav-sidebar-item-height);
   display: flex;
   align-items: center;
 }

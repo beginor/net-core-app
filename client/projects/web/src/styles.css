@@ -1,18 +1,12 @@
 :root {
-  --navbar-height: 3.5rem;
-  --detail-zIndex: 100;
-  --nav-sidebar-width: 220px;
-  --nav-sidebar-collapsed-width: 54px;
-  --nav-sidebar-item-height: 48px;
+  --app-navbar-height: 3.5rem;
+  --app-detail-zIndex: 100;
+  --app-nav-sidebar-width: 220px;
+  --app-nav-sidebar-collapsed-width: 54px;
+  --app-nav-sidebar-item-height: 48px;
 }
 
-html {
-  width: 100%; height: 100%;
-  margin: 0; padding: 0;
-  overflow: hidden;
-}
-
-body {
+html, body {
   width: 100%; height: 100%;
   margin: 0; padding: 0;
   overflow: hidden;

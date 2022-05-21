@@ -1,8 +1,7 @@
-@import "../variables";
-
 :host {
+  display: block;
+}
 
-  .drawer-container {
-    height: 100%;
-  }
+.drawer-container {
+  height: 100%;
 }
