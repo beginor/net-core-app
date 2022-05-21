@@ -14,7 +14,8 @@ public class ModelMapping : AutoMapper.Profile {
             .ReverseMap();
         CreateMap<DataService, DataServiceModel>()
             .ReverseMap()
-            .ForMember(dest => dest.Id, map => map.Ignore());
+            .ForMember(dest => dest.Id, map => map.Ignore())
+            .ForMember(dest => dest.Type, map => map.Ignore());
         CreateMap<DataServiceField, DataServiceFieldModel>()
             .ReverseMap();
 

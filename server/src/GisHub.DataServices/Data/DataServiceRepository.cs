@@ -12,6 +12,7 @@ using Dapper;
 using NHibernate;
 using NHibernate.Linq;
 using Beginor.GisHub.Common;
+using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DataServices.Models;
 
 namespace Beginor.GisHub.DataServices.Data;
@@ -48,42 +49,40 @@ public partial class DataServiceRepository : HibernateRepository<DataService, Da
 
     /// <summary>搜索 数据源（数据表或视图） ，返回分页结果。</summary>
     public async Task<PaginatedResponseModel<DataServiceModel>> SearchAsync(
-        DataServiceSearchModel model,
-        string[] roles
+        DataServiceSearchModel model
     ) {
         var query = Session.Query<DataService>();
-        var totalSql = new StringBuilder(" select count(ds.*) ");
-        var dataSql = new StringBuilder(" select ds.id, ds.name, ds.description, ds.schema, ds.table_name, ds.primary_key_column, ds.display_column, ds.geometry_column, ds.support_mvt, ds.mvt_min_zoom, ds.mvt_max_zoom ");
-        var body = new StringBuilder();
-        body.AppendLine(" from public.data_services as ds ");
-        // body.AppendLine(" inner join connections c on c.id = ds.connection_id and c.is_deleted = false ");
-        body.AppendLine(" where (ds.is_deleted = false) and (ds.roles && @roles::character varying[]) ");
-        //
-        long id = 0;
         if (model.Keywords.IsNotNullOrEmpty()) {
-            body.AppendLine(
-                long.TryParse(model.Keywords, out id)
-                    ? " and (ds.id = @id) "
-                    : " and (ds.name like '%' || @keywords || '%' or ds.table_name like '%' || @keywords || '%') "
-            );
+            var keywords = model.Keywords.Trim();
+            if (long.TryParse(keywords, out var id)) {
+                query = query.Where(e => e.Id == id);
+            }
+            else {
+                query = query.Where(
+                    e => e.Name.Contains(keywords) || e.Description.Contains(keywords)
+                );
+            }
         }
-        var param = new {
-            roles,
-            id,
-            keywords = model.Keywords,
-            take = model.Take,
-            skip = model.Skip
-        };
-        totalSql.Append(body.ToString());
-        var total = await Session.Connection.ExecuteScalarAsync<long>(totalSql.ToString(), param);
-        dataSql.Append(body.ToString());
-        dataSql.AppendLine(" order by ds.id desc ");
-        dataSql.AppendLine(" limit @take offset @skip ");
-        // Dapper.SqlMapper.AddTypeHandler(new JsonTypedHandler<DataSourceField[]>());
-        var data = await Session.Connection.QueryAsync<DataService>(
-            sql: dataSql.ToString(),
-            param: param
-        );
+        if (model.Category > 0) {
+            query = query.Where(e => e.Category.Id == model.Category);
+        }
+        var total = await query.LongCountAsync();
+        var data = await query.Select(x => new DataService {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                Schema = x.Schema,
+                TableName = x.TableName,
+                PrimaryKeyColumn = x.PrimaryKeyColumn,
+                DisplayColumn = x.DisplayColumn,
+                GeometryColumn = x.GeometryColumn,
+                SupportMvt = x.SupportMvt,
+                MvtMinZoom = x.MvtMinZoom,
+                MvtMaxZoom = x.MvtMaxZoom
+            })
+            .OrderByDescending(e => e.Id)
+            .Skip(model.Skip).Take(model.Take)
+            .ToListAsync();
         return new PaginatedResponseModel<DataServiceModel> {
             Total = total,
             Data = Mapper.Map<IList<DataServiceModel>>(data),
@@ -92,27 +91,35 @@ public partial class DataServiceRepository : HibernateRepository<DataService, Da
         };
     }
 
-    public override async Task UpdateAsync(
+    public async Task UpdateAsync(
         long id,
         DataServiceModel model,
+        AppUser user,
         CancellationToken token = default
     ) {
         var entity = await Session.LoadAsync<DataService>(id, token);
         if (entity.DataSource.Id.ToString() != model.DataSource.Id) {
             entity.DataSource = Mapper.Map<DataSource>(model.DataSource);
         }
+        if (entity.Category.Id.ToString() != model.DataSource.Id) {
+            entity.Category = Mapper.Map<Category>(model.Category);
+        }
         Mapper.Map(model, entity);
+        entity.Updater = user;
+        entity.UpdatedAt = DateTime.Now;
         await Session.UpdateAsync(entity, token);
         await Session.FlushAsync(token);
         Session.Clear();
         await cache.RemoveAsync(id.ToString(), token);
     }
 
-    public override async Task DeleteAsync(long id, CancellationToken token = default) {
+    public async Task DeleteAsync(long id, AppUser user, CancellationToken token = default) {
         var entity = Session.Get<DataService>(id);
         if (entity != null) {
             await cache.RemoveAsync(id.ToString(), token);
             entity.IsDeleted = true;
+            entity.Updater = user;
+            entity.UpdatedAt = DateTime.Now;
             await Session.SaveAsync(entity, token);
             await Session.FlushAsync(token);
         }

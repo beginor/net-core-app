@@ -4,11 +4,13 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Common;
+using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DataServices.Data;
@@ -28,6 +30,7 @@ public partial class DataServiceController : Controller {
     private IAppJsonDataRepository jsonRepository;
     private JsonSerializerOptionsFactory serializerOptionsFactory;
     private IFileCacheProvider fileCache;
+    private UserManager<AppUser> userMgr;
 
     public DataServiceController(
         ILogger<DataServiceController> logger,
@@ -35,7 +38,8 @@ public partial class DataServiceController : Controller {
         IDataServiceFactory factory,
         IAppJsonDataRepository jsonRepository,
         JsonSerializerOptionsFactory serializerOptionsFactory,
-        IFileCacheProvider fileCache
+        IFileCacheProvider fileCache,
+        UserManager<AppUser> userMgr
     ) {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
@@ -43,6 +47,7 @@ public partial class DataServiceController : Controller {
         this.jsonRepository = jsonRepository ?? throw new ArgumentNullException(nameof(jsonRepository));
         this.serializerOptionsFactory = serializerOptionsFactory ?? throw new ArgumentNullException(nameof(serializerOptionsFactory));
         this.fileCache = fileCache ?? throw new ArgumentNullException(nameof(fileCache));
+        this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
     }
 
     protected override void Dispose(bool disposing) {
@@ -53,6 +58,7 @@ public partial class DataServiceController : Controller {
             jsonRepository = null;
             serializerOptionsFactory = null;
             fileCache = null;
+            userMgr = null;
         }
         base.Dispose(disposing);
     }
@@ -66,10 +72,7 @@ public partial class DataServiceController : Controller {
         [FromQuery]DataServiceSearchModel model
     ) {
         try {
-            var roles = User.Claims.Where(c => c.Type == ClaimTypes.Role)
-                .Select(c => c.Value)
-                .ToArray();
-            var result = await repository.SearchAsync(model, roles);
+            var result = await repository.SearchAsync(model);
             return result;
         }
         catch (Exception ex) {
@@ -104,6 +107,11 @@ public partial class DataServiceController : Controller {
     [Authorize("data_services.delete")]
     public async Task<ActionResult> Delete(long id) {
         try {
+            var userId = this.GetUserId();
+            var user = await userMgr.FindByIdAsync(userId);
+            if (user == null) {
+                return BadRequest("User is null!");
+            }
             await repository.DeleteAsync(id);
             await jsonRepository.DeleteAsync(id);
             await fileCache.DeleteAsync(id.ToString());
@@ -154,7 +162,12 @@ public partial class DataServiceController : Controller {
             if (!exists) {
                 return NotFound();
             }
-            await repository.UpdateAsync(id, model);
+            var userId = this.GetUserId();
+            var user = await userMgr.FindByIdAsync(userId);
+            if (user == null) {
+                return BadRequest("User is null!");
+            }
+            await repository.UpdateAsync(id, model, user);
             await jsonRepository.DeleteAsync(id);
             var infoPath = Path.Combine(id.ToString(), "info.json");
             if (model.SupportMvt) {

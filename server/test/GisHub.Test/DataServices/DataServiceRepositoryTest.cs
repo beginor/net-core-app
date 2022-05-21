@@ -27,7 +27,7 @@ public class DataServiceRepositoryTest : BaseTest<IDataServiceRepository> {
             Skip = 0,
             Take = 10
         };
-        var result = await Target.SearchAsync(searchModel, new []{ "users" });
+        var result = await Target.SearchAsync(searchModel);
         Assert.GreaterOrEqual(result.Total, 0);
         Assert.GreaterOrEqual(result.Take, result.Data.Count);
     }

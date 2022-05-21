@@ -1,9 +1,7 @@
-using System;
 using System.Xml;
-using Beginor.AppFx.Core;
+using NHibernate.Mapping.Attributes;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DataServices.Data;
-using NHibernate.Mapping.Attributes;
 
 namespace Beginor.GisHub.DynamicSql.Data; 
 

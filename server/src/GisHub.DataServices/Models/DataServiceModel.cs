@@ -1,17 +1,12 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Models;
 
 namespace Beginor.GisHub.DataServices.Models; 
 
 /// <summary>数据服务模型</summary>
-public partial class DataServiceModel : StringEntity {
+public partial class DataServiceModel : BaseResourceModel {
 
-    /// <summary>数据服务名称</summary>
-    [Required(ErrorMessage = "数据服务名称 必须填写！")]
-    public string Name { get; set; }
-    /// <summary>数据服务描述</summary>
-    public string Description { get; set; }
     /// <summary>数据源</summary>
     [Required(ErrorMessage = "数据源 必须填写！")]
     public StringIdNameEntity DataSource { get; set; }
@@ -34,10 +29,6 @@ public partial class DataServiceModel : StringEntity {
     public string PresetCriteria { get; set; }
     /// <summary>默认排序</summary>
     public string DefaultOrder { get; set; }
-    /// <summary>标签</summary>
-    public string[] Tags { get; set; }
-    /// <summary>允许的角色</summary>
-    public string[] Roles { get; set; }
     /// <summary>是否支持矢量切片格式</summary>
     public virtual bool SupportMvt { get; set; }
     /// <summary>矢量切片最小级别</summary>
@@ -62,4 +53,5 @@ public class DataServiceFieldModel {
 public partial class DataServiceSearchModel : PaginatedRequestModel {
     /// <summary>搜索数据服务的关键字</summary>
     public string Keywords { get; set; }
+    public long Category { get; set; }
 }

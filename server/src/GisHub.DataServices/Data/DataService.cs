@@ -1,24 +1,15 @@
-using System;
-using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
+using Beginor.GisHub.Data.Entities;
 
 namespace Beginor.GisHub.DataServices.Data; 
 
 /// <summary>数据服务</summary>
-[Class(Schema = "public", Table = "data_services", Where = "is_deleted = false")]
-public partial class DataService : BaseEntity<long> {
-
-    /// <summary>数据服务ID</summary>
-    [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]
-    public override long Id { get { return base.Id; } set { base.Id = value; } }
-
-    /// <summary>数据服务名称</summary>
-    [Property(Name = "Name", Column = "name", Type = "string", NotNull = true, Length = 32)]
-    public virtual string Name { get; set; }
-
-    /// <summary>数据服务描述</summary>
-    [Property(Name = "Description", Column = "description", Type = "string", NotNull = false, Length = 256)]
-    public virtual string Description { get; set; }
+[JoinedSubclass(0, Schema = "public", Table = "data_services", ExtendsType = typeof(BaseResource))]
+public partial class DataService : BaseResource {
+    
+    public DataService() {
+        base.Type = "data_service";
+    }
 
     /// <summary>数据源id</summary>
     [ManyToOne(Name = "DataSource", Column = "data_source_id", ClassType = typeof(DataSource), NotFound = NotFoundMode.Ignore)]
@@ -55,18 +46,6 @@ public partial class DataService : BaseEntity<long> {
     /// <summary>默认排序</summary>
     [Property(Name = "DefaultOrder", Column = "default_order", Type = "string", NotNull = false, Length = 128)]
     public virtual string DefaultOrder { get; set; }
-
-    /// <summary>标签</summary>
-    [Property(Name = "Tags", Column = "tags", TypeType = typeof(NHibernate.Extensions.NpgSql.StringArrayType), NotNull = false)]
-    public virtual string[] Tags { get; set; }
-
-    /// <summary>是否删除</summary>
-    [Property(Name = "IsDeleted", Column = "is_deleted", Type = "bool", NotNull = true)]
-    public virtual bool IsDeleted { get; set; }
-
-    /// <summary>允许的角色</summary>
-    [Property(Name = "Roles", Column = "roles", TypeType = typeof(NHibernate.Extensions.NpgSql.StringArrayType), NotNull = false)]
-    public virtual string[] Roles { get; set; }
 
     /// <summary>是否支持矢量切片格式</summary>
     [Property(Name = "SupportMvt", Column = "support_mvt", Type = "bool", NotNull = true)]
