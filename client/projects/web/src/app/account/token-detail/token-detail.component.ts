@@ -18,7 +18,7 @@ import { UiService } from '../../common';
 @Component({
     selector: 'app-token-detail',
     templateUrl: './token-detail.component.html',
-    styleUrls: ['./token-detail.component.scss'],
+    styleUrls: ['./token-detail.component.css'],
     animations: [
         trigger('animation', [
             transition(':enter', useAnimation(slideInRight)),

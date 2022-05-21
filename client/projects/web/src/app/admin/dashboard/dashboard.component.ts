@@ -6,7 +6,7 @@ import {NavigationService} from "../../common";
 @Component({
     selector: 'app-admin-dashboard',
     templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.scss']
+    styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
 

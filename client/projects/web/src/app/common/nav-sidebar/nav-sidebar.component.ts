@@ -11,7 +11,7 @@ import { NavigationService } from '../services/navigation.service';
 @Component({
     selector: 'app-nav-sidebar',
     templateUrl: './nav-sidebar.component.html',
-    styleUrls: ['./nav-sidebar.component.scss'],
+    styleUrls: ['./nav-sidebar.component.css'],
     animations: [
         trigger('status', [
             state('expanded', style({ width: '220px' })),

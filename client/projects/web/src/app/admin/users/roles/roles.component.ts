@@ -10,7 +10,7 @@ import { UserModel, UsersService } from '../users.service';
 @Component({
     selector: 'app-user-roles',
     templateUrl: './roles.component.html',
-    styleUrls: ['./roles.component.scss'],
+    styleUrls: ['./roles.component.css'],
     animations: [
         trigger('animation', [
             transition(':enter', useAnimation(slideInRight)),

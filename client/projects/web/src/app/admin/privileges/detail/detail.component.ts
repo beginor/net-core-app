@@ -10,7 +10,7 @@ import { AppPrivilegeModel, AppPrivilegeService } from '../privileges.service';
 @Component({
     selector: 'app-privilege-detail',
     templateUrl: './detail.component.html',
-    styleUrls: ['./detail.component.scss'],
+    styleUrls: ['./detail.component.css'],
     animations: [
         trigger('animation', [
             transition(':enter', useAnimation(slideInRight)),

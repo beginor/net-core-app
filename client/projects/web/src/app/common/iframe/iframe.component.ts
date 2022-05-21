@@ -7,7 +7,7 @@ import { NavigationService } from '../services/navigation.service';
 @Component({
     selector: 'app-iframe',
     templateUrl: './iframe.component.html',
-    styleUrls: ['./iframe.component.scss']
+    styleUrls: ['./iframe.component.css']
 })
 export class IframeComponent {
 
