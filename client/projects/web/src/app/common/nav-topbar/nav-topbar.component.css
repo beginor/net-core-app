@@ -1,33 +1,26 @@
-@import '../../../variables';
-
 :host {
-  // background-color: #ccc;
+  /* background-color: #ccc;*/
+}
 
-  .navbar {
-    @include box-shadow(0 0 4px 0 $dark);
+.navbar {
+  box-shadow: 0 0 4px 0 var(--bs-dark);
+}
+.navbar .navbar-brand {
+  text-shadow: 0 0 1px var(--bs-light);
+}
 
-    .navbar-brand {
-      text-shadow: 0 0 1px $light;
-    }
-
-    .navbar-nav.modules {
-
-      @include media-breakpoint-up(md) {
-        .nav-item.active {
-          border-bottom: .25rem solid $navbar-dark-active-color;
-          margin-bottom: -0.5rem;
-        }
-      }
-    }
-
-    .user-info-action {
-      cursor: pointer;
-    }
+@media (min-width: 768px) {
+  .navbar .navbar-nav.modules .nav-item.active {
+    border-bottom: 0.25rem solid var(--bs-navbar-dark-active-color);
+    margin-bottom: -0.5rem;
   }
+}
 
-  .dropdown-menu-end {
-    right: 0;
-    left: auto;
-  }
+.user-info-action {
+  cursor: pointer;
+}
 
+.dropdown-menu-end {
+right: 0;
+left: auto;
 }

@@ -1,0 +1,37 @@
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
+
+$enable-shadows: true;
+
+:host {
+  // background-color: #ccc;
+
+  .navbar {
+    @include box-shadow(0 0 4px 0 var(--bs-dark));
+
+    .navbar-brand {
+      text-shadow: 0 0 1px $light;
+    }
+
+    .navbar-nav.modules {
+
+      @include media-breakpoint-up(md) {
+        .nav-item.active {
+          border-bottom: .25rem solid var(--bs-navbar-dark-active-color);
+          margin-bottom: -0.5rem;
+        }
+      }
+    }
+
+    .user-info-action {
+      cursor: pointer;
+    }
+  }
+
+  .dropdown-menu-end {
+    right: 0;
+    left: auto;
+  }
+
+}

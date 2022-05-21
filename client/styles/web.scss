@@ -1,0 +1,51 @@
+$enable-shadows: true;
+$enable-rounded: true;
+$enable-caret: true;
+
+$border-radius: 2px;
+$border-radius-sm: 2px;
+$border-radius-lg: 2px;
+
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+/* Styles for BootStrap Icons */
+.bi {
+  display: inline-block;
+  vertical-align: text-bottom;
+  width: 1rem;
+  height: 1rem;
+}
+
+.bi-xs { width: .75rem; height: .75rem; }
+
+.bi-sm { width: .875rem; height: .875rem; }
+
+.bi-lg { width: 1.25rem; height: 1.25rem; }
+
+.bi-xl { width: 1.33333rem; height: 1.33333rem; }
+
+.bi-xxl { width: 1.5rem; height: 1.5rem; }
+
+@for $i from 1 through 10 {
+  .bi-#{$i}x { width: $i * 1rem; height: $i * 1rem; }
+}
+
+.bi-spin {
+  animation: bi-spin 2s linear infinite;
+}
+
+@keyframes bi-spin {
+  0% { transform: rotate(0deg); }
+  to { transform: rotate(1turn); }
+}
+
+.form-check.form-switch > input[type=checkbox].form-check-input {
+  border-radius: $form-switch-border-radius;
+}
+
+:root {
+  --#{$variable-prefix}font-weight-bold: #{$font-weight-bold};
+  --#{$variable-prefix}border-width: #{$border-width};
+  --#{$variable-prefix}border-color: #{$border-color};
+  --#{$variable-prefix}navbar-dark-active-color: #{$navbar-dark-active-color}
+}

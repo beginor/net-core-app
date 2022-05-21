@@ -117,7 +117,8 @@
               }
             ],
             "styles": [
-              "projects/handset/src/styles.scss"
+              "styles/handset.css",
+              "projects/handset/src/styles.css"
             ],
             "scripts": []
           },
@@ -235,7 +236,12 @@
               }
             ],
             "styles": [
-              "projects/web/src/styles.scss"
+              {
+                "input": "styles/web.css",
+                "bundleName": "web",
+                "inject": true
+              },
+              "projects/web/src/styles.css"
             ],
             "scripts": []
           },

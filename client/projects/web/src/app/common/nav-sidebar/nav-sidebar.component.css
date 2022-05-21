@@ -1,29 +1,23 @@
-@import "../../../variables";
 
 :host {
-  background-color: $light;
+  background-color: var(--bs-light);
   display: flex;
   flex-direction: column;
-  border-right: $border-width solid $border-color !important;
-  // overflow: hidden;
+  border-right: var(--bs-border-width) solid var(--bs-border-color) !important;
+}
+.sidebar-body {
+  flex: 1;
+  display: block;
+  width: var(--nav-sidebar-width);
+}
 
-  .sidebar-body {
-    flex: 1;
-    display: block;
-    // overflow-y: auto;
-    width: var(--nav-sidebar-width);
-  }
-
-  .sidebar-toggler {
-    cursor: pointer;
-    height: var(--nav-sidebar-item-height);
-    display: flex;
-    align-items: center;
-
-    .collapse-text {
-      white-space: nowrap;
-      overflow: hidden;
-    }
-  }
-
+.sidebar-toggler {
+  cursor: pointer;
+  height: var(--nav-sidebar-item-height);
+  display: flex;
+  align-items: center;
+}
+.sidebar-toggler .collapse-text {
+  white-space: nowrap;
+  overflow: hidden;
 }

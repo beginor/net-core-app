@@ -1,10 +1,12 @@
 :host {
-  .detail-container {
-    position: absolute;
-    top: var(--navbar-height);
-    right: 0;
-    height: calc(100vh - var(--navbar-height));
-    bottom: 0;
-    z-index: var(--detail-zIndex);
-  }
+  display: block;
+}
+
+.detail-container {
+  position: absolute;
+  top: var(--navbar-height);
+  right: 0;
+  height: calc(100vh - var(--navbar-height));
+  bottom: 0;
+  z-index: var(--detail-zIndex);
 }
