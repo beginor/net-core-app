@@ -7,7 +7,7 @@
   <ng-container *ngTemplateOutlet="status === 'edit' ? editTemplate : displayTpl; context:{ ctxNode: node }">
   </ng-container>
   <ng-template #displayTpl let-ctxNode="ctxNode">
-    <div class="p-2 bg-white border border-1 flex-grow-1 d-flex flex-row align-items-center">
+    <div class="p-2 bg-white border border-1 rounded flex-grow-1 d-flex flex-row align-items-center">
       <div class="flex-grow-1">
         {{ctxNode.name}}
         <ng-container *ngIf="ctxNode.resourceCount">

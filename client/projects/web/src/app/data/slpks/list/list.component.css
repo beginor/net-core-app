@@ -15,9 +15,9 @@ ngb-pagination ::ng-deep ul.pagination {
 
 .detail-container {
   position: absolute;
-  top: var(--navbar-height);
+  top: var(--app-navbar-height);
   right: 0;
-  height: calc(100vh - var(--navbar-height));
+  height: calc(100vh - var(--app-navbar-height));
   bottom: 0;
-  z-index: var(--detail-zIndex);
+  z-index: var(--app-detail-zIndex);
 }

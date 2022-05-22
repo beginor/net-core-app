@@ -1,6 +1,6 @@
 :host {
   display: block;
-  width: calc(100vw - var(--nav-sidebar-width));
+  width: calc(100vw - var(--app-nav-sidebar-width));
   height: 100%;
   padding: 0;
   overflow-x: hidden;

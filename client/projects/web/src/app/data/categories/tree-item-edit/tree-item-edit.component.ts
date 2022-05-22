@@ -30,7 +30,7 @@ export class TreeItemEditComponent {
 
     public getFormClass(): string {
         return this.compact ? ''
-            : 'p-2 bg-white border border-1 flex-grow-1 d-flex flex-row align-items-center'; // eslint-disable-line max-len
+            : 'p-2 bg-white border border-1 rounded flex-grow-1 d-flex flex-row align-items-center'; // eslint-disable-line max-len
     }
 
     public async saveOrUpdate(node: CategoryNode): Promise<void> {
