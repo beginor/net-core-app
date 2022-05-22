@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 @Component({
     selector: 'app-tags-editor',
     templateUrl: './tags-editor.component.html',
-    styleUrls: ['./tags-editor.component.scss']
+    styleUrls: ['./tags-editor.component.css']
 })
 export class TagsEditorComponent {
 
@@ -13,7 +13,7 @@ export class TagsEditorComponent {
     public tags: string[] = [];
 
     public newTag = '';
-    
+
     public addNewTag(): void {
         const tag = this.newTag.trim();
         if (!!tag && this.tags.indexOf(tag) < 0) {
@@ -21,7 +21,7 @@ export class TagsEditorComponent {
             this.newTag = '';
         }
     }
-    
+
     public delTag(tag: string): void {
         const idx = this.tags.indexOf(tag);
         this.tags.splice(idx, 1);

@@ -12,7 +12,7 @@ import { StorageBrowserComponent } from '../../../common';
 @Component({
     selector: 'app-tilemap-detail',
     templateUrl: './detail.component.html',
-    styleUrls: ['./detail.component.scss'],
+    styleUrls: ['./detail.component.css'],
     animations: [
         trigger('animation', [
             transition(':enter', useAnimation(slideInRight)),

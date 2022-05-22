@@ -19,7 +19,7 @@ import {
 @Component({
     selector: 'app-statement',
     templateUrl: './statement.component.html',
-    styleUrls: ['./statement.component.scss'],
+    styleUrls: ['./statement.component.css'],
     animations: [
         trigger('animation', [
             transition(':enter', useAnimation(slideInRight)),

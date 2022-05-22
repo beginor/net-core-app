@@ -7,7 +7,7 @@ import { CategoryNode, CategoryService, CategoryModel } from '../../../common';
 @Component({
     selector: 'app-data-categories-tree-item-edit',
     templateUrl: './tree-item-edit.component.html',
-    styleUrls: ['./tree-item-edit.component.scss']
+    styleUrls: ['./tree-item-edit.component.css']
 })
 export class TreeItemEditComponent {
 

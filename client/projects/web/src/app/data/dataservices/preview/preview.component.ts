@@ -10,7 +10,7 @@ import {
 @Component({
     selector: 'app-dataservices-preview',
     templateUrl: './preview.component.html',
-    styleUrls: ['./preview.component.scss']
+    styleUrls: ['./preview.component.css']
 })
 export class PreviewComponent {
 

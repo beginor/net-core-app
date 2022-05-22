@@ -10,7 +10,7 @@ import {
 @Component({
     selector: 'app-dataapi-param-cols',
     templateUrl: './param-cols.component.html',
-    styleUrls: ['./param-cols.component.scss']
+    styleUrls: ['./param-cols.component.css']
 })
 export class ParamColsComponent {
 

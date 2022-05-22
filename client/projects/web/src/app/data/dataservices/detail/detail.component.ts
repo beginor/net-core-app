@@ -25,7 +25,7 @@ import { UiService } from '../../../common';
 @Component({
     selector: 'app-dataservices-detail',
     templateUrl: './detail.component.html',
-    styleUrls: ['./detail.component.scss'],
+    styleUrls: ['./detail.component.css'],
     animations: [
         trigger('animation', [
             transition(':enter', useAnimation(slideInRight)),

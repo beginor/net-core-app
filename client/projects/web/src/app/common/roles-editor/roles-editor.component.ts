@@ -6,12 +6,12 @@ import { RolesService } from '../../admin/roles/roles.service';
 @Component({
     selector: 'app-roles-editor',
     templateUrl: './roles-editor.component.html',
-    styleUrls: ['./roles-editor.component.scss']
+    styleUrls: ['./roles-editor.component.css']
 })
 export class RolesEditorComponent implements OnInit {
-    
+
     private _roles: string[] = [];
-    
+
     public get roles(): string[] { return this._roles; }
     @Input()
     public set roles(val: string[]) {
@@ -30,7 +30,7 @@ export class RolesEditorComponent implements OnInit {
         private account: AccountService,
         public vm: RolesService
     ) {}
-    
+
     public async ngOnInit(): Promise<void> {
         this.vm.searchModel.skip = 0;
         this.vm.searchModel.take = 999;
@@ -42,7 +42,7 @@ export class RolesEditorComponent implements OnInit {
             this.addDefaultRoles();
         }
     }
-    
+
     public isRoleChecked(role: string): boolean {
         if (!this.roles) {
             return false;
@@ -59,7 +59,7 @@ export class RolesEditorComponent implements OnInit {
             this.roles.push(role);
         }
     }
-    
+
     private addDefaultRoles(): void {
         this.vm.data.getValue()
             .filter(role => !!role.isDefault)

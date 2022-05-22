@@ -9,7 +9,7 @@ import { VectortileService } from '../vectortiles.service';
 @Component({
     selector: 'app-vectortiles-preview',
     templateUrl: './preview.component.html',
-    styleUrls: ['./preview.component.scss']
+    styleUrls: ['./preview.component.css']
 })
 export class PreviewComponent implements AfterViewInit, OnDestroy {
 

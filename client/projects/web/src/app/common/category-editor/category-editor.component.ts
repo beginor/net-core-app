@@ -5,7 +5,7 @@ import { CategoryNode, CategoryService } from '../services/categories.service';
 @Component({
     selector: 'app-category-editor',
     templateUrl: './category-editor.component.html',
-    styleUrls: ['./category-editor.component.scss']
+    styleUrls: ['./category-editor.component.css']
 })
 export class CategoryEditorComponent implements OnInit {
 
@@ -13,7 +13,7 @@ export class CategoryEditorComponent implements OnInit {
     public category: { id?: string, name?: string; } = {};
     @Input()
     public editable = true;
-    
+
     public nodes: CategoryNode[] = [];
 
     constructor(
@@ -32,11 +32,11 @@ export class CategoryEditorComponent implements OnInit {
             this.category.name = this.nodes[0].name;
         }
     }
-    
+
     public getStyle(level: number): { [key: string]: string } {
         return { 'padding-left': `${level + 1}rem`};
     }
-    
+
     public updateCategory(node: CategoryNode): void {
         this.category.id = node.id;
         this.category.name = node.name;

@@ -7,7 +7,7 @@ import { DataApiDocModel, DataApiService } from '../dataapis.service';
 @Component({
     selector: 'app-dataapis-export',
     templateUrl: './export.component.html',
-    styleUrls: ['./export.component.scss']
+    styleUrls: ['./export.component.css']
 })
 export class ExportComponent implements OnInit {
 

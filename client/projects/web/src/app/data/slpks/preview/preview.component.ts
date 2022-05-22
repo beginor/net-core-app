@@ -9,7 +9,7 @@ import { ArcGisService } from '../../arcgis.service';
 @Component({
     selector: 'app-slpks-preview',
     templateUrl: './preview.component.html',
-    styleUrls: ['./preview.component.scss']
+    styleUrls: ['./preview.component.css']
 })
 export class PreviewComponent implements AfterViewInit, OnDestroy {
 

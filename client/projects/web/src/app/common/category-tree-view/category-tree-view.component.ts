@@ -9,16 +9,16 @@ import { CategoryNode, CategoryService } from '../services/categories.service';
 @Component({
     selector: 'app-category-tree-view',
     templateUrl: './category-tree-view.component.html',
-    styleUrls: ['./category-tree-view.component.scss']
+    styleUrls: ['./category-tree-view.component.css']
 })
 export class CategoryTreeViewComponent implements OnInit, OnDestroy {
     @Input()
     public resourceType?: string
     @Output()
     public itemClick = new EventEmitter<CategoryNode>();
-    
+
     public currentNode?: CategoryNode;
-    
+
     private currentNode$?: Subscription;
 
     constructor(
@@ -35,7 +35,7 @@ export class CategoryTreeViewComponent implements OnInit, OnDestroy {
             void this.loadData();
         }
     }
-    
+
     public ngOnDestroy(): void {
         if (!!this.currentNode$) {
             this.currentNode$.unsubscribe();
@@ -45,12 +45,12 @@ export class CategoryTreeViewComponent implements OnInit, OnDestroy {
     public refresh(): void {
         void this.loadData();
     }
-    
+
     public onItemClick(node: CategoryNode): void {
         this.currentNode = node;
         this.itemClick.next(node);
     }
-    
+
     public async loadData(): Promise<void> {
         await this.vm.getAll(this.resourceType);
     }

@@ -8,7 +8,7 @@ import { CategoryNode, CategoryService  } from '../../../common';
 @Component({
     selector: 'app-data-categories-tree',
     templateUrl: './tree.component.html',
-    styleUrls: ['./tree.component.scss']
+    styleUrls: ['./tree.component.css']
 })
 export class TreeComponent implements OnInit {
 

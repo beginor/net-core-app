@@ -6,7 +6,7 @@ import { DataApiService } from '../dataapis.service';
 @Component({
     selector: 'app-dataapi-preview',
     templateUrl: './preview.component.html',
-    styleUrls: ['./preview.component.scss']
+    styleUrls: ['./preview.component.css']
 })
 export class PreviewComponent {
 

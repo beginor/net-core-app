@@ -9,7 +9,7 @@ import { SlpkModel, SlpkService } from '../slpks.service';
 @Component({
     selector: 'app-slpk-list',
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+    styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
 

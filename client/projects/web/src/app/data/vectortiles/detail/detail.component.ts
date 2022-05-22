@@ -19,7 +19,7 @@ import { VectortileService, VectortileModel } from '../vectortiles.service';
 @Component({
     selector: 'app-vectortile-detail',
     templateUrl: './detail.component.html',
-    styleUrls: ['./detail.component.scss'],
+    styleUrls: ['./detail.component.css'],
     animations: [
         trigger('animation', [
             transition(':enter', useAnimation(slideInRight)),

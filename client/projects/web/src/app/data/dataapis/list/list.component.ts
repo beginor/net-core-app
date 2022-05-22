@@ -12,13 +12,13 @@ import { ExportComponent } from '../export/export.component';
 @Component({
     selector: 'app-dataapi-list',
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+    styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
 
     public exportingApiDoc = false;
     public selectedApis: string[] = [];
-    
+
     @ViewChild('categoryTreeView', { static: true })
     public categoryTreeView!: CategoryTreeViewComponent;
 
@@ -125,7 +125,7 @@ export class ListComponent implements OnInit {
             this.exportingApiDoc = false;
         });
     };
-    
+
     public onTreeItemClick(node: CategoryNode): void {
         if (!node) {
             delete this.vm.searchModel.category;

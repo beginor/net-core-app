@@ -9,7 +9,7 @@ import { PreviewComponent } from '../preview/preview.component';
 @Component({
     selector: 'app-vectortile-list',
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+    styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
 

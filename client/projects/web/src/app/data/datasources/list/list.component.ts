@@ -8,7 +8,7 @@ import { DataSourceService } from '../datasources.service';
 @Component({
     selector: 'app-datasources-list',
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+    styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
 

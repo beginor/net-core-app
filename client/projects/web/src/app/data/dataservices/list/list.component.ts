@@ -11,10 +11,10 @@ import { PreviewComponent } from '../preview/preview.component';
 @Component({
     selector: 'app-dataservices-list',
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+    styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
-    
+
     @ViewChild('categoryTreeView', { static: true })
     public categoryTreeView!: CategoryTreeViewComponent;
 
@@ -68,7 +68,7 @@ export class ListComponent implements OnInit {
         Object.assign(ref.componentInstance, { ds });
         // ref.componentInstance.ds = ds;
     }
-    
+
     public onTreeItemClick(node: CategoryNode): void {
         if (!node) {
             delete this.vm.searchModel.category;

@@ -21,7 +21,7 @@ import { PreviewGeoJsonComponent } from '../preview/preview-geojson.component';
 @Component({
     selector: 'app-dataapi-debug',
     templateUrl: './debug.component.html',
-    styleUrls: ['./debug.component.scss']
+    styleUrls: ['./debug.component.css']
 })
 export class DebugComponent implements OnInit {
 

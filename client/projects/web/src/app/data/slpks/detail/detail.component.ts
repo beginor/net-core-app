@@ -15,7 +15,7 @@ import { SlpkService, SlpkModel } from '../slpks.service';
 @Component({
     selector: 'app-slpk-detail',
     templateUrl: './detail.component.html',
-    styleUrls: ['./detail.component.scss'],
+    styleUrls: ['./detail.component.css'],
     animations: [
         trigger('animation', [
             transition(':enter', useAnimation(slideInRight)),
