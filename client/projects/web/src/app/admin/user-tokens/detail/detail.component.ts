@@ -11,7 +11,7 @@ import { AppUserTokenService, AppUserTokenModel } from '../user-tokens.service';
 @Component({
     selector: 'app-user-token-detail',
     templateUrl: './detail.component.html',
-    styleUrls: ['./detail.component.scss'],
+    styleUrls: ['./detail.component.css'],
     animations: [
         trigger('animation', [
             transition(':enter', useAnimation(slideInRight)),

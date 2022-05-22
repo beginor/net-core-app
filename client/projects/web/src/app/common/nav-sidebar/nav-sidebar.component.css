@@ -1,0 +1,23 @@
+
+:host {
+  background-color: var(--bs-light);
+  display: flex;
+  flex-direction: column;
+  border-right: var(--bs-border-width) solid var(--bs-border-color) !important;
+}
+.sidebar-body {
+  flex: 1;
+  display: block;
+  width: var(--app-nav-sidebar-width);
+}
+
+.sidebar-toggler {
+  cursor: pointer;
+  height: var(--app-nav-sidebar-item-height);
+  display: flex;
+  align-items: center;
+}
+.sidebar-toggler .collapse-text {
+  white-space: nowrap;
+  overflow: hidden;
+}

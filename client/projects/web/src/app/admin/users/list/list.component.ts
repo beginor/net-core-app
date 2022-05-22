@@ -8,7 +8,7 @@ import { UsersService, UserModel } from '../users.service';
 @Component({
     selector: 'app-admin-users-list',
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+    styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
 

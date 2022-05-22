@@ -15,7 +15,7 @@ import { UsersService } from '../users.service';
 @Component({
     selector: 'app-user-password',
     templateUrl: './password.component.html',
-    styleUrls: ['./password.component.scss'],
+    styleUrls: ['./password.component.css'],
     animations: [
         trigger('animation', [
             transition(':enter', useAnimation(slideInRight)),

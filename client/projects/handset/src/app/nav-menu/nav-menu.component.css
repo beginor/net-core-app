@@ -1,0 +1,9 @@
+:host {
+  width: 18.75rem;
+  height: 100%;
+  display: block;
+}
+
+.nav-item-icon {
+  margin-right: 0.5rem;
+}

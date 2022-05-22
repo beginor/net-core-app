@@ -6,7 +6,7 @@ import { AuditLogsService } from '../audit-logs.service';
 @Component({
     selector: 'app-audits-list',
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+    styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
 

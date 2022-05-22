@@ -1,0 +1,12 @@
+:host {
+  display: block;
+}
+
+.login-form .form-field {
+  width: 100%;
+}
+
+.login-form .login-button {
+  width: 100%;
+  margin-top: 1rem;
+}

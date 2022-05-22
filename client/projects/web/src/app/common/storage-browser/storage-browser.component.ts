@@ -6,7 +6,7 @@ import { StorageService, StorageContent } from '../services/storage.service';
 @Component({
     selector: 'app-storage-browser',
     templateUrl: './storage-browser.component.html',
-    styleUrls: ['./storage-browser.component.scss']
+    styleUrls: ['./storage-browser.component.css']
 })
 export class StorageBrowserComponent implements OnInit {
 

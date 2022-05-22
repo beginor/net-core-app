@@ -8,7 +8,7 @@ import { AppUserTokenService } from '../user-tokens.service';
 @Component({
     selector: 'app-user-token-list',
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+    styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
 

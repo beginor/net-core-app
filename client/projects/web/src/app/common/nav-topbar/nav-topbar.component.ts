@@ -7,7 +7,7 @@ import { NavigationService } from '../services/navigation.service';
 @Component({
     selector: 'app-nav-topbar',
     templateUrl: './nav-topbar.component.html',
-    styleUrls: ['./nav-topbar.component.scss']
+    styleUrls: ['./nav-topbar.component.css']
 })
 export class NavTopBarComponent {
 

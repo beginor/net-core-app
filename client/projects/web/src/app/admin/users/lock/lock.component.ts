@@ -14,7 +14,7 @@ import { UsersService } from '../users.service';
 @Component({
     selector: 'app-user-lock',
     templateUrl: './lock.component.html',
-    styleUrls: ['./lock.component.scss'],
+    styleUrls: ['./lock.component.css'],
     animations: [
         trigger('animation', [
             transition(':enter', useAnimation(slideInRight)),

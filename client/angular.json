@@ -7,7 +7,7 @@
       "projectType": "library",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss",
+          "style": "css",
           "skipTests": true
         },
         "@schematics/angular:class": {
@@ -60,7 +60,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss",
+          "style": "css",
           "skipTests": true
         },
         "@schematics/angular:class": {
@@ -101,7 +101,7 @@
             "main": "projects/handset/src/main.ts",
             "polyfills": "projects/handset/src/polyfills.ts",
             "tsConfig": "projects/handset/tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
+            "inlineStyleLanguage": "css",
             "assets": [
               "projects/handset/src/favicon.ico",
               "projects/handset/src/assets",
@@ -117,7 +117,12 @@
               }
             ],
             "styles": [
-              "projects/handset/src/styles.scss"
+              {
+                "input": "styles/handset.css",
+                "bundleName": "handset",
+                "inject": true
+              },
+              "projects/handset/src/styles.css"
             ],
             "scripts": []
           },
@@ -178,7 +183,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss",
+          "style": "css",
           "skipTests": true
         },
         "@schematics/angular:class": {
@@ -219,7 +224,7 @@
             "main": "projects/web/src/main.ts",
             "polyfills": "projects/web/src/polyfills.ts",
             "tsConfig": "projects/web/tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
+            "inlineStyleLanguage": "css",
             "assets": [
               "projects/web/src/favicon.ico",
               "projects/web/src/assets",
@@ -235,7 +240,12 @@
               }
             ],
             "styles": [
-              "projects/web/src/styles.scss",
+              {
+                "input": "styles/web.css",
+                "bundleName": "web",
+                "inject": true
+              },
+              "projects/web/src/styles.css",
               {
                 "input": "node_modules/mapbox-gl/dist/mapbox-gl.css",
                 "bundleName": "mapbox-gl",

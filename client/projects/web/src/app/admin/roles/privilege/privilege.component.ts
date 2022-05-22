@@ -10,7 +10,7 @@ import { RolesService } from '../roles.service';
 @Component({
     selector: 'app-role-privilege',
     templateUrl: './privilege.component.html',
-    styleUrls: ['./privilege.component.scss'],
+    styleUrls: ['./privilege.component.css'],
     animations: [
         trigger('animation', [
             transition(':enter', useAnimation(slideInRight)),

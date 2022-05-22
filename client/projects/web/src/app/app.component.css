@@ -1,0 +1,19 @@
+:host {
+  /* background-color: #ccc; */
+}
+
+.app-main {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.app-main .error-container {
+  position: absolute;
+  width: 24rem;
+  margin-left: -12rem;
+  left: 50%;
+  z-index: 9999;
+}

@@ -8,7 +8,7 @@ import { AppStorageService } from '../storages.service';
 @Component({
     selector: 'app-storage-list',
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+    styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
 
