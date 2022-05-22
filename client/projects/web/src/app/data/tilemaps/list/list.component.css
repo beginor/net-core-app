@@ -7,22 +7,21 @@
   overflow-x: hidden;
   overflow-y: auto;
   background-color: var(--bs-light);
+}
 
-  ngb-pagination ::ng-deep ul.pagination {
-    margin-bottom: 0 !important;
-  }
+ngb-pagination ::ng-deep ul.pagination {
+  margin-bottom: 0 !important;
+}
 
-  .preview-link {
-    cursor: pointer;
-  }
+.preview-link {
+  cursor: pointer;
+}
 
-  .detail-container {
-    position: absolute;
-    top: var(--navbar-height);
-    right: 0;
-    height: calc(100vh - var(--navbar-height));
-    bottom: 0;
-    z-index: var(--detail-zIndex);
-  }
-
+.detail-container {
+  position: absolute;
+  top: var(--navbar-height);
+  right: 0;
+  height: calc(100vh - var(--navbar-height));
+  bottom: 0;
+  z-index: var(--detail-zIndex);
 }

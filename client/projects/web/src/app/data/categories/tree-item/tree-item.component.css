@@ -1,8 +1,6 @@
-@import "../../../../variables";
-
 .cdk-drag-preview {
   background-color: var(--bs-white);
-  @include box-shadow(0 0 4px 0 $dark);
+  box-shadow: 0 0 4px 0 var(--bs-dark);
 }
 
 .cdk-drag-placeholder {

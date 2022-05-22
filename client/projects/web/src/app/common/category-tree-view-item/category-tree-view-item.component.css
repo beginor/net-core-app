@@ -1,16 +1,15 @@
-@import '../../../variables';
-
 :host {
   display: block;
-  
-  .tree-node-info {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    flex: 1;
-    cursor: pointer;
-    &.selected {
-      background-color: $gray-300;
-    }
-  }
+}
+
+.tree-node-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex: 1;
+  cursor: pointer;
+}
+
+.tree-node-info.selected {
+  background-color: var(--bs-gray-300);
 }

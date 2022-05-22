@@ -7,9 +7,9 @@
   overflow-x: hidden;
   overflow-y: auto;
   background-color: var(--bs-light);
+}
 
-  .cdk-nested-tree-node {
-    display: flex;
-    flex-direction: column;
-  }
+.cdk-nested-tree-node {
+  display: flex;
+  flex-direction: column;
 }
