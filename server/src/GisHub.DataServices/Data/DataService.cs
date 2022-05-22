@@ -1,12 +1,13 @@
 using NHibernate.Mapping.Attributes;
 using Beginor.GisHub.Data.Entities;
 
-namespace Beginor.GisHub.DataServices.Data; 
+namespace Beginor.GisHub.DataServices.Data;
 
 /// <summary>数据服务</summary>
 [JoinedSubclass(0, Schema = "public", Table = "data_services", ExtendsType = typeof(BaseResource))]
+[Key(1, Column = "id")]
 public partial class DataService : BaseResource {
-    
+
     public DataService() {
         base.Type = "data_service";
     }
