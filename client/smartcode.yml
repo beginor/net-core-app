@@ -103,7 +103,7 @@ Build:
     Output:
       Path: '{{Items.CurrentTable.ConvertedName}}/list'
       Name: 'list.component'
-      Extension: '.scss'
+      Extension: '.css'
   ListComponentHtml:
     Type: Table
     Module: Data
@@ -130,7 +130,7 @@ Build:
     Output:
       Path: '{{Items.CurrentTable.ConvertedName}}/detail'
       Name: 'detail.component'
-      Extension: '.scss'
+      Extension: '.css'
   DetailComponentHtml:
     Type: Table
     Module: Data
