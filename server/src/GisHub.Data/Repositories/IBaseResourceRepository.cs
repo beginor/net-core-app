@@ -15,5 +15,7 @@ public partial interface IBaseResourceRepository {
     );
     
     Task<PaginatedResponseModel<CategoryCountModel>> CountByCategoryAsync(BaseResourceStatisticRequestModel model);
+    
+    Task<string[]> GetRolesByResourceIdAsync(long resourceId);
 
 }

@@ -16,7 +16,7 @@ public static class DistributedCacheExtensions {
         if (buffer != null) {
             return JsonSerializer.Deserialize<T>(buffer);
         }
-        return default(T);
+        return default;
     }
 
     public static async Task SetAsync<T>(

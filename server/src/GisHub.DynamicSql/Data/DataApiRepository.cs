@@ -154,11 +154,6 @@ public partial class DataApiRepository : HibernateRepository<DataApi, DataApiMod
         await cache.RemoveAsync(id.ToString());
     }
 
-    public async Task<string[]> GetRolesAsync(object id) {
-        var api = await GetDataApiCacheItemByIdAsync((long)id);
-        return api.Roles;
-    }
-
     public async Task<IList<DataApiModel>> GetByIdArray(long[] idArray) {
         var data = await Session.Query<DataApi>()
             .Where(api => idArray.Contains(api.Id))

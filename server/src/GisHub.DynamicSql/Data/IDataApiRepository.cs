@@ -11,7 +11,7 @@ using Beginor.GisHub.Geo.GeoJson;
 namespace Beginor.GisHub.DynamicSql.Data; 
 
 /// <summary>数据API 仓储接口</summary>
-public partial interface IDataApiRepository : IRepository<DataApiModel, long>, IRolesFilterProvider {
+public partial interface IDataApiRepository : IRepository<DataApiModel, long> {
 
     /// <summary>搜索 数据API ，返回分页结果。</summary>
     Task<PaginatedResponseModel<DataApiModel>> SearchAsync(DataApiSearchModel model);

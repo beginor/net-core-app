@@ -54,7 +54,7 @@ public class FeatureController : Controller {
     /// <summary>读取要素服务信息</summary>
     [HttpGet("{id:long}/MapServer/0")]
     [Authorize("features.get_layer_info")]
-    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult<AgsLayerDescription>> GetLayerDescriptionAsync(
         [FromRoute]long id,
         [FromQuery]AgsCommonParams param
@@ -85,7 +85,7 @@ public class FeatureController : Controller {
     /// <summary>查询空间要素</summary>
     [HttpGet("{id:long}/MapServer/0/query")]
     [Authorize("features.query")]
-    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult<AgsFeatureSet>> QueryFeaturesByGetAsync(
         [FromRoute]long id,
         [ModelBinder(BinderType = typeof(EncryptedModelBinder))]AgsQueryParam param
@@ -107,7 +107,7 @@ public class FeatureController : Controller {
     [HttpPost("{id:long}/MapServer/0/query")]
     [Consumes("application/x-www-form-urlencoded")]
     [Authorize("features.query")]
-    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult<AgsFeatureSet>> QueryFeaturesByPostAsync(
         [FromRoute]long id,
         [ModelBinder(BinderType = typeof(EncryptedModelBinder))]AgsQueryParam param

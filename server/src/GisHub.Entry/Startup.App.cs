@@ -26,6 +26,7 @@ partial class Startup {
             t => t.Name.EndsWith("Repository"),
             ServiceLifetime.Scoped
         );
+        services.AddSingleton<Beginor.GisHub.Common.IRolesFilterProvider, Beginor.GisHub.Data.ResourceRolesFilterProvider>();
         services.AddServiceWithDefaultImplements(
             typeof(Beginor.GisHub.Slpk.ModelMapping).Assembly,
             t => t.Name.EndsWith("Repository"),

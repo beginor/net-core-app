@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
-using Dapper;
 using NHibernate;
 using NHibernate.Linq;
 using Beginor.GisHub.Common;
@@ -78,7 +76,8 @@ public partial class DataServiceRepository : HibernateRepository<DataService, Da
                 GeometryColumn = x.GeometryColumn,
                 SupportMvt = x.SupportMvt,
                 MvtMinZoom = x.MvtMinZoom,
-                MvtMaxZoom = x.MvtMaxZoom
+                MvtMaxZoom = x.MvtMaxZoom,
+                MvtCacheDuration = x.MvtCacheDuration
             })
             .OrderByDescending(e => e.Id)
             .Skip(model.Skip).Take(model.Take)
@@ -149,12 +148,11 @@ public partial class DataServiceRepository : HibernateRepository<DataService, Da
             GeometryColumn = ds.GeometryColumn,
             PresetCriteria = ds.PresetCriteria,
             DefaultOrder = ds.DefaultOrder,
-            Roles = ds.Roles,
             Fields = ds.Fields,
-            SupportMvt = ds.SupportMvt,
-            MvtMinZoom = ds.MvtMinZoom,
-            MvtMaxZoom = ds.MvtMaxZoom,
-            MvtCacheDuration = ds.MvtCacheDuration
+            SupportMvt = ds.SupportMvt.GetValueOrDefault(false),
+            MvtMinZoom = ds.MvtMinZoom.GetValueOrDefault(0),
+            MvtMaxZoom = ds.MvtMaxZoom.GetValueOrDefault(0),
+            MvtCacheDuration = ds.MvtCacheDuration.GetValueOrDefault(0)
         };
         var meta = factory.CreateMetadataProvider(item.DatabaseType);
         var model = Mapper.Map<DataSourceModel>(ds.DataSource);
@@ -166,11 +164,6 @@ public partial class DataServiceRepository : HibernateRepository<DataService, Da
         }
         await cache.SetAsync(key, item, commonOption.Cache.MemoryExpiration);
         return item;
-    }
-
-    public async Task<string[]> GetRolesAsync(object id) {
-        var cachedItem = await GetCacheItemByIdAsync((long)id);
-        return cachedItem.Roles;
     }
 
 }

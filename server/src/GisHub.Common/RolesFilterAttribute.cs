@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Beginor.GisHub.Common;
 
 public class RolesFilterAttribute : ActionFilterAttribute {
 
     public string IdParameterName { get; set; }
-
-    public Type ProviderType { get; set; }
 
     public override async Task OnActionExecutionAsync(
         ActionExecutingContext context,
@@ -22,9 +21,9 @@ public class RolesFilterAttribute : ActionFilterAttribute {
             context.Result = new BadRequestObjectResult($"Parameter {IdParameterName} is not in action arguments.");
             return;
         }
-        var provider = context.HttpContext.RequestServices.GetService(ProviderType) as IRolesFilterProvider;
+        var provider = context.HttpContext.RequestServices.GetService<IRolesFilterProvider>();
         if (provider == null) {
-            context.Result = new ObjectResult($"{ProviderType} is not {typeof(IRolesFilterProvider)}") {
+            context.Result = new ObjectResult($"required service IRolesFilterProvider is not registered!") {
                 StatusCode = StatusCodes.Status500InternalServerError
             };
             return;
@@ -45,5 +44,7 @@ public class RolesFilterAttribute : ActionFilterAttribute {
 public interface IRolesFilterProvider {
 
     Task<string[]> GetRolesAsync(object id);
+    
+    Task ResetRolesAsync(object id);
 
 }

@@ -9,6 +9,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
+using NHibernate.Linq;
 
 namespace Beginor.GisHub.Test.DataServices; 
 
@@ -64,6 +65,28 @@ public class DataServiceRepositoryTest : BaseTest<IDataServiceRepository> {
         var cacheItem = await Target.GetCacheItemByIdAsync(id);
         Assert.IsNotNull(cacheItem);
         Console.WriteLine(cacheItem.ToJson());
+    }
+    
+    [Test]
+    public async Task _04_CanQueryDataService() {
+        var session = ServiceProvider.GetService<NHibernate.ISession>();
+        var query = session.Query<DataService>();
+        var data = await query.Select(x => new DataService {
+            Id = x.Id,
+            Name = x.Name,
+            Description = x.Description,
+            Schema = x.Schema,
+            TableName = x.TableName,
+            PrimaryKeyColumn = x.PrimaryKeyColumn,
+            DisplayColumn = x.DisplayColumn,
+            GeometryColumn = x.GeometryColumn,
+            SupportMvt = x.SupportMvt,
+            // MvtMinZoom = x.MvtMinZoom,
+            // MvtMaxZoom = x.MvtMaxZoom,
+            // MvtCacheDuration = x.MvtCacheDuration
+        }).ToListAsync();
+        Assert.IsNotEmpty(data);
+        Console.WriteLine(data.Count);
     }
 
 }

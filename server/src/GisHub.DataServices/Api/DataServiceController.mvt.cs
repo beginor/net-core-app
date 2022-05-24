@@ -22,7 +22,7 @@ partial class DataServiceController {
     /// <summary>读取图层的矢量切片信息</summary>
     [HttpGet("{id:long}/mvt/info")]
     [Authorize("data_services.read_mvt")]
-    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult<MvtInfoModel>> GetMvtInfo(long id) {
         try {
             var ds = await repository.GetCacheItemByIdAsync(id);
@@ -92,7 +92,7 @@ partial class DataServiceController {
     /// <summary>读取数据服务的空间数据(矢量切片形式)</summary>
     [HttpGet("{id:long}/mvt/{z:int}/{y:int}/{x:int}")]
     [Authorize("data_services.read_mvt")]
-    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult> ReadAsMvt(long id, int z, int y, int x) {
         try {
             var ds = await repository.GetCacheItemByIdAsync(id);
@@ -135,7 +135,7 @@ partial class DataServiceController {
     /// <summary>判断图层是否支持矢量切片</summary>
     [HttpGet("{id:long}/mvt/support")]
     [Authorize("data_services.read_mvt")]
-    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult<bool>> SupportMvt(long id) {
         try {
             var ds = await repository.GetCacheItemByIdAsync(id);
@@ -158,7 +158,7 @@ partial class DataServiceController {
     /// <summary>获取图层矢量切片缓存的大小</summary>
     [HttpGet("{id:long}/mvt/cache")]
     [Authorize("data_services.read_mvt")]
-    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult<long>> GetCacheSize(long id) {
         try {
             var ds = await repository.GetCacheItemByIdAsync(id);

@@ -89,5 +89,13 @@ public partial class BaseResourceRepository : Disposable, IBaseResourceRepositor
         }
         return result;
     }
+    
+    public async Task<string[]> GetRolesByResourceIdAsync(long resourceId) {
+        var query = session.Query<BaseResource>()
+            .Where(res => res.Id == resourceId)
+            .Select(res => res.Roles);
+        var roles = await query.FirstOrDefaultAsync();
+        return roles ?? Array.Empty<string>();
+    }
 
 }

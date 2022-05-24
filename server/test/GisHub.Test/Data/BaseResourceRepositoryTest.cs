@@ -43,5 +43,13 @@ public class BaseResourceRepositoryTest : BaseTest<IBaseResourceRepository> {
         Assert.IsNotEmpty(result.Data);
         Console.WriteLine(result.ToJson());
     }
+    
+    [Test]
+    public async Task _04_CanGetRolesByResourceId() {
+        var resourceId = 1618394546378030029;
+        var roles = await Target.GetRolesByResourceIdAsync(resourceId);
+        Assert.IsNotEmpty(roles);
+        Console.WriteLine(string.Join(',', roles));
+    }
 
 }

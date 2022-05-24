@@ -17,7 +17,7 @@ partial class DataServiceController {
 
     [HttpGet("{id:long}/columns")]
     [Authorize("data_services.read_data")]
-    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult<List<ColumnModel>>> GetColumns(long id) {
         try {
             var dataSource = await repository.GetCacheItemByIdAsync(id);
@@ -36,7 +36,7 @@ partial class DataServiceController {
 
     [HttpGet("{id:long}/count")]
     [Authorize("data_services.read_data")]
-    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult<long>> Count(
         [FromRoute]long id,
         [ModelBinder(BinderType = typeof(EncryptedModelBinder))]CountParam param
@@ -61,7 +61,7 @@ partial class DataServiceController {
 
     [HttpGet("{id:long}/data")]
     [Authorize("data_services.read_data")]
-    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult> ReadData(
         [FromRoute] long id,
         [ModelBinder(BinderType = typeof(EncryptedModelBinder))] ReadDataParam param
@@ -99,7 +99,7 @@ partial class DataServiceController {
 
     [HttpGet("{id:long}/distinct")]
     [Authorize("data_services.read_data")]
-    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult> ReadDistinctData(
         [FromRoute] long id,
         [ModelBinder(BinderType = typeof(EncryptedModelBinder))] DistinctParam param
@@ -130,7 +130,7 @@ partial class DataServiceController {
 
     [HttpGet("{id:long}/pivot")]
     [Authorize("data_services.read_data")]
-    [RolesFilter(IdParameterName = "id", ProviderType = typeof(IDataServiceRepository))]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult> PivotData(
         long id,
         [ModelBinder(BinderType = typeof(EncryptedModelBinder))]PivotParam param
