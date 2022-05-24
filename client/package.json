@@ -15,6 +15,7 @@
     "build-handset": "pnpm run build-handset-style && ng build handset --configuration production",
     "watch-web": "ng build web --watch --configuration development",
     "watch-handset": "ng build handset --watch --configuration development",
+    "build-styles": "pnpm run build-web-style && pnpm run build-handset-style",
     "start": "pnpm run watch-web"
   },
   "repository": {
