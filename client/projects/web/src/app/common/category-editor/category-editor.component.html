@@ -1,11 +1,11 @@
 <label class="form-label text-muted">类别</label>
-<div class="input-group" ngbDropdown container="body" placement="left-top">
-  <input class="form-control" [ngModel]="category?.name" [disabled]="!editable" />
-  <ng-container *ngIf="editable">
-    <button class="btn btn-outline-secondary" ngbDropdownToggle>
-      <svg-icon path="bi/caret-down"></svg-icon>
-    </button>
-  </ng-container>
+<div class="input-group" ngbDropdown #categoryDropdown="ngbDropdown"
+  container="body" placement="left-top">
+  <input class="form-control" [ngModel]="category?.name" [disabled]="!editable"
+    readonly/>
+  <button class="btn btn-outline-secondary" [disabled]="!editable" ngbDropdownToggle>
+    <svg-icon path="bi/caret-down"></svg-icon>
+  </button>
   <div ngbDropdownMenu>
     <ng-container *ngFor="let node of nodes">
       <button ngbDropdownItem [ngStyle]="getStyle(node.level)"
