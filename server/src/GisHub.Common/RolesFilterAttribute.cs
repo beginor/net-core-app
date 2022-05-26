@@ -23,7 +23,7 @@ public class RolesFilterAttribute : ActionFilterAttribute {
         }
         var provider = context.HttpContext.RequestServices.GetService<IRolesFilterProvider>();
         if (provider == null) {
-            context.Result = new ObjectResult($"required service IRolesFilterProvider is not registered!") {
+            context.Result = new ObjectResult("required service IRolesFilterProvider is not registered!") {
                 StatusCode = StatusCodes.Status500InternalServerError
             };
             return;
