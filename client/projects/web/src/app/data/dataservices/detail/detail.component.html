@@ -18,7 +18,7 @@
     <div class="mb-3">
       <label class="form-label text-muted" for="name">服务名称 <i class="text-danger">*</i> </label>
       <input class="form-control" type="text" id="name" name="name"
-        placeholder="请输入数据服务名称 ..." required
+        placeholder="请输入服务名称 ..." required
         [disabled]="!editable"
         [(ngModel)]="model.name"
         #name="ngModel"
@@ -29,7 +29,7 @@
     <div class="mb-3">
       <label class="form-label text-muted" for="description">服务描述 </label>
       <input class="form-control" type="text" id="description" name="description"
-        placeholder="请输入数据服务描述 ..."
+        placeholder="请输入服务描述 ..."
         [disabled]="!editable"
         [(ngModel)]="model.description"
       />
@@ -203,7 +203,6 @@
         </div>
       </div>
     </div>
-
     <div class="mb-3 mx-3" *ngIf="model.supportMvt">
       <label class="form-label text-muted me-3">缓存时间 </label>
       <div class="form-check form-check-inline">
@@ -232,25 +231,12 @@
         <label class="form-check-label text-muted" for="mvtCacheDuration4" >1年</label>
       </div>
     </div>
-
     <div class="mb-3 mx-3" *ngIf="model.supportMvt">
       <div class="input-group">
         <div class="input-group-text">缓存占用空间</div>
         <input class="form-control text-end" disabled type="text" [value]="cacheSize | fileSize" />
         <button class="btn btn-outline-secondary" type="button"
           *ngIf="editable" (click)="deleteMvtCache()">清除缓存</button>
-      </div>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label text-muted">授权角色</label>
-      <div class="form-text">
-        <div class="form-check form-check-inline form-switch" *ngFor="let role of vm.roles">
-          <input class="form-check-input" type="checkbox" [id]="role.id"
-            [name]="role.name" [disabled]="!editable" [value]="role.name"
-            [checked]="isRoleChecked(role.name)" (change)="toggleCheckedRole(role.name)" />
-          <label class="form-check-label text-muted" [for]="role.id">{{role.description}}</label>
-        </div>
       </div>
     </div>
   </div>
