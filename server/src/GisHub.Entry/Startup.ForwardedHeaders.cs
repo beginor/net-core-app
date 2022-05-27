@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Beginor.NetCoreApp.Entry;
+namespace Beginor.GisHub.Entry;
 
 partial class Startup {
 
