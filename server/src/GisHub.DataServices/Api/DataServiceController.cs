@@ -90,7 +90,12 @@ public partial class DataServiceController : Controller {
         [FromBody]DataServiceModel model
     ) {
         try {
-            await repository.SaveAsync(model);
+            var userId = this.GetUserId();
+            var user = await userMgr.FindByIdAsync(userId);
+            if (user == null) {
+                return BadRequest("User is null!");
+            }
+            await repository.SaveAsync(model, user);
             return model;
         }
         catch (Exception ex) {

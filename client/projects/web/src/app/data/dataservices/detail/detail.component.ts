@@ -38,7 +38,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: DataServiceModel = { id: '' };
+    public model: DataServiceModel = { id: '', roles: [], tags: [], category: {} }; // eslint-disable-line max-len
     public dataSources: DataSourceModel[] = [];
     public dataSource?: DataSourceModel;
 
@@ -116,6 +116,12 @@ export class DetailComponent implements OnInit {
                 if (!model.roles) {
                     model.roles = [];
                 }
+                if (!model.tags) {
+                    model.tags = [];
+                }
+                if (!model.category) {
+                    model.category = {};
+                }
                 this.model = model;
                 this.dataSource = this.dataSources.find(
                     ds => ds.id === model.dataSource?.id
@@ -130,10 +136,9 @@ export class DetailComponent implements OnInit {
                 }
             }
         }
-        else {
-            const roles = this.account.info.getValue().roles;
-            this.model.roles = Object.keys(roles);
-        }
+        // else {
+        //     this.model.roles = Object.keys(roles);
+        // }
     }
 
     public async onAnimationEvent(e: AnimationEvent): Promise<void> {
@@ -202,26 +207,6 @@ export class DetailComponent implements OnInit {
             this.model.name = table.description || table.name;
         }
         await this.loadColumns();
-    }
-
-    public isRoleChecked(role: string): boolean {
-        if (!this.model.roles) {
-            return false;
-        }
-        return this.model.roles.indexOf(role) > -1;
-    }
-
-    public toggleCheckedRole(role: string): void {
-        if (!this.model.roles) {
-            return;
-        }
-        const idx = this.model.roles.indexOf(role);
-        if (idx > -1) {
-            this.model.roles.splice(idx, 1);
-        }
-        else {
-            this.model.roles.push(role);
-        }
     }
 
     public toggleField(name: string): void {

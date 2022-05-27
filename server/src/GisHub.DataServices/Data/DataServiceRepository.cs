@@ -166,4 +166,16 @@ public partial class DataServiceRepository : HibernateRepository<DataService, Da
         return item;
     }
 
+    public async Task SaveAsync(DataServiceModel model, AppUser user, CancellationToken token = default) {
+        var entity = Mapper.Map<DataService>(model);
+        entity.Creator = user;
+        entity.CreatedAt = DateTime.Now;
+        entity.Updater = user;
+        entity.UpdatedAt = DateTime.Now;
+        await Session.SaveAsync(entity, token);
+        await Session.FlushAsync(token);
+        Session.Clear();
+        Mapper.Map(entity, model);
+    }
+
 }
