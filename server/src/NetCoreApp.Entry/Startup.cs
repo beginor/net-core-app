@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SysEnvironment = System.Environment;
 
-namespace Beginor.NetCoreApp.Entry; 
+namespace Beginor.NetCoreApp.Entry;
 
 public partial class Startup {
 
@@ -36,6 +36,8 @@ public partial class Startup {
         ConfigureCorsServices(services, env);
         // web related.
         ConfigurePathBaseServices(services, env);
+        // forwarded headers
+        ConfigureForwardedHeadersServices(services, env);
         ConfigureCustomHeaderServices(services, env);
         ConfigureStaticFilesServices(services, env);
         ConfigureSwaggerServices(services, env);
@@ -56,6 +58,8 @@ public partial class Startup {
         ConfigureAutoMapper(app, env);
         ConfigureApp(app, env);
         ConfigureIdentity(app, env);
+        // forwarded headers
+        ConfigureForwardedHeaders(app, env);
         // cors, auth;
         ConfigureCors(app, env);
         // web related.
