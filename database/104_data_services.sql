@@ -5,8 +5,6 @@
 create table public.data_services
 (
     id bigint not null default snow_flake_id(),
-    name character varying(32) collate pg_catalog."default" not null,
-    description character varying(256) collate pg_catalog."default",
     data_source_id bigint not null,
     schema character varying(16) collate pg_catalog."default",
     table_name character varying(64) collate pg_catalog."default" not null,
@@ -16,13 +14,10 @@ create table public.data_services
     geometry_column character varying(256) collate pg_catalog."default",
     preset_criteria character varying(128) collate pg_catalog."default",
     default_order character varying(128) collate pg_catalog."default",
-    tags character varying(16)[] collate pg_catalog."default",
     support_mvt boolean,
     mvt_min_zoom integer,
     mvt_max_zoom integer,
     mvt_cache_duration integer,
-    roles character varying(64)[] collate pg_catalog."default",
-    is_deleted boolean not null default false,
     constraint pk_data_services primary key (id),
     constraint fk_data_services_data_source_id foreign key (data_source_id)
         references public.data_sources (id) match simple
@@ -43,9 +38,6 @@ comment on table public.data_services
 
 comment on column public.data_services.id
     is '数据服务id';
-
-comment on column public.data_services.name
-    is '数据服务名称';
 
 comment on column public.data_services.data_source_id
     is '数据库源id';
@@ -71,12 +63,6 @@ comment on column public.data_services.preset_criteria
 comment on column public.data_services.default_order
     is '默认排序';
 
-comment on column public.data_services.tags
-    is '标签';
-
-comment on column public.data_services.is_deleted
-    is '是否删除';
-
 -- index: fki_fk_datasources_id
 
 -- drop index public.fki_fk_datasources_id;
@@ -85,12 +71,6 @@ create index fki_fk_data_source_id
     on public.data_services using btree
     (data_source_id asc nulls last)
     tablespace pg_default;
-
-comment on column public.data_services.roles
-    is '允许的角色';
-
-comment on column public.data_services.description
-    is '数据服务描述';
 
 comment on column public.data_services.fields
     is '数据服务允许的的字段列表';
