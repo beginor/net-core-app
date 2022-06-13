@@ -8,7 +8,8 @@ public class ModelMapping : AutoMapper.Profile {
     public ModelMapping() {
         CreateMap<SlpkEntity, SlpkModel>()
             .ReverseMap()
-            .ForMember(dest => dest.Id, map => map.Ignore());
+            .ForMember(dest => dest.Id, map => map.Ignore())
+            .ForMember(dest => dest.Type, map => map.Ignore());
     }
 
 }

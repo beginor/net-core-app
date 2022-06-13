@@ -3,11 +3,13 @@ using System.Security.Claims;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Api;
+using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Slpk.Data;
 using Beginor.GisHub.Slpk.Models;
 
@@ -20,15 +22,18 @@ public partial class SlpkController : Controller {
     private ILogger<SlpkController> logger;
     private ISlpkRepository repository;
     private IContentTypeProvider provider;
+    private UserManager<AppUser> userMgr;
 
     public SlpkController(
         ILogger<SlpkController> logger,
         ISlpkRepository repository,
-        IContentTypeProvider provider
+        IContentTypeProvider provider,
+        UserManager<AppUser> userMgr
     ) {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
+        this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
     }
 
     protected override void Dispose(bool disposing) {
@@ -36,6 +41,7 @@ public partial class SlpkController : Controller {
             logger = null;
             repository = null;
             provider = null;
+            userMgr = null;
         }
         base.Dispose(disposing);
     }
@@ -49,8 +55,9 @@ public partial class SlpkController : Controller {
         [FromBody]SlpkModel model
     ) {
         try {
-            var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            await repository.SaveAsync(model, userId);
+            var userId = this.GetUserId();
+            var user = await userMgr.FindByIdAsync(userId);
+            await repository.SaveAsync(model, user);
             return model;
         }
         catch (Exception ex) {
@@ -67,8 +74,9 @@ public partial class SlpkController : Controller {
     [Authorize("slpks.delete")]
     public async Task<ActionResult> Delete(long id) {
         try {
-            var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            await repository.DeleteAsync(id, userId);
+            var userId = this.GetUserId();
+            var user = await userMgr.FindByIdAsync(userId);
+            await repository.DeleteAsync(id, user);
             return NoContent();
         }
         catch (Exception ex) {
@@ -134,8 +142,9 @@ public partial class SlpkController : Controller {
             if (modelInDb == null) {
                 return NotFound();
             }
-            var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            await repository.UpdateAsync(id, model, userId);
+            var userId = this.GetUserId();
+            var user = await userMgr.FindByIdAsync(userId);
+            await repository.UpdateAsync(id, model, user);
             return model;
         }
         catch (Exception ex) {

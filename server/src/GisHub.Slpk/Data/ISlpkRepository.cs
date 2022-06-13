@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Slpk.Models;
 
 namespace Beginor.GisHub.Slpk.Data; 
@@ -13,11 +14,11 @@ public partial interface ISlpkRepository : IRepository<SlpkModel, long> {
         SlpkSearchModel model
     );
 
-    Task SaveAsync(SlpkModel model, string userId, CancellationToken token = default);
+    Task SaveAsync(SlpkModel model, AppUser user, CancellationToken token = default);
 
-    Task UpdateAsync(long id, SlpkModel entity, string userId, CancellationToken token = default);
+    Task UpdateAsync(long id, SlpkModel entity, AppUser user, CancellationToken token = default);
 
-    Task DeleteAsync(long id, string userId, CancellationToken token = default);
+    Task DeleteAsync(long id, AppUser user, CancellationToken token = default);
 
     Task<string> GetSlpkDirectoryAsync(long id);
 

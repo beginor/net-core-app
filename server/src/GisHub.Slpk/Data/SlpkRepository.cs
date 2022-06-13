@@ -12,6 +12,7 @@ using NHibernate.Linq;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using Beginor.GisHub.Common;
+using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Slpk.Models;
 
@@ -49,22 +50,43 @@ public class SlpkRepository : HibernateRepository<SlpkEntity, SlpkModel, long>, 
         SlpkSearchModel model
     ) {
         var query = Session.Query<SlpkEntity>();
-        var sql = new StringBuilder();
-        sql.AppendLine("from public.slpks ");
-        sql.AppendLine("where is_deleted = false ");
         if (model.Keywords.IsNotNullOrEmpty()) {
-            sql.AppendLine(" and (directory like '%' || @Keywords || '%' or @Keywords = any(tags)) ");
+            var keywords = model.Keywords;
+            if (long.TryParse(keywords, out var id)) {
+                query = query.Where(e => e.Id == id);
+            }
+            else {
+                query = query.Where(
+                    e => e.Name.Contains(keywords) || e.Description.Contains(keywords)
+                );
+            }
         }
-        var total = await Session.Connection.ExecuteScalarAsync<long>(
-            "select count(*) " + sql.ToString(),
-            model
-        );
-        sql.AppendLine(" order by updated_at desc ");
-        sql.AppendLine(" limit @Take offset @Skip ");
-        var data = await Session.Connection.QueryAsync<SlpkEntity>(
-            "select * " + sql.ToString(),
-            model
-        );
+        if (model.Category > 0) {
+            query = query.Where(e => e.Category.Id == model.Category);
+        }
+        var total = await query.LongCountAsync();
+        var data = await query.Select(e => new SlpkEntity {
+                Id = e.Id,
+                Name = e.Name,
+                Description = e.Description,
+                Type = e.Type,
+                Category = e.Category,
+                Roles = e.Roles,
+                Tags = e.Tags,
+                Creator = e.Creator,
+                CreatedAt = e.CreatedAt,
+                Updater = e.Updater,
+                UpdatedAt = e.UpdatedAt,
+                Directory = e.Directory,
+                Longitude = e.Longitude,
+                Latitude = e.Latitude,
+                Elevation = e.Elevation,
+                IsDeleted = e.IsDeleted
+            })
+            .OrderByDescending(e => e.Id)
+            .Skip(model.Skip)
+            .Take(model.Take)
+            .ToListAsync();
         return new PaginatedResponseModel<SlpkModel> {
             Total = total,
             Data = Mapper.Map<IList<SlpkModel>>(data),
@@ -73,18 +95,18 @@ public class SlpkRepository : HibernateRepository<SlpkEntity, SlpkModel, long>, 
         };
     }
 
-    public async Task SaveAsync(SlpkModel model, string userId, CancellationToken token = default) {
+    public async Task SaveAsync(SlpkModel model, AppUser user, CancellationToken token = default) {
         var entity = Mapper.Map<SlpkEntity>(model);
         entity.CreatedAt = DateTime.Now;
-        entity.CreatorId = userId;
+        entity.Creator = user;
         entity.UpdatedAt = DateTime.Now;
-        entity.UpdaterId = userId;
+        entity.Updater = user;
         await Session.SaveAsync(entity, token);
         await Session.FlushAsync(token);
         await cache.RemoveAsync(entity.Id.ToString());
     }
 
-    public async Task UpdateAsync(long id, SlpkModel model, string userId, CancellationToken token = default) {
+    public async Task UpdateAsync(long id, SlpkModel model, AppUser user, CancellationToken token = default) {
         var entity = await Session.LoadAsync<SlpkEntity>(id, token);
         if (entity == null) {
             throw new InvalidOperationException(
@@ -93,18 +115,18 @@ public class SlpkRepository : HibernateRepository<SlpkEntity, SlpkModel, long>, 
         }
         Mapper.Map(model, entity);
         entity.UpdatedAt = DateTime.Now;
-        entity.UpdaterId = userId;
+        entity.Updater = user;
         await Session.UpdateAsync(entity, token);
         await Session.FlushAsync(token);
         Mapper.Map(entity, model);
         await cache.RemoveAsync(id.ToString(), token);
     }
 
-    public async Task DeleteAsync(long id, string userId, CancellationToken token = default) {
+    public async Task DeleteAsync(long id, AppUser user, CancellationToken token = default) {
         var entity = await Session.GetAsync<SlpkEntity>(id, token);
         if (entity != null) {
             entity.UpdatedAt = DateTime.Now;
-            entity.UpdaterId = userId;
+            entity.Updater = user;
             entity.IsDeleted = true;
             await Session.UpdateAsync(entity, token);
             await Session.FlushAsync(token);
