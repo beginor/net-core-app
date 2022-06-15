@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Api;
+using Beginor.GisHub.Common;
 
 namespace Beginor.GisHub.Slpk.Api; 
 
@@ -31,6 +32,7 @@ partial class SlpkController {
     /// <summary>获取 slpk 场景信息</summary>
     [HttpGet("~/rest/services/slpks/{id:long}/SceneServer")]
     [Authorize("slpks.read_slpk_scene")]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult> GetSlpkInfo(long id) {
         try {
             var directory = await repository.GetSlpkDirectoryAsync(id);
@@ -50,6 +52,7 @@ partial class SlpkController {
     /// <summary>获取 slpk 场景图层信息</summary>
     [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/layers/0")]
     [Authorize("slpks.read_slpk_scene")]
+    [RolesFilter(IdParameterName = "id")]
     public Task<ActionResult> GetSlpkLayerInfo(long id) {
         return GetSlpkInfo(id);
     }
@@ -57,6 +60,7 @@ partial class SlpkController {
     /// <summary>获取 slpk 场景节点信息</summary>
     [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/layers/0/nodes/{node}")]
     [Authorize("slpks.read_slpk_scene")]
+    [RolesFilter(IdParameterName = "id")]
     public Task<ActionResult> GetLayer0NodeIndex(long id, string node) {
         return GetNodeIndex(id, node);
     }
@@ -64,6 +68,7 @@ partial class SlpkController {
     /// <summary>获取 slpk 场景节点信息</summary>
     [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/nodes/{node}")]
     [Authorize("slpks.read_slpk_scene")]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult> GetNodeIndex(long id, string node) {
         try {
             var directory = await repository.GetSlpkDirectoryAsync(id);
@@ -83,6 +88,7 @@ partial class SlpkController {
     /// <summary>获取 slpk 场景节点要素</summary>
     [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/layers/0/nodes/{node}/features/{feature}")]
     [Authorize("slpks.read_slpk_scene")]
+    [RolesFilter(IdParameterName = "id")]
     public Task<ActionResult> GetLayer0NodeFeature(long id, string node, string feature) {
         return GetNodeFeature(id, node, feature);
     }
@@ -90,6 +96,7 @@ partial class SlpkController {
     /// <summary>获取 slpk 场景节点要素</summary>
     [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/nodes/{node}/features/{feature}")]
     [Authorize("slpks.read_slpk_scene")]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult> GetNodeFeature(long id, string node, string feature) {
         try {
             var directory = await repository.GetSlpkDirectoryAsync(id);
@@ -109,12 +116,14 @@ partial class SlpkController {
     /// <summary>获取 slpk 场景节点坐标</summary>
     [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/layers/0/nodes/{node}/geometries/{geometry}")]
     [Authorize("slpks.read_slpk_scene")]
+    [RolesFilter(IdParameterName = "id")]
     public Task<ActionResult> GetLayer0NodeGeometry(long id, string node, string geometry) {
         return GetNodeGeometry(id, node, geometry);
     }
     /// <summary>获取 slpk 场景节点坐标</summary>
     [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/nodes/{node}/geometries/{geometry}")]
     [Authorize("slpks.read_slpk_scene")]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult> GetNodeGeometry(long id, string node, string geometry) {
         try {
             var directory = await repository.GetSlpkDirectoryAsync(id);
@@ -134,12 +143,14 @@ partial class SlpkController {
     /// <summary>获取 slpk 场景节点共享资源</summary>
     [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/layers/0/nodes/{node}/shared")]
     [Authorize("slpks.read_slpk_scene")]
+    [RolesFilter(IdParameterName = "id")]
     public Task<ActionResult> GetLayer0NodeShared(long id, string node) {
         return GetNodeShared(id, node);
     }
     /// <summary>获取 slpk 场景节点共享资源</summary>
     [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/nodes/{node}/shared")]
     [Authorize("slpks.read_slpk_scene")]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult> GetNodeShared(long id, string node) {
         try {
             var directory = await repository.GetSlpkDirectoryAsync(id);
@@ -159,6 +170,7 @@ partial class SlpkController {
     /// <summary>获取 slpk 场景节点贴图</summary>
     [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/layers/0/nodes/{node}/textures/{texture}")]
     [Authorize("slpks.read_slpk_scene")]
+    [RolesFilter(IdParameterName = "id")]
     public Task<ActionResult> GetLayer0NodeTexture(long id, string node, string texture) {
         return GetNodeTexture(id, node, texture);
     }
@@ -166,6 +178,7 @@ partial class SlpkController {
     /// <summary>获取 slpk 场景节点贴图</summary>
     [HttpGet("~/rest/services/slpks/{id:long}/SceneServer/nodes/{node}/textures/{texture}")]
     [Authorize("slpks.read_slpk_scene")]
+    [RolesFilter(IdParameterName = "id")]
     public async Task<ActionResult> GetNodeTexture(long id, string node, string texture) {
         try {
             var directory = await repository.GetSlpkDirectoryAsync(id);
