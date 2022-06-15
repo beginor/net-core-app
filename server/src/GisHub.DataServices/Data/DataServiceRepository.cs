@@ -100,7 +100,7 @@ public partial class DataServiceRepository : HibernateRepository<DataService, Da
         if (entity.DataSource.Id.ToString() != model.DataSource.Id) {
             entity.DataSource = Mapper.Map<DataSource>(model.DataSource);
         }
-        if (entity.Category.Id.ToString() != model.DataSource.Id) {
+        if (entity.Category.Id.ToString() != model.Category.Id) {
             entity.Category = Mapper.Map<Category>(model.Category);
         }
         Mapper.Map(model, entity);
