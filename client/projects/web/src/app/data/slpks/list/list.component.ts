@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
-import { CategoryNode, CategoryTreeViewComponent } from "../../../common";
+import { CategoryNode, CategoryTreeViewComponent } from '../../../common';
 import { PreviewComponent } from '../preview/preview.component';
 import { SlpkModel, SlpkService } from '../slpks.service';
 
