@@ -65,11 +65,8 @@ export class ListComponent implements OnInit {
             }
         );
         const id = item.id;
-        let tag = '';
-        if (!!item.tags && !!item.tags[0]) {
-            tag = item.tags[0];
-        }
-        Object.assign(modalRef.componentInstance, {id, name: tag });
+        const name = item.name;
+        Object.assign(modalRef.componentInstance, {id, name });
     }
 
     public onTreeItemClick(node: CategoryNode): void {
