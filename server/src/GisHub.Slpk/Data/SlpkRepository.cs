@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using AutoMapper;
-using Dapper;
 using NHibernate;
 using NHibernate.Linq;
 using Beginor.AppFx.Core;
@@ -112,6 +110,9 @@ public class SlpkRepository : HibernateRepository<SlpkEntity, SlpkModel, long>, 
             throw new InvalidOperationException(
                 $"{typeof(SlpkModel)} with id {id} is null!"
             );
+        }
+        if (entity.Category.Id.ToString() != model.Category.Id) {
+            entity.Category = Mapper.Map<Category>(model.Category);
         }
         Mapper.Map(model, entity);
         entity.UpdatedAt = DateTime.Now;

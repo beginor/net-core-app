@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountService } from 'app-shared';
+import { CategoryNode, CategoryTreeViewComponent } from "../../../common";
 import { PreviewComponent } from '../preview/preview.component';
 import { SlpkModel, SlpkService } from '../slpks.service';
 
@@ -13,6 +14,9 @@ import { SlpkModel, SlpkService } from '../slpks.service';
 })
 export class ListComponent implements OnInit {
 
+    @ViewChild('categoryTreeView', { static: true })
+    public categoryTreeView!: CategoryTreeViewComponent;
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -21,8 +25,9 @@ export class ListComponent implements OnInit {
         public vm: SlpkService
     ) { }
 
-    public ngOnInit(): void {
-        this.loadData();
+    public async ngOnInit(): Promise<void> {
+        await this.categoryTreeView.loadData();
+        await this.loadData();
     }
 
     public async loadData(): Promise<void> {
@@ -30,7 +35,7 @@ export class ListComponent implements OnInit {
     }
 
     public showDetail(id: string, editable: boolean): void {
-        this.router.navigate(
+        void this.router.navigate(
             ['./', id, { editable: editable }],
             { relativeTo: this.route, skipLocationChange: true }
         );
@@ -39,14 +44,14 @@ export class ListComponent implements OnInit {
     public async delete(id: string): Promise<void> {
         const deleted = await this.vm.delete(id);
         if (deleted) {
-            this.vm.search();
+            void this.vm.search();
         }
     }
 
     public async resetSearch(): Promise<void> {
         this.vm.searchModel.keywords = '';
         this.vm.searchModel.skip = 0;
-        this.vm.search();
+        await this.vm.search();
     }
 
     public showPreview(item: SlpkModel): void {
@@ -64,8 +69,17 @@ export class ListComponent implements OnInit {
         if (!!item.tags && !!item.tags[0]) {
             tag = item.tags[0];
         }
-        modalRef.componentInstance.id = id;
-        modalRef.componentInstance.name = tag;
+        Object.assign(modalRef.componentInstance, {id, name: tag });
+    }
+
+    public onTreeItemClick(node: CategoryNode): void {
+        if (!node) {
+            delete this.vm.searchModel.category;
+        }
+        else {
+            this.vm.searchModel.category = node.id;
+        }
+        void this.loadData();
     }
 
 }

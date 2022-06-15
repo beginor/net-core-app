@@ -169,6 +169,16 @@ export class SlpkService {
 export interface SlpkModel {
     /** 航拍模型id */
     id: string;
+    /** 模型名称 */
+    name?: string;
+    /** 模型描述 */
+    description?: string;
+    /** 类别 */
+    category?: { id?: string; name?: string; };
+    /** 角色 */
+    roles?: string[];
+    /** 标签 */
+    tags?: string[];
     /** 航拍模型目录 */
     directory?: string;
     /** 模型经度 */
@@ -177,8 +187,6 @@ export interface SlpkModel {
     latitude?: number;
     /** 模型海拔高度 */
     elevation?: number;
-    /** 标签/别名 */
-    tags?: string[];
 }
 
 /** slpk 航拍模型 搜索参数 */
@@ -189,6 +197,7 @@ export interface SlpkSearchModel {
     /** 取多少条记录 */
     take: number;
     keywords?: string;
+    category?: string;
 }
 
 /** slpk 航拍模型 搜索结果 */

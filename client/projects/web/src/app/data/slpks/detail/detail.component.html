@@ -17,6 +17,31 @@
   </div>
   <div class="card-body">
     <div class="mb-3">
+      <label class="form-label text-muted" for="name">模型名称 <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="name" name="name"
+        placeholder="请输入模型名称 ..." required
+        [disabled]="!editable"
+        [(ngModel)]="model.name"
+        #name="ngModel"
+        [class.is-invalid]="!(name.valid || name.pristine)"
+        [class.is-valid]="name.valid"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="description">模型描述 </label>
+      <input class="form-control" type="text" id="description" name="description"
+        placeholder="请输入模型描述 ..."
+        [disabled]="!editable"
+        [(ngModel)]="model.description"
+      />
+    </div>
+    <app-category-editor class="mb-3" [category]="model.category!" [editable]="editable">
+    </app-category-editor>
+    <app-roles-editor class="mb-3" [roles]="model.roles!" [editable]="editable">
+    </app-roles-editor>
+    <app-tags-editor class="mb-3" [tags]="model.tags!" [editable]="editable">
+    </app-tags-editor>
+    <div class="mb-3">
       <label class="form-label text-muted" for="directory">目录  <i class="text-danger">*</i> </label>
       <div class="input-group">
         <input class="form-control" type="text" id="directory" name="directory"
@@ -69,23 +94,6 @@
         </div>
       </div>
     </div>
-    <div class="mb-3">
-      <label class="form-label text-muted" for="tags">标签 </label>
-      <div class="input-group">
-        <button class="btn btn-outline-secondary" type="button"
-          *ngFor="let t of model.tags" ngbTooltip="点击删除这个标签" container="body"
-          [disabled]="!editable" (click)="delTag(t)">{{t}}</button>
-        <input class="form-control" type="text" id="newTag" name="newTag"
-          placeholder="请输入新标签 ..." *ngIf="editable" [(ngModel)]="newTag" />
-        <ng-container *ngIf="!!newTag">
-          <button class="btn btn-outline-secondary" (click)="addNewTag()">
-            <svg-icon path="bi/plus"></svg-icon>
-          </button>
-        </ng-container>
-      </div>
-    </div>
-    <app-tags-editor class="mb-3" [tags]="model.tags!" [editable]="editable">
-    </app-tags-editor>
   </div>
   <div *ngIf="info.privileges['app_privileges.update'] && editable"
     class="card-footer d-flex justify-content-between">

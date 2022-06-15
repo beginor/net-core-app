@@ -28,7 +28,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: SlpkModel = { id: '', tags: [] };
+    public model: SlpkModel = { id: '', tags: [], roles: [], category: {} };
     public newTag = '';
 
     private id = '';
@@ -60,10 +60,16 @@ export class DetailComponent implements OnInit {
         if (this.id !== '0') {
             const model = await this.vm.getById(this.id);
             if (!!model) {
-                this.model = model;
-                if (this.editable && !model.tags) {
+                if (!model.roles) {
+                    model.roles = [];
+                }
+                if (!model.tags) {
                     model.tags = [];
                 }
+                if (!model.category) {
+                    model.category = {};
+                }
+                this.model = model;
             }
         }
     }

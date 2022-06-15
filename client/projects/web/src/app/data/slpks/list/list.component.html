@@ -6,8 +6,14 @@
   </ol>
 </nav>
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-12">
+  <div class="row g-0">
+    <div class="col-auto pe-1">
+      <app-category-tree-view #categoryTreeView
+        resourceType="slpk"
+        (itemClick)="onTreeItemClick($event)">
+      </app-category-tree-view>
+    </div>
+    <div class="col ps-1">
       <div class="card" *ngIf="(account.info | async) as info">
         <div class="card-header d-flex justify-content-between">
           <h5 class="card-title mb-0">航拍模型</h5>
@@ -75,11 +81,9 @@
             <thead>
               <tr>
                 <th scope="col" class="text-center text-nowrap text-muted">#</th>
-                <th scope="col" class="text-center text-nowrap text-muted">目录</th>
-                <th scope="col" class="text-center text-nowrap text-muted">经度</th>
-                <th scope="col" class="text-center text-nowrap text-muted">纬度</th>
-                <th scope="col" class="text-center text-nowrap text-muted">海拔高度</th>
-                <th scope="col" class="text-center text-nowrap text-muted">标签</th>
+                <th scope="col" class="text-start text-nowrap text-muted">名称</th>
+                <th scope="col" class="text-start text-nowrap text-muted">描述</th>
+                <th scope="col" class="text-start text-nowrap text-muted">目录</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
@@ -87,12 +91,10 @@
               <tr *ngFor="let item of data; let i = index;">
                 <th scope="row" class="text-end text-muted">{{i+1+vm.searchModel.skip}}</th>
                 <td class='text-start'>
-                  <a class="clickable" (click)="showPreview(item)">{{item.directory}}</a>
+                  <a class="clickable" (click)="showPreview(item)">{{item.name}}</a>
                 </td>
-                <td class='text-end'>{{item.longitude}}</td>
-                <td class='text-end'>{{item.latitude}}</td>
-                <td class='text-end'>{{item.elevation}}</td>
-                <td class='text-start'>{{item.tags}}</td>
+                <td class='text-start'>{{item.description}}</td>
+                <td class='text-start'>{{item.directory}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
                     <button *ngIf="info.privileges['slpks.read_by_id']"
