@@ -12,4 +12,5 @@ cd docker/gishub
 docker compose down
 docker rmi 127.0.0.1:5000/beginor/gishub
 docker compose up -d
+docker exec nginx nginx -s reload
 '
