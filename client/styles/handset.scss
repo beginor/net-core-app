@@ -1,3 +1,5 @@
+@import "../node_modules/bootstrap/scss/functions";
+
 $enable-shadows: true;
 $enable-rounded: true;
 $enable-caret: false;
@@ -22,12 +24,13 @@ $container-max-widths: (
   xl: 1600px
 );
 
-@import "../node_modules/bootstrap/scss/functions";
+
 @import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/maps";
 @import "../node_modules/bootstrap/scss/mixins";
 @import "../node_modules/bootstrap/scss/reboot";
-@import "../node_modules/bootstrap/scss/grid";
 @import "../node_modules/bootstrap/scss/utilities";
+@import "../node_modules/bootstrap/scss/grid";
 
 * {
   &:active,
