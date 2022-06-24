@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SmartSql" Version="4.1.59" />
+    <PackageReference Include="SmartSql" Version="4.1.64" />
   </ItemGroup>
 
   <ItemGroup>
