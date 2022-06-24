@@ -1,10 +1,11 @@
 $enable-shadows: true;
-$enable-rounded: true;
-$enable-caret: true;
+$enable-rounded: false;
+$enable-caret: false;
+$enable-transitions: true;
 
-$border-radius: 0.375rem;
-$border-radius-sm: 0.25rem;
-$border-radius-lg: 0.5rem;
+// $border-radius: 0.375rem;
+// $border-radius-sm: 0.25rem;
+// $border-radius-lg: 0.5rem;
 
 @import '../node_modules/bootstrap/scss/bootstrap';
 
