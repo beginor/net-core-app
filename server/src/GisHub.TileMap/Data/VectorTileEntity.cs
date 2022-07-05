@@ -1,5 +1,3 @@
-using System;
-using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
 using Beginor.GisHub.Data.Entities;
 
