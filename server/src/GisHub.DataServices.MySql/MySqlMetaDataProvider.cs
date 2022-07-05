@@ -23,7 +23,7 @@ public class MySqlMetaDataProvider : Disposable, IMetaDataProvider {
             AllowUserVariables = true,
             CharacterSet = "utf8"
         };
-        builder.SslMode = model.UseSsl ? MySqlSslMode.Required : MySqlSslMode.None;
+        builder.SslMode = model.UseSsl ? MySqlSslMode.Required : MySqlSslMode.Disabled;
         return builder.ConnectionString;
     }
 
