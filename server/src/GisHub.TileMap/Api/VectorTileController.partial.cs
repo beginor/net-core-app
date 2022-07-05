@@ -1,16 +1,12 @@
 using System;
 using System.Linq;
 using System.Text.Json;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
-using Beginor.AppFx.Core;
-using Beginor.GisHub.TileMap.Models;
-using Beginor.GisHub.TileMap.Data;
-using Microsoft.AspNetCore.Http;
 
 namespace Beginor.GisHub.TileMap.Api; 
 

@@ -1,15 +1,11 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Models;
 
 namespace Beginor.GisHub.TileMap.Models; 
 
 /// <summary>切片地图模型</summary>
-public partial class TileMapModel : StringEntity {
-
-    /// <summary>切片地图名称</summary>
-    [Required(ErrorMessage = "切片地图名称 必须填写！")]
-    public string Name { get; set; }
+public partial class TileMapModel : BaseResourceModel {
     /// <summary>缓存目录</summary>
     [Required(ErrorMessage = "缓存目录 必须填写！")]
     public string CacheDirectory { get; set; }
@@ -36,15 +32,11 @@ public partial class TileMapModel : StringEntity {
     public double? MinLongitude { get; set; }
     /// <summary>最大经度</summary>
     public double? MaxLongitude { get; set; }
-    /// <summary>创建时间</summary>
-    public DateTime CreatedAt { get; set; }
-    /// <summary>更新时间</summary>
-    public DateTime UpdatedAt { get; set; }
-
 }
 
 /// <summary>切片地图搜索参数</summary>
 public partial class TileMapSearchModel : PaginatedRequestModel {
     /// <summary>关键字，搜索图层名称或切片路径</summary>
     public string Keywords { get; set; }
+    public long Category { get; set; }
 }

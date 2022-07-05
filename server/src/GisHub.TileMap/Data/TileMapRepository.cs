@@ -11,8 +11,9 @@ using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using Beginor.GisHub.Common;
-using Beginor.GisHub.Geo.Esri;
 using Beginor.GisHub.Data.Repositories;
+using Beginor.GisHub.Data.Entities;
+using Beginor.GisHub.Geo.Esri;
 using Beginor.GisHub.TileMap.Models;
 using NHibernate;
 using NHibernate.Linq;
@@ -65,9 +66,38 @@ public partial class TileMapRepository : HibernateRepository<TileMapEntity, Tile
                 query = query.Where(e => e.Name.Contains(keywords) || e.CacheDirectory.Contains(keywords));
             }
         }
+        if (model.Category > 0) {
+            query = query.Where(e => e.Category.Id == model.Category);
+        }
         var total = await query.LongCountAsync();
-        var data = await query.OrderByDescending(e => e.UpdatedAt)
-            .Skip(model.Skip).Take(model.Take)
+        var data = await query.Select(e => new TileMapEntity {
+                Id = e.Id,
+                Name = e.Name,
+                Description = e.Description,
+                Type = e.Type,
+                Category = e.Category,
+                Roles = e.Roles,
+                Tags = e.Tags,
+                Creator = e.Creator,
+                CreatedAt = e.CreatedAt,
+                Updater = e.Updater,
+                UpdatedAt = e.UpdatedAt,
+                IsDeleted = e.IsDeleted,
+                CacheDirectory = e.CacheDirectory,
+                MapTileInfoPath = e.MapTileInfoPath,
+                ContentType = e.ContentType,
+                FolderStructure = e.FolderStructure,
+                IsBundled = e.IsBundled,
+                MinLevel = e.MinLevel,
+                MaxLevel = e.MaxLevel,
+                MinLongitude = e.MinLongitude,
+                MaxLongitude = e.MaxLongitude,
+                MinLatitude = e.MinLatitude,
+                MaxLatitude = e.MaxLatitude
+            })
+            .OrderByDescending(e => e.Id)
+            .Skip(model.Skip)
+            .Take(model.Take)
             .ToListAsync();
         return new PaginatedResponseModel<TileMapModel> {
             Total = total,
@@ -79,14 +109,14 @@ public partial class TileMapRepository : HibernateRepository<TileMapEntity, Tile
 
     public async Task SaveAsync(
         TileMapModel model,
-        string userId,
+        AppUser user,
         CancellationToken token = default
     ) {
         var entity = Mapper.Map<TileMapEntity>(model);
         entity.CreatedAt = DateTime.Now;
-        entity.CreatorId = userId;
+        entity.Creator = user;
         entity.UpdatedAt = DateTime.Now;
-        entity.UpdaterId = userId;
+        entity.Updater = user;
         await Session.SaveAsync(entity, token);
         await Session.FlushAsync(token);
         await cache.RemoveAsync(entity.Id.ToString(), token);
@@ -95,7 +125,7 @@ public partial class TileMapRepository : HibernateRepository<TileMapEntity, Tile
     public async Task UpdateAsync(
         long id,
         TileMapModel model,
-        string userId,
+        AppUser user,
         CancellationToken token = default
     ) {
         var entity = await Session.LoadAsync<TileMapEntity>(id, token);
@@ -104,9 +134,12 @@ public partial class TileMapRepository : HibernateRepository<TileMapEntity, Tile
                 $"{typeof(TileMapModel)} with id {id} is null!"
             );
         }
+        if (entity.Category.Id.ToString() != model.Category.Id) {
+            entity.Category = Mapper.Map<Category>(model.Category);
+        }
         Mapper.Map(model, entity);
         entity.UpdatedAt = DateTime.Now;
-        entity.UpdaterId = userId;
+        entity.Updater = user;
         await Session.UpdateAsync(entity, token);
         await Session.FlushAsync(token);
         Mapper.Map(entity, model);
@@ -116,13 +149,13 @@ public partial class TileMapRepository : HibernateRepository<TileMapEntity, Tile
 
     public async Task DeleteAsync(
         long id,
-        string userId,
+        AppUser user,
         CancellationToken token = default
     ) {
         var entity = await Session.GetAsync<TileMapEntity>(id, token);
         if (entity != null) {
             entity.UpdatedAt = DateTime.Now;
-            entity.UpdaterId = userId;
+            entity.Updater = user;
             entity.IsDeleted = true;
             await Session.UpdateAsync(entity, token);
             await Session.FlushAsync(token);

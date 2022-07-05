@@ -10,9 +10,7 @@ namespace Beginor.GisHub.Slpk.Data;
 [Key(1, Column = "id")]
 public partial class SlpkEntity : BaseResource {
 
-    public SlpkEntity() {
-        base.Type = "slpk";
-    }
+    public SlpkEntity() { base.Type = "slpk"; }
 
     /// <summary>航拍模型目录</summary>
     [Property(Name = "Directory", Column = "directory", Type = "string", NotNull = true, Length = 512)]

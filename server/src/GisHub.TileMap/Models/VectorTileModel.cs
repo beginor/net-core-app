@@ -1,15 +1,13 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Models;
 
 namespace Beginor.GisHub.TileMap.Models; 
 
 /// <summary>矢量切片包模型</summary>
-public partial class VectorTileModel : StringEntity {
+public partial class VectorTileModel : BaseResourceModel {
 
-    /// <summary>矢量切片包名称</summary>
-    [Required(ErrorMessage = "矢量切片包名称 必须填写！")]
-    public string Name { get; set; }
     /// <summary>矢量切片包目录</summary>
     [Required(ErrorMessage = "矢量切片包目录 必须填写！")]
     public string Directory { get; set; }
@@ -35,4 +33,5 @@ public partial class VectorTileModel : StringEntity {
 public partial class VectorTileSearchModel : PaginatedRequestModel {
     /// <summary>搜索关键字</summary>
     public string Keywords { get; set; }
+    public long Category { get; set; }
 }

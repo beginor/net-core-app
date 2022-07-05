@@ -7,11 +7,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using AutoMapper;
-using Beginor.AppFx.Core;
-using Beginor.AppFx.Repository.Hibernate;
 using NHibernate;
 using NHibernate.Linq;
+using Beginor.AppFx.Core;
+using Beginor.AppFx.Repository.Hibernate;
 using Beginor.GisHub.Common;
+using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.TileMap.Models;
 using Beginor.GisHub.Data.Repositories;
 
@@ -64,8 +65,32 @@ public partial class VectorTileRepository : HibernateRepository<VectorTileEntity
                 }
             }
         }
+        if (model.Category > 0) {
+            query = query.Where(e => e.Category.Id == model.Category);
+        }
         var total = await query.LongCountAsync();
-        var data = await query.OrderByDescending(e => e.Id)
+        var data = await query.Select(e => new VectorTileEntity {
+                Id = e.Id,
+                Name = e.Name,
+                Description = e.Description,
+                Type = e.Type,
+                Category = e.Category,
+                Roles = e.Roles,
+                Tags = e.Tags,
+                Creator = e.Creator,
+                CreatedAt = e.CreatedAt,
+                Updater = e.Updater,
+                UpdatedAt = e.UpdatedAt,
+                IsDeleted = e.IsDeleted,
+                Directory = e.Directory,
+                DefaultStyle = e.DefaultStyle,
+                MinZoom = e.MinZoom,
+                MaxZoom = e.MaxZoom,
+                MinLongitude = e.MinLongitude,
+                MaxLongitude = e.MaxLongitude,
+                MinLatitude = e.MinLatitude,
+                MaxLatitude = e.MaxLatitude
+            }).OrderByDescending(e => e.Id)
             .Skip(model.Skip).Take(model.Take)
             .ToListAsync();
         return new PaginatedResponseModel<VectorTileModel> {
@@ -78,14 +103,14 @@ public partial class VectorTileRepository : HibernateRepository<VectorTileEntity
 
     public async Task SaveAsync(
         VectorTileModel model,
-        string userId,
+        AppUser user,
         CancellationToken token = default
     ) {
         var entity = Mapper.Map<VectorTileEntity>(model);
         entity.CreatedAt = DateTime.Now;
-        entity.CreatorId = userId;
+        entity.Creator = user;
         entity.UpdatedAt = DateTime.Now;
-        entity.UpdaterId = userId;
+        entity.Updater = user;
         using var trans = Session.BeginTransaction();
         try {
             await Session.SaveAsync(entity, token);
@@ -114,7 +139,7 @@ public partial class VectorTileRepository : HibernateRepository<VectorTileEntity
     public async Task UpdateAsync(
         long id,
         VectorTileModel model,
-        string userId,
+        AppUser user,
         CancellationToken token = default
     ) {
         var entity = await Session.LoadAsync<VectorTileEntity>(id, token);
@@ -123,31 +148,34 @@ public partial class VectorTileRepository : HibernateRepository<VectorTileEntity
                 $"{typeof(VectorTileModel)} with id {id} is null!"
             );
         }
+        if (entity.Category.Id.ToString() != model.Category.Id) {
+            entity.Category = Mapper.Map<Category>(model.Category);
+        }
         Mapper.Map(model, entity);
         entity.UpdatedAt = DateTime.Now;
-        entity.UpdaterId = userId;
+        entity.Updater = user;
         using var trans = Session.BeginTransaction();
         try {
             await Session.UpdateAsync(entity, token);
             await Session.FlushAsync(token);
             await TrySaveStyleContent(id, model.StyleContent);
-            await trans.CommitAsync();
+            await trans.CommitAsync(token);
             Mapper.Map(entity, model);
             await cache.RemoveAsync(id.ToString(), token);
         }
         catch (Exception) {
-            await trans.RollbackAsync();
+            await trans.RollbackAsync(token);
             throw;
         }
     }
 
 
-    public async Task DeleteAsync(long id, string userId, CancellationToken token = default) {
+    public async Task DeleteAsync(long id, AppUser user, CancellationToken token = default) {
         var entity = Session.Get<VectorTileEntity>(id);
         if (entity != null) {
             entity.IsDeleted = true;
             entity.UpdatedAt = DateTime.Now;
-            entity.UpdaterId = userId;
+            entity.Updater = user;
             await Session.SaveAsync(entity, token);
             await jsonRepository.DeleteAsync(id);
             await Session.FlushAsync();

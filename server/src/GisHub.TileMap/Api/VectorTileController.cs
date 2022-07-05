@@ -3,10 +3,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.TileMap.Models;
 using Beginor.GisHub.TileMap.Data;
 
@@ -19,19 +21,23 @@ public partial class VectorTileController : Controller {
 
     private ILogger<VectorTileController> logger;
     private IVectorTileRepository repository;
+    private UserManager<AppUser> userMgr;
 
     public VectorTileController(
         ILogger<VectorTileController> logger,
-        IVectorTileRepository repository
+        IVectorTileRepository repository,
+        UserManager<AppUser> userMgr
     ) {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
     }
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
             logger = null;
             repository = null;
+            userMgr = null;
         }
         base.Dispose(disposing);
     }
@@ -63,8 +69,9 @@ public partial class VectorTileController : Controller {
         [FromBody]VectorTileModel model
     ) {
         try {
-            var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            await repository.SaveAsync(model, userId);
+            var userId = this.GetUserId();
+            var user = await userMgr.FindByIdAsync(userId);
+            await repository.SaveAsync(model, user);
             return model;
         }
         catch (Exception ex) {
@@ -81,8 +88,9 @@ public partial class VectorTileController : Controller {
     [Authorize("vectortiles.delete")]
     public async Task<ActionResult> Delete(long id) {
         try {
-            var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            await repository.DeleteAsync(id, userId);
+            var userId = this.GetUserId();
+            var user = await userMgr.FindByIdAsync(userId);
+            await repository.DeleteAsync(id, user);
             return NoContent();
         }
         catch (Exception ex) {
@@ -130,8 +138,9 @@ public partial class VectorTileController : Controller {
             if (!exists) {
                 return NotFound();
             }
-            var userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            await repository.UpdateAsync(id, model, userId);
+            var userId = this.GetUserId();
+            var user = await userMgr.FindByIdAsync(userId);
+            await repository.UpdateAsync(id, model, user);
             return model;
         }
         catch (Exception ex) {
