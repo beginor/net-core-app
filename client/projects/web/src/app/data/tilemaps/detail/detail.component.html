@@ -15,33 +15,29 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="row">
-      <div class="col">
-        <div class="mb-3">
-          <label class="form-label text-muted" for="name">栅格切片包名称  <i class="text-danger">*</i> </label>
-          <input class="form-control" type="text" id="name" name="name"
-            placeholder="请输入栅格切片包名称 ..." [(ngModel)]="model.name"
-            [class.is-invalid]="!(name.valid || name.pristine)"
-            [class.is-valid]="name.valid"
-            required #name="ngModel" [disabled]="!editable"
-          />
-        </div>
-      </div>
-      <div class="col">
-        <div class="mb-3">
-          <label class="form-label text-muted" for="contentType">栅格数据格式  <i class="text-danger">*</i> </label>
-          <select class="form-select" id="contentType" name="contentType" [(ngModel)]="model.contentType"
-            [class.is-invalid]="!(contentType.valid || contentType.pristine)"
-            [class.is-valid]="contentType.valid"
-            required #contentType="ngModel" [disabled]="!editable"
-          >
-            <option [ngValue]="undefined">选择栅格数据格式</option>
-            <option value="image/png">PNG</option>
-            <option value="image/jpg">JPEG</option>
-          </select>
-        </div>
-      </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="name">栅格切片包名称  <i class="text-danger">*</i> </label>
+      <input class="form-control" type="text" id="name" name="name"
+        placeholder="请输入栅格切片包名称 ..." [(ngModel)]="model.name"
+        [class.is-invalid]="!(name.valid || name.pristine)"
+        [class.is-valid]="name.valid"
+        required #name="ngModel" [disabled]="!editable"
+      />
     </div>
+    <div class="mb-3">
+      <label class="form-label text-muted" for="description">栅格切片包描述 </label>
+      <input class="form-control" type="text" id="description" name="description"
+        placeholder="请输入栅格切片包描述 ..."
+        [disabled]="!editable"
+        [(ngModel)]="model.description"
+      />
+    </div>
+    <app-category-editor class="mb-3" [category]="model.category!" [editable]="editable">
+    </app-category-editor>
+    <app-roles-editor class="mb-3" [roles]="model.roles!" [editable]="editable">
+    </app-roles-editor>
+    <app-tags-editor class="mb-3" [tags]="model.tags!" [editable]="editable">
+    </app-tags-editor>
     <div class="mb-3" [class.is-valid]="cacheDirectory.valid"
       [class.is-invalid]="!(cacheDirectory.valid || cacheDirectory.pristine)">
       <label class="form-label text-muted" for="cacheDirectory">缓存目录  <i class="text-danger">*</i> </label>
@@ -62,6 +58,19 @@
       </div>
     </div>
     <div class="row">
+      <div class="col">
+        <div class="mb-3">
+          <label class="form-label text-muted" for="contentType">栅格数据格式  <i class="text-danger">*</i> </label>
+          <select class="form-select" id="contentType" name="contentType" [(ngModel)]="model.contentType"
+            [class.is-invalid]="!(contentType.valid || contentType.pristine)"
+            [class.is-valid]="contentType.valid"
+            required #contentType="ngModel" [disabled]="!editable"
+          >
+            <option value="image/png">PNG</option>
+            <option value="image/jpg">JPEG</option>
+          </select>
+        </div>
+      </div>
       <div class="col">
         <div class="mb-3">
           <label class="form-label text-muted" for="folderStructure">目录结构</label>

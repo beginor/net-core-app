@@ -54,7 +54,7 @@ export class ListComponent implements OnInit {
         await this.vm.search();
     }
 
-    public showPreview(item: SlpkModel): void {
+    public showPreview(model: SlpkModel): void {
         const modalRef = this.modal.open(
             PreviewComponent,
             {
@@ -64,8 +64,7 @@ export class ListComponent implements OnInit {
                 backdrop: 'static'
             }
         );
-        const id = item.id;
-        const name = item.name;
+        const { id, name } = model;
         Object.assign(modalRef.componentInstance, {id, name });
     }
 

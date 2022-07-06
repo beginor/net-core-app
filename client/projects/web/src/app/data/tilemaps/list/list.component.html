@@ -6,8 +6,14 @@
   </ol>
 </nav>
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-12">
+  <div class="row g-0">
+    <div class="col-auto pe-0">
+      <app-category-tree-view #categoryTreeView
+        resourceType="tilemap"
+        (itemClick)="onTreeItemClick($event)">
+      </app-category-tree-view>
+    </div>
+    <div class="col ps-1">
       <div class="card" *ngIf="(account.info | async) as info">
         <div class="card-header d-flex justify-content-between">
           <h5 class="card-title mb-0">栅格切片包</h5>
@@ -76,11 +82,11 @@
               <tr>
                 <th scope="col" class="text-end text-nowrap text-muted">#</th>
                 <th scope="col" class="text-start text-nowrap text-muted">名称</th>
-                <th scope="col" class="text-start text-nowrap text-muted">缓存目录</th>
+                <th scope="col" class="text-start text-nowrap text-muted">描述</th>
                 <th scope="col" class="text-center text-nowrap text-muted">目录格式</th>
                 <th scope="col" class="text-center text-nowrap text-muted">紧凑格式</th>
-                <th scope="col" class="text-center text-nowrap text-muted">创建时间</th>
-                <th scope="col" class="text-center text-nowrap text-muted">更新时间</th>
+                <th scope="col" class="text-center text-nowrap text-muted">级别</th>
+                <th scope="col" class="text-center text-nowrap text-muted">经纬度范围</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
@@ -90,11 +96,11 @@
                 <td class='text-start'>
                   <a class="preview-link" (click)="showPreview(item)">{{item.name}}</a>
                 </td>
-                <td class='text-start'>{{item.cacheDirectory}}</td>
+                <td class='text-start'>{{item.description}}</td>
                 <td class='text-center'>{{item.folderStructure?.toUpperCase()}}</td>
                 <td class='text-center'>{{!!item.isBundled ? '是' : '否'}}</td>
-                <td class='text-center'>{{item.createdAt | date:'yyyy-MM-dd'}}</td>
-                <td class='text-center'>{{item.updatedAt | date:'yyyy-MM-dd'}}</td>
+                <td class='text-center'>{{getTileLevels(item)}}</td>
+                <td class='text-center'>{{getTileExtent(item)}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
                     <button *ngIf="info.privileges['tilemaps.read_by_id']"

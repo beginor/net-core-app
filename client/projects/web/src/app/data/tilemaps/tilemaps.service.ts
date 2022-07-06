@@ -172,6 +172,14 @@ export interface TileMapModel {
     id: string;
     /** 切片地图名称 */
     name?: string;
+    /** 模型描述 */
+    description?: string;
+    /** 类别 */
+    category?: { id?: string; name?: string; };
+    /** 角色 */
+    roles?: string[];
+    /** 标签 */
+    tags?: string[];
     /** 缓存目录 */
     cacheDirectory?: string;
     /** 切片信息路径 */
@@ -208,6 +216,7 @@ export interface TileMapSearchModel {
     /** 取多少条记录 */
     take: number;
     keywords?: string;
+    category?: string;
 }
 
 /** 切片地图 搜索结果 */

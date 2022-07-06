@@ -33,6 +33,7 @@ export class DetailComponent implements OnInit {
 
     private id = '';
     private reloadList = false;
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -100,25 +101,6 @@ export class DetailComponent implements OnInit {
         }
         this.reloadList = true;
         this.goBack();
-    }
-
-    public addNewTag(): void {
-        if (!this.model.tags) {
-            this.model.tags = [];
-        }
-        const newTag = this.newTag.trim();
-        if (!!newTag && this.model.tags.indexOf(newTag) < 0) {
-            this.model.tags.push(newTag);
-            this.newTag = '';
-        }
-    }
-
-    public delTag(tag: string): void {
-        if (!this.model.tags) {
-            return;
-        }
-        const idx = this.model.tags.indexOf(tag);
-        this.model.tags?.splice(idx, 1);
     }
 
     public showFolderModal(): void {

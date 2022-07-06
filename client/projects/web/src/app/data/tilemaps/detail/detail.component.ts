@@ -25,7 +25,7 @@ export class DetailComponent implements OnInit {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: TileMapModel = { id: '' };
+    public model: TileMapModel = { id: '', tags: [], roles: [], category: {} };
 
     private id = '';
     private reloadList = false;
@@ -50,13 +50,22 @@ export class DetailComponent implements OnInit {
             this.title = '查看栅格切片包';
             this.editable = false;
         }
-        this.id = id;
+        this.id = id as string;
     }
 
     public async ngOnInit(): Promise<void> {
         if (this.id !== '0') {
             const model = await this.vm.getById(this.id);
             if (!!model) {
+                if (!model.roles) {
+                    model.roles = [];
+                }
+                if (!model.tags) {
+                    model.tags = [];
+                }
+                if (!model.category) {
+                    model.category = {};
+                }
                 this.model = model;
             }
         }
