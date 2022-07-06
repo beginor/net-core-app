@@ -27,6 +27,20 @@
       />
     </div>
     <div class="mb-3">
+      <label class="form-label text-muted" for="description">矢量切片包描述 </label>
+      <input class="form-control" type="text" id="description" name="description"
+        placeholder="请输入矢量切片包描述 ..."
+        [disabled]="!editable"
+        [(ngModel)]="model.description"
+      />
+    </div>
+    <app-category-editor class="mb-3" [category]="model.category!" [editable]="editable">
+    </app-category-editor>
+    <app-roles-editor class="mb-3" [roles]="model.roles!" [editable]="editable">
+    </app-roles-editor>
+    <app-tags-editor class="mb-3" [tags]="model.tags!" [editable]="editable">
+    </app-tags-editor>
+    <div class="mb-3">
       <label class="form-label text-muted" for="directory">缓存目录  <i class="text-danger">*</i> </label>
       <div class="input-group">
         <input class="form-control" type="text" id="directory" name="directory"

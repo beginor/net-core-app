@@ -6,8 +6,14 @@
   </ol>
 </nav>
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-12">
+  <div class="row g-0">
+    <div class="col-auto pe-0">
+      <app-category-tree-view #categoryTreeView
+        resourceType="vectortile"
+        (itemClick)="onTreeItemClick($event)">
+      </app-category-tree-view>
+    </div>
+    <div class="col ps-0">
       <div class="card" *ngIf="(account.info | async) as info">
         <div class="card-header d-flex justify-content-between">
           <h5 class="card-title mb-0">矢量切片包</h5>
@@ -68,7 +74,6 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </form>
@@ -76,11 +81,11 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-center text-nowrap text-muted">#</th>
-                <th scope="col" class="text-center text-nowrap text-muted">名称</th>
-                <th scope="col" class="text-center text-nowrap text-muted">缓存目录</th>
-                <th scope="col" class="text-center text-nowrap text-muted">最小缩放级别</th>
-                <th scope="col" class="text-center text-nowrap text-muted">最大缩放级别</th>
+                <th scope="col" class="text-end text-nowrap text-muted">#</th>
+                <th scope="col" class="text-start text-nowrap text-muted">名称</th>
+                <th scope="col" class="text-start text-nowrap text-muted">描述</th>
+                <th scope="col" class="text-center text-nowrap text-muted">级别</th>
+                <th scope="col" class="text-center text-nowrap text-muted">经纬度范围</th>
                 <th scope="col" class="text-center text-nowrap text-muted">操作</th>
               </tr>
             </thead>
@@ -94,9 +99,9 @@
                     {{item.name}}
                   </ng-template>
                 </td>
-                <td class='text-start'>{{item.directory}}</td>
-                <td class='text-end'>{{item.minZoom}}</td>
-                <td class='text-end'>{{item.maxZoom}}</td>
+                <td class='text-start'>{{item.description}}</td>
+                <td class='text-center'>{{getTileLevels(item)}}</td>
+                <td class='text-center'>{{getTileExtent(item)}}</td>
                 <td class="text-center">
                   <div class="btn-group btn-group-sm">
                     <button *ngIf="info.privileges['vectortiles.read_by_id']"

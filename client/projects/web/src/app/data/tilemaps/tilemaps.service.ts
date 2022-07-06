@@ -50,7 +50,7 @@ export class TileMapService {
             this.data.next(data);
             this.showPagination = total > data.length;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.total.next(0);
             this.data.next([]);
@@ -85,7 +85,7 @@ export class TileMapService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '创建切片地图出错！' }
@@ -102,7 +102,7 @@ export class TileMapService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取指定的切片地图出错！' }
@@ -123,7 +123,7 @@ export class TileMapService {
             );
             return true;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '删除切片地图出错！' }
@@ -143,7 +143,7 @@ export class TileMapService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '更新切片地图出错！' }
@@ -172,7 +172,7 @@ export interface TileMapModel {
     id: string;
     /** 切片地图名称 */
     name?: string;
-    /** 模型描述 */
+    /** 切片地图描述 */
     description?: string;
     /** 类别 */
     category?: { id?: string; name?: string; };
@@ -215,7 +215,9 @@ export interface TileMapSearchModel {
     skip: number;
     /** 取多少条记录 */
     take: number;
+    /** 查询关键字 */
     keywords?: string;
+    /** 类别 */
     category?: string;
 }
 

@@ -32,7 +32,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     public animation = '';
     public title = '';
     public editable = false;
-    public model: VectortileModel = { id: '' };
+    public model: VectortileModel = { id: '', tags: [], roles: [], category: {} }; // eslint-disable-line max-len
     public styleFileName = '选择默认样式';
     @ViewChild('styleFile', { static: false })
     public styleFileRef?: ElementRef<HTMLInputElement>;
@@ -71,6 +71,15 @@ export class DetailComponent implements OnInit, OnDestroy {
             const model = await this.vm.getById(this.id);
             if (!!model) {
                 this.model = model;
+                if (!model.roles) {
+                    model.roles = [];
+                }
+                if (!model.tags) {
+                    model.tags = [];
+                }
+                if (!model.category) {
+                    model.category = {};
+                }
                 if (!!model.defaultStyle) {
                     this.styleFileName = model.defaultStyle;
                 }
@@ -178,7 +187,7 @@ export class DetailComponent implements OnInit, OnDestroy {
                 const text = await file.text();
                 this.model.styleContent = text;
             }
-            catch (ex) {
+            catch (ex: unknown) {
                 this.ui.showAlert(
                     { type: 'danger', message: '无法识别默认样式， 请重新选择！' }
                 );

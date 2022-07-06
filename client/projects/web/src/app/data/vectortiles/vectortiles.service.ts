@@ -84,7 +84,7 @@ export class VectortileService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '创建矢量切片包出错！' }
@@ -101,7 +101,7 @@ export class VectortileService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '获取指定的矢量切片包出错！' }
@@ -122,7 +122,7 @@ export class VectortileService {
             );
             return true;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '删除矢量切片包出错！' }
@@ -142,7 +142,7 @@ export class VectortileService {
             );
             return result;
         }
-        catch (ex) {
+        catch (ex: unknown) {
             this.errorHandler.handleError(ex);
             this.ui.showAlert(
                 { type: 'danger', message: '更新矢量切片包出错！' }
@@ -192,6 +192,14 @@ export interface VectortileModel {
     id: string;
     /** 矢量切片包名称 */
     name?: string;
+    /** 矢量切片描述 */
+    description?: string;
+    /** 类别 */
+    category?: { id?: string; name?: string; };
+    /** 角色 */
+    roles?: string[];
+    /** 标签 */
+    tags?: string[];
     /** 矢量切片包目录 */
     directory?: string;
     /** 最小缩放级别 */
@@ -221,6 +229,8 @@ export interface VectortileSearchModel {
     take: number;
     /** 查询关键字 */
     keywords?: string;
+    /** 类别 */
+    category?: string;
 }
 
 /** 矢量切片包 搜索结果 */
