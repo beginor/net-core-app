@@ -18,8 +18,8 @@ require([
   });
   // 注记
   var satelliteLabel = new WebTileLayer({
-    // urlTemplate: baseUrl + '/gmap/api/wmts/DOMZJ_2000_2015/{level}/{row}/{col}',
-    urlTemplate: baseUrl + '/gmap/api/proxy/YZT1610609681389/tile/{level}/{row}/{col}',
+    urlTemplate: baseUrl + '/gmap/api/wmts/DOMZJ_2000_2015/{level}/{row}/{col}',
+    // urlTemplate: baseUrl + '/gmap/api/proxy/YZT1610609681389/tile/{level}/{row}/{col}',
     opacity: 1
   });
 
@@ -27,7 +27,7 @@ require([
     spatialReference: SpatialReference.WebMercator,
     basemap: 'satellite',
     layers: [
-      // satellite,
+      satellite,
       satelliteLabel
       // yztLayer,
       // featureLayer

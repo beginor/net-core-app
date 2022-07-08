@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Beginor.GisHub.Gmap.Cache;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -15,15 +16,17 @@ namespace Beginor.GisHub.Gmap.Api;
 [Route("api/proxy")]
 public class ProxyController : Controller {
 
-    private readonly ILogger<ProxyController> logger;
+    private ILogger<ProxyController> logger;
     private ApiProxyOptions options;
+    private ICacheProvider cacheProvider;
 
-    public ProxyController(ILogger<ProxyController> logger, IOptionsMonitor<ApiProxyOptions> monitor) {
+    public ProxyController(ILogger<ProxyController> logger, IOptionsMonitor<ApiProxyOptions> monitor, ICacheProvider cacheProvider) {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         if (monitor == null) {
             throw new ArgumentNullException(nameof(monitor));
         }
         options = monitor.CurrentValue;
+        this.cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
     }
 
     [HttpGet("{serviceId}")]
@@ -54,6 +57,10 @@ public class ProxyController : Controller {
         }
         logger.LogInformation($"Get tile for service {serviceId}");
         try {
+            var buffer = await cacheProvider.GetTileAsync(serviceId, level, row, col);
+            if (buffer.Length > 0) {
+                return File(buffer, "image/png");
+            }
             var z = level;
             var extent = new [] {
                 new [] { MercatorTileUtil.TileX2Lng(col, z), MercatorTileUtil.TileY2Lat(row, z) },
@@ -96,6 +103,9 @@ public class ProxyController : Controller {
             var result = YztTileUtil.CropTiles(tiles, extent);
             if (result == null) {
                 return NotFound();
+            }
+            if (result.Length > 0) {
+                await cacheProvider.SaveTileAsync(serviceId, level, row, col, result);
             }
             return File(result, "image/png");
         }

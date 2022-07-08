@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Beginor.GisHub.Gmap.Cache;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -16,25 +17,25 @@ public class WmtsController : Controller {
 
     private YztService service;
     private ILogger<WmtsController> logger;
+    private ICacheProvider cacheProvider;
 
     public WmtsController(
         YztService service,
-        ILogger<WmtsController> logger
+        ILogger<WmtsController> logger,
+        ICacheProvider cacheProvider
     ) {
         this.service = service ?? throw new ArgumentNullException(nameof(service));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
-
-    protected override void Dispose(bool disposing) {
-        if (disposing) {
-            service = null;
-            logger = null;
-        }
+        this.cacheProvider = cacheProvider ?? throw new ArgumentNullException(nameof(cacheProvider));
     }
 
     [HttpGet("{tileName}/{level:int}/{row:int}/{col:int}")]
     public async Task<ActionResult> GetTile(string tileName, int level, int row, int col) {
         try {
+            var buffer = await cacheProvider.GetTileAsync(tileName, level, row, col);
+            if (buffer.Length > 0) {
+                return File(buffer, "image/png");
+            }
             var z = level;
             var extent = new [] {
                 new [] { MercatorTileUtil.TileX2Lng(col, z), MercatorTileUtil.TileY2Lat(row, z) },
@@ -60,6 +61,9 @@ public class WmtsController : Controller {
             var result = YztTileUtil.CropTiles(tiles, extent);
             if (result == null) {
                 return NotFound();
+            }
+            if (result.Length > 0) {
+                await cacheProvider.SaveTileAsync(tileName, level, row, col, result);
             }
             return File(result, "image/png");
         }

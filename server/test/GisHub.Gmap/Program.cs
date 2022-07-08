@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Logging.Log4net;
+using Beginor.GisHub.Gmap.Cache;
 using Beginor.GisHub.Gmap.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -28,6 +29,9 @@ public class Program {
         builder.Services.Configure<KestrelServerOptions>(configuration.GetSection("kestrel"));
         builder.Services.Configure<EBusOptions>(configuration.GetSection("ebus"));
         builder.Services.AddSingleton<YztService>();
+        var cacheOptions = configuration.GetSection("cache").Get<CacheOptions>();
+        builder.Services.AddSingleton(cacheOptions);
+        builder.Services.AddSingleton<ICacheProvider, CacheProvider>();
         builder.Services.Configure<ApiProxyOptions>(configuration.GetSection("apiProxy"));
         builder.Services.Configure<ForwardedHeadersOptions>(configuration.GetSection("forwardedHeaders"));
         builder.Services.AddCors(cors => cors.AddDefaultPolicy(configuration.GetSection("cors").Get<CorsPolicy>()));
