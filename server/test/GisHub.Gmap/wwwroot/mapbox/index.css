@@ -1,0 +1,24 @@
+@import url(https://app.gdeei.cn/arcgis-js-api/dist/libs/mapbox-gl/mapbox-gl.css);
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#themap {
+  width: 100%;
+  height: 100%;
+}
+
+#toolbar {
+  position: absolute;
+  margin: .5rem;
+  padding: .5rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  right: 0;
+  top: 0;
+}

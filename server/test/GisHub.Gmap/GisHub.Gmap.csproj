@@ -30,8 +30,4 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\mapbox" />
-  </ItemGroup>
-
 </Project>

@@ -8,8 +8,7 @@
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
-  <div id="themap">
-  </div>
+  <div id="themap"></div>
   <div id="toolbar">
     <input id="layer-satellite" name="layer" type="radio" value="satellite" checked />
     <label for="layer-satellite">卫星图</label>
@@ -21,8 +20,7 @@
     loadScripts([
       { type: 'importmap',
         src: [
-          'https://app.gdeei.cn/arcgis-js-api/dist/importmap.prod.json',
-          '../importmap.json'
+          'https://app.gdeei.cn/arcgis-js-api/dist/importmap.prod.json'
         ]
       },
       { type: 'module', src: './index.js' }

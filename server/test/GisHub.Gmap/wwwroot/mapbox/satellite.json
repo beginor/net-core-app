@@ -1,0 +1,74 @@
+{
+  "version": 8,
+  "id": "yzt-satellite",
+  "name": "粤政卫星图",
+  "sprite": "https://app.gdeei.cn/arcgis-js-api/mapbox/sprites/satellite-streets/sprite",
+  "glyphs": "https://app.gdep.gov.cn/arcgis-js-api/mapbox/glyphs/{fontstack}/{range}.pbf",
+  "sources": {
+    "image": {
+      "type": "raster",
+      "scheme": "xyz",
+      "tiles": [ "https://it.gdeei.cn/gmap/api/wmts/GDDOM/{z}/{y}/{x}" ],
+      "bounds": [ 109.7734,20.2615,117.1026,25.4619 ],
+      "minzoom": 0,
+      "maxzoom": 18,
+      "tileSize": 256
+    },
+    "label": {
+      "type": "raster",
+      "scheme": "xyz",
+      "tiles": [ "https://it.gdeei.cn/gmap/api/wmts/DOMZJ_2000_2015/{z}/{y}/{x}" ],
+      "bounds": [ 109.7734,20.2615,117.1026,25.4619 ],
+      "minzoom": 0,
+      "maxzoom": 18,
+      "tileSize": 256
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "background-opacity": 1.0,
+        "background-color": "#ffffff"
+      }
+    },
+    {
+      "id": "image",
+      "type": "raster",
+      "source": "image",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "raster-opacity": 1,
+        "raster-hue-rotate": 0,
+        "raster-brightness-min": 0,
+        "raster-brightness-max": 1,
+        "raster-saturation": 0,
+        "raster-contrast": 0,
+        "raster-fade-duration": 300
+      }
+    },
+    {
+      "id": "label",
+      "type": "raster",
+      "source": "label",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "raster-opacity": 1,
+        "raster-hue-rotate": 0,
+        "raster-brightness-min": 0,
+        "raster-brightness-max": 1,
+        "raster-saturation": 0,
+        "raster-contrast": 0,
+        "raster-fade-duration": 300
+      }
+    }
+  ]
+}
