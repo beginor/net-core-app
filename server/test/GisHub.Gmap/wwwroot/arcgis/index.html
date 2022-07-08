@@ -6,13 +6,26 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>粤政图测试</title>
   <link rel="stylesheet" href="index.css">
-  <link rel="stylesheet" href="https://app.gdeei.cn/arcgis-js-api/library/4.17/esri/themes/light/main.css" />
-  <script>window.dojoConfig = { locale: 'zh-cn', async: true };</script>
-  <script src="https://app.gdeei.cn/arcgis-js-api/library/4.17/init.js"></script>
 </head>
 <body>
-  <div id="mymap" class="wrapper">
+  <div id="themap">
   </div>
-  <script src="index.js"></script>
+  <div id="toolbar">
+    <input id="layer-satellite" name="layer" type="radio" value="satellite" checked />
+    <label for="layer-satellite">卫星图</label>
+    <input id="layer-road" name="layer" type="radio" value="road" />
+    <label for="layer-road">道路图</label>
+  </div>
+  <script src="https://app.gdeei.cn/arcgis-js-api/dist/loader.js"></script>
+  <script>
+    loadScripts([
+      { type: 'importmap',
+        src: [
+          '../importmap.json'
+        ]
+      },
+      { type: 'module', src: './index.js' }
+    ]).catch(ex => console.error(ex));
+  </script>
 </body>
 </html>

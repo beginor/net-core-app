@@ -1,3 +1,5 @@
+@import url(https://app.gdeei.cn/arcgis-js-api/4.22/esri/themes/light/main.css);
+
 html, body {
   width: 100%;
   height: 100%;
@@ -6,21 +8,17 @@ html, body {
   overflow: hidden;
 }
 
-.wrapper {
+#themap {
   width: 100%;
   height: 100%;
-  display: flex;
 }
 
-.sidebar {
-  width: 240px;
-}
-.main {
-  flex: 1;
-  display: block;
-}
-
-#mymap {
-  width: 100%;
-  height: 100%;
+#toolbar {
+  position: absolute;
+  margin: .5rem;
+  padding: .5rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  right: 0;
+  top: 0;
 }

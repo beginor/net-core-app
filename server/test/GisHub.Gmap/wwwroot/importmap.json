@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "@arcgis/core/": "https://app.gdeei.cn/arcgis-js-api/4.22/@arcgis/core/"
+  }
+}
