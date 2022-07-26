@@ -1,7 +1,7 @@
 <label class="form-label text-muted">类别</label>
 <div class="input-group" ngbDropdown #categoryDropdown="ngbDropdown"
   container="body" placement="left-top">
-  <input class="form-control" [ngModel]="category?.name" [disabled]="!editable"
+  <input class="form-control" [ngModel]="category.name" [disabled]="!editable"
     readonly/>
   <button class="btn btn-outline-secondary" [disabled]="!editable" ngbDropdownToggle>
     <svg-icon path="bi/caret-down"></svg-icon>
