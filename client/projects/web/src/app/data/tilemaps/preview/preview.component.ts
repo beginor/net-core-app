@@ -35,7 +35,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
         if (!url) {
             return;
         }
-        this.arcgis.createTileLayerPreview(
+        void this.arcgis.createTileLayerPreview(
             this.mapElRef.nativeElement, url
         ).then(mapview => this.mapview = mapview);
     }
@@ -58,7 +58,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
         if (!layerUrl) {
             return '';
         }
-        return layerUrl + '/tiles/{z}/{y}/{x}'
+        return layerUrl + '/tile/{z}/{y}/{x}';
     }
 
 }

@@ -59,7 +59,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
         if (!layerUrl) {
             return '';
         }
-        return layerUrl + '/tiles/{z}/{y}/{x}'
+        return layerUrl + '/tile/{z}/{y}/{x}';
     }
 
 }
