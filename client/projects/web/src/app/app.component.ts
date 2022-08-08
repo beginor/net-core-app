@@ -31,7 +31,7 @@ export class AppComponent {
         modal: NgbModalConfig
     ) {
         tooltip.container = 'body';
-        // dropdown.container = 'body';
+        dropdown.container = 'body';
         modal.container = 'body';
         account.getInfo().catch(ex => {
             errorHandler.handleError(ex);
