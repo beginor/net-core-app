@@ -7,7 +7,6 @@
       "@angular-eslint/schematics"
     ]
   },
-  "defaultProject": "web",
   "newProjectRoot": "projects",
   "projects": {
     "app-shared": {
