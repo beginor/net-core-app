@@ -8,7 +8,7 @@
     "ngcc": "ngcc --create-ivy-entry-points -l debug",
     "ng": "ng",
     "build": "pnpm run build-shared && pnpm run build-web && pnpm run build-handset",
-    "build-shared": "ng build app-shared --configuration development",
+    "build-shared": "ng build app-shared --configuration production",
     "build-web-style": "sass styles/web.scss styles/web.css --no-source-map --style=compressed",
     "build-web": "pnpm run build-web-style && ng build web --configuration production",
     "build-handset-style": "sass styles/handset.scss styles/handset.css --no-source-map --style=compressed",
