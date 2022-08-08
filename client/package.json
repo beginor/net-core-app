@@ -55,8 +55,8 @@
     "@angular/material": "^14.1.0",
     "hammerjs": "^2.0.8",
     "material-design-icons": "^3.0.1",
-    "esri-loader": "^3.5.0",
-    "mapbox-gl": "^2.9.1",
+    "esri-loader": "^3.6.0",
+    "mapbox-gl": "^2.9.2",
     "@turf/bbox": "6.5.0"
   },
   "devDependencies": {
