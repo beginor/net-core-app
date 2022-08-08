@@ -22,7 +22,7 @@
     </ul>
     <ul class="navbar-nav mt-2 mt-lg-0 ms-auto">
       <ng-container *ngIf="info.id; else loginTpl;">
-        <li class="nav-item" routerLinkActive="active" ngbDropdown>
+        <li class="nav-item" routerLinkActive="active" display="dynamic" ngbDropdown>
           <a class="nav-link" id="account-dropdown" style="cursor: pointer;" routerLinkActive="active" ngbDropdownToggle>{{account.fullName | async}}</a>
           <div class="dropdown-menu dropdown-menu-end" aria-labelledby="account-dropdown" ngbDropdownMenu>
             <ng-container *ngIf="navigation.accountNodes | async as ans">
