@@ -7,13 +7,13 @@
 </nav>
 <div class="container-fluid">
   <div class="row g-0">
-    <div class="col-auto pe-0">
+    <div class="col-auto pe-1">
       <app-category-tree-view #categoryTreeView
         resourceType="vectortile"
         (itemClick)="onTreeItemClick($event)">
       </app-category-tree-view>
     </div>
-    <div class="col ps-0">
+    <div class="col ps-1">
       <div class="card" *ngIf="(account.info | async) as info">
         <div class="card-header d-flex justify-content-between">
           <h5 class="card-title mb-0">矢量切片包</h5>
