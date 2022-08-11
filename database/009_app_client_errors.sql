@@ -6,7 +6,7 @@ create table public.app_client_errors
 (
     id bigint not null default snow_flake_id(),
     user_name character varying(64) collate pg_catalog."default" not null,
-    occured_at timestamp without time zone not null,
+    occured_at timestamp with time zone not null,
     user_agent character varying(512) collate pg_catalog."default" not null,
     path character varying(1024) collate pg_catalog."default",
     message character varying(2048) collate pg_catalog."default",

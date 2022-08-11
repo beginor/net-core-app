@@ -2,7 +2,7 @@ using System;
 using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
 
-namespace Beginor.NetCoreApp.Data.Entities; 
+namespace Beginor.NetCoreApp.Data.Entities;
 
 /// <summary>程序客户端错误记录</summary>
 [Class(Schema = "public", Table = "app_client_errors")]
@@ -17,7 +17,7 @@ public partial class AppClientError : BaseEntity<long> {
     public virtual string UserName { get; set; }
 
     /// <summary>错误发生时间</summary>
-    [Property(Name = "OccuredAt", Column = "occured_at", TypeType = typeof(NHibernate.Extensions.NpgSql.TimeStampType), NotNull = true)]
+    [Property(Name = "OccuredAt", Column = "occured_at", TypeType = typeof(NHibernate.Extensions.NpgSql.TimeStampTzType), NotNull = true)]
     public virtual DateTime OccuredAt { get; set; }
 
     /// <summary>用户浏览器代理</summary>
