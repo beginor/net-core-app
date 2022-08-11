@@ -29,6 +29,10 @@ const routes: Routes = [
     {
         path: 'storages',
         loadChildren: () => import('./storages/storages.module').then(m => m.AppStorageModule)
+    },
+    {
+        path: 'logs',
+        loadChildren: () => import('./logs/logs.module').then(m => m.AppLogModule)
     }
 ];
 /* eslint-enable max-len */

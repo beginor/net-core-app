@@ -6,6 +6,8 @@ namespace Beginor.NetCoreApp.Models;
 
 /// <summary>应用程序日志模型</summary>
 public partial class AppLogModel : StringEntity {
+    /// <summary>创建时间</summary>
+    public DateTime CreatedAt { get; set; }
     /// <summary>线程ID</summary>
     public string Thread { get; set; }
     /// <summary>日志级别</summary>

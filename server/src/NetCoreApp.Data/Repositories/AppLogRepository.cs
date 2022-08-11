@@ -24,15 +24,7 @@ public partial class AppLogRepository : HibernateRepository<AppLog, AppLogModel,
     ) {
         var startDate = model.StartDate.GetValueOrDefault(DateTime.Today);
         var endDate = model.EndDate.GetValueOrDefault(DateTime.Today).AddDays(1);
-        var query = Session.Query<AppLog>().Select(log => new AppLog {
-            Id = log.Id,
-            CreatedAt = log.CreatedAt,
-            Thread = log.Thread,
-            Logger = log.Logger,
-            Level = log.Level,
-            Message = log.Message,
-            Exception = string.Empty
-        }).Where(
+        var query = Session.Query<AppLog>().Where(
             log => log.CreatedAt >= startDate && log.CreatedAt < endDate
         );
         if (model.Level.IsNotNullOrEmpty()) {
@@ -40,7 +32,15 @@ public partial class AppLogRepository : HibernateRepository<AppLog, AppLogModel,
             query = query.Where(log => log.Level == level);
         }
         var total = await query.LongCountAsync();
-        var data = await query.OrderByDescending(e => e.Id)
+        var data = await query.Select(log => new AppLog {
+            Id = log.Id,
+            CreatedAt = log.CreatedAt,
+            Thread = log.Thread,
+            Logger = log.Logger,
+            Level = log.Level,
+            Message = log.Message,
+            Exception = string.Empty
+        }).OrderByDescending(e => e.Id)
             .Skip(model.Skip).Take(model.Take)
             .ToListAsync();
         return new PaginatedResponseModel<AppLogModel> {
