@@ -56,6 +56,7 @@ TableFilter:
     - app_storages
   IncludeTables:
     - app_user_tokens
+    - app_logs
   IgnoreNoPKTable: true
   IgnoreView: true
 

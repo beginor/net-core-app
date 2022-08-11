@@ -4,14 +4,14 @@
 
 create table if not exists public.app_logs
 (
-    id bigint not null default nextval('snow_flake_id_seq'::regclass),
+    id bigint not null default snow_flake_id(),
     created_at timestamp without time zone not null,
     thread character varying(8) collate pg_catalog."default" not null,
     level character varying(16) collate pg_catalog."default" not null,
     logger character varying(256) collate pg_catalog."default",
     message character varying(4096) collate pg_catalog."default",
     exception character varying(4096) collate pg_catalog."default",
-    constraint app_logs_pkey primary key (created_at)
+    constraint pk_app_logs primary key (id)
 )
 
 tablespace pg_default;

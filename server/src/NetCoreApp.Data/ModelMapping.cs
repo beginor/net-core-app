@@ -3,7 +3,7 @@ using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Data; 
+namespace Beginor.NetCoreApp.Data;
 
 public class ModelMapping : AutoMapper.Profile {
 
@@ -48,6 +48,7 @@ public class ModelMapping : AutoMapper.Profile {
             .ReverseMap()
             .ForMember(dest => dest.Id, map => map.Ignore())
             .ForMember(d => d.User, m => m.Ignore());
+        CreateMap<AppLog, AppLogModel>();
     }
 
 }
