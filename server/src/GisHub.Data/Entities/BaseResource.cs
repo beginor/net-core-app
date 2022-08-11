@@ -14,7 +14,7 @@ public partial class BaseResource : BaseEntity<long> {
     /// <summary>资源名称</summary>
     [Property(Name = nameof(Name), Column = "name", Type = "string", NotNull = true, Length = 32)]
     public virtual string Name { get; set; }
-    
+
     /// <summary>资源描述</summary>
     [Property(Name = nameof(Description), Column = "description", Type = "string", NotNull = false, Length = 256)]
     public virtual string Description { get; set; }
@@ -30,7 +30,7 @@ public partial class BaseResource : BaseEntity<long> {
     /// <summary>资源标签</summary>
     [Property(Name = nameof(Tags), Column = "tags", TypeType = typeof(NHibernate.Extensions.NpgSql.StringArrayType), NotNull = false)]
     public virtual string[] Tags { get; set; }
-    
+
     /// <summary>允许访问的角色</summary>
     [Property(Name = "Roles", Column = "roles", TypeType = typeof(NHibernate.Extensions.NpgSql.StringArrayType), NotNull = false)]
     public virtual string[] Roles { get; set; }
@@ -40,7 +40,7 @@ public partial class BaseResource : BaseEntity<long> {
     public virtual AppUser Creator { get; set; }
 
     /// <summary>创建时间</summary>
-    [Property(Name = nameof(CreatedAt), Column = "created_at", Type = "datetime", NotNull = true)]
+    [Property(Name = nameof(CreatedAt), Column = "created_at", TypeType = typeof(NHibernate.Extensions.NpgSql.TimeStampType), NotNull = true)]
     public virtual DateTime CreatedAt { get; set; }
 
     /// <summary>更新者</summary>
@@ -48,7 +48,7 @@ public partial class BaseResource : BaseEntity<long> {
     public virtual AppUser Updater { get; set; }
 
     /// <summary>更新时间</summary>
-    [Property(Name = nameof(UpdatedAt), Column = "updated_at", Type = "datetime", NotNull = true)]
+    [Property(Name = nameof(UpdatedAt), Column = "updated_at", TypeType = typeof(NHibernate.Extensions.NpgSql.TimeStampType), NotNull = true)]
     public virtual DateTime UpdatedAt { get; set; }
 
     /// <summary>是否删除</summary>
