@@ -54,6 +54,7 @@ TableFilter:
     - app_nav_items
     - app_storages
     - app_user_tokens
+    - app_logs
     - slpks
     - tilemaps
     - connections

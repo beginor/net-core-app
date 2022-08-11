@@ -17,7 +17,7 @@ public partial class AppClientError : BaseEntity<long> {
     public virtual string UserName { get; set; }
 
     /// <summary>错误发生时间</summary>
-    [Property(Name = "OccuredAt", Column = "occured_at", Type = "datetime", NotNull = true)]
+    [Property(Name = "OccuredAt", Column = "occured_at", TypeType = typeof(NHibernate.Extensions.NpgSql.TimeStampType), NotNull = true)]
     public virtual DateTime OccuredAt { get; set; }
 
     /// <summary>用户浏览器代理</summary>

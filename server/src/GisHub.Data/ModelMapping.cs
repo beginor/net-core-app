@@ -48,6 +48,8 @@ public class ModelMapping : AutoMapper.Profile {
             .ReverseMap()
             .ForMember(dest => dest.Id, map => map.Ignore())
             .ForMember(d => d.User, m => m.Ignore());
+		CreateMap<AppLog, AppLogModel>();
+
         CreateMap<Category, CategoryModel>()
             .ReverseMap()
             .ForMember(dest => dest.Id, map => map.Ignore());

@@ -55,6 +55,7 @@ TableFilter:
     - app_json_data
     - app_storages
     - app_user_tokens
+    - app_logs
     - slpks
     - tilemaps
     - connections

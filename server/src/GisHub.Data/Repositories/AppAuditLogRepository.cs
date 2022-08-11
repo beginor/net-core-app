@@ -20,8 +20,8 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
     public async Task<PaginatedResponseModel<AppAuditLogModel>> SearchAsync(
         AppAuditLogSearchModel model
     ) {
-        var startDate = model.startDate.GetValueOrDefault(DateTime.Today);
-        var endDate = model.endDate.GetValueOrDefault(DateTime.Today).AddDays(1);
+        var startDate = model.StartDate.GetValueOrDefault(DateTime.Today);
+        var endDate = model.EndDate.GetValueOrDefault(DateTime.Today).AddDays(1);
         var query = Session.Query<AppAuditLog>().Where(
             log => log.StartAt >= startDate && log.StartAt < endDate
         );

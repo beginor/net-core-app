@@ -34,9 +34,9 @@ public partial class AppAuditLogModel : StringEntity {
 /// <summary>审计日志搜索参数</summary>
 public partial class AppAuditLogSearchModel : PaginatedRequestModel {
     /// <summary>请求开始日期，精确到日</summary>
-    public DateTime? startDate { get; set; }
+    public DateTime? StartDate { get; set; }
     /// <summary>请求结束日期，精确到日</summary>
-    public DateTime? endDate { get; set; }
+    public DateTime? EndDate { get; set; }
     /// <summary>用户名</summary>
     public string UserName { get; set; }
 }
