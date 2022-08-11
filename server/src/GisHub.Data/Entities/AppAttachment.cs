@@ -2,7 +2,7 @@ using System;
 using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
 
-namespace Beginor.GisHub.Data.Entities; 
+namespace Beginor.GisHub.Data.Entities;
 
 /// <summary>附件表</summary>
 [Class(Schema = "public", Table = "app_attachments")]

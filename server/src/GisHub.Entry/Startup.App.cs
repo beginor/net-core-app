@@ -61,7 +61,5 @@ partial class Startup {
 
     private void ConfigureApp(WebApplication app, IWebHostEnvironment env) {
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
-        System.AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-        System.AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
     }
 }

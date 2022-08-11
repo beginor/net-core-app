@@ -1,4 +1,4 @@
-﻿using Beginor.NetCoreApp.Api.Controllers;
+﻿using Beginor.GisHub.Api.Controllers;
 using NUnit.Framework;
 
 namespace Beginor.GisHub.Test.Api;
