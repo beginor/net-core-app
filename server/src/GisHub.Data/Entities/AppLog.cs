@@ -1,7 +1,9 @@
 ﻿using System;
 using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
+
 namespace Beginor.GisHub.Data.Entities;
+
 /// <summary>应用程序日志</summary>
 [Class(Schema = "public", Table = "app_logs")]
 public partial class AppLog : BaseEntity<long> {
