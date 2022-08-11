@@ -38,10 +38,10 @@ public partial class AppUserToken : BaseEntity<long> {
     public virtual string[] Urls { get; set; }
 
     /// <summary>过期时间</summary>
-    [Property(Name = "ExpiresAt", Column = "expires_at", Type = "datetime", NotNull = false)]
+    [Property(Name = "ExpiresAt", Column = "expires_at", TypeType = typeof(NHibernate.Extensions.NpgSql.TimeStampType), NotNull = false)]
     public virtual DateTime? ExpiresAt { get; set; }
 
     /// <summary>更新时间</summary>
-    [Property(Name = "UpdateTime", Column = "update_time", Type = "datetime", NotNull = true)]
+    [Property(Name = "UpdateTime", Column = "update_time", TypeType = typeof(NHibernate.Extensions.NpgSql.TimeStampType), NotNull = true)]
     public virtual DateTime UpdateTime { get; set; }
 }

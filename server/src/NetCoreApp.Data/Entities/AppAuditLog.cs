@@ -29,7 +29,7 @@ public partial class AppAuditLog : BaseEntity<long> {
     [Property(Name = "UserName", Column = "user_name", Type = "string", NotNull = true, Length = 64)]
     public virtual string UserName { get; set; }
     /// <summary>开始时间</summary>
-    [Property(Name = "StartAt", Column = "start_at", Type = "datetime", NotNull = true)]
+    [Property(Name = "StartAt", Column = "start_at", TypeType = typeof(NHibernate.Extensions.NpgSql.TimeStampType), NotNull = true)]
     public virtual DateTime StartAt { get; set; }
     /// <summary>耗时(毫秒)</summary>
     [Property(Name = "Duration", Column = "duration", Type = "long", NotNull = true)]

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Beginor.AppFx.DependencyInjection;
 
-namespace Beginor.NetCoreApp.Entry; 
+namespace Beginor.NetCoreApp.Entry;
 
 partial class Startup {
 
@@ -30,7 +30,5 @@ partial class Startup {
     private static void ConfigureApp(WebApplication app, IWebHostEnvironment env) {
         // do nothing now.
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
-        System.AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-        System.AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
     }
 }
