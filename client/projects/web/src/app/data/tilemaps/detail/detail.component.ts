@@ -134,4 +134,8 @@ export class DetailComponent implements OnInit {
         }).catch(_ => { /* ignore select error */ });
     }
 
+    public onFolderStructureChange(): void {
+        this.model.isBundled = this.model.folderStructure === 'esri';
+    }
+
 }

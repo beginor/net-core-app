@@ -78,6 +78,7 @@
             [class.is-invalid]="!(folderStructure.valid || folderStructure.pristine)"
             [class.is-valid]="folderStructure.valid"
             required #folderStructure="ngModel" [disabled]="!editable"
+            (change)="onFolderStructureChange()"
           >
             <option value="gdal">GDAL</option>
             <option value="esri">ESRI</option>
