@@ -64,9 +64,25 @@ public class AppAuditLogStatusStatModel {
 }
 
 /// <summary>访问日志响应时间统计</summary>
-public class AppAuditlogDurationStatModel {
+public class AppAuditLogDurationStatModel {
     /// <summary>响应时间</summary>
     public string Duration { get; set; }
+    /// <summary>请求数量</summary>
+    public int RequestCount { get; set; }
+}
+
+/// <summary>访问日志响应时间统计</summary>
+public class AppAuditLogUserStatModel {
+    /// <summary>用户名</summary>
+    public string Username { get; set; }
+    /// <summary>请求数量</summary>
+    public int RequestCount { get; set; }
+}
+
+/// <summary>访问日志响应时间统计</summary>
+public class AppAuditLogIpStatModel {
+    /// <summary>用户IP地址</summary>
+    public string Ip { get; set; }
     /// <summary>请求数量</summary>
     public int RequestCount { get; set; }
 }

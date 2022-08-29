@@ -17,6 +17,9 @@ public partial interface IAppAuditLogRepository : IRepository<AppAuditLogModel, 
 
     Task<PaginatedResponseModel<AppAuditLogStatusStatModel>> StatStatusAsync(DateTime startDate, DateTime endDate);
 
-    Task<PaginatedResponseModel<AppAuditlogDurationStatModel>> StatsDurationAsync(DateTime startDate, DateTime endDate);
+    Task<PaginatedResponseModel<AppAuditLogDurationStatModel>> StatDurationAsync(DateTime startDate, DateTime endDate);
 
+    Task<PaginatedResponseModel<AppAuditLogUserStatModel>> StatUserAsync(DateTime startDate, DateTime endDate);
+    
+    Task<PaginatedResponseModel<AppAuditLogIpStatModel>> StatIpAsync(DateTime startDate, DateTime endDate);
 }

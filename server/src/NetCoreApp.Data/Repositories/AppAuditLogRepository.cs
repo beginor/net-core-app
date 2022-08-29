@@ -83,7 +83,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
         return result;
     }
     
-    public async Task<PaginatedResponseModel<AppAuditlogDurationStatModel>> StatsDurationAsync(DateTime startDate, DateTime endDate) {
+    public async Task<PaginatedResponseModel<AppAuditLogDurationStatModel>> StatDurationAsync(DateTime startDate, DateTime endDate) {
         var sql = @"
             select substr(logs.duration, 3) as duration, logs.request_count from (
                 select
@@ -102,10 +102,41 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
             order by logs.duration;
         ";
         var conn = Session.Connection;
-        var durations = await conn.QueryAsync<AppAuditlogDurationStatModel>(sql, new { startDate, endDate});
-        var result = new PaginatedResponseModel<AppAuditlogDurationStatModel> {
+        var durations = await conn.QueryAsync<AppAuditLogDurationStatModel>(sql, new { startDate, endDate});
+        var result = new PaginatedResponseModel<AppAuditLogDurationStatModel> {
             Data = durations.ToList()
         };
         return result;
     }
+    
+    public async Task<PaginatedResponseModel<AppAuditLogUserStatModel>> StatUserAsync(DateTime startDate, DateTime endDate) {
+        var query = Session.Query<AppAuditLog>()
+            .Where(log => log.StartAt <= startDate && log.StartAt < endDate)
+            .GroupBy(log => log.UserName)
+            .Select(g => new AppAuditLogUserStatModel {
+                Username = g.Key,
+                RequestCount = g.Count()
+            })
+            .OrderByDescending(x => x.RequestCount);
+        var result = new PaginatedResponseModel<AppAuditLogUserStatModel> {
+            Data = await query.ToListAsync()
+        };
+        return result;
+    }
+    
+    public async Task<PaginatedResponseModel<AppAuditLogIpStatModel>> StatIpAsync(DateTime startDate, DateTime endDate) {
+        var query = Session.Query<AppAuditLog>()
+            .Where(log => log.StartAt <= startDate && log.StartAt < endDate)
+            .GroupBy(log => log.Ip)
+            .Select(g => new AppAuditLogIpStatModel {
+                Ip = g.Key,
+                RequestCount = g.Count()
+            })
+            .OrderByDescending(x => x.RequestCount);
+        var result = new PaginatedResponseModel<AppAuditLogIpStatModel> {
+            Data = await query.ToListAsync()
+        };
+        return result;
+    }
+
 }
