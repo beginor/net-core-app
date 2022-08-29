@@ -38,7 +38,7 @@ public class AppAuditLogStatController : Controller {
     /// <response code="200">读取访问量统计 成功</response>
     /// <response code="500">服务器内部错误</response>
     [HttpGet("traffic")]
-    // [Authorize("app_audit_logs.read_stat")]
+    [Authorize("app_audit_logs.read_stat")]
     public async Task<ActionResult<PaginatedResponseModel<AppAuditLogTrafficStatModel>>> StatTraffic() {
         try {
             var endDate = DateTime.Today;
