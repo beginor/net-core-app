@@ -38,7 +38,7 @@ public class AppAuditLogStatController : Controller {
     /// <response code="200">读取访问量统计 成功</response>
     /// <response code="500">服务器内部错误</response>
     [HttpGet("traffic")]
-    // // [Authorize("app_audit_logs.read_stat")]
+    // [Authorize("app_audit_logs.read_stat")]
     public async Task<ActionResult<PaginatedResponseModel<AppAuditLogTrafficStatModel>>> StatTraffic() {
         try {
             var endDate = DateTime.Today;
@@ -56,7 +56,7 @@ public class AppAuditLogStatController : Controller {
     /// <response code="200">读取状态码统计 成功</response>
     /// <response code="500">服务器内部错误</response>
     [HttpGet("status")]
-    // [Authorize("app_audit_logs.read_stat")]
+    [Authorize("app_audit_logs.read_stat")]
     public async Task<ActionResult<PaginatedResponseModel<AppAuditLogStatusStatModel>>> StatStatus() {
         try {
             var endDate = DateTime.Now;
@@ -74,7 +74,7 @@ public class AppAuditLogStatController : Controller {
     /// <response code="200">读取响应时间统计 成功</response>
     /// <response code="500">服务器内部错误</response>
     [HttpGet("duration")]
-    // [Authorize("app_audit_logs.read_stat")]
+    [Authorize("app_audit_logs.read_stat")]
     public async Task<ActionResult<PaginatedResponseModel<AppAuditLogDurationStatModel>>> StatDuration() {
         try {
             var endDate = DateTime.Now;
@@ -92,7 +92,7 @@ public class AppAuditLogStatController : Controller {
     /// <response code="200">读取用户访问统计 成功</response>
     /// <response code="500">服务器内部错误</response>
     [HttpGet("user")]
-    // [Authorize("app_audit_logs.read_stat")]
+    [Authorize("app_audit_logs.read_stat")]
     public async Task<ActionResult<PaginatedResponseModel<AppAuditLogUserStatModel>>> StatUser() {
         try {
             var endDate = DateTime.Now;
@@ -110,7 +110,7 @@ public class AppAuditLogStatController : Controller {
     /// <response code="200">读取 ip 地址访问统计 成功</response>
     /// <response code="500">服务器内部错误</response>
     [HttpGet("ip")]
-    // [Authorize("app_audit_logs.read_stat")]
+    [Authorize("app_audit_logs.read_stat")]
     public async Task<ActionResult<PaginatedResponseModel<AppAuditLogIpStatModel>>> StatIp() {
         try {
             var endDate = DateTime.Now;
