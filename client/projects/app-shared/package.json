@@ -4,10 +4,10 @@
   "peerDependencies": {
     "@angular/common": "^14.2.0",
     "@angular/core": "^14.2.0",
-    "@angular/router": "^14.2.0"
+    "@angular/router": "^14.2.0",
+    "echarts": "^5.3.3"
   },
   "dependencies": {
-    "tslib": "^2.3.0",
-    "echarts": "^5.3.3"
+    "tslib": "^2.3.0"
   }
 }

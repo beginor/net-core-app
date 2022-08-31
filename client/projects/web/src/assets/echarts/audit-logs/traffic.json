@@ -1,0 +1,61 @@
+{
+  "data": {
+    "url": "/audit-log-stats/traffic"
+  },
+  "echarts": {
+    "darkMode": false,
+    "title": { "show": false, "text": "访问量统计" },
+    "grid": { "show": false, "bottom": 30, "left": 30, "right": 30, "top": 30 },
+    "tooltip": {
+      "show": true,
+      "trigger": "axis",
+      "confine": false,
+      "formatter": [
+        "_lambda",
+        "(p) => {",
+        "  let str = '<table class=\"text-gray-300\">';",
+        "  str += '<tr><th class=\"px-1\" colspan=\"2\">' + p[0].axisValueLabel.substring(0, p[0].axisValueLabel.indexOf(' ')) + '</th></tr>';",
+        "  str += '<tr><td class=\"px-1\">' + p[0].marker + ' ' + p[0].seriesName + '</td><td class=\"text-end px-1\">' + p[0].data.requestCount.toFixed() + ' 次</td></tr>';",
+        "  str += '<tr><td class=\"px-1\">' + p[1].marker + ' ' + p[1].seriesName + '</td><td class=\"text-end px-1\">' + p[1].data.avgDuration.toFixed() + ' 毫秒</td></tr>';",
+        "  str += '</table>'",
+        "  return str;",
+        "}"
+      ]
+    },
+    "xAxis": {
+      "type": "time",
+      "axisTick": { "alignWithLabel": true },
+      "axisLabel": { "show": true, "formatter": "{yyyy}-{MM}-{dd}" }
+    },
+    "yAxis": [
+      {
+        "type": "value",
+        "splitLine": { "show": false },
+        "axisLabel": { "show": false }
+      },
+      {
+        "type": "value",
+        "splitLine": { "show": false },
+        "axisLabel": { "show": false }
+      }
+    ],
+    "legend": {
+      "data": ["访问量", "平均响应时间"], "left": "right"
+    },
+    "series": [
+      {
+        "name": "访问量",
+        "type": "line",
+        "smooth": true,
+        "encode": { "x": "requestDate", "y": "requestCount" },
+        "yAxisIndex": 0
+      },
+      {
+        "name": "平均响应时间",
+        "type": "bar",
+        "encode": { "x": "requestDate", "y": "avgDuration" },
+        "yAxisIndex": 1
+      }
+    ]
+  }
+}
