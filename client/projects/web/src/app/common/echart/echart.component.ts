@@ -17,8 +17,6 @@ export class EchartComponent implements AfterViewInit {
 
     @Input()
     public config!: string;
-    @Output()
-    public beforeUpdateChart = new EventEmitter<EChartsOption>();
 
     @ViewChild('echart')
     protected chartElRef!: ElementRef<HTMLDivElement>;
