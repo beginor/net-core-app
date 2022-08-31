@@ -1,5 +1,5 @@
 import {
-    Component, AfterViewInit, ElementRef, ViewChild, Input, EventEmitter, Output
+    Component, AfterViewInit, ElementRef, ViewChild, Input, EventEmitter, Output, OnDestroy
 } from '@angular/core';
 import { EChartsType, EChartsOption, init } from 'echarts';
 
@@ -13,7 +13,7 @@ import { EchartService } from './echart.service';
         .echart { width: 100%; height: 100%; }
     `]
 })
-export class EchartComponent implements AfterViewInit {
+export class EchartComponent implements AfterViewInit, OnDestroy {
 
     @Input()
     public config!: string;
@@ -22,12 +22,18 @@ export class EchartComponent implements AfterViewInit {
     protected chartElRef!: ElementRef<HTMLDivElement>;
 
     private echart!: EChartsType;
+    private hundleResize = this.onResize.bind(this);
 
     constructor(private vm: EchartService) { }
 
     public async ngAfterViewInit(): Promise<void> {
         this.initChart();
+        self.addEventListener('resize', this.hundleResize);
         void this.updateChartFromConfig();
+    }
+
+    public ngOnDestroy(): void {
+        self.removeEventListener('resize', this.hundleResize);
     }
 
     private initChart(): void {
@@ -76,6 +82,10 @@ export class EchartComponent implements AfterViewInit {
             props.beforeSetChartOptions(opts);
         }
         this.echart.setOption(opts);
+    }
+
+    private onResize(): void {
+        this.echart?.resize();
     }
 
 }

@@ -82,7 +82,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
         };
         return result;
     }
-    
+
     public async Task<PaginatedResponseModel<AppAuditLogDurationStatModel>> StatDurationAsync(DateTime startDate, DateTime endDate) {
         var sql = @"
             select substr(logs.duration, 3) as duration, logs.request_count from (
@@ -108,7 +108,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
         };
         return result;
     }
-    
+
     public async Task<PaginatedResponseModel<AppAuditLogUserStatModel>> StatUserAsync(DateTime startDate, DateTime endDate) {
         var query = Session.Query<AppAuditLog>()
             .Where(log => log.StartAt <= startDate && log.StartAt < endDate)
@@ -117,13 +117,13 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
                 Username = g.Key,
                 RequestCount = g.Count()
             })
-            .OrderByDescending(x => x.RequestCount);
+            .OrderBy(x => x.RequestCount);
         var result = new PaginatedResponseModel<AppAuditLogUserStatModel> {
             Data = await query.ToListAsync()
         };
         return result;
     }
-    
+
     public async Task<PaginatedResponseModel<AppAuditLogIpStatModel>> StatIpAsync(DateTime startDate, DateTime endDate) {
         var query = Session.Query<AppAuditLog>()
             .Where(log => log.StartAt <= startDate && log.StartAt < endDate)
