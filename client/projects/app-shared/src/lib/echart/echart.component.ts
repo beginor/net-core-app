@@ -6,7 +6,7 @@ import { EChartsType, EChartsOption, init } from 'echarts';
 import { EchartService } from './echart.service';
 
 @Component({
-    selector: 'app-echart',
+    selector: 'lib-echart',
     template: '<div class="echart" #echart>App Echart works!</div>',
     styles: [`
         :host { display: block; }

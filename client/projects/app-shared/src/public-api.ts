@@ -11,3 +11,5 @@ export * from './lib/http-error.handler';
 export * from './lib/svg-icon/svg-icon.component';
 export * from './lib/svg-icon/svg-icon.service';
 export * from './lib/base64-url.service';
+export * from './lib/echart/echart.component';
+export * from './lib/echart/echart.service';

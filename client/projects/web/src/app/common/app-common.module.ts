@@ -21,7 +21,6 @@ import {
 } from './storage-browser/storage-browser.component';
 import { NavCardComponent } from './nav-card/nav-card.component';
 import { HighlightDirective } from './highlight.directive';
-import { EchartComponent } from './echart/echart.component';
 
 @NgModule({
     declarations: [
@@ -33,7 +32,6 @@ import { EchartComponent } from './echart/echart.component';
         StorageBrowserComponent,
         NavCardComponent,
         HighlightDirective,
-        EchartComponent
     ],
     imports: [
         CommonModule,
@@ -56,7 +54,6 @@ import { EchartComponent } from './echart/echart.component';
         IframeComponent,
         NavCardComponent,
         HighlightDirective,
-        EchartComponent,
     ],
 })
 export class AppCommonModule { }
