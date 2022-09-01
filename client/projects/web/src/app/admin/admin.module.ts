@@ -9,12 +9,12 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 @NgModule({
-  declarations: [DashboardComponent],
-  imports: [
-    CommonModule,
-    AppSharedModule,
-    AppCommonModule,
-    AdminRoutingModule
-  ]
+    declarations: [DashboardComponent],
+    imports: [
+        CommonModule,
+        AppSharedModule,
+        AppCommonModule,
+        AdminRoutingModule
+    ]
 })
 export class AdminModule { }
