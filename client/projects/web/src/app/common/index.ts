@@ -6,4 +6,3 @@ export * from './storage-browser/storage-browser.component';
 export * from './services/storage.service';
 export * from './nav-card/nav-card.component';
 export * from './highlight.directive';
-export * from './echart/echart.component';
