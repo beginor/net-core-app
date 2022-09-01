@@ -1,5 +1,5 @@
 import {
-    Component, AfterViewInit, ElementRef, ViewChild, Input, EventEmitter, Output, OnDestroy, NgZone
+    Component, AfterViewInit, ElementRef, ViewChild, Input, OnDestroy, NgZone
 } from '@angular/core';
 import { EChartsType, EChartsOption, init } from 'echarts';
 
