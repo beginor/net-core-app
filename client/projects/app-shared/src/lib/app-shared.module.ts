@@ -1,20 +1,22 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { SvgIconComponent } from './svg-icon/svg-icon.component';
-import { FileSizePipe } from './file-size.pipe';
+import { EchartComponent } from './echart/echart.component';
 
 
 @NgModule({
     declarations: [
         SvgIconComponent,
-        FileSizePipe
+        EchartComponent,
+        FileSizePipe,
     ],
     imports: [
-        HttpClientModule
+        HttpClientModule,
     ],
     exports: [
         SvgIconComponent,
-        FileSizePipe
+        EchartComponent,
+        FileSizePipe,
     ]
 })
 export class AppSharedModule { }

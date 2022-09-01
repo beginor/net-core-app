@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { AccountService } from 'app-shared';
-import {NavigationService} from "../../common";
+import { NavigationService } from '../../common';
 
 @Component({
     selector: 'app-admin-dashboard',

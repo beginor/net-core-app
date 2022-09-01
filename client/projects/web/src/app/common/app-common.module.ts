@@ -62,7 +62,7 @@ import {
         NgbCollapseModule,
         NgbNavModule,
         NgbDatepickerModule,
-        AppSharedModule
+        AppSharedModule,
     ],
     exports: [
         NavTopBarComponent,

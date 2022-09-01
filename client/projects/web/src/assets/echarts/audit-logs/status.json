@@ -1,0 +1,25 @@
+{
+  "data": {
+    "url": "/audit-log-stats/status"
+  },
+  "echarts": {
+    "title": { "show": false },
+    "grid": { "show": false, "bottom": 30, "left": 30, "right": 30, "top": 30 },
+    "tooltip": {
+      "show": true,
+      "confine": false,
+      "trigger": "item"
+    },
+    "legend": {
+      "show": true, "left": "right", "orient": "vertical"
+    },
+    "series": [
+      {
+        "name": "状态码",
+        "type": "pie",
+        "avoidLabelOverlap": false,
+        "encode": { "itemName": "statusCode", "value": "requestCount" }
+      }
+    ]
+  }
+}

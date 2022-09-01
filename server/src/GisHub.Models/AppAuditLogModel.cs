@@ -40,3 +40,49 @@ public partial class AppAuditLogSearchModel : PaginatedRequestModel {
     /// <summary>用户名</summary>
     public string UserName { get; set; }
 }
+
+/// <summary>审计日志访问量</summary>
+public class AppAuditLogTrafficStatModel {
+    /// <summary>请求日期</summary>
+    public DateTime RequestDate { get; set; }
+    /// <summary>请求数量</summary>
+    public long RequestCount { get; set; }
+    /// <summary>平均响应时间</summary>
+    public double AvgDuration { get; set; }
+    /// <summary>最大响应时间</summary>
+    public double MaxDuration { get; set; }
+    /// <summary>最小响应设时间</summary>
+    public double MinDuration { get; set; }
+}
+
+/// <summary>访问日志状态码统计</summary>
+public class AppAuditLogStatusStatModel {
+    /// <summary>状态码</summary>
+    public int StatusCode { get; set; }
+    /// <summary>请求数量</summary>
+    public int RequestCount { get; set; }
+}
+
+/// <summary>访问日志响应时间统计</summary>
+public class AppAuditLogDurationStatModel {
+    /// <summary>响应时间</summary>
+    public string Duration { get; set; }
+    /// <summary>请求数量</summary>
+    public int RequestCount { get; set; }
+}
+
+/// <summary>访问日志响应时间统计</summary>
+public class AppAuditLogUserStatModel {
+    /// <summary>用户名</summary>
+    public string Username { get; set; }
+    /// <summary>请求数量</summary>
+    public int RequestCount { get; set; }
+}
+
+/// <summary>访问日志响应时间统计</summary>
+public class AppAuditLogIpStatModel {
+    /// <summary>用户IP地址</summary>
+    public string Ip { get; set; }
+    /// <summary>请求数量</summary>
+    public int RequestCount { get; set; }
+}

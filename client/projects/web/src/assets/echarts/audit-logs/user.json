@@ -1,0 +1,28 @@
+{
+  "data": {
+    "url": "/audit-log-stats/user"
+  },
+  "echarts": {
+    "title": { "show": false },
+    "grid": { "show": false, "bottom": 30, "left": 30, "right": 60, "top": 30 },
+    "tooltip": {
+      "show": true,
+      "confine": false,
+      "trigger": "item"
+    },
+    "legend": {
+      "show": false, "left": "right", "orient": "vertical"
+    },
+    "xAxis": { "type": "value", "show": true },
+    "yAxis": { "type": "category", "show": true, "axisLabel": { "show": false } },
+    "series": [
+      {
+        "name": "用户请求",
+        "type": "bar",
+        "avoidLabelOverlap": false,
+        "label": { "show": true, "position": "outside" },
+        "encode": { "y": "username", "x": "requestCount" }
+      }
+    ]
+  }
+}
