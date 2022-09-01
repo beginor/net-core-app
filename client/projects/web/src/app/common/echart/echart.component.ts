@@ -1,5 +1,5 @@
 import {
-    Component, AfterViewInit, ElementRef, ViewChild, Input, EventEmitter, Output, OnDestroy
+    Component, AfterViewInit, ElementRef, ViewChild, Input, EventEmitter, Output, OnDestroy, NgZone
 } from '@angular/core';
 import { EChartsType, EChartsOption, init } from 'echarts';
 
@@ -22,18 +22,23 @@ export class EchartComponent implements AfterViewInit, OnDestroy {
     protected chartElRef!: ElementRef<HTMLDivElement>;
 
     private echart!: EChartsType;
-    private hundleResize = this.onResize.bind(this);
 
-    constructor(private vm: EchartService) { }
+    private rb = new ResizeObserver(entires => {
+        this.zone.runOutsideAngular(() => {
+            this.echart?.resize();
+        });
+    });
+
+    constructor(private vm: EchartService, private zone: NgZone) { }
 
     public async ngAfterViewInit(): Promise<void> {
         this.initChart();
-        self.addEventListener('resize', this.hundleResize);
+        this.rb.observe(this.chartElRef.nativeElement);
         void this.updateChartFromConfig();
     }
 
     public ngOnDestroy(): void {
-        self.removeEventListener('resize', this.hundleResize);
+        this.rb.unobserve(this.chartElRef.nativeElement);
     }
 
     private initChart(): void {
@@ -76,16 +81,14 @@ export class EchartComponent implements AfterViewInit, OnDestroy {
         const opts = props.echarts;
         const result = await this.vm.loadData(props.data.url);
         opts.dataset = { source: result.data };
-        this.echart.clear();
-        this.echart.resize();
-        if (!!props.beforeSetChartOptions) {
-            props.beforeSetChartOptions(opts);
-        }
-        this.echart.setOption(opts);
-    }
-
-    private onResize(): void {
-        this.echart?.resize();
+        this.zone.runOutsideAngular(() => {
+            this.echart.clear();
+            this.echart.resize();
+            if (!!props.beforeSetChartOptions) {
+                props.beforeSetChartOptions(opts);
+            }
+            this.echart.setOption(opts);
+        });
     }
 
 }
