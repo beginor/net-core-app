@@ -6,6 +6,7 @@ using AutoMapper;
 using Dapper;
 using NHibernate;
 using NHibernate.Linq;
+using NHIdentityUser = NHibernate.AspNetCore.Identity.IdentityUser;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using Beginor.NetCoreApp.Data.Entities;
@@ -88,6 +89,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
             select substr(logs.duration, 3) as duration, logs.request_count from (
                 select
                     case
+                       when duration < 200 then '0: < 200ms'
                        when duration < 500 then '1: < 500ms'
                        when duration < 1000 then '2: 500ms ~ 1s'
                        when duration < 2000 then '3: 1s ~ 2s'
@@ -118,8 +120,35 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
                 RequestCount = g.Count()
             })
             .OrderBy(x => x.RequestCount);
+        var data = await query.ToListAsync();
+
+        var userData = new List<AppAuditLogUserStatModel>();
+
+        var addOrMerge = (string username, int requestCount) => {
+            var userModel = userData.FirstOrDefault(x => x.Username == username);
+            if (userModel == null) {
+                userData.Add(new AppAuditLogUserStatModel {
+                    Username = username,
+                    RequestCount = requestCount
+                });
+            }
+            else {
+                userModel.RequestCount += requestCount;
+            }
+        };
+
+        foreach (var model in data) {
+            var idx = model.Username.IndexOf(':');
+            if (idx < 0) {
+                addOrMerge(model.Username, model.RequestCount);
+            }
+            else {
+                addOrMerge(model.Username.Substring(0, idx), model.RequestCount);
+            }
+        }
+
         var result = new PaginatedResponseModel<AppAuditLogUserStatModel> {
-            Data = await query.ToListAsync()
+            Data = userData.OrderBy(x => x.RequestCount).ToList()
         };
         return result;
     }
