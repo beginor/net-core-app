@@ -72,7 +72,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
 
     public async Task<PaginatedResponseModel<AppAuditLogStatusStatModel>> StatStatusAsync(DateTime startDate, DateTime endDate) {
         var query = Session.Query<AppAuditLog>()
-            .Where(log => log.StartAt <= startDate && log.StartAt < endDate)
+            .Where(log => log.StartAt >= startDate && log.StartAt < endDate)
             .GroupBy(log => log.ResponseCode)
             .Select(g => new AppAuditLogStatusStatModel {
                 StatusCode = g.Key,
@@ -113,7 +113,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
 
     public async Task<PaginatedResponseModel<AppAuditLogUserStatModel>> StatUserAsync(DateTime startDate, DateTime endDate) {
         var query = Session.Query<AppAuditLog>()
-            .Where(log => log.StartAt <= startDate && log.StartAt < endDate)
+            .Where(log => log.StartAt >= startDate && log.StartAt < endDate)
             .GroupBy(log => log.UserName)
             .Select(g => new AppAuditLogUserStatModel {
                 Username = g.Key,
@@ -155,7 +155,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
 
     public async Task<PaginatedResponseModel<AppAuditLogIpStatModel>> StatIpAsync(DateTime startDate, DateTime endDate) {
         var query = Session.Query<AppAuditLog>()
-            .Where(log => log.StartAt <= startDate && log.StartAt < endDate)
+            .Where(log => log.StartAt >= startDate && log.StartAt < endDate)
             .GroupBy(log => log.Ip)
             .Select(g => new AppAuditLogIpStatModel {
                 Ip = g.Key,
