@@ -4,7 +4,7 @@
   },
   "echarts": {
     "title": { "show": false },
-    "grid": { "show": false, "bottom": 30, "left": 30, "right": 60, "top": 30 },
+    "grid": { "show": false, "bottom": 30, "left": 80, "right": 30, "top": 30 },
     "tooltip": {
       "show": true,
       "confine": false,
@@ -14,7 +14,7 @@
       "show": false, "left": "right", "orient": "vertical"
     },
     "xAxis": { "type": "value", "show": true },
-    "yAxis": { "type": "category", "show": true, "axisLabel": { "show": false } },
+    "yAxis": { "type": "category", "show": true },
     "series": [
       {
         "name": "用户请求",
