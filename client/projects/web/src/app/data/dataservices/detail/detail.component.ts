@@ -294,7 +294,7 @@ export class DetailComponent implements OnInit {
     }
 
     public hasGeoColumn(): boolean {
-        return  !!(this.model.fields?.find(x => x.type === 'geometry'));
+        return  !!(this.model.fields?.find(x => x.type === 'geometry' || x.type?.startsWith('geometry(')));
     }
 
     public async deleteMvtCache(): Promise<void> {
@@ -353,7 +353,7 @@ export class DetailComponent implements OnInit {
 
     private checkGeometryColumns(): boolean {
         const geometryCols = this.model.fields?.filter(
-            x => x.type === 'geometry'
+            x => x.type === 'geometry' || x.type?.startsWith('geometry(')
         );
         if (!!geometryCols) {
             if (geometryCols.length > 1) {

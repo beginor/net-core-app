@@ -65,15 +65,22 @@ public class PostGISMetaDataProvider : Disposable, IMetaDataProvider {
         }
         var connStr = BuildConnectionString(model);
         await using var conn = new NpgsqlConnection(connStr);
-        var sql = ""
-            + " select"
-            + " t.table_schema as schema,"
-            + " t.table_name as name,"
-            + " obj_description((t.table_schema||'.'||t.table_name)::regclass::oid) as description,"
-            + " t.table_type as type"
-            + " from information_schema.tables t"
-            + " where t.table_schema = @schema"
-            + " order by t.table_name";
+        var sql = "("
+            + "  select t.schemaname as schema, t.tablename as name, pg_catalog.obj_description(c.oid) as description, 'BASE TABLE' as type"
+            + "  from pg_catalog.pg_tables t"
+            + "  left join pg_catalog.pg_class c on c.relname = t.tablename and c.relkind = 'r'"
+            + "  where schemaname = @schema"
+            + ") union all ("
+            + "  select v.schemaname as schema, v.viewname as name, pg_catalog.obj_description(c.oid) as description, 'VIEW' as type"
+            + "  from pg_catalog.pg_views v"
+            + "  left join pg_catalog.pg_class c on c.relname = v.viewname and c.relkind = 'v'"
+            + "  where schemaname = @schema"
+            + " ) union all ("
+            + "  select m.schemaname as schema, m.matviewname as name, pg_catalog.obj_description(c.oid) as description, 'MATERIALIZED VIEW' as type"
+            + "  from pg_catalog.pg_matviews m"
+            + "  left join pg_catalog.pg_class c on c.relname = m.matviewname and c.relkind = 'm'"
+            + "  where m.schemaname = @schema"
+            + ");";
         var meta = await conn.QueryAsync<TableModel>(sql, new {schema});
         return meta.ToList();
     }
@@ -89,20 +96,17 @@ public class PostGISMetaDataProvider : Disposable, IMetaDataProvider {
         }
         var connStr = BuildConnectionString(model);
         await using var conn = new NpgsqlConnection(connStr);
-        var sql = ""
-            + " select"
-            + " col.table_schema as schema,"
-            + " col.table_name as table,"
-            + " col.column_name as name,"
-            + " col_description((col.table_schema || '.' || col.table_name)::regclass::oid, col.ordinal_position) as description,"
-            + " col.udt_name as type,"
-            + " coalesce(col.character_maximum_length, col.numeric_precision, 0) as length,"
-            + " case col.is_nullable when 'YES' then true else false end as nullable"
-            + " from information_schema.columns col"
-            + " where col.table_catalog = @database "
-            + " and col.table_schema = @schema"
-            + " and col.table_name = @tableName"
-            + " order by col.ordinal_position ";
+        var sql = "select  n.nspname as schema, c.relname as \"table\", a.attname as name,"
+            + "  pg_catalog.col_description(a.attrelid, a.attnum) as description,"
+            + "  pg_catalog.format_type(a.atttypid, a.atttypmod) as type,"
+            + "  case when a.attlen > 0 then a.attlen::integer else a.atttypmod - 4 end as length,"
+            + "  not a.attnotnull as nullable"
+            + " from pg_catalog.pg_attribute a"
+            + " inner join pg_catalog.pg_class c on a.attrelid = c.oid"
+            + " inner join pg_catalog.pg_namespace n on c.relnamespace = n.oid"
+            + " where a.attnum > 0 and not a.attisdropped"
+            + "  and n.nspname=@schema and c.relname = @tableName"
+            + " order by a.attnum;";
         var columns = await conn.QueryAsync<ColumnModel>(
             sql,
             new {

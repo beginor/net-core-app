@@ -59,7 +59,7 @@
     "esri-loader": "^3.6.0",
     "@types/arcgis-js-api": "^4.24.0",
     "mapbox-gl": "^2.10.0",
-    "@types/mapbox-gl": "^2.7.5",
+    "@types/mapbox-gl": "^2.7.6",
     "@turf/bbox": "6.5.0"
   },
   "devDependencies": {
