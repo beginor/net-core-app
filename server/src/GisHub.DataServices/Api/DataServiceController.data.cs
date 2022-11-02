@@ -120,6 +120,9 @@ partial class DataServiceController {
             }
             var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
             var data = await reader.ReadDistinctDataAsync(dataSource, param);
+            var result = new PaginatedResponseModel<IDictionary<string, object>> {
+                Total = data.Count, Data = data, Skip = 0, Take = 0
+            };
             return this.CompressedJson(data, serializerOptionsFactory.JsonSerializerOptions);
         }
         catch (Exception ex) {
