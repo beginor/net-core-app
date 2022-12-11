@@ -29,7 +29,7 @@ export class UsersService {
     ];
     public roles = new BehaviorSubject<AppRoleModel[]>([]);
 
-    private baseUrl = this.apiRoot + '/users';
+    private baseUrl: string;
     private rolesSvc: RolesService;
 
     constructor(
@@ -39,6 +39,7 @@ export class UsersService {
         private errorHandler: ErrorHandler,
         private base64Url: Base64UrlService
     ) {
+        this.baseUrl = this.apiRoot + '/users';
         this.searchModel.sortBy = this.sortMethods[0].value;
         this.rolesSvc = new RolesService(http, apiRoot, ui, errorHandler);
         this.rolesSvc.data.subscribe(data => {

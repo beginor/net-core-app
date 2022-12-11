@@ -26,7 +26,7 @@ export class AppLogService {
     public loading = false;
     public showPagination = false;
 
-    private baseUrl = `${this.apiRoot}/logs`;
+    private baseUrl: string;
 
     constructor(
         private http: HttpClient,
@@ -36,6 +36,7 @@ export class AppLogService {
         private formatter: NgbDateParserFormatter,
         calendar: NgbCalendar
     ) {
+        this.baseUrl = `${this.apiRoot}/logs`;
         const today = calendar.getToday();
         this.endDate = today;
         this.maxDate = today;

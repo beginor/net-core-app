@@ -21,14 +21,16 @@ export class AppPrivilegeService {
     public loading = false;
     public showPagination = false;
 
-    private baseUrl = `${this.apiRoot}/privileges`;
+    private baseUrl: string;
 
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService,
         private errorHandler: ErrorHandler
-    ) { }
+    ) {
+        this.baseUrl = `${this.apiRoot}/privileges`;
+    }
 
     /** 搜索系统权限 */
     public async search(): Promise<void> {

@@ -19,14 +19,16 @@ export class AppUserTokenService {
     public loading = false;
     public showPagination = false;
 
-    private baseUrl = `${this.apiRoot}/app-user-tokens`;
+    private baseUrl: string;
 
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService,
         private errorHandler: ErrorHandler
-    ) { }
+    ) {
+        this.baseUrl = `${this.apiRoot}/app-user-tokens`;
+    }
 
     /** 搜索用户凭证 */
     public async search(): Promise<void> {

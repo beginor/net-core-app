@@ -40,11 +40,11 @@ import { environment } from '../environments/environment';
         },
         {
             provide: 'apiRoot',
-            useFactory: () => environment.apiRoot
+            useFactory: () => '/net-core-app/api'
         },
         {
             provide: 'isProduction',
-            useFactory: () => environment.production
+            useFactory: () => ['127.0.0.1', 'localhost'].indexOf(location.hostname) === -1 // eslint-disable-line max-len
         },
         {
             provide: ErrorHandler,
