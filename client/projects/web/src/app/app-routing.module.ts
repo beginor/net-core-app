@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AuthGuard } from 'app-shared';
+import { AuthGuard, isProd } from 'app-shared';
 
-import { environment } from '../environments/environment';
 import { IframeComponent } from './common';
 /* eslint-disable max-len */
 const routes: Routes = [
@@ -45,7 +44,7 @@ const routes: Routes = [
     imports: [
         RouterModule.forRoot(
             routes,
-            { useHash: false, enableTracing: !environment.production }
+            { useHash: false, enableTracing: isProd() }
         )
     ],
     exports: [RouterModule]

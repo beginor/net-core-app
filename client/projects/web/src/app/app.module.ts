@@ -6,12 +6,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { AppSharedModule, ApiInterceptor, HttpErrorHandler } from 'app-shared';
+import {
+    AppSharedModule, ApiInterceptor, HttpErrorHandler, isProd
+} from 'app-shared';
 
 import { AppCommonModule } from './common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { environment } from '../environments/environment';
 
 @NgModule({
     declarations: [
@@ -40,11 +41,11 @@ import { environment } from '../environments/environment';
         },
         {
             provide: 'apiRoot',
-            useFactory: () => '/net-core-app/api'
+            useFactory: (): string => '/net-core-app/api'
         },
         {
             provide: 'isProduction',
-            useFactory: () => ['127.0.0.1', 'localhost'].indexOf(location.hostname) === -1 // eslint-disable-line max-len
+            useFactory: (): boolean => isProd()
         },
         {
             provide: ErrorHandler,
