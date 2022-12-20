@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
     <AssemblyName>Beginor.GisHub.Slpk</AssemblyName>
     <RootNamespace>Beginor.GisHub.Slpk</RootNamespace>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

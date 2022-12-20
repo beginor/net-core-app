@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
     <AssemblyName>Beginor.GisHub.Data</AssemblyName>
     <RootNamespace>Beginor.GisHub.Data</RootNamespace>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <Import Project="../../package-references.props" />

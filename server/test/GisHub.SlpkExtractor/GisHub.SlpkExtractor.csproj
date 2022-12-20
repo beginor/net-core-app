@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
     <AssemblyName>SlpkExtractor</AssemblyName>
     <RootNamespace>Beginor.GisHub.SlpkExtractor</RootNamespace>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <Import Project="../../package-references.props" />
