@@ -13,7 +13,7 @@ public class AuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider {
         IOptions<AuthorizationOptions> options
     ) : base(options) { }
 
-    public override Task<AuthorizationPolicy> GetPolicyAsync(string policyName) {
+    public override Task<AuthorizationPolicy?> GetPolicyAsync(string policyName) {
         var builder = new AuthorizationPolicyBuilder();
         builder.RequireAuthenticatedUser()
             .RequireClaim(Consts.PrivilegeClaimType, policyName)
@@ -21,7 +21,7 @@ public class AuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider {
                 JwtBearerDefaults.AuthenticationScheme,
                 TokenOptions.DefaultSchemaName
             );
-        return Task.FromResult(builder.Build());
+        return Task.FromResult<AuthorizationPolicy?>(builder.Build());
     }
 
 }
