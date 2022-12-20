@@ -30,11 +30,11 @@ export class RolesService {
 
     constructor(
         private http: HttpClient,
-        @Inject('apiRoot') private apiRoot: string,
+        @Inject('apiRoot') apiRoot: string,
         private ui: UiService,
         private errorHandler: ErrorHandler
     ) {
-        this.baseUrl = `${this.apiRoot}/roles`;
+        this.baseUrl = `${apiRoot}/roles`;
         this.privilegeService = new AppPrivilegeService(
             http,
             apiRoot,

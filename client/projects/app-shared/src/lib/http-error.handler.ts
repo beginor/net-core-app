@@ -20,7 +20,7 @@ export class HttpErrorHandler implements ErrorHandler {
         this.url = `${apiRoot}/client-errors`;
     }
 
-    public handleError(error: any): void {
+    public handleError(error: unknown): void {
         const err: ErrorModel = {
             userName: this.account.info.getValue().userName,
             occuredAt: new Date(),

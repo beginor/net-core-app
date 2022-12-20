@@ -28,13 +28,13 @@ export class AuditLogsService {
 
     constructor(
         private http: HttpClient,
-        @Inject('apiRoot') private apiRoot: string,
+        @Inject('apiRoot') apiRoot: string,
         private ui: UiService,
         private errorHandler: ErrorHandler,
         private formatter: NgbDateParserFormatter,
         calendar: NgbCalendar
     ) {
-        this.baseUrl = `${this.apiRoot}/audit-logs`;
+        this.baseUrl = `${apiRoot}/audit-logs`;
         const today = calendar.getToday();
         this.endDate = today;
         this.maxDate = today;
