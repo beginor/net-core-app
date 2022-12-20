@@ -24,7 +24,7 @@ public partial class AppStorageModel : StringEntity {
 /// <summary>应用存储搜索参数</summary>
 public partial class AppStorageSearchModel : PaginatedRequestModel {
     /// <summary>搜索关键字</summary>
-    public string Keywords { get; set; }
+    public string? Keywords { get; set; }
 }
 
 /// <summary>服务目录浏览模型</summary>

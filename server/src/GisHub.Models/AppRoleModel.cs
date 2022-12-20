@@ -29,7 +29,7 @@ public class AppRoleModel : StringEntity {
 public class AppRoleSearchModel : PaginatedRequestModel {
 
     /// <summary>角色名称</summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 }
 
 /// <summary>角色权限模型</summary>

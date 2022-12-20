@@ -30,7 +30,7 @@ export class NavItemsService {
         private uiService: UiService,
         private errorHandler: ErrorHandler
     ) {
-        this.baseUrl = `${this.apiRoot}/nav-items`;
+        this.baseUrl = `${apiRoot}/nav-items`;
         this.rolesSvc = new RolesService(
             http, apiRoot, uiService, errorHandler
         );

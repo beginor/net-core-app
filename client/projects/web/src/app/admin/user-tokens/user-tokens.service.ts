@@ -23,11 +23,11 @@ export class AppUserTokenService {
 
     constructor(
         private http: HttpClient,
-        @Inject('apiRoot') private apiRoot: string,
+        @Inject('apiRoot') apiRoot: string,
         private ui: UiService,
         private errorHandler: ErrorHandler
     ) {
-        this.baseUrl = `${this.apiRoot}/app-user-tokens`;
+        this.baseUrl = `${apiRoot}/app-user-tokens`;
     }
 
     /** 搜索用户凭证 */

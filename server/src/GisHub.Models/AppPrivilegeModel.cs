@@ -24,5 +24,5 @@ public partial class AppPrivilegeModel : StringEntity {
 /// <summary>系统权限搜索参数</summary>
 public partial class AppPrivilegeSearchModel : PaginatedRequestModel {
     /// <summary>模块</summary>
-    public string Module { get; set; }
+    public string? Module { get; set; }
 }
