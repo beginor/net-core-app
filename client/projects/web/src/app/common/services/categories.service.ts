@@ -17,7 +17,7 @@ export class CategoryService {
         undefined
     );
 
-    private baseUrl = `${this.apiRoot}/categories`;
+    private baseUrl: string;
 
     constructor(
         private http: HttpClient,
@@ -25,7 +25,9 @@ export class CategoryService {
         private ui: UiService,
         private errorHandler: ErrorHandler,
         private resource: ResourceService
-    ) { }
+    ) {
+        this.baseUrl = `${apiRoot}/categories`;
+    }
 
     /** 获取全部数据类别 */
     public async getAll(resourceType?: string): Promise<void> {

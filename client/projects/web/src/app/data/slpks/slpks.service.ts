@@ -20,14 +20,16 @@ export class SlpkService {
     public loading = false;
     public showPagination = false;
 
-    private baseUrl = `${this.apiRoot}/slpks`;
+    private baseUrl: string;
 
     constructor(
         private http: HttpClient,
-        @Inject('apiRoot') private apiRoot: string,
+        @Inject('apiRoot') apiRoot: string,
         private ui: UiService,
         private errorHandler: ErrorHandler
-    ) { }
+    ) {
+        this.baseUrl = `${apiRoot}/slpks`;
+    }
 
     /** 搜索slpk 航拍模型 */
     public async search(): Promise<void> {

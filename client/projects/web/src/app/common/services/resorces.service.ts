@@ -8,14 +8,16 @@ import { UiService } from './ui.service';
 @Injectable({ providedIn: 'root' })
 export class ResourceService {
 
-    private baseUrl = `${this.apiRoot}/resources`;
+    private baseUrl: string;
 
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService,
         private errorHandler: ErrorHandler
-    ) { }
+    ) {
+        this.baseUrl = `${apiRoot}/resources`;
+    }
 
     public async getResourceCount(
         type?: string

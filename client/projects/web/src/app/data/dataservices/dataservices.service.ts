@@ -21,7 +21,7 @@ export class DataServiceService {
     public showPagination = false;
     public roles: AppRoleModel[] = [];
 
-    private baseUrl = `${this.apiRoot}/dataservices`;
+    private baseUrl: string;
     private rolesSvc: RolesService;
 
     constructor(
@@ -30,6 +30,7 @@ export class DataServiceService {
         private ui: UiService,
         private errorHandler: ErrorHandler
     ) {
+        this.baseUrl = `${apiRoot}/dataservices`;
         this.rolesSvc = new RolesService(http, apiRoot, ui, errorHandler);
         this.rolesSvc.data.subscribe(data => { this.roles = data; });
     }

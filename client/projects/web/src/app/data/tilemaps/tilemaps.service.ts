@@ -21,14 +21,16 @@ export class TileMapService {
     public loading = false;
     public showPagination = false;
 
-    private baseUrl = `${this.apiRoot}/tilemaps`;
+    private baseUrl: string;
 
     constructor(
         private http: HttpClient,
-        @Inject('apiRoot') private apiRoot: string,
+        @Inject('apiRoot') apiRoot: string,
         private ui: UiService,
         private errorHandler: ErrorHandler
-    ) { }
+    ) {
+        this.baseUrl = `${apiRoot}/tilemaps`;
+    }
 
     /** 搜索切片地图 */
     public async search(): Promise<void> {

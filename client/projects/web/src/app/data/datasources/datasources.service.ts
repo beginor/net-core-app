@@ -22,14 +22,16 @@ export class DataSourceService {
     public loading = false;
     public showPagination = false;
 
-    private baseUrl = `${this.apiRoot}/datasources`;
+    private baseUrl: string;
 
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService,
         private errorHandler: ErrorHandler
-    ) { }
+    ) {
+        this.baseUrl = `${apiRoot}/datasources`;
+    }
 
     /** 搜索数据源 */
     public async search(): Promise<void> {

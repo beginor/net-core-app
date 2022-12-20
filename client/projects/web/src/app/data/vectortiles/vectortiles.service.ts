@@ -20,14 +20,16 @@ export class VectortileService {
     public loading = false;
     public showPagination = false;
 
-    private baseUrl = `${this.apiRoot}/vectortiles`;
+    private baseUrl: string;
 
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService,
         private errorHandler: ErrorHandler
-    ) { }
+    ) {
+        this.baseUrl = `${apiRoot}/vectortiles`;
+    }
 
     /** 搜索矢量切片包 */
     public async search(): Promise<void> {

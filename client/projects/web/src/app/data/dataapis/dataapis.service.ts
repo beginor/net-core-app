@@ -22,7 +22,7 @@ export class DataApiService {
     public showPagination = false;
     public tokens = new BehaviorSubject<UserTokenModel[]>([]);
 
-    private baseUrl = `${this.apiRoot}/dataapis`;
+    private baseUrl: string;
 
     constructor(
         private http: HttpClient,
@@ -30,7 +30,9 @@ export class DataApiService {
         private account: AccountService,
         private ui: UiService,
         private errorHandler: ErrorHandler
-    ) { }
+    ) {
+        this.baseUrl = `${apiRoot}/dataapis`;
+    }
 
     /** 搜索数据API */
     public async search(): Promise<void> {
