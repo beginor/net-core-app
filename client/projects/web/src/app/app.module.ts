@@ -6,12 +6,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { AppSharedModule, ApiInterceptor, HttpErrorHandler } from 'app-shared';
+import {
+    AppSharedModule, ApiInterceptor, HttpErrorHandler, isProd
+} from 'app-shared';
 
 import { AppCommonModule } from './common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { environment } from '../environments/environment';
 
 @NgModule({
     declarations: [
@@ -44,11 +45,11 @@ import { environment } from '../environments/environment';
         },
         {
             provide: 'apiRoot',
-            useFactory: () => environment.apiRoot
+            useFactory: (): string => '/net-core-app/api'
         },
         {
             provide: 'isProduction',
-            useFactory: () => environment.production
+            useFactory: (): boolean => isProd()
         },
         {
             provide: ErrorHandler,

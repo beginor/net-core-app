@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>Beginor.GisHub.Geo</AssemblyName>
     <RootNamespace>Beginor.GisHub.Geo</RootNamespace>
     <LangVersion>latest</LangVersion>

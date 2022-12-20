@@ -21,7 +21,7 @@ export class AppStorageService {
     public showPagination = false;
     public roles: AppRoleModel[] = [];
 
-    private baseUrl = `${this.apiRoot}/storages`;
+    private baseUrl: string;
     private rolesSvc: RolesService;
 
     constructor(
@@ -30,6 +30,7 @@ export class AppStorageService {
         private ui: UiService,
         private errorHandler: ErrorHandler
     ) {
+        this.baseUrl = `${this.apiRoot}/storages`;
         this.rolesSvc = new RolesService(
             http, apiRoot, ui, errorHandler
         );

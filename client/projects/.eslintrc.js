@@ -5,6 +5,8 @@ module.exports = {
     {
       "files": ["*.ts"],
       "rules": {
+        "no-extra-boolean-cast": ["off"],
+        "no-prototype-builtins": ["off"],
         "quotes": ["warn", "single"],
         "no-console": ["warn", { "allow": ["error"] }],
         "no-debugger": ["warn"],

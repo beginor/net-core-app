@@ -27,10 +27,8 @@ git commit -m "Rename to ${COMPANY_NAME}.${PROJ_NAME}"
 # 修改客户端相关文件
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/package.json
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/angular.json
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/web/src/environments/environment.ts
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/web/src/environments/environment.prod.ts
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/handset/src/environments/environment.ts
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/handset/src/environments/environment.prod.ts
+sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/web/src/app/app.module.ts
+sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./client/projects/handset/src/app/app.module.ts
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./client/smartcode.yml
 sed -i.bak "s/Beginor/${COMPANY_NAME}/g" ./client/smartcode.yml
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./start.sh

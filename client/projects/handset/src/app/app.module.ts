@@ -5,14 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppSharedModule, ApiInterceptor, HttpErrorHandler } from 'app-shared';
+import {
+    AppSharedModule, ApiInterceptor, HttpErrorHandler, isProd
+} from 'app-shared';
 
 import { MatModule } from './mat/mat.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-
-import { environment } from '../environments/environment';
 
 @NgModule({
     declarations: [
@@ -41,11 +41,11 @@ import { environment } from '../environments/environment';
         },
         {
             provide: 'apiRoot',
-            useFactory: () => environment.apiRoot
+            useFactory: (): string => '/net-core-app/api'
         },
         {
             provide: 'isProduction',
-            useFactory: () => environment.production
+            useFactory: (): boolean => isProd()
         },
         {
             provide: ErrorHandler,

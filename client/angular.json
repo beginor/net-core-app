@@ -105,7 +105,7 @@
             "index": "projects/handset/src/index.html",
             "baseHref": "/gishub/handset/",
             "main": "projects/handset/src/main.ts",
-            "polyfills": "projects/handset/src/polyfills.ts",
+            "polyfills": ["zone.js", "projects/handset/src/polyfills.ts"],
             "tsConfig": "projects/handset/tsconfig.app.json",
             "inlineStyleLanguage": "css",
             "assets": [
@@ -144,12 +144,6 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
                   "maximumError": "4kb"
-                }
-              ],
-              "fileReplacements": [
-                {
-                  "replace": "projects/handset/src/environments/environment.ts",
-                  "with": "projects/handset/src/environments/environment.prod.ts"
                 }
               ],
               "outputHashing": "all"
@@ -228,7 +222,7 @@
             "index": "projects/web/src/index.html",
             "baseHref": "/gishub/web/",
             "main": "projects/web/src/main.ts",
-            "polyfills": "projects/web/src/polyfills.ts",
+            "polyfills": ["zone.js","projects/web/src/polyfills.ts"],
             "tsConfig": "projects/web/tsconfig.app.json",
             "inlineStyleLanguage": "css",
             "assets": [
@@ -272,12 +266,6 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
                   "maximumError": "4kb"
-                }
-              ],
-              "fileReplacements": [
-                {
-                  "replace": "projects/web/src/environments/environment.ts",
-                  "with": "projects/web/src/environments/environment.prod.ts"
                 }
               ],
               "outputHashing": "all"

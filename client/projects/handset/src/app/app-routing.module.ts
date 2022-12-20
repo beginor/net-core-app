@@ -1,29 +1,27 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { environment } from '../environments/environment';
-
-import { AuthGuard } from 'app-shared';
+import { AuthGuard, isProd } from 'app-shared';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     {
         path: 'home',
-        loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
+        loadChildren: () => import('./home/home.module').then(m => m.HomeModule), // eslint-disable-line max-len
         canLoad: [AuthGuard],
         canActivate: [AuthGuard],
         data: { }
     },
     {
         path: 'about',
-        loadChildren: () => import('./about/about.module').then(m => m.AboutModule),
+        loadChildren: () => import('./about/about.module').then(m => m.AboutModule), // eslint-disable-line max-len
         canLoad: [AuthGuard],
         canActivate: [AuthGuard],
         data: { }
     },
     {
         path: 'login',
-        loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
+        loadChildren: () => import('./login/login.module').then(m => m.LoginModule), // eslint-disable-line max-len
         canLoad: []
     }
 ];
@@ -31,7 +29,7 @@ const routes: Routes = [
 @NgModule({
     imports: [RouterModule.forRoot(routes, {
         useHash: false,
-        enableTracing: !environment.production
+        enableTracing: isProd()
     })],
     exports: [RouterModule]
 })

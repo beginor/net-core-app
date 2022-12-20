@@ -21,7 +21,7 @@ export class NavItemsService {
     public showPagination = false;
     public roles: AppRoleModel[] = [];
 
-    private baseUrl = `${this.apiRoot}/nav-items`;
+    private baseUrl: string;
     private rolesSvc: RolesService;
 
     constructor(
@@ -30,6 +30,7 @@ export class NavItemsService {
         private uiService: UiService,
         private errorHandler: ErrorHandler
     ) {
+        this.baseUrl = `${this.apiRoot}/nav-items`;
         this.rolesSvc = new RolesService(
             http, apiRoot, uiService, errorHandler
         );

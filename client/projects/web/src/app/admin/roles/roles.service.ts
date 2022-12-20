@@ -25,7 +25,7 @@ export class RolesService {
     public privileges: ModulePrivileges[] = [];
     public rolePrivileges: { [key: string]: boolean } = {};
 
-    private baseUrl = `${this.apiRoot}/roles`;
+    private baseUrl: string;
     private privilegeService: AppPrivilegeService;
 
     constructor(
@@ -34,6 +34,7 @@ export class RolesService {
         private ui: UiService,
         private errorHandler: ErrorHandler
     ) {
+        this.baseUrl = `${this.apiRoot}/roles`;
         this.privilegeService = new AppPrivilegeService(
             http,
             apiRoot,

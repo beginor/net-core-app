@@ -24,7 +24,7 @@ export class AuditLogsService {
     public loading = false;
     public showPagination = false;
 
-    private baseUrl = `${this.apiRoot}/audit-logs`;
+    private baseUrl: string;
 
     constructor(
         private http: HttpClient,
@@ -34,6 +34,7 @@ export class AuditLogsService {
         private formatter: NgbDateParserFormatter,
         calendar: NgbCalendar
     ) {
+        this.baseUrl = `${this.apiRoot}/audit-logs`;
         const today = calendar.getToday();
         this.endDate = today;
         this.maxDate = today;
