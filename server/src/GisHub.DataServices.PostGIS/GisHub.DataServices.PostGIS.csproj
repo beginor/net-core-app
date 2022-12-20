@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>Beginor.GisHub.DataServices.PostGIS</AssemblyName>
     <RootNamespace>Beginor.GisHub.DataServices.PostGIS</RootNamespace>
     <LangVersion>latest</LangVersion>

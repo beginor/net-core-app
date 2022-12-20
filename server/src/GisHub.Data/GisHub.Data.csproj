@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>Beginor.GisHub.Data</AssemblyName>
     <RootNamespace>Beginor.GisHub.Data</RootNamespace>
     <LangVersion>latest</LangVersion>
