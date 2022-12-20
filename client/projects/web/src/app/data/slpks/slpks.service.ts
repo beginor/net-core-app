@@ -24,7 +24,7 @@ export class SlpkService {
 
     constructor(
         private http: HttpClient,
-        @Inject('apiRoot') apiRoot: string,
+        @Inject('apiRoot') private apiRoot: string,
         private ui: UiService,
         private errorHandler: ErrorHandler
     ) {
