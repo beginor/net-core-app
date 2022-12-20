@@ -41,11 +41,11 @@ import { AppComponent } from './app.component';
         },
         {
             provide: 'webRoot',
-            useFactory: () => environment.webRoot
+            useValue: '/gishub'
         },
         {
             provide: 'apiRoot',
-            useValue: '/net-core-app/api'
+            useValue: '/gishub/api'
         },
         {
             provide: 'isProduction',

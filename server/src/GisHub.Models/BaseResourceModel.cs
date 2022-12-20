@@ -38,7 +38,7 @@ public partial class BaseResourceSearchModel : PaginatedRequestModel {
 /// <summary>数据资源的统计参数</summary>
 public class BaseResourceStatisticRequestModel {
     /// <summary>资源类型</summary>
-    public string Type { get; set; }
+    public string? Type { get; set; }
 }
 
 /// <summary>数据资源按类别统计</summary>

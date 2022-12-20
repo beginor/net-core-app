@@ -41,7 +41,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
         },
         {
             provide: 'apiRoot',
-            useValue: '/net-core-app/api'
+            useValue: '/gishub/api'
         },
         {
             provide: 'isProduction',

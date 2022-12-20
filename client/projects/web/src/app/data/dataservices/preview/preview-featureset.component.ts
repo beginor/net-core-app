@@ -77,7 +77,7 @@ export class PreviewFeatureSetComponent implements AfterViewInit, OnDestroy {
             __esri.FeatureLayerConstructor,
             __esri.ExtentConstructor
         ]>([
-            'esri/tasks/support/FeatureSet',
+            'esri/rest/support/FeatureSet',
             'esri/layers/FeatureLayer',
             'esri/geometry/Extent'
         ]);

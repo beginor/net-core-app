@@ -53,13 +53,13 @@ partial class AgsQueryParam {
         return geometry;
     }
     [JsonIgnore]
-    public string[] OutFieldsValue {
+    public string[]? OutFieldsValue {
         get {
             return OutFields.Split(',');
         }
     }
     [JsonIgnore]
-    public long[] ObjectIdsValue {
+    public long[]? ObjectIdsValue {
         get {
             if (ObjectIds.IsNullOrEmpty()) {
                 return null;
@@ -117,7 +117,7 @@ partial class AgsQueryParam {
         }
     }
     [JsonIgnore]
-    public string[] GroupByValue {
+    public string[]? GroupByValue {
         get {
             if (GroupByFieldsForStatistics.IsNullOrEmpty()) {
                 return null;
@@ -126,7 +126,7 @@ partial class AgsQueryParam {
         }
     }
     [JsonIgnore]
-    public AgsOutputStatistic[] OutStatisticsValue {
+    public AgsOutputStatistic[]? OutStatisticsValue {
         get {
             if (OutStatistics.IsNullOrEmpty()) {
                 return null;
