@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
-namespace Beginor.GisHub.DataServices.Models; 
+namespace Beginor.GisHub.DataServices.Models;
 
 /// <summary>数据源模型</summary>
 public partial class DataSourceModel : StringEntity {
@@ -34,5 +34,5 @@ public partial class DataSourceModel : StringEntity {
 
 /// <summary>数据源搜索参数</summary>
 public partial class DataSourceSearchModel : PaginatedRequestModel {
-    public string Keywords { get; set; }
+    public string? Keywords { get; set; }
 }

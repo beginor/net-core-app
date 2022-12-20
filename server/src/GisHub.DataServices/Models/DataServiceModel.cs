@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.DataServices.Models; 
+namespace Beginor.GisHub.DataServices.Models;
 
 /// <summary>数据服务模型</summary>
 public partial class DataServiceModel : BaseResourceModel {
@@ -52,6 +52,6 @@ public class DataServiceFieldModel {
 /// <summary>数据服务搜索参数</summary>
 public partial class DataServiceSearchModel : PaginatedRequestModel {
     /// <summary>搜索数据服务的关键字</summary>
-    public string Keywords { get; set; }
+    public string? Keywords { get; set; }
     public long Category { get; set; }
 }

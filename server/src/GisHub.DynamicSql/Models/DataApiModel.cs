@@ -5,7 +5,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Models;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.DynamicSql.Models; 
+namespace Beginor.GisHub.DynamicSql.Models;
 
 /// <summary>数据API模型</summary>
 public partial class DataApiModel : BaseResourceModel {
@@ -40,7 +40,7 @@ public class DataApiParameterModel {
 /// <summary>数据API搜索参数</summary>
 public partial class DataApiSearchModel : PaginatedRequestModel {
     /// <summary>搜索关键字</summary>
-    public string Keywords { get; set; }
+    public string? Keywords { get; set; }
     /// <summary>资源类别</summary>
     public long Category { get; set; }
 }

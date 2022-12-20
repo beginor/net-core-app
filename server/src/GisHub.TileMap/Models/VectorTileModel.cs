@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.TileMap.Models; 
+namespace Beginor.GisHub.TileMap.Models;
 
 /// <summary>矢量切片包模型</summary>
 public partial class VectorTileModel : BaseResourceModel {
@@ -32,6 +32,6 @@ public partial class VectorTileModel : BaseResourceModel {
 /// <summary>矢量切片包搜索参数</summary>
 public partial class VectorTileSearchModel : PaginatedRequestModel {
     /// <summary>搜索关键字</summary>
-    public string Keywords { get; set; }
+    public string? Keywords { get; set; }
     public long Category { get; set; }
 }

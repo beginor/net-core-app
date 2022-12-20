@@ -32,7 +32,7 @@ public partial class BaseResourceSearchModel : PaginatedRequestModel {
     /// <summary>类别ID</summary>
     public long? CategoryId { get; set; }
     /// <summary>关键字</summary>
-    public string Keywords { get; set; }
+    public string? Keywords { get; set; }
 }
 
 /// <summary>数据资源的统计参数</summary>
