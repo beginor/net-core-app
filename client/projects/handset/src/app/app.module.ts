@@ -41,11 +41,11 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
         },
         {
             provide: 'apiRoot',
-            useFactory: (): string => '/net-core-app/api'
+            useValue: '/net-core-app/api'
         },
         {
             provide: 'isProduction',
-            useFactory: (): boolean => isProd()
+            useFactory: isProd
         },
         {
             provide: ErrorHandler,
