@@ -27,5 +27,5 @@ public partial class AppLogSearchModel : PaginatedRequestModel {
     /// <summary>结束日期</summary>
     public DateTime? EndDate { get; set; }
     /// <summary>日志级别</summary>
-    public string Level { get; set; }
+    public string? Level { get; set; }
 }

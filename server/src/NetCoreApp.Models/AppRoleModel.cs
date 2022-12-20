@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
-namespace Beginor.NetCoreApp.Models; 
+namespace Beginor.NetCoreApp.Models;
 
 /// <summary>应用程序角色模型</summary>
 public class AppRoleModel : StringEntity {
@@ -29,7 +29,7 @@ public class AppRoleModel : StringEntity {
 public class AppRoleSearchModel : PaginatedRequestModel {
 
     /// <summary>角色名称</summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 }
 
 /// <summary>角色权限模型</summary>
