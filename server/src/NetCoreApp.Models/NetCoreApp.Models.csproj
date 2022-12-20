@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
     <AssemblyName>Beginor.NetCoreApp.Models</AssemblyName>
     <RootNamespace>Beginor.NetCoreApp.Models</RootNamespace>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <Import Project="../../package-references.props" />

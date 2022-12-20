@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <AssemblyName>Beginor.NetCoreApp.Test</AssemblyName>
     <RootNamespace>Beginor.NetCoreApp.Test</RootNamespace>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

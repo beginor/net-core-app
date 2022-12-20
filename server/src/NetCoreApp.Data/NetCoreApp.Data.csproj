@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
     <AssemblyName>Beginor.NetCoreApp.Data</AssemblyName>
     <RootNamespace>Beginor.NetCoreApp.Data</RootNamespace>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <Import Project="../../package-references.props" />

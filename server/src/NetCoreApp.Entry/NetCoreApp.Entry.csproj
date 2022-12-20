@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <AssemblyName>NetCoreApp</AssemblyName>
     <RootNamespace>Beginor.NetCoreApp.Entry</RootNamespace>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <Import Project="../../package-references.props" />
