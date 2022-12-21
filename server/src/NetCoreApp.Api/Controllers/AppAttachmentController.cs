@@ -8,7 +8,7 @@ using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Api.Controllers; 
+namespace Beginor.NetCoreApp.Api.Controllers;
 
 /// <summary>附件表服务接口</summary>
 [Route("api/attachments")]
@@ -28,8 +28,7 @@ public class AppAttachmentController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
+            // disable managed resource here;
         }
         base.Dispose(disposing);
     }

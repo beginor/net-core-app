@@ -32,19 +32,19 @@ partial class Startup {
             x.SaveToken = true;
             x.TokenValidationParameters = new TokenValidationParameters {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(jwt.SecretKey),
+                IssuerSigningKey = new SymmetricSecurityKey(jwt!.SecretKey),
                 ValidateIssuer = false,
                 ValidateAudience = false
             };
             x.Events = new JwtBearerEvents {
                 OnTokenValidated = async context => {
                     var cache = context.HttpContext.RequestServices.GetService<IDistributedCache>();
-                    var identity = context.Principal.Identity as ClaimsIdentity;
-                    var userId = identity.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                    var identity = context.Principal!.Identity as ClaimsIdentity;
+                    var userId = identity!.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
                     if (userId.IsNullOrEmpty()) {
                         userId = "anonymous";
                     }
-                    var cachedClaims = await cache.GetUserClaimsAsync(userId);
+                    var cachedClaims = await cache!.GetUserClaimsAsync(userId);
                     foreach (var claim in cachedClaims) {
                         identity.AddClaim(claim);
                     }
@@ -54,7 +54,7 @@ partial class Startup {
             options.Events = new TokenEvents {
                 OnTokenReceived = async context => {
                     var repo = context.HttpContext.RequestServices.GetService<IAppUserTokenRepository>();
-                    var token = await repo.GetTokenByValueAsync(context.Token);
+                    var token = await repo!.GetTokenByValueAsync(context.Token!);
                     if (token == null) {
                         context.Fail("Invalid token!");
                         return;
@@ -65,7 +65,7 @@ partial class Startup {
                     }
                     if (token.Urls != null && token.Urls.Length > 0) {
                         var req = context.Request;
-                        string referer = req.Headers.Referer;
+                        string referer = req.Headers.Referer!;
                         if (referer.IsNullOrEmpty()) {
                             context.Fail("No referer provided");
                             return;
@@ -77,8 +77,8 @@ partial class Startup {
                         }
                     }
                     var claims = new List<Claim>() {
-                        new Claim(ClaimTypes.NameIdentifier, token.Value),
-                        new Claim(ClaimTypes.Name, $"{token.User.UserName}:{token.Name}")
+                        new Claim(ClaimTypes.NameIdentifier, token.Value!),
+                        new Claim(ClaimTypes.Name, $"{token.User!.UserName}:{token.Name}")
                     };
                     if (token.Privileges != null && token.Privileges.Length > 0) {
                         foreach (var privilege in token.Privileges) {

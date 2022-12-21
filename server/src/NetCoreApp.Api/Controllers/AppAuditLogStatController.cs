@@ -8,16 +8,16 @@ using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Api.Controllers; 
+namespace Beginor.NetCoreApp.Api.Controllers;
 
 /// <summary>审计日志统计接口</summary>
 [Route("api/audit-log-stats")]
 [ApiController]
 public class AppAuditLogStatController : Controller {
-    
+
     private ILogger<AppAuditLogStatController> logger;
     private IAppAuditLogRepository repository;
-    
+
     public AppAuditLogStatController(
         ILogger<AppAuditLogStatController> logger,
         IAppAuditLogRepository repository
@@ -28,8 +28,7 @@ public class AppAuditLogStatController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
+            // disable managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -51,7 +50,7 @@ public class AppAuditLogStatController : Controller {
             return this.InternalServerError(ex);
         }
     }
-    
+
     /// <summary>读取状态码统计</summary>
     /// <response code="200">读取状态码统计 成功</response>
     /// <response code="500">服务器内部错误</response>
@@ -69,7 +68,7 @@ public class AppAuditLogStatController : Controller {
             return this.InternalServerError(ex);
         }
     }
-    
+
     /// <summary>读取响应时间统计</summary>
     /// <response code="200">读取响应时间统计 成功</response>
     /// <response code="500">服务器内部错误</response>
@@ -87,7 +86,7 @@ public class AppAuditLogStatController : Controller {
             return this.InternalServerError(ex);
         }
     }
-    
+
     /// <summary>读取用户访问统计</summary>
     /// <response code="200">读取用户访问统计 成功</response>
     /// <response code="500">服务器内部错误</response>
@@ -105,7 +104,7 @@ public class AppAuditLogStatController : Controller {
             return this.InternalServerError(ex);
         }
     }
-    
+
     /// <summary>读取 ip 地址访问统计</summary>
     /// <response code="200">读取 ip 地址访问统计 成功</response>
     /// <response code="500">服务器内部错误</response>

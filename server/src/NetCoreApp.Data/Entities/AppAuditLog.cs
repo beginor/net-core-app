@@ -2,7 +2,9 @@ using System;
 using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
 
-namespace Beginor.NetCoreApp.Data.Entities; 
+namespace Beginor.NetCoreApp.Data.Entities;
+
+#nullable disable
 
 /// <summary>审计日志</summary>
 [Class(Schema = "public", Table = "app_audit_logs")]

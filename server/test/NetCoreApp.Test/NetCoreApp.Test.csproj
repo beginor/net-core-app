@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <IsPackable>false</IsPackable>
     <AssemblyName>Beginor.NetCoreApp.Test</AssemblyName>
     <RootNamespace>Beginor.NetCoreApp.Test</RootNamespace>

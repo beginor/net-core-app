@@ -8,7 +8,7 @@ using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Api.Controllers; 
+namespace Beginor.NetCoreApp.Api.Controllers;
 
 partial class AccountController {
 
@@ -45,7 +45,7 @@ partial class AccountController {
     [Authorize]
     public async Task<ActionResult> ChangePassword([FromBody]ChangePasswordModel model) {
         var userId = User.GetUserId();
-        var user = await userMgr.FindByIdAsync(userId);
+        var user = await userMgr.FindByIdAsync(userId!);
         if (user == null) {
             return Forbid();
         }

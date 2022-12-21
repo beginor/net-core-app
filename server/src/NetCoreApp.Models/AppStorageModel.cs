@@ -4,6 +4,8 @@ using Beginor.AppFx.Core;
 
 namespace Beginor.NetCoreApp.Models;
 
+#nullable disable
+
 /// <summary>应用存储模型</summary>
 public partial class AppStorageModel : StringEntity {
 

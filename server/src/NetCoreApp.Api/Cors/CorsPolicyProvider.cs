@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace Beginor.NetCoreApp.Api.Cors; 
+namespace Beginor.NetCoreApp.Api.Cors;
 
 public class CorsPolicyProvider : ICorsPolicyProvider {
 
@@ -25,15 +25,15 @@ public class CorsPolicyProvider : ICorsPolicyProvider {
         this.options = options.Value;
     }
 
-    public Task<CorsPolicy> GetPolicyAsync(HttpContext context, string policyName) {
+    public Task<CorsPolicy?> GetPolicyAsync(HttpContext context, string? policyName) {
         if (context == null) {
             throw new ArgumentNullException(nameof(context));
         }
         policyName ??= options.DefaultPolicyName;
         if (options.DefaultPolicyName.Equals(policyName, StringComparison.OrdinalIgnoreCase)) {
-            return Task.FromResult(policy);
+            return Task.FromResult<CorsPolicy?>(policy);
         }
-        return Task.FromResult<CorsPolicy>(null);
+        return Task.FromResult<CorsPolicy?>(null);
     }
 
 }

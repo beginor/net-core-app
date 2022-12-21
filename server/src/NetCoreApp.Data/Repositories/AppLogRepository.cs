@@ -28,7 +28,7 @@ public partial class AppLogRepository : HibernateRepository<AppLog, AppLogModel,
             log => log.CreatedAt >= startDate && log.CreatedAt < endDate
         );
         if (model.Level.IsNotNullOrEmpty()) {
-            var level = model.Level.ToUpperInvariant();
+            var level = model.Level!.ToUpperInvariant();
             query = query.Where(log => log.Level == level);
         }
         var total = await query.LongCountAsync();

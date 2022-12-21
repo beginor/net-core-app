@@ -4,6 +4,8 @@ using NHibernate.Mapping.Attributes;
 
 namespace Beginor.NetCoreApp.Data.Entities;
 
+#nullable disable
+
 /// <summary>应用程序日志</summary>
 [Class(Schema = "public", Table = "app_logs")]
 public partial class AppLog : BaseEntity<long> {

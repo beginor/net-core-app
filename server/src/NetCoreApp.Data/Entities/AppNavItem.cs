@@ -3,7 +3,9 @@ using Beginor.AppFx.Core;
 using NHibernate.Extensions.NpgSql;
 using NHibernate.Mapping.Attributes;
 
-namespace Beginor.NetCoreApp.Data.Entities; 
+namespace Beginor.NetCoreApp.Data.Entities;
+
+#nullable disable
 
 /// <summary>导航节点（菜单）</summary>
 [Class(Schema = "public", Table = "app_nav_items", Where = "is_deleted = false")]

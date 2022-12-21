@@ -3,7 +3,9 @@ using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
 using NHIdentityUser = NHibernate.AspNetCore.Identity.IdentityUser;
 
-namespace Beginor.NetCoreApp.Data.Entities; 
+namespace Beginor.NetCoreApp.Data.Entities;
+
+#nullable disable
 
 [JoinedSubclass(0, Schema = "public", Table = "app_users", ExtendsType = typeof(NHIdentityUser))]
 [Key(1, Column = "id")]

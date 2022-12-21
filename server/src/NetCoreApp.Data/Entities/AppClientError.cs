@@ -4,6 +4,8 @@ using NHibernate.Mapping.Attributes;
 
 namespace Beginor.NetCoreApp.Data.Entities;
 
+#nullable disable
+
 /// <summary>程序客户端错误记录</summary>
 [Class(Schema = "public", Table = "app_client_errors")]
 public partial class AppClientError : BaseEntity<long> {

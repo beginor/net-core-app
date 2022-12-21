@@ -9,7 +9,7 @@ using Beginor.NetCoreApp.Models;
 using Beginor.NetCoreApp.Data.Repositories;
 using Microsoft.AspNetCore.StaticFiles;
 
-namespace Beginor.NetCoreApp.Api.Controllers; 
+namespace Beginor.NetCoreApp.Api.Controllers;
 
 /// <summary>应用存储 服务接口</summary>
 [ApiController]
@@ -32,9 +32,7 @@ public partial class AppStorageController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
-            contentTypeProvider = null;
+            // disable managed resource here;
         }
         base.Dispose(disposing);
     }

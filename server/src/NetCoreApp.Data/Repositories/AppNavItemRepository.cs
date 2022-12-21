@@ -13,7 +13,7 @@ using NHibernate.Linq;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Data.Repositories; 
+namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>导航节点（菜单）仓储实现</summary>
 public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppNavItemModel, long>, IAppNavItemRepository {
@@ -33,7 +33,7 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppN
     ) {
         base.Dispose(disposing);
         if (disposing) {
-            userManager = null;
+            // dispose managed resource here;
         }
     }
 
@@ -151,7 +151,7 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppN
         return model;
     }
 
-    private MenuNodeModel[] FindChildrenRecursive(long id, IEnumerable<AppNavItem> items) {
+    private MenuNodeModel[]? FindChildrenRecursive(long id, IEnumerable<AppNavItem> items) {
         var childCount = items.Count(item => item.ParentId == id);
         if (childCount == 0) {
             return null;

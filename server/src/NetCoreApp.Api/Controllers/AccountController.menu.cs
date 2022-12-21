@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Api.Controllers; 
+namespace Beginor.NetCoreApp.Api.Controllers;
 
 partial class AccountController {
 
@@ -16,10 +16,10 @@ partial class AccountController {
     public async Task<MenuNodeModel> GetMenuAsync() {
         try {
             List<string> roles;
-            if (!User.Identity.IsAuthenticated || User.HasClaim(ClaimTypes.NameIdentifier, string.Empty)) {
+            if (!User.Identity!.IsAuthenticated || User.HasClaim(ClaimTypes.NameIdentifier, string.Empty)) {
                 roles = roleMgr.Roles
                     .Where(role => role.IsAnonymous == true)
-                    .Select(role => role.Name)
+                    .Select(role => role.Name!)
                     .ToList();
             }
             else {

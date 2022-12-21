@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Beginor.NetCoreApp.Api.Cors;
 using Beginor.NetCoreApp.Api.Middlewares;
 
-namespace Beginor.NetCoreApp.Entry; 
+namespace Beginor.NetCoreApp.Entry;
 
 partial class Startup {
 
@@ -16,7 +16,7 @@ partial class Startup {
         services.Configure<CorsPolicy>(section);
         services.AddScoped<ICorsPolicyProvider, CorsPolicyProvider>();
         services.AddCors(options => {
-            options.AddDefaultPolicy(corsPolicy);
+            options.AddDefaultPolicy(corsPolicy!);
         });
     }
 

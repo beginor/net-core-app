@@ -10,7 +10,7 @@ using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Api.Controllers; 
+namespace Beginor.NetCoreApp.Api.Controllers;
 
 /// <summary>系统权限服务接口</summary>
 [Route("api/privileges")]
@@ -30,8 +30,7 @@ public class AppPrivilegeController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
+            // disable managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -150,7 +149,7 @@ public class AppPrivilegeController : Controller {
                 .Where(t => t.IsSubclassOf(typeof(ControllerBase)))
                 .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Instance))
                 .SelectMany(m => m.GetCustomAttributes<AuthorizeAttribute>(false))
-                .Select(attr => attr.Policy);
+                .Select(attr => attr.Policy!);
             await repository.SyncRequiredAsync(policies);
             return Ok();
         }

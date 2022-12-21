@@ -4,6 +4,8 @@ using Beginor.AppFx.Core;
 
 namespace Beginor.NetCoreApp.Models;
 
+#nullable disable
+
 /// <summary>应用程序用户模型</summary>
 public class AppUserModel : StringEntity {
     /// <summary>用户名</summary>

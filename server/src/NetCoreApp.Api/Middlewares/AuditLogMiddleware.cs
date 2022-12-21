@@ -15,7 +15,7 @@ using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Entities;
 
-namespace Beginor.NetCoreApp.Api.Middlewares; 
+namespace Beginor.NetCoreApp.Api.Middlewares;
 
 public class AuditLogMiddleware : Disposable {
 
@@ -43,21 +43,17 @@ public class AuditLogMiddleware : Disposable {
         }
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.scope = serviceProvider.CreateScope();
-        this.session = this.scope.ServiceProvider.GetService<NHibernate.ISession>();
+        this.session = this.scope.ServiceProvider.GetService<NHibernate.ISession>()!;
         cts = new CancellationTokenSource();
         ThreadPool.QueueUserWorkItem(StartSaveAuditLog, cts.Token, preferLocal: false);
     }
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
+            // dispose managed resource here
             this.cts.Cancel();
             this.session.Dispose();
             this.scope.Dispose();
-            // this.next = null;
-            this.provider = null;
-            this.selector = null;
-            // this.serviceProvider = null;
-            this.logger = null;
         }
         base.Dispose(disposing);
     }
@@ -142,13 +138,13 @@ public class AuditLogMiddleware : Disposable {
         }
     }
 
-    private ActionDescriptor GetMatchingAction(string path, string httpMethod) {
+    private ActionDescriptor? GetMatchingAction(string path, string httpMethod) {
         var actionDescriptors = provider.ActionDescriptors.Items;
         // match by route template
         var matchingDescriptors = new List<ActionDescriptor>();
         foreach (var actionDescriptor in actionDescriptors) {
             var matchesRouteTemplate = MatchesTemplate(
-                actionDescriptor.AttributeRouteInfo!.Template,
+                actionDescriptor.AttributeRouteInfo!.Template!,
                 path
             );
             if (matchesRouteTemplate) {
@@ -189,9 +185,9 @@ public class AuditLogMiddleware : Disposable {
     }
 
     private string GetUserName(HttpContext context) {
-        var username = "anonymous";
-        if (context.User.Identity.IsAuthenticated) {
-            username = context.User.Identity.Name;
+        string username = "anonymous";
+        if (context.User.Identity!.IsAuthenticated) {
+            username = context.User.Identity.Name!;
         }
         return username;
     }

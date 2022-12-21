@@ -7,7 +7,7 @@ using Beginor.NetCoreApp.Models;
 using Dapper;
 using NHibernate;
 
-namespace Beginor.NetCoreApp.Data.Repositories; 
+namespace Beginor.NetCoreApp.Data.Repositories;
 
 public partial class IdentityRepository : Disposable, IIdentityRepository {
 
@@ -19,7 +19,7 @@ public partial class IdentityRepository : Disposable, IIdentityRepository {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            factory = null;
+            // dispose managed resource here;
         }
     }
 

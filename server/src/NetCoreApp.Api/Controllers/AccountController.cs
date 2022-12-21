@@ -20,7 +20,7 @@ using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 using Base64UrlEncoder = Beginor.NetCoreApp.Common.Base64UrlEncoder;
 
-namespace Beginor.NetCoreApp.Api.Controllers; 
+namespace Beginor.NetCoreApp.Api.Controllers;
 
 /// <summary>账户 API</summary>
 [Route("api/account")]
@@ -64,16 +64,7 @@ public partial class AccountController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            userMgr = null;
-            roleMgr = null;
-            jwt = null;
-            navRepo = null;
-            cache = null;
-            userTokenRepo = null;
-            usersCtrl = null;
-            privilegeRepo = null;
-            commonOption = null;
+            // dispose managed resource here
         }
         base.Dispose(disposing);
     }
@@ -87,19 +78,19 @@ public partial class AccountController : Controller {
     [ResponseCache(NoStore = true, Duration = 0)]
     public async Task<ActionResult<AccountInfoModel>> GetInfo() {
         try {
-            if (!User.Identity.IsAuthenticated || User.HasClaim(ClaimTypes.NameIdentifier, string.Empty)) {
+            if (!User.Identity!.IsAuthenticated || User.HasClaim(ClaimTypes.NameIdentifier, string.Empty)) {
                 var anonymousIdentity = await CreateAnonymousIdentity();
                 var anonymousInfo = await CreateAccountInfoModel(anonymousIdentity);
                 anonymousInfo.Token = CreateJwtToken(anonymousIdentity);
                 return anonymousInfo;
             }
-            var appUser = await userMgr.FindByNameAsync(User.Identity.Name);
+            var appUser = await userMgr.FindByNameAsync(User.Identity.Name!);
             if (appUser == null) {
                 return NotFound();
             }
-            var identity = await CreateIdentityAsync(appUser);
-            var info = await CreateAccountInfoModel(identity);
-            info.Token = CreateJwtToken(identity);
+            var userIdentity = await CreateIdentityAsync(appUser);
+            var info = await CreateAccountInfoModel(userIdentity);
+            info.Token = CreateJwtToken(userIdentity);
             return info;
         }
         catch (Exception ex) {
@@ -201,7 +192,7 @@ public partial class AccountController : Controller {
             new Claim(ClaimTypes.NameIdentifier, user.Id)
         );
         identity.AddClaim(
-            new Claim(ClaimTypes.Name, user.UserName)
+            new Claim(ClaimTypes.Name, user.UserName!)
         );
         // user claims;
         var userClaims = await userMgr.GetClaimsAsync(user);
@@ -211,16 +202,21 @@ public partial class AccountController : Controller {
         // role as claim;
         var roles = await userMgr.GetRolesAsync(user);
         // add role and role claims;
-        foreach (var roleName in roles) {
-            claimsToCache.Add(new Claim(ClaimTypes.Role, roleName));
-            var role = await roleMgr.FindByNameAsync(roleName);
-            var roleClaims = await roleMgr.GetClaimsAsync(role);
-            foreach (var roleClaim in roleClaims) {
-                if (!identity.Claims.Any(c => c.Type == roleClaim.Type && c.Value == roleClaim.Value)) {
-                    claimsToCache.Add(roleClaim);
+        if (roles != null) {
+            foreach (var roleName in roles) {
+                claimsToCache.Add(new Claim(ClaimTypes.Role, roleName));
+                var role = await roleMgr.FindByNameAsync(roleName);
+                if (role == null) {
+                    continue;
                 }
+                var roleClaims = await roleMgr.GetClaimsAsync(role);
+                foreach (var roleClaim in roleClaims) {
+                    if (!identity.Claims.Any(c => c.Type == roleClaim.Type && c.Value == roleClaim.Value)) {
+                        claimsToCache.Add(roleClaim);
+                    }
+                }
+                await cache.SetUserClaimsAsync(user.Id, claimsToCache.ToArray(), jwt.ExpireTimeSpan);
             }
-            await cache.SetUserClaimsAsync(user.Id, claimsToCache.ToArray(), jwt.ExpireTimeSpan);
         }
         return identity;
     }
@@ -246,13 +242,15 @@ public partial class AccountController : Controller {
             .Where(r => r.IsAnonymous == true)
             .ToListAsync();
         // add role and role claims;
-        foreach (var role in roles) {
-            claimsToCache.Add(new Claim(ClaimTypes.Role, role.Name));
-            // var role = await roleMgr.FindByNameAsync(roleName);
-            var roleClaims = await roleMgr.GetClaimsAsync(role);
-            foreach (var roleClaim in roleClaims) {
-                if (!identity.Claims.Any(c => c.Type == roleClaim.Type && c.Value == roleClaim.Value)) {
-                    claimsToCache.Add(roleClaim);
+        if (roles != null) {
+            foreach (var role in roles) {
+                claimsToCache.Add(new Claim(ClaimTypes.Role, role.Name!));
+                // var role = await roleMgr.FindByNameAsync(roleName);
+                var roleClaims = await roleMgr.GetClaimsAsync(role);
+                foreach (var roleClaim in roleClaims) {
+                    if (!identity.Claims.Any(c => c.Type == roleClaim.Type && c.Value == roleClaim.Value)) {
+                        claimsToCache.Add(roleClaim);
+                    }
                 }
             }
         }

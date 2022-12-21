@@ -6,13 +6,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate.AspNetCore.Identity;
 
-namespace Beginor.NetCoreApp.Entry; 
+namespace Beginor.NetCoreApp.Entry;
 
 partial class Startup {
 
     private void ConfigureIdentityServices(IServiceCollection services, IWebHostEnvironment env) {
         var identitySection = config.GetSection("identity");
-        var identitySettings = identitySection.Get<IdentityOptions>();
+        var identitySettings = identitySection.Get<IdentityOptions>()!;
         services
             .AddIdentity<AppUser, AppRole>(options => {
                 // user settings;

@@ -4,11 +4,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace Beginor.NetCoreApp.Common; 
+namespace Beginor.NetCoreApp.Common;
 
 public static class DistributedCacheExtensions {
 
-    public static async Task<T> GetAsync<T>(
+    public static async Task<T?> GetAsync<T>(
         this IDistributedCache cache,
         string key
     ) {

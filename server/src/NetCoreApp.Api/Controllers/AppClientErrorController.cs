@@ -8,7 +8,7 @@ using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Models;
 using Beginor.NetCoreApp.Data.Repositories;
 
-namespace Beginor.NetCoreApp.Api.Controllers; 
+namespace Beginor.NetCoreApp.Api.Controllers;
 
 /// <summary>程序客户端错误记录 服务接口</summary>
 [ApiController]
@@ -28,8 +28,7 @@ public class AppClientErrorController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
+            // disable managed resource here;
         }
         base.Dispose(disposing);
     }
