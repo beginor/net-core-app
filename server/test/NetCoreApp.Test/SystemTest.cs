@@ -9,7 +9,7 @@ using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Test; 
+namespace Beginor.NetCoreApp.Test;
 
 [TestFixture]
 public class SystemTest : BaseTest {

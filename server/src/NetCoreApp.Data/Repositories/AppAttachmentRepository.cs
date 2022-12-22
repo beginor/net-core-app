@@ -10,7 +10,7 @@ using NHibernate.Linq;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Data.Repositories; 
+namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>附件表仓储实现</summary>
 public partial class AppAttachmentRepository : HibernateRepository<AppAttachment, AppAttachmentModel, long>, IAppAttachmentRepository {

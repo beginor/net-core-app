@@ -7,7 +7,7 @@ using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Data; 
+namespace Beginor.NetCoreApp.Data;
 
 public static class AppUserExtensions {
 

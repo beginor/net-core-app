@@ -3,7 +3,7 @@ using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Entities;
 using NUnit.Framework;
 
-namespace Beginor.NetCoreApp.Test.Data; 
+namespace Beginor.NetCoreApp.Test.Data;
 
 [TestFixture]
 public class ModelMappingTest : BaseTest<IMapper> {

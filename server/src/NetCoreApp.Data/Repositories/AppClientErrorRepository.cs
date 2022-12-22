@@ -10,7 +10,7 @@ using NHibernate.Linq;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Data.Repositories; 
+namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>程序客户端错误记录仓储实现</summary>
 public partial class AppClientErrorRepository : HibernateRepository<AppClientError, AppClientErrorModel, long>, IAppClientErrorRepository {

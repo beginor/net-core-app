@@ -5,7 +5,7 @@ using Beginor.NetCoreApp.Data.Entities;
 using NUnit.Framework;
 using NHibernate.Linq;
 
-namespace Beginor.NetCoreApp.Test.Security; 
+namespace Beginor.NetCoreApp.Test.Security;
 
 [TestFixture]
 public class UserManagerTest : BaseTest<UserManager<AppUser>> {

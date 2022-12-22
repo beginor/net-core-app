@@ -8,7 +8,7 @@ using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Test.Data; 
+namespace Beginor.NetCoreApp.Test.Data;
 
 /// <summary>应用存储仓储测试</summary>
 [TestFixture]

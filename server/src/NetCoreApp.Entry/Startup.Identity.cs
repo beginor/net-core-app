@@ -1,10 +1,10 @@
-using Beginor.NetCoreApp.Data.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate.AspNetCore.Identity;
+using Beginor.NetCoreApp.Data.Entities;
 
 namespace Beginor.NetCoreApp.Entry;
 

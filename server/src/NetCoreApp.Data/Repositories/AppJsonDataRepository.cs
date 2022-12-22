@@ -11,7 +11,7 @@ using NHibernate.Linq;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Data.Repositories; 
+namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>json 数据仓储实现</summary>
 public partial class AppJsonDataRepository : HibernateRepository<AppJsonData, AppJsonDataModel, long>, IAppJsonDataRepository {

@@ -7,7 +7,7 @@ using NHibernate;
 using NHibernate.NetCore;
 using NUnit.Framework;
 
-namespace Beginor.NetCoreApp.Test.Data; 
+namespace Beginor.NetCoreApp.Test.Data;
 
 [TestFixture]
 public class AppPrivilegeRepositoryTest : BaseTest<IAppPrivilegeRepository> {

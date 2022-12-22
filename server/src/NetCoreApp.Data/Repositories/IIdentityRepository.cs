@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Data.Repositories; 
+namespace Beginor.NetCoreApp.Data.Repositories;
 
 public partial interface IIdentityRepository {
 

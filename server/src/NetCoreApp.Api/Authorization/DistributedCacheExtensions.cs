@@ -3,9 +3,8 @@ using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
-using Beginor.NetCoreApp.Common;
 
-namespace Beginor.NetCoreApp.Api.Authorization; 
+namespace Beginor.NetCoreApp.Api.Authorization;
 
 public static class DistributedCacheExtensions {
 

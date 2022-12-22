@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 
-namespace Beginor.NetCoreApp.Test.Data; 
+namespace Beginor.NetCoreApp.Test.Data;
 
 [TestFixture]
 public class AppNavItemRepositoryTest : BaseTest<IAppNavItemRepository> {

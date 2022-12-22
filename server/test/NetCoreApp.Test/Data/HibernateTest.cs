@@ -4,7 +4,7 @@ using Beginor.NetCoreApp.Data.Entities;
 using NHibernate;
 using NUnit.Framework;
 
-namespace Beginor.NetCoreApp.Test.Data; 
+namespace Beginor.NetCoreApp.Test.Data;
 
 [TestFixture]
 public class HibernateTest : BaseTest<ISessionFactory> {

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Beginor.NetCoreApp.Api.Middlewares; 
+namespace Beginor.NetCoreApp.Api.Middlewares;
 
 public class ExceptionMiddleware {
 

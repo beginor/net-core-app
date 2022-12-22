@@ -9,7 +9,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using NUnit.Framework;
 
-namespace Beginor.NetCoreApp.Test; 
+namespace Beginor.NetCoreApp.Test;
 
 public abstract class BaseTest {
 

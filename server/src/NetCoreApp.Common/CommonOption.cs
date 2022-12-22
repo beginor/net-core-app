@@ -1,6 +1,6 @@
 using System;
 
-namespace Beginor.NetCoreApp.Common; 
+namespace Beginor.NetCoreApp.Common;
 
 public class CommonOption {
     public CacheOption Cache { get; set; } = new();

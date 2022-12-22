@@ -7,9 +7,8 @@ using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
 using NUnit.Framework;
-using NHibernate.Linq;
 
-namespace Beginor.NetCoreApp.Test.Security; 
+namespace Beginor.NetCoreApp.Test.Security;
 
 [TestFixture]
 public class RoleManagerTest : BaseTest<RoleManager<AppRole>> {
