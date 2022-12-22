@@ -1,6 +1,6 @@
 using System;
-using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
+
 using NHIdentityUser = NHibernate.AspNetCore.Identity.IdentityUser;
 
 #nullable disable

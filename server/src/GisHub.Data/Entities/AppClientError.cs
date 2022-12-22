@@ -2,9 +2,9 @@ using System;
 using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
 
-namespace Beginor.GisHub.Data.Entities;
-
 #nullable disable
+
+namespace Beginor.GisHub.Data.Entities;
 
 /// <summary>程序客户端错误记录</summary>
 [Class(Schema = "public", Table = "app_client_errors")]

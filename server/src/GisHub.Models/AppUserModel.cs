@@ -2,9 +2,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
-namespace Beginor.GisHub.Models; 
-
 #nullable disable
+
+namespace Beginor.GisHub.Models;
 
 /// <summary>应用程序用户模型</summary>
 public class AppUserModel : StringEntity {
@@ -51,11 +51,11 @@ public class AppUserModel : StringEntity {
 public class UserSearchRequestModel : PaginatedRequestModel {
 
     /// <summary>用户名</summary>
-    public string? UserName { get; set; }
+    public string UserName { get; set; }
     /// <summary>排序方式</summary>
-    public string? SortBy { get; set; }
+    public string SortBy { get; set; }
     /// <summary>角色名称</summary>
-    public string? RoleName { get; set; }
+    public string RoleName { get; set; }
 }
 
 /// <summary>

@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
-namespace Beginor.GisHub.Models;
-
 #nullable disable
+
+namespace Beginor.GisHub.Models;
 
 /// <summary>应用程序日志模型</summary>
 public partial class AppLogModel : StringEntity {
@@ -29,5 +29,5 @@ public partial class AppLogSearchModel : PaginatedRequestModel {
     /// <summary>结束日期</summary>
     public DateTime? EndDate { get; set; }
     /// <summary>日志级别</summary>
-    public string? Level { get; set; }
+    public string Level { get; set; }
 }

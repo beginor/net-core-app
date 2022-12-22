@@ -2,9 +2,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
-namespace Beginor.GisHub.Models; 
-
 #nullable disable
+
+namespace Beginor.GisHub.Models;
 
 /// <summary>用户凭证模型</summary>
 public partial class AppUserTokenModel : StringEntity {
@@ -32,5 +32,5 @@ public partial class AppUserTokenModel : StringEntity {
 /// <summary>用户凭证搜索参数</summary>
 public partial class AppUserTokenSearchModel : PaginatedRequestModel {
     /// <summary>查询关键字</summary>
-    public string? Keywords { get; set; }
+    public string Keywords { get; set; }
 }

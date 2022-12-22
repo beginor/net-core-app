@@ -5,7 +5,7 @@ using NHibernate.Mapping.Attributes;
 
 #nullable disable
 
-namespace Beginor.GisHub.Data.Entities; 
+namespace Beginor.GisHub.Data.Entities;
 
 /// <summary>用户凭证</summary>
 [Class(Schema = "public", Table = "app_user_tokens")]
