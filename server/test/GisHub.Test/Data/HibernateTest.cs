@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NHibernate;
 using NUnit.Framework;
+using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
 
 namespace Beginor.GisHub.Test.Data;
@@ -22,7 +23,7 @@ public class HibernateTest : BaseTest<ISessionFactory> {
             Assert.IsTrue(users.Count >= 0);
         }
     }
-    
+
     [Test]
     public void _03_CanQueryBaseResource() {
         using var session = Target.OpenSession();
