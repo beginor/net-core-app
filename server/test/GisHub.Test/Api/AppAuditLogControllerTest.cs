@@ -1,5 +1,5 @@
-using Beginor.GisHub.Api.Controllers;
 using NUnit.Framework;
+using Beginor.GisHub.Api.Controllers;
 
 namespace Beginor.GisHub.Test.Api;
 

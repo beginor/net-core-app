@@ -1,9 +1,8 @@
 using System;
 using System.Linq;
-using Beginor.AppFx.Core;
-using Beginor.GisHub.Data.Entities;
 using NHibernate;
 using NUnit.Framework;
+using Beginor.GisHub.Data.Entities;
 
 namespace Beginor.GisHub.Test.Data;
 

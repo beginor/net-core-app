@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using static NUnit.Framework.Assert;
 using Beginor.AspNetCore.Middlewares.CustomHeader;
 using Beginor.AspNetCore.Middlewares.SpaFailback;
 using Beginor.GisHub.Common;
@@ -84,7 +83,7 @@ public class ConfigTest : BaseTest<IConfiguration> {
     [Test]
     public void _08_CanResolveCommonOption() {
         var option = ServiceProvider.GetService<CommonOption>();
-        IsNotNull(option);
+        Assert.IsNotNull(option);
         Console.WriteLine(option.Cache.Enabled);
         Console.WriteLine(option.Cache.MemoryExpiration);
         Console.WriteLine(option.Cache.FileExpiration);

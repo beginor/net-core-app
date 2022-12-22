@@ -1,7 +1,7 @@
 using AutoMapper;
+using NUnit.Framework;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
-using NUnit.Framework;
 
 namespace Beginor.GisHub.Test.Data;
 

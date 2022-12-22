@@ -1,14 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Beginor.GisHub.Data.Entities;
-using Beginor.GisHub.Data.Repositories;
-using Beginor.GisHub.Models;
 using NHibernate.NetCore;
 using NUnit.Framework;
+using Beginor.GisHub.Data.Entities;
+using Beginor.GisHub.Data.Repositories;
 
 namespace Beginor.GisHub.Test.Data;
 

@@ -2,10 +2,10 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Beginor.GisHub.Api.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
+using Beginor.GisHub.Api.Controllers;
 
 namespace Beginor.GisHub.Test.Api;
 

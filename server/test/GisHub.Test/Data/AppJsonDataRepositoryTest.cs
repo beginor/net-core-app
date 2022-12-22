@@ -1,12 +1,8 @@
 using System;
-using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using NHibernate;
-using NHibernate.NetCore;
 using NUnit.Framework;
 using Beginor.AppFx.Core;
-using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Models;
 

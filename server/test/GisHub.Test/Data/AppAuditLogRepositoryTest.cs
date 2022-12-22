@@ -1,12 +1,8 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Beginor.GisHub.Data.Entities;
-using Beginor.GisHub.Data.Repositories;
-using NHibernate;
-using NHibernate.NetCore;
 using NUnit.Framework;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Data.Repositories;
 
 
 namespace Beginor.GisHub.Test.Data; 
@@ -44,7 +40,7 @@ public class AppAuditLogRepositoryTest : BaseTest<IAppAuditLogRepository> {
             Console.WriteLine(t.ToJson());
         }
     }
-    
+
     [Test]
     public async Task _04_CanStatDuration() {
         var endDate = DateTime.Now;
@@ -56,7 +52,7 @@ public class AppAuditLogRepositoryTest : BaseTest<IAppAuditLogRepository> {
             Console.WriteLine(t.ToJson());
         }
     }
-    
+
     [Test]
     public async Task _05_CanStatUser() {
         var endDate = DateTime.Now;
@@ -68,7 +64,7 @@ public class AppAuditLogRepositoryTest : BaseTest<IAppAuditLogRepository> {
             Console.WriteLine(t.ToJson());
         }
     }
-    
+
     [Test]
     public async Task _06_CanStatIp() {
         var endDate = DateTime.Now;
