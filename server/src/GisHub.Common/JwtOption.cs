@@ -1,10 +1,10 @@
 using System;
 using System.Text;
 
-namespace Beginor.GisHub.Common; 
+namespace Beginor.GisHub.Common;
 
 public class JwtOption {
-    public string Secret { get; set; }
+    public string Secret { get; set; } = "";
     public TimeSpan ExpireTimeSpan { get; set; }
     public byte[] SecretKey {
         get {

@@ -1,7 +1,9 @@
 using System;
 using Beginor.AppFx.Core;
 
-namespace Beginor.GisHub.Models; 
+#nullable disable
+
+namespace Beginor.GisHub.Models;
 
 /// <summary>附件表模型</summary>
 public partial class AppAttachmentModel : StringEntity {

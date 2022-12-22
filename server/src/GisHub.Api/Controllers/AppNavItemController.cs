@@ -28,8 +28,7 @@ public class AppNavItemController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
+            // disable managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -43,7 +42,7 @@ public class AppNavItemController : Controller {
         [FromBody]AppNavItemModel model
     ) {
         try {
-            await repository.SaveAsync(model, User.Identity.Name);
+            await repository.SaveAsync(model, User.Identity!.Name!);
             return model;
         }
         catch (Exception ex) {
@@ -127,7 +126,7 @@ public class AppNavItemController : Controller {
                 return NotFound();
             }
             model.Id = id.ToString();
-            await repository.UpdateAsync(id, model, User.Identity.Name);
+            await repository.UpdateAsync(id, model, User.Identity!.Name!);
             return model;
         }
         catch (Exception ex) {

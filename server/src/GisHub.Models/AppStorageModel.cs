@@ -4,6 +4,8 @@ using Beginor.AppFx.Core;
 
 namespace Beginor.GisHub.Models; 
 
+#nullable disable
+
 /// <summary>应用存储模型</summary>
 public partial class AppStorageModel : StringEntity {
 

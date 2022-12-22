@@ -2,7 +2,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
-namespace Beginor.GisHub.Models; 
+#nullable disable
+
+namespace Beginor.GisHub.Models;
 
 /// <summary>程序客户端错误记录模型</summary>
 public partial class AppClientErrorModel : StringEntity {

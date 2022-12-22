@@ -33,7 +33,7 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppN
     ) {
         base.Dispose(disposing);
         if (disposing) {
-            userManager = null;
+            // dispose managed resource here;
         }
     }
 
@@ -151,7 +151,7 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppN
         return model;
     }
 
-    private MenuNodeModel[] FindChildrenRecursive(long id, IEnumerable<AppNavItem> items) {
+    private MenuNodeModel[]? FindChildrenRecursive(long id, IEnumerable<AppNavItem> items) {
         var childCount = items.Count(item => item.ParentId == id);
         if (childCount == 0) {
             return null;

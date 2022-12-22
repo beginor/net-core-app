@@ -45,7 +45,7 @@ partial class AccountController {
     [Authorize]
     public async Task<ActionResult> ChangePassword([FromBody]ChangePasswordModel model) {
         var userId = User.GetUserId();
-        var user = await userMgr.FindByIdAsync(userId);
+        var user = await userMgr.FindByIdAsync(userId!);
         if (user == null) {
             return Forbid();
         }

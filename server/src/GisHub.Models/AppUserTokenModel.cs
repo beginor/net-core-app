@@ -4,6 +4,8 @@ using Beginor.AppFx.Core;
 
 namespace Beginor.GisHub.Models; 
 
+#nullable disable
+
 /// <summary>用户凭证模型</summary>
 public partial class AppUserTokenModel : StringEntity {
 

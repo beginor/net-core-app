@@ -42,7 +42,7 @@ public partial class AppPrivilegeRepository : HibernateRepository<AppPrivilege, 
     /// <summary>返回权限表的所有模块</summary>
     public async Task<IList<string>> GetModulesAsync() {
         var modules = await Session.Query<AppPrivilege>()
-            .Select(p => p.Module)
+            .Select(p => p.Module!)
             .Distinct()
             .ToListAsync();
         return modules;
@@ -99,7 +99,7 @@ public partial class AppPrivilegeRepository : HibernateRepository<AppPrivilege, 
 
     public async Task<IList<AppPrivilegeModel>> GetByNamesAsync(IList<string> names) {
         var entities = await Session.Query<AppPrivilege>()
-            .Where(p => names.Contains(p.Name))
+            .Where(p => names.Contains(p.Name!))
             .ToListAsync();
         return Mapper.Map<IList<AppPrivilegeModel>>(entities);
     }

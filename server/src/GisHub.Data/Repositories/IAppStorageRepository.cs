@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Data.Repositories; 
+namespace Beginor.GisHub.Data.Repositories;
 
 /// <summary>应用存储 仓储接口</summary>
 public partial interface IAppStorageRepository : IRepository<AppStorageModel, long> {
@@ -15,10 +15,10 @@ public partial interface IAppStorageRepository : IRepository<AppStorageModel, lo
         AppStorageSearchModel model
     );
 
-    Task<AppStorageBrowseModel> GetFolderContentAsync(AppStorageBrowseModel model);
+    Task<AppStorageBrowseModel?> GetFolderContentAsync(AppStorageBrowseModel model);
 
     Task<string> GetPhysicalPathAsync(string aliasedPath);
 
-    Task<Stream> GetFileContentAsync(string alias, string path);
+    Task<Stream?> GetFileContentAsync(string alias, string path);
 
 }

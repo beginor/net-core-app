@@ -3,6 +3,8 @@ using Beginor.AppFx.Core;
 
 namespace Beginor.GisHub.Models; 
 
+#nullable disable
+
 /// <summary>审计日志模型</summary>
 public partial class AppAuditLogModel : StringEntity {
 

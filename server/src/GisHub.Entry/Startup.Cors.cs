@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Beginor.GisHub.Api.Cors;
 using Beginor.GisHub.Api.Middlewares;
 
-namespace Beginor.GisHub.Entry; 
+namespace Beginor.GisHub.Entry;
 
 partial class Startup {
 
@@ -16,7 +16,7 @@ partial class Startup {
         services.Configure<CorsPolicy>(section);
         services.AddScoped<ICorsPolicyProvider, CorsPolicyProvider>();
         services.AddCors(options => {
-            options.AddDefaultPolicy(corsPolicy);
+            options.AddDefaultPolicy(corsPolicy!);
         });
     }
 

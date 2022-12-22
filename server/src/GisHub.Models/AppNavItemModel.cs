@@ -2,6 +2,8 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
+#nullable disable
+
 namespace Beginor.GisHub.Models; 
 
 /// <summary>导航节点（菜单）模型</summary>

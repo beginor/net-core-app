@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
-namespace Beginor.GisHub.Models; 
+#nullable disable
+
+namespace Beginor.GisHub.Models;
 
 /// <summary>登录信息</summary>
 public class AccountLoginModel {

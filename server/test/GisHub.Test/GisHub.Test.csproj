@@ -3,10 +3,10 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
     <AssemblyName>Beginor.GisHub.Test</AssemblyName>
     <RootNamespace>Beginor.GisHub.Test</RootNamespace>
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

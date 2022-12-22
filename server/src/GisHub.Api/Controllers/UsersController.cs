@@ -17,7 +17,7 @@ using Beginor.GisHub.Data;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Api.Controllers; 
+namespace Beginor.GisHub.Api.Controllers;
 
 /// <summary>用户 API</summary>
 [Route("api/users")]
@@ -43,10 +43,7 @@ public class UsersController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            userMgr = null;
-            roleMgr = null;
-            mapper = null;
+            // disable managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -61,11 +58,11 @@ public class UsersController : Controller {
         [FromBody]AppUserModel model
     ) {
         try {
-            var user = await userMgr.FindByNameAsync(model.UserName);
+            var user = await userMgr.FindByNameAsync(model.UserName!);
             if (user != null) {
                 return BadRequest($"User with {model.UserName} exists!");
             }
-            user = await userMgr.FindByEmailAsync(model.Email);
+            user = await userMgr.FindByEmailAsync(model.Email!);
             if (user != null) {
                 return BadRequest($"User with {model.Email} exists!");
             }
@@ -75,7 +72,7 @@ public class UsersController : Controller {
             // add default roles to new created user;
             var defaultRoles = await roleMgr.Roles
                 .Where(r => r.IsDefault == true)
-                .Select(r => r.Name)
+                .Select(r => r.Name!)
                 .ToListAsync();
             await userMgr.AddToRolesAsync(user, defaultRoles);
             await AddOrReplaceClaims(user, claims);
@@ -134,23 +131,23 @@ public class UsersController : Controller {
                 query = usersInRole.AsQueryable();
             }
             if (model.UserName.IsNotNullOrEmpty()) {
-                query = query.Where(u => u.UserName.Contains(model.UserName));
+                query = query.Where(u => u.UserName!.Contains(model.UserName!));
             }
             var total = query.LongCount();
-            var sortInfo = model.SortBy.Split(
-                ':',
-                StringSplitOptions.RemoveEmptyEntries
-            );
-            var propertyName = sortInfo[0];
-            var isAsc = sortInfo[1].Equals(
-                "ASC",
-                StringComparison.OrdinalIgnoreCase
-            );
-            var data = query
-                .AddOrderBy(sortInfo[0], isAsc)
-                .Skip(model.Skip)
-                .Take(model.Take)
-                .ToList();
+            if (model.SortBy != null) {
+                var sortInfo = model.SortBy.Split(
+                    ':',
+                    StringSplitOptions.RemoveEmptyEntries
+                );
+                var propertyName = sortInfo[0];
+                var isAsc = sortInfo[1].Equals(
+                    "ASC",
+                    StringComparison.OrdinalIgnoreCase
+                );
+                query = query.AddOrderBy(sortInfo[0], isAsc);
+            }
+
+            var data = query.Skip(model.Skip).Take(model.Take).ToList();
             var models = new List<AppUserModel>();
             foreach (var user in data) {
                 var claims = await userMgr.GetClaimsAsync(user);
@@ -361,7 +358,7 @@ public class UsersController : Controller {
             }
             var roleNames = await userMgr.GetRolesAsync(user);
             var roles = await roleMgr.Roles
-                .Where(r => roleNames.Contains(r.Name))
+                .Where(r => roleNames.Contains(r.Name!))
                 .ToListAsync();
             var model = mapper.Map<IList<AppRoleModel>>(roles);
             return model.ToList();

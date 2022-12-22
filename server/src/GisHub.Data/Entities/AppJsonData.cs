@@ -4,7 +4,9 @@ using Beginor.AppFx.Core;
 using NHibernate.Extensions.NpgSql;
 using NHibernate.Mapping.Attributes;
 
-namespace Beginor.GisHub.Data.Entities; 
+#nullable disable
+
+namespace Beginor.GisHub.Data.Entities;
 
 /// <summary>json 数据</summary>
 [Class(Schema = "public", Table = "app_json_data")]

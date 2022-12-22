@@ -23,11 +23,11 @@ partial class AccountController {
     ) {
         try {
             var userId = this.GetUserId();
-            var models = await userTokenRepo.SearchAsync(model, userId);
+            var models = await userTokenRepo.SearchAsync(model, userId!);
             return models;
         }
         catch (Exception ex) {
-            logger.LogError(ex, $"Can not get all tokens for user {User.Identity.Name} .");
+            logger.LogError(ex, $"Can not get all tokens for user {User.Identity!.Name} .");
             return this.InternalServerError(ex);
         }
     }
@@ -37,14 +37,14 @@ partial class AccountController {
     [Authorize]
     public async Task<ActionResult<AppUserTokenModel>> GetById([FromQuery]long id) {
         try {
-            var model = await userTokenRepo.GetTokenForUserAsync(id, this.GetUserId());
+            var model = await userTokenRepo.GetTokenForUserAsync(id, this.GetUserId()!);
             if (model == null) {
                 return NotFound();
             }
             return model;
         }
         catch (Exception ex) {
-            logger.LogError(ex, $"Can not get token {id} for user {User.Identity.Name} .");
+            logger.LogError(ex, $"Can not get token {id} for user {User.Identity!.Name} .");
             return this.InternalServerError(ex);
         }
     }
@@ -56,7 +56,7 @@ partial class AccountController {
         [FromBody]AppUserTokenModel model
     ) {
         try {
-            var user = await userMgr.FindByIdAsync(this.GetUserId());
+            var user = await userMgr.FindByIdAsync(this.GetUserId()!);
             if (user == null) {
                 return BadRequest("Invalid user !");
             }
@@ -64,7 +64,7 @@ partial class AccountController {
             return model;
         }
         catch (Exception ex) {
-            logger.LogError(ex, $"Can not save token {model.ToJson()} to for user {User.Identity.Name} .");
+            logger.LogError(ex, $"Can not save token {model.ToJson()} to for user {User.Identity!.Name} .");
             return this.InternalServerError(ex);
         }
     }
@@ -78,11 +78,11 @@ partial class AccountController {
     ) {
         try {
             var userId = this.GetUserId();
-            var exists = await userTokenRepo.ExistsAsync(id, userId);
+            var exists = await userTokenRepo.ExistsAsync(id, userId!);
             if (!exists) {
                 return NotFound();
             }
-            var user = await userMgr.FindByIdAsync(userId);
+            var user = await userMgr.FindByIdAsync(userId!);
             if (user == null) {
                 return BadRequest("Invalid user !");
             }
@@ -90,7 +90,7 @@ partial class AccountController {
             return model;
         }
         catch (Exception ex) {
-            logger.LogError(ex, $"Can not update token by id {id} with {model.ToJson()} for user {User.Identity.Name} .");
+            logger.LogError(ex, $"Can not update token by id {id} with {model.ToJson()} for user {User.Identity!.Name} .");
             return this.InternalServerError(ex);
         }
     }
@@ -101,7 +101,7 @@ partial class AccountController {
     [Authorize]
     public async Task<ActionResult> Delete(long id) {
         try {
-            await userTokenRepo.DeleteTokenForUserAsync(id, this.GetUserId());
+            await userTokenRepo.DeleteTokenForUserAsync(id, this.GetUserId()!);
             return NoContent();
         }
         catch (Exception ex) {
@@ -122,13 +122,13 @@ partial class AccountController {
     [Authorize]
     public async Task<ActionResult> GetRolesAndPrivileges() {
         var userId = User.GetUserId();
-        var user = await userMgr.FindByIdAsync(userId);
+        var user = await userMgr.FindByIdAsync(userId!);
         if (user == null) {
             return Forbid();
         }
         var userRoleNames = await userMgr.GetRolesAsync(user);
         var userRoles = await roleMgr.Roles
-            .Where(role => userRoleNames.Contains(role.Name))
+            .Where(role => userRoleNames.Contains(role.Name!))
             .ToListAsync();
         var userPrivilegeNames = new List<string>();
         var rolesWithPrivileges = new List<AppRoleWithPrivilegesModel>();

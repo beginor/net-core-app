@@ -16,7 +16,7 @@ using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Api.Controllers; 
+namespace Beginor.GisHub.Api.Controllers;
 
 /// <summary>角色 API</summary>
 [Route("api/roles")]
@@ -45,11 +45,7 @@ public class RolesController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            roleMgr = null;
-            userMgr = null;
-            identityRepo = null;
-            mapper = null;
+            // disable managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -64,7 +60,7 @@ public class RolesController : Controller {
         [FromBody]AppRoleModel model
     ) {
         try {
-            if (await roleMgr.RoleExistsAsync(model.Name)) {
+            if (await roleMgr.RoleExistsAsync(model.Name!)) {
                 return BadRequest($"Role already {model.Name} exists!");
             }
             var role = mapper.Map<AppRole>(model);
@@ -197,7 +193,7 @@ public class RolesController : Controller {
             if (role == null) {
                 return NotFound();
             }
-            var users = await userMgr.GetUsersInRoleAsync(role.Name);
+            var users = await userMgr.GetUsersInRoleAsync(role.Name!);
             var models = mapper.Map<IList<AppUserModel>>(users);
             return models.ToList();
         }

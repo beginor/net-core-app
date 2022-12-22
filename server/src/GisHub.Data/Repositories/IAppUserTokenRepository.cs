@@ -5,7 +5,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Data.Repositories; 
+namespace Beginor.GisHub.Data.Repositories;
 
 /// <summary>用户凭证 仓储接口</summary>
 public partial interface IAppUserTokenRepository : IRepository<AppUserTokenModel, long> {
@@ -15,9 +15,9 @@ public partial interface IAppUserTokenRepository : IRepository<AppUserTokenModel
         AppUserTokenSearchModel model, string userId = ""
     );
 
-    Task<AppUserToken> GetTokenByValueAsync(string tokenValue);
+    Task<AppUserToken?> GetTokenByValueAsync(string tokenValue);
 
-    Task<AppUserTokenModel> GetTokenForUserAsync(long id, string userId);
+    Task<AppUserTokenModel?> GetTokenForUserAsync(long id, string userId);
 
     Task SaveTokenForUserAsync(AppUserTokenModel model, AppUser user);
 

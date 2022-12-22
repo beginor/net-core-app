@@ -3,6 +3,8 @@ using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
 using NHIdentityUser = NHibernate.AspNetCore.Identity.IdentityUser;
 
+#nullable disable
+
 namespace Beginor.GisHub.Data.Entities; 
 
 [JoinedSubclass(0, Schema = "public", Table = "app_users", ExtendsType = typeof(NHIdentityUser))]

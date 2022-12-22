@@ -2,7 +2,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
-namespace Beginor.GisHub.Models; 
+#nullable disable
+
+namespace Beginor.GisHub.Models;
 
 /// <summary>json 数据模型</summary>
 public partial class AppJsonDataModel : StringEntity {

@@ -8,7 +8,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Models;
 using Beginor.GisHub.Data.Repositories;
 
-namespace Beginor.GisHub.Api.Controllers; 
+namespace Beginor.GisHub.Api.Controllers;
 
 /// <summary>用户凭证 服务接口</summary>
 [ApiController]
@@ -28,8 +28,7 @@ public class AppUserTokenController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
+            // disable managed resource here;
         }
         base.Dispose(disposing);
     }

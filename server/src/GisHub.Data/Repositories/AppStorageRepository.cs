@@ -15,7 +15,7 @@ using Beginor.GisHub.Common;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Data.Repositories; 
+namespace Beginor.GisHub.Data.Repositories;
 
 /// <summary>应用存储仓储实现</summary>
 public partial class AppStorageRepository : HibernateRepository<AppStorage, AppStorageModel, long>, IAppStorageRepository {
@@ -38,9 +38,7 @@ public partial class AppStorageRepository : HibernateRepository<AppStorage, AppS
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            cache = null;
-            hostEnv = null;
-            commonOption = null;
+            // disable managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -53,7 +51,7 @@ public partial class AppStorageRepository : HibernateRepository<AppStorage, AppS
         var keywords = model.Keywords;
         if (keywords.IsNotNullOrEmpty()) {
             query = query.Where(
-                f => f.AliasName.Contains(keywords) || f.RootFolder.Contains(keywords)
+                f => f.AliasName!.Contains(keywords!) || f.RootFolder!.Contains(keywords!)
             );
         }
         var total = await query.LongCountAsync();
@@ -68,22 +66,22 @@ public partial class AppStorageRepository : HibernateRepository<AppStorage, AppS
         };
     }
 
-    public async Task<AppStorageBrowseModel> GetFolderContentAsync(AppStorageBrowseModel model) {
-        var folderItem = await GetByAlias(model.Alias);
+    public async Task<AppStorageBrowseModel?> GetFolderContentAsync(AppStorageBrowseModel model) {
+        var folderItem = await GetByAlias(model.Alias!);
         if (folderItem == null) {
             return null;
         }
-        if (model.Path.StartsWith(Path.DirectorySeparatorChar)) {
+        if (model.Path!.StartsWith(Path.DirectorySeparatorChar)) {
             model.Path = model.Path.Substring(1);
         }
         var cachedItem = await GetCacheItemAsync(folderItem.Id);
-        var serverPath = Path.Combine(cachedItem.RootFolder, model.Path);
+        var serverPath = Path.Combine(cachedItem.RootFolder!, model.Path);
         var dirInfo = new DirectoryInfo(serverPath);
         if (!dirInfo.Exists) {
             return null;
         }
         model.Folders = dirInfo.EnumerateDirectories().Select(x => x.Name).ToArray();
-        model.Files = dirInfo.EnumerateFiles(model.Filter).Select(x => x.Name).ToArray();
+        model.Files = dirInfo.EnumerateFiles(model.Filter!).Select(x => x.Name).ToArray();
         return model;
     }
 
@@ -103,14 +101,14 @@ public partial class AppStorageRepository : HibernateRepository<AppStorage, AppS
             path = path.Substring(1);
         }
         var cachedItem = await GetCacheItemAsync(folderItem.Id);
-        var serverPath = Path.Combine(cachedItem.RootFolder, path);
+        var serverPath = Path.Combine(cachedItem.RootFolder!, path);
         if (Directory.Exists(serverPath) || File.Exists(serverPath)) {
             return serverPath;
         }
         return string.Empty;
     }
 
-    public async Task<Stream> GetFileContentAsync(string alias, string path) {
+    public async Task<Stream?> GetFileContentAsync(string alias, string path) {
         Argument.NotNullOrEmpty(alias, nameof(alias));
         Argument.NotNullOrEmpty(path, nameof(path));
         var physicalPath = await GetPhysicalPathAsync($"{alias}:{path}");
@@ -138,7 +136,7 @@ public partial class AppStorageRepository : HibernateRepository<AppStorage, AppS
                 Roles = entity.Roles
             };
             var rootFolder = entity.RootFolder;
-            if (rootFolder.StartsWith("!")) {
+            if (rootFolder!.StartsWith("!")) {
                 rootFolder = rootFolder.Substring(1);
                 if (rootFolder.StartsWith(Path.DirectorySeparatorChar)) {
                     rootFolder = rootFolder.Substring(1);

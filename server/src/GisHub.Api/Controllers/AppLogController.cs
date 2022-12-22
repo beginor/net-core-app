@@ -28,8 +28,7 @@ public class AppLogController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
+            // disable managed resource here;
         }
         base.Dispose(disposing);
     }

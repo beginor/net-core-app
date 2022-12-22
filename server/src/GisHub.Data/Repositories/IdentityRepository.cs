@@ -7,7 +7,7 @@ using Beginor.GisHub.Models;
 using Dapper;
 using NHibernate;
 
-namespace Beginor.GisHub.Data.Repositories; 
+namespace Beginor.GisHub.Data.Repositories;
 
 public partial class IdentityRepository : Disposable, IIdentityRepository {
 
@@ -19,7 +19,7 @@ public partial class IdentityRepository : Disposable, IIdentityRepository {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            factory = null;
+            // dispose managed resource here;
         }
     }
 

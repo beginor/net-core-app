@@ -4,6 +4,8 @@ using Beginor.AppFx.Core;
 
 namespace Beginor.GisHub.Models;
 
+#nullable disable
+
 /// <summary>应用程序日志模型</summary>
 public partial class AppLogModel : StringEntity {
     /// <summary>创建时间</summary>

@@ -30,7 +30,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
 
         if (model.UserName.IsNotNullOrEmpty()) {
             var userName = model.UserName;
-            query = query.Where(log => log.UserName.Contains(userName));
+            query = query.Where(log => log.UserName!.Contains(userName!));
         }
         var total = await query.LongCountAsync();
         var data = await query.OrderByDescending(e => e.Id)
@@ -114,7 +114,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
     public async Task<PaginatedResponseModel<AppAuditLogUserStatModel>> StatUserAsync(DateTime startDate, DateTime endDate) {
         var query = Session.Query<AppAuditLog>()
             .Where(log => log.StartAt >= startDate && log.StartAt < endDate)
-            .GroupBy(log => log.UserName)
+            .GroupBy(log => log.UserName!)
             .Select(g => new AppAuditLogUserStatModel {
                 Username = g.Key,
                 RequestCount = g.Count()
@@ -138,7 +138,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
         };
 
         foreach (var model in data) {
-            var idx = model.Username.IndexOf(':');
+            var idx = model.Username!.IndexOf(':');
             if (idx < 0) {
                 addOrMerge(model.Username, model.RequestCount);
             }
@@ -156,7 +156,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
     public async Task<PaginatedResponseModel<AppAuditLogIpStatModel>> StatIpAsync(DateTime startDate, DateTime endDate) {
         var query = Session.Query<AppAuditLog>()
             .Where(log => log.StartAt >= startDate && log.StartAt < endDate)
-            .GroupBy(log => log.Ip)
+            .GroupBy(log => log.Ip!)
             .Select(g => new AppAuditLogIpStatModel {
                 Ip = g.Key,
                 RequestCount = g.Count()

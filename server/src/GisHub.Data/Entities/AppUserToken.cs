@@ -3,6 +3,8 @@ using Beginor.AppFx.Core;
 using NHibernate.Extensions.NpgSql;
 using NHibernate.Mapping.Attributes;
 
+#nullable disable
+
 namespace Beginor.GisHub.Data.Entities; 
 
 /// <summary>用户凭证</summary>
