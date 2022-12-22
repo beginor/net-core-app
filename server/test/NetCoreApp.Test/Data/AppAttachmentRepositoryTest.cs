@@ -1,14 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Beginor.NetCoreApp.Data.Entities;
-using Beginor.NetCoreApp.Data.Repositories;
-using Beginor.NetCoreApp.Models;
 using NHibernate.NetCore;
 using NUnit.Framework;
+using Beginor.NetCoreApp.Data.Entities;
+using Beginor.NetCoreApp.Data.Repositories;
 
 namespace Beginor.NetCoreApp.Test.Data;
 

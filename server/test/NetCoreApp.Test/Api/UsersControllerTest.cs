@@ -1,5 +1,5 @@
-using Beginor.NetCoreApp.Api.Controllers;
 using NUnit.Framework;
+using Beginor.NetCoreApp.Api.Controllers;
 
 namespace Beginor.NetCoreApp.Test.Api;
 

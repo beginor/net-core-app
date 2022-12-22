@@ -1,12 +1,8 @@
 using System;
-using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using NHibernate;
-using NHibernate.NetCore;
 using NUnit.Framework;
 using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 

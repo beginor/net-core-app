@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
-using Beginor.NetCoreApp.Data.Entities;
 using NHibernate;
 using NUnit.Framework;
+using Beginor.NetCoreApp.Data.Entities;
 
 namespace Beginor.NetCoreApp.Test.Data;
 

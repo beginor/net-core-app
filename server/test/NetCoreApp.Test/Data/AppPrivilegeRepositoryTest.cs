@@ -1,11 +1,5 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Beginor.NetCoreApp.Data.Entities;
-using Beginor.NetCoreApp.Data.Repositories;
-using NHibernate;
-using NHibernate.NetCore;
 using NUnit.Framework;
+using Beginor.NetCoreApp.Data.Repositories;
 
 namespace Beginor.NetCoreApp.Test.Data;
 

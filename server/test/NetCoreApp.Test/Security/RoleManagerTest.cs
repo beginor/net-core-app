@@ -3,10 +3,10 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
 using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
-using NUnit.Framework;
 
 namespace Beginor.NetCoreApp.Test.Security;
 

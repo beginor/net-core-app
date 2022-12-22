@@ -1,12 +1,8 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Beginor.NetCoreApp.Data.Entities;
-using Beginor.NetCoreApp.Data.Repositories;
-using NHibernate;
-using NHibernate.NetCore;
 using NUnit.Framework;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Data.Repositories;
 
 namespace Beginor.NetCoreApp.Test.Data;
 
@@ -43,7 +39,7 @@ public class AppAuditLogRepositoryTest : BaseTest<IAppAuditLogRepository> {
             Console.WriteLine(t.ToJson());
         }
     }
-    
+
     [Test]
     public async Task _04_CanStatDuration() {
         var endDate = DateTime.Now;
@@ -55,7 +51,7 @@ public class AppAuditLogRepositoryTest : BaseTest<IAppAuditLogRepository> {
             Console.WriteLine(t.ToJson());
         }
     }
-    
+
     [Test]
     public async Task _05_CanStatUser() {
         var endDate = DateTime.Now;
@@ -67,7 +63,7 @@ public class AppAuditLogRepositoryTest : BaseTest<IAppAuditLogRepository> {
             Console.WriteLine(t.ToJson());
         }
     }
-    
+
     [Test]
     public async Task _06_CanStatIp() {
         var endDate = DateTime.Now;

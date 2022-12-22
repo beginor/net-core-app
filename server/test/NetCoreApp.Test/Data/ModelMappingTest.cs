@@ -1,7 +1,7 @@
 using AutoMapper;
+using NUnit.Framework;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Entities;
-using NUnit.Framework;
 
 namespace Beginor.NetCoreApp.Test.Data;
 

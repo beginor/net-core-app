@@ -1,5 +1,5 @@
-using Beginor.NetCoreApp.Common;
 using NUnit.Framework;
+using Beginor.NetCoreApp.Common;
 
 namespace Beginor.NetCoreApp.Test.Common;
 
