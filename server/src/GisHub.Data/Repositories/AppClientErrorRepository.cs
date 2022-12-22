@@ -10,7 +10,7 @@ using NHibernate.Linq;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Data.Repositories; 
+namespace Beginor.GisHub.Data.Repositories;
 
 /// <summary>程序客户端错误记录仓储实现</summary>
 public partial class AppClientErrorRepository : HibernateRepository<AppClientError, AppClientErrorModel, long>, IAppClientErrorRepository {

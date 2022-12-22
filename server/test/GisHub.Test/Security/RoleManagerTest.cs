@@ -7,9 +7,8 @@ using Beginor.GisHub.Common;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Data.Repositories;
 using NUnit.Framework;
-using NHibernate.Linq;
 
-namespace Beginor.GisHub.Test.Security; 
+namespace Beginor.GisHub.Test.Security;
 
 [TestFixture]
 public class RoleManagerTest : BaseTest<RoleManager<AppRole>> {

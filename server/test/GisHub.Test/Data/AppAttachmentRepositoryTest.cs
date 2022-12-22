@@ -10,7 +10,7 @@ using Beginor.GisHub.Models;
 using NHibernate.NetCore;
 using NUnit.Framework;
 
-namespace Beginor.GisHub.Test.Data; 
+namespace Beginor.GisHub.Test.Data;
 
 [TestFixture]
 public class AppAttachmentRepositoryTest : BaseTest<IAppAttachmentRepository> {

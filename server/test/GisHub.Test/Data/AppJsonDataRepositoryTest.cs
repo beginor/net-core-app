@@ -10,7 +10,7 @@ using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Test.Data; 
+namespace Beginor.GisHub.Test.Data;
 
 /// <summary>json 数据仓储测试</summary>
 [TestFixture]

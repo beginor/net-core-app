@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Test.Data; 
+namespace Beginor.GisHub.Test.Data;
 
 [TestFixture]
 public class AppNavItemRepositoryTest : BaseTest<IAppNavItemRepository> {

@@ -6,12 +6,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using static NUnit.Framework.Assert;
-using Beginor.AppFx.Core;
 using Beginor.AspNetCore.Middlewares.CustomHeader;
 using Beginor.AspNetCore.Middlewares.SpaFailback;
 using Beginor.GisHub.Common;
 
-namespace Beginor.GisHub.Test; 
+namespace Beginor.GisHub.Test;
 
 [TestFixture]
 public class ConfigTest : BaseTest<IConfiguration> {

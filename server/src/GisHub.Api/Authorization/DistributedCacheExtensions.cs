@@ -3,9 +3,8 @@ using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
-using Beginor.GisHub.Common;
 
-namespace Beginor.GisHub.Api.Authorization; 
+namespace Beginor.GisHub.Api.Authorization;
 
 public static class DistributedCacheExtensions {
 

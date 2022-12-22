@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Data.Repositories; 
+namespace Beginor.GisHub.Data.Repositories;
 
 /// <summary>导航节点（菜单）仓储接口</summary>
 public partial interface IAppNavItemRepository : IRepository<AppNavItemModel, long> {

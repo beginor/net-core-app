@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Beginor.GisHub.Api.Middlewares; 
+namespace Beginor.GisHub.Api.Middlewares;
 
 public class ExceptionMiddleware {
 

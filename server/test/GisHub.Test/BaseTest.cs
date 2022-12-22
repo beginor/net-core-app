@@ -9,7 +9,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using NUnit.Framework;
 
-namespace Beginor.GisHub.Test; 
+namespace Beginor.GisHub.Test;
 
 public abstract class BaseTest {
 

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Data.Repositories; 
+namespace Beginor.GisHub.Data.Repositories;
 
 /// <summary>系统权限仓储接口</summary>
 public partial interface IAppPrivilegeRepository : IRepository<AppPrivilegeModel, long> {

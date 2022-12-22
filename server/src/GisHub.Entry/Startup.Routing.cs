@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Beginor.GisHub.Entry; 
+namespace Beginor.GisHub.Entry;
 
 partial class Startup {
 

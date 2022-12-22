@@ -5,7 +5,7 @@ using Beginor.GisHub.Data.Entities;
 using NUnit.Framework;
 using NHibernate.Linq;
 
-namespace Beginor.GisHub.Test.Security; 
+namespace Beginor.GisHub.Test.Security;
 
 [TestFixture]
 public class UserManagerTest : BaseTest<UserManager<AppUser>> {

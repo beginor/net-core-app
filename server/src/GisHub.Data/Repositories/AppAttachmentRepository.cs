@@ -10,7 +10,7 @@ using NHibernate.Linq;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Data.Repositories; 
+namespace Beginor.GisHub.Data.Repositories;
 
 /// <summary>附件表仓储实现</summary>
 public partial class AppAttachmentRepository : HibernateRepository<AppAttachment, AppAttachmentModel, long>, IAppAttachmentRepository {

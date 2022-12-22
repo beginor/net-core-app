@@ -8,7 +8,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Models;
 using Beginor.GisHub.Data.Repositories;
 
-namespace Beginor.GisHub.Api.Controllers; 
+namespace Beginor.GisHub.Api.Controllers;
 
 partial class AppStorageController {
 

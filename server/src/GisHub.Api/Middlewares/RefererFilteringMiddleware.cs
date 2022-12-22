@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Beginor.GisHub.Api.Middlewares; 
+namespace Beginor.GisHub.Api.Middlewares;
 
 public class RefererFilteringMiddleware {
 

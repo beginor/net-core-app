@@ -5,7 +5,7 @@ using Beginor.GisHub.Data.Entities;
 using NHibernate;
 using NUnit.Framework;
 
-namespace Beginor.GisHub.Test.Data; 
+namespace Beginor.GisHub.Test.Data;
 
 [TestFixture]
 public class HibernateTest : BaseTest<ISessionFactory> {

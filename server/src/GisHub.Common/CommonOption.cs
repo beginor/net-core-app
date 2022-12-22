@@ -1,6 +1,6 @@
 using System;
 
-namespace Beginor.GisHub.Common; 
+namespace Beginor.GisHub.Common;
 
 public class CommonOption {
     public CacheOption Cache { get; set; } = new();

@@ -11,7 +11,7 @@ using NHibernate.Linq;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Data.Repositories; 
+namespace Beginor.GisHub.Data.Repositories;
 
 /// <summary>json 数据仓储实现</summary>
 public partial class AppJsonDataRepository : HibernateRepository<AppJsonData, AppJsonDataModel, long>, IAppJsonDataRepository {

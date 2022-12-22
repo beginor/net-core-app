@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 
-namespace Beginor.GisHub.Test.Api; 
+namespace Beginor.GisHub.Test.Api;
 
 [TestFixture]
 public class AppPrivilegeControllerTest : BaseTest<AppPrivilegeController> {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Beginor.GisHub.Entry; 
+namespace Beginor.GisHub.Entry;
 
 partial class Startup {
 

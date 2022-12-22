@@ -3,7 +3,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
 using NUnit.Framework;
 
-namespace Beginor.GisHub.Test.Data; 
+namespace Beginor.GisHub.Test.Data;
 
 [TestFixture]
 public class ModelMappingTest : BaseTest<IMapper> {

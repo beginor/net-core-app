@@ -9,7 +9,7 @@ using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Test; 
+namespace Beginor.GisHub.Test;
 
 [TestFixture]
 public class SystemTest : BaseTest {

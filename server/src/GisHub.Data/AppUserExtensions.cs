@@ -7,7 +7,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Data; 
+namespace Beginor.GisHub.Data;
 
 public static class AppUserExtensions {
 
