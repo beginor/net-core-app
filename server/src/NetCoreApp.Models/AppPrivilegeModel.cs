@@ -2,9 +2,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
-namespace Beginor.NetCoreApp.Models;
-
 #nullable disable
+
+namespace Beginor.NetCoreApp.Models;
 
 /// <summary>系统权限模型</summary>
 public partial class AppPrivilegeModel : StringEntity {

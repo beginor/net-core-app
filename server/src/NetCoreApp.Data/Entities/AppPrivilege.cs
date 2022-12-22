@@ -2,9 +2,9 @@ using System;
 using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
 
-namespace Beginor.NetCoreApp.Data.Entities;
-
 #nullable disable
+
+namespace Beginor.NetCoreApp.Data.Entities;
 
 /// <summary>系统权限</summary>
 [Class(Schema = "public", Table = "app_privileges")]

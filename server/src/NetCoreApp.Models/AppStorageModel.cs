@@ -2,9 +2,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
-namespace Beginor.NetCoreApp.Models;
-
 #nullable disable
+
+namespace Beginor.NetCoreApp.Models;
 
 /// <summary>应用存储模型</summary>
 public partial class AppStorageModel : StringEntity {
@@ -26,7 +26,7 @@ public partial class AppStorageModel : StringEntity {
 /// <summary>应用存储搜索参数</summary>
 public partial class AppStorageSearchModel : PaginatedRequestModel {
     /// <summary>搜索关键字</summary>
-    public string? Keywords { get; set; }
+    public string Keywords { get; set; }
 }
 
 /// <summary>服务目录浏览模型</summary>

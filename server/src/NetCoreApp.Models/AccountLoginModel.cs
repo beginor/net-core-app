@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
+#nullable disable
+
 namespace Beginor.NetCoreApp.Models;
 
-#nullable disable
 /// <summary>登录信息</summary>
 public class AccountLoginModel {
 

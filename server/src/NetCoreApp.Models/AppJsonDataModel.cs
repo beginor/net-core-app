@@ -2,9 +2,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
-namespace Beginor.NetCoreApp.Models;
-
 #nullable disable
+
+namespace Beginor.NetCoreApp.Models;
 
 /// <summary>json 数据模型</summary>
 public partial class AppJsonDataModel : StringEntity {

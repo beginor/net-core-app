@@ -1,9 +1,9 @@
 using System;
 using Beginor.AppFx.Core;
 
-namespace Beginor.NetCoreApp.Models;
-
 #nullable disable
+
+namespace Beginor.NetCoreApp.Models;
 
 /// <summary>附件表模型</summary>
 public partial class AppAttachmentModel : StringEntity {

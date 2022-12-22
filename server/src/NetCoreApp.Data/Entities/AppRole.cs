@@ -2,9 +2,9 @@
 using NHibernate.Mapping.Attributes;
 using NHIdentityRole = NHibernate.AspNetCore.Identity.IdentityRole;
 
-namespace Beginor.NetCoreApp.Data.Entities;
-
 #nullable disable
+
+namespace Beginor.NetCoreApp.Data.Entities;
 
 [JoinedSubclass(0, Schema = "public", Table = "app_roles", ExtendsType = typeof(NHIdentityRole))]
 [Key(1, Column = "id")]
