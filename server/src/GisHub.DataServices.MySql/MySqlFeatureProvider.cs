@@ -11,7 +11,7 @@ using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.Geo.Esri;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.DataServices.MySql; 
+namespace Beginor.GisHub.DataServices.MySql;
 
 public class MySqlFeatureProvider : FeatureProvider {
 

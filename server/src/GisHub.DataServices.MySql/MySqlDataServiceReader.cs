@@ -9,7 +9,7 @@ using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 using MySql.Data.MySqlClient;
 
-namespace Beginor.GisHub.DataServices.MySql; 
+namespace Beginor.GisHub.DataServices.MySql;
 
 public class MySqlDataServiceReader : DataServiceReader {
 

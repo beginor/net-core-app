@@ -2,7 +2,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.DataServices; 
+namespace Beginor.GisHub.DataServices;
 
 public class ModelMapping : AutoMapper.Profile {
 

@@ -9,7 +9,7 @@ using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DataServices.PostGIS;
 
-namespace Beginor.GisHub.Test.DataServices.PostGIS; 
+namespace Beginor.GisHub.Test.DataServices.PostGIS;
 
 [TestFixture]
 public class PostGISDataSourceReaderTest : BaseTest<PostGISDataServiceReader> {

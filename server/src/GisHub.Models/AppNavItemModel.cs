@@ -4,7 +4,7 @@ using Beginor.AppFx.Core;
 
 #nullable disable
 
-namespace Beginor.GisHub.Models; 
+namespace Beginor.GisHub.Models;
 
 /// <summary>导航节点（菜单）模型</summary>
 public partial class AppNavItemModel : StringEntity {

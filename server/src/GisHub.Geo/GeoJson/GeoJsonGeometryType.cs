@@ -1,4 +1,4 @@
-namespace Beginor.GisHub.Geo.GeoJson; 
+namespace Beginor.GisHub.Geo.GeoJson;
 
 public static class GeoJsonGeometryType {
     public const string Point = "Point";

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.TileMap.Models;
 
-namespace Beginor.GisHub.TileMap; 
+namespace Beginor.GisHub.TileMap;
 
 public static class FileHelper {
 

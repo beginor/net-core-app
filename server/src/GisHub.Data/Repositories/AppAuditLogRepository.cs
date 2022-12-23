@@ -12,7 +12,7 @@ using Beginor.AppFx.Repository.Hibernate;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Data.Repositories; 
+namespace Beginor.GisHub.Data.Repositories;
 
 /// <summary>审计日志仓储实现</summary>
 public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, AppAuditLogModel, long>, IAppAuditLogRepository {

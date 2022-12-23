@@ -6,7 +6,7 @@ using Beginor.GisHub.DataServices;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.Geo.Esri;
 
-namespace Beginor.GisHub.Test.DataServices; 
+namespace Beginor.GisHub.Test.DataServices;
 
 [TestFixture]
 public class FeatureProviderTest : BaseTest {

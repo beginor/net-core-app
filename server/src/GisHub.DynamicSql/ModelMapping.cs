@@ -3,7 +3,7 @@ using AutoMapper;
 using Beginor.GisHub.DynamicSql.Data;
 using Beginor.GisHub.DynamicSql.Models;
 
-namespace Beginor.GisHub.DynamicSql; 
+namespace Beginor.GisHub.DynamicSql;
 
 public class ModelMapping : AutoMapper.Profile {
 

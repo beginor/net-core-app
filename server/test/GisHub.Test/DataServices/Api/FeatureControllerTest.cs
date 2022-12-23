@@ -4,7 +4,7 @@ using Beginor.GisHub.Geo.Esri;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 
-namespace Beginor.GisHub.Test.DataServices.Api; 
+namespace Beginor.GisHub.Test.DataServices.Api;
 
 [TestFixture]
 public class FeatureControllerTest : BaseTest<FeatureController> {

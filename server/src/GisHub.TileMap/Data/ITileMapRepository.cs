@@ -6,7 +6,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.TileMap.Models;
 
-namespace Beginor.GisHub.TileMap.Data; 
+namespace Beginor.GisHub.TileMap.Data;
 
 /// <summary>切片地图 仓储接口</summary>
 public partial interface ITileMapRepository : IRepository<TileMapModel, long> {

@@ -16,7 +16,7 @@ using NUnit.Framework;
 using static System.Console;
 using static NUnit.Framework.Assert;
 
-namespace Beginor.GisHub.Test.DynamicSql; 
+namespace Beginor.GisHub.Test.DynamicSql;
 
 /// <summary>数据API仓储测试</summary>
 [TestFixture]
@@ -72,7 +72,7 @@ public class DataApiRepositoryTest : BaseTest<IDataApiRepository> {
             WriteLine(match);
         }
     }
-    
+
     [Test]
     public void _05_CanGetById() {
         var id = 1646193841190030916L;
@@ -82,7 +82,7 @@ public class DataApiRepositoryTest : BaseTest<IDataApiRepository> {
         // var model = Target.GetById(id);
         // Assert.IsNotNull(model.Statement);
     }
-    
+
     [Test]
     public void _06_CanQueryBaseResource() {
         var session = ServiceProvider.GetService<ISession>();
@@ -103,7 +103,7 @@ public class DataApiRepositoryTest : BaseTest<IDataApiRepository> {
         IsNotEmpty(data);
         WriteLine(data.Count);
     }
-    
+
     [Test]
     public void _07_CanSaveDataApi() {
         var session = ServiceProvider.GetService<ISession>();

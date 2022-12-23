@@ -13,7 +13,7 @@ using Beginor.GisHub.Common;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Data.Repositories; 
+namespace Beginor.GisHub.Data.Repositories;
 
 /// <summary>系统权限仓储实现</summary>
 public partial class AppPrivilegeRepository : HibernateRepository<AppPrivilege, AppPrivilegeModel, long>, IAppPrivilegeRepository {

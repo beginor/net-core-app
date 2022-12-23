@@ -10,7 +10,7 @@ using Beginor.GisHub.Models;
 using Beginor.GisHub.Slpk.Data;
 using Beginor.GisHub.Slpk.Models;
 
-namespace Beginor.GisHub.Test.Slpk; 
+namespace Beginor.GisHub.Test.Slpk;
 
 /// <summary>slpk 航拍模型仓储测试</summary>
 [TestFixture]

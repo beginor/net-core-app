@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Beginor.GisHub.TileMap.Models;
 
-namespace Beginor.GisHub.TileMap; 
+namespace Beginor.GisHub.TileMap;
 
 public static class BundleHelper {
 

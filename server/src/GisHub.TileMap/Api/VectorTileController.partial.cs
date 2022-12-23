@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 
-namespace Beginor.GisHub.TileMap.Api; 
+namespace Beginor.GisHub.TileMap.Api;
 
 partial class VectorTileController {
 

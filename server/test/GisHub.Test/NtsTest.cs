@@ -9,7 +9,7 @@ using Beginor.GisHub.Geo;
 using Beginor.GisHub.Geo.GeoJson;
 using NetTopologySuite.IO;
 
-namespace Beginor.GisHub.Test; 
+namespace Beginor.GisHub.Test;
 
 [TestFixture]
 public class NtsTest {

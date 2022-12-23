@@ -5,7 +5,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Repositories;
 
 
-namespace Beginor.GisHub.Test.Data; 
+namespace Beginor.GisHub.Test.Data;
 
 [TestFixture]
 public class AppAuditLogRepositoryTest : BaseTest<IAppAuditLogRepository> {

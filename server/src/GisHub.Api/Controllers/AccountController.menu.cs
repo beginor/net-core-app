@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Api.Controllers; 
+namespace Beginor.GisHub.Api.Controllers;
 
 partial class AccountController {
 

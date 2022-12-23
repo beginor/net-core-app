@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Extensions.Logging;
 
-namespace Beginor.GisHub.DynamicSql.ParameterConverters; 
+namespace Beginor.GisHub.DynamicSql.ParameterConverters;
 
 public class StringParameterConverter : IParameterConverter {
 

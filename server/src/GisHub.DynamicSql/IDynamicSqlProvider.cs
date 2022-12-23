@@ -1,7 +1,7 @@
 using System.Data.Common;
 using System.Collections.Generic;
 
-namespace Beginor.GisHub.DynamicSql; 
+namespace Beginor.GisHub.DynamicSql;
 
 public interface IDynamicSqlProvider {
 

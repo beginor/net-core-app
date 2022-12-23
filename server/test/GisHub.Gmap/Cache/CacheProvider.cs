@@ -3,14 +3,14 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace Beginor.GisHub.Gmap.Cache; 
+namespace Beginor.GisHub.Gmap.Cache;
 
 public class CacheProvider : ICacheProvider {
-    
+
     private CacheOptions options;
     private ILogger<CacheProvider> logger;
     private const string FileExt = ".png";
-    
+
     public CacheProvider(CacheOptions options, ILogger<CacheProvider> logger) {
         this.options = options ?? throw new ArgumentNullException(nameof(options));
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -49,7 +49,7 @@ public class CacheProvider : ICacheProvider {
             return Task.FromResult(Array.Empty<byte>());
         }
     }
-    
+
     private string GetTilePath(string serviceId, int level, int row, int col) {
         return Path.Combine(options.Directory, serviceId, level.ToString(), row.ToString(), col.ToString()) + FileExt;
     }

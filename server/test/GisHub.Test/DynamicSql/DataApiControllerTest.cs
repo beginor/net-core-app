@@ -1,7 +1,7 @@
 using Beginor.GisHub.DynamicSql.Api;
 using NUnit.Framework;
 
-namespace Beginor.GisHub.Test.DynamicSql; 
+namespace Beginor.GisHub.Test.DynamicSql;
 
 [TestFixture]
 public class DataApiControllerTest : BaseTest<DataApiController> {

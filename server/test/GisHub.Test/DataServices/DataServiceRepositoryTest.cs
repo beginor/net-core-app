@@ -11,7 +11,7 @@ using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 using NHibernate.Linq;
 
-namespace Beginor.GisHub.Test.DataServices; 
+namespace Beginor.GisHub.Test.DataServices;
 
 /// <summary>数据源（数据表或视图）仓储测试</summary>
 [TestFixture]
@@ -66,7 +66,7 @@ public class DataServiceRepositoryTest : BaseTest<IDataServiceRepository> {
         Assert.IsNotNull(cacheItem);
         Console.WriteLine(cacheItem.ToJson());
     }
-    
+
     [Test]
     public async Task _04_CanQueryDataService() {
         var session = ServiceProvider.GetService<NHibernate.ISession>();

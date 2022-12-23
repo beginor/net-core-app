@@ -9,7 +9,7 @@ using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.TileMap.Models;
 using Beginor.GisHub.TileMap.Data;
 
-namespace Beginor.GisHub.Test.TileMap; 
+namespace Beginor.GisHub.Test.TileMap;
 
 /// <summary>切片地图仓储测试</summary>
 [TestFixture]

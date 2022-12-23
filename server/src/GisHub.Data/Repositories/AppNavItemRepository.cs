@@ -13,7 +13,7 @@ using NHibernate.Linq;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Data.Repositories; 
+namespace Beginor.GisHub.Data.Repositories;
 
 /// <summary>导航节点（菜单）仓储实现</summary>
 public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppNavItemModel, long>, IAppNavItemRepository {

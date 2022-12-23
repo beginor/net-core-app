@@ -7,7 +7,7 @@ using NUnit.Framework;
 using Beginor.GisHub.TileMap.Data;
 using Beginor.GisHub.TileMap.Models;
 
-namespace Beginor.GisHub.Test.TileMap; 
+namespace Beginor.GisHub.Test.TileMap;
 
 /// <summary>矢量切片包仓储测试</summary>
 [TestFixture]

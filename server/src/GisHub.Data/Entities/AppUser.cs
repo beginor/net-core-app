@@ -5,7 +5,7 @@ using NHIdentityUser = NHibernate.AspNetCore.Identity.IdentityUser;
 
 #nullable disable
 
-namespace Beginor.GisHub.Data.Entities; 
+namespace Beginor.GisHub.Data.Entities;
 
 [JoinedSubclass(0, Schema = "public", Table = "app_users", ExtendsType = typeof(NHIdentityUser))]
 [Key(1, Column = "id")]

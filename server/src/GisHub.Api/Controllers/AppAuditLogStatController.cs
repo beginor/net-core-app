@@ -8,7 +8,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Models;
 
-namespace Beginor.GisHub.Api.Controllers; 
+namespace Beginor.GisHub.Api.Controllers;
 
 /// <summary>审计日志统计接口</summary>
 [Route("api/audit-log-stats")]

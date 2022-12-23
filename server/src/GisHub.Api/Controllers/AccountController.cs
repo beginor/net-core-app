@@ -20,7 +20,7 @@ using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Models;
 using Base64UrlEncoder = Beginor.GisHub.Common.Base64UrlEncoder;
 
-namespace Beginor.GisHub.Api.Controllers; 
+namespace Beginor.GisHub.Api.Controllers;
 
 /// <summary>账户 API</summary>
 [Route("api/account")]

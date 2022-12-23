@@ -9,7 +9,7 @@ using NHibernate.Cfg;
 using NHibernate.Mapping.Attributes;
 using NHibernate.NetCore;
 
-namespace Beginor.GisHub.Entry; 
+namespace Beginor.GisHub.Entry;
 
 partial class Startup {
 

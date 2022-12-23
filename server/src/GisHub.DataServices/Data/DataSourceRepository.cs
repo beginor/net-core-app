@@ -11,7 +11,7 @@ using NHibernate;
 using NHibernate.Linq;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.DataServices.Data; 
+namespace Beginor.GisHub.DataServices.Data;
 
 /// <summary>数据库连接仓储实现</summary>
 public partial class DataSourceRepository : HibernateRepository<DataSource, DataSourceModel, long>, IDataSourceRepository {

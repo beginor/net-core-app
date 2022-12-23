@@ -4,7 +4,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Slpk.Models;
 
-namespace Beginor.GisHub.Slpk.Data; 
+namespace Beginor.GisHub.Slpk.Data;
 
 /// <summary>slpk 航拍模型 仓储接口</summary>
 public partial interface ISlpkRepository : IRepository<SlpkModel, long> {

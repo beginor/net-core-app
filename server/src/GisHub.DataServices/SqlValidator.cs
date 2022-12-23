@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Beginor.AppFx.Core;
 
-namespace Beginor.GisHub.DataServices; 
+namespace Beginor.GisHub.DataServices;
 
 public static class SqlValidator {
     private static readonly string[] Disallowed = {

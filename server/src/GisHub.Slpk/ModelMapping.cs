@@ -1,7 +1,7 @@
 using Beginor.GisHub.Slpk.Data;
 using Beginor.GisHub.Slpk.Models;
 
-namespace Beginor.GisHub.Slpk; 
+namespace Beginor.GisHub.Slpk;
 
 public class ModelMapping : AutoMapper.Profile {
 

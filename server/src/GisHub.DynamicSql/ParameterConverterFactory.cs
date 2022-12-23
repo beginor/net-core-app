@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Beginor.GisHub.DynamicSql.ParameterConverters;
 using Microsoft.Extensions.Logging;
 
-namespace Beginor.GisHub.DynamicSql; 
+namespace Beginor.GisHub.DynamicSql;
 
 public class ParameterConverterFactory {
 

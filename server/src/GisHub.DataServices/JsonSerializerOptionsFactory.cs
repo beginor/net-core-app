@@ -5,7 +5,7 @@ using Beginor.GisHub.Geo;
 using Beginor.GisHub.Geo.Esri;
 using Beginor.GisHub.Geo.GeoJson;
 
-namespace Beginor.GisHub.DataServices; 
+namespace Beginor.GisHub.DataServices;
 
 public class JsonSerializerOptionsFactory {
 

@@ -7,7 +7,7 @@ using Npgsql;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.DataServices.PostGIS; 
+namespace Beginor.GisHub.DataServices.PostGIS;
 
 public class PostGISMetaDataProvider : Disposable, IMetaDataProvider {
 

@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Beginor.GisHub.TileMap; 
+namespace Beginor.GisHub.TileMap;
 
 [Serializable]
 public class TileNotFoundException : Exception {

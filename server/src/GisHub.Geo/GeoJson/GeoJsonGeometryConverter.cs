@@ -2,7 +2,7 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Beginor.GisHub.Geo.GeoJson; 
+namespace Beginor.GisHub.Geo.GeoJson;
 
 public class GeoJsonGeometryConverter : JsonConverter<GeoJsonGeometry> {
 

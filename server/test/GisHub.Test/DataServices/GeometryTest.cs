@@ -6,7 +6,7 @@ using Beginor.GisHub.Common;
 using Beginor.GisHub.DataServices;
 using Beginor.GisHub.Geo.Esri;
 
-namespace Beginor.GisHub.Test.DataServices; 
+namespace Beginor.GisHub.Test.DataServices;
 
 [TestFixture]
 public class GeometryTest : BaseTest<CommonOption> {

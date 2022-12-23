@@ -2,7 +2,7 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Beginor.GisHub.Geo; 
+namespace Beginor.GisHub.Geo;
 
 public class CoordinateConverter : JsonConverter<double> {
 

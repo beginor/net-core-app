@@ -1,7 +1,7 @@
 using Beginor.GisHub.Common;
 using NUnit.Framework;
 
-namespace Beginor.GisHub.Test.Data; 
+namespace Beginor.GisHub.Test.Data;
 
 [TestFixture]
 public class ResourceRolesFilterProviderTest : BaseTest<IRolesFilterProvider> {

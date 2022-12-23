@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Beginor.AspNetCore.Authentication.Token;
 using Beginor.GisHub.Common;
 
-namespace Beginor.GisHub.Api.Authorization; 
+namespace Beginor.GisHub.Api.Authorization;
 
 public class AuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider {
 

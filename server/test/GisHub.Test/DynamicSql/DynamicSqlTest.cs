@@ -6,7 +6,7 @@ using NUnit.Framework;
 using static NUnit.Framework.Assert;
 using static System.Console;
 
-namespace Beginor.GisHub.Test.DynamicSql; 
+namespace Beginor.GisHub.Test.DynamicSql;
 
 [TestFixture]
 public class DynamicSqlTest : BaseTest<IDynamicSqlProvider> {

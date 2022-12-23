@@ -8,7 +8,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.Models;
 using Beginor.GisHub.Data.Repositories;
 
-namespace Beginor.GisHub.Api.Controllers; 
+namespace Beginor.GisHub.Api.Controllers;
 
 /// <summary>程序客户端错误记录 服务接口</summary>
 [ApiController]

@@ -9,7 +9,7 @@ using Beginor.GisHub.DataServices;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.Test.DataServices; 
+namespace Beginor.GisHub.Test.DataServices;
 
 [TestFixture]
 public class DataServiceFactoryTest : BaseTest<IDataServiceFactory> {

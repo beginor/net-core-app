@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 
-namespace Beginor.GisHub.DynamicSql.ParameterConverters; 
+namespace Beginor.GisHub.DynamicSql.ParameterConverters;
 
 public class BoolArrayParameterConverter : IParameterConverter {
 

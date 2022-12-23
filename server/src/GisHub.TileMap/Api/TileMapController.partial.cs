@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.GisHub.Common;
 
-namespace Beginor.GisHub.TileMap.Api; 
+namespace Beginor.GisHub.TileMap.Api;
 
 partial class TileMapController {
 

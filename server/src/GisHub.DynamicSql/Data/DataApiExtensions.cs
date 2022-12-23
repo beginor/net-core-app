@@ -1,6 +1,6 @@
 using System;
 
-namespace Beginor.GisHub.DynamicSql.Data; 
+namespace Beginor.GisHub.DynamicSql.Data;
 
 public static class DataApiExtensions {
 
