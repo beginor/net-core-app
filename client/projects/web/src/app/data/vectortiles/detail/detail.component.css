@@ -7,17 +7,6 @@
   overflow-y: auto;
 }
 
-.detail {
-  height: 100%;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 4px 0px;
-  background-color: var(--bs-light);
-}
-
-.card-body {
-  overflow-y: auto;
-}
-
 hr {
   padding-top: 1px;
 }
-

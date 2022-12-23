@@ -58,6 +58,7 @@ ngb-pagination ul.pagination {
   box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 4px 0px;
   background-color: var(--bs-light);
 }
+
 .detail .card-body {
   overflow-y: auto;
 }

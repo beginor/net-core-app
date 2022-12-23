@@ -135,7 +135,7 @@
                   </ng-template>
                 </th>
                 <td class='text-start'>
-                  <a class="preview-link"
+                  <a class="clickable"
                     *ngIf="(info.privileges['data_apis.read_data'] || info.privileges['data_apis.read_sql']);else apiNameTpl"
                     (click)="showPreview(item)">
                     <svg-icon [path]="!!item.geometryColumn ? 'bi/globe' : 'bi/table'"></svg-icon>
