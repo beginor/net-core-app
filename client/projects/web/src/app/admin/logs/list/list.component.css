@@ -8,16 +8,3 @@
   overflow-y: auto;
   background-color: var(--bs-light);
 }
-
-ngb-pagination ::ng-deep ul.pagination {
-  margin-bottom: 0 !important;
-}
-
-.detail-container {
-  position: absolute;
-  top: var(--app-navbar-height);
-  right: 0;
-  height: calc(100vh - var(--app-navbar-height));
-  bottom: 0;
-  z-index: var(--app-detail-zIndex);
-}
