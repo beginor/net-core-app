@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -33,67 +35,57 @@ public class EBusMiddleware {
         var servicePath = service.GetGatewayServiceUrl(reqPath);
         servicePath += queryString.Value;
         logger.LogInformation($"{reqMethod}: {servicePath}");
-        var yztReq = service.CreateHttpRequest(servicePath, reqMethod);
+        var yztReq = service.CreateHttpRequestMessage(new HttpMethod(reqMethod), servicePath);
         if (req.Headers.TryGetValue("Accept", out var acceptVal)) {
-            yztReq.Accept = acceptVal;
+            yztReq.Headers.Accept.TryParseAdd(acceptVal);
         }
         if (req.Headers.TryGetValue("Accept-Encoding", out var acceptEncodingVal)) {
-            yztReq.Headers.Add("Accept-Encoding", acceptEncodingVal);
-        }
-        if (req.Headers.TryGetValue("Content-Type", out var contentTypeValue)) {
-            yztReq.Headers.Add("Content-Type", contentTypeValue);
+            yztReq.Headers.AcceptEncoding.TryParseAdd(acceptEncodingVal);
         }
         if (req.Headers.TryGetValue("User-Agent", out var userAgentVal)) {
-            yztReq.Headers.Add("User-Agent", userAgentVal);
+            yztReq.Headers.UserAgent.TryParseAdd(userAgentVal);
         }
         if (reqMethod.Equals("POST", StringComparison.OrdinalIgnoreCase)) {
-            var stream = await yztReq.GetRequestStreamAsync();
+            var stream = new MemoryStream();
             await req.Body.CopyToAsync(stream);
             await stream.FlushAsync();
-        }
-        try {
-            var yztRes = (HttpWebResponse) await yztReq.GetResponseAsync();
-            res.StatusCode = (int)yztRes.StatusCode;
-            res.ContentType = yztRes.ContentType;
-            res.Headers.Add("Content-Encoding", yztRes.ContentEncoding);
-            var responseStream = yztRes.GetResponseStream();
-            if (responseStream != null) {
-                if (yztRes.ContentType.Contains("text/xml", StringComparison.OrdinalIgnoreCase)
-                    && queryString.Value!.Contains("GetCapabilities", StringComparison.OrdinalIgnoreCase)
-                   ) {
-                    using var streamReader = new StreamReader(responseStream);
-                    var streamWriter = new StreamWriter(res.Body);
-                    string? line;
-                    var replacement = req.Scheme + "://" + req.Host + req.PathBase;
-                    while ((line = await streamReader.ReadLineAsync()) != null) {
-                        line = service.ReplaceGatewayUrl(line, replacement);
-                        await streamWriter.WriteLineAsync(line);
-                    }
-                    await streamWriter.FlushAsync();
-                }
-                else {
-                    await responseStream.CopyToAsync(res.Body, 1024);
-                }
+            var content = new StreamContent(stream);
+            if (req.Headers.TryGetValue("Content-Type", out var contentTypeValue)) {
+                content.Headers.ContentType = MediaTypeHeaderValue.Parse(contentTypeValue);
             }
-            logger.LogInformation($"Success {reqMethod}: {servicePath}");
         }
-        catch (WebException webEx) {
-            var errResponse = (HttpWebResponse?)webEx.Response;
-            logger.LogError($"Failed {reqMethod}: {servicePath}");
-            logger.LogError($"Server returns {errResponse!.StatusCode}");
-            res.StatusCode = (int)errResponse.StatusCode;
-            foreach (string key in errResponse.Headers.Keys) {
-                res.Headers.Add(key, errResponse.Headers.Get(key));
-            }
-            await errResponse.GetResponseStream().CopyToAsync(res.Body, 1024);
-        }
-        catch (Exception ex) {
-            res.StatusCode = 500;
-            await res.WriteAsync(ex.ToString());
-        }
-        finally {
+        
+        using var yztRes = await service.SendAsync(yztReq);
+        if (yztRes == null) {
+            res.StatusCode = (int)HttpStatusCode.BadGateway;
+            await res.WriteAsync($"Can not get response from {reqMethod} {servicePath}");
             await res.CompleteAsync();
+            return;
         }
+        res.StatusCode = (int)yztRes.StatusCode;
+        var contentType = yztRes.Content.Headers.ContentType?.ToString() ?? string.Empty;
+        res.ContentType = contentType;
+        res.Headers.Add("Content-Encoding", yztRes.Content.Headers.ContentEncoding.ToString());
+        var responseStream = await yztRes.Content.ReadAsStreamAsync();
+        if (yztRes.IsSuccessStatusCode
+            && contentType.Contains("text/xml", StringComparison.OrdinalIgnoreCase)
+            && queryString.Value!.Contains("GetCapabilities", StringComparison.OrdinalIgnoreCase)
+        ) {
+            using var streamReader = new StreamReader(responseStream);
+            var streamWriter = new StreamWriter(res.Body);
+            string? line;
+            var replacement = req.Scheme + "://" + req.Host + req.PathBase;
+            while ((line = await streamReader.ReadLineAsync()) != null) {
+                line = service.ReplaceGatewayUrl(line, replacement);
+                await streamWriter.WriteLineAsync(line);
+            }
+            await streamWriter.FlushAsync();
+        }
+        else {
+            await responseStream.CopyToAsync(res.Body, 1024);
+        }
+        await res.CompleteAsync();
+        logger.LogInformation($"Success {reqMethod}: {servicePath}");
     }
 
 }

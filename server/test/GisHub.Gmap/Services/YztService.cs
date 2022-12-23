@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,14 +16,16 @@ public class YztService {
     private readonly ILogger<YztService> logger;
     private EBusOptions options;
 
+    private readonly HttpClient httpClient;
 
     public YztService(
         ILogger<YztService> logger,
         IOptionsMonitor<EBusOptions> monitor
     ) {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.options = monitor.CurrentValue ?? throw new ArgumentNullException(nameof(monitor));
+        options = monitor.CurrentValue ?? throw new ArgumentNullException(nameof(monitor));
         monitor.OnChange(newVal => options = newVal);
+        httpClient = CreateHttpClient();
     }
 
     public string GetGatewayServiceUrl(string resource) {
@@ -40,41 +42,31 @@ public class YztService {
         return options.GatewayUrl + path;
     }
 
-    public string GetGatewayServiceUrl() {
-        return options.GatewayUrl;
+    public async Task<HttpResponseMessage?> SendAsync(HttpRequestMessage request) {
+        try {
+            var response = await httpClient.SendAsync(request);
+            return response;
+        }
+        catch (Exception ex) {
+            logger.LogError(ex, $"Can not get response for {request.Method} {request.RequestUri}");
+            return null;
+        }
     }
 
-    public HttpWebRequest CreateHttpRequest(string url, string method) {
-        var request = WebRequest.CreateHttp(url);
-        request.Method = method;
-        request.ServerCertificateValidationCallback = (s, cert, chain, sslErr) => true;
-        request.AutomaticDecompression = DecompressionMethods.All;
-        request.AllowAutoRedirect = false;
+    public HttpRequestMessage CreateHttpRequestMessage(HttpMethod method, string uri) {
+        var req = new HttpRequestMessage(method, uri);
         var headers = ComputeSignatureHeaders();
         foreach (var pair in headers) {
-            request.Headers.Add(pair.Key, pair.Value);
+            req.Headers.Add(pair.Key, pair.Value);
         }
-        return request;
-    }
-
-    public HttpWebRequest CreateHttpRequest(string url, string method, string serviceId) {
-        var request = WebRequest.CreateHttp(url);
-        request.Method = method;
-        request.ServerCertificateValidationCallback = (s, cert, chain, sslErr) => true;
-        request.AutomaticDecompression = DecompressionMethods.All;
-        request.AllowAutoRedirect = false;
-        var headers = ComputeSignatureHeaders(serviceId);
-        foreach (var pair in headers) {
-            request.Headers.Add(pair.Key, pair.Value);
-        }
-        return request;
+        return req;
     }
 
     public string ReplaceGatewayUrl(string content, string replacement) {
         return content.Replace(options.GatewayUrl, replacement, StringComparison.OrdinalIgnoreCase);
     }
 
-    public Dictionary<string, string> ComputeSignatureHeaders(string serviceId = "") {
+    private Dictionary<string, string> ComputeSignatureHeaders(string serviceId = "") {
         var headers = new Dictionary<string, string>();
         var now = DateTimeOffset.Now;
         var timestamp = now.ToUnixTimeSeconds().ToString();
@@ -96,8 +88,8 @@ public class YztService {
         var buffer = Encoding.UTF8.GetBytes(input);
         var hashed = sha256.ComputeHash(buffer);
         var strBuilder = new StringBuilder();
-        for (var i = 0; i < hashed.Length; i++) {
-            strBuilder.Append(hashed[i].ToString("x2"));
+        foreach (var b in hashed) {
+            strBuilder.Append(b.ToString("x2"));
         }
         return strBuilder.ToString();
     }
@@ -105,24 +97,33 @@ public class YztService {
     public async Task GetTileContent(string tileName, Tile tile) {
         var template = GetGatewayServiceUrl(tileName);
         var url = string.Format(template, tile.Z, tile.Y, tile.X);
-        var request = CreateHttpRequest(url, "GET");
-        try {
-            using var response = (HttpWebResponse) await request.GetResponseAsync();
-            if (response.ContentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase)) {
-                var stream = new MemoryStream();
-                var responseStream = response.GetResponseStream();
-                if (responseStream != null) {
-                    await responseStream.CopyToAsync(stream);
-                    await stream.FlushAsync();
-                    tile.Content = stream.GetBuffer();
-                    tile.ContentType = response.ContentType;
-                }
-            }
+        var req = CreateHttpRequestMessage(HttpMethod.Get, url);
+        using var res = await SendAsync(req);
+        if (res == null) {
+            logger.LogWarning($"Can not get response for {tileName}, url is {url}");
+            return;
         }
-        catch (Exception ex) {
-            logger.LogError(ex, $"Can not get content from {tileName}");
-            tile.Content = new byte[0];
+        if (!res.IsSuccessStatusCode) {
+            logger.LogWarning($"Server returns status {res.StatusCode} {res.ReasonPhrase} for {tileName} , url is {url}");
+            return;
+        }
+        var mediaType = res.Content.Headers.ContentType?.MediaType ?? "";
+        if (mediaType.StartsWith("image/", StringComparison.OrdinalIgnoreCase)) {
+            tile.Content = await res.Content.ReadAsByteArrayAsync();
+            tile.ContentType = mediaType;
+        }
+        else {
+            logger.LogWarning($"Server returns content type is {mediaType}, can not read as image.");
         }
     }
 
+    private static HttpClient CreateHttpClient() {
+        var handler = new HttpClientHandler {
+            AutomaticDecompression = DecompressionMethods.All,
+            AllowAutoRedirect = false,
+            ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+        };
+        var client = new HttpClient(handler, true);
+        return client;
+    }
 }

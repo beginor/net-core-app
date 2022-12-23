@@ -16,9 +16,9 @@ namespace Beginor.GisHub.Gmap.Api;
 [Route("api/proxy")]
 public class ProxyController : Controller {
 
-    private ILogger<ProxyController> logger;
-    private ApiProxyOptions options;
-    private ICacheProvider cacheProvider;
+    private readonly ILogger<ProxyController> logger;
+    private readonly ApiProxyOptions options;
+    private readonly ICacheProvider cacheProvider;
 
     public ProxyController(ILogger<ProxyController> logger, IOptionsMonitor<ApiProxyOptions> monitor, ICacheProvider cacheProvider) {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -137,7 +137,7 @@ public class ProxyController : Controller {
             var content = proxyResponse.Content;
             var contentType = content.Headers.ContentType!;
             // replace proxy url;
-            string op = Request.Query!["request"]!;
+            string op = Request.Query["request"]!;
             var mediaType = contentType.MediaType;
             if (ProxyUtil.NeedReplace(op, mediaType!)) {
                 var replacement = Request.Scheme + "://" + Request.Host + Request.PathBase + Request.Path;
