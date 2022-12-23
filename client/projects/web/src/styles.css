@@ -39,3 +39,25 @@ html, body {
 .clickable {
   cursor: pointer !important;
 }
+
+ngb-pagination ul.pagination {
+  margin-bottom: 0 !important;
+}
+
+.detail-container {
+  position: absolute;
+  top: var(--app-navbar-height);
+  right: 0;
+  height: calc(100vh - var(--app-navbar-height));
+  bottom: 0;
+  z-index: var(--app-detail-zIndex);
+}
+
+.detail {
+  height: 100%;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 4px 0px;
+  background-color: var(--bs-light);
+}
+.detail .card-body {
+  overflow-y: auto;
+}
