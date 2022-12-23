@@ -1,9 +1,9 @@
-using System;
-using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
 using Beginor.GisHub.Data.Entities;
 
-namespace Beginor.GisHub.Slpk.Data; 
+#nullable disable
+
+namespace Beginor.GisHub.Slpk.Data;
 
 /// <summary>slpk 航拍模型</summary>
 [JoinedSubclass(0, Schema = "public", Table = "slpks", ExtendsType = typeof(BaseResource))]

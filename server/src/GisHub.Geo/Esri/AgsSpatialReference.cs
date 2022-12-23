@@ -1,4 +1,6 @@
-namespace Beginor.GisHub.Geo.Esri; 
+namespace Beginor.GisHub.Geo.Esri;
+
+#nullable disable
 
 public class AgsSpatialReference {
 

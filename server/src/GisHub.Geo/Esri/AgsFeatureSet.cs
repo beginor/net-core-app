@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 
-namespace Beginor.GisHub.Geo.Esri; 
+#nullable disable
+
+namespace Beginor.GisHub.Geo.Esri;
 
 public class AgsFeatureSet {
     public string DisplayFieldName { get; set; }

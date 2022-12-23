@@ -1,6 +1,6 @@
-using System.Text.Json.Serialization;
+#nullable disable
 
-namespace Beginor.GisHub.Geo.GeoJson; 
+namespace Beginor.GisHub.Geo.GeoJson;
 
 public class Crs {
     public string Type { get; set; }

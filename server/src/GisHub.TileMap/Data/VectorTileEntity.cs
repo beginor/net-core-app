@@ -1,7 +1,9 @@
 using NHibernate.Mapping.Attributes;
 using Beginor.GisHub.Data.Entities;
 
-namespace Beginor.GisHub.TileMap.Data; 
+#nullable disable
+
+namespace Beginor.GisHub.TileMap.Data;
 
 /// <summary>矢量切片包</summary>
 [JoinedSubclass(0, Schema = "public", Table = "vectortiles", ExtendsType = typeof(BaseResource))]

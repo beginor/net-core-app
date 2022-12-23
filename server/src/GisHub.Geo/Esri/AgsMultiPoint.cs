@@ -1,6 +1,8 @@
 using NetTopologySuite.Geometries;
 
-namespace Beginor.GisHub.Geo.Esri; 
+#nullable disable
+
+namespace Beginor.GisHub.Geo.Esri;
 
 public class AgsMultiPoint : AgsGeometry {
     public double[][] Points { get; set; }

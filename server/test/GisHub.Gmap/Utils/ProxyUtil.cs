@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 
-namespace Beginor.GisHub.Gmap.Utils; 
+namespace Beginor.GisHub.Gmap.Utils;
 
 public static class ProxyUtil {
 
@@ -83,7 +83,7 @@ public static class ProxyUtil {
     public static async Task ReplaceInStream(Stream orginal, Stream result, string replacement) {
         using var reader = new StreamReader(orginal);
         var writer = new StreamWriter(result);
-        string line;
+        string? line;
         while ((line = await reader.ReadLineAsync()) != null) {
             line = regex.Replace(line, replacement);
             await writer.WriteLineAsync(line);

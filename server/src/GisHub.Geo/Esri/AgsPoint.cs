@@ -1,6 +1,8 @@
 using NetTopologySuite.Geometries;
 
-namespace Beginor.GisHub.Geo.Esri; 
+#nullable disable
+
+namespace Beginor.GisHub.Geo.Esri;
 
 public class AgsPoint : AgsGeometry {
     public double X { get; set; }

@@ -42,7 +42,7 @@ public class MarkdownApiDocBuilder : IApiDocBuilder {
         // url
         doc.AppendLine("### 地址");
         doc.AppendLine();
-        var (jsonUrl, geoJsonUrl) = BuildApiUrls(baseUrl, api.Id);
+        var (jsonUrl, geoJsonUrl) = BuildApiUrls(baseUrl, api.Id!);
         doc.AppendLine($"- JSON 数据 <{jsonUrl}>");
         if (api.GeometryColumn.IsNotNullOrEmpty()) {
             doc.AppendLine($"- GeoJSON 数据 <{geoJsonUrl}>");

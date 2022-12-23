@@ -3,7 +3,9 @@ using NHibernate.Mapping.Attributes;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DataServices.Data;
 
-namespace Beginor.GisHub.DynamicSql.Data; 
+#nullable disable
+
+namespace Beginor.GisHub.DynamicSql.Data;
 
 /// <summary>数据API</summary>
 [JoinedSubclass(0, Schema = "public", Table = "data_apis", ExtendsType = typeof(BaseResource), Lazy = true)]

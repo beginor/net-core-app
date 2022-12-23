@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+#nullable disable
+
 namespace GisHub.VectorTile.Data;
 
 public class VectorTileSource {

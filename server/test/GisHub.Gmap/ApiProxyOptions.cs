@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Beginor.GisHub.Gmap; 
+namespace Beginor.GisHub.Gmap;
 
 public class ApiProxyOptions {
-    public string PaasId { get; set; }
-    public string PaasToken { get; set; }
-    public string GatewayUrl { get; set; }
+    public string PaasId { get; set; } = string.Empty;
+    public string PaasToken { get; set; } = string.Empty;
+    public string GatewayUrl { get; set; } = string.Empty;
     public List<ApiProxyService> Services { get; } = new ();
 
     public void CheckServiceConfig() {
@@ -24,7 +24,7 @@ public class ApiProxyOptions {
         }
     }
 
-    public ApiProxyService FindServiceById(string serviceId) {
+    public ApiProxyService? FindServiceById(string serviceId) {
         var svc = Services.FirstOrDefault(s => serviceId.Equals(s.Id, StringComparison.OrdinalIgnoreCase));
         if (svc != null) {
             if (string.IsNullOrEmpty(svc.PaasId)) {
@@ -42,10 +42,10 @@ public class ApiProxyOptions {
 }
 
 public class ApiProxyService {
-    public string Id { get; set; }
-    public string Name { get; set; }
-    public string PaasId { get; set; }
-    public string PaasToken { get; set; }
-    public string GatewayUrl { get; set; }
-    public string TileTemplate { get; set; }
+    public string Id { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string PaasId { get; set; } = string.Empty;
+    public string PaasToken { get; set; } = string.Empty;
+    public string GatewayUrl { get; set; } = string.Empty;
+    public string TileTemplate { get; set; } = string.Empty;
 }

@@ -9,12 +9,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Beginor.GisHub.Gmap.Data;
 
-namespace Beginor.GisHub.Gmap.Services; 
+namespace Beginor.GisHub.Gmap.Services;
 
 public class YztService {
 
     private readonly ILogger<YztService> logger;
     private EBusOptions options;
+
 
     public YztService(
         ILogger<YztService> logger,

@@ -1,4 +1,4 @@
-namespace Beginor.GisHub.Gmap.Data; 
+namespace Beginor.GisHub.Gmap.Data;
 
 public class Tile {
 
@@ -6,8 +6,8 @@ public class Tile {
     public int Y { get; }
     public int Z { get; }
 
-    public byte[] Content { get; set; }
-    public string ContentType { get; set; }
+    public byte[]? Content { get; set; }
+    public string? ContentType { get; set; }
 
     public Tile(int x, int y, int z) {
         X = x;

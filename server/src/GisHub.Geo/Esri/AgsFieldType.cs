@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Beginor.GisHub.Geo.Esri; 
+#nullable disable
+
+namespace Beginor.GisHub.Geo.Esri;
 
 public static class AgsFieldType {
 

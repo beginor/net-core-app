@@ -33,6 +33,9 @@ public abstract class FeatureProvider : IFeatureProvider {
         GeoJsonParam param
     ) {
         var dsReader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
+        if (dsReader == null) {
+            throw new NotSupportedException($"Unsupported database type {dataService.DatabaseType}!");
+        }
         var rdp = new ReadDataParam {
             Select = CheckGeoSelect(dataService, param.Select),
             Where = CheckGeoWhere(dataService, param.Where),
@@ -73,23 +76,28 @@ public abstract class FeatureProvider : IFeatureProvider {
         string geoField
     ) {
         var dsReader = DataServiceFactory.CreateDataSourceReader(databaseType);
+        if (dsReader == null) {
+            throw new NotSupportedException($"Unsupported database type {databaseType}!");
+        }
         var data = await dsReader.ReadDataAsync(reader);
         return ConvertToGeoJson(data, idField, geoField);
     }
 
-    public IList<GeoJsonFeature> ConvertToGeoJson(IList<IDictionary<string, object>> data, string idField, string geoField) {
+    public IList<GeoJsonFeature> ConvertToGeoJson(IList<IDictionary<string, object?>> data, string idField, string geoField) {
         var features = new List<GeoJsonFeature>();
+        var wktReader = new WKTReader();
         foreach (var dict in data) {
             var id = dict[idField];
-            var wkt = (string) dict[geoField];
+            var wkt = (string?) dict[geoField];
             dict.Remove(geoField);
             var feature = new GeoJsonFeature {
-                Id = id,
-                Properties = dict
+                Id = id!,
+                Properties = dict!
             };
-            var wktReader = new WKTReader();
-            var geom = wktReader.Read(wkt);
-            feature.Geometry = geom.ToGeoJson();
+            if (!string.IsNullOrEmpty(wkt)) {
+                var geom = wktReader.Read(wkt);
+                feature.Geometry = geom.ToGeoJson();
+            }
             features.Add(feature);
         }
         return features;
@@ -97,6 +105,9 @@ public abstract class FeatureProvider : IFeatureProvider {
 
     public async Task<AgsFeatureSet> ReadAsFeatureSetAsync(DataServiceCacheItem dataService, AgsJsonParam param) {
         var dsReader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
+        if (dsReader == null) {
+            throw new NotSupportedException($"Unsupported database type {dataService.DatabaseType}!");
+        }
         var selectFields = CheckGeoSelect(dataService, param.Select);
         var rdp = new ReadDataParam {
             Select = selectFields,
@@ -132,8 +143,9 @@ public abstract class FeatureProvider : IFeatureProvider {
         columns.Remove(
             columns.First(col => col.Name.EqualsOrdinalIgnoreCase(dataService.GeometryColumn))
         );
+        var reader = new WKTReader();
         foreach (var row in list) {
-            var wkt = (string) row[dataService.GeometryColumn];
+            var wkt = (string?) row[dataService.GeometryColumn];
             row.Remove(dataService.GeometryColumn);
             var attrs = new Dictionary<string, object>(row.Count);
             foreach (var col in columns) {
@@ -161,9 +173,10 @@ public abstract class FeatureProvider : IFeatureProvider {
             var feature = new AgsFeature {
                 Attributes = attrs
             };
-            var reader = new WKTReader();
-            var geom = reader.Read(wkt);
-            feature.Geometry = geom.ToAgs();
+            if (!string.IsNullOrEmpty(wkt)) {
+                var geom = reader.Read(wkt);
+                feature.Geometry = geom.ToAgs();
+            }
             result.Features.Add(feature);
         }
         result.SpatialReference = new AgsSpatialReference {
@@ -180,6 +193,9 @@ public abstract class FeatureProvider : IFeatureProvider {
 
     public async Task<AgsLayerDescription> GetLayerDescriptionAsync(DataServiceCacheItem dataService) {
         var reader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
+        if (reader == null) {
+            throw new NotSupportedException($"Unsupported database type {dataService.DatabaseType}!");
+        }
         var columns = await reader.GetColumnsAsync(dataService);
         var layerDesc = new AgsLayerDescription {
             CurrentVersion = 10.61,
@@ -242,6 +258,9 @@ public abstract class FeatureProvider : IFeatureProvider {
         else {
             var param = ConvertQueryParams(dataService, queryParam);
             var featureProvider = DataServiceFactory.CreateFeatureProvider(dataService.DatabaseType);
+            if (featureProvider == null) {
+                throw new NotSupportedException($"Unsupported database type {dataService.DatabaseType}!");
+            }
             result = await featureProvider.ReadAsFeatureSetAsync(dataService, param);
         }
         return result;
@@ -250,6 +269,9 @@ public abstract class FeatureProvider : IFeatureProvider {
     protected async Task<AgsFeatureSet> QueryForIdsAsync(DataServiceCacheItem dataService, AgsQueryParam queryParam) {
         var param = ConvertIdsQueryParam(dataService, queryParam);
         var reader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
+        if (reader == null) {
+            throw new NotSupportedException($"Unsupported database type {dataService.DatabaseType}!");
+        }
         var data = await reader.ReadDataAsync(dataService, param);
         var result = new AgsFeatureSet();
         result.ObjectIdFieldName = dataService.PrimaryKeyColumn;
@@ -267,6 +289,9 @@ public abstract class FeatureProvider : IFeatureProvider {
         var result = new AgsFeatureSet();
         var param = ConvertCountQueryParam(dataService, queryParam);
         var reader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
+        if (reader == null) {
+            throw new NotSupportedException($"Unsupported database type {dataService.DatabaseType}!");
+        }
         var count = await reader.ReadScalarAsync<long>(dataService, param);
         result.Count = count;
         return result;
@@ -276,6 +301,9 @@ public abstract class FeatureProvider : IFeatureProvider {
         var result = new AgsFeatureSet();
         var param = ConvertExtentQueryParam(dataService, queryParam);
         var reader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
+        if (reader == null) {
+            throw new NotSupportedException($"Unsupported database type {dataService.DatabaseType}!");
+        }
         var wkt = await reader.ReadScalarAsync<string>(dataService, param);
         if (wkt != null) {
             var wktReader = new WKTReader();
@@ -318,6 +346,9 @@ public abstract class FeatureProvider : IFeatureProvider {
     protected async Task<AgsFeatureSet> QueryForStatisticsAsync(DataServiceCacheItem dataService, AgsQueryParam queryParam) {
         var param = ConvertStatisticsQueryParam(dataService, queryParam);
         var reader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
+        if (reader == null) {
+            throw new NotSupportedException($"Unsupported database type {dataService.DatabaseType}!");
+        }
         var data = await reader.ReadDataAsync(dataService, param);
         var result = new AgsFeatureSet {
             Features = new List<AgsFeature>(data.Count)
@@ -408,7 +439,7 @@ public abstract class FeatureProvider : IFeatureProvider {
     private AgsField[] ConvertToFields(
         DataServiceCacheItem dataService,
         IEnumerable<ColumnModel> columns,
-        IDictionary<string, object> row
+        IDictionary<string, object?> row
     ) {
         return columns.Select(column => ConvertToField(dataService, column, row)).ToArray();
     }
@@ -416,7 +447,7 @@ public abstract class FeatureProvider : IFeatureProvider {
     private AgsField ConvertToField(
         DataServiceCacheItem dataService,
         ColumnModel column,
-        IDictionary<string, object> row
+        IDictionary<string, object?> row
     ) {
         var field = new AgsField {
             Name = column.Name,
@@ -517,7 +548,7 @@ public abstract class FeatureProvider : IFeatureProvider {
         featureSet.SpatialReference = sr;
     }
 
-    private static AgsGeometry ConvertGeometrySr(AgsGeometry geometry, int inSr, int outSr) {
+    private static AgsGeometry? ConvertGeometrySr(AgsGeometry geometry, int inSr, int outSr) {
         if (!IsSupported(outSr)) {
             return null;
         }

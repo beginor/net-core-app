@@ -2,6 +2,8 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
+#nullable disable
+
 namespace Beginor.GisHub.Models;
 
 /// <summary>数据类别模型</summary>

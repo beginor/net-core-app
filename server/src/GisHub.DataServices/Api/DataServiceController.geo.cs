@@ -13,7 +13,7 @@ using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.Geo.GeoJson;
 using Beginor.GisHub.Geo.Esri;
 
-namespace Beginor.GisHub.DataServices.Api; 
+namespace Beginor.GisHub.DataServices.Api;
 
 partial class DataServiceController {
 
@@ -44,6 +44,9 @@ partial class DataServiceController {
             }
             //
             var featureProvider = factory.CreateFeatureProvider(ds.DatabaseType);
+            if (featureProvider == null) {
+                return this.InternalServerError($"Unsupported database type {ds.DatabaseType}");
+            }
             var featureCollection = await featureProvider.ReadAsFeatureCollectionAsync(ds, param);
             var json = JsonSerializer.Serialize(featureCollection, typeof(GeoJsonFeatureCollection), serializerOptionsFactory.GeoJsonSerializerOptions);
             return this.CompressedContent(json, "application/geo+json", Encoding.UTF8);
@@ -80,6 +83,9 @@ partial class DataServiceController {
                 return BadRequest($"Data Service {id} does not define geometry column !");
             }
             var featureProvider = factory.CreateFeatureProvider(ds.DatabaseType);
+            if (featureProvider == null) {
+                return this.InternalServerError($"Unsupported database type {ds.DatabaseType}");
+            }
             var featureSet = await featureProvider.ReadAsFeatureSetAsync(ds, param);
             return this.CompressedJson(featureSet, serializerOptionsFactory.AgsJsonSerializerOptions);
         }

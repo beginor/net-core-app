@@ -1,4 +1,6 @@
-namespace Beginor.GisHub.DataServices.Models; 
+namespace Beginor.GisHub.DataServices.Models;
+
+#nullable disable
 
 public class TableModel {
     public string Schema { get; set; }

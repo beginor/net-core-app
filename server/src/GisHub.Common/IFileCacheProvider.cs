@@ -7,7 +7,7 @@ public interface IFileCacheProvider {
 
     Task SetContentAsync(string path, byte[] content);
 
-    Task<byte[]> GetContentAsync(string path, int duration);
+    Task<byte[]?> GetContentAsync(string path, int duration);
 
     FileInfo GetFileInfo(string path);
 

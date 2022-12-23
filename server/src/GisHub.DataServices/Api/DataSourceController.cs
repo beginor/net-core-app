@@ -10,7 +10,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DataServices.Data;
 
-namespace Beginor.GisHub.DataServices.Api; 
+namespace Beginor.GisHub.DataServices.Api;
 
 /// <summary>数据源 服务</summary>
 [ApiController]
@@ -33,9 +33,7 @@ public class DataSourceController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
-            factory = null;
+            // dispose managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -162,6 +160,9 @@ public class DataSourceController : Controller {
     ) {
         try {
             var metadataProvider = factory.CreateMetadataProvider(model.DatabaseType);
+            if (metadataProvider == null) {
+                return this.InternalServerError($"Unsupported database type {model.DatabaseType}");
+            }
             await metadataProvider.GetStatusAsync(model);
             try {
                 await metadataProvider.GetTablesAsync(model, string.Empty);

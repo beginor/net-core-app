@@ -1,5 +1,7 @@
 namespace Beginor.GisHub.DataServices.Models;
 
+#nullable disable
+
 /// <summary>矢量切片信息</summary>
 public class MvtInfoModel {
     /// <summary>图层名称</summary>

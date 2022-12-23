@@ -2,7 +2,9 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Beginor.GisHub.Geo.Esri; 
+#nullable disable
+
+namespace Beginor.GisHub.Geo.Esri;
 
 public class AgsGeometryConverter : JsonConverter<AgsGeometry> {
 

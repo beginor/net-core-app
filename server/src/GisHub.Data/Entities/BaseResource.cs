@@ -1,6 +1,8 @@
 using System;
-using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
+using Beginor.AppFx.Core;
+
+#nullable disable
 
 namespace Beginor.GisHub.Data.Entities;
 

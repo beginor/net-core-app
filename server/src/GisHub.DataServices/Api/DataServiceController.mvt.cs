@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Common;
-using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.Geo.Esri;
 
@@ -38,7 +37,7 @@ partial class DataServiceController {
             var infoPath = Path.Combine(id.ToString(), "info.json");
             var fileInfo = fileCache.GetFileInfo(infoPath);
             var url = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/{RouteTemplate}/{id}/mvt/{{z}}/{{y}}/{{x}}";
-            MvtInfoModel infoModel;
+            MvtInfoModel? infoModel;
             if (fileInfo.Exists) {
                 try {
                     using var reader = fileInfo.OpenText();
@@ -61,6 +60,9 @@ partial class DataServiceController {
                 Maxzoom = ds.MvtMaxZoom
             };
             var featureProvider = factory.CreateFeatureProvider(ds.DatabaseType);
+            if (featureProvider == null) {
+                return this.InternalServerError($"Unsupported database type {ds.DatabaseType}");
+            }
             var fs = await featureProvider.QueryAsync(
                 ds,
                 new AgsQueryParam {
@@ -118,6 +120,9 @@ partial class DataServiceController {
                 }
             }
             var provider = factory.CreateFeatureProvider(ds.DatabaseType);
+            if (provider == null) {
+                return this.InternalServerError($"Unsupported database type {ds.DatabaseType}");
+            }
             var buffer = await provider.ReadAsMvtBufferAsync(ds, z, y, x);
             if (buffer == null || buffer.Length == 0) {
                 return NotFound();
@@ -146,6 +151,9 @@ partial class DataServiceController {
                 return BadRequest();
             }
             var provider = factory.CreateFeatureProvider(ds.DatabaseType);
+            if (provider == null) {
+                return this.InternalServerError($"Unsupported database type {ds.DatabaseType}");
+            }
             var supportMvt = await provider.SupportMvtAsync(ds);
             return supportMvt;
         }

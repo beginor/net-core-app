@@ -16,7 +16,7 @@ using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.TileMap.Models;
 using Beginor.GisHub.Data.Repositories;
 
-namespace Beginor.GisHub.TileMap.Data; 
+namespace Beginor.GisHub.TileMap.Data;
 
 /// <summary>矢量切片包仓储实现</summary>
 public partial class VectorTileRepository : HibernateRepository<VectorTileEntity, VectorTileModel, long>, IVectorTileRepository {
@@ -42,9 +42,7 @@ public partial class VectorTileRepository : HibernateRepository<VectorTileEntity
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            cache = null;
-            storageRepository = null;
-            jsonRepository = null;
+            // dispose managed resource here;
         }
         base.Dispose(disposing);
     }

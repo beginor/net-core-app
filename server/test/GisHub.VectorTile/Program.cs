@@ -21,7 +21,7 @@ builder.Services
     .Configure<Dictionary<string, string>>(builder.Configuration.GetSection("connectionStrings"))
     .Configure<Dictionary<string, VectorTileSource>>(builder.Configuration.GetSection("vectors"))
     .AddSingleton<VectorTileProvider>()
-    .AddSingleton(builder.Configuration.GetSection("cache").Get<CacheOptions>())
+    .AddSingleton(builder.Configuration.GetSection("cache").Get<CacheOptions>()!)
     .AddCors()
     .AddControllers();
 // build and config app

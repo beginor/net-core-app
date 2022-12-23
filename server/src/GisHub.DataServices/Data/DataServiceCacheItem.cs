@@ -1,5 +1,8 @@
 using Beginor.AppFx.Core;
 
+
+#nullable disable
+
 namespace Beginor.GisHub.DataServices.Data;
 
 public class DataServiceCacheItem {

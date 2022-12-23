@@ -1,7 +1,9 @@
 using NHibernate.Mapping.Attributes;
 using Beginor.GisHub.Data.Entities;
 
-namespace Beginor.GisHub.TileMap.Data; 
+#nullable disable
+
+namespace Beginor.GisHub.TileMap.Data;
 
 /// <summary>切片地图</summary>
 [JoinedSubclass(0, Schema = "public", Table = "tilemaps", ExtendsType = typeof(BaseResource))]

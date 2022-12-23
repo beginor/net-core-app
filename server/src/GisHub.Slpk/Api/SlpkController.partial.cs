@@ -10,7 +10,7 @@ using Beginor.AppFx.Core;
 using Beginor.AppFx.Api;
 using Beginor.GisHub.Common;
 
-namespace Beginor.GisHub.Slpk.Api; 
+namespace Beginor.GisHub.Slpk.Api;
 
 partial class SlpkController {
 
@@ -213,7 +213,7 @@ partial class SlpkController {
         Response.Headers.CacheControl = "no-cache";
         Response.Headers.ETag = fileTime;
         var fileName = fileInfo.Name;
-        string contentType = string.Empty;
+        string? contentType = null;
         if (fileName.EndsWith(".gz")) {
             Response.Headers.ContentEncoding = "gzip";
             provider.TryGetContentType(
@@ -223,6 +223,9 @@ partial class SlpkController {
         }
         else {
             provider.TryGetContentType(fileName, out contentType);
+        }
+        if (contentType == null) {
+            contentType = "application/octet-stream";
         }
         return File(fileInfo.OpenRead(), contentType);
     }

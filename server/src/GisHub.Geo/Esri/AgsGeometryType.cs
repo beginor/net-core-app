@@ -1,4 +1,6 @@
-namespace Beginor.GisHub.Geo.Esri; 
+namespace Beginor.GisHub.Geo.Esri;
+
+#nullable disable
 
 public static class AgsGeometryType {
     public const string Point = "esriGeometryPoint";

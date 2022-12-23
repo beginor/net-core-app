@@ -1,6 +1,8 @@
 using System;
 using Beginor.AppFx.Core;
 
+#nullable disable
+
 namespace Beginor.GisHub.Models;
 
 /// <summary>数据资源的基类模型</summary>
@@ -32,13 +34,13 @@ public partial class BaseResourceSearchModel : PaginatedRequestModel {
     /// <summary>类别ID</summary>
     public long? CategoryId { get; set; }
     /// <summary>关键字</summary>
-    public string? Keywords { get; set; }
+    public string Keywords { get; set; }
 }
 
 /// <summary>数据资源的统计参数</summary>
 public class BaseResourceStatisticRequestModel {
     /// <summary>资源类型</summary>
-    public string? Type { get; set; }
+    public string Type { get; set; }
 }
 
 /// <summary>数据资源按类别统计</summary>

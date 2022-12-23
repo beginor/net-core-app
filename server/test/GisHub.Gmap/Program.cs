@@ -9,7 +9,7 @@ using Beginor.GisHub.Gmap.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 
-namespace Beginor.GisHub.Gmap; 
+namespace Beginor.GisHub.Gmap;
 
 public class Program {
 
@@ -29,12 +29,12 @@ public class Program {
         builder.Services.Configure<KestrelServerOptions>(configuration.GetSection("kestrel"));
         builder.Services.Configure<EBusOptions>(configuration.GetSection("ebus"));
         builder.Services.AddSingleton<YztService>();
-        var cacheOptions = configuration.GetSection("cache").Get<CacheOptions>();
+        var cacheOptions = configuration.GetSection("cache").Get<CacheOptions>()!;
         builder.Services.AddSingleton(cacheOptions);
         builder.Services.AddSingleton<ICacheProvider, CacheProvider>();
         builder.Services.Configure<ApiProxyOptions>(configuration.GetSection("apiProxy"));
         builder.Services.Configure<ForwardedHeadersOptions>(configuration.GetSection("forwardedHeaders"));
-        builder.Services.AddCors(cors => cors.AddDefaultPolicy(configuration.GetSection("cors").Get<CorsPolicy>()));
+        builder.Services.AddCors(cors => cors.AddDefaultPolicy(configuration.GetSection("cors").Get<CorsPolicy>()!));
         builder.Services.AddControllers();
         // build and config app
         var app = builder.Build();

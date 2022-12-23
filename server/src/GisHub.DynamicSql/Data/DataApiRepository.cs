@@ -4,6 +4,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
+using NHibernate;
+using NHibernate.Linq;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using Beginor.GisHub.Common;
@@ -11,12 +15,8 @@ using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.DataServices;
 using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DynamicSql.Models;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Logging;
-using NHibernate;
-using NHibernate.Linq;
 
-namespace Beginor.GisHub.DynamicSql.Data; 
+namespace Beginor.GisHub.DynamicSql.Data;
 
 /// <summary>数据API仓储实现</summary>
 public partial class DataApiRepository : HibernateRepository<DataApi, DataApiModel, long>, IDataApiRepository {
@@ -45,11 +45,7 @@ public partial class DataApiRepository : HibernateRepository<DataApi, DataApiMod
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            dynamicSqlProvider = null;
-            cache = null;
-            commonOption = null;
-            dataServiceFactory = null;
-            logger = null;
+            // dispose managed resource here;
         }
         base.Dispose(disposing);
     }

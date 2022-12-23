@@ -1,6 +1,8 @@
 using NHibernate.Mapping.Attributes;
 using Beginor.GisHub.Data.Entities;
 
+#nullable disable
+
 namespace Beginor.GisHub.DataServices.Data;
 
 /// <summary>数据服务</summary>

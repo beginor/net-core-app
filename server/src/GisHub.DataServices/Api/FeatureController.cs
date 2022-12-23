@@ -13,7 +13,7 @@ using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Geo.Esri;
 using Beginor.GisHub.DataServices.Data;
 
-namespace Beginor.GisHub.DataServices.Api; 
+namespace Beginor.GisHub.DataServices.Api;
 
 /// <summary>要素服务接口</summary>
 [ApiController]
@@ -42,11 +42,7 @@ public class FeatureController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
-            factory = null;
-            jsonRepository = null;
-            serializerOptionsFactory = null;
+            // dispose managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -70,6 +66,9 @@ public class FeatureController : Controller {
                 return this.CompressedJson(jsonElement, serializerOptions);
             }
             var featureProvider = factory.CreateFeatureProvider(dataSource.DatabaseType);
+            if (featureProvider == null) {
+                return this.InternalServerError($"Unsupported database type {dataSource.DatabaseType}");
+            }
             var layerDesc = await featureProvider.GetLayerDescriptionAsync(dataSource);
             var json = layerDesc.ToJson(serializerOptions);
             jsonElement = JsonDocument.Parse(json).RootElement;
@@ -125,7 +124,7 @@ public class FeatureController : Controller {
         }
     }
 
-    private async Task<AgsFeatureSet> QueryFeaturesAsync(
+    private async Task<AgsFeatureSet?> QueryFeaturesAsync(
         long id,
         AgsQueryParam param
     ) {
@@ -137,6 +136,9 @@ public class FeatureController : Controller {
             param.OutFields = string.Join(",", dataSource.Fields.Select(f => f.Name));
         }
         var featureProvider = factory.CreateFeatureProvider(dataSource.DatabaseType);
+        if (featureProvider == null) {
+            return null;
+        }
         var featureSet = await featureProvider.QueryAsync(dataSource, param);
         return featureSet;
     }

@@ -62,7 +62,7 @@ public class VectorTileProvider {
         }
     }
 
-    public async Task<byte[]> GetTileContentAsync(string source, int z, int y, int x) {
+    public async Task<byte[]?> GetTileContentAsync(string source, int z, int y, int x) {
         if (!vectorTileSources.ContainsKey(source)) {
             return null;
         }
@@ -77,8 +77,10 @@ public class VectorTileProvider {
             return null;
         }
         buffer = await GetMvtBufferAsync(vectorTileSource, sql);
-        buffer = await GzipBufferAsync(buffer);
-        await WriteTileCache(source, z, y, x, buffer);
+        if (buffer != null) {
+            buffer = await GzipBufferAsync(buffer);
+            await WriteTileCache(source, z, y, x, buffer);
+        }
         return buffer;
     }
 
@@ -92,7 +94,7 @@ public class VectorTileProvider {
         return result;
     }
 
-    private async Task<byte[]> GetTileContentFromCache(string source, int z, int y, int x) {
+    private async Task<byte[]?> GetTileContentFromCache(string source, int z, int y, int x) {
         if (!cache.Enabled) {
             return null;
         }
@@ -203,7 +205,7 @@ public class VectorTileProvider {
         return sqlBuilder.ToString();
     }
 
-    private async Task<byte[]> GetMvtBufferAsync(VectorTileSource source, string sql) {
+    private async Task<byte[]?> GetMvtBufferAsync(VectorTileSource source, string sql) {
         logger.LogInformation(sql);
         await using var conn = new NpgsqlConnection(source.ConnectionString);
         await conn.OpenAsync();

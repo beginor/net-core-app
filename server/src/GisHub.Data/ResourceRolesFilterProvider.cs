@@ -5,16 +5,16 @@ using Microsoft.Extensions.Caching.Distributed;
 using Beginor.GisHub.Common;
 using Beginor.GisHub.Data.Repositories;
 
-namespace Beginor.GisHub.Data; 
+namespace Beginor.GisHub.Data;
 
 public class ResourceRolesFilterProvider : Disposable, IRolesFilterProvider {
-    
+
     private IDistributedCache cache;
     private IBaseResourceRepository repository;
     private CommonOption commonOption;
-    
+
     private static readonly string cacheKeyFormat = "{0}_roles";
-    
+
     public ResourceRolesFilterProvider(
         IBaseResourceRepository repository,
         IDistributedCache cache,
@@ -26,9 +26,9 @@ public class ResourceRolesFilterProvider : Disposable, IRolesFilterProvider {
     }
 
     protected override void Dispose(bool disposing) {
-        repository = null;
-        cache = null;
-        commonOption = null;
+        if (disposing) {
+            // dispose managed resource here;
+        }
         base.Dispose(disposing);
     }
 
@@ -42,7 +42,7 @@ public class ResourceRolesFilterProvider : Disposable, IRolesFilterProvider {
         await cache.SetAsync(cacheKey, roles, commonOption.Cache.MemoryExpiration);
         return roles;
     }
-    
+
     public async Task ResetRolesAsync(object id) {
         var cacheKey = GetCacheKey(id);
         await cache.RemoveAsync(cacheKey);

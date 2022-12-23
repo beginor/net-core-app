@@ -26,8 +26,7 @@ public partial class BaseResourceRepository : Disposable, IBaseResourceRepositor
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            session = null;
-            mapper = null;
+            // dispose managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -42,7 +41,7 @@ public partial class BaseResourceRepository : Disposable, IBaseResourceRepositor
             query = query.Where(x => x.Category.Id == categoryId);
         }
         if (model.Keywords.IsNotNullOrEmpty()) {
-            query = query.Where(x => x.Name.Contains(model.Keywords) || x.Description.Contains(model.Keywords));
+            query = query.Where(x => x.Name.Contains(model.Keywords!) || x.Description.Contains(model.Keywords!));
         }
         var total = await query.LongCountAsync();
         query = query.Select(x => new BaseResource {
@@ -67,11 +66,11 @@ public partial class BaseResourceRepository : Disposable, IBaseResourceRepositor
             Take = model.Take
         };
     }
-    
+
     public async Task<PaginatedResponseModel<CategoryCountModel>> CountByCategoryAsync(BaseResourceStatisticRequestModel model) {
         var query = session.Query<BaseResource>();
         if (model.Type.IsNotNullOrEmpty()) {
-            var type = model.Type.ToLowerInvariant();
+            var type = model.Type!.ToLowerInvariant();
             query = query.Where(res => res.Type == type);
         }
         var groupQuery = query.GroupBy(res => new { CategoryId = res.Category.Id, CategoryName = res.Category.Name })
@@ -89,7 +88,7 @@ public partial class BaseResourceRepository : Disposable, IBaseResourceRepositor
         }
         return result;
     }
-    
+
     public async Task<string[]> GetRolesByResourceIdAsync(long resourceId) {
         var query = session.Query<BaseResource>()
             .Where(res => res.Id == resourceId)

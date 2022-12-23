@@ -2,7 +2,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Beginor.AppFx.Core;
 
-namespace Beginor.GisHub.DataServices; 
+namespace Beginor.GisHub.DataServices;
 
 public class DataServiceFactory : Disposable, IDataServiceFactory {
 
@@ -14,13 +14,13 @@ public class DataServiceFactory : Disposable, IDataServiceFactory {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
+            // dispose managed resource here;
             scope.Dispose();
-            scope = null;
         }
         base.Dispose(disposing);
     }
 
-    public IMetaDataProvider CreateMetadataProvider(string databaseType) {
+    public IMetaDataProvider? CreateMetadataProvider(string databaseType) {
         string typeName;
         if (databaseType.Equals("postgis", StringComparison.OrdinalIgnoreCase)) {
             typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider,Beginor.GisHub.DataServices.PostGIS";
@@ -39,7 +39,7 @@ public class DataServiceFactory : Disposable, IDataServiceFactory {
         return provider as IMetaDataProvider;
     }
 
-    public IDataServiceReader CreateDataSourceReader(string databaseType) {
+    public IDataServiceReader? CreateDataSourceReader(string databaseType) {
         string typeName;
         if (databaseType.Equals("postgis", StringComparison.OrdinalIgnoreCase)) {
             typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISDataServiceReader,Beginor.GisHub.DataServices.PostGIS";
@@ -58,7 +58,7 @@ public class DataServiceFactory : Disposable, IDataServiceFactory {
         return provider as IDataServiceReader;
     }
 
-    public IFeatureProvider CreateFeatureProvider(string databaseType) {
+    public IFeatureProvider? CreateFeatureProvider(string databaseType) {
         string typeName;
         if (databaseType.Equals("postgis", StringComparison.OrdinalIgnoreCase)) {
             typeName = "Beginor.GisHub.DataServices.PostGIS.PostGISFeatureProvider,Beginor.GisHub.DataServices.PostGIS";

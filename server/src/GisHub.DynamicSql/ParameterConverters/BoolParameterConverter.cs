@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Extensions.Logging;
 
-namespace Beginor.GisHub.DynamicSql.ParameterConverters; 
+namespace Beginor.GisHub.DynamicSql.ParameterConverters;
 
 public class BoolParameterConverter : IParameterConverter {
 
@@ -13,7 +13,7 @@ public class BoolParameterConverter : IParameterConverter {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public object ConvertParameter(string parameterValue) {
+    public object? ConvertParameter(string parameterValue) {
         if (bool.TryParse(parameterValue, out var value)) {
             return value;
         }

@@ -6,7 +6,7 @@ using Beginor.GisHub.Geo.Esri;
 using Beginor.GisHub.Geo.GeoJson;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.DataServices; 
+namespace Beginor.GisHub.DataServices;
 
 public interface IFeatureProvider {
 
@@ -26,5 +26,5 @@ public interface IFeatureProvider {
 
     Task<byte[]> ReadAsMvtBufferAsync(DataServiceCacheItem dataService, int z, int y, int x);
     Task<IList<GeoJsonFeature>> ReadAsGeoJsonAsync(string databaseType, DbDataReader reader, string idField, string geoField);
-    IList<GeoJsonFeature> ConvertToGeoJson(IList<IDictionary<string, object>> data, string idField, string geoField);
+    IList<GeoJsonFeature> ConvertToGeoJson(IList<IDictionary<string, object?>> data, string idField, string geoField);
 }

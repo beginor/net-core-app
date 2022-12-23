@@ -20,7 +20,7 @@ public class FileCacheProvider : IFileCacheProvider {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task<byte[]> GetContentAsync(string path, int duration) {
+    public async Task<byte[]?> GetContentAsync(string path, int duration) {
         if (path.IsNullOrEmpty()) {
             throw new ArgumentNullException(nameof(path));
         }

@@ -10,15 +10,8 @@ namespace Beginor.GisHub.Common;
 
 public static class ControllerExtensions {
 
-    public static TService GetRequiredService<TService>(this ControllerBase controller) {
+    public static TService GetRequiredService<TService>(this ControllerBase controller) where TService : notnull {
         return controller.HttpContext.RequestServices.GetRequiredService<TService>();
-    }
-
-    public static ActionResult CompressedContent(
-        this ControllerBase controller,
-        string content
-    ) {
-        return CompressedContent(controller, content, (MediaTypeHeaderValue)null);
     }
 
     public static ActionResult CompressedContent(
@@ -54,7 +47,7 @@ public static class ControllerExtensions {
                 ContentType = contentType?.ToString()
             };
         }
-        var encoding = contentType?.Encoding ?? Encoding.UTF8;
+        var encoding = contentType.Encoding ?? Encoding.UTF8;
         var buffer = encoding.GetBytes(content);
         var output = new MemoryStream();
         using var zipStream = new GZipStream(output, CompressionMode.Compress);

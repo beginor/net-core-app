@@ -1,4 +1,4 @@
-namespace Beginor.GisHub.Geo.Esri; 
+namespace Beginor.GisHub.Geo.Esri;
 
 public class AgsAdvancedQueryCapability {
 

@@ -9,7 +9,7 @@ using SmartSql.Configuration.Tags;
 using SmartSql.DataSource;
 using SmartSql.Utils;
 
-namespace Beginor.GisHub.DynamicSql; 
+namespace Beginor.GisHub.DynamicSql;
 
 public class SmartSqlProvider : IDynamicSqlProvider {
 
@@ -89,7 +89,7 @@ public class SmartSqlProvider : IDynamicSqlProvider {
         return dbProvider.Factory ?? (dbProvider.Factory = DbProviderManager.Instance.GetDbProviderFactory(dbProvider.Type));
     }
 
-    private Statement CreateStatement(string xml, SqlMap sqlmap) {
+    private Statement? CreateStatement(string xml, SqlMap sqlmap) {
         var xmlDoc = new XmlDocument();
         xmlDoc.LoadXml(xml);
         var root = xmlDoc.DocumentElement;
@@ -112,7 +112,7 @@ public class SmartSqlProvider : IDynamicSqlProvider {
         return statement;
     }
 
-    private ITag LoadTag(XmlNode xmlNode, Statement stmt) {
+    private ITag? LoadTag(XmlNode xmlNode, Statement stmt) {
         if (xmlNode.Name == "#comment") {
             return null;
         }
@@ -142,8 +142,8 @@ public class SmartSqlProvider : IDynamicSqlProvider {
         SmartSqlConfig config
     ) {
         // requestContext.ExecutionContext
-        var propInfo = requestContext.GetType().GetProperty("ExecutionContext");
-        var setter = propInfo.GetSetMethod(true);
+        var propInfo = requestContext.GetType().GetProperty("ExecutionContext")!;
+        var setter = propInfo.GetSetMethod(true)!;
         var executionContext = new ExecutionContext {
             Request = requestContext,
             SmartSqlConfig = config

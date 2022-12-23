@@ -2,7 +2,9 @@ using System;
 using System.Text;
 using System.Text.Json;
 
-namespace Beginor.GisHub.Geo.Esri; 
+#nullable disable
+
+namespace Beginor.GisHub.Geo.Esri;
 
 public class AgsDrawingInfo {
 

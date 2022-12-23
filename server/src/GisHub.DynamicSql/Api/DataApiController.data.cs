@@ -16,7 +16,7 @@ using Beginor.GisHub.DynamicSql.Data;
 using Beginor.GisHub.DynamicSql.Models;
 using Beginor.GisHub.Geo.GeoJson;
 
-namespace Beginor.GisHub.DynamicSql.Api; 
+namespace Beginor.GisHub.DynamicSql.Api;
 
 partial class DataApiController {
 
@@ -201,7 +201,7 @@ partial class DataApiController {
             if (string.IsNullOrEmpty(values)) {
                 continue;
             }
-            var val = ConvertParameter(param.Type, values);
+            var val = ConvertParameter(param.Type, values!);
             if (val != null) {
                 result[param.Name] = val;
             }
@@ -209,7 +209,7 @@ partial class DataApiController {
         return result;
     }
 
-    private object ConvertParameter(string parameterType, string parameterValue) {
+    private object? ConvertParameter(string parameterType, string parameterValue) {
         var converter = parameterConverterFactory.GetParameterConverter(parameterType);
         return converter.ConvertParameter(parameterValue);
     }

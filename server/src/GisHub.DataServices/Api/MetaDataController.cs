@@ -9,7 +9,7 @@ using Beginor.AppFx.Core;
 using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DataServices.Data;
 
-namespace Beginor.GisHub.DataServices.Api; 
+namespace Beginor.GisHub.DataServices.Api;
 
 /// <summary>数据库元数据 服务</summary>
 [ApiController]
@@ -45,6 +45,9 @@ public class MetaDataController : Controller {
                 return NotFound();
             }
             var provider = factory.CreateMetadataProvider(model.DatabaseType);
+            if (provider == null) {
+                return this.InternalServerError($"Unsupported database type {model.DatabaseType}");
+            }
             await provider.GetStatusAsync(model);
             return Ok();
         }
@@ -71,6 +74,9 @@ public class MetaDataController : Controller {
                 return NotFound();
             }
             var provider = factory.CreateMetadataProvider(model.DatabaseType);
+            if (provider == null) {
+                return this.InternalServerError($"Unsupported database type {model.DatabaseType}");
+            }
             var schemas = await provider.GetSchemasAsync(model);
             return schemas.ToArray();
         }
@@ -98,6 +104,9 @@ public class MetaDataController : Controller {
                 return NotFound();
             }
             var provider = factory.CreateMetadataProvider(model.DatabaseType);
+            if (provider == null) {
+                return this.InternalServerError($"Unsupported database type {model.DatabaseType}");
+            }
             var tables = await provider.GetTablesAsync(model, schema);
             return tables.ToArray();
         }
@@ -126,6 +135,9 @@ public class MetaDataController : Controller {
                 return NotFound();
             }
             var provider = factory.CreateMetadataProvider(model.DatabaseType);
+            if (provider == null) {
+                return this.InternalServerError($"Unsupported database type {model.DatabaseType}");
+            }
             var columns = await provider.GetColumnsAsync(model, schema, tableName);
             return columns.ToArray();
         }

@@ -30,8 +30,7 @@ public class CategoryController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
+            // dispose managed resource here;
         }
         base.Dispose(disposing);
     }

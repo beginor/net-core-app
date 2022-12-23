@@ -18,7 +18,7 @@ using Beginor.GisHub.TileMap.Models;
 using NHibernate;
 using NHibernate.Linq;
 
-namespace Beginor.GisHub.TileMap.Data; 
+namespace Beginor.GisHub.TileMap.Data;
 
 /// <summary>切片地图仓储实现</summary>
 public partial class TileMapRepository : HibernateRepository<TileMapEntity, TileMapModel, long>, ITileMapRepository {
@@ -44,10 +44,7 @@ public partial class TileMapRepository : HibernateRepository<TileMapEntity, Tile
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            cache = null;
-            storageRepository = null;
-            jsonRepository = null;
-            commonOption = null;
+            // dispose managed resource here;
         }
         base.Dispose(disposing);
     }

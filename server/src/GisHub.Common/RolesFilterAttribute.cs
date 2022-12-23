@@ -11,7 +11,7 @@ namespace Beginor.GisHub.Common;
 
 public class RolesFilterAttribute : ActionFilterAttribute {
 
-    public string IdParameterName { get; set; }
+    public string IdParameterName { get; set; } = "id";
 
     public override async Task OnActionExecutionAsync(
         ActionExecutingContext context,
@@ -29,7 +29,7 @@ public class RolesFilterAttribute : ActionFilterAttribute {
             return;
         }
         var id = context.ActionArguments[IdParameterName];
-        var requiredRoles = await provider.GetRolesAsync(id);
+        var requiredRoles = await provider.GetRolesAsync(id!);
         var userRoles = context.HttpContext.User.Claims.Where(
             c => c.Type == ClaimTypes.Role
         ).Select(c => c.Value).ToArray();
@@ -44,7 +44,7 @@ public class RolesFilterAttribute : ActionFilterAttribute {
 public interface IRolesFilterProvider {
 
     Task<string[]> GetRolesAsync(object id);
-    
+
     Task ResetRolesAsync(object id);
 
 }

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Beginor.GisHub.Gmap.Utils;
 
-namespace Beginor.GisHub.Gmap; 
+namespace Beginor.GisHub.Gmap;
 
 public class ApiProxyMiddleware {
 
@@ -27,20 +27,22 @@ public class ApiProxyMiddleware {
             throw new ArgumentNullException(nameof(monitor));
         }
         options = monitor.CurrentValue;
-        CreateProxyClient();
+        this.http = CreateProxyClient();
         monitor.OnChange(val => {
             options = val;
-            CreateProxyClient();
+            this.http = CreateProxyClient();
         });
     }
 
-    private void CreateProxyClient() {
+    private HttpClient CreateProxyClient() {
         var handler = new HttpClientHandler();
         handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
         handler.AutomaticDecompression = DecompressionMethods.All;
         handler.AllowAutoRedirect = false;
-        http = new HttpClient(handler);
-        http.BaseAddress = new Uri(options.GatewayUrl);
+        return new HttpClient(handler) {
+            BaseAddress = new Uri(options.GatewayUrl)
+        };
+
     }
 
     public async Task InvokeAsync(HttpContext context) {

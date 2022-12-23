@@ -13,7 +13,7 @@ public partial interface IDataServiceRepository : IRepository<DataServiceModel, 
     /// <summary>搜索 数据服务 ，返回分页结果。</summary>
     Task<PaginatedResponseModel<DataServiceModel>> SearchAsync(DataServiceSearchModel model);
 
-    Task<DataServiceCacheItem> GetCacheItemByIdAsync(long id);
+    Task<DataServiceCacheItem?> GetCacheItemByIdAsync(long id);
 
     Task SaveAsync(DataServiceModel model, AppUser user, CancellationToken token = default);
 

@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -52,13 +50,7 @@ public partial class DataServiceController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
-            factory = null;
-            jsonRepository = null;
-            serializerOptionsFactory = null;
-            fileCache = null;
-            userMgr = null;
+            // dispose managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -90,7 +82,7 @@ public partial class DataServiceController : Controller {
         [FromBody]DataServiceModel model
     ) {
         try {
-            var userId = this.GetUserId();
+            var userId = this.GetUserId()!;
             var user = await userMgr.FindByIdAsync(userId);
             if (user == null) {
                 return BadRequest("User is null!");
@@ -112,7 +104,7 @@ public partial class DataServiceController : Controller {
     [Authorize("data_services.delete")]
     public async Task<ActionResult> Delete(long id) {
         try {
-            var userId = this.GetUserId();
+            var userId = this.GetUserId()!;
             var user = await userMgr.FindByIdAsync(userId);
             if (user == null) {
                 return BadRequest("User is null!");
@@ -167,7 +159,7 @@ public partial class DataServiceController : Controller {
             if (!exists) {
                 return NotFound();
             }
-            var userId = this.GetUserId();
+            var userId = this.GetUserId()!;
             var user = await userMgr.FindByIdAsync(userId);
             if (user == null) {
                 return BadRequest("User is null!");

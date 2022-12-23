@@ -19,8 +19,7 @@ public class VectorTileController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            provider = null;
+            // dispose managed resource here;
         }
         base.Dispose(disposing);
     }

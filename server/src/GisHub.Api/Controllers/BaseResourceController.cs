@@ -29,8 +29,7 @@ public class BaseResourceController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
+            // dispose managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -51,7 +50,7 @@ public class BaseResourceController : Controller {
             return this.InternalServerError(ex);
         }
     }
-    
+
     /// <summary>按类别统计资源的个数</summary>
     /// <response code="200">成功, 返回统计结果</response>
     /// <response code="500">服务器内部错误</response>

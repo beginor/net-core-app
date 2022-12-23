@@ -1,7 +1,6 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
+#nullable disable
 
-namespace Beginor.GisHub.Geo.GeoJson; 
+namespace Beginor.GisHub.Geo.GeoJson;
 
 public class GeoJsonPoint : GeoJsonGeometry {
 

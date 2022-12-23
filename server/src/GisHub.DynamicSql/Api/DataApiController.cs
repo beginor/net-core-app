@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Beginor.GisHub.DynamicSql.Api; 
+namespace Beginor.GisHub.DynamicSql.Api;
 
 /// <summary>数据API 服务接口</summary>
 [ApiController]
@@ -43,11 +43,7 @@ public partial class DataApiController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
-            userMgr = null;
-            serializerOptionsFactory = null;
-            parameterConverterFactory = null;
+            // dispose managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -80,7 +76,7 @@ public partial class DataApiController : Controller {
     ) {
         try {
             var userId = this.GetUserId();
-            var user = await userMgr.FindByIdAsync(userId);
+            var user = await userMgr.FindByIdAsync(userId!);
             if (user == null) {
                 return BadRequest("User is null!");
             }
@@ -102,7 +98,7 @@ public partial class DataApiController : Controller {
     public async Task<ActionResult> Delete(long id) {
         try {
             var userId = this.GetUserId();
-            var user = await userMgr.FindByIdAsync(userId);
+            var user = await userMgr.FindByIdAsync(userId!);
             if (user == null) {
                 return BadRequest("User is null!");
             }
@@ -155,7 +151,7 @@ public partial class DataApiController : Controller {
                 return NotFound();
             }
             var userId = this.GetUserId();
-            var user = await userMgr.FindByIdAsync(userId);
+            var user = await userMgr.FindByIdAsync(userId!);
             if (user == null) {
                 return BadRequest("User is null!");
             }

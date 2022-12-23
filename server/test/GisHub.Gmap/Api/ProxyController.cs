@@ -87,7 +87,7 @@ public class ProxyController : Controller {
                 ProxyUtil.AddSignatureHeaders(tileRequest.Headers, svc.PaasId, svc.PaasToken, serviceId, logger);
                 try {
                     var tileResponse = await httpClient.SendAsync(tileRequest);
-                    var mediaType = tileResponse.Content.Headers.ContentType.MediaType;
+                    var mediaType = tileResponse.Content.Headers.ContentType!.MediaType!;
                     if (mediaType.StartsWith("image/", StringComparison.OrdinalIgnoreCase)) {
                         var stream = new MemoryStream();
                         await tileResponse.Content.CopyToAsync(stream);
@@ -135,11 +135,11 @@ public class ProxyController : Controller {
             // process response
             var contentStream = new MemoryStream();
             var content = proxyResponse.Content;
-            var contentType = content.Headers.ContentType;
+            var contentType = content.Headers.ContentType!;
             // replace proxy url;
-            string op = Request.Query["request"];
-            var mediaType = contentType?.MediaType;
-            if (ProxyUtil.NeedReplace(op, mediaType)) {
+            string op = Request.Query!["request"]!;
+            var mediaType = contentType.MediaType;
+            if (ProxyUtil.NeedReplace(op, mediaType!)) {
                 var replacement = Request.Scheme + "://" + Request.Host + Request.PathBase + Request.Path;
                 await ProxyUtil.ReplaceInStream(await content.ReadAsStreamAsync(), contentStream, replacement);
             }

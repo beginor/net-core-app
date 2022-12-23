@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+#nullable disable
 
 namespace Beginor.GisHub.DynamicSql.Models;
 

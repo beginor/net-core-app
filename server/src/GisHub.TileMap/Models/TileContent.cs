@@ -1,4 +1,6 @@
-namespace Beginor.GisHub.TileMap.Models; 
+#nullable disable
+
+namespace Beginor.GisHub.TileMap.Models;
 
 public class TileContentModel {
     public byte[] Content { get; set; }

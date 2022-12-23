@@ -1,10 +1,10 @@
 using Beginor.GisHub.Geo.Esri;
 
-namespace Beginor.GisHub.TileMap.Data; 
+namespace Beginor.GisHub.TileMap.Data;
 
 public static class EntityExtensions {
 
-    public static AgsExtent GetExtent(this TileMapEntity entity) {
+    public static AgsExtent? GetExtent(this TileMapEntity entity) {
         if (entity.MinLongitude.HasValue && entity.MaxLongitude.HasValue
             && entity.MinLatitude.HasValue && entity.MaxLatitude.HasValue
            ) {
@@ -19,7 +19,7 @@ public static class EntityExtensions {
         return null;
     }
 
-    public static AgsExtent GetExtent(this VectorTileEntity entity) {
+    public static AgsExtent? GetExtent(this VectorTileEntity entity) {
         if (entity.MinLongitude.HasValue && entity.MaxLongitude.HasValue
             && entity.MinLatitude.HasValue && entity.MaxLatitude.HasValue
            ) {
@@ -66,7 +66,7 @@ public static class EntityExtensions {
             ModifiedTime = null,
             MinLevel = entity.MinLevel,
             MaxLevel = entity.MaxLevel,
-            Extent = entity.GetExtent()
+            Extent = entity.GetExtent()!
         };
         return cacheItem;
     }
@@ -92,8 +92,8 @@ public static class EntityExtensions {
         var cacheItem = new TileMapCacheItem {
             Name = entity.Name,
             CacheDirectory = entity.Directory,
-            MinLevel = (short)entity.MinZoom,
-            MaxLevel = (short)entity.MaxZoom,
+            MinLevel = entity.MinZoom.GetValueOrDefault(1),
+            MaxLevel = entity.MaxZoom.GetValueOrDefault(23),
             Extent = entity.GetExtent(),
             ModifiedTime = null
         };

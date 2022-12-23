@@ -38,9 +38,7 @@ public partial class DataServiceRepository : HibernateRepository<DataService, Da
         bool disposing
     ) {
         if (disposing) {
-            cache = null;
-            factory = null;
-            commonOption = null;
+            // dispose managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -124,7 +122,7 @@ public partial class DataServiceRepository : HibernateRepository<DataService, Da
         }
     }
 
-    public async Task<DataServiceCacheItem> GetCacheItemByIdAsync(long id) {
+    public async Task<DataServiceCacheItem?> GetCacheItemByIdAsync(long id) {
         var key = id.ToString();
         var item = await cache.GetAsync<DataServiceCacheItem>(key);
         if (item != null) {
@@ -155,10 +153,16 @@ public partial class DataServiceRepository : HibernateRepository<DataService, Da
             MvtCacheDuration = ds.MvtCacheDuration.GetValueOrDefault(0)
         };
         var meta = factory.CreateMetadataProvider(item.DatabaseType);
+        if (meta == null) {
+            return null;
+        }
         var model = Mapper.Map<DataSourceModel>(ds.DataSource);
         item.ConnectionString = meta.BuildConnectionString(model);
         if (item.HasGeometryColumn) {
             var featureProvider = factory.CreateFeatureProvider(item.DatabaseType);
+            if (featureProvider == null) {
+                return null;
+            }
             item.Srid = await featureProvider.GetSridAsync(item);
             item.GeometryType = await featureProvider.GetGeometryTypeAsync(item);
         }

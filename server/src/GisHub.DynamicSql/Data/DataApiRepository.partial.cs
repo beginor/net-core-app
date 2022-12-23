@@ -10,11 +10,11 @@ using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.Geo.GeoJson;
 using Dapper;
 
-namespace Beginor.GisHub.DynamicSql.Data; 
+namespace Beginor.GisHub.DynamicSql.Data;
 
 partial class DataApiRepository {
 
-    public async Task<IList<IDictionary<string, object>>> QueryAsync(DataApiCacheItem api, IDictionary<string, object> parameters) {
+    public async Task<IList<IDictionary<string, object?>>> QueryAsync(DataApiCacheItem api, IDictionary<string, object> parameters) {
         // check parameters;
         if (api == null) {
             throw new ArgumentNullException(nameof(api));
@@ -29,6 +29,9 @@ partial class DataApiRepository {
         }
         logger.LogInformation(sql);
         var dsReader = dataServiceFactory.CreateDataSourceReader(api.DatabaseType);
+        if (dsReader == null) {
+            throw new NotSupportedException($"Unsupported database type {api.DatabaseType} !");
+        }
         await using var conn = dsReader.CreateConnection(api.ConnectionString);
         var reader = await conn.ExecuteReaderAsync(sql, parameters);
         var result = await dsReader.ReadDataAsync(reader);
@@ -50,15 +53,21 @@ partial class DataApiRepository {
         }
         logger.LogInformation(sql);
         var dsReader = dataServiceFactory.CreateDataSourceReader(api.DatabaseType);
+        if (dsReader == null) {
+            throw new NotSupportedException($"Unsupported database type {api.DatabaseType} !");
+        }
         await using var conn = dsReader.CreateConnection(api.ConnectionString);
         var reader = await conn.ExecuteReaderAsync(sql, parameters);
         var data = await dsReader.ReadDataAsync(reader);
         var featureReader = dataServiceFactory.CreateFeatureProvider(api.DatabaseType);
+        if (featureReader == null) {
+            throw new NotSupportedException($"Unsupported database type {api.DatabaseType} !");
+        }
         var features = featureReader.ConvertToGeoJson(data, api.IdColumn, api.GeometryColumn);
         return features;
     }
 
-    public async Task<DataApiCacheItem> GetDataApiCacheItemByIdAsync(long apiId) {
+    public async Task<DataApiCacheItem?> GetDataApiCacheItemByIdAsync(long apiId) {
         var key = apiId.ToString();
         var cacheItem = await cache.GetAsync<DataApiCacheItem>(key);
         if (cacheItem != null) {
@@ -70,6 +79,9 @@ partial class DataApiRepository {
         }
         cacheItem = api.ToCacheItem();
         var metaProvider = dataServiceFactory.CreateMetadataProvider(api.DataSource.DatabaseType);
+        if (metaProvider == null) {
+            throw new NotSupportedException($"Unsupported database type {api.DataSource.DatabaseType} !");
+        }
         var model = Mapper.Map<DataSourceModel>(api.DataSource);
         cacheItem.ConnectionString = metaProvider.BuildConnectionString(model);
         await cache.SetAsync(key, cacheItem, commonOption.Cache.MemoryExpiration);
@@ -113,6 +125,9 @@ partial class DataApiRepository {
         //
         var factory = dynamicSqlProvider.GetDbProviderFactory(cacheItem.DatabaseType);
         await using var conn = factory.CreateConnection();
+        if (conn == null) {
+            throw new InvalidOperationException($"Cannot create connection with factory {factory.GetType()}");
+        }
         conn.ConnectionString = cacheItem.ConnectionString;
         var reader = await conn.ExecuteReaderAsync(sql, parameters);
         await reader.ReadAsync();
@@ -149,6 +164,9 @@ partial class DataApiRepository {
 
     private async Task<IList<DataServiceFieldModel>> GetColumnsFromDataSourceAsync(DataSourceModel dataSource, IList<string> tableNames) {
         var metadata = dataServiceFactory.CreateMetadataProvider(dataSource.DatabaseType);
+        if (metadata == null) {
+            throw new NotSupportedException($"Unsupported database type {dataSource.DatabaseType} !");
+        }
         var result = new List<DataServiceFieldModel>();
         foreach (var tableName in tableNames) {
             var parts = tableName.Split('.');

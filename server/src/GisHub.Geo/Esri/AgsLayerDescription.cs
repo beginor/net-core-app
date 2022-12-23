@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using System.Text.Json;
 
-namespace Beginor.GisHub.Geo.Esri; 
+#nullable disable
+
+namespace Beginor.GisHub.Geo.Esri;
 
 public class AgsLayerDescription {
 

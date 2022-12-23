@@ -11,7 +11,7 @@ using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 using Dapper;
 
-namespace Beginor.GisHub.DataServices; 
+namespace Beginor.GisHub.DataServices;
 
 public abstract class DataServiceReader : Disposable, IDataServiceReader {
 
@@ -37,10 +37,7 @@ public abstract class DataServiceReader : Disposable, IDataServiceReader {
         bool disposing
     ) {
         if (disposing) {
-            Factory = null;
-            DataServiceRepo = null;
-            DataSourceRepo = null;
-            logger = null;
+            // dispose managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -63,12 +60,12 @@ public abstract class DataServiceReader : Disposable, IDataServiceReader {
         return Task.FromResult(result);
     }
 
-    public virtual Task<IList<IDictionary<string, object>>> PivotData(DataServiceCacheItem dataService, PivotParam param) {
+    public virtual Task<IList<IDictionary<string, object?>>> PivotData(DataServiceCacheItem dataService, PivotParam param) {
         var sql = BuildPivotSql(dataService, param);
         return ReadDataAsync(dataService, sql);
     }
 
-    public Task<IList<IDictionary<string, object>>> ReadDataAsync(
+    public Task<IList<IDictionary<string, object?>>> ReadDataAsync(
         DataServiceCacheItem dataService,
         ReadDataParam param
     ) {
@@ -76,7 +73,7 @@ public abstract class DataServiceReader : Disposable, IDataServiceReader {
         return ReadDataAsync(dataService, sql);
     }
 
-    public Task<IList<IDictionary<string, object>>> ReadDistinctDataAsync(DataServiceCacheItem dataService, DistinctParam param) {
+    public Task<IList<IDictionary<string, object?>>> ReadDistinctDataAsync(DataServiceCacheItem dataService, DistinctParam param) {
         var sql = BuildDistinctSql(dataService, param);
         return ReadDataAsync(dataService, sql);
     }
@@ -86,10 +83,10 @@ public abstract class DataServiceReader : Disposable, IDataServiceReader {
         return ReadScalarAsync<T>(dataService, sql);
     }
 
-    public async Task<IList<IDictionary<string, object>>> ReadDataAsync(DbDataReader reader) {
-        var result = new List<IDictionary<string, object>>();
+    public async Task<IList<IDictionary<string, object?>>> ReadDataAsync(DbDataReader reader) {
+        var result = new List<IDictionary<string, object?>>();
         while (await reader.ReadAsync()) {
-            var row = new Dictionary<string, object>();
+            var row = new Dictionary<string, object?>();
             for (var i = 0; i < reader.FieldCount; i++) {
                 var (key, value) = ReadField(reader, i);
                 row.Add(key, value);
@@ -111,13 +108,13 @@ public abstract class DataServiceReader : Disposable, IDataServiceReader {
 
     protected abstract string BuildScalarSql(DataServiceCacheItem dataService, ReadDataParam param);
 
-    protected virtual KeyValuePair<string, object> ReadField(IDataReader dataReader, int fieldIndex) {
+    protected virtual KeyValuePair<string, object?> ReadField(IDataReader dataReader, int fieldIndex) {
         var name = dataReader.GetName(fieldIndex);
         var value = dataReader.IsDBNull(fieldIndex) ? null : dataReader.GetValue(fieldIndex);
-        return new KeyValuePair<string, object>(name, value);
+        return new KeyValuePair<string, object?>(name, value);
     }
 
-    protected virtual async Task<IList<IDictionary<string, object>>> ReadDataAsync(DataServiceCacheItem dataService, string sql) {
+    protected virtual async Task<IList<IDictionary<string, object?>>> ReadDataAsync(DataServiceCacheItem dataService, string sql) {
         await using var conn = CreateConnection(dataService.ConnectionString);
         logger.LogInformation(sql);
         var reader = await conn.ExecuteReaderAsync(sql);

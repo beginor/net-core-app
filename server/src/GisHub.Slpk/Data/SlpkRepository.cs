@@ -14,7 +14,7 @@ using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Data.Repositories;
 using Beginor.GisHub.Slpk.Models;
 
-namespace Beginor.GisHub.Slpk.Data; 
+namespace Beginor.GisHub.Slpk.Data;
 
 /// <summary>slpk 航拍模型仓储实现</summary>
 public class SlpkRepository : HibernateRepository<SlpkEntity, SlpkModel, long>, ISlpkRepository {
@@ -37,9 +37,7 @@ public class SlpkRepository : HibernateRepository<SlpkEntity, SlpkModel, long>, 
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            cache = null;
-            storageRepository = null;
-            commonOption = null;
+            // dispose managed resource here;
         }
     }
 

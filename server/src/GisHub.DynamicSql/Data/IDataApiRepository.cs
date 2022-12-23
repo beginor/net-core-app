@@ -8,7 +8,7 @@ using Beginor.GisHub.DataServices.Models;
 using Beginor.GisHub.DynamicSql.Models;
 using Beginor.GisHub.Geo.GeoJson;
 
-namespace Beginor.GisHub.DynamicSql.Data; 
+namespace Beginor.GisHub.DynamicSql.Data;
 
 /// <summary>数据API 仓储接口</summary>
 public partial interface IDataApiRepository : IRepository<DataApiModel, long> {
@@ -22,7 +22,7 @@ public partial interface IDataApiRepository : IRepository<DataApiModel, long> {
 
     Task UpdateAsync(long id, DataApiModel model, AppUser user, CancellationToken token = default);
 
-    Task<IList<IDictionary<string, object>>> QueryAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
+    Task<IList<IDictionary<string, object?>>> QueryAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
 
     Task<IList<GeoJsonFeature>> QueryGeoJsonAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
 
@@ -30,7 +30,7 @@ public partial interface IDataApiRepository : IRepository<DataApiModel, long> {
 
     Task<DataServiceFieldModel[]> GetColumnsAsync(DataApiCacheItem api, IDictionary<string, object> parameters);
 
-    Task<DataApiCacheItem> GetDataApiCacheItemByIdAsync(long apiId);
+    Task<DataApiCacheItem?> GetDataApiCacheItemByIdAsync(long apiId);
 
     Task<IList<DataApiModel>> GetByIdArray(long[] idArray);
 

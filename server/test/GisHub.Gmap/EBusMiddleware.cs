@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Beginor.GisHub.Gmap.Services;
 
-namespace Beginor.GisHub.Gmap; 
+namespace Beginor.GisHub.Gmap;
 
 public class EBusMiddleware {
 
@@ -59,11 +59,11 @@ public class EBusMiddleware {
             var responseStream = yztRes.GetResponseStream();
             if (responseStream != null) {
                 if (yztRes.ContentType.Contains("text/xml", StringComparison.OrdinalIgnoreCase)
-                    && queryString.Value.Contains("GetCapabilities", StringComparison.OrdinalIgnoreCase)
+                    && queryString.Value!.Contains("GetCapabilities", StringComparison.OrdinalIgnoreCase)
                    ) {
                     using var streamReader = new StreamReader(responseStream);
                     var streamWriter = new StreamWriter(res.Body);
-                    string line;
+                    string? line;
                     var replacement = req.Scheme + "://" + req.Host + req.PathBase;
                     while ((line = await streamReader.ReadLineAsync()) != null) {
                         line = service.ReplaceGatewayUrl(line, replacement);
@@ -78,9 +78,9 @@ public class EBusMiddleware {
             logger.LogInformation($"Success {reqMethod}: {servicePath}");
         }
         catch (WebException webEx) {
-            var errResponse = (HttpWebResponse)webEx.Response;
+            var errResponse = (HttpWebResponse?)webEx.Response;
             logger.LogError($"Failed {reqMethod}: {servicePath}");
-            logger.LogError($"Server returns {errResponse.StatusCode}");
+            logger.LogError($"Server returns {errResponse!.StatusCode}");
             res.StatusCode = (int)errResponse.StatusCode;
             foreach (string key in errResponse.Headers.Keys) {
                 res.Headers.Add(key, errResponse.Headers.Get(key));

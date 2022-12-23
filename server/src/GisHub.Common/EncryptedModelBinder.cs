@@ -19,7 +19,7 @@ public class EncryptedModelBinder : IModelBinder {
 
     public Task BindModelAsync(ModelBindingContext bindingContext) {
         var request = bindingContext.HttpContext.Request;
-        object model = null;
+        object? model = null;
         if (request.Method == HttpMethods.Get) {
             model = BindModelFromQuery(request.Query, bindingContext.ModelType);
         }
@@ -34,7 +34,7 @@ public class EncryptedModelBinder : IModelBinder {
         return Task.CompletedTask;
     }
 
-    private static bool IsTrueValue(string value) {
+    private static bool IsTrueValue(string? value) {
         if (value.IsNullOrEmpty()) {
             return false;
         }
@@ -44,22 +44,22 @@ public class EncryptedModelBinder : IModelBinder {
         return false;
     }
 
-    private static object BindModelFromQuery(IQueryCollection query, Type modelType) {
+    private static object? BindModelFromQuery(IQueryCollection query, Type modelType) {
         var encrypted = IsTrueValue(query[EncryptedParamName]);
         return BindModel(query, modelType, encrypted);
     }
 
-    private static object BindModelFromForm(IFormCollection form, Type modelType) {
+    private static object? BindModelFromForm(IFormCollection form, Type modelType) {
         var encrypted = IsTrueValue(form[EncryptedParamName]);
         return BindModel(form, modelType, encrypted);
     }
 
-    private static object BindModel(IEnumerable<KeyValuePair<string, StringValues>> paires, Type modelType, bool encrypted) {
+    private static object? BindModel(IEnumerable<KeyValuePair<string, StringValues>> paires, Type modelType, bool encrypted) {
         var model = Activator.CreateInstance(modelType);
         var props = modelType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
             .Where(p => p.GetCustomAttribute<FromQueryAttribute>() != null);
         foreach (var prop in props) {
-            var attr = prop.GetCustomAttribute<FromQueryAttribute>();
+            var attr = prop.GetCustomAttribute<FromQueryAttribute>()!;
             if (paires.Any(a => a.Key == attr.Name)) {
                 var pair = paires.First(a => a.Key.Equals(attr.Name, StringComparison.OrdinalIgnoreCase));
                 var val = pair.Value.ToString();

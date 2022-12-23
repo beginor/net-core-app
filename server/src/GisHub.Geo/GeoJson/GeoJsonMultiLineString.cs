@@ -1,4 +1,6 @@
-namespace Beginor.GisHub.Geo.GeoJson; 
+#nullable disable
+
+namespace Beginor.GisHub.Geo.GeoJson;
 
 public class GeoJsonMultiLineString : GeoJsonGeometry {
 

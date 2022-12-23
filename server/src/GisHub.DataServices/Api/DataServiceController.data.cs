@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +7,9 @@ using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Common;
-using Beginor.GisHub.DataServices.Data;
 using Beginor.GisHub.DataServices.Models;
 
-namespace Beginor.GisHub.DataServices.Api; 
+namespace Beginor.GisHub.DataServices.Api;
 
 partial class DataServiceController {
 
@@ -25,6 +23,9 @@ partial class DataServiceController {
                 return NotFound($"Datasource {id} does not exits !");
             }
             var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
+            if (reader == null) {
+                return this.InternalServerError($"Unsupported database type {dataSource.DatabaseType}");
+            }
             var columns = await reader.GetColumnsAsync(dataSource);
             return this.CompressedJson(columns, serializerOptionsFactory.JsonSerializerOptions);
         }
@@ -50,6 +51,9 @@ partial class DataServiceController {
                 return BadRequest($"$where = {param.Where} is not allowed!");
             }
             var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
+            if (reader == null) {
+                return this.InternalServerError($"Unsupported database type {dataSource.DatabaseType}");
+            }
             var count = await reader.CountAsync(dataSource, param);
             return count;
         }
@@ -84,10 +88,13 @@ partial class DataServiceController {
                 return BadRequest($"$orderBy = {param.OrderBy} is not allowed!");
             }
             var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
+            if (reader == null) {
+                return this.InternalServerError($"Unsupported database type {dataSource.DatabaseType}");
+            }
             var data = await reader.ReadDataAsync(dataSource, param);
             var total = await reader.CountAsync(dataSource, param);
             var result = new PaginatedResponseModel<IDictionary<string, object>> {
-                Total = total, Data = data, Skip = param.Skip, Take = param.Take
+                Total = total, Data = data!, Skip = param.Skip, Take = param.Take
             };
             return this.CompressedJson(result, serializerOptionsFactory.JsonSerializerOptions);
         }
@@ -119,9 +126,12 @@ partial class DataServiceController {
                 return BadRequest($"$orderBy = {param.OrderBy} is not allowed!");
             }
             var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
+            if (reader == null) {
+                return this.InternalServerError($"Unsupported database type {dataSource.DatabaseType}");
+            }
             var data = await reader.ReadDistinctDataAsync(dataSource, param);
             var result = new PaginatedResponseModel<IDictionary<string, object>> {
-                Total = data.Count, Data = data, Skip = 0, Take = 0
+                Total = data.Count, Data = data!, Skip = 0, Take = 0
             };
             return this.CompressedJson(data, serializerOptionsFactory.JsonSerializerOptions);
         }
@@ -162,6 +172,9 @@ partial class DataServiceController {
                 return BadRequest($"$orderBy = {param.OrderBy} is not allowed!");
             }
             var reader = factory.CreateDataSourceReader(dataSource.DatabaseType);
+            if (reader == null) {
+                return this.InternalServerError($"Unsupported database type {dataSource.DatabaseType}");
+            }
             var data = await reader.PivotData(dataSource, param);
             return this.CompressedJson(data, serializerOptionsFactory.JsonSerializerOptions);
         }

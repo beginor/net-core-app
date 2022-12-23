@@ -29,7 +29,7 @@ public class TmsController : Controller {
         req.Method = Request.Method;
         try {
             var res = await req.GetResponseAsync() as HttpWebResponse;
-            if (res.StatusCode == HttpStatusCode.OK) {
+            if (res!.StatusCode == HttpStatusCode.OK) {
                 var contentType = res.ContentType;
                 using var ms = new MemoryStream();
                 await res.GetResponseStream().CopyToAsync(ms);

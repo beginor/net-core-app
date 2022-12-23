@@ -13,7 +13,7 @@ using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Slpk.Data;
 using Beginor.GisHub.Slpk.Models;
 
-namespace Beginor.GisHub.Slpk.Api; 
+namespace Beginor.GisHub.Slpk.Api;
 
 [Route("api/slpks")]
 [ApiController]
@@ -38,10 +38,7 @@ public partial class SlpkController : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            logger = null;
-            repository = null;
-            provider = null;
-            userMgr = null;
+            // dispose managed resource here;
         }
         base.Dispose(disposing);
     }
@@ -56,8 +53,8 @@ public partial class SlpkController : Controller {
     ) {
         try {
             var userId = this.GetUserId();
-            var user = await userMgr.FindByIdAsync(userId);
-            await repository.SaveAsync(model, user);
+            var user = await userMgr.FindByIdAsync(userId!);
+            await repository.SaveAsync(model, user!);
             return model;
         }
         catch (Exception ex) {
@@ -75,8 +72,8 @@ public partial class SlpkController : Controller {
     public async Task<ActionResult> Delete(long id) {
         try {
             var userId = this.GetUserId();
-            var user = await userMgr.FindByIdAsync(userId);
-            await repository.DeleteAsync(id, user);
+            var user = await userMgr.FindByIdAsync(userId!);
+            await repository.DeleteAsync(id, user!);
             return NoContent();
         }
         catch (Exception ex) {
@@ -143,8 +140,8 @@ public partial class SlpkController : Controller {
                 return NotFound();
             }
             var userId = this.GetUserId();
-            var user = await userMgr.FindByIdAsync(userId);
-            await repository.UpdateAsync(id, model, user);
+            var user = await userMgr.FindByIdAsync(userId!);
+            await repository.UpdateAsync(id, model, user!);
             return model;
         }
         catch (Exception ex) {

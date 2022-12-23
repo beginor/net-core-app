@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
-namespace Beginor.GisHub.Geo.GeoJson; 
+#nullable disable
+
+namespace Beginor.GisHub.Geo.GeoJson;
 
 public class GeoJsonFeatureCollection {
     public string Type => "FeatureCollection";

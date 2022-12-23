@@ -6,7 +6,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using Beginor.GisHub.Gmap.Data;
 
-namespace Beginor.GisHub.Gmap.Utils; 
+namespace Beginor.GisHub.Gmap.Utils;
 
 /// <summary>粤政图切片工具类</summary>
 public static class YztTileUtil {
@@ -29,7 +29,7 @@ public static class YztTileUtil {
         return 90.0 - y / (double)(1 << z) * 360.0;
     }
 
-    public static byte[] CropTiles(IList<Tile> tiles, double[][] extent) {
+    public static byte[]? CropTiles(IList<Tile> tiles, double[][] extent) {
         if (tiles.Count == 1) {
             return CropTile(tiles[0], extent);
         }
@@ -61,7 +61,7 @@ public static class YztTileUtil {
         return stream.GetBuffer();
     }
 
-    public static byte[] CropTile(Tile tile, double[][] extent) {
+    public static byte[]? CropTile(Tile tile, double[][] extent) {
         if (tile.IsEmpty) {
             return null;
         }

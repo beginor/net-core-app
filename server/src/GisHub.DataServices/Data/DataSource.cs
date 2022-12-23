@@ -1,8 +1,11 @@
 using System;
-using Beginor.AppFx.Core;
 using NHibernate.Mapping.Attributes;
+using Beginor.AppFx.Core;
 
-namespace Beginor.GisHub.DataServices.Data; 
+
+#nullable disable
+
+namespace Beginor.GisHub.DataServices.Data;
 
 /// <summary>数据源</summary>
 [Class(Schema = "public", Table = "data_sources", Where = "is_deleted = false")]

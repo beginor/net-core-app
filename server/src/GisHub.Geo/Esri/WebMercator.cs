@@ -1,8 +1,8 @@
-
-
 using System;
 
-namespace Beginor.GisHub.Geo.Esri; 
+#nullable disable
+
+namespace Beginor.GisHub.Geo.Esri;
 
 public static class WebMercator {
 

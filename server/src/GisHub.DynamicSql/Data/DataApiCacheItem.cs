@@ -1,6 +1,8 @@
 using Beginor.GisHub.DataServices.Data;
 
-namespace Beginor.GisHub.DynamicSql.Data; 
+#nullable disable
+
+namespace Beginor.GisHub.DynamicSql.Data;
 
 public class DataApiCacheItem {
     public long DataApiId { get; set; }

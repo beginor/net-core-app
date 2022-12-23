@@ -49,7 +49,7 @@ class Program {
             var entryDest = Path.Combine(slpkDestDir, entry.FullName.Replace('\\', Path.DirectorySeparatorChar));
             Console.WriteLine($"{percent.ToString("p")}: {entry.Name} -> {entryDest}");
             try {
-                Directory.CreateDirectory(Path.GetDirectoryName(entryDest));
+                Directory.CreateDirectory(Path.GetDirectoryName(entryDest)!);
                 entry.ExtractToFile(entryDest, true);
             }
             catch (Exception ex) {

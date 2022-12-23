@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 using Beginor.GisHub.Models;
 
+#nullable disable
+
 namespace Beginor.GisHub.TileMap.Models;
 
 /// <summary>切片地图模型</summary>
@@ -37,6 +39,6 @@ public partial class TileMapModel : BaseResourceModel {
 /// <summary>切片地图搜索参数</summary>
 public partial class TileMapSearchModel : PaginatedRequestModel {
     /// <summary>关键字，搜索图层名称或切片路径</summary>
-    public string? Keywords { get; set; }
+    public string Keywords { get; set; }
     public long Category { get; set; }
 }

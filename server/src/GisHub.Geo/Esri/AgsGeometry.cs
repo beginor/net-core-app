@@ -1,6 +1,8 @@
 using NetTopologySuite.Geometries;
 
-namespace Beginor.GisHub.Geo.Esri; 
+#nullable disable
+
+namespace Beginor.GisHub.Geo.Esri;
 
 // [JsonConverter(typeof(AgsGeometryConverter))]
 public abstract class AgsGeometry {
