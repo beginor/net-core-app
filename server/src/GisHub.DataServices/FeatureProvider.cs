@@ -297,7 +297,7 @@ public abstract class FeatureProvider : IFeatureProvider {
         return result;
     }
 
-    protected async Task<AgsFeatureSet> QueryForExtentAsync(DataServiceCacheItem dataService, AgsQueryParam queryParam) {
+    public async Task<AgsFeatureSet> QueryForExtentAsync(DataServiceCacheItem dataService, AgsQueryParam queryParam) {
         var result = new AgsFeatureSet();
         var param = ConvertExtentQueryParam(dataService, queryParam);
         var reader = DataServiceFactory.CreateDataSourceReader(dataService.DatabaseType);
@@ -318,10 +318,6 @@ public abstract class FeatureProvider : IFeatureProvider {
             };
             result.Extent = extent;
         }
-        // if (queryParam.ReturnCountOnly) {
-        //     var count = await reader.CountAsync(dataSource, param);
-        //     result.Count = count;
-        // }
         return result;
     }
 

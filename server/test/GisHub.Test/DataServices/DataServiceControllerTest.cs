@@ -1,5 +1,5 @@
-using Beginor.GisHub.DataServices.Api;
 using NUnit.Framework;
+using Beginor.GisHub.DataServices.Api;
 
 namespace Beginor.GisHub.Test.DataServices;
 

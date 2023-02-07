@@ -18,6 +18,8 @@ public interface IFeatureProvider {
 
     Task<AgsFeatureSet> QueryAsync(DataServiceCacheItem dataService, AgsQueryParam queryParam);
 
+    Task<AgsFeatureSet> QueryForExtentAsync(DataServiceCacheItem dataService, AgsQueryParam queryParam);
+
     Task<int> GetSridAsync(DataServiceCacheItem dataService);
 
     Task<string> GetGeometryTypeAsync(DataServiceCacheItem dataService);

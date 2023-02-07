@@ -49,6 +49,8 @@ partial class Startup {
         );
         services.AddSingleton<Beginor.GisHub.DataServices.IDataServiceFactory, Beginor.GisHub.DataServices.DataServiceFactory>();
         services.AddSingleton<Beginor.GisHub.DataServices.JsonSerializerOptionsFactory>();
+        services.AddScoped<Beginor.GisHub.DataServices.MarkdownServiceDocBuilder>();
+        services.AddScoped<Beginor.GisHub.DataServices.JsonServiceDocBuilder>();
         services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISMetaDataProvider>();
         services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISDataServiceReader>();
         services.AddScoped<Beginor.GisHub.DataServices.PostGIS.PostGISFeatureProvider>();

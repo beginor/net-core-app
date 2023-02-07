@@ -24,6 +24,8 @@ public class MarkdownApiDocBuilder : IApiDocBuilder {
         foreach (var model in models) {
             BuildApiDocForModel(doc, baseUrl, model, token, referer);
         }
+        // attentions
+        BuildAttentions(doc);
         return doc.ToString();
     }
 
@@ -86,15 +88,19 @@ public class MarkdownApiDocBuilder : IApiDocBuilder {
             doc.AppendLine();
             doc.AppendLine("```http");
             doc.AppendLine($"{geoJsonUrl}?$token={token}&{api.Parameters[0].Name}=");
-            doc.AppendLine("Referer: http://localhost:3000");
+            if (referer.IsNotNullOrEmpty()) {
+                doc.AppendLine($"Referer: {referer}");
+            }
             doc.AppendLine("```");
             doc.AppendLine();
         }
-        // attentions
-        doc.AppendLine("> 注意问题：");
-        doc.AppendLine(">");
-        doc.AppendLine("> 1. 凭证参数需要向数据接口提供者申请。");
-        doc.AppendLine("> 2. 数据接口暂时只支持使用 HTTP GET 方法请求，因此参数必须以 QueryString 的形式传递。");
+    }
+    
+    private static void BuildAttentions(StringBuilder doc) {
+        doc.AppendLine("## 注意问题：");
+        doc.AppendLine("");
+        doc.AppendLine(" 1. 凭证参数需要向数据接口提供者申请。");
+        doc.AppendLine(" 2. 数据接口暂时只支持使用 HTTP GET 方法请求，因此参数必须以 QueryString 的形式传递。");
         doc.AppendLine();
     }
 
