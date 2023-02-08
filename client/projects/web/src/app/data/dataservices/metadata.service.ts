@@ -8,13 +8,15 @@ import { UiService } from 'projects/web/src/app/common';
 @Injectable({ providedIn: 'root' })
 export class MetadataService {
 
-    private url = `${this.apiRoot}/metadata`;
+    private url: string;
 
     constructor(
         private http: HttpClient,
         @Inject('apiRoot') private apiRoot: string,
         private ui: UiService
-    ) { }
+    ) {
+        this.url  = `${this.apiRoot}/metadata`;
+    }
 
     public async getStatus(id: string): Promise<void> {
         await lastValueFrom(
