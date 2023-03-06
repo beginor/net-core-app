@@ -50,7 +50,7 @@ public class AppAttachmentController : Controller {
         if (files.Count == 0) {
             return BadRequest("No file in current request ！");
         }
-        string businessId = string.Empty;
+        var businessId = string.Empty;
         const string key = "businessId";
         if (Request.Query.TryGetValue(key, out var queryVal)) {
             businessId = queryVal.ToString();
@@ -133,11 +133,18 @@ public class AppAttachmentController : Controller {
     /// <response code="500">服务器内部错误</response>
     [HttpGet("{id:long}")]
     [Authorize("app_attachments.read_by_id")]
-    public async Task<ActionResult<AppAttachmentModel>> GetById(long id) {
+    public async Task<ActionResult> GetById(long id, [FromQuery]string? action) {
         try {
-            var result = await repository.GetByIdAsync(id);
-            if (result == null) {
+            var model = await repository.GetByIdAsync(id);
+            if (model == null) {
                 return NotFound();
+            }
+            var content = await repository.GetContentAsync(id);
+            var result = new FileContentResult(content, model.ContentType) {
+                LastModified = new DateTimeOffset(model.CreatedAt)
+            };
+            if (action.EqualsOrdinalIgnoreCase("download")) {
+                result.FileDownloadName = model.FileName;
             }
             return result;
         }
