@@ -154,7 +154,7 @@ public partial class AccountController : Controller {
             Id = user.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value,
             UserName = user.Claims.First(c => c.Type == ClaimTypes.Name).Value,
             Surname = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value,
-            GivenName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value
+            GivenName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value,
         };
         var cachedClaims = await cache.GetUserClaimsAsync(info.Id);
         info.Roles = cachedClaims
