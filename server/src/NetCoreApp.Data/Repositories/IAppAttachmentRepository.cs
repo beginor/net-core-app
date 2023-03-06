@@ -1,5 +1,7 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Data.Repositories;
@@ -10,5 +12,11 @@ public partial interface IAppAttachmentRepository : IRepository<AppAttachmentMod
     Task<PaginatedResponseModel<AppAttachmentModel>> SearchAsync(
         AppAttachmentSearchModel model
     );
+
+    Task SaveContentAsync(long id, byte[] content, CancellationToken token = default);
+
+    Task<byte[]> GetContentAsync(long id, CancellationToken token = default);
+
+    Task SaveAsync(AppAttachmentModel model, byte[] content, AppUser user, CancellationToken token = default);
 
 }

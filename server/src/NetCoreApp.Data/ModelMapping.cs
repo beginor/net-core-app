@@ -28,7 +28,9 @@ public class ModelMapping : AutoMapper.Profile {
                 map => map.MapFrom(src => src.Creator.UserName)
             )
             .ReverseMap()
-            .ForMember(dest => dest.Id, map => map.Ignore());
+            .ForMember(dest => dest.Id, map => map.Ignore())
+            .ForMember(dest => dest.Creator, map => map.Ignore())
+            .ForMember(dest => dest.CreatedAt, map => map.Ignore());
         CreateMap<AppNavItem, AppNavItemModel>()
             .ReverseMap()
             .ForMember(dest => dest.Id, map => map.Ignore());
