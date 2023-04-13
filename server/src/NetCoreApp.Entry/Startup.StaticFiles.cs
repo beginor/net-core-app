@@ -1,6 +1,8 @@
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 namespace Beginor.NetCoreApp.Entry;
 
@@ -18,9 +20,17 @@ partial class Startup {
         app.UseDefaultFiles();
         app.UseGzipStatic();
         app.UseSpaFailback();
-        app.UseStaticFiles();
         #if DEBUG
+        var rootPath = env.ContentRootPath;
+        app.UseStaticFiles(new StaticFileOptions {
+            FileProvider = new CompositeFileProvider(
+                new PhysicalFileProvider(Path.Combine(rootPath, "wwwroot")),
+                new PhysicalFileProvider(Path.Combine(rootPath, "../../../client/dist/"))
+            )
+        });
         app.UseDirectoryBrowser();
+        #else
+        app.UseStaticFiles();
         #endif
     }
 

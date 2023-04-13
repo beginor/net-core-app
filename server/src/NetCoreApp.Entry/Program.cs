@@ -13,12 +13,7 @@ public class Program {
 
     public static void Main(string[] args) {
         AddGlobalConverters();
-        var options = new WebApplicationOptions {
-            #if DEBUG
-            WebRootPath = "../../../client/dist/"
-            #endif
-        };
-        var builder = WebApplication.CreateBuilder(options);
+        var builder = WebApplication.CreateBuilder();
         var env = builder.Environment;
         builder.Configuration
             .SetBasePath(Directory.GetCurrentDirectory())
