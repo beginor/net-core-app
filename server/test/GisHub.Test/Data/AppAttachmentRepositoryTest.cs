@@ -1,8 +1,12 @@
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using NHibernate.NetCore;
 using NUnit.Framework;
 using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Data.Repositories;
+using Beginor.GisHub.Models;
 
 namespace Beginor.GisHub.Test.Data;
 
@@ -53,6 +57,22 @@ public class AppAttachmentRepositoryTest : BaseTest<IAppAttachmentRepository> {
             var data = query.ToList();
             Assert.IsNotNull(data);
         }
+    }
+
+    [Test]
+    public async Task _04_CanSaveAttachment() {
+        var userManager = ServiceProvider.GetService<UserManager<AppUser>>();
+        var user = await userManager.FindByNameAsync("testuser");
+        Assert.IsNotNull(user);
+        var model = new AppAttachmentModel {
+            BusinessId = "123456",
+            FileName = "P30PRO.pdf",
+            ContentType = "application/pdf",
+            Length = 123456
+        };
+        // var content = await System.IO.File.ReadAllBytesAsync("");
+        var content = System.Text.Encoding.UTF8.GetBytes("hello, world");
+        await Target.SaveAsync(model, content, user);
     }
 
 }

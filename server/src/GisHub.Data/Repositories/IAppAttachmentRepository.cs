@@ -1,5 +1,7 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
+using Beginor.GisHub.Data.Entities;
 using Beginor.GisHub.Models;
 
 namespace Beginor.GisHub.Data.Repositories;
@@ -10,5 +12,11 @@ public partial interface IAppAttachmentRepository : IRepository<AppAttachmentMod
     Task<PaginatedResponseModel<AppAttachmentModel>> SearchAsync(
         AppAttachmentSearchModel model
     );
+
+    Task SaveContentAsync(long id, byte[] content, CancellationToken token = default);
+
+    Task<byte[]> GetContentAsync(long id, CancellationToken token = default);
+
+    Task SaveAsync(AppAttachmentModel model, byte[] content, AppUser user, CancellationToken token = default);
 
 }

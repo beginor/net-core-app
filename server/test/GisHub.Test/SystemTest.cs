@@ -1,3 +1,4 @@
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -25,6 +26,22 @@ public class SystemTest : BaseTest {
         var adminUserName = "admin";
         var adminUserId = await CreateAdminUserAsync(adminUserName, "1qaz@WSX", adminRoleName);
         await CreateSystemMenuAsync(adminUserName, adminRoleName, anonymousRoleName);
+    }
+
+    [Test]
+    public async Task _02_CanResetPassword() {
+        var manager = ServiceProvider.GetService<UserManager<AppUser>>();
+        var username = "admin";
+        var password = "1qaz@WSX";
+        var user = await manager.FindByNameAsync("admin");
+        if (user == null) {
+            Assert.Fail($"User {username} does not exits!");
+            return;
+        }
+        var token = await manager.GeneratePasswordResetTokenAsync(user);
+        Console.WriteLine($"Reset token is ${token} ");
+        var result = await manager.ResetPasswordAsync(user, token, password);
+        Assert.IsTrue(result.Succeeded);
     }
 
     private async Task<long> SyncSyncRequiredPrivilegesAsync() {
