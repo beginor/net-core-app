@@ -57,8 +57,8 @@
     "material-design-icons": "^3.0.1",
     "echarts": "^5.4.2",
     "esri-loader": "^3.7.0",
-    "@types/arcgis-js-api": "^4.24.0",
-    "mapbox-gl": "^2.11.1",
+    "@types/arcgis-js-api": "^4.26.0",
+    "mapbox-gl": "^2.14.1",
     "@types/mapbox-gl": "^2.7.10",
     "@turf/bbox": "6.5.0"
   },
