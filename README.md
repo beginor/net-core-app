@@ -52,21 +52,21 @@ Angular 多项目结构， `projects` 提供了多个三个项目，分别是：
 
 ## 功能截图
 
-![01_login](docs/assets/images/01_login.png)
+![01_login](https://beginor.github.io/assets/net-core-app/01_login.png)
 
-![02_admin_home](docs/assets/images/02_admin_home.png)
+![02_admin_home](https://beginor.github.io/assets/net-core-app/02_admin_home.png)
 
-![03_admin_menu](docs/assets/images/03_admin_menu.png)
+![03_admin_menu](https://beginor.github.io/assets/net-core-app/03_admin_menu.png)
 
-![04_admin_users](docs/assets/images/04_admin_users-1.png)
+![04_admin_users](https://beginor.github.io/assets/net-core-app/04_admin_users-1.png)
 
-![05_admin_users](docs/assets/images/05_admin_users-2.png)
+![05_admin_users](https://beginor.github.io/assets/net-core-app/05_admin_users-2.png)
 
-![06_admin_roles](docs/assets/images/06_admin_roles.png)
+![06_admin_roles](https://beginor.github.io/assets/net-core-app/06_admin_roles.png)
 
-![07_admin_privileges](docs/assets/images/07_admin_privileges.png)
+![07_admin_privileges](https://beginor.github.io/assets/net-core-app/07_admin_privileges.png)
 
-![08_audit_log](docs/assets/images/08_audit_log.png)
+![08_audit_log](https://beginor.github.io/assets/net-core-app/08_audit_log.png)
 
 ## 下载和使用
 
