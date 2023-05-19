@@ -28,6 +28,7 @@ public partial class AppAttachmentModel : StringEntity {
 /// <summary>附件表搜索参数</summary>
 public partial class AppAttachmentSearchModel : PaginatedRequestModel {
 
+    /// <summary>业务ID</summary>
     public long? BusinessId { get; set; }
 
 }

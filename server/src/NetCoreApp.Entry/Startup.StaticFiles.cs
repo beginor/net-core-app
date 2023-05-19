@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,16 +10,29 @@ namespace Beginor.NetCoreApp.Entry;
 partial class Startup {
 
     private void ConfigureStaticFilesServices(IServiceCollection services, IWebHostEnvironment env) {
-        #if DEBUG
+        IList<IFileProvider> fileProviders = new List<IFileProvider>();
         var rootPath = env.ContentRootPath;
-        var fileProvider = new CompositeFileProvider(
-            new PhysicalFileProvider(Path.Combine(rootPath, "wwwroot")),
-            new PhysicalFileProvider(Path.Combine(rootPath, "../../../client/dist/"))
-        );
-        services.AddSingleton<IFileProvider>(fileProvider);
+        var wwwroot = Path.Combine(rootPath, "wwwroot");
+        if (!Directory.Exists(wwwroot)) {
+            Directory.CreateDirectory(wwwroot);
+        }
+        var wwwrootFileProvider = new PhysicalFileProvider(wwwroot);
+        fileProviders.Add(wwwrootFileProvider);
+
+        #if DEBUG
+        var clientDist = Path.Combine(rootPath, "../../../client/dist/");
+        if (!Directory.Exists(clientDist)) {
+            Directory.CreateDirectory(clientDist);
+        }
+        var clientDistFileProvider = new PhysicalFileProvider(clientDist);
+        fileProviders.Add(clientDistFileProvider);
         #endif
+
+        var compositeFileProvider = new CompositeFileProvider(fileProviders);
+        services.AddSingleton<IFileProvider>(compositeFileProvider);
         services.ConfigureSpaFailback(config.GetSection("spaFailback"));
         services.ConfigureGzipStatic();
+
         #if DEBUG
         services.AddDirectoryBrowser();
         #endif
@@ -37,6 +51,7 @@ partial class Startup {
         else {
             app.UseStaticFiles();
         }
+
         #if DEBUG
         app.UseDirectoryBrowser();
         #endif
