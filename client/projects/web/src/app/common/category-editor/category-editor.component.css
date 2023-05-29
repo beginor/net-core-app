@@ -1,3 +1,8 @@
 :host {
   display: block;
 }
+
+.category-dropdown-menu {
+  max-height: calc((100vh - 330px) * 0.75);
+  overflow-y: auto;
+}

@@ -6,7 +6,7 @@
   <button class="btn btn-outline-secondary" [disabled]="!editable" ngbDropdownToggle>
     <svg-icon path="bi/caret-down"></svg-icon>
   </button>
-  <div ngbDropdownMenu>
+  <div class="category-dropdown-menu" ngbDropdownMenu>
     <ng-container *ngFor="let node of nodes">
       <button ngbDropdownItem [ngStyle]="getStyle(node.level)"
         (click)="updateCategory(node)">
