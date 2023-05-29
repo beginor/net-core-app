@@ -21,11 +21,10 @@ partial class Startup {
 
         #if DEBUG
         var clientDist = Path.Combine(rootPath, "../../../client/dist/");
-        if (!Directory.Exists(clientDist)) {
-            Directory.CreateDirectory(clientDist);
+        if (Directory.Exists(clientDist)) {
+            var clientDistFileProvider = new PhysicalFileProvider(clientDist);
+            fileProviders.Add(clientDistFileProvider);
         }
-        var clientDistFileProvider = new PhysicalFileProvider(clientDist);
-        fileProviders.Add(clientDistFileProvider);
         #endif
 
         var compositeFileProvider = new CompositeFileProvider(fileProviders);
