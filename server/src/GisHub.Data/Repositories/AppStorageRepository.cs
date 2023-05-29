@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.FileProviders;
 using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
@@ -21,18 +22,18 @@ namespace Beginor.GisHub.Data.Repositories;
 public partial class AppStorageRepository : HibernateRepository<AppStorage, AppStorageModel, long>, IAppStorageRepository {
 
     private IDistributedCache cache;
-    private IWebHostEnvironment hostEnv;
+    private IFileProvider fileProvider;
     private CommonOption commonOption;
 
     public AppStorageRepository(
         ISession session,
         IMapper mapper,
         IDistributedCache cache,
-        IWebHostEnvironment hostEnv,
+        IFileProvider fileProvider,
         CommonOption commonOption
     ) : base(session, mapper) {
         this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
-        this.hostEnv = hostEnv ?? throw new ArgumentNullException(nameof(hostEnv));
+        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
     }
 
@@ -74,14 +75,18 @@ public partial class AppStorageRepository : HibernateRepository<AppStorage, AppS
         if (model.Path!.StartsWith(Path.DirectorySeparatorChar)) {
             model.Path = model.Path.Substring(1);
         }
-        var cachedItem = await GetCacheItemAsync(folderItem.Id);
-        var serverPath = Path.Combine(cachedItem.RootFolder!, model.Path);
-        var dirInfo = new DirectoryInfo(serverPath);
+        var item = await GetByAlias(model.Alias);
+        var path = model.Path;
+        if (path.StartsWith(Path.PathSeparator)) {
+            path = path.Substring(1);
+        }
+        path = Path.Combine(item.RootFolder, path);
+        var dirInfo = fileProvider.GetDirectoryContents(path);
         if (!dirInfo.Exists) {
             return null;
         }
-        model.Folders = dirInfo.EnumerateDirectories().Select(x => x.Name).ToArray();
-        model.Files = dirInfo.EnumerateFiles(model.Filter!).Select(x => x.Name).ToArray();
+        model.Folders = dirInfo.Where(f => f.IsDirectory).Select(f => f.Name).ToArray();
+        model.Files = dirInfo.Where(f => !f.IsDirectory).Select(x => x.Name).ToArray();
         return model;
     }
 
@@ -97,56 +102,30 @@ public partial class AppStorageRepository : HibernateRepository<AppStorage, AppS
         if (folderItem == null) {
             return string.Empty;
         }
-        if (path.StartsWith(Path.PathSeparator)) {
-            path = path.Substring(1);
+        var item = await GetByAlias(alias);
+        var fileInfo = fileProvider.GetFileInfo(path);
+        var result = string.Empty;
+        if (fileInfo.Exists) {
+            result = fileInfo.PhysicalPath;
         }
-        var cachedItem = await GetCacheItemAsync(folderItem.Id);
-        var serverPath = Path.Combine(cachedItem.RootFolder!, path);
-        if (Directory.Exists(serverPath) || File.Exists(serverPath)) {
-            return serverPath;
-        }
-        return string.Empty;
+        return result!;
     }
 
     public async Task<Stream?> GetFileContentAsync(string alias, string path) {
         Argument.NotNullOrEmpty(alias, nameof(alias));
         Argument.NotNullOrEmpty(path, nameof(path));
-        var physicalPath = await GetPhysicalPathAsync($"{alias}:{path}");
-        if (physicalPath.IsNullOrEmpty()) {
+        var item = await GetByAlias(alias);
+        var fileInfo = fileProvider.GetFileInfo(path);
+        if (!fileInfo.Exists) {
             return null;
         }
-        return File.OpenRead(physicalPath);
+        return fileInfo.CreateReadStream();
     }
 
     private async Task<AppStorage> GetByAlias(string alias) {
         var folder = await Session.Query<AppStorage>()
             .FirstOrDefaultAsync(x => x.AliasName == alias);
         return folder;
-    }
-
-    private async Task<AppStorageCacheItem> GetCacheItemAsync(long id) {
-        var key = id.ToString();
-        var item = await cache.GetAsync<AppStorageCacheItem>(key);
-        if (item == null) {
-            var entity = await Session.LoadAsync<AppStorage>(id);
-            item = new AppStorageCacheItem {
-                Id = entity.Id,
-                AliasName = entity.AliasName,
-                Readonly = entity.Readonly,
-                Roles = entity.Roles
-            };
-            var rootFolder = entity.RootFolder;
-            if (rootFolder!.StartsWith("!")) {
-                rootFolder = rootFolder.Substring(1);
-                if (rootFolder.StartsWith(Path.DirectorySeparatorChar)) {
-                    rootFolder = rootFolder.Substring(1);
-                }
-            }
-            rootFolder = Path.Combine(hostEnv.WebRootPath, rootFolder);
-            item.RootFolder = rootFolder;
-            await cache.SetAsync(key, item, commonOption.Cache.MemoryExpiration);
-        }
-        return item;
     }
 
 }
