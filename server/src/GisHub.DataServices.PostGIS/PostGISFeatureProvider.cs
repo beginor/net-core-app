@@ -158,7 +158,7 @@ public class PostGISFeatureProvider : FeatureProvider {
         sqlBuilder.AppendLine($"      ST_TileEnvelope({z}, {x}, {y}),");
         sqlBuilder.AppendLine("      extent => 4096, buffer => 64");
         sqlBuilder.AppendLine($"    ) as {layer.GeometryColumn},");
-        sqlBuilder.AppendLine($"    {string.Join(',', layer.Fields.Where(f => f.Name != layer.GeometryColumn).Select(f => f.Name))}");
+        sqlBuilder.AppendLine($"    {string.Join(',', layer.Fields.Where(f => f.Name != layer.GeometryColumn).Select(f => f.Name))}, {layer.PrimaryKeyColumn} as _fid");
         sqlBuilder.AppendLine($"  from {layer.Schema}.{layer.TableName}");
         sqlBuilder.AppendLine($"  where ");
         if (layer.PresetCriteria.IsNotNullOrEmpty()) {
@@ -172,7 +172,7 @@ public class PostGISFeatureProvider : FeatureProvider {
         }
         sqlBuilder.AppendLine($" && ST_TileEnvelope({z}, {x}, {y}, margin => (64.0 / 4096))");
         sqlBuilder.AppendLine(")");
-        sqlBuilder.AppendLine($"select ST_AsMVT(mvt_geom, '{layer.DataServiceName}', 4096, '{layer.GeometryColumn}', '{layer.PrimaryKeyColumn}')");
+        sqlBuilder.AppendLine($"select ST_AsMVT(mvt_geom, '{layer.DataServiceName}', 4096, '{layer.GeometryColumn}', '_fid')");
         sqlBuilder.AppendLine("from mvt_geom");
         return sqlBuilder.ToString();
     }
