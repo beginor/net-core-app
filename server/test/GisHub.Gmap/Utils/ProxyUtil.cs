@@ -62,7 +62,7 @@ public static class ProxyUtil {
     }
 
     public static void AddSignatureHeaders(HttpRequestHeaders headers, string paasId, string paasToken, string serviceId, ILogger logger) {
-        var paasHeaders = ProxyUtil.ComputeSignatureHeaders(paasId, paasToken, serviceId);
+        var paasHeaders = ComputeSignatureHeaders(paasId, paasToken, serviceId);
         logger.LogInformation("Signature headers are:");
         foreach (var pair in paasHeaders) {
             headers.Add(pair.Key, pair.Value);
@@ -78,10 +78,10 @@ public static class ProxyUtil {
         );
     }
 
-    private static Regex regex = new Regex("https://dc-gateway.gdgov.cn(.*?).(?=[\"?])");
+    private static Regex regex = new("https://dc-gateway.gdgov.cn(.*?).(?=[\"?])");
 
-    public static async Task ReplaceInStream(Stream orginal, Stream result, string replacement) {
-        using var reader = new StreamReader(orginal);
+    public static async Task ReplaceInStream(Stream original, Stream result, string replacement) {
+        using var reader = new StreamReader(original);
         var writer = new StreamWriter(result);
         string? line;
         while ((line = await reader.ReadLineAsync()) != null) {
@@ -106,8 +106,8 @@ public static class ProxyUtil {
         var buffer = Encoding.UTF8.GetBytes(input);
         var hashed = sha256.ComputeHash(buffer);
         var strBuilder = new StringBuilder();
-        for (var i = 0; i < hashed.Length; i++) {
-            strBuilder.Append(hashed[i].ToString("x2"));
+        foreach (var item in hashed) {
+            strBuilder.Append(item.ToString("x2"));
         }
         return strBuilder.ToString();
     }
