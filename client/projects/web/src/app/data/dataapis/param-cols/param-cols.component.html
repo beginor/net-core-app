@@ -17,7 +17,7 @@
           <input class="form-control form-control-sm"
             *ngIf="paramEditIndex === i; else paramNameViewTpl"
             [name]="'p-name-' + i" type="text"
-            [(ngModel)]="p.name" />
+            [(ngModel)]="p.name" trimInput />
           <ng-template #paramNameViewTpl>{{p.name}}</ng-template>
         </td>
         <td class="text-start">
@@ -33,7 +33,7 @@
           <input class="form-control form-control-sm"
             *ngIf="paramEditIndex === i; else paramDescViewTpl"
             [name]="'p-desc-' + i" type="text"
-            [(ngModel)]="p.description" />
+            [(ngModel)]="p.description" trimInput />
           <ng-template #paramDescViewTpl>{{p.description}}</ng-template>
         </td>
         <td class="text-center">
@@ -63,7 +63,7 @@
           <input class="form-control form-control-sm"
             name="newParamName" type="text"
             placeholder="请输入参数名称"
-            [(ngModel)]="newParam.name" />
+            [(ngModel)]="newParam.name" trimInput />
         </td>
         <td class="text-start">
           <select class="form-select form-select-sm"

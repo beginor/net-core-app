@@ -23,7 +23,7 @@
         [(ngModel)]="model.name"
         #name="ngModel"
         [class.is-invalid]="!(name.valid || name.pristine)"
-        [class.is-valid]="name.valid"
+        [class.is-valid]="name.valid" trimInput
       />
     </div>
     <div class="mb-3">

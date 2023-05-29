@@ -10,7 +10,7 @@ import { EchartService } from './echart.service';
     template: '<div class="echart" #echart>App Echart works!</div>',
     styles: [`
         :host { display: block; }
-        .echart { width: 100%; height: 100%; }
+        .echart { position: relative; width: 100%; height: 100%; }
     `]
 })
 export class EchartComponent implements AfterViewInit, OnDestroy {
@@ -92,4 +92,3 @@ export class EchartComponent implements AfterViewInit, OnDestroy {
     }
 
 }
-

@@ -22,7 +22,7 @@
         placeholder="请输入数据源名称 ..." [(ngModel)]="model.name"
         [class.is-invalid]="!(name.valid || name.pristine)"
         [class.is-valid]="name.valid"
-        required #name="ngModel" [disabled]="!editable"
+        required #name="ngModel" [disabled]="!editable" trimInput
       />
     </div>
     <div class="mb-3" [class.is-valid]="databaseType.valid"
@@ -47,7 +47,7 @@
             placeholder="请输入服务器地址 (IP或域名)..." [(ngModel)]="model.serverAddress"
             [class.is-invalid]="!(serverAddress.valid || serverAddress.pristine)"
             [class.is-valid]="serverAddress.valid"
-            required #serverAddress="ngModel" [disabled]="!editable"
+            required #serverAddress="ngModel" [disabled]="!editable" trimInput
           />
         </div>
       </div>
@@ -68,7 +68,7 @@
         placeholder="请输入数据库名称 ..." [(ngModel)]="model.databaseName"
         [class.is-invalid]="!(databaseName.valid || databaseName.pristine)"
         [class.is-valid]="databaseName.valid"
-        required #databaseName="ngModel" [disabled]="!editable"
+        required #databaseName="ngModel" [disabled]="!editable" trimInput
       />
     </div>
     <div class="row">
@@ -76,7 +76,7 @@
         <div class="mb-3">
           <label class="form-label text-muted" for="username">用户名 </label>
           <input class="form-control" type="text" id="username" name="username"
-            placeholder="请输入用户名 ..." [(ngModel)]="model.username"
+            placeholder="请输入用户名 ..." [(ngModel)]="model.username" trimInput
             [disabled]="!editable"
           />
         </div>
@@ -87,12 +87,12 @@
           <div class="input-group">
             <input class="form-control" type="text" id="password" name="password"
               placeholder="请输入密码 ..." *ngIf="showPass; else hidenPassTpl" [(ngModel)]="model.password"
-              [disabled]="!editable"
+              [disabled]="!editable" trimInput
             />
             <ng-template #hidenPassTpl>
               <input class="form-control" type="password" id="password" name="password"
                 placeholder="请输入密码 ..." [(ngModel)]="model.password"
-                [disabled]="!editable"
+                [disabled]="!editable" trimInput
               />
             </ng-template>
             <button type="button" class="btn btn-outline-secondary" (click)="showPass = !showPass"

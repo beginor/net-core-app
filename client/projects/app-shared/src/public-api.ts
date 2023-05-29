@@ -15,3 +15,4 @@ export * from './lib/echart/echart.component';
 export * from './lib/echart/echart.service';
 export * from './lib/is-prod';
 export * from './lib/file-size.pipe';
+export * from './lib/trim-input-directive';
