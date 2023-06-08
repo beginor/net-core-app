@@ -17,7 +17,7 @@ partial class Startup {
         var cfg = new Configuration();
         var configFile = Path.Combine("config", "hibernate.config");
         cfg.Configure(configFile);
-        var isDevelopment = "false"; // env.IsDevelopment().ToString();
+        var isDevelopment = env.IsDevelopment().ToString();
         cfg.SetProperty(Environment.ShowSql, isDevelopment);
         cfg.SetProperty(Environment.FormatSql, isDevelopment);
         cfg.AddIdentityMappingsForPostgres();
@@ -30,7 +30,7 @@ partial class Startup {
     }
 
     private void ConfigureHibernate(WebApplication app, IWebHostEnvironment env) {
-        // do nothing know
+        // do nothing now
     }
 
 }
