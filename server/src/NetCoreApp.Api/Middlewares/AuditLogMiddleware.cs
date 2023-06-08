@@ -12,48 +12,44 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Dapper;
+
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
+using NHibernate;
 
 namespace Beginor.NetCoreApp.Api.Middlewares;
 
 public class AuditLogMiddleware : Disposable {
 
     private readonly RequestDelegate next;
-    private IActionDescriptorCollectionProvider provider;
-    private IActionSelector selector;
-    private ILogger<AuditLogMiddleware> logger;
-    private NHibernate.ISession session;
-    private IServiceScope scope;
-    private CancellationTokenSource cts;
-    private Channel<AppAuditLog> channel = Channel.CreateUnbounded<AppAuditLog>();
+    private readonly IActionDescriptorCollectionProvider provider;
+    private readonly IActionSelector selector;
+    private readonly ILogger<AuditLogMiddleware> logger;
+    private ISessionFactory sessionFactory;
+    private readonly CancellationTokenSource cts;
+    private readonly Channel<AppAuditLog> channel = Channel.CreateUnbounded<AppAuditLog>();
 
     public AuditLogMiddleware(
         RequestDelegate next,
         IActionDescriptorCollectionProvider provider,
         IActionSelector selector,
-        IServiceProvider serviceProvider,
-        ILogger<AuditLogMiddleware> logger
+        ILogger<AuditLogMiddleware> logger,
+        ISessionFactory sessionFactory
     ) {
         this.next = next ?? throw new ArgumentNullException(nameof(next));
         this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
         this.selector = selector ?? throw new ArgumentNullException(nameof(selector));
-        if (serviceProvider == null) {
-            throw new ArgumentNullException(nameof(serviceProvider));
-        }
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.scope = serviceProvider.CreateScope();
-        this.session = this.scope.ServiceProvider.GetService<NHibernate.ISession>()!;
+        this.sessionFactory = sessionFactory ?? throw new ArgumentNullException(nameof(sessionFactory));
         cts = new CancellationTokenSource();
         ThreadPool.QueueUserWorkItem(StartSaveAuditLog, cts.Token, preferLocal: false);
     }
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            // dispose managed resource here
-            this.cts.Cancel();
-            this.session.Dispose();
-            this.scope.Dispose();
+            cts.Cancel();
         }
         base.Dispose(disposing);
     }
@@ -93,16 +89,16 @@ public class AuditLogMiddleware : Disposable {
         const int batchSize = 128;
         IList<AppAuditLog> logs = new List<AppAuditLog>(batchSize);
         while (!token.IsCancellationRequested) {
-            while (await channel.Reader.WaitToReadAsync()) {
+            while (await channel.Reader.WaitToReadAsync(token)) {
                 while (channel.Reader.TryRead(out var log)) {
                     logs.Add(log);
                     if (logs.Count == batchSize) {
-                        BatchSaveInTransaction(logs);
+                        await BatchSaveInTransaction(logs);
                         logs.Clear();
                     }
                 }
                 if (logs.Count > 0) {
-                    BatchSaveInTransaction(logs);
+                    await BatchSaveInTransaction(logs);
                     logs.Clear();
                 }
             }
@@ -115,26 +111,20 @@ public class AuditLogMiddleware : Disposable {
         }
     }
 
-    private void BatchSaveInTransaction(IList<AppAuditLog> logs) {
+    private async Task BatchSaveInTransaction(IList<AppAuditLog> logs) {
         logger.LogInformation($"Batch save {logs.Count} audit logs to db ...");
-        session.SetBatchSize(logs.Count);
-        using (var tx = session.BeginTransaction()) {
-            try {
-                session.SetBatchSize(logs.Count);
-                foreach (var log in logs) {
-                    session.Save(log);
-                }
-                session.Flush();
-                session.Clear();
-                tx.Commit();
-            }
-            catch (Exception ex) {
-                tx?.Rollback();
-                logger.LogError(ex, "Can not save audit logs with transactions.");
-                foreach (var log in logs) {
-                    logger.LogError(log.ToJson());
-                }
-            }
+        using var session = sessionFactory.OpenStatelessSession();
+        var conn = session.Connection;
+        var sql = EntityHelper.GenerateInsertSql(typeof(AppAuditLog));
+        await using var tx = await conn.BeginTransactionAsync();
+        try {
+            var rowsAffected = await conn.ExecuteAsync(sql, logs);
+            logger.LogInformation($"Save {rowsAffected} app audit logs to db.");
+            await tx.CommitAsync();
+        }
+        catch (Exception ex) {
+            logger.LogError(ex, $"Can not save app audit logs.");
+            await tx.RollbackAsync();
         }
     }
 
