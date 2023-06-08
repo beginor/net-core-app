@@ -19,9 +19,9 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 [ApiController]
 public class AppAttachmentController : Controller {
 
-    private ILogger<AppAttachmentController> logger;
-    private IAppAttachmentRepository repository;
-    private UserManager<AppUser> userMgr;
+    private readonly ILogger<AppAttachmentController> logger;
+    private readonly IAppAttachmentRepository repository;
+    private readonly UserManager<AppUser> userMgr;
 
     public AppAttachmentController(
         ILogger<AppAttachmentController> logger,
@@ -51,17 +51,17 @@ public class AppAttachmentController : Controller {
             return BadRequest("No file in current request ！");
         }
         var businessId = string.Empty;
-        const string key = "businessId";
-        if (Request.Query.TryGetValue(key, out var queryVal)) {
+        const string BusinessId = "businessId";
+        if (Request.Query.TryGetValue(BusinessId, out var queryVal)) {
             businessId = queryVal.ToString();
         }
-        else if (Request.Form.TryGetValue(key, out var formVal)) {
+        else if (Request.Form.TryGetValue(BusinessId, out var formVal)) {
             businessId = formVal.ToString();
         }
         if (string.IsNullOrEmpty(businessId)) {
             return BadRequest("businessId is required.");
         }
-        if (!long.TryParse(businessId, out var longVal)) {
+        if (!long.TryParse(businessId, out _)) {
             return BadRequest("invalid businessId.");
         }
 
@@ -143,7 +143,7 @@ public class AppAttachmentController : Controller {
             var result = new FileContentResult(content, model.ContentType) {
                 LastModified = new DateTimeOffset(model.CreatedAt)
             };
-            if (action.EqualsOrdinalIgnoreCase("download")) {
+            if (action != null && action.EqualsOrdinalIgnoreCase("download")) {
                 result.FileDownloadName = model.FileName;
             }
             return result;
