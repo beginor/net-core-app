@@ -32,7 +32,7 @@ export class StorageBrowserComponent implements OnInit {
     }
 
     public async getFolderContentByPath(path: string): Promise<void> {
-        this.params.path = path ?? '.';
+        this.params.path = path ?? '/';
         await this.loadData();
     }
 

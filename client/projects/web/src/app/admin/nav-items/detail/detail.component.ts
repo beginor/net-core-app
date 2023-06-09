@@ -125,14 +125,14 @@ export class DetailComponent implements OnInit {
             title: '选择图标',
             params: {
                 alias: 'icons',
-                path: '.',
+                path: '/',
                 filter: '*.svg'
             }
         });
         modalRef.result.then((path: string) => {
             let icon = path;
             if (icon.endsWith('.svg')) {
-                icon = icon.substr(0, icon.length - 4);
+                icon = icon.substring(0, icon.length - 4);
                 this.model.icon = icon;
             }
         }).catch(ex => { console.error(ex); });

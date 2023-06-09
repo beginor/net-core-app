@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Models;
 using Beginor.NetCoreApp.Data.Repositories;
 
@@ -17,14 +19,14 @@ partial class AppStorageController {
     [Authorize("app_storages.read_folder_content")]
     public async Task<ActionResult<AppStorageBrowseModel>> GetFolderContent(
         string alias,
-        string path,
+        string path = "/",
         string filter = "*.*"
     ) {
         try {
             var model = await repository.GetFolderContentAsync(
                 new AppStorageBrowseModel {
                     Alias = alias,
-                    Path = path,
+                    Path = path.TrimStartDirectorySeparatorChar(),
                     Filter = filter
                 }
             );
@@ -49,7 +51,9 @@ partial class AppStorageController {
             return BadRequest("path is null!");
         }
         try {
-            var stream = await repository.GetFileContentAsync(alias, path);
+            var stream = await repository.GetFileContentAsync(
+                alias, path.TrimStartDirectorySeparatorChar()
+            );
             if (stream == null) {
                 return NotFound();
             }

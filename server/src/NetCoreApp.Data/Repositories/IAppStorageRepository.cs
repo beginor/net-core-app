@@ -1,8 +1,5 @@
-using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.FileProviders;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Models;
 
@@ -17,8 +14,6 @@ public partial interface IAppStorageRepository : IRepository<AppStorageModel, lo
     );
 
     Task<AppStorageBrowseModel?> GetFolderContentAsync(AppStorageBrowseModel model);
-
-    Task<string> GetPhysicalPathAsync(string aliasedPath);
 
     Task<Stream?> GetFileContentAsync(string alias, string path);
 

@@ -22,19 +22,22 @@ namespace Beginor.NetCoreApp.Data.Repositories;
 public partial class AppStorageRepository : HibernateRepository<AppStorage, AppStorageModel, long>, IAppStorageRepository {
 
     private IDistributedCache cache;
-    private IFileProvider fileProvider;
     private CommonOption commonOption;
+    private IWebHostEnvironment webHostEnv;
+    private IFileProvider fileProvider;
 
     public AppStorageRepository(
         ISession session,
         IMapper mapper,
         IDistributedCache cache,
-        IFileProvider fileProvider,
-        CommonOption commonOption
+        CommonOption commonOption,
+        IWebHostEnvironment webHostEnv,
+        IFileProvider fileProvider
     ) : base(session, mapper) {
         this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
-        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
         this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
+        this.webHostEnv = webHostEnv ?? throw new ArgumentNullException(nameof(webHostEnv));
+        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
 
     protected override void Dispose(bool disposing) {
@@ -68,64 +71,75 @@ public partial class AppStorageRepository : HibernateRepository<AppStorage, AppS
     }
 
     public async Task<AppStorageBrowseModel?> GetFolderContentAsync(AppStorageBrowseModel model) {
-        var folderItem = await GetByAlias(model.Alias!);
-        if (folderItem == null) {
+        var cacheItem = await GetCacheItemByAliasAsync(model.Alias!);
+        if (cacheItem == null) {
             return null;
         }
-        if (model.Path!.StartsWith(Path.DirectorySeparatorChar)) {
-            model.Path = model.Path.Substring(1);
+        var rootFolder = cacheItem.RootFolder;
+        if (rootFolder.StartsWith("!")) {
+            var fullPath = Path.Combine(rootFolder.Substring(1), model.Path);
+            var dirContent = fileProvider.GetDirectoryContents(fullPath);
+            if (!dirContent.Exists) {
+                return null;
+            }
+            model.Folders = dirContent.Where(f => f.IsDirectory).Select(f => f.Name).ToArray();
+            model.Files = dirContent.Where(f => !f.IsDirectory).Select(f => f.Name).ToArray();
         }
-        var item = await GetByAlias(model.Alias);
-        var path = model.Path;
-        if (path.StartsWith(Path.PathSeparator)) {
-            path = path.Substring(1);
+        else {
+            var dirInfo = new DirectoryInfo(Path.Combine(cacheItem.RootFolder, model.Path));
+            if (!dirInfo.Exists) {
+                return null;
+            }
+            model.Folders = dirInfo.EnumerateDirectories().Select(x => x.Name).ToArray();
+            model.Files = dirInfo.EnumerateFiles(model.Filter).Select(x => x.Name).ToArray();
         }
-        path = Path.Combine(item.RootFolder, path);
-        var dirInfo = fileProvider.GetDirectoryContents(path);
-        if (!dirInfo.Exists) {
-            return null;
-        }
-        model.Folders = dirInfo.Where(f => f.IsDirectory).Select(f => f.Name).ToArray();
-        model.Files = dirInfo.Where(f => !f.IsDirectory).Select(x => x.Name).ToArray();
         return model;
-    }
-
-    public async Task<string> GetPhysicalPathAsync(string aliasedPath) {
-        Argument.NotNullOrEmpty(aliasedPath, nameof(aliasedPath));
-        var idx = aliasedPath.IndexOf(':');
-        if (idx < 0) {
-            throw new InvalidOperationException($"Invalid path {aliasedPath}");
-        }
-        var alias = aliasedPath.Substring(0, idx);
-        var path = aliasedPath.Substring(idx + 1);
-        var folderItem = await GetByAlias(alias);
-        if (folderItem == null) {
-            return string.Empty;
-        }
-        var item = await GetByAlias(alias);
-        var fileInfo = fileProvider.GetFileInfo(path);
-        var result = string.Empty;
-        if (fileInfo.Exists) {
-            result = fileInfo.PhysicalPath;
-        }
-        return result!;
     }
 
     public async Task<Stream?> GetFileContentAsync(string alias, string path) {
         Argument.NotNullOrEmpty(alias, nameof(alias));
         Argument.NotNullOrEmpty(path, nameof(path));
-        var item = await GetByAlias(alias);
-        var fileInfo = fileProvider.GetFileInfo(path);
-        if (!fileInfo.Exists) {
+        var cacheItem = await GetCacheItemByAliasAsync(alias);
+        if (cacheItem == null) {
             return null;
         }
-        return fileInfo.CreateReadStream();
+        var rootFolder = cacheItem.RootFolder;
+        if (rootFolder.StartsWith("!")) {
+            var fullPath = Path.Combine(rootFolder.Substring(1), path);
+            var fileInfo = fileProvider.GetFileInfo(fullPath);
+            return fileInfo.Exists ? fileInfo.CreateReadStream() : null;
+        }
+        else {
+            var fullPath = Path.Combine(cacheItem.RootFolder, path.TrimStartDirectorySeparatorChar());
+            var fileInfo = new FileInfo(fullPath);
+            return fileInfo.Exists ? fileInfo.OpenRead() : null;
+        }
     }
 
-    private async Task<AppStorage> GetByAlias(string alias) {
-        var folder = await Session.Query<AppStorage>()
-            .FirstOrDefaultAsync(x => x.AliasName == alias);
-        return folder;
+    private async Task<AppStorageCacheItem?> GetCacheItemByAliasAsync(string alias) {
+        var key = $"NetCoreApp_AppStorage_{alias}";
+        var cacheItem = await cache.GetAsync<AppStorageCacheItem>(key);
+        if (cacheItem == null) {
+            var entity = await Session.Query<AppStorage>().FirstOrDefaultAsync(
+                x => x.AliasName == alias
+            );
+            if (entity == null) {
+                return null;
+            }
+            cacheItem = new AppStorageCacheItem {
+                Id = entity.Id,
+                AliasName = entity.AliasName,
+                Readonly = entity.Readonly,
+                Roles = entity.Roles,
+                RootFolder = entity.RootFolder,
+            };
+            await cache.SetAsync(
+                key,
+                cacheItem,
+                commonOption.Cache.MemoryExpiration
+            );
+        }
+        return cacheItem;
     }
 
 }
