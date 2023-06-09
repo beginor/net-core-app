@@ -116,8 +116,46 @@ public partial class AppStorageRepository : HibernateRepository<AppStorage, AppS
         }
     }
 
+    public async Task<string> GetPhysicalPathAsync(string fullPath) {
+        var idx = fullPath.IndexOf(':');
+        if (idx == -1) {
+            throw new ArgumentException($"{fullPath} does not contain an alias!");
+        }
+        var alias = fullPath.Substring(0, idx);
+        var subPath = fullPath.Substring(idx + 1);
+        var cacheItem = await GetCacheItemByAliasAsync(alias);
+        if (cacheItem == null) {
+            return string.Empty;
+        }
+        var rootFolder = cacheItem.RootFolder;
+        if (rootFolder.StartsWith("!")) {
+            var path = Path.Combine(
+                cacheItem.RootFolder.Substring(1),
+                subPath.TrimStartDirectorySeparatorChar()
+            );
+            if (fileProvider is CompositeFileProvider compositeFileProvider) {
+                foreach (var provider in compositeFileProvider.FileProviders) {
+                    if (provider is not PhysicalFileProvider physicalFileProvider) {
+                        continue;
+                    }
+                    var fileInfo = physicalFileProvider.GetFileInfo(path);
+                    if (fileInfo.Exists) {
+                        return fileInfo.PhysicalPath!;
+                    }
+                }
+            }
+        }
+        else {
+            return Path.Combine(
+                rootFolder,
+                subPath.TrimStartDirectorySeparatorChar()
+            );
+        }
+        return string.Empty;
+    }
+
     private async Task<AppStorageCacheItem?> GetCacheItemByAliasAsync(string alias) {
-        var key = $"NetCoreApp_AppStorage_{alias}";
+        var key = $"GisHub_AppStorage_{alias}";
         var cacheItem = await cache.GetAsync<AppStorageCacheItem>(key);
         if (cacheItem == null) {
             var entity = await Session.Query<AppStorage>().FirstOrDefaultAsync(
