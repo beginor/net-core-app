@@ -1,7 +1,7 @@
 import { Injectable, ErrorHandler } from '@angular/core';
 import {
-    CanLoad, CanActivate, Route, UrlSegment, Router, ActivatedRouteSnapshot,
-    RouterStateSnapshot, NavigationCancel
+    Route, UrlSegment, Router, ActivatedRouteSnapshot,
+    RouterStateSnapshot, NavigationError,
 } from '@angular/router';
 
 import { first } from 'rxjs/operators';
@@ -9,23 +9,24 @@ import { first } from 'rxjs/operators';
 import { AccountService } from './account.service';
 
 @Injectable({ providedIn: 'root' })
-export class AuthGuard implements CanLoad, CanActivate {
+export class AuthGuard {
 
     constructor(
         private router: Router,
         private accountSvc: AccountService,
         private errorHandler: ErrorHandler
-    ) { }
+    ) {
+        this.router.events.pipe(first(evt => evt instanceof NavigationError))
+            .subscribe(e => {
+                const nc = e as NavigationError;
+                this.redirectToLogin(nc.url);
+            });
+    }
 
     public async canLoad(
         route: Route,
         segments: UrlSegment[]
     ): Promise<boolean> {
-        this.router.events.pipe(first(evt => evt instanceof NavigationCancel))
-            .subscribe(e => {
-                const nc = e as NavigationCancel;
-                this.redirectToLogin(nc.url);
-            });
         try {
             const info = await this.accountSvc.getInfo();
             return !!info.id;

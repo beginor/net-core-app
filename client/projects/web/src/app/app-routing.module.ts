@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { inject, NgModule } from '@angular/core';
+import {ActivatedRouteSnapshot, Route, RouterModule, RouterStateSnapshot, Routes, UrlSegment} from '@angular/router';
 
 import { AuthGuard, isProd } from 'app-shared';
 
@@ -10,33 +10,54 @@ const routes: Routes = [
     {
         path: 'home',
         loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
-        canLoad: []
+        canMatch: []
     },
     {
         path: 'about',
         loadChildren: () => import('./about/about.module').then(m => m.AboutModule),
-        canLoad: [AuthGuard]
+        canMatch: [
+            (route: Route, segments: UrlSegment[]): Promise<boolean> => {
+                return inject(AuthGuard).canLoad(route, segments);
+            }
+        ],
+        canActivate: [
+            (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> => {
+                return inject(AuthGuard).canActivate(route, state);
+            }
+        ],
     },
     {
         path: 'admin',
         loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
-        canLoad: [AuthGuard],
-        canActivate: [AuthGuard]
+        canMatch: [
+            (route: Route, segments: UrlSegment[]): Promise<boolean> => {
+                return inject(AuthGuard).canLoad(route, segments);
+            }
+        ],
+        canActivate: [
+            (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> => {
+                return inject(AuthGuard).canActivate(route, state);
+            }
+        ]
     },
     {
         path: 'login',
         loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
-        canLoad: []
+        canMatch: []
     },
     {
         path: 'iframe/:src',
         component: IframeComponent,
-        canLoad: []
+        canMatch: []
     },
     {
         path: 'account',
         loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
-        canLoad: [AuthGuard]
+        canMatch: [
+            (route: Route, segments: UrlSegment[]): Promise<boolean> => {
+                return inject(AuthGuard).canLoad(route, segments);
+            }
+        ],
     }
 ];
 /* eslint-enable max-len */
