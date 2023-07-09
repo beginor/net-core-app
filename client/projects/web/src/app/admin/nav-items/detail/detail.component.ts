@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {
-    trigger, transition, useAnimation, AnimationEvent
-} from '@angular/animations';
-import { Router, ActivatedRoute } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveOffcanvas, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { slideInRight, slideOutRight, AccountService } from 'app-shared';
+import { AccountService } from 'app-shared';
 import {
     NavItemsService, NavItemModel, MenuOption
 } from '../nav-items.service';
@@ -15,18 +11,24 @@ import { StorageBrowserComponent } from '../../../common';
     selector: 'app-nav-item-detail',
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.css'],
-    animations: [
-        trigger('animation', [
-            transition(':enter', useAnimation(slideInRight)),
-            transition(':leave', useAnimation(slideOutRight))
-        ])
-    ]
 })
 export class DetailComponent implements OnInit {
 
-    public animation = '';
-    public formTitle: string;
-    public editable: boolean;
+    public editable = false;
+    public id = '';
+
+    public getTitle(): string {
+        if (this.id === '0') {
+            return '新建菜单项';
+        }
+        else if (this.editable) {
+            return '编辑菜单项';
+        }
+        else {
+            return '查看菜单项';
+        }
+    }
+
     public targets = [
         { name: '当前窗口', value: '' },
         { name: '内嵌窗口', value: '_iframe' }
@@ -35,31 +37,14 @@ export class DetailComponent implements OnInit {
     public selectedRoles: string[] = [];
     public parents: MenuOption[] = [];
 
-    private id: string;
     private reloadList = false;
 
     constructor(
-        private router: Router,
         private modal: NgbModal,
-        private route: ActivatedRoute,
+        private activeOffcanvas: NgbActiveOffcanvas,
         public account: AccountService,
         public vm: NavItemsService
-    ) {
-        const { id, editable } = route.snapshot.params;
-        if (id === '0') {
-            this.formTitle = '新建菜单项';
-            this.editable = true;
-        }
-        else if (editable === 'true') {
-            this.formTitle = '编辑菜单项';
-            this.editable = true;
-        }
-        else {
-            this.formTitle = '查看菜单项';
-            this.editable = false;
-        }
-        this.id = id as string;
-    }
+    ) { }
 
     public async ngOnInit(): Promise<void> {
         await this.vm.getAllRoles();
@@ -72,17 +57,8 @@ export class DetailComponent implements OnInit {
         }
     }
 
-    public async onAnimationEvent(e: AnimationEvent): Promise<void> {
-        if (e.fromState === '' && e.toState === 'void') {
-            await this.router.navigate(['../'], { relativeTo: this.route });
-            if (this.reloadList) {
-                await this.vm.search();
-            }
-        }
-    }
-
-    public goBack(): void {
-        this.animation = 'void';
+    public cancel(): void {
+        this.activeOffcanvas.dismiss('');
     }
 
     public async save(): Promise<void> {
@@ -92,8 +68,7 @@ export class DetailComponent implements OnInit {
         else {
             await this.vm.create(this.model);
         }
-        this.reloadList = true;
-        this.goBack();
+        this.activeOffcanvas.close('ok');
     }
 
     public isRoleChecked(role: string): boolean {
