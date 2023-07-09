@@ -1,16 +1,20 @@
 import { inject, NgModule } from '@angular/core';
-import {ActivatedRouteSnapshot, Route, RouterModule, RouterStateSnapshot, Routes, UrlSegment} from '@angular/router';
+import {
+    ActivatedRouteSnapshot, Route, RouterModule, RouterStateSnapshot, Routes,
+    UrlSegment
+} from '@angular/router';
 
 import { AuthGuard, isProd } from 'app-shared';
 
 import { IframeComponent } from './common';
+
 /* eslint-disable max-len */
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     {
         path: 'home',
         loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
-        canMatch: []
+        canMatch: [],
     },
     {
         path: 'about',
