@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
@@ -97,6 +98,32 @@ public partial class AccountController : Controller {
             logger.LogError(ex, $"Can not get user account info.");
             return this.InternalServerError(ex);
         }
+    }
+
+    [HttpGet("token")]
+    [Authorize("account.get_info_by_token")]
+    [ResponseCache(NoStore = true, Duration = 0)]
+    public async Task<ActionResult<AccountInfoModel>> GetInfoByToken() {
+        var identity = User.Identity as ClaimsIdentity;
+        if (identity == null) {
+            var anonymousIdentity = await CreateAnonymousIdentity();
+            var anonymousInfo = await CreateAccountInfoModel(anonymousIdentity);
+            anonymousInfo.Token = CreateJwtToken(anonymousIdentity);
+            return anonymousInfo;
+        }
+        var userName = identity.Name;
+        var idx = userName.IndexOf(':');
+        if (idx > -1) {
+            userName = userName.Substring(0, idx);
+        }
+        var appUser = await userMgr.FindByNameAsync(userName);
+        if (appUser == null) {
+            return NotFound();
+        }
+        var userIdentity = await CreateIdentityAsync(appUser);
+        var info = await CreateAccountInfoModel(userIdentity);
+        info.Token = CreateJwtToken(userIdentity);
+        return info;
     }
 
     /// <summary>用户登录</summary>
