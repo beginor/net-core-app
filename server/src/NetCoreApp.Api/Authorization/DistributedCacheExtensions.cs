@@ -14,7 +14,7 @@ public static class DistributedCacheExtensions {
     ) {
         var buffer = await cache.GetAsync(userId);
         if (buffer == null) {
-            return new Claim[0];
+            return Array.Empty<Claim>();
         }
         await using var stream = new MemoryStream(buffer);
         var reader = new BinaryReader(stream);
