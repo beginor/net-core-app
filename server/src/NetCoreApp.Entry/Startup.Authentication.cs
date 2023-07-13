@@ -96,7 +96,6 @@ partial class Startup {
                     var principal = new ClaimsPrincipal(identity);
                     context.Principal = principal;
                     context.Success();
-                    return;
                 }
             };
         });
