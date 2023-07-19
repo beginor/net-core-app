@@ -17,12 +17,20 @@ namespace Beginor.GisHub.Gmap.Utils;
 
 public static class ProxyUtil {
 
+    private static readonly string UserAgent = "Mozilla/5.0 AppleWebKit/537.36 Chrome/114.0.0.0 Safari/537.36";
+
     public static async Task<HttpRequestMessage> CreateHttpRequestMessage(HttpRequest request, Uri uri) {
         var method = new HttpMethod(request.Method);
         var requestMessage = new HttpRequestMessage(method, uri);
-        requestMessage.Headers.UserAgent.ParseAdd(request.Headers.UserAgent);
-        requestMessage.Headers.Accept.ParseAdd(request.Headers.Accept);
-        requestMessage.Headers.AcceptEncoding.ParseAdd(request.Headers.AcceptEncoding);
+        if (!requestMessage.Headers.UserAgent.TryParseAdd(request.Headers.UserAgent)) {
+            requestMessage.Headers.UserAgent.ParseAdd(UserAgent);
+        }
+        if (!requestMessage.Headers.Accept.TryParseAdd(request.Headers.Accept)) {
+            requestMessage.Headers.Accept.ParseAdd("*/*");
+        }
+        if (!requestMessage.Headers.AcceptEncoding.TryParseAdd(request.Headers.AcceptEncoding)) {
+            requestMessage.Headers.AcceptEncoding.TryParseAdd("*");
+        }
         if (requestMessage.Method == HttpMethod.Post) {
             var bodyStream = new MemoryStream();
             await request.BodyReader.CopyToAsync(bodyStream);
