@@ -48,8 +48,10 @@ public static class ProxyUtil {
             AutomaticDecompression = DecompressionMethods.All,
             AllowAutoRedirect = false,
         };
-        var http = new HttpClient(handler);
-        http.BaseAddress = new Uri(baseUrl);
+        var http = new HttpClient(handler) {
+            BaseAddress = new Uri(baseUrl),
+            Timeout = TimeSpan.FromMinutes(3.0)
+        };
         return http;
     }
 
