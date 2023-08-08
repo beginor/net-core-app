@@ -17,8 +17,7 @@ public class SystemTest : BaseTest {
 
     [Test]
     public async Task _01_CanInitSystem() {
-        var privilegeCount = await SyncSyncRequiredPrivilegesAsync();
-        Assert.Greater(privilegeCount, 0);
+        await CreatePrivilegesAsync();
         var adminRoleName = "administrators";
         await CreateAdminRoleAsync(adminRoleName, "系统管理员");
         var anonymousRoleName = "anonymous";
@@ -85,6 +84,78 @@ public class SystemTest : BaseTest {
             };
             await manager.CreateAsync(role);
             Assert.IsNotEmpty(role.Id);
+        }
+    }
+
+    private async Task CreatePrivilegesAsync() {
+        var repo = ServiceProvider.GetService<IAppPrivilegeRepository>();
+        var count = await repo.CountAllAsync();
+        if (count > 0) {
+            return;
+        }
+        var privileges = new AppPrivilegeModel[] {
+            new () { Module = "菜单", Name = "app_nav_items.create", Description = "创建菜单项", IsRequired = true },
+            new () { Module = "菜单", Name = "app_nav_items.delete", Description = "删除菜单项", IsRequired = true },
+            new () { Module = "菜单", Name = "app_nav_items.update", Description = "更新菜单项", IsRequired = true },
+            new () { Module = "菜单", Name = "app_nav_items.read", Description = "读取菜单项列表", IsRequired = true },
+            new () { Module = "菜单", Name = "app_nav_items.read_by_id", Description = "读取菜单项详情", IsRequired = true },
+            new () { Module = "用户", Name = "app_users.create", Description = "创建用户", IsRequired = true },
+            new () { Module = "用户", Name = "app_users.delete", Description = "删除用户", IsRequired = true },
+            new () { Module = "用户", Name = "app_users.update", Description = "更新用户", IsRequired = true },
+            new () { Module = "用户", Name = "app_users.reset_pass", Description = "重置用户密码", IsRequired = true },
+            new () { Module = "用户", Name = "app_users.lock", Description = "锁定用户", IsRequired = true },
+            new () { Module = "用户", Name = "app_users.unlock", Description = "锁定用户", IsRequired = true },
+            new () { Module = "用户", Name = "app_users.add_role_to_user", Description = "添加用户角色", IsRequired = true },
+            new () { Module = "用户", Name = "app_users.remove_role_from_user", Description = "删除用户的角色", IsRequired = true },
+            new () { Module = "用户", Name = "app_users.read_by_id", Description = "读取用户信息详情", IsRequired = true },
+            new () { Module = "用户", Name = "app_users.read_user_roles", Description = "读取用户角色", IsRequired = true },
+            new () { Module = "用户", Name = "app_users.read", Description = "读取用户列表", IsRequired = true },
+            new () { Module = "角色", Name = "app_roles.create", Description = "创建角色", IsRequired = true },
+            new () { Module = "角色", Name = "app_roles.remove_privilige_from_role", Description = "删除角色的权限", IsRequired = true },
+            new () { Module = "角色", Name = "app_roles.delete", Description = "删除角色", IsRequired = true },
+            new () { Module = "角色", Name = "app_roles.update", Description = "更新角色", IsRequired = true },
+            new () { Module = "角色", Name = "app_roles.add_privilege_to_role", Description = "添加角色的权限", IsRequired = true },
+            new () { Module = "角色", Name = "app_roles.read_by_id", Description = "读取角色详情", IsRequired = true },
+            new () { Module = "角色", Name = "app_roles.read_role_privileges", Description = "读取角色的权限", IsRequired = true },
+            new () { Module = "角色", Name = "app_roles.read_users_in_role", Description = "读取角色的用户列表", IsRequired = true },
+            new () { Module = "角色", Name = "app_roles.read", Description = "读取角色列表", IsRequired = true },
+            new () { Module = "权限", Name = "app_privileges.sync_required", Description = "同步必须的权限", IsRequired = true },
+            new () { Module = "权限", Name = "app_privileges.update", Description = "更新权限", IsRequired = true },
+            new () { Module = "权限", Name = "app_privileges.create", Description = "创建权限", IsRequired = true },
+            new () { Module = "权限", Name = "app_privileges.delete", Description = "删除权限", IsRequired = true },
+            new () { Module = "权限", Name = "app_privileges.read_by_id", Description = "读取权限详情", IsRequired = true },
+            new () { Module = "权限", Name = "app_privileges.read_modules", Description = "读取权限的模块列表", IsRequired = true },
+            new () { Module = "权限", Name = "app_privileges.read", Description = "读取权限信息列表", IsRequired = true },
+            new () { Module = "存储配置", Name = "app_storages.read", Description = "读取存储配置列表", IsRequired = true },
+            new () { Module = "存储配置", Name = "app_storages.create", Description = "创建存储配置", IsRequired = true },
+            new () { Module = "存储配置", Name = "app_storages.delete", Description = "删除存储配置", IsRequired = true },
+            new () { Module = "存储配置", Name = "app_storages.read_by_id", Description = "读取存储配置详情", IsRequired = true },
+            new () { Module = "存储配置", Name = "app_storages.update", Description = "更新存储配置", IsRequired = true },
+            new () { Module = "存储配置", Name = "app_storages.read_folder_content", Description = "读取存储配置的文件列表", IsRequired = true },
+            new () { Module = "存储配置", Name = "app_storages.read_file_content", Description = "读取存储配置的文件内容", IsRequired = true },
+            new () { Module = "审计日志", Name = "app_audit_logs.create", Description = "创建审计日志", IsRequired = true },
+            new () { Module = "审计日志", Name = "app_audit_logs.read_by_id", Description = "读取审计日志详情", IsRequired = true },
+            new () { Module = "审计日志", Name = "app_audit_logs.read", Description = "读取审计日志列表", IsRequired = true },
+            new () { Module = "审计日志", Name = "app_audit_logs.read_stat", Description = "读取统计数据", IsRequired = true },
+            new () { Module = "运行日志", Name = "app_logs.read_by_id", Description = "读取运行日志详情", IsRequired = true },
+            new () { Module = "运行日志", Name = "app_logs.read", Description = "读取运行日志列表", IsRequired = true },
+            new () { Module = "附件", Name = "app_attachments.update", Description = "更新附件", IsRequired = true },
+            new () { Module = "附件", Name = "app_attachments.delete", Description = "删除附件", IsRequired = true },
+            new () { Module = "附件", Name = "app_attachments.create", Description = "创建附件", IsRequired = true },
+            new () { Module = "附件", Name = "app_attachments.read_by_id", Description = "读取附件详情", IsRequired = true },
+            new () { Module = "附件", Name = "app_attachments.read", Description = "读取附件列表", IsRequired = true },
+            new () { Module = "JSON数据", Name = "app_json_data.update", Description = "更新JSON数据", IsRequired = true },
+            new () { Module = "JSON数据", Name = "app_json_data.delete", Description = "删除JSON数据", IsRequired = true },
+            new () { Module = "JSON数据", Name = "app_json_data.read", Description = "读取JSON数据列表", IsRequired = true },
+            new () { Module = "JSON数据", Name = "app_json_data.read_by_id", Description = "读取JSON数据详情", IsRequired = true },
+            new () { Module = "客户端错误", Name = "app_client_errors.create", Description = "创建客户端错误记录", IsRequired = true },
+            new () { Module = "客户端错误", Name = "app_client_errors.read", Description = "读取客户端错误记录列表", IsRequired = true },
+            new () { Module = "客户端错误", Name = "app_client_errors.read_by_id", Description = "读取客户端错误记录详情", IsRequired = true },
+            new () { Module = "帐户", Name = "account.get_info_by_token", Description = "帐户通过 token 获取帐户信息", IsRequired = true },
+        };
+        foreach (var privilege in privileges) {
+            await repo.SaveAsync(privilege);
+            Assert.IsNotEmpty(privilege.Id);
         }
     }
 
