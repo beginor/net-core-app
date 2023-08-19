@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
 import {
-    trigger, transition, useAnimation, AnimationEvent
-} from '@angular/animations';
-import {
     FormGroup, FormControl, Validators
 } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { NgbActiveOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
 import {
-    slideInRight, slideOutRight, AccountService, confirmTo
+    AccountService, confirmTo
 } from 'app-shared';
 import { UsersService } from '../users.service';
 
@@ -16,18 +13,15 @@ import { UsersService } from '../users.service';
     selector: 'app-user-password',
     templateUrl: './password.component.html',
     styleUrls: ['./password.component.css'],
-    animations: [
-        trigger('animation', [
-            transition(':enter', useAnimation(slideInRight)),
-            transition(':leave', useAnimation(slideOutRight))
-        ])
-    ]
 })
 export class PasswordComponent {
 
-    public animation = '';
-    public title: string;
-    public editable: boolean;
+    public userId = '';
+    public fullname = '';
+    public get title(): string {
+        return `重置 ${this.fullname} 的密码`;
+    }
+    public editable = true;
     public form: FormGroup;
 
     public get password(): FormControl {
@@ -38,18 +32,11 @@ export class PasswordComponent {
         return this.form.get('confirmPassword') as FormControl;
     }
 
-    private userId: string;
     constructor(
-        private router: Router,
-        private route: ActivatedRoute,
+        private activeOffcanvas: NgbActiveOffcanvas,
         public account: AccountService,
         public vm: UsersService
     ) {
-        const { id, fullname } = route.snapshot.params;
-        this.userId = id as string;
-        const username = fullname as string || '用户';
-        this.title = `重置 ${username} 的密码`;
-        this.editable = true;
         this.form = new FormGroup({
             password: new FormControl(
                 { value: '', disabled: !this.editable },
@@ -62,19 +49,13 @@ export class PasswordComponent {
         });
     }
 
-    public async onAnimationEvent(e: AnimationEvent): Promise<void> {
-        if (e.fromState === '' && e.toState === 'void') {
-            await this.router.navigate(['../..'], { relativeTo: this.route });
-        }
-    }
-
-    public goBack(): void {
-        this.animation = 'void';
+    public cancel(): void {
+        this.activeOffcanvas.dismiss('');
     }
 
     public async save(): Promise<void> {
         await this.vm.resetPass(this.userId, this.form.value);
-        this.goBack();
+        this.activeOffcanvas.close('ok')
     }
 
 }
