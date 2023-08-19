@@ -1,54 +1,41 @@
 import { Component } from '@angular/core';
-import {
-    trigger, transition, useAnimation, AnimationEvent
-} from '@angular/animations';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
 import {
-    NgbCalendar, NgbDateStruct, NgbDateParserFormatter
+    NgbCalendar, NgbDateStruct, NgbDateParserFormatter, NgbActiveOffcanvas,
 } from '@ng-bootstrap/ng-bootstrap';
 
-import { slideInRight, slideOutRight, AccountService } from 'app-shared';
+import { AccountService } from 'app-shared';
 import { UsersService } from '../users.service';
 
 @Component({
     selector: 'app-user-lock',
     templateUrl: './lock.component.html',
     styleUrls: ['./lock.component.css'],
-    animations: [
-        trigger('animation', [
-            transition(':enter', useAnimation(slideInRight)),
-            transition(':leave', useAnimation(slideOutRight))
-        ])
-    ]
 })
 export class LockComponent {
 
-    public animation = '';
-    public title: string;
-    public editable: boolean;
+    public editable = true;
 
     public lockForm: FormGroup;
 
-    private userId: string;
+    public userId = '';
+    public fullname = '';
+    public get title(): string {
+        return `锁定 ${this.fullname || '用户'}`
+    }
+
 
     public get lockoutEnd(): FormControl {
         return this.lockForm.get('lockoutEnd') as FormControl;
     }
 
     constructor(
-        private router: Router,
-        private route: ActivatedRoute,
+        private activeOffcanvas: NgbActiveOffcanvas,
         private dateFormatter: NgbDateParserFormatter,
         public calendar: NgbCalendar,
         public account: AccountService,
         public vm: UsersService
     ) {
-        const { id, fullname } = route.snapshot.params;
-        this.title = `锁定 ${fullname || '用户'}`;
-        this.editable = true;
-        this.userId = id as string;
-        //
         const nextDay = calendar.getNext(calendar.getToday(), 'd', 1);
         this.lockForm  = new FormGroup({
             lockoutEnd: new FormControl(
@@ -58,24 +45,15 @@ export class LockComponent {
         });
     }
 
-    public async onAnimationEvent(e: AnimationEvent): Promise<void> {
-        if (e.fromState === '' && e.toState === 'void') {
-            await this.router.navigate(['../..'], { relativeTo: this.route });
-            // if (this.reloadList) {
-            //     this.vm.search();
-            // }
-        }
-    }
-
-    public goBack(): void {
-        this.animation = 'void';
+    public cancel(): void {
+        this.activeOffcanvas.dismiss('');
     }
 
     public save(): void {
         const value = this.lockoutEnd.value as NgbDateStruct;
         const date = this.dateFormatter.format(value);
-        this.vm.lockUser(this.userId, `${date} 23:59:59`).then(
-            () => this.goBack()
+        void this.vm.lockUser(this.userId, `${date} 23:59:59`).then(
+            () => this.activeOffcanvas.close('ok')
         );
     }
 
