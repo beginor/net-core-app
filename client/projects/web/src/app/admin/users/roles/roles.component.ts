@@ -1,43 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import {
-    trigger, transition, useAnimation, AnimationEvent
-} from '@angular/animations';
-import { Router, ActivatedRoute } from '@angular/router';
+import { NgbActiveOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
-import { slideInRight, slideOutRight, AccountService } from 'app-shared';
-import { UserModel, UsersService } from '../users.service';
+import { AccountService } from 'app-shared';
+import { UsersService } from '../users.service';
 
 @Component({
     selector: 'app-user-roles',
     templateUrl: './roles.component.html',
     styleUrls: ['./roles.component.css'],
-    animations: [
-        trigger('animation', [
-            transition(':enter', useAnimation(slideInRight)),
-            transition(':leave', useAnimation(slideOutRight))
-        ])
-    ]
 })
 export class RolesComponent implements OnInit {
 
-    public animation = '';
-    public title: string;
-    public editable: boolean;
+    public userId = '';
+    public fullname = '';
+    public get title(): string {
+        return `设置 ${this.fullname || '用户'} 的角色`;
+    }
+    public editable = true;
 
-    private userId: string;
     private userRoles: { [key: string]: boolean } = {};
 
     constructor(
-        private router: Router,
-        private route: ActivatedRoute,
+        private activeOffcanvas: NgbActiveOffcanvas,
         public account: AccountService,
         public vm: UsersService
-    ) {
-        const { id, fullname } = route.snapshot.params;
-        this.userId = id as string;
-        this.title = `设置 ${fullname || '用户'} 的角色`;
-        this.editable = true;
-    }
+    ) { }
 
     public async ngOnInit(): Promise<void> {
         await this.vm.getRoles();
@@ -47,17 +34,8 @@ export class RolesComponent implements OnInit {
         }
     }
 
-    public async onAnimationEvent(e: AnimationEvent): Promise<void> {
-        if (e.fromState === '' && e.toState === 'void') {
-            await this.router.navigate(['../..'], { relativeTo: this.route });
-            // if (this.reloadList) {
-            //     this.vm.search();
-            // }
-        }
-    }
-
-    public goBack(): void {
-        this.animation = 'void';
+    public cancel(): void {
+        this.activeOffcanvas.dismiss('');
     }
 
     public async save(): Promise<void> {
@@ -75,11 +53,11 @@ export class RolesComponent implements OnInit {
             }
         }
         await this.vm.saveUserRoles(this.userId, toAdd, toDelete);
-        this.goBack();
+        this.activeOffcanvas.close('ok');
     }
 
     public isChecked(roleName: string): boolean {
-        return !!this.userRoles[roleName];
+        return this.userRoles[roleName];
     }
 
     public toggleUserRole($event: Event, roleName: string): void {

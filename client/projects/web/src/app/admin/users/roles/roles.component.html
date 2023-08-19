@@ -1,5 +1,4 @@
-<div class="card detail" *ngIf="(account.info | async) as info"
-  [@animation]="animation" (@animation.done)="onAnimationEvent($event)">
+<div class="card detail" *ngIf="(account.info | async) as info">
   <div class="card-header d-flex justify-content-between align-content-center">
     <h5 class="card-title mb-0">{{title}}</h5>
     <div class="btn-group btn-group-sm">
@@ -8,7 +7,7 @@
         <svg-icon path="bi/check"></svg-icon> 确定
       </button>
       <button class="btn btn-sm btn-outline-secondary" type="button"
-        (click)="goBack()">
+        (click)="cancel()">
         <svg-icon path="bi/x"></svg-icon> 取消
       </button>
     </div>
@@ -33,7 +32,7 @@
       <svg-icon path="bi/check"></svg-icon> 保存
     </button>
     <button class="btn btn-sm btn-outline-secondary" type="button"
-      (click)="goBack()">
+      (click)="cancel()">
       <svg-icon path="bi/x"></svg-icon> 取消
     </button>
   </div>
