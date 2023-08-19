@@ -143,18 +143,18 @@
                         <ng-template #lockTpl>
                           <button class="text-muted" type="button" ngbDropdownItem
                             *ngIf="info.privileges['app_users.lock']"
-                            (click)="navigateTo(item, 'lock')">
+                            (click)="showLock(item)">
                             <svg-icon path="bi/lock"></svg-icon> 锁定
                           </button>
                         </ng-template>
                         <button class="text-muted" type="button" ngbDropdownItem
                           *ngIf="info.privileges['app_users.reset_pass']"
-                          (click)="navigateTo(item, 'password')">
+                          (click)="showPassword(item)">
                           <svg-icon path="bi/key"></svg-icon> 重置密码
                         </button>
                         <button class="text-muted" type="button" ngbDropdownItem
                           *ngIf="info.privileges['app_users.read_user_roles']"
-                          (click)="navigateTo(item, 'roles')">
+                          (click)="showRoles(item)">
                           <svg-icon path="bi/shield-check"></svg-icon> 角色
                         </button>
                         <button class="text-muted" type="button" ngbDropdownItem
@@ -198,8 +198,5 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="detail-container">
-    <router-outlet></router-outlet>
   </div>
 </div>

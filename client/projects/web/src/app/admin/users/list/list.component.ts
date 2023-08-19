@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap'
 
 import { AccountService } from 'app-shared';
 
 import { UsersService, UserModel } from '../users.service';
+import { DetailComponent } from '../detail/detail.component';
+import { LockComponent } from '../lock/lock.component';
+import { PasswordComponent } from '../password/password.component';
+import { RolesComponent } from '../roles/roles.component';
 
 @Component({
     selector: 'app-admin-users-list',
@@ -13,8 +18,8 @@ import { UsersService, UserModel } from '../users.service';
 export class ListComponent implements OnInit {
 
     constructor(
-        private router: Router,
-        private route: ActivatedRoute,
+        route: ActivatedRoute,
+        private offcanvas: NgbOffcanvas,
         public account: AccountService,
         public vm: UsersService
     ) {
@@ -28,7 +33,7 @@ export class ListComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.loadData();
+        void this.loadData();
     }
 
     public async loadData(): Promise<void> {
@@ -37,17 +42,58 @@ export class ListComponent implements OnInit {
     }
 
     public showDetail(id: string, editable: boolean): void {
-        this.router.navigate(
-            ['./', id, { editable: editable }],
-            { relativeTo: this.route, skipLocationChange: true }
+        const ref = this.offcanvas.open(
+            DetailComponent,
+            { position: 'end', panelClass: 'offcanvas-vw-40' }
         );
+        const detail = ref.componentInstance as DetailComponent;
+        detail.editable = editable;
+        detail.id = id;
+        void ref.result.then(() => {
+            void this.vm.search();
+        });
     }
 
-    public navigateTo(user: UserModel, page: string): void {
-        this.router.navigate(
-            ['./', user.id, page, { fullname: this.getFullname(user) }],
-            { relativeTo: this.route, skipLocationChange: true }
+    public showLock(user: UserModel): void {
+        const ref = this.offcanvas.open(
+            LockComponent,
+            { position: 'end', panelClass: 'offcanvas-vw-40' }
         );
+        const lock = ref.componentInstance as LockComponent;
+        lock.userId = user.id;
+        lock.fullname = this.getFullname(user);
+        lock.editable = true;
+        void ref.result.then(() => {
+            void this.vm.search();
+        });
+    }
+
+    public showPassword(user: UserModel): void {
+        const ref = this.offcanvas.open(
+            PasswordComponent,
+            { position: 'end', panelClass: 'offcanvas-vw-40' }
+        );
+        const lock = ref.componentInstance as PasswordComponent;
+        lock.userId = user.id;
+        lock.fullname = this.getFullname(user);
+        lock.editable = true;
+        void ref.result.then(() => {
+            void this.vm.search();
+        });
+    }
+
+    public showRoles(user: UserModel): void {
+        const ref = this.offcanvas.open(
+            RolesComponent,
+            { position: 'end', panelClass: 'offcanvas-vw-40' }
+        );
+        const lock = ref.componentInstance as RolesComponent;
+        lock.userId = user.id;
+        lock.fullname = this.getFullname(user);
+        lock.editable = true;
+        void ref.result.then(() => {
+            void this.vm.search();
+        });
     }
 
     public async delete(id: string): Promise<void> {
