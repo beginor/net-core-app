@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 
 namespace Beginor.NetCoreApp.Entry;
 
@@ -30,16 +32,21 @@ partial class Startup {
         var compositeFileProvider = new CompositeFileProvider(fileProviders);
         services.AddSingleton<IFileProvider>(compositeFileProvider);
         services.ConfigureSpaFailback(config.GetSection("spaFailback"));
-        services.ConfigureGzipStatic();
+        if (env.IsProduction()) {
+            services.ConfigureGzipStatic();
+        }
 
         #if DEBUG
         services.AddDirectoryBrowser();
         #endif
+        services.AddSingleton<IContentTypeProvider>(new FileExtensionContentTypeProvider());
     }
 
     private void ConfigureStaticFiles(WebApplication app, IWebHostEnvironment env) {
         app.UseDefaultFiles();
-        app.UseGzipStatic();
+        if (env.IsProduction()) {
+            app.UseGzipStatic();
+        }
         app.UseSpaFailback();
         var fileProvider = app.Services.GetService<IFileProvider>();
         if (fileProvider != null) {
