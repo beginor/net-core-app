@@ -16,7 +16,6 @@ import { PasswordComponent } from './password/password.component';
 import { LockComponent } from './lock/lock.component';
 import { RolesComponent } from './roles/roles.component';
 
-
 @NgModule({
   declarations: [
       ListComponent,
