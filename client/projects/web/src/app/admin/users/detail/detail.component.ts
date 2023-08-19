@@ -1,55 +1,39 @@
 import { Component, OnInit } from '@angular/core';
-import {
-    trigger, transition, useAnimation, AnimationEvent
-} from '@angular/animations';
-import { Router, ActivatedRoute } from '@angular/router';
+import { NgbActiveOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
-import { slideInRight, slideOutRight, AccountService } from 'app-shared';
+import { AccountService } from 'app-shared';
 import { UserModel, UsersService} from '../users.service';
 
 @Component({
     selector: 'app-users-detail',
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.css'],
-    animations: [
-        trigger('animation', [
-            transition(':enter', useAnimation(slideInRight)),
-            transition(':leave', useAnimation(slideOutRight))
-        ])
-    ]
 })
 export class DetailComponent implements OnInit {
 
-    public animation = '';
-    public title: string;
-    public editable: boolean;
+    public editable = false;
+    public id = '';
+
+    public getTitle(): string {
+        if (this.id === '0') {
+            return '新建菜单项';
+        }
+        else if (this.editable) {
+            return '编辑菜单项';
+        }
+        else {
+            return '查看菜单项';
+        }
+    }
+
     public model: UserModel = { id: '', lockoutEnabled: true, gender: '保密' };
     public dob = { year: 1970, month: 1, day: 1 };
 
-    private id: string;
-    private reloadList = false;
-
     constructor(
-        private router: Router,
-        private route: ActivatedRoute,
+        private activeOffcanvas: NgbActiveOffcanvas,
         public account: AccountService,
         public vm: UsersService
-    ) {
-        const { id, editable } = route.snapshot.params;
-        if (id === '0') {
-            this.title = '新建用户';
-            this.editable = true;
-        }
-        else if (editable === 'true') {
-            this.title = '编辑用户';
-            this.editable = true;
-        }
-        else {
-            this.title = '查看用户';
-            this.editable = false;
-        }
-        this.id = id as string;
-    }
+    ) { }
 
     public async ngOnInit(): Promise<void> {
         if (this.id !== '0') {
@@ -68,17 +52,8 @@ export class DetailComponent implements OnInit {
         }
     }
 
-    public async onAnimationEvent(e: AnimationEvent): Promise<void> {
-        if (e.fromState === '' && e.toState === 'void') {
-            await this.router.navigate(['../'], { relativeTo: this.route });
-            if (this.reloadList) {
-                this.vm.search();
-            }
-        }
-    }
-
-    public goBack(): void {
-        this.animation = 'void';
+    public cancel(): void {
+        this.activeOffcanvas.dismiss('');
     }
 
     public async save(): Promise<void> {
@@ -90,8 +65,7 @@ export class DetailComponent implements OnInit {
         else {
             await this.vm.create(this.model);
         }
-        this.reloadList = true;
-        this.goBack();
+        this.activeOffcanvas.close('ok');
     }
 
 }
