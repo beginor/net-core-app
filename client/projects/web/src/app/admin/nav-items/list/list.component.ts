@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap'
 
@@ -15,15 +14,13 @@ import { DetailComponent } from '../detail/detail.component';
 export class ListComponent implements OnInit {
 
     constructor(
-        private router: Router,
-        private route: ActivatedRoute,
         private offcanvas: NgbOffcanvas,
         public account: AccountService,
         public vm: NavItemsService
     ) { }
 
     public ngOnInit(): void {
-        this.loadData();
+        void this.loadData();
     }
 
     public async loadData(): Promise<void> {
