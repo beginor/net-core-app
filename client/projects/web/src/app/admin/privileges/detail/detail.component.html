@@ -1,5 +1,4 @@
-<form class="card detail" *ngIf="(account.info | async) as info"
-  #detailForm="ngForm" [@animation]="animation" (@animation.done)="onAnimationEvent($event)" >
+<form class="card detail" *ngIf="(account.info | async) as info" #detailForm="ngForm" >
   <div class="card-header d-flex justify-content-between align-content-center">
     <h5 class="card-title mb-0">{{title}}</h5>
     <div class="btn-group btn-group-sm">
@@ -9,7 +8,7 @@
         <svg-icon path="bi/check"></svg-icon> 保存
       </button>
       <button type="button" class="btn btn-sm btn-outline-secondary"
-        (click)="goBack()">
+        (click)="cancel()">
         <svg-icon path="bi/x"></svg-icon> 取消
       </button>
     </div>
@@ -54,14 +53,14 @@
       </div>
     </div>
   </div>
-  <div *ngIf="info.privileges['app_privileges.update'] && editable" class="card-footer d-flex justify-content-between">
-    <button
-      type="button" class="btn btn-sm btn-outline-primary"
+  <div *ngIf="info.privileges['app_privileges.update'] && editable"
+    class="card-footer d-flex justify-content-between">
+    <button type="button" class="btn btn-sm btn-outline-primary"
       (click)="save()" [disabled]="!detailForm.valid">
       <svg-icon path="bi/check"></svg-icon> 保存
     </button>
     <button type="button" class="btn btn-sm btn-outline-secondary"
-      (click)="goBack()">
+      (click)="cancel()">
       <svg-icon path="bi/x"></svg-icon> 取消
     </button>
   </div>

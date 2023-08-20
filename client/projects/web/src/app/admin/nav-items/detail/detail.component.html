@@ -74,7 +74,7 @@
       </div>
     </div>
     <div class="mb-3" *ngIf="model.target === '_iframe'">
-      <label class="form-label text-muted">内嵌窗口地址 <i class="text-danger">*</i></label>
+      <label class="form-label text-muted" for="frame_url">内嵌窗口地址 <i class="text-danger">*</i></label>
       <input class="form-control" type="text" id="frame_url" name="frameUrl"
         placeholder="请输入内嵌窗口地址 ..." [(ngModel)]="model.frameUrl"
         [class.is-invalid]="!(frameUrl.valid || frameUrl.pristine)"
