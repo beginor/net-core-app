@@ -44,6 +44,8 @@ export class ListComponent implements OnInit, OnDestroy {
         detail.id = id;
         void ref.result.then(() => {
             void this.vm.search();
+        }).catch(ex => {
+            console.log(`offcanvas canceled with reason ${ex}`)
         });
     }
 
@@ -57,6 +59,8 @@ export class ListComponent implements OnInit, OnDestroy {
         privilege.title = `${role.description}权限列表`;
         void ref.result.then(() => {
             void this.vm.search();
+        }).catch(ex => {
+            console.log(`offcanvas canceled with reason ${ex}`)
         });
     }
 
