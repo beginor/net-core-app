@@ -1,8 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap'
 
 import { AccountService } from 'app-shared';
 import { RolesService, AppRoleModel } from '../roles.service';
+import { DetailComponent } from '../detail/detail.component';
+import { PrivilegeComponent } from '../privilege/privilege.component';
 
 @Component({
     selector: 'app-role-list',
@@ -12,6 +15,7 @@ import { RolesService, AppRoleModel } from '../roles.service';
 export class ListComponent implements OnInit, OnDestroy {
 
     constructor(
+        private offcanvas: NgbOffcanvas,
         private router: Router,
         private route: ActivatedRoute,
         public account: AccountService,
@@ -31,24 +35,29 @@ export class ListComponent implements OnInit, OnDestroy {
     }
 
     public showDetail(id: string, editable: boolean): void {
-        void this.router.navigate(
-            ['./', id, { editable: editable }],
-            { relativeTo: this.route, skipLocationChange: true }
+        const ref = this.offcanvas.open(
+            DetailComponent,
+            { position: 'end', panelClass: 'offcanvas-vw-40' }
         );
-    }
-
-    public showUsers(role: AppRoleModel): void {
-        void this.router.navigate(
-            ['./', role.id, 'users', { desc: role.description }],
-            { relativeTo: this.route, skipLocationChange: true }
-        );
+        const detail = ref.componentInstance as DetailComponent;
+        detail.editable = editable;
+        detail.id = id;
+        void ref.result.then(() => {
+            void this.vm.search();
+        });
     }
 
     public showPrivileges(role: AppRoleModel): void {
-        void this.router.navigate(
-            ['./', role.id, 'privileges', { desc: role.description }],
-            { relativeTo: this.route, skipLocationChange: true }
+        const ref = this.offcanvas.open(
+            PrivilegeComponent,
+            { position: 'end', panelClass: 'offcanvas-vw-40' }
         );
+        const privilege = ref.componentInstance as PrivilegeComponent;
+        privilege.id = role.id;
+        privilege.title = `${role.description}权限列表`;
+        void ref.result.then(() => {
+            void this.vm.search();
+        });
     }
 
     public async delete(id: string): Promise<void> {

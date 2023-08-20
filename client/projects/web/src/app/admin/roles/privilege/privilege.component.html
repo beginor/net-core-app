@@ -1,10 +1,8 @@
-<form class="card privileges" [@animation]="animation"
-  (@animation.done)="onAnimationEvent($event)" #privilegeForm="ngForm">
+<form class="card privileges" #privilegeForm="ngForm">
   <div class="card-header d-flex justify-content-between align-content-center">
     <h5 class="card-title mb-0">{{title}}</h5>
     <div class="btn-group btn-group-sm">
-      <button type="button" class="btn btn-sm btn-outline-primary"
-        (click)="goBack()">
+      <button type="button" class="btn btn-sm btn-outline-primary" (click)="cancel()">
         <svg-icon path="bi/check"></svg-icon> 确定
       </button>
     </div>
