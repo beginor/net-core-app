@@ -1,10 +1,8 @@
-﻿<form class="card detail" *ngIf="(account.info | async) as info" #detailForm="ngForm"
-  [@animation]="animation" (@animation.done)="onAnimationEvent($event)">
+﻿<form class="card detail" *ngIf="(account.info | async) as info" #detailForm="ngForm">
   <div class="card-header d-flex justify-content-between align-content-center">
     <h5 class="card-title mb-0">{{title}}</h5>
     <div class="btn-group btn-group-sm">
-      <button type="button" class="btn btn-sm btn-outline-secondary"
-        (click)="goBack()">
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="cancel()">
         <svg-icon path="bi/x"></svg-icon> 关闭
       </button>
     </div>
@@ -12,40 +10,40 @@
   <div class="card-body">
     <div class="row">
       <div class="col mb-3">
-        <label class="form-label text-muted">日志ID </label>
+        <div class="form-label text-muted">日志ID </div>
         <div class="form-control-plaintext">{{model.id}}</div>
       </div>
       <div class="col mb-3">
-        <label class="form-label text-muted">创建时间 </label>
+        <div class="form-label text-muted">创建时间 </div>
         <div class="form-control-plaintext">{{model.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</div>
       </div>
     </div>
     <div class="row">
       <div class="col mb-3">
-        <label class="form-label text-muted">线程 </label>
+        <div class="form-label text-muted">线程 </div>
         <div class="form-control-plaintext">{{model.thread}}</div>
       </div>
       <div class="col mb-3">
-        <label class="form-label text-muted">日志级别 </label>
+        <div class="form-label text-muted">日志级别 </div>
         <div class="form-control-plaintext">{{model.level}}</div>
       </div>
     </div>
     <div class="mb-3">
-      <label class="form-label text-muted">记录者 </label>
+      <div class="form-label text-muted">记录者 </div>
       <div class="form-control-plaintext">{{model.logger}}</div>
     </div>
     <div class="mb-3">
-      <label class="form-label text-muted" for="message">日志消息 </label>
+      <div class="form-label text-muted">日志消息 </div>
       <textarea class="form-control" id="message" readonly>{{model.message}}</textarea>
     </div>
     <div class="mb-3">
-      <label class="form-label text-muted" for="exception">异常信息 </label>
+      <div class="form-label text-muted">异常信息 </div>
       <textarea class="form-control" id="exception" readonly rows="10" placeholder="无异常信息...">{{model.exception}}</textarea>
     </div>
   </div>
   <div class="card-footer d-flex justify-content-end">
     <button type="button" class="btn btn-sm btn-outline-secondary"
-      (click)="goBack()">
+      (click)="cancel()">
       <svg-icon path="bi/x"></svg-icon> 关闭
     </button>
   </div>
