@@ -105,12 +105,12 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-end text-nowrap text-muted">#</th>
+                <th scope="col" class="text-end text-nowrap text-muted table-row-num-col">#</th>
                 <th scope="col" class="text-start text-nowrap text-muted">产生时间</th>
                 <th scope="col" class="text-start text-nowrap text-muted">日志级别</th>
                 <th scope="col" class="text-start text-nowrap text-muted">记录者</th>
                 <th scope="col" class="text-start text-nowrap text-muted">日志消息</th>
-                <th scope="col" class="text-center text-nowrap text-muted">操作</th>
+                <th scope="col" class="text-center text-nowrap text-muted table-action-col-1">操作</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">

@@ -65,3 +65,23 @@ ngb-pagination ul.pagination {
 .offcanvas-vw-40 {
   --bs-offcanvas-width: 40vw;
 }
+
+.table-row-num-col {
+  width: 36px;
+}
+
+.table-action-col-1 {
+  width: 50px;
+}
+
+.table-action-col-2 {
+  width: 84px;
+}
+
+.table-action-col-3 {
+  width: 118px;
+}
+
+.table-action-col-4 {
+  width: 144px;
+}

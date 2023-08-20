@@ -65,13 +65,13 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-end text-nowrap text-muted">#</th>
+                <th scope="col" class="text-end text-nowrap text-muted table-row-num-col">#</th>
                 <th scope="col" class="text-start text-nowrap text-muted">标题</th>
                 <th scope="col" class="text-start text-nowrap text-muted">提示文字</th>
                 <th scope="col" class="text-start text-nowrap text-muted">图标</th>
                 <th scope="col" class="text-start text-nowrap text-muted">导航地址</th>
                 <th scope="col" class="text-center text-nowrap text-muted">顺序</th>
-                <th scope="col" class="text-center text-nowrap text-muted">操作</th>
+                <th scope="col" class="text-center text-nowrap text-muted table-action-col-3">操作</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">

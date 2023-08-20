@@ -59,7 +59,7 @@
                 </div>
                 <div class="col">
                   <div class="row g-0">
-                    <label class="col-auto col-form-label col-form-label-sm">
+                    <label class="col-auto col-form-label col-form-label-sm" for="module">
                       模块：
                     </label>
                     <div class="col">
@@ -83,12 +83,12 @@
           <table class="table table-striped mb-0">
             <thead>
               <tr>
-                <th scope="col" class="text-end text-nowrap text-muted">#</th>
+                <th scope="col" class="text-end text-nowrap text-muted table-row-num-col">#</th>
                 <th scope="col" class="text-start text-nowrap text-muted">权限模块</th>
                 <th scope="col" class="text-start text-nowrap text-muted">权限名称</th>
                 <th scope="col" class="text-start text-nowrap text-muted">权限描述</th>
                 <th scope="col" class="text-center text-nowrap text-muted">是否必须</th>
-                <th scope="col" class="text-center text-nowrap text-muted">操作</th>
+                <th scope="col" class="text-center text-nowrap text-muted table-action-col-3">操作</th>
               </tr>
             </thead>
             <tbody *ngIf="(vm.data | async) as data">
