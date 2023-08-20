@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {
-    trigger, transition, useAnimation, AnimationEvent
-} from '@angular/animations';
-import { Router, ActivatedRoute } from '@angular/router';
+import { NgbActiveOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
-import { slideInRight, slideOutRight, AccountService } from 'app-shared';
+import { AccountService } from 'app-shared';
 
 import {
     AppStorageService, AppStorageModel
@@ -14,44 +11,31 @@ import {
     selector: 'app-storage-detail',
     templateUrl: './detail.component.html',
     styleUrls: ['./detail.component.css'],
-    animations: [
-        trigger('animation', [
-            transition(':enter', useAnimation(slideInRight)),
-            transition(':leave', useAnimation(slideOutRight))
-        ])
-    ]
 })
 export class DetailComponent implements OnInit {
 
-    public animation = '';
-    public title = '';
+    public id = '';
+    public get title(): string {
+        let title = '';
+        if (this.id === '0') {
+            title = '新建存储目录';
+        }
+        else if (this.editable) {
+            title = '编辑存储目录';
+        }
+        else {
+            title = '查看存储目录';
+        }
+        return title;
+    }
     public editable = false;
     public model: AppStorageModel = { id: '', aliasName: '', rootFolder: '', readonly: true, roles: [] }; // eslint-disable-line max-len
 
-    private id = '';
-    private reloadList = false;
-
     constructor(
-        private router: Router,
-        private route: ActivatedRoute,
+        private activeOffcanvas: NgbActiveOffcanvas,
         public account: AccountService,
         public vm: AppStorageService
-    ) {
-        const { id, editable } = route.snapshot.params;
-        if (id === '0') {
-            this.title = '新建存储目录';
-            this.editable = true;
-        }
-        else if (editable === 'true') {
-            this.title = '编辑存储目录';
-            this.editable = true;
-        }
-        else {
-            this.title = '查看存储目录';
-            this.editable = false;
-        }
-        this.id = id as string;
-    }
+    ) { }
 
     public async ngOnInit(): Promise<void> {
         await this.vm.getAllRoles();
@@ -63,17 +47,8 @@ export class DetailComponent implements OnInit {
         }
     }
 
-    public async onAnimationEvent(e: AnimationEvent): Promise<void> {
-        if (e.fromState === '' && e.toState === 'void') {
-            await this.router.navigate(['../'], { relativeTo: this.route });
-            if (this.reloadList) {
-                void this.vm.search();
-            }
-        }
-    }
-
-    public goBack(): void {
-        this.animation = 'void';
+    public cancel(): void {
+        this.activeOffcanvas.dismiss('');
     }
 
     public async save(): Promise<void> {
@@ -86,8 +61,7 @@ export class DetailComponent implements OnInit {
         else {
             await this.vm.create(this.model);
         }
-        this.reloadList = true;
-        this.goBack();
+        this.activeOffcanvas.close('ok');
     }
 
     public isRoleChecked(role: string): boolean {
