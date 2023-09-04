@@ -34,3 +34,6 @@ comment on column public.app_storages.readonly
 
 comment on column public.app_storages.roles
     is '可访问此存储的角色';
+
+INSERT INTO public.app_storages (alias_name, root_folder, readonly, roles)
+VALUES ('icons', '!/web/assets/icons/', true, '{users}');

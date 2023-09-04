@@ -275,16 +275,38 @@ public class SystemTest : BaseTest {
         };
         await repo.SaveAsync(privilegesManageItem, userName);
         Assert.IsNotEmpty(privilegesManageItem.Id);
-        // 权限管理
+        // 存储管理
+        var storageManageItem = new AppNavItemModel {
+            ParentId = adminItem.Id,
+            Title = "存储管理",
+            Icon = "bi/folder2-open",
+            Url = "/admin/storages",
+            Sequence = 5,
+            Roles = new [] { adminRoleName }
+        };
+        await repo.SaveAsync(storageManageItem);
+        Assert.IsNotEmpty(storageManageItem.Id);
+        // 审计日志
         var auditLogsItem = new AppNavItemModel {
             ParentId = adminItem.Id,
             Title = "审计日志",
             Icon = "bi/list-check",
             Url = "/admin/audit-logs",
-            Sequence = 5,
+            Sequence = 6,
             Roles = new [] { adminRoleName }
         };
         await repo.SaveAsync(auditLogsItem, userName);
         Assert.IsNotEmpty(auditLogsItem.Id);
+        // 运行日志
+        var logsItem = new AppNavItemModel {
+            ParentId = adminItem.Id,
+            Title = "运行日志",
+            Icon = "bi/exclamation-diamond",
+            Url = "/admin/logs",
+            Sequence = 7,
+            Roles = new [] { adminRoleName }
+        };
+        await repo.SaveAsync(logsItem, userName);
+        Assert.IsNotEmpty(logsItem.Id);
     }
 }
