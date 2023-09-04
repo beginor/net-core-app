@@ -284,7 +284,7 @@ public class SystemTest : BaseTest {
             Sequence = 5,
             Roles = new [] { adminRoleName }
         };
-        await repo.SaveAsync(storageManageItem);
+        await repo.SaveAsync(storageManageItem, userName);
         Assert.IsNotEmpty(storageManageItem.Id);
         // 审计日志
         var auditLogsItem = new AppNavItemModel {
