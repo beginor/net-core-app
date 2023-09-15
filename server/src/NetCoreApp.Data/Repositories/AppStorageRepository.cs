@@ -76,23 +76,21 @@ public partial class AppStorageRepository : HibernateRepository<AppStorage, AppS
             return null;
         }
         var rootFolder = cacheItem.RootFolder;
-        if (rootFolder.StartsWith("!")) {
-            var fullPath = Path.Combine(rootFolder.Substring(1), model.Path);
-            var dirContent = fileProvider.GetDirectoryContents(fullPath);
-            if (!dirContent.Exists) {
-                return null;
-            }
-            model.Folders = dirContent.Where(f => f.IsDirectory).Select(f => f.Name).ToArray();
-            model.Files = dirContent.Where(f => !f.IsDirectory).Select(f => f.Name).ToArray();
+        var fullPath = rootFolder.StartsWith("!")
+            ? Path.Combine(webHostEnv.WebRootPath + rootFolder.Substring(1), model.Path)
+            : Path.Combine(Path.Combine(cacheItem.RootFolder, model.Path));
+        var dirInfo = new DirectoryInfo(fullPath);
+        if (!dirInfo.Exists) {
+            return null;
         }
-        else {
-            var dirInfo = new DirectoryInfo(Path.Combine(cacheItem.RootFolder, model.Path));
-            if (!dirInfo.Exists) {
-                return null;
-            }
-            model.Folders = dirInfo.EnumerateDirectories().Select(x => x.Name).ToArray();
-            model.Files = dirInfo.EnumerateFiles(model.Filter).Select(x => x.Name).ToArray();
+        model.Folders = dirInfo.EnumerateDirectories().Select(x => x.Name).ToArray();
+        var files = new List<string>();
+
+        foreach (var filter in model.Filter.Split(";")) {
+            var fileNames = dirInfo.EnumerateFiles(filter).Select(file => file.Name);
+            files.AddRange(fileNames);
         }
+        model.Files = files.ToArray();
         return model;
     }
 
