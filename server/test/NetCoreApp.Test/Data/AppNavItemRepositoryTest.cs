@@ -1,4 +1,7 @@
 using System.Threading.Tasks;
+using Beginor.NetCoreApp.Data.Entities;
+using Microsoft.Extensions.DependencyInjection;
+using Dapper;
 using NUnit.Framework;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
@@ -28,6 +31,16 @@ public class AppNavItemRepositoryTest : BaseTest<IAppNavItemRepository> {
         await Target.DeleteAsync(long.Parse(entity.Id));
         entity = await Target.GetByIdAsync(long.Parse(entity.Id));
         Assert.IsNull(entity);
+    }
+
+    [Test]
+    public async Task _03_CanQueryEmpty() {
+        var sql = "select * from public.app_nav_items where 1 = 0";
+        using var session = ServiceProvider.GetService<NHibernate.ISession>();
+        var conn = session.Connection;
+        var navItems = await conn.QueryAsync<AppNavItem>(sql);
+        Assert.IsNotNull(navItems);
+        Assert.IsEmpty(navItems);
     }
 
 }

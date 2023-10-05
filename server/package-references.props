@@ -16,7 +16,7 @@
     <PackageReference Include="Beginor.AspNetCore.Middlewares.CustomHeader" Version="7.1.0" />
     <PackageReference Include="Beginor.AspNetCore.Middlewares.GzipStatic" Version="7.1.0" />
     <PackageReference Include="Beginor.AspNetCore.Middlewares.SpaFailback" Version="7.1.0" />
-    <PackageReference Include="Dapper" Version="2.0.151" />
+    <PackageReference Include="Dapper" Version="2.1.4" />
     <PackageReference Include="NHibernate" Version="5.4.6" />
     <PackageReference Include="NHibernate.Mapping.Attributes" Version="5.1.0" />
     <PackageReference Include="NHibernate.AspNetCore.Identity" Version="7.0.12" />
