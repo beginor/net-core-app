@@ -137,7 +137,7 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppN
                 )
                 select * from cte;
             ";
-        var navItems = await conn.QueryAsync<AppNavItem>(sql, new { roles });
+        var navItems = (await conn.QueryAsync<AppNavItem>(sql, new { roles })).ToArray();
         var rootNavItem = navItems.OrderBy(n => n.Id).First(n => n.ParentId == null);
         var model = new MenuNodeModel {
             Id = rootNavItem.Id.ToString(),
@@ -151,7 +151,7 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppN
         return model;
     }
 
-    private MenuNodeModel[]? FindChildrenRecursive(long id, IEnumerable<AppNavItem> items) {
+    private static MenuNodeModel[]? FindChildrenRecursive(long id, AppNavItem[] items) {
         var childCount = items.Count(item => item.ParentId == id);
         if (childCount == 0) {
             return null;
