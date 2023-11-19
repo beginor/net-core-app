@@ -9,6 +9,6 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
-  <Import Project="../../package-references.props" />
+  <Import Project="../package-references.props" />
 
 </Project>

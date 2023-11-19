@@ -8,10 +8,10 @@
     <RootNamespace>Beginor.NetCoreApp.Data</RootNamespace>
   </PropertyGroup>
 
-  <Import Project="../../package-references.props" />
+  <Import Project="../package-references.props" />
 
   <ItemGroup>
-    <ProjectReference Include="..\NetCoreApp.Common\NetCoreApp.Common.csproj" />
-    <ProjectReference Include="..\NetCoreApp.Models\NetCoreApp.Models.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 </Project>

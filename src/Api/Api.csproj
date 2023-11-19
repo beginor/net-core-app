@@ -13,12 +13,12 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-  <Import Project="../../package-references.props" />
+  <Import Project="../package-references.props" />
 
   <ItemGroup>
-    <ProjectReference Include="..\NetCoreApp.Common\NetCoreApp.Common.csproj" />
-    <ProjectReference Include="..\NetCoreApp.Data\NetCoreApp.Data.csproj" />
-    <ProjectReference Include="..\NetCoreApp.Models\NetCoreApp.Models.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Data\Data.csproj" />
+    <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 
 </Project>

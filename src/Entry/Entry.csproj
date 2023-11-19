@@ -10,7 +10,7 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
-  <Import Project="../../package-references.props" />
+  <Import Project="../package-references.props" />
 
   <ItemGroup>
     <Content Update="config/*">
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NetCoreApp.Api\NetCoreApp.Api.csproj" />
+    <ProjectReference Include="..\Api\Api.csproj" />
   </ItemGroup>
 
 </Project>

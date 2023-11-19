@@ -8,6 +8,6 @@
     <RootNamespace>Beginor.NetCoreApp.Common</RootNamespace>
   </PropertyGroup>
 
-  <Import Project="../../package-references.props" />
+  <Import Project="../package-references.props" />
 
 </Project>
