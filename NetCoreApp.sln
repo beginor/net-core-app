@@ -7,17 +7,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{397CAAEE-23E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{13C02213-1B27-45B1-9CBC-BA2BC24B94DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApp.Test", "test\NetCoreApp.Test\NetCoreApp.Test.csproj", "{6A2ADFEB-F199-4EDF-B76F-0CB6DFE72515}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "test\Test\Test.csproj", "{6A2ADFEB-F199-4EDF-B76F-0CB6DFE72515}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApp.Api", "src\NetCoreApp.Api\NetCoreApp.Api.csproj", "{68453A67-6467-404B-8725-BF759C26F13A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "src\Api\Api.csproj", "{68453A67-6467-404B-8725-BF759C26F13A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApp.Data", "src\NetCoreApp.Data\NetCoreApp.Data.csproj", "{633841C3-B32D-4C55-A69D-00318C371818}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "src\Data\Data.csproj", "{633841C3-B32D-4C55-A69D-00318C371818}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApp.Models", "src\NetCoreApp.Models\NetCoreApp.Models.csproj", "{D7F9AB18-7919-41DB-BA75-485CFBD4E07C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "src\Models\Models.csproj", "{D7F9AB18-7919-41DB-BA75-485CFBD4E07C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApp.Common", "src\NetCoreApp.Common\NetCoreApp.Common.csproj", "{0DE26159-5312-4AC0-BE7C-94CED0FFE3CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "src\Common\Common.csproj", "{0DE26159-5312-4AC0-BE7C-94CED0FFE3CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreApp.Entry", "src\NetCoreApp.Entry\NetCoreApp.Entry.csproj", "{491B1F1C-C114-4FEF-8EC6-6A4E7AC1D832}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entry", "src\Entry\Entry.csproj", "{491B1F1C-C114-4FEF-8EC6-6A4E7AC1D832}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -22,27 +22,27 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\NetCoreApp.Api\NetCoreApp.Api.csproj" />
-    <ProjectReference Include="..\..\src\NetCoreApp.Common\NetCoreApp.Common.csproj" />
-    <ProjectReference Include="..\..\src\NetCoreApp.Data\NetCoreApp.Data.csproj" />
-    <ProjectReference Include="..\..\src\NetCoreApp.Entry\NetCoreApp.Entry.csproj" />
-    <ProjectReference Include="..\..\src\NetCoreApp.Models\NetCoreApp.Models.csproj" />
+    <ProjectReference Include="..\..\src\Api\Api.csproj" />
+    <ProjectReference Include="..\..\src\Common\Common.csproj" />
+    <ProjectReference Include="..\..\src\Data\Data.csproj" />
+    <ProjectReference Include="..\..\src\Entry\Entry.csproj" />
+    <ProjectReference Include="..\..\src\Models\Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\src\NetCoreApp.Entry\config\hibernate.config">
+    <None Include="..\..\src\Entry\config\hibernate.config">
       <Link>config\hibernate.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\src\NetCoreApp.Entry\config\log.config">
+    <None Include="..\..\src\Entry\config\log.config">
       <Link>config\log.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\src\NetCoreApp.Entry\config\appsettings.json">
+    <None Include="..\..\src\Entry\config\appsettings.json">
       <Link>config\appsettings.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\src\NetCoreApp.Entry\config\appsettings.Development.json">
+    <None Include="..\..\src\Entry\config\appsettings.Development.json">
       <Link>config\appsettings.Development.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
