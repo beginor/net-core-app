@@ -57,7 +57,7 @@ TableFilter:
     - app_user_tokens
     - app_logs
   IncludeTables:
-    - app_organize_unit
+    - app_organize_units
   IgnoreNoPKTable: true
   IgnoreView: true
 

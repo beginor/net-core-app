@@ -6,7 +6,7 @@ using Beginor.AppFx.Core;
 namespace Beginor.NetCoreApp.Data.Entities;
 
 /// <summary>组织单元</summary>
-[Class(Schema = "public", Table = "app_organize_unit", Where = "is_deleted = false")]
+[Class(Schema = "public", Table = "app_organize_units", Where = "is_deleted = false")]
 public partial class AppOrganizeUnit : BaseEntity<long> {
     /// <summary>组织单元ID</summary>
     [Id(Name = nameof(Id), Column = "id", Type = "long", Generator = "trigger-identity")]
