@@ -12,7 +12,7 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 
 /// <summary>用户凭证 服务接口</summary>
 [ApiController]
-[Route("api/app-user-tokens")]
+[Route("api/user-tokens")]
 public class AppUserTokenController : Controller {
 
     private ILogger<AppUserTokenController> logger;
