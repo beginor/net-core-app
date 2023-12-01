@@ -12,7 +12,7 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 
 /// <summary>组织单元 服务接口</summary>
 [ApiController]
-[Route("api/app-organize-unit")]
+[Route("api/organize-units")]
 public class AppOrganizeUnitController : Controller {
 
     private ILogger<AppOrganizeUnitController> logger;

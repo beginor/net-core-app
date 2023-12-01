@@ -14,4 +14,8 @@ public partial interface IAppOrganizeUnitRepository : IRepository<AppOrganizeUni
         AppOrganizeUnitSearchModel model
     );
 
+    Task SaveAsync(AppOrganizeUnitModel model, string userName);
+
+    Task UpdateAsync(long id, AppOrganizeUnitModel model, string userName);
+
 }
