@@ -12,14 +12,4 @@ public static class ApiGatewayExtensions {
         var res = await api.RequestAsync<WeChatJsCode2SessionResponse>(url, string.Empty);
         return res;
     }
-
-    public static async Task<WeChatGetUserPhoneNumberResponse> GetPhoneNumberAsync(this ApiGateway api, string jsCode) {
-        var accessToken = await api.GetAccessTokenAsync();
-        var url = $"/wxa/business/getuserphonenumber?access_token={accessToken}";
-        var param = new WeChatGetUserPhoneNumberRequest {
-            Code = jsCode,
-        };
-        var res = await api.RequestAsync<WeChatGetUserPhoneNumberResponse>(url, param.ToJson());
-        return res;
-    }
 }

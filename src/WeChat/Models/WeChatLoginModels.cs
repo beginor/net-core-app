@@ -57,7 +57,10 @@ public class WeChatLoginResponseModel {
     /// <summary>
     /// 登录成功时响应
     /// </summary>
-    public string Token { get; set; } = string.Empty;
+    public string TmpTokenKey { get; set; } = string.Empty;
 
-
+    /// <summary>
+    /// 登录成功时响应
+    /// </summary>
+    public string TmpTokenValue { get; set; } = string.Empty;
 }
