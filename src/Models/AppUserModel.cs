@@ -45,6 +45,8 @@ public class AppUserModel : StringEntity {
     public string Gender { get; set; }
     /// <summary>家庭住址</summary>
     public string StreetAddress { get; set; }
+    /// <summary>组织单元</summary>
+    public StringIdNameEntity OrganizeUnit { get; set; }
 }
 
 /// <summary>用户搜索参数</summary>

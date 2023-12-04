@@ -20,4 +20,7 @@ public class AppUser : NHIdentityUser {
     [Property(Column = "login_count", Type = "int", NotNull = true)]
     public virtual int LoginCount { get; set; }
 
+    [ManyToOne(Name = "OrganizeUnit", Column = "organize_unit_id", ClassType = typeof(AppOrganizeUnit), NotNull = true)]
+    public virtual AppOrganizeUnit OrganizeUnit { get; set; }
+
 }
