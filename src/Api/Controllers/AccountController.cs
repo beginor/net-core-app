@@ -79,19 +79,26 @@ public partial class AccountController : Controller {
     [ResponseCache(NoStore = true, Duration = 0)]
     public async Task<ActionResult<AccountInfoModel>> GetInfo() {
         try {
-            if (!User.Identity!.IsAuthenticated || User.HasClaim(ClaimTypes.NameIdentifier, string.Empty)) {
-                var anonymousIdentity = await CreateAnonymousIdentity();
-                var anonymousInfo = await CreateAccountInfoModel(anonymousIdentity);
-                anonymousInfo.Token = CreateJwtToken(anonymousIdentity);
-                return anonymousInfo;
+            var userId = string.Empty;
+            if (Request.Query.TryGetValue(Consts.TmpToken, out var value)) {
+                var tmpToken = value.ToString();
+                if (tmpToken.IsNotNullOrEmpty()) {
+                    userId = await cache.GetStringAsync(tmpToken);
+                    await cache.RemoveAsync(tmpToken);
+                }
             }
-            var appUser = await userMgr.FindByNameAsync(User.Identity.Name!);
-            if (appUser == null) {
-                return NotFound();
+            if (userId.IsNullOrEmpty()) {
+                userId = this.GetUserId();
             }
-            var userIdentity = await CreateIdentityAsync(appUser);
-            var info = await CreateAccountInfoModel(userIdentity);
-            info.Token = CreateJwtToken(userIdentity);
+            ClaimsIdentity? identity = null;
+            if (userId.IsNotNullOrEmpty()) {
+                var user = await userMgr.FindByIdAsync(userId!);
+                if (user != null) {
+                    identity = await CreateIdentityAsync(user);
+                }
+            }
+            identity ??= await CreateAnonymousIdentity();
+            var info = await CreateAccountInfoModel(identity);
             return info;
         }
         catch (Exception ex) {
