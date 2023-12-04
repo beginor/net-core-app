@@ -1,21 +1,21 @@
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using NHibernate.Linq;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Data.Repositories;
-using System.Collections.Generic;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Identity;
-using Beginor.NetCoreApp.Data.Entities;
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
 using Beginor.NetCoreApp.Common;
-using Microsoft.Extensions.Caching.Distributed;
-using System.Linq;
-using NHibernate.Linq;
+using Beginor.NetCoreApp.Data.Entities;
+using Beginor.NetCoreApp.Data.Repositories;
 
 namespace Beginor.NetCoreApp.WeChat;
 
@@ -172,7 +172,6 @@ public class WeChatController : Controller {
         res.Token = result;
         return Ok(res);
     }
-
 
     private string CreateJwtToken(ClaimsIdentity identity) {
         var handler = new JwtSecurityTokenHandler();

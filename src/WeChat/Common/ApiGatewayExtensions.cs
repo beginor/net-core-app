@@ -1,7 +1,5 @@
-using System;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
-using Npgsql.Replication;
 
 namespace Beginor.NetCoreApp.WeChat;
 

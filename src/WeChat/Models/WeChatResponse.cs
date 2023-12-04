@@ -54,14 +54,12 @@ public class WeChatPhoneInfo {
     /// <summary>
     /// 区号
     /// </summary>
-
     [JsonPropertyName("countryCode")]
     public string CountryCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 数据水印
     /// </summary>
-
     [JsonPropertyName("watermark")]
     public WeChatWatermark Watermark { get; set; } = new();
 }
@@ -77,7 +75,6 @@ public class WeChatWatermark {
     /// <summary>
     /// 小程序appid
     /// </summary>
-
     [JsonPropertyName("appid")]
     public string AppId { get; set; } = string.Empty;
 }

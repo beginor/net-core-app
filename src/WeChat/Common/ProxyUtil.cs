@@ -1,5 +1,4 @@
 using System;
-
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
@@ -9,6 +8,7 @@ using System.Text.Json;
 namespace Beginor.NetCoreApp.WeChat;
 
 public static class ProxyUtil {
+
     public static HttpClient CreateHttpClient(string baseUrl) {
         var handler = new HttpClientHandler() {
             ServerCertificateCustomValidationCallback = (_, _, _, _) => true,

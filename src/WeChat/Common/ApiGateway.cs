@@ -1,12 +1,12 @@
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using Beginor.AppFx.Core;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using Beginor.AppFx.Core;
 
 namespace Beginor.NetCoreApp.WeChat;
 
