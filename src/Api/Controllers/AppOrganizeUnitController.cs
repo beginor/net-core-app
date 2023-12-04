@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 using Beginor.NetCoreApp.Data.Repositories;
+
 
 namespace Beginor.NetCoreApp.Api.Controllers;
 
@@ -15,15 +18,18 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 [Route("api/organize-units")]
 public class AppOrganizeUnitController : Controller {
 
-    private ILogger<AppOrganizeUnitController> logger;
-    private IAppOrganizeUnitRepository repository;
+    private readonly ILogger<AppOrganizeUnitController> logger;
+    private readonly IAppOrganizeUnitRepository repository;
+    private readonly UserManager<AppUser> userManager;
 
     public AppOrganizeUnitController(
         ILogger<AppOrganizeUnitController> logger,
-        IAppOrganizeUnitRepository repository
+        IAppOrganizeUnitRepository repository,
+        UserManager<AppUser> userManager
     ) {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
     }
 
     protected override void Dispose(bool disposing) {
@@ -42,6 +48,8 @@ public class AppOrganizeUnitController : Controller {
         [FromQuery]AppOrganizeUnitSearchModel model
     ) {
         try {
+            var userId = this.GetUserId()!;
+            var appUser = await userManager.FindByIdAsync(userId);
             var result = await repository.SearchAsync(model);
             return result;
         }
