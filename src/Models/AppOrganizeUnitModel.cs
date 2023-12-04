@@ -21,6 +21,10 @@ public partial class AppOrganizeUnitModel : StringEntity {
     /// <summary>组织机构排序</summary>
     [Required(ErrorMessage = "组织机构排序 必须填写！")]
     public float Sequence { get; set; }
+    /// <summary>组织机构级别</summary>
+    public int Level { get; set; } = 0;
+    /// <summary>是否展开</summary>
+    public bool Expand { get; set; } = false;
 }
 
 /// <summary>组织单元搜索参数</summary>

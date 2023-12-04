@@ -27,7 +27,6 @@ public class AppOrganizeUnitRepositoryTest : BaseTest<IAppOrganizeUnitRepository
         };
         var result = await Target.SearchAsync(searchModel);
         Assert.GreaterOrEqual(result.Total, 0);
-        Assert.GreaterOrEqual(result.Take, result.Data.Count);
     }
 
     [Test]

@@ -37,20 +37,20 @@ public partial class AppOrganizeUnitRepository : HibernateRepository<AppOrganize
         var conn = Session.Connection;
         var sql = @"
             with recursive cte as (
-                select p.id, p.parent_id, p.code, p.name, p.description, p.sequence
+                select p.id, p.parent_id, p.code, p.name, p.description, p.sequence, 0 as level, true as expand
                 from public.app_organize_units p
                 where p.is_deleted = false and p.id = @unitId
                 union all
-                select c.id, c.parent_id,c.code,c.name,c.description,c.sequence
+                select c.id, c.parent_id,c.code,c.name,c.description,c.sequence, (cte.level + 1) as level, false as expand
                 from public.app_organize_units c
                 inner join cte on cte.id = c.parent_id
                 where c.is_deleted = false
             ) select * from cte a
             order by a.code, a.sequence;
         ";
-        var entities = await conn.QueryAsync<AppOrganizeUnit>(sql, new { unitId });
+        var models = await conn.QueryAsync<AppOrganizeUnitModel>(sql, new { unitId });
         var result = new PaginatedResponseModel<AppOrganizeUnitModel> {
-            Data = Mapper.Map<IList<AppOrganizeUnitModel>>(entities)
+            Data = models.ToList()
         };
         return result;
     }
