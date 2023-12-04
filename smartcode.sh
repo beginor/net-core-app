@@ -1,2 +1,2 @@
 #!/bin/bash -e
-dotnet run --project ../../smartcode/src/SmartCode.CLI ./smartcode.yml
+dotnet run --project ../smartcode/src/SmartCode.CLI ./smartcode.yml

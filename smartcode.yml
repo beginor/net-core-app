@@ -54,9 +54,10 @@ TableFilter:
     - app_client_errors
     - app_json_data
     - app_storages
-  IncludeTables:
     - app_user_tokens
     - app_logs
+  IncludeTables:
+    - app_organize_units
   IgnoreNoPKTable: true
   IgnoreView: true
 
@@ -67,7 +68,7 @@ Build:
     TemplateEngine:
       Path: Entity.cshtml
     Output:
-      Path: '{{Project.Module}}.{{Build.Module}}/Entities'
+      Path: '{{Build.Module}}/Entities'
       Name: '{{Items.CurrentTable.ConvertedName}}'
       Extension: '.cs'
   Model:
@@ -76,7 +77,7 @@ Build:
     TemplateEngine:
       Path: Model.cshtml
     Output:
-      Path: '{{Project.Module}}.{{Build.Module}}'
+      Path: '{{Build.Module}}'
       Name: '{{Items.CurrentTable.ConvertedName}}Model'
       Extension: '.cs'
   IRepository:
@@ -85,7 +86,7 @@ Build:
     TemplateEngine:
       Path: IRepository.cshtml
     Output:
-      Path: '{{Project.Module}}.{{Build.Module}}/Repositories'
+      Path: '{{Build.Module}}/Repositories'
       Name: 'I{{Items.CurrentTable.ConvertedName}}Repository'
       Extension: '.cs'
   Repository:
@@ -94,7 +95,7 @@ Build:
     TemplateEngine:
       Path: Repository.cshtml
     Output:
-      Path: '{{Project.Module}}.{{Build.Module}}/Repositories'
+      Path: '{{Build.Module}}/Repositories'
       Name: '{{Items.CurrentTable.ConvertedName}}Repository'
       Extension: '.cs'
   RepositoryTest:
@@ -103,7 +104,7 @@ Build:
     TemplateEngine:
       Path: RepositoryTest.cshtml
     Output:
-      Path: '../test/{{Project.Module}}.{{Build.Module}}/Data'
+      Path: '../test/{{Build.Module}}/Data'
       Name: '{{Items.CurrentTable.ConvertedName}}RepositoryTest'
       Extension: '.cs'
   Api:
@@ -112,7 +113,7 @@ Build:
     TemplateEngine:
       Path: Api.cshtml
     Output:
-      Path: '{{Project.Module}}.{{Build.Module}}/Controllers'
+      Path: '{{Build.Module}}/Controllers'
       Name: '{{Items.CurrentTable.ConvertedName}}Controller'
       Extension: '.cs'
   ApiTest:
@@ -121,6 +122,6 @@ Build:
     TemplateEngine:
       Path: ApiTest.cshtml
     Output:
-      Path: '../test/{{Project.Module}}.{{Build.Module}}/Api'
+      Path: '../test/{{Build.Module}}/Api'
       Name: '{{Items.CurrentTable.ConvertedName}}ControllerTest'
       Extension: '.cs'

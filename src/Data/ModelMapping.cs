@@ -51,6 +51,9 @@ public class ModelMapping : AutoMapper.Profile {
             .ForMember(dest => dest.Id, map => map.Ignore())
             .ForMember(d => d.User, m => m.Ignore());
         CreateMap<AppLog, AppLogModel>();
+        CreateMap<AppOrganizeUnit, AppOrganizeUnitModel>()
+            .ReverseMap()
+            .ForMember(dest => dest.Id, map => map.Ignore());
     }
 
 }

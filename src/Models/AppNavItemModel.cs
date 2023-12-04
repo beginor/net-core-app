@@ -28,7 +28,7 @@ public partial class AppNavItemModel : StringEntity {
     public string Target { get; set; }
     /// <summary>内嵌窗口地址</summary>
     public string FrameUrl { get; set; }
-    /// <summary>是否删除</summary>
+    /// <summary>是否隐藏</summary>
     public bool IsHidden { get; set; }
 }
 

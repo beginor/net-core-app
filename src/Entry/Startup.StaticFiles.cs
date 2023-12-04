@@ -21,16 +21,9 @@ partial class Startup {
         var wwwrootFileProvider = new PhysicalFileProvider(wwwroot);
         fileProviders.Add(wwwrootFileProvider);
 
-        #if DEBUG
-        var clientDist = Path.Combine(rootPath, "../../../client/dist/");
-        if (Directory.Exists(clientDist)) {
-            var clientDistFileProvider = new PhysicalFileProvider(clientDist);
-            fileProviders.Add(clientDistFileProvider);
-        }
-        #endif
-
         var compositeFileProvider = new CompositeFileProvider(fileProviders);
         services.AddSingleton<IFileProvider>(compositeFileProvider);
+
         services.ConfigureSpaFailback(config.GetSection("spaFailback"));
         if (env.IsProduction()) {
             services.ConfigureGzipStatic();
