@@ -10,7 +10,6 @@ using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 using Beginor.NetCoreApp.Data.Repositories;
 
-
 namespace Beginor.NetCoreApp.Api.Controllers;
 
 /// <summary>组织单元 服务接口</summary>
@@ -49,9 +48,21 @@ public class AppOrganizeUnitController : Controller {
     ) {
         try {
             var userId = this.GetUserId()!;
-            if (model.OrganizeUnitId == null) {
-                var appUser = await userManager.FindByIdAsync(userId);
-                model.OrganizeUnitId = appUser.OrganizeUnit.Id;
+            var user = await userManager.FindByIdAsync(userId);
+            if (user!.OrganizeUnit == null) {
+                return Forbid($"User {user.UserName} does not set organize unit!");
+            }
+            var reqUnitId = model.OrganizeUnitId;
+            var userUnitId = user.OrganizeUnit.Id;
+            if (reqUnitId.HasValue) {
+                var canView = await repository.CanViewOrganizeUnitAsync(userUnitId, reqUnitId.Value);
+                if (!canView) {
+                    return Forbid($"User {user.UserName} can not view organize unit {reqUnitId} !");
+                }
+                model.OrganizeUnitId = reqUnitId;
+            }
+            else {
+                model.OrganizeUnitId = userUnitId;
             }
             var result = await repository.SearchAsync(model);
             return result;

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Data.Repositories;
@@ -18,4 +19,7 @@ public partial interface IAppOrganizeUnitRepository : IRepository<AppOrganizeUni
 
     Task UpdateAsync(long id, AppOrganizeUnitModel model, string userName);
 
+    Task<IList<AppOrganizeUnitModel>> QueryPathAsync(long unitId);
+
+    Task<bool> CanViewOrganizeUnitAsync(long userUnitId, long unitId);
 }

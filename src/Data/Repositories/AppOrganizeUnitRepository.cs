@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using Dapper;
@@ -32,18 +33,26 @@ public partial class AppOrganizeUnitRepository : HibernateRepository<AppOrganize
     public async Task<PaginatedResponseModel<AppOrganizeUnitModel>> SearchAsync(
         AppOrganizeUnitSearchModel model
     ) {
-        var query = Session.Query<AppOrganizeUnit>();
-        // todo: 添加自定义查询；
-        var total = await query.LongCountAsync();
-        var data = await query.OrderByDescending(e => e.Id)
-            .Skip(model.Skip).Take(model.Take)
-            .ToListAsync();
-        return new PaginatedResponseModel<AppOrganizeUnitModel> {
-            Total = total,
-            Data = Mapper.Map<IList<AppOrganizeUnitModel>>(data),
-            Skip = model.Skip,
-            Take = model.Take
+        var unitId = model.OrganizeUnitId ?? 0L;
+        var conn = Session.Connection;
+        var sql = @"
+            with recursive cte as (
+                select p.id, p.parent_id, p.code, p.name, p.description, p.sequence
+                from public.app_organize_units p
+                where p.is_deleted = false and p.id = @unitId
+                union all
+                select c.id, c.parent_id,c.code,c.name,c.description,c.sequence
+                from public.app_organize_units c
+                inner join cte on cte.id = c.parent_id
+                where c.is_deleted = false
+            ) select * from cte a
+            order by a.code, a.sequence;
+        ";
+        var entities = await conn.QueryAsync<AppOrganizeUnit>(sql, new { unitId });
+        var result = new PaginatedResponseModel<AppOrganizeUnitModel> {
+            Data = Mapper.Map<IList<AppOrganizeUnitModel>>(entities)
         };
+        return result;
     }
 
     public override async Task DeleteAsync(long id, CancellationToken token = default) {
@@ -93,7 +102,7 @@ public partial class AppOrganizeUnitRepository : HibernateRepository<AppOrganize
         var entity = await Session.LoadAsync<AppOrganizeUnit>(id);
         if (entity == null) {
             throw new InvalidOperationException(
-                $"导航节点 {id} 不存在！"
+                $"组织单元 {id} 不存在！"
             );
         }
         Mapper.Map(model, entity);
@@ -104,6 +113,34 @@ public partial class AppOrganizeUnitRepository : HibernateRepository<AppOrganize
         await Session.UpdateAsync(entity);
         await Session.FlushAsync();
         Session.Clear();
+    }
+
+    public async Task<IList<AppOrganizeUnitModel>> QueryPathAsync(long unitId) {
+        var entities = await QueryUnitPathAsync(unitId);
+        return Mapper.Map<IList<AppOrganizeUnitModel>>(entities);
+    }
+
+    public async Task<bool> CanViewOrganizeUnitAsync(long userUnitId, long unitId) {
+        var units = await QueryUnitPathAsync(unitId);
+        return units.Any(unit => unit.Id == userUnitId);
+    }
+
+    private async Task<IList<AppOrganizeUnit>> QueryUnitPathAsync(long unitId) {
+        var conn = Session.Connection;
+        var sql = @"
+            with recursive cte as (
+                select c.id, c.parent_id,c.code,c.name,c.description,c.sequence
+                from public.app_organize_units c
+                where c.is_deleted = false and c.id = @unitId
+                union all
+                select p.id, p.parent_id, p.code, p.name, p.description, p.sequence
+                from public.app_organize_units p
+                inner join cte on cte.parent_id = p.id
+                where p.is_deleted = false
+            ) select * from cte
+        ";
+        var units = await conn.QueryAsync<AppOrganizeUnit>(sql, new { unitId });
+        return units.ToList();
     }
 
 }
