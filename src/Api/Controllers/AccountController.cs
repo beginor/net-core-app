@@ -201,6 +201,7 @@ public partial class AccountController : Controller {
             .Select(c => c.Value)
             .Distinct()
             .ToDictionary(p => p, p => true);
+        info.Token = CreateJwtToken(user);
         return info;
     }
 
