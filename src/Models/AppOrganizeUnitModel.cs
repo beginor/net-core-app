@@ -24,4 +24,7 @@ public partial class AppOrganizeUnitModel : StringEntity {
 }
 
 /// <summary>组织单元搜索参数</summary>
-public partial class AppOrganizeUnitSearchModel : PaginatedRequestModel { }
+public partial class AppOrganizeUnitSearchModel : PaginatedRequestModel {
+    /// <summary>组织机构ID</summary>
+    public long? OrganizeUnitId { get; set; }
+}

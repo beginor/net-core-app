@@ -49,7 +49,10 @@ public class AppOrganizeUnitController : Controller {
     ) {
         try {
             var userId = this.GetUserId()!;
-            var appUser = await userManager.FindByIdAsync(userId);
+            if (model.OrganizeUnitId == null) {
+                var appUser = await userManager.FindByIdAsync(userId);
+                model.OrganizeUnitId = appUser.OrganizeUnit.Id;
+            }
             var result = await repository.SearchAsync(model);
             return result;
         }
