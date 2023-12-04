@@ -102,14 +102,6 @@ public class WeChatController : Controller {
             ErrMsg = "ok",
         };
         if (string.IsNullOrWhiteSpace(model.SessionId) || string.IsNullOrWhiteSpace(model.EncryptedData) || string.IsNullOrWhiteSpace(model.IV)) {
-            // 直接 code 授权，不关联微信账号
-            if (!string.IsNullOrWhiteSpace(model.Code)) {
-                var phoneRes = await apiGateway.GetPhoneNumberAsync(model.Code);
-                if (phoneRes != null) {
-                    var user = await userMgr.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phoneRes.PhoneInfo.PhoneNumber);
-                    return await JwtResultAsync(res, user);
-                }
-            }
             res.ErrCode = 40001;
             res.ErrMsg = $"参数有误！";
             return BadRequest(res);
@@ -164,64 +156,14 @@ public class WeChatController : Controller {
         // update user last login and login count;
         user.LastLogin = DateTime.Now;
         user.LoginCount += 1;
-        user.AccessFailedCount = 0;
+        // user.AccessFailedCount = 0;
         await userMgr.UpdateAsync(user);
-        var identity = await CreateIdentityAsync(user);
-        // create a jwt token;
-        var result = CreateJwtToken(identity);
-        res.Token = result;
+
+        var tmpToken = Guid.NewGuid().ToString("N");
+        // 先暂存 token
+        await cache.SetStringAsync(tmpToken, user.Id);
+        res.TmpTokenKey = Beginor.NetCoreApp.Common.Consts.TmpToken;
+        res.TmpTokenValue = tmpToken;
         return Ok(res);
     }
-
-    private string CreateJwtToken(ClaimsIdentity identity) {
-        var handler = new JwtSecurityTokenHandler();
-        var descriptor = new SecurityTokenDescriptor {
-            Subject = identity,
-            Expires = DateTime.UtcNow.Add(jwt.ExpireTimeSpan),
-            SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(jwt.SecretKey),
-                SecurityAlgorithms.HmacSha256Signature
-            )
-        };
-        var securityToken = handler.CreateToken(descriptor);
-        var jwtToken = handler.WriteToken(securityToken);
-        return jwtToken;
-    }
-
-    private async Task<ClaimsIdentity> CreateIdentityAsync(AppUser user) {
-        // create a identity;
-        var identity = new ClaimsIdentity();
-        identity.AddClaim(
-            new Claim(ClaimTypes.NameIdentifier, user.Id)
-        );
-        identity.AddClaim(
-            new Claim(ClaimTypes.Name, user.UserName!)
-        );
-        // user claims;
-        var userClaims = await userMgr.GetClaimsAsync(user);
-        identity.AddClaims(userClaims);
-        // save role and role privileges to cache;
-        var claimsToCache = new List<Claim>();
-        // role as claim;
-        var roles = await userMgr.GetRolesAsync(user);
-        // add role and role claims;
-        if (roles != null) {
-            foreach (var roleName in roles) {
-                claimsToCache.Add(new Claim(ClaimTypes.Role, roleName));
-                var role = await roleMgr.FindByNameAsync(roleName);
-                if (role == null) {
-                    continue;
-                }
-                var roleClaims = await roleMgr.GetClaimsAsync(role);
-                foreach (var roleClaim in roleClaims) {
-                    if (!identity.Claims.Any(c => c.Type == roleClaim.Type && c.Value == roleClaim.Value)) {
-                        claimsToCache.Add(roleClaim);
-                    }
-                }
-                await cache.SetUserClaimsAsync(user.Id, claimsToCache.ToArray(), jwt.ExpireTimeSpan);
-            }
-        }
-        return identity;
-    }
-
 }
