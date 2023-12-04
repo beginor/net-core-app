@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
-namespace Beginor.NetCoreApp.WeChat;
+namespace Beginor.NetCoreApp.WeChat.Common;
 
 public static class ProxyUtil {
 

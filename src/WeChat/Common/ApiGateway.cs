@@ -7,8 +7,9 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.WeChat.Models;
 
-namespace Beginor.NetCoreApp.WeChat;
+namespace Beginor.NetCoreApp.WeChat.Common;
 
 public class ApiGateway : IDisposable {
 

@@ -1,7 +1,4 @@
-using System;
-using System.Text;
-
-namespace Beginor.NetCoreApp.WeChat;
+namespace Beginor.NetCoreApp.WeChat.Common;
 
 /// <summary>
 /// 微信相关配置

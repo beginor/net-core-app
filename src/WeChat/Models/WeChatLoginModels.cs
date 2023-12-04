@@ -1,4 +1,4 @@
-namespace Beginor.NetCoreApp.WeChat;
+namespace Beginor.NetCoreApp.WeChat.Models;
 
 /// <summary>
 /// 微信小程序登录请求参数
