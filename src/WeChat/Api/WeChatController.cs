@@ -9,6 +9,8 @@ using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
+using Beginor.NetCoreApp.WeChat.Common;
+using Beginor.NetCoreApp.WeChat.Models;
 
 namespace Beginor.NetCoreApp.WeChat.Api;
 

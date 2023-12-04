@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Beginor.NetCoreApp.WeChat;
+using Beginor.NetCoreApp.WeChat.Common;
 
 namespace Beginor.NetCoreApp.Entry;
 

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.WeChat.Models;
 
-namespace Beginor.NetCoreApp.WeChat;
+namespace Beginor.NetCoreApp.WeChat.Common;
 
 public static class ApiGatewayExtensions {
 

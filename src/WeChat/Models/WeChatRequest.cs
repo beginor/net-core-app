@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Beginor.NetCoreApp.WeChat;
+namespace Beginor.NetCoreApp.WeChat.Models;
 
 public class WeChatGetUserPhoneNumberRequest {
     [JsonPropertyName("code")]
