@@ -8,7 +8,7 @@ using NUnit.Framework;
 using Beginor.AspNetCore.Middlewares.CustomHeader;
 using Beginor.AspNetCore.Middlewares.SpaFailback;
 using Beginor.NetCoreApp.Common;
-using Beginor.NetCoreApp.WeChat;
+using Beginor.NetCoreApp.WeChat.Common;
 
 namespace Beginor.NetCoreApp.Test;
 
