@@ -15,7 +15,7 @@ partial class Startup {
                     new AssemblyPart(typeof(Beginor.NetCoreApp.Api.Controllers.AccountController).Assembly)
                 );
                 manager.ApplicationParts.Add(
-                    new AssemblyPart(typeof(Beginor.NetCoreApp.WeChat.WeChatController).Assembly)
+                    new AssemblyPart(typeof(Beginor.NetCoreApp.WeChat.Api.WeChatController).Assembly)
                 );
             })
             .AddControllersAsServices()

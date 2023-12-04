@@ -7,4 +7,6 @@ public static class Consts {
 
     public static readonly string TmpToken = "tmpToken";
     public static readonly string AppUserIdClaimType = "AppUserId";
+    public static readonly string WeChatAuth = "WeChat";
+
 }
