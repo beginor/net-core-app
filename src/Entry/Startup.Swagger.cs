@@ -51,15 +51,19 @@ partial class Startup {
     }
 
     private void ConfigureSwagger(WebApplication app, IWebHostEnvironment env) {
+        var pathBase = GetAppPathbase();
         app.UseSwagger().UseSwaggerUI(options => {
             // options.RoutePrefix = pathbase;
             options.UseRequestInterceptor("function (req) { if (req.url.endsWith('/api/account') && req.method === 'POST') { var param = JSON.parse(req.body); param.userName = (btoa(param.userName).split('=')[0]).replace('+','-').replace('/','_'); param.password = (btoa(param.password).split('=')[0]).replace('+','-').replace('/','_'); req.body = JSON.stringify(param); } return req; }");
             options.SwaggerEndpoint(
-                GetAppPathbase() + "/swagger/v1/swagger.json",
+                pathBase + "/swagger/v1/swagger.json",
                 "NetCoreApp API v1.0.0"
             );
             options.DocumentTitle = "NetCoreApp API v1.0.0";
         });
+
+
+        logger.Info($"swagger url : {pathBase}/swaager");
     }
 
 }

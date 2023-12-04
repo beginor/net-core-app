@@ -2,49 +2,40 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "pnpm:watch-web",
-      "command": "pnpm",
-      "type": "shell",
-      "args": ["run", "watch-web"],
-      "problemMatcher": ["$tsc", "$node-sass"],
-      "group": "none",
-      "options": {
-        "cwd": "${workspaceRoot}/client"
-      }
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/NetCoreApp.sln",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary;ForceNoAlign"
+      ],
+      "problemMatcher": "$msCompile"
     },
     {
-      "label": "dotnet:build",
+      "label": "publish",
       "command": "dotnet",
-      "type": "shell",
-      "args": ["build"],
-      "problemMatcher": ["$msCompile"],
-      "group": { "kind": "build", "isDefault": true },
-      "options": {
-        "cwd": "${workspaceRoot}/server/src/NetCoreApp.Entry"
-      }
+      "type": "process",
+      "args": [
+        "publish",
+        "${workspaceFolder}/NetCoreApp.sln",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary;ForceNoAlign"
+      ],
+      "problemMatcher": "$msCompile"
     },
     {
-      "label": "dotnet:run",
+      "label": "watch",
       "command": "dotnet",
-      "type": "shell",
-      "args": ["run"],
-      "problemMatcher": ["$msCompile"],
-      "group": "none",
-      "isBackground": true,
-      "options": {
-        "cwd": "${workspaceRoot}/server/src/NetCoreApp.Entry"
-      }
-    },
-    {
-      "label": "dotnet:watch-run",
-      "command": "dotnet",
-      "type": "shell",
-      "args": ["watch", "run"],
-      "problemMatcher": ["$msCompile"],
-      "group": "none",
-      "options": {
-        "cwd": "${workspaceRoot}/server/src/NetCoreApp.Entry"
-      }
+      "type": "process",
+      "args": [
+        "watch",
+        "run",
+        "--project",
+        "${workspaceFolder}/NetCoreApp.sln"
+      ],
+      "problemMatcher": "$msCompile"
     }
   ]
 }
