@@ -45,6 +45,8 @@ public partial class Startup {
         ConfigureRoutingServices(services, env);
         ConfigureAuthenticationServices(services, env);
         ConfigureMvcServices(services, env);
+        // wechat
+        ConfigureWeChatServices(services, env);
         logger.Info("Configure services completed!");
     }
 
@@ -71,6 +73,8 @@ public partial class Startup {
         ConfigureRouting(app, env);
         ConfigureAuthentication(app, env);
         ConfigureMvc(app, env);
+        // wechat
+        ConfigureWeChat(app, env);
         logger.Info("Configure app completed.");
     }
 

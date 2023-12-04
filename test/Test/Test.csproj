@@ -25,6 +25,7 @@
     <ProjectReference Include="..\..\src\Data\Data.csproj" />
     <ProjectReference Include="..\..\src\Entry\Entry.csproj" />
     <ProjectReference Include="..\..\src\Models\Models.csproj" />
+    <ProjectReference Include="..\..\src\WeChat\WeChat.csproj" />
   </ItemGroup>
 
   <ItemGroup>
