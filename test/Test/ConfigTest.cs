@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Beginor.AspNetCore.Middlewares.CustomHeader;
 using Beginor.AspNetCore.Middlewares.SpaFailback;
 using Beginor.NetCoreApp.Common;
+using Beginor.NetCoreApp.WeChat;
 
 namespace Beginor.NetCoreApp.Test;
 
@@ -64,6 +65,14 @@ public class ConfigTest : BaseTest<IConfiguration> {
         var options = section.Get<CustomHeaderOptions>();
         Assert.IsNotNull(options.Headers);
         Assert.Greater(options.Headers.Keys.Count, 0);
+    }
+
+    [Test]
+    public void _07_CanGetWeChatOptions() {
+        var section = Target.GetSection("wechat");
+        var options = section.Get<WeChatOption>();
+        Assert.IsNotNull(options.AppId);
+        Assert.IsNotNull(options.Secret);
     }
 
     [Test]
