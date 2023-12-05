@@ -82,7 +82,7 @@ public class AppOrganizeUnitController : Controller {
         [FromBody]AppOrganizeUnitModel model
     ) {
         try {
-            await repository.SaveAsync(model);
+            await repository.SaveAsync(model, User.Identity!.Name!);
             return model;
         }
         catch (Exception ex) {
@@ -147,7 +147,7 @@ public class AppOrganizeUnitController : Controller {
             if (!exists) {
                 return NotFound();
             }
-            await repository.UpdateAsync(id, model);
+            await repository.UpdateAsync(id, model, User.Identity!.Name!);
             return model;
         }
         catch (Exception ex) {

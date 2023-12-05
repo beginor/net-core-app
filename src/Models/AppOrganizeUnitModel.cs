@@ -7,7 +7,6 @@ namespace Beginor.NetCoreApp.Models;
 
 /// <summary>组织单元模型</summary>
 public partial class AppOrganizeUnitModel : StringEntity {
-
     /// <summary>上级组织单元 ID</summary>
     public string ParentId { get; set; }
     /// <summary>组织单元编码</summary>
