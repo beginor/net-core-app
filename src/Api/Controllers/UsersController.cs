@@ -15,6 +15,7 @@ using NHibernate.AspNetCore.Identity;
 using NHibernate.Linq;
 using Beginor.NetCoreApp.Data;
 using Beginor.NetCoreApp.Data.Entities;
+using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Api.Controllers;
@@ -28,17 +29,20 @@ public class UsersController : Controller {
     private UserManager<AppUser> userMgr;
     private RoleManager<AppRole> roleMgr;
     private IMapper mapper;
+    private IAppOrganizeUnitRepository orgUnitRepo;
 
     public UsersController(
         ILogger<UsersController> logger,
         UserManager<AppUser> userMgr,
         RoleManager<AppRole> roleMgr,
-        IMapper mapper
+        IMapper mapper,
+        IAppOrganizeUnitRepository orgUnitRepo
     ) {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
         this.roleMgr = roleMgr ?? throw new ArgumentNullException(nameof(roleMgr));
         this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        this.orgUnitRepo = orgUnitRepo ?? throw new ArgumentNullException(nameof(orgUnitRepo));
     }
 
     protected override void Dispose(bool disposing) {
@@ -133,6 +137,8 @@ public class UsersController : Controller {
             if (model.UserName.IsNotNullOrEmpty()) {
                 query = query.Where(u => u.UserName!.Contains(model.UserName!));
             }
+            var currUser = await userMgr.FindByNameAsync(User.Identity!.Name!);
+            query = query.Where(u => u.OrganizeUnit.Code.StartsWith(currUser!.OrganizeUnit.Code));
             var total = query.LongCount();
             if (model.SortBy != null) {
                 var sortInfo = model.SortBy.Split(
@@ -205,6 +211,10 @@ public class UsersController : Controller {
             var user = await userMgr.FindByIdAsync(id.ToString());
             if (user == null) {
                 return NotFound();
+            }
+            if (model.OrganizeUnit.Id != user.OrganizeUnit.Id.ToString()) {
+                var unitId = long.Parse(model.OrganizeUnit.Id!);
+                user.OrganizeUnit = await orgUnitRepo.GetEntityByIdAsync(unitId);
             }
             var claims = user.UpdateFromUserModel(mapper, model);
             await AddOrReplaceClaims(user, claims);

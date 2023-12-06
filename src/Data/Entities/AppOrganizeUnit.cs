@@ -13,7 +13,7 @@ public partial class AppOrganizeUnit : BaseEntity<long> {
     public override long Id { get { return base.Id; } set { base.Id = value; } }
     /// <summary>上级组织单元 ID</summary>
     [Property(Name = nameof(ParentId), Column = "parent_id", Type = "long", NotNull = false)]
-    public virtual long? ParentId { get; set; }
+    public virtual long ParentId { get; set; }
     /// <summary>组织单元编码</summary>
     [Property(Name = nameof(Code), Column = "code", Type = "string", NotNull = true, Length = 32)]
     public virtual string Code { get; set; }

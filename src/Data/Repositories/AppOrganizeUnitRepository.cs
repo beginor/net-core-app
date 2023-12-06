@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
 using Dapper;
@@ -83,6 +82,8 @@ public partial class AppOrganizeUnitRepository : HibernateRepository<AppOrganize
         // Ensure not deleted.
         entity.IsDeleted = false;
         await Session.SaveAsync(entity);
+        entity.Code = await GenerateUnitCodeAsync(entity.Id);
+        await Session.SaveAsync(entity);
         await Session.FlushAsync();
         Session.Clear();
         Mapper.Map(entity, model);
@@ -95,7 +96,7 @@ public partial class AppOrganizeUnitRepository : HibernateRepository<AppOrganize
     ) {
         // Check parameters;
         if (id <= 0) {
-            throw new ArgumentOutOfRangeException(nameof(id), "NavItemId <= 0 !");
+            throw new ArgumentOutOfRangeException(nameof(id), "Id <= 0 !");
         }
         Argument.NotNull(model, nameof(model));
         Argument.NotNullOrEmpty(userName, nameof(userName));
@@ -105,14 +106,39 @@ public partial class AppOrganizeUnitRepository : HibernateRepository<AppOrganize
                 $"组织单元 {id} 不存在！"
             );
         }
-        Mapper.Map(model, entity);
-        entity.Id = id;
-        entity.Updater = await Session.Query<AppUser>()
-            .FirstAsync(u => u.UserName == userName);
-        entity.UpdatedAt = DateTime.Now;
-        await Session.UpdateAsync(entity);
-        await Session.FlushAsync();
-        Session.Clear();
+        var trans = Session.BeginTransaction();
+        try {
+            var oldParentId = entity.ParentId;
+            var oldCode = entity.Code;
+            Mapper.Map(model, entity);
+            entity.Id = id;
+            var updater = await Session.Query<AppUser>()
+                .FirstAsync(u => u.UserName == userName);
+            entity.Updater = updater;
+            entity.UpdatedAt = DateTime.Now;
+            await Session.UpdateAsync(entity);
+            if (entity.ParentId != oldParentId) {
+                var descendants = await Session.Query<AppOrganizeUnit>()
+                .Where(x => x.Code.StartsWith($"{oldCode}/"))
+                .ToListAsync();
+                entity.UpdatedAt = DateTime.Now;
+                entity.Code = await GenerateUnitCodeAsync(entity.Id);
+                await Session.UpdateAsync(entity);
+                foreach (var descendant in descendants) {
+                    descendant.Code = await GenerateUnitCodeAsync(descendant.Id);
+                    descendant.Updater = updater;
+                    descendant.UpdatedAt = DateTime.Now;
+                    await Session.UpdateAsync(descendant);
+                }
+            }
+            await Session.FlushAsync();
+            Session.Clear();
+            await trans.CommitAsync();
+        }
+        catch (Exception) {
+            await trans.RollbackAsync();
+            throw;
+        }
     }
 
     public async Task<IList<AppOrganizeUnitModel>> QueryPathAsync(long unitId) {
@@ -141,6 +167,19 @@ public partial class AppOrganizeUnitRepository : HibernateRepository<AppOrganize
         ";
         var units = await conn.QueryAsync<AppOrganizeUnit>(sql, new { unitId });
         return units.ToList();
+    }
+
+    public async Task<AppOrganizeUnit> GetEntityByIdAsync(long unitId) {
+        var entity = await Session.LoadAsync<AppOrganizeUnit>(unitId);
+        return entity;
+    }
+
+    public async Task<string> GenerateUnitCodeAsync(long id) {
+        var units = await QueryUnitPathAsync(id);
+        var idArr = units.Select(x => x.Id.ToString()).ToArray();
+        Array.Reverse(idArr);
+        var path = string.Join('/', idArr);
+        return path;
     }
 
 }

@@ -9,9 +9,6 @@ namespace Beginor.NetCoreApp.Models;
 public partial class AppOrganizeUnitModel : StringEntity {
     /// <summary>上级组织单元 ID</summary>
     public string ParentId { get; set; }
-    /// <summary>组织单元编码</summary>
-    [Required(ErrorMessage = "组织单元编码 必须填写！")]
-    public string Code { get; set; }
     /// <summary>组织单元名称</summary>
     [Required(ErrorMessage = "组织单元名称 必须填写！")]
     public string Name { get; set; }

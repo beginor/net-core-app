@@ -31,7 +31,7 @@ public class AppOrganizeUnitRepositoryTest : BaseTest<IAppOrganizeUnitRepository
 
     [Test]
     public async Task _03_CanQueryPath() {
-        var units = await Target.QueryPathAsync(1701678508063020798L);
+        var units = await Target.QueryPathAsync(1L);
         Assert.IsNotEmpty(units);
         Console.WriteLine(units.ToJson());
     }

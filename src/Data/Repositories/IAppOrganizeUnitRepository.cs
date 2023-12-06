@@ -22,4 +22,6 @@ public partial interface IAppOrganizeUnitRepository : IRepository<AppOrganizeUni
     Task<IList<AppOrganizeUnitModel>> QueryPathAsync(long unitId);
 
     Task<bool> CanViewOrganizeUnitAsync(long userUnitId, long unitId);
+
+    Task<AppOrganizeUnit> GetEntityByIdAsync(long unitId);
 }
