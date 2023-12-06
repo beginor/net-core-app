@@ -69,24 +69,31 @@ public partial class AppOrganizeUnitRepository : HibernateRepository<AppOrganize
         Argument.NotNullOrEmpty(userName, nameof(userName));
         // Map to entity;
         var entity = Mapper.Map<AppOrganizeUnit>(model);
-        var user = await Session.Query<AppUser>()
-            .FirstOrDefaultAsync(
-                u => u.UserName == userName
-            );
-        // Assign creator;
-        entity.Creator = user;
-        entity.CreatedAt = DateTime.Now;
-        // Assign updater;
-        entity.Updater = user;
-        entity.UpdatedAt = DateTime.Now;
-        // Ensure not deleted.
-        entity.IsDeleted = false;
-        await Session.SaveAsync(entity);
-        entity.Code = await GenerateUnitCodeAsync(entity.Id);
-        await Session.SaveAsync(entity);
-        await Session.FlushAsync();
-        Session.Clear();
-        Mapper.Map(entity, model);
+        var tx = Session.BeginTransaction();
+        try {
+            var user = await Session.Query<AppUser>()
+                .FirstOrDefaultAsync(
+                    u => u.UserName == userName
+                );
+            // Assign creator;
+            entity.Creator = user;
+            entity.CreatedAt = DateTime.Now;
+            // Assign updater;
+            entity.Updater = user;
+            entity.UpdatedAt = DateTime.Now;
+            // Ensure not deleted.
+            entity.IsDeleted = false;
+            await Session.SaveAsync(entity);
+            entity.Code = await GenerateUnitCodeAsync(entity.Id);
+            await Session.SaveAsync(entity);
+            await Session.FlushAsync();
+            Session.Clear();
+            await tx.CommitAsync();
+            Mapper.Map(entity, model);
+        }
+        catch (Exception) {
+            await tx.RollbackAsync();
+        }
     }
 
     public async Task UpdateAsync(
