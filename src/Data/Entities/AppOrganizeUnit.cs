@@ -15,7 +15,7 @@ public partial class AppOrganizeUnit : BaseEntity<long> {
     [Property(Name = nameof(ParentId), Column = "parent_id", Type = "long", NotNull = false)]
     public virtual long ParentId { get; set; }
     /// <summary>组织单元编码</summary>
-    [Property(Name = nameof(Code), Column = "code", Type = "string", NotNull = true, Length = 32)]
+    [Property(Name = nameof(Code), Column = "code", Type = "string", NotNull = false, Length = 32)]
     public virtual string Code { get; set; }
     /// <summary>组织单元名称</summary>
     [Property(Name = nameof(Name), Column = "name", Type = "string", NotNull = true, Length = 32)]

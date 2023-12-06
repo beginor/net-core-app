@@ -6,7 +6,7 @@ create table if not exists public.app_organize_unit
 (
     id bigint not null default snow_flake_id(),
     parent_id bigint,
-    code character varying(512) collate pg_catalog."default" not null,
+    code character varying(512) collate pg_catalog."default",
     name character varying(32) collate pg_catalog."default" not null,
     description character varying(128) collate pg_catalog."default",
     sequence real not null,
