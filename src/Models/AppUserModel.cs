@@ -58,6 +58,8 @@ public class UserSearchRequestModel : PaginatedRequestModel {
     public string SortBy { get; set; }
     /// <summary>角色名称</summary>
     public string RoleName { get; set; }
+    /// <summary>组织单元ID</summary>
+    public long? OrganizeUnitId { get; set; }
 }
 
 /// <summary>

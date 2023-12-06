@@ -138,14 +138,24 @@ public class UsersController : Controller {
                 query = query.Where(u => u.UserName!.Contains(model.UserName!));
             }
             var currUser = await userMgr.FindByNameAsync(User.Identity!.Name!);
-            query = query.Where(u => u.OrganizeUnit.Code.StartsWith(currUser!.OrganizeUnit.Code));
+            var userUnit = currUser!.OrganizeUnit!;
+            var unitCode = userUnit.Code;
+            if (model.OrganizeUnitId.HasValue) {
+                var unitId = model.OrganizeUnitId.Value;
+                var canView = await orgUnitRepo.CanViewOrganizeUnitAsync(userUnit.Id, unitId);
+                if (!canView) {
+                    return BadRequest($"Can not view organize unit {unitId}");
+                }
+                var unit = await orgUnitRepo.GetEntityByIdAsync(unitId);
+                unitCode = unit.Code;
+            }
+            query = query.Where(u => u.OrganizeUnit.Code.StartsWith(unitCode));
             var total = query.LongCount();
             if (model.SortBy != null) {
                 var sortInfo = model.SortBy.Split(
                     ':',
                     StringSplitOptions.RemoveEmptyEntries
                 );
-                var propertyName = sortInfo[0];
                 var isAsc = sortInfo[1].Equals(
                     "ASC",
                     StringComparison.OrdinalIgnoreCase
