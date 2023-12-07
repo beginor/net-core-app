@@ -3,7 +3,7 @@
 rm -rf dist/config
 rm -rf dist/wwwroot
 # rm -rf dist/log
-./build-client.sh
+# ./build-client.sh
 
 # Build docker image
 docker buildx build --pull --rm \
