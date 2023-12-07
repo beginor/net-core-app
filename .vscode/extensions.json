@@ -2,6 +2,7 @@
   "recommendations": [
     "EditorConfig.EditorConfig",
     "VisualStudioExptTeam.vscodeintellicode",
-    "VisualStudioExptTeam.intellicode-api-usage-examples"
+    "VisualStudioExptTeam.intellicode-api-usage-examples",
+    "DavidAnson.vscode-markdownlint"
   ]
 }
