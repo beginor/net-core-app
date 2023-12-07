@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
@@ -29,9 +30,13 @@ public class AppRoleModel : StringEntity {
 
 /// <summary>角色搜索参数</summary>
 public class AppRoleSearchModel : PaginatedRequestModel {
-
     /// <summary>角色名称</summary>
     public string Name { get; set; }
+    /// <summary>组织单元ID</summary>
+    public long? OrganizeUnitId { get; set; }
+    /// <summary>组织单元编码</summary>
+    [JsonIgnore]
+    public string? OrganizeUnitCode { get; set; }
 }
 
 /// <summary>角色权限模型</summary>

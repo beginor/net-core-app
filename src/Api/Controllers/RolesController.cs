@@ -28,19 +28,22 @@ public class RolesController : Controller {
     private UserManager<AppUser> userMgr;
     private IIdentityRepository identityRepo;
     private IMapper mapper;
+    private IAppOrganizeUnitRepository orgUnitRepo;
 
     public RolesController(
         ILogger<RolesController> logger,
         RoleManager<AppRole> roleMgr,
         UserManager<AppUser> userMgr,
         IIdentityRepository identityRepo,
-        IMapper mapper
+        IMapper mapper,
+        IAppOrganizeUnitRepository orgUnitRepo
     ) {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.roleMgr = roleMgr ?? throw new ArgumentNullException(nameof(roleMgr));
         this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
         this.identityRepo = identityRepo ?? throw new ArgumentNullException(nameof(identityRepo));
         this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        this.orgUnitRepo = orgUnitRepo ?? throw new ArgumentNullException(nameof(orgUnitRepo));
     }
 
     protected override void Dispose(bool disposing) {
@@ -111,6 +114,19 @@ public class RolesController : Controller {
         [FromQuery]AppRoleSearchModel model
     ) {
         try {
+            var currUser = await userMgr.FindByNameAsync(User.Identity!.Name!);
+            var userUnit = currUser!.OrganizeUnit!;
+            var unitCode = userUnit.Code;
+            if (model.OrganizeUnitId.HasValue) {
+                var unitId = model.OrganizeUnitId.Value;
+                var canView = await orgUnitRepo.CanViewOrganizeUnitAsync(userUnit.Id, unitId);
+                if (!canView) {
+                    return BadRequest($"Can not view organize unit {unitId}");
+                }
+                var unit = await orgUnitRepo.GetEntityByIdAsync(unitId);
+                unitCode = unit.Code;
+            }
+            model.OrganizeUnitCode = unitCode;
             var data = await identityRepo.SearchAsync(model);
             var result = new PaginatedResponseModel<AppRoleModel> {
                 Skip = model.Skip,
