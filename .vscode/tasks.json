@@ -2,17 +2,6 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "pnpm:watch-web",
-      "command": "pnpm",
-      "type": "shell",
-      "args": ["run", "watch-web"],
-      "problemMatcher": ["$tsc", "$node-sass"],
-      "group": "none",
-      "options": {
-        "cwd": "${workspaceRoot}/client"
-      }
-    },
-    {
       "label": "dotnet:build",
       "command": "dotnet",
       "type": "shell",
@@ -20,7 +9,7 @@
       "problemMatcher": ["$msCompile"],
       "group": { "kind": "build", "isDefault": true },
       "options": {
-        "cwd": "${workspaceRoot}/server/src/NetCoreApp.Entry"
+        "cwd": "${workspaceRoot}/src/Entry"
       }
     },
     {
@@ -32,7 +21,7 @@
       "group": "none",
       "isBackground": true,
       "options": {
-        "cwd": "${workspaceRoot}/server/src/NetCoreApp.Entry"
+        "cwd": "${workspaceRoot}/src/Entry"
       }
     },
     {
@@ -43,7 +32,7 @@
       "problemMatcher": ["$msCompile"],
       "group": "none",
       "options": {
-        "cwd": "${workspaceRoot}/server/src/NetCoreApp.Entry"
+        "cwd": "${workspaceRoot}/src/Entry"
       }
     }
   ]

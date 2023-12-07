@@ -1,9 +1,1 @@
-{
-  "eslint.workingDirectories": [
-    "client"
-  ],
-  "files.exclude": {
-    "**/.angular": true,
-    "**/.pnpm": true
-  }
-}
+{}
