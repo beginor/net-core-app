@@ -1,7 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "Beginor.NetCoreApp.Entry": {
+    "Entry": {
       "commandName": "Project",
       "launchBrowser": false,
       "launchUrl": "/",

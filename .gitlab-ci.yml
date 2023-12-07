@@ -4,33 +4,18 @@ stages:
   - test
   - deploy
 # Cache client/node_modules between jobs
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  untracked: true
-  paths:
-    - client/node_modules/
 setup:
   stage: setup
   script:
-    - cd client
-    - npm ci
-    - cd ..
-    - cd server
     - dotnet restore
 build:
   stage: build
   script:
-    - cd client
-    - npm run lint
-    - npm run build
-    - cd ..
-    - cd server
     - dotnet build
-    - cd ..
 test:
   stage: test
   script:
-    - cd server/test/NetCoreApp.Test
+    - cd test/Test
     - dotnet test
     - cd ..
 deploy:

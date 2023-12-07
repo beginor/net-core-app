@@ -11,8 +11,6 @@ SERVER_PREFIX="${COMPANY_NAME}.${PROJ_NAME}"
 # 修改 Docker 编译/部署文件
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/build-docker-image.sh
 sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/build-docker-image.sh
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./docker/build-docker-image.sh
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./docker/build-server.sh
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/deploy-docker-image.sh
 sed -i.bak "s/beginor/$(echo ${COMPANY_NAME} | tr '[:upper:]' '[:lower:]')/g" ./docker/deploy-docker-image.sh
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/Dockerfile
@@ -26,18 +24,16 @@ git add *
 git commit -m "Rename to ${COMPANY_NAME}.${PROJ_NAME}"
 # 修改服务端相关文件
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./src/Entry/Properties/launchSettings.json
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./src/Entry/Properties/launchSettings.json
-grep Beginor.NetCoreApp -rl server --include *.cs | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
-grep Beginor.NetCoreApp -rl server --include *.hbm.xml | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
-grep Beginor.NetCoreApp -rl server --include *.config | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
-grep Beginor.NetCoreApp -rl server --include *.csproj | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
-grep Beginor.NetCoreApp -rl server --include *.config | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+grep Beginor.NetCoreApp -rl src --include *.cs | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+grep Beginor.NetCoreApp -rl src --include *.hbm.xml | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+grep Beginor.NetCoreApp -rl src --include *.config | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+grep Beginor.NetCoreApp -rl src --include *.config | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+grep Beginor.NetCoreApp -rl src --include *.csproj | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+grep Beginor.NetCoreApp -rl test --include *.cs | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+grep Beginor.NetCoreApp -rl test --include *.csproj | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./src/Entry/Startup.Swagger.cs
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./test/Test/Test.csproj
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./.gitlab-ci.yml
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./.vscode/launch.json
-sed -i.bak "s/Beginor/${COMPANY_NAME}/g" ./.vscode/launch.json
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./.vscode/tasks.json
+
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./smartcode.yml
 sed -i.bak "s/Beginor/${COMPANY_NAME}/g" ./smartcode.yml
 # 删除备份文件
