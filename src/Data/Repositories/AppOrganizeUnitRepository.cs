@@ -44,12 +44,14 @@ public partial class AppOrganizeUnitRepository : HibernateRepository<AppOrganize
                 from public.app_organize_units c
                 inner join cte on cte.id = c.parent_id
                 where c.is_deleted = false
-            ) select * from cte a
+            )
+            select id, parent_id, code, name, description, sequence, level, expand
+            from cte a
             order by a.code, a.sequence;
         ";
-        var models = await conn.QueryAsync<AppOrganizeUnitModel>(sql, new { unitId });
+        var models = await conn.QueryAsync<AppOrganizeUnit>(sql, new { unitId });
         var result = new PaginatedResponseModel<AppOrganizeUnitModel> {
-            Data = models.ToList()
+            Data = Mapper.Map<IList<AppOrganizeUnitModel>>(models.ToList())
         };
         return result;
     }

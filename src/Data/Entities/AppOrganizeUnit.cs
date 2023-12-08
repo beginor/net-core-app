@@ -41,4 +41,7 @@ public partial class AppOrganizeUnit : BaseEntity<long> {
     /// <summary>是否删除</summary>
     [Property(Name = "IsDeleted", Column = "is_deleted", Type = "bool", NotNull = true)]
     public virtual bool IsDeleted { get; set; }
+
+    public virtual int Level { get; set; }
+    public virtual bool Expand { get; set; }
 }
