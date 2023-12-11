@@ -32,7 +32,11 @@ grep Beginor.NetCoreApp -rl src --include *.csproj | xargs sed -i.bak "s/Beginor
 grep Beginor.NetCoreApp -rl test --include *.cs | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp -rl test --include *.csproj | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 
+sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./src/Entry/Entry.csproj
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./src/Entry/Startup.Swagger.cs
+sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./src/Data/Repositories/AppStorageRepository.cs
+sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./src/Entry/config/hibernate.config
+sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./src/Entry/config/log.config
 
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./smartcode.yml
 sed -i.bak "s/Beginor/${COMPANY_NAME}/g" ./smartcode.yml
