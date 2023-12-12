@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,6 +45,14 @@ public abstract class BaseTest {
         startup.ConfigureServices(services);
         ServiceProvider = services.BuildServiceProvider(false);
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+    }
+
+    protected JsonSerializerOptions GetTestJsonOption() {
+        var option = new JsonSerializerOptions {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            WriteIndented = true
+        };
+        return option;
     }
 
 }

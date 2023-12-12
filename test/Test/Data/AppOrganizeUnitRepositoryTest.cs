@@ -33,7 +33,7 @@ public class AppOrganizeUnitRepositoryTest : BaseTest<IAppOrganizeUnitRepository
     public async Task _03_CanQueryPath() {
         var units = await Target.QueryPathAsync(1L);
         Assert.IsNotEmpty(units);
-        Console.WriteLine(units.ToJson());
+        Console.WriteLine(units.ToJson(GetTestJsonOption()));
     }
 
     [Test]
