@@ -9,7 +9,7 @@ using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Repositories;
 
-namespace Gdeei.Impress.Api.Authorization;
+namespace Beginor.NetCoreApp.Api.Authorization;
 
 public class TokenEventsHandler {
 

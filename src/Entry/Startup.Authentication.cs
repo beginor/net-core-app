@@ -8,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using Beginor.AspNetCore.Authentication.Token;
 using Beginor.NetCoreApp.Api.Authorization;
 using Beginor.NetCoreApp.Common;
-using Gdeei.Impress.Api.Authorization;
 
 namespace Beginor.NetCoreApp.Entry;
 
