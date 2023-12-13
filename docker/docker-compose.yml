@@ -1,10 +1,8 @@
-version: "3.9"
 services:
-  net-core-app:
+  app:
     image: beginor/net-core-app
-    hostname: net-core-app
     ports:
-      - 5000:80
+      - 8080:8080
     volumes:
       - ./config:/app/config
       - ./log:/app/log
@@ -12,6 +10,8 @@ services:
     environment:
       TZ: Asia/Shanghai
       ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_PATHBASE: /net-core-app
     restart: unless-stopped
 networks:
   default:

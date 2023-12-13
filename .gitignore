@@ -56,4 +56,4 @@ bin
 *.DotSettings
 
 # app_cache folder
-app_cache
+cache
