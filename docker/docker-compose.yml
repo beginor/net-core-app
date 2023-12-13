@@ -6,7 +6,9 @@ services:
     ports:
       - 5000:80
     volumes:
-      - ./log:/net-core-app/log
+      - ./config:/app/config
+      - ./log:/app/log
+      - ./cache:/app/cache
     environment:
       TZ: Asia/Shanghai
       ASPNETCORE_ENVIRONMENT: Development
