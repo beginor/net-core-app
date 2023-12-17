@@ -42,7 +42,7 @@ public class AppOrganizeUnitController : Controller {
     /// <response code="200">成功, 分页返回结果</response>
     /// <response code="500">服务器内部错误</response>
     [HttpGet("")]
-    [Authorize("app_organize_unit.read")]
+    [Authorize("app_organize_units.read")]
     public async Task<ActionResult<PaginatedResponseModel<AppOrganizeUnitModel>>> Search(
         [FromQuery]AppOrganizeUnitSearchModel model
     ) {
@@ -77,7 +77,7 @@ public class AppOrganizeUnitController : Controller {
     /// <response code="200">创建 组织单元 成功</response>
     /// <response code="500">服务器内部错误</response>
     [HttpPost("")]
-    [Authorize("app_organize_unit.create")]
+    [Authorize("app_organize_units.create")]
     public async Task<ActionResult<AppOrganizeUnitModel>> Create(
         [FromBody]AppOrganizeUnitModel model
     ) {
@@ -86,7 +86,7 @@ public class AppOrganizeUnitController : Controller {
             return model;
         }
         catch (Exception ex) {
-            logger.LogError(ex, $"Can not save {model.ToJson()} to app_organize_unit.");
+            logger.LogError(ex, $"Can not save {model.ToJson()} to app_organize_units.");
             return this.InternalServerError(ex);
         }
     }
@@ -96,7 +96,7 @@ public class AppOrganizeUnitController : Controller {
     /// <response code="500">服务器内部错误</response>
     [HttpDelete("{id:long}")]
     [ProducesResponseType(204)]
-    [Authorize("app_organize_unit.delete")]
+    [Authorize("app_organize_units.delete")]
     public async Task<ActionResult> Delete(long id) {
         try {
             await repository.DeleteAsync(id);
@@ -115,7 +115,7 @@ public class AppOrganizeUnitController : Controller {
     /// <response code="404"> 组织单元 不存在</response>
     /// <response code="500">服务器内部错误</response>
     [HttpGet("{id:long}")]
-    [Authorize("app_organize_unit.read_by_id")]
+    [Authorize("app_organize_units.read_by_id")]
     public async Task<ActionResult<AppOrganizeUnitModel>> GetById(long id) {
         try {
             var result = await repository.GetByIdAsync(id);
@@ -137,7 +137,7 @@ public class AppOrganizeUnitController : Controller {
     /// <response code="404"> 组织单元 不存在</response>
     /// <response code="500">服务器内部错误</response>
     [HttpPut("{id:long}")]
-    [Authorize("app_organize_unit.update")]
+    [Authorize("app_organize_units.update")]
     public async Task<ActionResult<AppOrganizeUnitModel>> Update(
         [FromRoute]long id,
         [FromBody]AppOrganizeUnitModel model
