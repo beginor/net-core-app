@@ -123,7 +123,7 @@ public class RolesController : Controller {
                 if (!canView) {
                     return BadRequest($"Can not view organize unit {unitId}");
                 }
-                var unit = await orgUnitRepo.GetEntityByIdAsync(unitId);
+                var unit = await orgUnitRepo.GetEntityByIdAsync(unitId, User);
                 unitCode = unit.Code;
             }
             model.OrganizeUnitCode = unitCode;

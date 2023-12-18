@@ -233,25 +233,25 @@ public partial class AccountController : Controller {
         var userClaims = await userMgr.GetClaimsAsync(user);
         identity.AddClaims(userClaims);
         // save role and role privileges to cache;
-        var claimsToCache = new List<Claim>();
+        var claimsToCache = new List<Claim> {
+            new (Consts.OrganizeUnitIdClaimType, user.OrganizeUnit.Id.ToString())
+        };
         // role as claim;
         var roles = await userMgr.GetRolesAsync(user);
         // add role and role claims;
-        if (roles != null) {
-            foreach (var roleName in roles) {
-                claimsToCache.Add(new Claim(ClaimTypes.Role, roleName));
-                var role = await roleMgr.FindByNameAsync(roleName);
-                if (role == null) {
-                    continue;
-                }
-                var roleClaims = await roleMgr.GetClaimsAsync(role);
-                foreach (var roleClaim in roleClaims) {
-                    if (!identity.Claims.Any(c => c.Type == roleClaim.Type && c.Value == roleClaim.Value)) {
-                        claimsToCache.Add(roleClaim);
-                    }
-                }
-                await cache.SetUserClaimsAsync(user.Id, claimsToCache.ToArray(), jwt.ExpireTimeSpan);
+        foreach (var roleName in roles) {
+            claimsToCache.Add(new Claim(ClaimTypes.Role, roleName));
+            var role = await roleMgr.FindByNameAsync(roleName);
+            if (role == null) {
+                continue;
             }
+            var roleClaims = await roleMgr.GetClaimsAsync(role);
+            foreach (var roleClaim in roleClaims) {
+                if (!identity.Claims.Any(c => c.Type == roleClaim.Type && c.Value == roleClaim.Value)) {
+                    claimsToCache.Add(roleClaim);
+                }
+            }
+            await cache.SetUserClaimsAsync(user.Id, claimsToCache.ToArray(), jwt.ExpireTimeSpan);
         }
         return identity;
     }

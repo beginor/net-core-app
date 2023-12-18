@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using NHibernate;
 using NHibernate.NetCore;
 using NUnit.Framework;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
@@ -25,7 +27,7 @@ public class AppOrganizeUnitRepositoryTest : BaseTest<IAppOrganizeUnitRepository
         var searchModel = new AppOrganizeUnitSearchModel {
             OrganizeUnitId = 1L
         };
-        var result = await Target.SearchAsync(searchModel);
+        var result = await Target.SearchAsync(searchModel, CreateTestPrincipal());
         Assert.GreaterOrEqual(result.Total, 0);
     }
 
@@ -46,6 +48,24 @@ public class AppOrganizeUnitRepositoryTest : BaseTest<IAppOrganizeUnitRepository
         Assert.IsTrue(canView);
         canView = await Target.CanViewOrganizeUnitAsync(userUnitId, 1701678232194020784L);
         Assert.IsFalse(canView);
+    }
+
+    [Test]
+    public async Task _04_CanGetById() {
+        var id = 1701678508063020798L;
+        var model = await Target.GetByIdAsync(id, CreateTestPrincipal());
+        Assert.AreEqual(model.Id, id.ToString());
+        Console.WriteLine(model.ToJson(GetTestJsonOption()));
+    }
+
+    private ClaimsPrincipal CreateTestPrincipal() {
+        var identity = new ClaimsIdentity(new [] {
+            new Claim(ClaimTypes.NameIdentifier, "1578371512959020099"),
+            new Claim(ClaimTypes.Name, "admin"),
+            new Claim(Consts.OrganizeUnitIdClaimType, "1")
+        }, "TestAuth");
+        var principal = new ClaimsPrincipal(identity);
+        return principal;
     }
 
 }

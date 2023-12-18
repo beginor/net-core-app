@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -15,31 +16,14 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 /// <summary>组织单元 服务接口</summary>
 [ApiController]
 [Route("api/organize-units")]
-public class AppOrganizeUnitController : Controller {
-
-    private readonly ILogger<AppOrganizeUnitController> logger;
-    private readonly IAppOrganizeUnitRepository repository;
-    private readonly UserManager<AppUser> userManager;
-
-    public AppOrganizeUnitController(
-        ILogger<AppOrganizeUnitController> logger,
-        IAppOrganizeUnitRepository repository,
-        UserManager<AppUser> userManager
-    ) {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-    }
-
-    protected override void Dispose(bool disposing) {
-        if (disposing) {
-            // dispose managed resource here;
-        }
-        base.Dispose(disposing);
-    }
+public class AppOrganizeUnitController(
+    ILogger<AppOrganizeUnitController> logger,
+    IAppOrganizeUnitRepository repository
+) : Controller {
 
     /// <summary>搜索 组织单元 ， 分页返回结果</summary>
     /// <response code="200">成功, 分页返回结果</response>
+    /// <response code="400">客户端发送错误请求</response>
     /// <response code="500">服务器内部错误</response>
     [HttpGet("")]
     [Authorize("app_organize_units.read")]
@@ -47,25 +31,12 @@ public class AppOrganizeUnitController : Controller {
         [FromQuery]AppOrganizeUnitSearchModel model
     ) {
         try {
-            var userId = this.GetUserId()!;
-            var user = await userManager.FindByIdAsync(userId);
-            if (user!.OrganizeUnit == null) {
-                return Forbid($"User {user.UserName} does not set organize unit!");
-            }
-            var reqUnitId = model.OrganizeUnitId;
-            var userUnitId = user.OrganizeUnit.Id;
-            if (reqUnitId.HasValue) {
-                var canView = await repository.CanViewOrganizeUnitAsync(userUnitId, reqUnitId.Value);
-                if (!canView) {
-                    return Forbid($"User {user.UserName} can not view organize unit {reqUnitId} !");
-                }
-                model.OrganizeUnitId = reqUnitId;
-            }
-            else {
-                model.OrganizeUnitId = userUnitId;
-            }
-            var result = await repository.SearchAsync(model);
+            var result = await repository.SearchAsync(model, User);
             return result;
+        }
+        catch (InvalidOperationException ex) {
+            logger.LogWarning(ex.GetOriginalMessage());
+            return BadRequest();
         }
         catch (Exception ex) {
             logger.LogError(ex, $"Can not search app_organize_unit with {model.ToJson()} .");
@@ -75,6 +46,7 @@ public class AppOrganizeUnitController : Controller {
 
     /// <summary> 创建 组织单元 </summary>
     /// <response code="200">创建 组织单元 成功</response>
+    /// <response code="400">客户端发送错误请求</response>
     /// <response code="500">服务器内部错误</response>
     [HttpPost("")]
     [Authorize("app_organize_units.create")]
@@ -82,8 +54,12 @@ public class AppOrganizeUnitController : Controller {
         [FromBody]AppOrganizeUnitModel model
     ) {
         try {
-            await repository.SaveAsync(model, User.Identity!.Name!);
+            await repository.SaveAsync(model, User);
             return model;
+        }
+        catch (InvalidOperationException ex) {
+            logger.LogWarning(ex.GetOriginalMessage());
+            return BadRequest();
         }
         catch (Exception ex) {
             logger.LogError(ex, $"Can not save {model.ToJson()} to app_organize_units.");
@@ -93,14 +69,19 @@ public class AppOrganizeUnitController : Controller {
 
     /// <summary>删除 组织单元 </summary>
     /// <response code="204">删除 组织单元 成功</response>
+    /// <response code="400">客户端发送错误请求</response>
     /// <response code="500">服务器内部错误</response>
     [HttpDelete("{id:long}")]
     [ProducesResponseType(204)]
     [Authorize("app_organize_units.delete")]
     public async Task<ActionResult> Delete(long id) {
         try {
-            await repository.DeleteAsync(id);
+            await repository.DeleteAsync(id, User);
             return NoContent();
+        }
+        catch (InvalidOperationException ex) {
+            logger.LogWarning(ex.GetOriginalMessage());
+            return BadRequest();
         }
         catch (Exception ex) {
             logger.LogError(ex, $"Can not delete app_organize_unit by id {id} .");
@@ -108,21 +89,20 @@ public class AppOrganizeUnitController : Controller {
         }
     }
 
-    /// <summary>
-    /// 获取指定的 组织单元
-    /// </summary>
+    /// <summary>获取指定的 组织单元</summary>
     /// <response code="200">返回 组织单元 信息</response>
-    /// <response code="404"> 组织单元 不存在</response>
+    /// <response code="400">客户端发送错误请求</response>
     /// <response code="500">服务器内部错误</response>
     [HttpGet("{id:long}")]
     [Authorize("app_organize_units.read_by_id")]
     public async Task<ActionResult<AppOrganizeUnitModel>> GetById(long id) {
         try {
-            var result = await repository.GetByIdAsync(id);
-            if (result == null) {
-                return NotFound();
-            }
+            var result = await repository.GetByIdAsync(id, User);
             return result;
+        }
+        catch (InvalidOperationException ex) {
+            logger.LogWarning(ex.GetOriginalMessage());
+            return BadRequest();
         }
         catch (Exception ex) {
             logger.LogError(ex, $"Can not get app_organize_unit by id {id}.");
@@ -130,11 +110,9 @@ public class AppOrganizeUnitController : Controller {
         }
     }
 
-    /// <summary>
-    /// 更新 组织单元
-    /// </summary>
+    /// <summary>更新 组织单元</summary>
     /// <response code="200">更新成功，返回 组织单元 信息</response>
-    /// <response code="404"> 组织单元 不存在</response>
+    /// <response code="400">客户端发送错误请求</response>
     /// <response code="500">服务器内部错误</response>
     [HttpPut("{id:long}")]
     [Authorize("app_organize_units.update")]
@@ -143,12 +121,12 @@ public class AppOrganizeUnitController : Controller {
         [FromBody]AppOrganizeUnitModel model
     ) {
         try {
-            var exists = await repository.ExistAsync(id);
-            if (!exists) {
-                return NotFound();
-            }
-            await repository.UpdateAsync(id, model, User.Identity!.Name!);
+            await repository.UpdateAsync(id, model, User);
             return model;
+        }
+        catch (InvalidOperationException ex) {
+            logger.LogWarning(ex.GetOriginalMessage());
+            return BadRequest();
         }
         catch (Exception ex) {
             logger.LogError(ex, $"Can not update app_organize_unit by id {id} with {model.ToJson()} .");

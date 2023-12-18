@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
@@ -11,17 +12,20 @@ namespace Beginor.NetCoreApp.Data.Repositories;
 public partial interface IAppOrganizeUnitRepository : IRepository<AppOrganizeUnitModel, long> {
 
     /// <summary>搜索 组织单元 ，返回分页结果。</summary>
-    Task<PaginatedResponseModel<AppOrganizeUnitModel>> SearchAsync(
-        AppOrganizeUnitSearchModel model
-    );
+    Task<PaginatedResponseModel<AppOrganizeUnitModel>> SearchAsync(AppOrganizeUnitSearchModel model, ClaimsPrincipal user);
 
-    Task SaveAsync(AppOrganizeUnitModel model, string userName);
+    Task<AppOrganizeUnitModel> GetByIdAsync(long id, ClaimsPrincipal user, CancellationToken token = default);
 
-    Task UpdateAsync(long id, AppOrganizeUnitModel model, string userName);
+    Task<AppOrganizeUnit> GetEntityByIdAsync(long unitId, ClaimsPrincipal user, CancellationToken token = default);
 
-    Task<IList<AppOrganizeUnitModel>> QueryPathAsync(long unitId);
+    Task SaveAsync(AppOrganizeUnitModel model, ClaimsPrincipal user, CancellationToken token = default);
 
-    Task<bool> CanViewOrganizeUnitAsync(long userUnitId, long unitId);
+    Task UpdateAsync(long id, AppOrganizeUnitModel model, ClaimsPrincipal user, CancellationToken token = default);
 
-    Task<AppOrganizeUnit> GetEntityByIdAsync(long unitId);
+    Task DeleteAsync(long id, ClaimsPrincipal user, CancellationToken token = default);
+
+    Task<IList<AppOrganizeUnitModel>> QueryPathAsync(long unitId, CancellationToken token = default);
+
+    Task<bool> CanViewOrganizeUnitAsync(long userUnitId, long unitId, CancellationToken token = default);
+
 }

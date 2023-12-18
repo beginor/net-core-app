@@ -146,7 +146,7 @@ public class UsersController : Controller {
                 if (!canView) {
                     return BadRequest($"Can not view organize unit {unitId}");
                 }
-                var unit = await orgUnitRepo.GetEntityByIdAsync(unitId);
+                var unit = await orgUnitRepo.GetEntityByIdAsync(unitId, User);
                 unitCode = unit.Code;
             }
             query = query.Where(u => u.OrganizeUnit.Code.StartsWith(unitCode));
@@ -224,7 +224,7 @@ public class UsersController : Controller {
             }
             if (model.OrganizeUnit.Id != user.OrganizeUnit.Id.ToString()) {
                 var unitId = long.Parse(model.OrganizeUnit.Id!);
-                user.OrganizeUnit = await orgUnitRepo.GetEntityByIdAsync(unitId);
+                user.OrganizeUnit = await orgUnitRepo.GetEntityByIdAsync(unitId, User);
             }
             var claims = user.UpdateFromUserModel(mapper, model);
             await AddOrReplaceClaims(user, claims);
