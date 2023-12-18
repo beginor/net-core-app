@@ -20,12 +20,11 @@ create table if not exists public.app_organize_units
         references public.app_users (id) match simple
         on update cascade
         on delete cascade,
-    constraint fk_app_organize_units_updator foreign key (updater_id)
+    constraint fk_app_organize_units_updater foreign key (updater_id)
         references public.app_users (id) match simple
         on update no action
         on delete no action
 )
-
 tablespace pg_default;
 
 alter table if exists public.app_organize_units
@@ -70,7 +69,7 @@ comment on column public.app_organize_units.is_deleted
 alter table public.app_users
     add column organize_unit_id bigint default 0 not null;
 comment on column public.app_users.organize_unit_id
-    is '组织单元ID'
+    is '组织单元ID';
 
 alter table if exists public.app_users
     add constraint fk_app_users_organize_unit foreign key (organize_unit_id)
