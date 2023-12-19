@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
@@ -7,8 +9,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using NHibernate;
 using NUnit.Framework;
 using Beginor.AppFx.Logging.Log4net;
+using Beginor.NetCoreApp.Common;
+using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Entry;
 
 namespace Beginor.NetCoreApp.Test;
@@ -53,6 +58,23 @@ public abstract class BaseTest {
             WriteIndented = true
         };
         return option;
+    }
+
+    protected ClaimsPrincipal CreateTestPrincipal() {
+        var userName = "admin";
+        var session = ServiceProvider.GetService<ISession>();
+        // using var session = factory.OpenSession();
+        var user = session.Query<AppUser>().First(x => x.UserName == userName);
+
+        var identity = new ClaimsIdentity(new [] {
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Name, user.UserName!),
+            new Claim(Consts.OrganizeUnitIdClaimType, user.OrganizeUnit.Id.ToString()),
+            new Claim(Consts.OrganizeUnitCodeClaimType, user.OrganizeUnit.Code)
+        }, "TestAuth");
+
+        var principal = new ClaimsPrincipal(identity);
+        return principal;
     }
 
 }

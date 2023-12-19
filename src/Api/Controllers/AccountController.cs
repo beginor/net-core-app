@@ -234,7 +234,8 @@ public partial class AccountController : Controller {
         identity.AddClaims(userClaims);
         // save role and role privileges to cache;
         var claimsToCache = new List<Claim> {
-            new (Consts.OrganizeUnitIdClaimType, user.OrganizeUnit.Id.ToString())
+            new (Consts.OrganizeUnitIdClaimType, user.OrganizeUnit.Id.ToString()),
+            new (Consts.OrganizeUnitCodeClaimType, user.OrganizeUnit.Code),
         };
         // role as claim;
         var roles = await userMgr.GetRolesAsync(user);

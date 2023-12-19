@@ -7,6 +7,9 @@ namespace Beginor.NetCoreApp.Common;
 public static class ClaimsPrincipalExtensions {
 
     public static long GetOrganizeUnitId(this ClaimsPrincipal user) {
+        if (!user.Identity!.IsAuthenticated) {
+            throw new InvalidOperationException("User is not authenticated!");
+        }
         var claim = user.FindFirst(Consts.OrganizeUnitIdClaimType);
         if (claim == null) {
             throw new InvalidOperationException("The principal does not have organize unit claim.");
@@ -15,6 +18,17 @@ public static class ClaimsPrincipalExtensions {
             return organizeUnitId;
         }
         throw new InvalidOperationException("The principal has invalid organize unit claim.");
+    }
+
+    public static string GetOrganizeUnitCode(this ClaimsPrincipal user) {
+        if (!user.Identity!.IsAuthenticated) {
+            throw new InvalidOperationException("User is not authenticated!");
+        }
+        var claim = user.FindFirst(Consts.OrganizeUnitCodeClaimType);
+        if (claim == null) {
+            throw new InvalidOperationException("The principal does not have organize unit claim.");
+        }
+        return claim.Value;
     }
 
     public static string GetUserName(this ClaimsPrincipal user) {
