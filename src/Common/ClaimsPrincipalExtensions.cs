@@ -38,4 +38,10 @@ public static class ClaimsPrincipalExtensions {
         return user.Identity!.Name!;
     }
 
+    public static (long id, string code) GetOrganizeUnitIdAndCode(this ClaimsPrincipal user) {
+        var id = user.GetOrganizeUnitId();
+        var code = user.GetOrganizeUnitCode();
+        return (id, code);
+    }
+
 }
