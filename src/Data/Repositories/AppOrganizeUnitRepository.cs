@@ -103,6 +103,7 @@ public partial class AppOrganizeUnitRepository(
         if (!canView) {
             throw new InvalidOperationException($"User {user.GetUserName()} can not access organize unit {id}");
         }
+        entity.IsDeleted = true;
         entity.Updater = await Session.GetAsync<AppUser>(user.GetUserId(), token);
         entity.UpdatedAt = DateTime.Now;
         await Session.SaveAsync(entity, token);
