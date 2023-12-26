@@ -226,21 +226,22 @@ public partial class AppOrganizeUnitRepository(
         long unitId,
         CancellationToken token = default
     ) {
-        var conn = Session.Connection;
         var sql = @"
             with recursive cte as (
-                select c.id, c.parent_id,c.code,c.name,c.description,c.sequence
+                select c.*
                 from public.app_organize_units c
-                where c.is_deleted = false and c.id = @unitId
+                where c.is_deleted = false and c.id = :unitId
                 union all
-                select p.id, p.parent_id, p.code, p.name, p.description, p.sequence
+                select p.*
                 from public.app_organize_units p
                 inner join cte on cte.parent_id = p.id
                 where p.is_deleted = false
             ) select * from cte
         ";
-        var units = await conn.QueryAsync<AppOrganizeUnit>(sql, new { unitId });
-        return units.ToList();
+        var query = Session.CreateSQLQuery(sql).AddEntity(typeof(AppOrganizeUnit));
+        query.SetInt64("unitId", unitId);
+        var units = await query.ListAsync<AppOrganizeUnit>(token);
+        return units;
     }
 
     public async Task<AppOrganizeUnit> GetEntityByIdAsync(

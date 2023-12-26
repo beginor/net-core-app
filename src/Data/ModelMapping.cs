@@ -55,8 +55,7 @@ public class ModelMapping : AutoMapper.Profile {
             .ReverseMap()
             .ForMember(dest => dest.Id, map => map.Ignore());
         CreateMap<AppOrganizeUnit, StringIdNameEntity>()
-            .ReverseMap()
-            .ForMember(dest => dest.Id, map => map.Ignore());
+            .ReverseMap();
     }
 
 }
