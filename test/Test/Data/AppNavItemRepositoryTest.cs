@@ -13,7 +13,7 @@ public class AppNavItemRepositoryTest : BaseTest<IAppNavItemRepository> {
 
     [Test]
     public void _01_CanResolveTarget() {
-        Assert.IsNotNull(Target);
+        Assert.That(Target, Is.Not.Null);
     }
 
     [Test]
@@ -27,10 +27,10 @@ public class AppNavItemRepositoryTest : BaseTest<IAppNavItemRepository> {
             Sequence = 0
         };
         await Target.SaveAsync(entity);
-        Assert.IsNotEmpty(entity.Id);
+        Assert.That(entity.Id, Is.Not.Empty);
         await Target.DeleteAsync(long.Parse(entity.Id));
         entity = await Target.GetByIdAsync(long.Parse(entity.Id));
-        Assert.IsNull(entity);
+        Assert.That(entity, Is.Null);
     }
 
     [Test]
@@ -39,8 +39,8 @@ public class AppNavItemRepositoryTest : BaseTest<IAppNavItemRepository> {
         using var session = ServiceProvider.GetService<NHibernate.ISession>();
         var conn = session.Connection;
         var navItems = await conn.QueryAsync<AppNavItem>(sql);
-        Assert.IsNotNull(navItems);
-        Assert.IsEmpty(navItems);
+        Assert.That(navItems, Is.Not.Null);
+        Assert.That(navItems, Is.Empty);
     }
 
 }

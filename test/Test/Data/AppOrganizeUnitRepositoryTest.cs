@@ -17,7 +17,7 @@ public class AppOrganizeUnitRepositoryTest : BaseTest<IAppOrganizeUnitRepository
 
     [Test]
     public void _01_CanResolveTarget() {
-        Assert.IsNotNull(Target);
+        Assert.That(Target, Is.Not.Null);
     }
 
     [Test]
@@ -26,13 +26,13 @@ public class AppOrganizeUnitRepositoryTest : BaseTest<IAppOrganizeUnitRepository
             OrganizeUnitId = 1L
         };
         var result = await Target.SearchAsync(searchModel, CreateTestPrincipal());
-        Assert.GreaterOrEqual(result.Total, 0);
+        Assert.That(result.Total, Is.GreaterThanOrEqualTo(0));
     }
 
     [Test]
     public async Task _03_CanQueryPath() {
         var units = await Target.QueryPathAsync(1L);
-        Assert.IsNotEmpty(units);
+        Assert.That(units, Is.Not.Empty);
         Console.WriteLine(units.ToJson(GetTestJsonOption()));
     }
 
@@ -40,19 +40,19 @@ public class AppOrganizeUnitRepositoryTest : BaseTest<IAppOrganizeUnitRepository
     public async Task _03_CanCheckUserUnit() {
         var userUnitId = 1L;
         var canView = await Target.CanViewOrganizeUnitAsync(userUnitId, 1701678508063020798L);
-        Assert.IsTrue(canView);
+        Assert.That(canView);
         userUnitId = 1701678508063020798L;
         canView = await Target.CanViewOrganizeUnitAsync(userUnitId, 1701678508063020798L);
-        Assert.IsTrue(canView);
+        Assert.That(canView);
         canView = await Target.CanViewOrganizeUnitAsync(userUnitId, 1701678232194020784L);
-        Assert.IsFalse(canView);
+        Assert.That(canView, Is.False);
     }
 
     [Test]
     public async Task _04_CanGetById() {
         var id = 1701678508063020798L;
         var model = await Target.GetByIdAsync(id, CreateTestPrincipal());
-        Assert.AreEqual(model.Id, id.ToString());
+        Assert.That(model.Id, Is.EqualTo(id.ToString()));
         Console.WriteLine(model.ToJson(GetTestJsonOption()));
     }
 

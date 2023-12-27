@@ -11,7 +11,7 @@ public class AppAuditLogRepositoryTest : BaseTest<IAppAuditLogRepository> {
 
     [Test]
     public void _01_CanResolveTarget() {
-        Assert.IsNotNull(Target);
+        Assert.That(Target, Is.Not.Null);
     }
 
     [Test]
@@ -20,8 +20,8 @@ public class AppAuditLogRepositoryTest : BaseTest<IAppAuditLogRepository> {
         var startDate = endDate.AddDays(-29);
         var result = await Target.StatTrafficAsync(startDate, endDate);
         var trafics = result.Data;
-        Assert.IsNotNull(trafics);
-        Assert.IsNotEmpty(trafics);
+        Assert.That(trafics, Is.Not.Null);
+        Assert.That(trafics, Is.Not.Empty);
         Console.WriteLine(trafics.Count);
         foreach (var t in trafics) {
             Console.WriteLine(t.ToJson());
@@ -33,7 +33,7 @@ public class AppAuditLogRepositoryTest : BaseTest<IAppAuditLogRepository> {
         var endDate = DateTime.Now;
         var startDate = endDate.AddDays(-29);
         var result = await Target.StatStatusAsync(startDate, endDate);
-        Assert.IsNotNull(result.Data);
+        Assert.That(result.Data, Is.Not.Null);
         Console.WriteLine(result.Data.Count);
         foreach (var t in result.Data) {
             Console.WriteLine(t.ToJson());
@@ -45,7 +45,7 @@ public class AppAuditLogRepositoryTest : BaseTest<IAppAuditLogRepository> {
         var endDate = DateTime.Now;
         var startDate = endDate.AddDays(-29);
         var result = await Target.StatDurationAsync(startDate, endDate);
-        Assert.IsNotNull(result.Data);
+        Assert.That(result.Data, Is.Not.Null);
         Console.WriteLine(result.Data.Count);
         foreach (var t in result.Data) {
             Console.WriteLine(t.ToJson());
@@ -57,7 +57,7 @@ public class AppAuditLogRepositoryTest : BaseTest<IAppAuditLogRepository> {
         var endDate = DateTime.Now;
         var startDate = endDate.AddDays(-29);
         var result = await Target.StatUserAsync(startDate, endDate);
-        Assert.IsNotNull(result.Data);
+        Assert.That(result.Data, Is.Not.Null);
         Console.WriteLine(result.Data.Count);
         foreach (var t in result.Data) {
             Console.WriteLine(t.ToJson());
@@ -69,7 +69,7 @@ public class AppAuditLogRepositoryTest : BaseTest<IAppAuditLogRepository> {
         var endDate = DateTime.Now;
         var startDate = endDate.AddDays(-29);
         var result = await Target.StatIpAsync(startDate, endDate);
-        Assert.IsNotNull(result.Data);
+        Assert.That(result.Data, Is.Not.Null);
         Console.WriteLine(result.Data.Count);
         foreach (var t in result.Data) {
             Console.WriteLine(t.ToJson());

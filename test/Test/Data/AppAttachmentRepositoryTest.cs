@@ -15,7 +15,7 @@ public class AppAttachmentRepositoryTest : BaseTest<IAppAttachmentRepository> {
 
     [Test]
     public void _01_CanResolveTarget() {
-        Assert.IsNotNull(Target);
+        Assert.That(Target, Is.Not.Null);
     }
 
     [Test]
@@ -32,7 +32,7 @@ public class AppAttachmentRepositoryTest : BaseTest<IAppAttachmentRepository> {
                     }
                 };
             var data = query.ToList();
-            Assert.IsNotNull(data);
+            Assert.That(data, Is.Not.Null);
         }
     }
 
@@ -55,7 +55,7 @@ public class AppAttachmentRepositoryTest : BaseTest<IAppAttachmentRepository> {
                 });
             //.ProjectTo<AppAttachmentModel>();
             var data = query.ToList();
-            Assert.IsNotNull(data);
+            Assert.That(data, Is.Not.Null);
         }
     }
 
@@ -63,7 +63,7 @@ public class AppAttachmentRepositoryTest : BaseTest<IAppAttachmentRepository> {
     public async Task _04_CanSaveAttachment() {
         var userManager = ServiceProvider.GetService<UserManager<AppUser>>();
         var user = await userManager.FindByNameAsync("testuser");
-        Assert.IsNotNull(user);
+        Assert.That(user, Is.Not.Null);
         var model = new AppAttachmentModel {
             BusinessId = "123456",
             FileName = "P30PRO.pdf",

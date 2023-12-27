@@ -18,13 +18,13 @@ public class FileStorageTest {
             new PhysicalFileProvider(appData)
         );
         var dir1 = provider.GetDirectoryContents("/");
-        Assert.IsTrue(dir1.Exists, "dir1.Exists");
+        Assert.That(dir1.Exists, "dir1.Exists");
         foreach (var file in dir1) {
             Console.WriteLine(file.Name);
         }
 
         var testDir = provider.GetDirectoryContents("test");
-        Assert.IsTrue(testDir.Exists);
+        Assert.That(testDir.Exists);
     }
 
 }

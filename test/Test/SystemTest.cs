@@ -40,7 +40,7 @@ public class SystemTest : BaseTest {
         var token = await manager.GeneratePasswordResetTokenAsync(user);
         Console.WriteLine($"Reset token is ${token} ");
         var result = await manager.ResetPasswordAsync(user, token, password);
-        Assert.IsTrue(result.Succeeded);
+        Assert.That(result.Succeeded);
     }
 
     private async Task<long> SyncSyncRequiredPrivilegesAsync() {
@@ -60,7 +60,7 @@ public class SystemTest : BaseTest {
                 Description = description
             };
             await manager.CreateAsync(role);
-            Assert.IsNotEmpty(role.Id);
+            Assert.That(role.Id, Is.Not.Empty);
             // create privileges;
             var repo = ServiceProvider.GetService<IAppPrivilegeRepository>();
             var privileges = await repo.GetAllAsync();
@@ -69,7 +69,7 @@ public class SystemTest : BaseTest {
                 await manager.AddClaimAsync(role, claim);
             }
             var claims = await manager.GetClaimsAsync(role);
-            Assert.AreEqual(privileges.Count, claims.Count);
+            Assert.That(privileges.Count, Is.EqualTo(claims.Count));
         }
     }
 
@@ -83,7 +83,7 @@ public class SystemTest : BaseTest {
                 IsAnonymous = true
             };
             await manager.CreateAsync(role);
-            Assert.IsNotEmpty(role.Id);
+            Assert.That(role.Id, Is.Not.Empty);
         }
     }
 
@@ -155,7 +155,7 @@ public class SystemTest : BaseTest {
         };
         foreach (var privilege in privileges) {
             await repo.SaveAsync(privilege);
-            Assert.IsNotEmpty(privilege.Id);
+            Assert.That(privilege.Id, Is.Not.Empty);
         }
     }
 
@@ -173,14 +173,14 @@ public class SystemTest : BaseTest {
                 LockoutEnabled = false
             };
             await manager.CreateAsync(user);
-            Assert.IsNotNull(user.Id);
+            Assert.That(user.Id, Is.Not.Null);
             // add password;
             var result = await manager.AddPasswordAsync(user, password);
-            Assert.IsTrue(result.Succeeded);
+            Assert.That(result.Succeeded);
             // add to administrators;
             if (!await manager.IsInRoleAsync(user, roleName)) {
                 var result2 = await manager.AddToRoleAsync(user, roleName);
-                Assert.IsTrue(result2.Succeeded);
+                Assert.That(result2.Succeeded);
             }
         }
         return user.Id;
@@ -200,7 +200,7 @@ public class SystemTest : BaseTest {
             Roles = new [] { adminRoleName, anonymousRoleName }
         };
         await repo.SaveAsync(rootNavItem, userName);
-        Assert.IsNotEmpty(rootNavItem.Id);
+        Assert.That(rootNavItem.Id, Is.Not.Empty);
         // 首页
         var homeItem = new AppNavItemModel {
             ParentId = rootNavItem.Id,
@@ -210,7 +210,7 @@ public class SystemTest : BaseTest {
             Roles = new [] { adminRoleName, anonymousRoleName }
         };
         await repo.SaveAsync(homeItem, userName);
-        Assert.IsNotEmpty(homeItem.Id);
+        Assert.That(homeItem.Id, Is.Not.Empty);
         // 管理
         var adminItem = new AppNavItemModel {
             ParentId = rootNavItem.Id,
@@ -220,7 +220,7 @@ public class SystemTest : BaseTest {
             Roles = new [] { adminRoleName }
         };
         await repo.SaveAsync(adminItem, userName);
-        Assert.IsNotEmpty(adminItem.Id);
+        Assert.That(adminItem.Id, Is.Not.Empty);
         // 关于
         var aboutItem = new AppNavItemModel {
             ParentId = rootNavItem.Id,
@@ -230,7 +230,7 @@ public class SystemTest : BaseTest {
             Roles = new [] { adminRoleName, anonymousRoleName }
         };
         await repo.SaveAsync(aboutItem, userName);
-        Assert.IsNotEmpty(aboutItem.Id);
+        Assert.That(aboutItem.Id, Is.Not.Empty);
         // 导航管理
         var menuManageItem = new AppNavItemModel {
             ParentId = adminItem.Id,
@@ -241,7 +241,7 @@ public class SystemTest : BaseTest {
             Roles = new [] { adminRoleName }
         };
         await repo.SaveAsync(menuManageItem, userName);
-        Assert.IsNotEmpty(menuManageItem.Id);
+        Assert.That(menuManageItem.Id, Is.Not.Empty);
         // 用户管理
         var userManageItem = new AppNavItemModel {
             ParentId = adminItem.Id,
@@ -252,7 +252,7 @@ public class SystemTest : BaseTest {
             Roles = new [] { adminRoleName }
         };
         await repo.SaveAsync(userManageItem, userName);
-        Assert.IsNotEmpty(userManageItem.Id);
+        Assert.That(userManageItem.Id, Is.Not.Empty);
         // 角色管理
         var roleManageItem = new AppNavItemModel {
             ParentId = adminItem.Id,
@@ -263,7 +263,7 @@ public class SystemTest : BaseTest {
             Roles = new [] { adminRoleName }
         };
         await repo.SaveAsync(roleManageItem, userName);
-        Assert.IsNotEmpty(roleManageItem.Id);
+        Assert.That(roleManageItem.Id, Is.Not.Empty);
         // 权限管理
         var privilegesManageItem = new AppNavItemModel {
             ParentId = adminItem.Id,
@@ -274,7 +274,7 @@ public class SystemTest : BaseTest {
             Roles = new [] { adminRoleName }
         };
         await repo.SaveAsync(privilegesManageItem, userName);
-        Assert.IsNotEmpty(privilegesManageItem.Id);
+        Assert.That(privilegesManageItem.Id, Is.Not.Empty);
         // 存储管理
         var storageManageItem = new AppNavItemModel {
             ParentId = adminItem.Id,
@@ -285,7 +285,7 @@ public class SystemTest : BaseTest {
             Roles = new [] { adminRoleName }
         };
         await repo.SaveAsync(storageManageItem, userName);
-        Assert.IsNotEmpty(storageManageItem.Id);
+        Assert.That(storageManageItem.Id, Is.Not.Empty);
         // 审计日志
         var auditLogsItem = new AppNavItemModel {
             ParentId = adminItem.Id,
@@ -296,7 +296,7 @@ public class SystemTest : BaseTest {
             Roles = new [] { adminRoleName }
         };
         await repo.SaveAsync(auditLogsItem, userName);
-        Assert.IsNotEmpty(auditLogsItem.Id);
+        Assert.That(auditLogsItem.Id, Is.Not.Empty);
         // 运行日志
         var logsItem = new AppNavItemModel {
             ParentId = adminItem.Id,
@@ -307,6 +307,6 @@ public class SystemTest : BaseTest {
             Roles = new [] { adminRoleName }
         };
         await repo.SaveAsync(logsItem, userName);
-        Assert.IsNotEmpty(logsItem.Id);
+        Assert.That(logsItem.Id, Is.Not.Empty);
     }
 }

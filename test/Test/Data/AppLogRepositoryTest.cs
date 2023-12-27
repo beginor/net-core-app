@@ -11,7 +11,7 @@ public class AppLogRepositoryTest : BaseTest<IAppLogRepository> {
 
     [Test]
     public void _01_CanResolveTarget() {
-        Assert.IsNotNull(Target);
+        Assert.That(Target, Is.Not.Null);
     }
 
     [Test]
@@ -21,7 +21,7 @@ public class AppLogRepositoryTest : BaseTest<IAppLogRepository> {
             Take = 10
         };
         var result = await Target.SearchAsync(searchModel);
-        Assert.GreaterOrEqual(result.Total, 0);
-        Assert.GreaterOrEqual(result.Take, result.Data.Count);
+        Assert.That(result.Total, Is.GreaterThanOrEqualTo(0));
+        Assert.That(result.Take, Is.GreaterThanOrEqualTo(result.Data.Count));
     }
 }

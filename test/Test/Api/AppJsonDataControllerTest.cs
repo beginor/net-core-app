@@ -8,7 +8,7 @@ public class AppJsonDataControllerTest : BaseTest<AppJsonDataController> {
 
     [Test]
     public void _01_CanResolveTarget() {
-        Assert.IsNotNull(Target);
+         Assert.That(Target, Is.Not.Null);
     }
 
 }

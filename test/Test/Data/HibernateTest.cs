@@ -11,7 +11,7 @@ public class HibernateTest : BaseTest<ISessionFactory> {
 
     [Test]
     public void _01_CanResolveTarget() {
-        Assert.IsNotNull(Target);
+        Assert.That(Target, Is.Not.Null);
     }
 
     [Test]
@@ -19,7 +19,7 @@ public class HibernateTest : BaseTest<ISessionFactory> {
         using (var session = Target.OpenSession()) {
             var users = session.Query<AppUser>().ToList();
             Console.WriteLine(users.Count);
-            Assert.IsTrue(users.Count >= 0);
+            Assert.That(users.Count >= 0);
         }
     }
 

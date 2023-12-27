@@ -17,15 +17,15 @@ public class ConfigTest : BaseTest<IConfiguration> {
 
     [Test]
     public void _01_CanResolveTarget() {
-        Assert.IsNotNull(Target);
+        Assert.That(Target, Is.Not.Null);
     }
 
     [Test]
     public void _02_CanGetJwtOptions() {
         var setting = Target.GetSection("jwt");
-        Assert.IsNotNull(setting);
+        Assert.That(setting, Is.Not.Null);
         var jwt = setting.Get<JwtOption>();
-        Assert.IsNotEmpty(jwt.Secret);
+        Assert.That(jwt.Secret, Is.Not.Empty);
     }
 
     [Test]
@@ -33,11 +33,11 @@ public class ConfigTest : BaseTest<IConfiguration> {
         var section = Target.GetSection("identity");
         var options = section.Get<IdentityOptions>();
         // Test Config Options
-        Assert.IsNotNull(options);
-        Assert.AreEqual(8, options.Password.RequiredLength);
-        Assert.AreEqual(
-            TimeSpan.FromHours(1),
-            options.Lockout.DefaultLockoutTimeSpan
+        Assert.That(options, Is.Not.Null);
+        Assert.That(options.Password.RequiredLength, Is.EqualTo(8));
+        Assert.That(
+            options.Lockout.DefaultLockoutTimeSpan,
+            Is.EqualTo(TimeSpan.FromHours(1))
         );
     }
 
@@ -45,17 +45,17 @@ public class ConfigTest : BaseTest<IConfiguration> {
     public void _04_CanResolveCorsPolicy() {
         var section = Target.GetSection("cors");
         var policy = section.Get<CorsPolicy>();
-        Assert.IsFalse(policy.AllowAnyOrigin);
-        Assert.IsTrue(policy.AllowAnyHeader);
-        Assert.IsTrue(policy.AllowAnyMethod);
-        Assert.IsTrue(policy.SupportsCredentials);
+        Assert.That(policy.AllowAnyOrigin, Is.False);
+        Assert.That(policy.AllowAnyHeader);
+        Assert.That(policy.AllowAnyMethod);
+        Assert.That(policy.SupportsCredentials);
     }
 
     [Test]
     public void _05_CanResolveSpaFailback() {
         var section = Target.GetSection("spaFailback");
         var spaFailback = section.Get<SpaFailbackOptions>();
-        Assert.IsNotNull(spaFailback);
+        Assert.That(spaFailback, Is.Not.Null);
         Console.WriteLine(spaFailback.Rules.Count);
     }
 
@@ -63,16 +63,16 @@ public class ConfigTest : BaseTest<IConfiguration> {
     public void _06_CanResolveCustomHeader() {
         var section = Target.GetSection("customHeader");
         var options = section.Get<CustomHeaderOptions>();
-        Assert.IsNotNull(options.Headers);
-        Assert.Greater(options.Headers.Keys.Count, 0);
+        Assert.That(options.Headers, Is.Not.Null);
+        Assert.That(options.Headers.Keys.Count, Is.GreaterThan(0));
     }
 
     [Test]
     public void _07_CanGetWeChatOptions() {
         var section = Target.GetSection("wechat");
         var options = section.Get<WeChatOption>();
-        Assert.IsNotNull(options.AppId);
-        Assert.IsNotNull(options.Secret);
+        Assert.That(options.AppId, Is.Not.Null);
+        Assert.That(options.Secret, Is.Not.Null);
     }
 
     [Test]
@@ -84,7 +84,7 @@ public class ConfigTest : BaseTest<IConfiguration> {
         var shouldIgnore = url.ToLowerInvariant().StartsWith("/web/assets/");
         var regex = new Regex("/web/(?!assets/).*");
         var isMatch = regex.IsMatch(url);
-        Assert.AreEqual(shouldIgnore, !isMatch);
+        Assert.That(shouldIgnore, Is.EqualTo(!isMatch));
         var match = regex.Match(url);
         Console.WriteLine(match);
     }
@@ -92,7 +92,7 @@ public class ConfigTest : BaseTest<IConfiguration> {
     [Test]
     public void _08_CanResolveCommonOption() {
         var option = ServiceProvider.GetService<CommonOption>();
-        Assert.IsNotNull(option);
+        Assert.That(option, Is.Not.Null);
         Console.WriteLine(option.Cache.Enabled);
         Console.WriteLine(option.Cache.MemoryExpiration);
         Console.WriteLine(option.Cache.FileExpiration);

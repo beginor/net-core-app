@@ -16,13 +16,13 @@
     <PackageReference Include="Beginor.AspNetCore.Middlewares.CustomHeader" Version="8.0.0" />
     <PackageReference Include="Beginor.AspNetCore.Middlewares.GzipStatic" Version="8.0.0" />
     <PackageReference Include="Beginor.AspNetCore.Middlewares.SpaFailback" Version="8.0.0" />
-    <PackageReference Include="Dapper" Version="2.1.21" />
-    <PackageReference Include="NHibernate" Version="5.4.6" />
+    <PackageReference Include="Dapper" Version="2.1.24" />
+    <PackageReference Include="NHibernate" Version="5.5.0" />
     <PackageReference Include="NHibernate.Mapping.Attributes" Version="5.1.0" />
-    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="8.0.0" />
-    <PackageReference Include="NHibernate.Extensions.NpgSql" Version="8.0.0" />
-    <PackageReference Include="NHibernate.NetCore" Version="8.0.0" />
-    <PackageReference Include="Npgsql" Version="8.0.0-rc.2" />
+    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="8.0.1" />
+    <PackageReference Include="NHibernate.Extensions.NpgSql" Version="8.0.1" />
+    <PackageReference Include="NHibernate.NetCore" Version="8.0.1" />
+    <PackageReference Include="Npgsql" Version="8.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 

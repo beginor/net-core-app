@@ -107,8 +107,8 @@ public class HostingEnvironmentTest {
     [Test]
     public void TestEnvironment() {
         var target = new TestHostEnvironment();
-        Assert.IsFalse(target.IsProduction());
-        Assert.IsTrue(target.IsDevelopment());
+        Assert.That(target.IsProduction(), Is.False);
+        Assert.That(target.IsDevelopment());
     }
 
 }

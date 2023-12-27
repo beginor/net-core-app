@@ -10,13 +10,13 @@ public class UserManagerTest : BaseTest<UserManager<AppUser>> {
 
     [Test]
     public void _01_CanResolveTarget() {
-        Assert.IsNotNull(Target);
+        Assert.That(Target, Is.Not.Null);
     }
 
     [Test]
     public void _02_CanQueryAllUsers() {
         var users = Target.Users.ToList();
-        Assert.IsNotNull(users);
+        Assert.That(users, Is.Not.Null);
     }
 
 }

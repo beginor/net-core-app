@@ -14,7 +14,7 @@ public class AppJsonDataRepositoryTest : BaseTest<IAppJsonDataRepository> {
 
     [Test]
     public void _01_CanResolveTarget() {
-        Assert.IsNotNull(Target);
+        Assert.That(Target, Is.Not.Null);
     }
 
     [Test]
@@ -24,8 +24,8 @@ public class AppJsonDataRepositoryTest : BaseTest<IAppJsonDataRepository> {
             Take = 10
         };
         var result = await Target.SearchAsync(searchModel);
-        Assert.GreaterOrEqual(result.Total, 0);
-        Assert.GreaterOrEqual(result.Take, result.Data.Count);
+        Assert.That(result.Total, Is.GreaterThanOrEqualTo(0));
+        Assert.That(result.Take, Is.GreaterThanOrEqualTo(result.Data.Count));
     }
 
     [Test]
@@ -34,7 +34,7 @@ public class AppJsonDataRepositoryTest : BaseTest<IAppJsonDataRepository> {
         var val = System.Text.Json.JsonDocument.Parse("{\"hello\": \"world\"}").RootElement;
         await Target.SaveValueAsync(id, val);
         var val2 = await Target.GetValueByIdAsync(id);
-        Assert.NotNull(val2);
+        Assert.That(val2, Is.Not.Null);
         Console.WriteLine(val.ToJson());
         Console.WriteLine(val2.ToJson());
         await Target.DeleteAsync(id);
@@ -44,9 +44,9 @@ public class AppJsonDataRepositoryTest : BaseTest<IAppJsonDataRepository> {
     public async Task _04_CanQueryEmptyAsync() {
         var id = DateTime.Now.ToUnixTime();
         var val = await Target.GetValueByIdAsync(id);
-        Assert.IsNotNull(val);
+        Assert.That(val, Is.Not.Null);
         Console.WriteLine(val);
-        Assert.AreEqual(val.ValueKind, JsonValueKind.Undefined);
+        Assert.That(val.ValueKind, Is.EqualTo(JsonValueKind.Undefined));
     }
 
 }

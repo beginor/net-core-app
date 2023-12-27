@@ -12,7 +12,7 @@ public class AppStorageRepositoryTest : BaseTest<IAppStorageRepository> {
 
     [Test]
     public void _01_CanResolveTarget() {
-        Assert.IsNotNull(Target);
+        Assert.That(Target, Is.Not.Null);
     }
 
     [Test]
@@ -22,8 +22,8 @@ public class AppStorageRepositoryTest : BaseTest<IAppStorageRepository> {
             Take = 10
         };
         var result = await Target.SearchAsync(searchModel);
-        Assert.GreaterOrEqual(result.Total, 0);
-        Assert.GreaterOrEqual(result.Take, result.Data.Count);
+        Assert.That(result.Total, Is.GreaterThanOrEqualTo(0));
+        Assert.That(result.Take, Is.GreaterThanOrEqualTo(result.Data.Count));
     }
 
     [Test]
@@ -34,18 +34,18 @@ public class AppStorageRepositoryTest : BaseTest<IAppStorageRepository> {
             Filter = "*.*"
         };
         var result = await Target.GetFolderContentAsync(faModel);
-        Assert.IsNotNull(result);
-        Assert.IsNotEmpty(result.Folders);
-        Assert.IsEmpty(result.Files);
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Folders, Is.Not.Empty);
+        Assert.That(result.Files, Is.Empty);
         var biModel = new AppStorageBrowseModel {
             Alias = "icons",
             Path = "bi",
             Filter = "*.svg"
         };
         result = await Target.GetFolderContentAsync(biModel);
-        Assert.IsNotNull(result);
-        Assert.IsNotEmpty(result.Files);
-        Assert.IsEmpty(result.Folders);
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Files, Is.Not.Empty);
+        Assert.That(result.Folders, Is.Empty);
     }
 
 }

@@ -10,7 +10,7 @@ public class AppOrganizeUnitControllerTest : BaseTest<AppOrganizeUnitController>
 
     [Test]
     public void _01_CanResolveTarget() {
-        Assert.IsNotNull(Target);
+         Assert.That(Target, Is.Not.Null);
     }
 
     [Test]
@@ -20,7 +20,7 @@ public class AppOrganizeUnitControllerTest : BaseTest<AppOrganizeUnitController>
             Skip = 0
         };
         var result = await Target.Search(model);
-        Assert.IsNotNull(result);
+        Assert.That(result, Is.Not.Null);
     }
 
 }

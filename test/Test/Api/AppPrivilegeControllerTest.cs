@@ -14,7 +14,7 @@ public class AppPrivilegeControllerTest : BaseTest<AppPrivilegeController> {
 
     [Test]
     public void _01_CanResolveTarget() {
-        Assert.IsNotNull(Target);
+        Assert.That(Target, Is.Not.Null);
     }
 
     [Test]
@@ -24,7 +24,7 @@ public class AppPrivilegeControllerTest : BaseTest<AppPrivilegeController> {
             .Where(t => t.IsSubclassOf(typeof(ControllerBase)))
             .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.Instance))
             .SelectMany(m => m.GetCustomAttributes<AuthorizeAttribute>(false));
-        Assert.IsTrue(attrs.Count() > 0);
+        Assert.That(attrs.Count() > 0);
         foreach (var attr in attrs) {
             Console.WriteLine(attr.Policy);
         }
@@ -34,7 +34,7 @@ public class AppPrivilegeControllerTest : BaseTest<AppPrivilegeController> {
     public async Task _03_CanSyncRequired() {
         var result = await Target.SyncRequired();
         var ok = result as OkResult;
-        Assert.IsNotNull(ok);
+        Assert.That(ok, Is.Not.Null);
     }
 
 }

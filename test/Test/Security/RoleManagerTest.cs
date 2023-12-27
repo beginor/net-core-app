@@ -15,13 +15,13 @@ public class RoleManagerTest : BaseTest<RoleManager<AppRole>> {
 
     [Test]
     public void _01_CanResolveTarget() {
-        Assert.IsNotNull(Target);
+        Assert.That(Target, Is.Not.Null);
     }
 
     [Test]
     public void _02_CanQueryAllRoles() {
         var roles = Target.Roles.ToList();
-        Assert.IsNotNull(roles);
+        Assert.That(roles, Is.Not.Null);
     }
 
     [Test]
@@ -34,7 +34,7 @@ public class RoleManagerTest : BaseTest<RoleManager<AppRole>> {
                 Description = "系统管理员"
             };
             await Target.CreateAsync(role);
-            Assert.IsNotEmpty(role.Id);
+            Assert.That(role.Id, Is.Not.Empty);
             // create privileges;
             var repo = ServiceProvider.GetService<IAppPrivilegeRepository>();
             var privileges = await repo.GetAllAsync();
@@ -43,7 +43,7 @@ public class RoleManagerTest : BaseTest<RoleManager<AppRole>> {
                 await Target.AddClaimAsync(role, claim);
             }
             var claims = await Target.GetClaimsAsync(role);
-            Assert.AreEqual(privileges.Count, claims.Count);
+            Assert.That(privileges.Count, Is.EqualTo(claims.Count));
         }
     }
 

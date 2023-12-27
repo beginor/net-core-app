@@ -15,11 +15,11 @@ public class ModelMappingTest : BaseTest<IMapper> {
             UserName = "TestUser"
         };
         var entity = Target.Map<StringIdNameEntity>(user);
-        Assert.AreEqual(user.Id, entity.Id);
-        Assert.AreEqual(user.UserName, entity.Name);
+        Assert.That(user.Id, Is.EqualTo(entity.Id));
+        Assert.That(user.UserName, Is.EqualTo(entity.Name));
         user = Target.Map<AppUser>(entity);
-        Assert.AreEqual(user.Id, entity.Id);
-        Assert.AreEqual(user.UserName, entity.Name);
+        Assert.That(user.Id, Is.EqualTo(entity.Id));
+        Assert.That(user.UserName, Is.EqualTo(entity.Name));
     }
 
     [Test]
@@ -29,11 +29,11 @@ public class ModelMappingTest : BaseTest<IMapper> {
             Name = "TestRole"
         };
         var entity = Target.Map<StringIdNameEntity>(role);
-        Assert.AreEqual(role.Id, entity.Id);
-        Assert.AreEqual(role.Name, entity.Name);
+        Assert.That(role.Id, Is.EqualTo(entity.Id));
+        Assert.That(role.Name, Is.EqualTo(entity.Name));
         role = Target.Map<AppRole>(entity);
-        Assert.AreEqual(role.Id, entity.Id);
-        Assert.AreEqual(role.Name, entity.Name);
+        Assert.That(role.Id, Is.EqualTo(entity.Id));
+        Assert.That(role.Name, Is.EqualTo(entity.Name));
     }
 
     [Test]
@@ -54,11 +54,11 @@ public class ModelMappingTest : BaseTest<IMapper> {
             }
         };
         var model = mapper.Map<TestModel>(entity);
-        Assert.AreEqual(entity.Id, model.Id);
-        Assert.AreEqual(entity.User.Id, model.UserId);
+        Assert.That(entity.Id, Is.EqualTo(model.Id));
+        Assert.That(entity.User.Id, Is.EqualTo(model.UserId));
         var entity2 = mapper.Map<TestEntity>(model);
-        Assert.AreEqual(model.Id, entity2.Id);
-        Assert.AreEqual(model.UserId, entity2.User.Id);
+        Assert.That(model.Id, Is.EqualTo(entity2.Id));
+        Assert.That(model.UserId, Is.EqualTo(entity2.User.Id));
     }
 
 }
