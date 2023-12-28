@@ -9,24 +9,18 @@ public class ModelMapping : AutoMapper.Profile {
 
     public ModelMapping() {
         CreateMap<AppRole, AppRoleModel>().ReverseMap();
-        CreateMap<AppUser, AppUserModel>().ReverseMap();
+        CreateMap<AppUser, AppUserModel>()
+            .ReverseMap()
+            .ForMember(dest => dest.DisplayName, map => map.MapFrom(src => src.Surname + src.GivenName));
         CreateMap<AppUser, StringIdNameEntity>()
-            .ForMember(
-                d => d.Name,
-                m => m.MapFrom(s => s.UserName)
-            )
-            .ReverseMap();
+            .ForMember(dest => dest.Name, map => map.MapFrom(src => src.DisplayName))
+            .ReverseMap()
+            .ForMember(dest => dest.UserName, map => map.Ignore());
         CreateMap<AppRole, StringIdNameEntity>().ReverseMap();
         // 添加其它的映射
         CreateMap<AppAttachment, AppAttachmentModel>()
-            .ForMember(
-                dest => dest.CreatorId,
-                map => map.MapFrom(src => src.Creator.Id)
-            )
-            .ForMember(
-                dest => dest.CreatorName,
-                map => map.MapFrom(src => src.Creator.UserName)
-            )
+            .ForMember(dest => dest.CreatorId, map => map.MapFrom(src => src.Creator.Id))
+            .ForMember(dest => dest.CreatorName, map => map.MapFrom(src => src.Creator.DisplayName))
             .ReverseMap()
             .ForMember(dest => dest.Creator, map => map.Ignore())
             .ForMember(dest => dest.CreatedAt, map => map.Ignore());
@@ -42,7 +36,7 @@ public class ModelMapping : AutoMapper.Profile {
             .ReverseMap();
         CreateMap<AppUserToken, AppUserTokenModel>()
             .ReverseMap()
-            .ForMember(d => d.User, m => m.Ignore());
+            .ForMember(dest => dest.User, map => map.Ignore());
         CreateMap<AppLog, AppLogModel>();
         CreateMap<AppOrganizeUnit, AppOrganizeUnitModel>()
             .ReverseMap();

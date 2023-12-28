@@ -23,4 +23,7 @@ public class AppUser : NHIdentityUser {
     [ManyToOne(Name = "OrganizeUnit", Column = "organize_unit_id", ClassType = typeof(AppOrganizeUnit), NotNull = true, Lazy = Laziness.False)]
     public virtual AppOrganizeUnit OrganizeUnit { get; set; }
 
+    [Property(Name = nameof(DisplayName), Column = "display_name", Type = "string", NotNull = false, Length = 64)]
+    public virtual string DisplayName { get; set; }
+
 }

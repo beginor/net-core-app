@@ -65,15 +65,3 @@ comment on column public.app_organize_units.updated_at
 
 comment on column public.app_organize_units.is_deleted
     is '是否删除';
-
-alter table public.app_users
-    add column organize_unit_id bigint default 0 not null;
-comment on column public.app_users.organize_unit_id
-    is '组织单元ID';
-
-alter table if exists public.app_users
-    add constraint fk_app_users_organize_unit foreign key (organize_unit_id)
-    references public.app_organize_units (id) match simple
-    on update no action
-    on delete no action
-    not valid;

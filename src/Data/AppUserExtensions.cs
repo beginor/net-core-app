@@ -17,21 +17,11 @@ public static class AppUserExtensions {
         IList<Claim> claims
     ) {
         var model = mapper.Map<AppUserModel>(user);
-        model.Surname = claims.FirstOrDefault(
-            c => c.Type == ClaimTypes.Surname
-        )?.Value;
-        model.GivenName = claims.FirstOrDefault(
-            c => c.Type == ClaimTypes.GivenName
-        )?.Value;
-        model.DateOfBirth = claims.FirstOrDefault(
-            c => c.Type == ClaimTypes.DateOfBirth
-        )?.Value;
-        model.Gender = claims.FirstOrDefault(
-            c => c.Type == ClaimTypes.Gender
-        )?.Value ?? "保密";
-        model.StreetAddress = claims.FirstOrDefault(
-            c => c.Type == ClaimTypes.StreetAddress
-        )?.Value;
+        model.Surname = claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+        model.GivenName = claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+        model.DateOfBirth = claims.FirstOrDefault(c => c.Type == ClaimTypes.DateOfBirth)?.Value;
+        model.Gender = claims.FirstOrDefault(c => c.Type == ClaimTypes.Gender)?.Value ?? "保密";
+        model.StreetAddress = claims.FirstOrDefault(c => c.Type == ClaimTypes.StreetAddress)?.Value;
         return model;
     }
 
@@ -41,12 +31,13 @@ public static class AppUserExtensions {
         AppUserModel model
     ) {
         mapper.Map(model, user);
-        var claims = new List<Claim>();
-        claims.Add(new Claim(ClaimTypes.Surname, model.Surname ?? string.Empty));
-        claims.Add(new Claim(ClaimTypes.GivenName, model.GivenName ?? string.Empty));
-        claims.Add(new Claim(ClaimTypes.DateOfBirth, model.DateOfBirth ?? "1970-1-1"));
-        claims.Add(new Claim(ClaimTypes.Gender, model.Gender ?? "保密"));
-        claims.Add(new Claim(ClaimTypes.StreetAddress, model.StreetAddress ?? string.Empty));
+        var claims = new List<Claim> {
+            new (ClaimTypes.Surname, model.Surname ?? string.Empty),
+            new (ClaimTypes.GivenName, model.GivenName ?? string.Empty),
+            new (ClaimTypes.DateOfBirth, model.DateOfBirth ?? "1970-1-1"),
+            new (ClaimTypes.Gender, model.Gender ?? "保密"),
+            new (ClaimTypes.StreetAddress, model.StreetAddress ?? string.Empty)
+        };
         return claims;
     }
 
