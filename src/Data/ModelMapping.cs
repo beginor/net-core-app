@@ -28,32 +28,24 @@ public class ModelMapping : AutoMapper.Profile {
                 map => map.MapFrom(src => src.Creator.UserName)
             )
             .ReverseMap()
-            .ForMember(dest => dest.Id, map => map.Ignore())
             .ForMember(dest => dest.Creator, map => map.Ignore())
             .ForMember(dest => dest.CreatedAt, map => map.Ignore());
         CreateMap<AppNavItem, AppNavItemModel>()
-            .ReverseMap()
-            .ForMember(dest => dest.Id, map => map.Ignore());
+            .ReverseMap();
         CreateMap<AppPrivilege, AppPrivilegeModel>()
-            .ReverseMap()
-            .ForMember(dest => dest.Id, map => map.Ignore());
+            .ReverseMap();
         CreateMap<AppAuditLog, AppAuditLogModel>()
-            .ReverseMap()
-            .ForMember(dest => dest.Id, map => map.Ignore());
+            .ReverseMap();
         CreateMap<AppClientError, AppClientErrorModel>()
-            .ReverseMap()
-            .ForMember(dest => dest.Id, map => map.Ignore());
+            .ReverseMap();
         CreateMap<AppStorage, AppStorageModel>()
-            .ReverseMap()
-            .ForMember(dest => dest.Id, map => map.Ignore());
+            .ReverseMap();
         CreateMap<AppUserToken, AppUserTokenModel>()
             .ReverseMap()
-            .ForMember(dest => dest.Id, map => map.Ignore())
             .ForMember(d => d.User, m => m.Ignore());
         CreateMap<AppLog, AppLogModel>();
         CreateMap<AppOrganizeUnit, AppOrganizeUnitModel>()
-            .ReverseMap()
-            .ForMember(dest => dest.Id, map => map.Ignore());
+            .ReverseMap();
         CreateMap<AppOrganizeUnit, StringIdNameEntity>()
             .ReverseMap();
     }
