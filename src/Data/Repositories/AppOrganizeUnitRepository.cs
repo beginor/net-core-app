@@ -52,7 +52,7 @@ public partial class AppOrganizeUnitRepository(
             )
             select id, parent_id, code, name, description, sequence, level, expand
             from cte a
-            order by a.code, a.sequence;
+            order by a.parent_id, a.sequence;
         ";
         var models = await conn.QueryAsync<AppOrganizeUnit>(sql, new { unitId });
         var result = new PaginatedResponseModel<AppOrganizeUnitModel> {
