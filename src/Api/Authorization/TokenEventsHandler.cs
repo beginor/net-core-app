@@ -43,7 +43,7 @@ public class TokenEventsHandler {
         };
         if (token.Privileges != null && token.Privileges.Length > 0) {
             foreach (var privilege in token.Privileges) {
-                var claim = new Claim(Consts.PrivilegeClaimType, privilege);
+                var claim = new Claim(AppClaimTypes.Privilege, privilege);
                 claims.Add(claim);
             }
         }

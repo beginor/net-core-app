@@ -134,7 +134,7 @@ partial class AccountController {
         var rolesWithPrivileges = new List<AppRoleWithPrivilegesModel>();
         foreach (var role in userRoles) {
             var roleClaims = await roleMgr.GetClaimsAsync(role);
-            var rolePrivilegeNames = roleClaims.Where(claim => claim.Type == Consts.PrivilegeClaimType)
+            var rolePrivilegeNames = roleClaims.Where(claim => claim.Type == AppClaimTypes.Privilege)
                 .Select(claim => claim.Value);
             userPrivilegeNames.AddRange(rolePrivilegeNames);
             rolesWithPrivileges.Add(

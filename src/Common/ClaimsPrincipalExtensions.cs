@@ -10,7 +10,7 @@ public static class ClaimsPrincipalExtensions {
         if (!user.Identity!.IsAuthenticated) {
             throw new InvalidOperationException("User is not authenticated!");
         }
-        var claim = user.FindFirst(Consts.OrganizeUnitIdClaimType);
+        var claim = user.FindFirst(AppClaimTypes.OrganizeUnitId);
         if (claim == null) {
             throw new InvalidOperationException("The principal does not have organize unit claim.");
         }
@@ -24,7 +24,7 @@ public static class ClaimsPrincipalExtensions {
         if (!user.Identity!.IsAuthenticated) {
             throw new InvalidOperationException("User is not authenticated!");
         }
-        var claim = user.FindFirst(Consts.OrganizeUnitCodeClaimType);
+        var claim = user.FindFirst(AppClaimTypes.OrganizeUnitCode);
         if (claim == null) {
             throw new InvalidOperationException("The principal does not have organize unit claim.");
         }

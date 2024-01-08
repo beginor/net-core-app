@@ -65,7 +65,7 @@ public class SystemTest : BaseTest {
             var repo = ServiceProvider.GetService<IAppPrivilegeRepository>();
             var privileges = await repo.GetAllAsync();
             foreach (var p in privileges) {
-                var claim = new Claim(Consts.PrivilegeClaimType, p.Name);
+                var claim = new Claim(AppClaimTypes.Privilege, p.Name);
                 await manager.AddClaimAsync(role, claim);
             }
             var claims = await manager.GetClaimsAsync(role);

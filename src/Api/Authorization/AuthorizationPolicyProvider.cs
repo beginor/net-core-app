@@ -16,7 +16,7 @@ public class AuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider {
     public override Task<AuthorizationPolicy?> GetPolicyAsync(string policyName) {
         var builder = new AuthorizationPolicyBuilder();
         builder.RequireAuthenticatedUser()
-            .RequireClaim(Consts.PrivilegeClaimType, policyName)
+            .RequireClaim(AppClaimTypes.Privilege, policyName)
             .AddAuthenticationSchemes(
                 JwtBearerDefaults.AuthenticationScheme,
                 TokenOptions.DefaultSchemaName

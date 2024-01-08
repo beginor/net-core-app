@@ -39,7 +39,7 @@ public class RoleManagerTest : BaseTest<RoleManager<AppRole>> {
             var repo = ServiceProvider.GetService<IAppPrivilegeRepository>();
             var privileges = await repo.GetAllAsync();
             foreach (var priv in privileges) {
-                var claim = new Claim(Consts.PrivilegeClaimType, priv.Name);
+                var claim = new Claim(AppClaimTypes.Privilege, priv.Name);
                 await Target.AddClaimAsync(role, claim);
             }
             var claims = await Target.GetClaimsAsync(role);

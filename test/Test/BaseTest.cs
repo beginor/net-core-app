@@ -69,8 +69,8 @@ public abstract class BaseTest {
         var identity = new ClaimsIdentity(new [] {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Name, user.UserName!),
-            new Claim(Consts.OrganizeUnitIdClaimType, user.OrganizeUnit.Id.ToString()),
-            new Claim(Consts.OrganizeUnitCodeClaimType, user.OrganizeUnit.Code)
+            new Claim(AppClaimTypes.OrganizeUnitId, user.OrganizeUnit.Id.ToString()),
+            new Claim(AppClaimTypes.OrganizeUnitCode, user.OrganizeUnit.Code)
         }, "TestAuth");
 
         var principal = new ClaimsPrincipal(identity);

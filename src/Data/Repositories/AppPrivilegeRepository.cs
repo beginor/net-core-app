@@ -82,7 +82,7 @@ public partial class AppPrivilegeRepository : HibernateRepository<AppPrivilege, 
             await Session.DeleteAsync(entity, token);
             // delete privileges in role claims;
             var claims = await Session.Query<IdentityRoleClaim>()
-                .Where(c => c.ClaimValue == entity.Name && c.ClaimType == Consts.PrivilegeClaimType)
+                .Where(c => c.ClaimValue == entity.Name && c.ClaimType == AppClaimTypes.Privilege)
                 .ToListAsync();
             foreach (var claim in claims) {
                 await Session.DeleteAsync(claim, token);

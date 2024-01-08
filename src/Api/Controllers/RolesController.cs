@@ -234,7 +234,7 @@ public class RolesController : Controller {
                 return NotFound();
             }
             var claims = await roleMgr.GetClaimsAsync(role);
-            var privileges = claims.Where(c => c.Type == Consts.PrivilegeClaimType)
+            var privileges = claims.Where(c => c.Type == AppClaimTypes.Privilege)
                 .Select(c => c.Value)
                 .ToList();
             return privileges;
@@ -261,8 +261,8 @@ public class RolesController : Controller {
                 return NotFound();
             }
             var claims = await roleMgr.GetClaimsAsync(role);
-            if (!claims.Any(c => c.Type == Consts.PrivilegeClaimType && c.Value == privilege)) {
-                await roleMgr.AddClaimAsync(role, new Claim(Consts.PrivilegeClaimType, privilege));
+            if (!claims.Any(c => c.Type == AppClaimTypes.Privilege && c.Value == privilege)) {
+                await roleMgr.AddClaimAsync(role, new Claim(AppClaimTypes.Privilege, privilege));
             }
             return Ok();
         }
@@ -289,7 +289,7 @@ public class RolesController : Controller {
                 return NotFound();
             }
             var claims = await roleMgr.GetClaimsAsync(role);
-            var claim = claims.FirstOrDefault(c => c.Type == Consts.PrivilegeClaimType && c.Value == privilege);
+            var claim = claims.FirstOrDefault(c => c.Type == AppClaimTypes.Privilege && c.Value == privilege);
             if (claim != null) {
                 await roleMgr.RemoveClaimAsync(role, claim);
             }

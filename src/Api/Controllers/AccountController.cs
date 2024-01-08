@@ -197,7 +197,7 @@ public partial class AccountController : Controller {
             .Distinct()
             .ToDictionary(r => r, r => true);
         info.Privileges = cachedClaims
-            .Where(c => c.Type == Consts.PrivilegeClaimType)
+            .Where(c => c.Type == AppClaimTypes.Privilege)
             .Select(c => c.Value)
             .Distinct()
             .ToDictionary(p => p, p => true);
@@ -234,8 +234,8 @@ public partial class AccountController : Controller {
         identity.AddClaims(userClaims);
         // save role and role privileges to cache;
         var claimsToCache = new List<Claim> {
-            new (Consts.OrganizeUnitIdClaimType, user.OrganizeUnit.Id.ToString()),
-            new (Consts.OrganizeUnitCodeClaimType, user.OrganizeUnit.Code),
+            new (AppClaimTypes.OrganizeUnitId, user.OrganizeUnit.Id.ToString()),
+            new (AppClaimTypes.OrganizeUnitCode, user.OrganizeUnit.Code),
         };
         // role as claim;
         var roles = await userMgr.GetRolesAsync(user);
