@@ -19,6 +19,11 @@ partial class Startup {
             logger.Error($"Cache directory {cacheFolder} does not exists, make sure your config is correct!");
             Directory.CreateDirectory(cacheFolder);
         }
+        var storageFolder = Path.Combine(env.ContentRootPath, commonOption.Storage.Directory);
+        if (!Directory.Exists(storageFolder)) {
+            logger.Error($"Storage directory {storageFolder} does not exists, make sure your config is correct!");
+            Directory.CreateDirectory(storageFolder);
+        }
         services.AddDistributedMemoryCache();
         services.AddServiceWithDefaultImplements(
             typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly,

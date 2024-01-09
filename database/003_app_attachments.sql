@@ -10,6 +10,7 @@ create table public.app_attachments
     length bigint not null default 0,
     content bytea,
     business_id bigint not null,
+    file_path character varying(512) collate pg_catalog."default" not null,
     created_at timestamp without time zone not null default now(),
     creator_id character varying(32) collate pg_catalog."default" not null,
     constraint app_attachments_pkey primary key (id),
@@ -51,3 +52,5 @@ comment on column public.app_attachments.length
 
 comment on column public.app_attachments.business_id
     is '附件所属的业务id，可以是任意表的id，如果业务表有附件， 则需要根据业务表记录的id，删除对应的附件。';
+
+comment on column public.app_attachments.file_path is '文件路径';

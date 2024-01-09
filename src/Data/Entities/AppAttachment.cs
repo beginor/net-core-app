@@ -31,5 +31,7 @@ public partial class AppAttachment : BaseEntity<long> {
     /// <summary>附件所属的业务ID，可以是任意表的ID，如果业务表有附件， 则需要根据业务表记录的ID，删除对应的附件。</summary>
     [Property(Name = "BusinessId", Column = "business_id", Type = "long", NotNull = true)]
     public virtual long BusinessId { get; set; }
-
+    /// <summary>文件路径</summary>
+    [Property(Name = nameof(FilePath), Column = "file_path", Type = "string", NotNull = false, Length = 512)]
+    public virtual string FilePath { get; set; }
 }

@@ -13,7 +13,7 @@ public partial interface IAppAttachmentRepository : IRepository<AppAttachmentMod
         AppAttachmentSearchModel model
     );
 
-    Task SaveContentAsync(long id, byte[] content, CancellationToken token = default);
+    Task<string> SaveContentAsync(long id, byte[] content, string extension, CancellationToken token = default);
 
     Task<byte[]> GetContentAsync(long id, CancellationToken token = default);
 
