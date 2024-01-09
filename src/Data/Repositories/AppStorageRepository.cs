@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.FileProviders;
 using AutoMapper;
@@ -23,7 +21,6 @@ public partial class AppStorageRepository : HibernateRepository<AppStorage, AppS
 
     private IDistributedCache cache;
     private CommonOption commonOption;
-    private IWebHostEnvironment webHostEnv;
     private IFileProvider fileProvider;
 
     public AppStorageRepository(
@@ -31,12 +28,10 @@ public partial class AppStorageRepository : HibernateRepository<AppStorage, AppS
         IMapper mapper,
         IDistributedCache cache,
         CommonOption commonOption,
-        IWebHostEnvironment webHostEnv,
         IFileProvider fileProvider
     ) : base(session, mapper) {
         this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
         this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
-        this.webHostEnv = webHostEnv ?? throw new ArgumentNullException(nameof(webHostEnv));
         this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
     }
 

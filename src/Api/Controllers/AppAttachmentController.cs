@@ -14,7 +14,7 @@ using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Api.Controllers;
 
-/// <summary>附件表服务接口</summary>
+/// <summary>附件服务接口</summary>
 [Route("api/attachments")]
 [ApiController]
 public class AppAttachmentController : Controller {
@@ -40,8 +40,8 @@ public class AppAttachmentController : Controller {
         base.Dispose(disposing);
     }
 
-    /// <summary> 创建 附件表  </summary>
-    /// <response code="200">创建 附件表 成功</response>
+    /// <summary> 创建 附件  </summary>
+    /// <response code="200">创建 附件 成功</response>
     /// <response code="500">服务器内部错误</response>
     [HttpPost("")]
     [Authorize("app_attachments.create")]
@@ -85,13 +85,13 @@ public class AppAttachmentController : Controller {
             return Ok(models);
         }
         catch (Exception ex) {
-            logger.LogError(ex, $"Can not save to attachments.");
+            logger.LogError(ex, "Can not save to attachments.");
             return this.InternalServerError(ex);
         }
     }
 
-    /// <summary>删除 附件表 </summary>
-    /// <response code="204">删除 附件表 成功</response>
+    /// <summary>删除 附件 </summary>
+    /// <response code="204">删除 附件 成功</response>
     /// <response code="500">服务器内部错误</response>
     [HttpDelete("{id:long}")]
     [ProducesResponseType(204)]
@@ -107,7 +107,7 @@ public class AppAttachmentController : Controller {
         }
     }
 
-    /// <summary>搜索 附件表 ， 分页返回结果</summary>
+    /// <summary>搜索 附件 ， 分页返回结果</summary>
     /// <response code="200">成功, 分页返回结果</response>
     /// <response code="500">服务器内部错误</response>
     [HttpGet("")]
@@ -126,10 +126,10 @@ public class AppAttachmentController : Controller {
     }
 
     /// <summary>
-    /// 获取指定的 附件表
+    /// 获取指定的 附件
     /// </summary>
-    /// <response code="200">返回 附件表 信息</response>
-    /// <response code="404"> 附件表 不存在</response>
+    /// <response code="200">返回 附件 信息</response>
+    /// <response code="404"> 附件 不存在</response>
     /// <response code="500">服务器内部错误</response>
     [HttpGet("{id:long}")]
     [Authorize("app_attachments.read_by_id")]
