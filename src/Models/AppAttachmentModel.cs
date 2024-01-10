@@ -22,8 +22,6 @@ public partial class AppAttachmentModel : StringEntity {
     public long Length { get; set; }
     /// <summary>附件所属的业务ID，可以是任意表的ID，如果业务表有附件， 则需要根据业务表记录的ID，删除对应的附件。</summary>
     public string BusinessId { get; set; }
-    /// <summary>文件路径</summary>
-    public string FilePath { get; set; }
 }
 
 /// <summary>附件表搜索参数</summary>
