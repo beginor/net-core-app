@@ -29,7 +29,7 @@ alter table public.xxx
     on update cascade
     on delete cascade;
 alter table public.xxx
-    add constraint fk_xxx_updator foreign key (updater_id)
+    add constraint fk_xxx_updater foreign key (updater_id)
     references public.app_users (id) match simple
     on update no action
     on delete no action;
