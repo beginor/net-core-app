@@ -78,7 +78,7 @@ public class AppAttachmentRepositoryTest : BaseTest<IAppAttachmentRepository> {
         };
         // var content = await System.IO.File.ReadAllBytesAsync("");
         var content = System.Text.Encoding.UTF8.GetBytes("hello, world");
-        await Target.SaveAsync(model, content, user);
+        // await Target.SaveAsync(model, content, user);
     }
 
     [Test]
@@ -114,9 +114,9 @@ public class AppAttachmentRepositoryTest : BaseTest<IAppAttachmentRepository> {
             var id = (long)reader["id"];
             var fileName = (string)reader["file_name"];
             var content = (byte[])reader["content"];
-            var filePath = await Target.SaveContentAsync(id, content, Path.GetExtension(fileName));
-            Console.WriteLine(filePath);
-            files.Add(id, filePath);
+            // var filePath = await Target.SaveContentAsync(id, content, Path.GetExtension(fileName));
+            // Console.WriteLine(filePath);
+            // files.Add(id, filePath);
         }
         await reader.CloseAsync();
         foreach (var (id, filePath) in files) {

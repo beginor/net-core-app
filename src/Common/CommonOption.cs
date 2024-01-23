@@ -16,4 +16,5 @@ public class CacheOption {
 
 public class StorageOption {
     public string Directory { get; set; } = "storage";
+    public string TempDirectory { get; set; } = "temp";
 }

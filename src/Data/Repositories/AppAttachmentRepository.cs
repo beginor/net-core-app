@@ -2,8 +2,10 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using AutoMapper;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
@@ -19,6 +21,7 @@ namespace Beginor.NetCoreApp.Data.Repositories;
 public partial class AppAttachmentRepository(
     ISession session,
     IMapper mapper,
+    IWebHostEnvironment env,
     CommonOption commonOption
 ) : HibernateRepository<AppAttachment, AppAttachmentModel, long>(session, mapper),
     IAppAttachmentRepository {
@@ -35,6 +38,19 @@ public partial class AppAttachmentRepository(
         var total = await query.LongCountAsync();
         var data = await query.OrderByDescending(e => e.Id)
             .Skip(model.Skip).Take(model.Take)
+            .Select(x => new AppAttachment {
+                Id = x.Id,
+                BusinessId = x.BusinessId,
+                FileName = x.FileName,
+                Length = x.Length,
+                // FilePath = x.FilePath,
+                ContentType = x.ContentType,
+                Creator = new AppUser {
+                    Id = x.Creator.Id,
+                    UserName = x.Creator.UserName
+                },
+                CreatedAt = x.CreatedAt,
+            })
             .ToListAsync();
         return new PaginatedResponseModel<AppAttachmentModel> {
             Total = total,
@@ -46,30 +62,37 @@ public partial class AppAttachmentRepository(
 
     public async Task SaveAsync(
         AppAttachmentModel model,
-        byte[] content,
-        AppUser user,
+        FileInfo file,
+        ClaimsPrincipal user,
         CancellationToken token = default
     ) {
         var entity = Mapper.Map<AppAttachment>(model);
-        entity.Creator = user;
-        entity.CreatedAt = DateTime.Now;
         ITransaction? trans = null;
         try {
             trans = Session.BeginTransaction();
+            entity.Creator = await Session.GetAsync<AppUser>(user.GetUserId(), token);
+            entity.CreatedAt = DateTime.Now;
             await Session.SaveAsync(entity, token);
             await Session.FlushAsync(token);
-            Session.Clear();
-            if (content.Length > 0) {
-                var extension = Path.GetExtension(entity.FileName);
-                var filePath = await SaveContentAsync(
-                    entity.Id,
-                    content,
-                    extension,
-                    token
-                );
-                entity.FilePath = filePath;
-                await Session.UpdateAsync(entity, token);
+            if (model.ContentType.StartsWith("image/")) {
+                var thumbnail = FileHelper.GetThumbnail(file.FullName);
+                await SaveThumbnailAsync(entity.Id, thumbnail.Content, token);
             }
+            var today = DateTime.Today;
+            var storageDir = GetAttachmentStorageDirectory();
+            var todayFolder = Path.Combine(
+                $"{today.Year:D4}",
+                $"{today.Month:D2}",
+                $"{today.Day:D2}"
+            );
+            var attachmentFolder = Path.Combine(storageDir, todayFolder);
+            if (!Directory.Exists(attachmentFolder)) {
+                Directory.CreateDirectory(attachmentFolder);
+            }
+            var filePath = Path.Combine(todayFolder, $"{entity.Id}{file.Extension}");
+            var destFolder = Path.Combine(storageDir, filePath);
+            file.MoveTo(destFolder);
+            entity.FilePath = filePath;
             await Session.FlushAsync(token);
             await trans.CommitAsync(token);
             Session.Clear();
@@ -83,41 +106,53 @@ public partial class AppAttachmentRepository(
         }
     }
 
-    public async Task<string> SaveContentAsync(
+    private async Task SaveThumbnailAsync(
         long id,
         byte[] content,
-        string extension,
         CancellationToken token = default
     ) {
-        var today = DateTime.Today;
-        var storageDir = commonOption.Storage.Directory;
-        var folderPath = Path.Combine(
-            storageDir,
-            "app_attachments",
-            today.Year.ToString("D4"),
-            today.Month.ToString("D2"),
-            today.Day.ToString("D2")
-        );
-        var dirInfo = new DirectoryInfo(folderPath);
-        if (!dirInfo.Exists) {
-            dirInfo.Create();
-        }
-        var filePath = Path.Combine(folderPath, $"{id}{extension}");
-        await File.WriteAllBytesAsync(filePath, content, token);
-        return filePath[(storageDir.Length + 1)..];
+        var sql = @"update public.app_attachments
+                    set content = :content
+                    where id = :id";
+        var query = Session.CreateSQLQuery(sql);
+        query.SetBinary("content", content);
+        query.SetInt64("id", id);
+        await query.ExecuteUpdateAsync(token);
     }
 
-    public async Task<byte[]> GetContentAsync(long id, CancellationToken token = default) {
-        var entity = await Session.GetAsync<AppAttachment>(id, token);
-        if (entity == null) {
-            return Array.Empty<byte>();
-        }
-        var filePath = Path.Combine(
-            commonOption.Storage.Directory,
-            entity.FilePath
+    public async Task<byte[]> GetThumbnailAsync(long id, CancellationToken token = default) {
+        var query = Session.CreateSQLQuery(
+            "select content from public.app_attachments where id = :id"
         );
-        var content = await File.ReadAllBytesAsync(filePath, token);
-        return content;
+        query.AddScalar("content", NHibernateUtil.Binary);
+        query.SetInt64("id", id);
+        var content = await query.UniqueResultAsync<byte[]>(token);
+        return content ?? Array.Empty<byte>();
+    }
+
+    public string GetAttachmentTempDirectory(string userId) {
+        var userTempFolder = Path.Combine(
+            env.ContentRootPath,
+            commonOption.Storage.Directory,
+            commonOption.Storage.TempDirectory,
+            userId
+        );
+        if (!Directory.Exists(userTempFolder)) {
+            Directory.CreateDirectory(userTempFolder);
+        }
+        return userTempFolder;
+    }
+
+    public string GetAttachmentStorageDirectory() {
+        var folder = Path.Combine(
+            env.ContentRootPath,
+            commonOption.Storage.Directory,
+            "app_attachments"
+        );
+        if (!Directory.Exists(folder)) {
+            Directory.CreateDirectory(folder);
+        }
+        return folder;
     }
 
 }

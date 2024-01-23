@@ -1,14 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
-using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 
@@ -17,21 +15,11 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 /// <summary>附件服务接口</summary>
 [Route("api/attachments")]
 [ApiController]
-public class AppAttachmentController : Controller {
-
-    private readonly ILogger<AppAttachmentController> logger;
-    private readonly IAppAttachmentRepository repository;
-    private readonly UserManager<AppUser> userMgr;
-
-    public AppAttachmentController(
-        ILogger<AppAttachmentController> logger,
-        IAppAttachmentRepository repository,
-        UserManager<AppUser> userMgr
-    ) {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
-    }
+public class AppAttachmentController(
+    ILogger<AppAttachmentController> logger,
+    IAppAttachmentRepository repository,
+    IContentTypeProvider contentTypeProvider
+) : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
@@ -45,44 +33,56 @@ public class AppAttachmentController : Controller {
     /// <response code="500">服务器内部错误</response>
     [HttpPost("")]
     [Authorize("app_attachments.create")]
-    public async Task<ActionResult<AppAttachmentModel[]>> Create() {
-        var files = Request.Form.Files;
-        if (files.Count == 0) {
-            return BadRequest("No file in current request ！");
-        }
-        var businessId = string.Empty;
-        const string BusinessId = "businessId";
-        if (Request.Query.TryGetValue(BusinessId, out var queryVal)) {
-            businessId = queryVal.ToString();
-        }
-        else if (Request.Form.TryGetValue(BusinessId, out var formVal)) {
-            businessId = formVal.ToString();
-        }
-        if (string.IsNullOrEmpty(businessId)) {
-            return BadRequest("businessId is required.");
-        }
-        if (!long.TryParse(businessId, out _)) {
-            return BadRequest("invalid businessId.");
-        }
-
-        var models = new List<AppAttachmentModel>();
+    public async Task<ActionResult<AttachmentUploadResultModel>> Create(AttachmentUploadModel model) {
+        var result = new AttachmentUploadResultModel {
+            FileName = model.FileName,
+            Length = model.Length
+        };
         try {
-            var userId = this.GetUserId();
-            var user = await userMgr.FindByIdAsync(userId!);
-            foreach (var file in files) {
-                var model = new AppAttachmentModel {
-                    BusinessId = businessId,
-                    ContentType = file.ContentType,
-                    FileName = file.FileName,
-                    Length = file.Length
-                };
-                using var stream = new MemoryStream();
-                await file.CopyToAsync(stream);
-                var content = stream.GetBuffer();
-                await repository.SaveAsync(model, content, user!);
-                models.Add(model);
+            var userId = this.GetUserId()!;
+            var userTemp = repository.GetAttachmentTempDirectory(userId);
+            var tmpPath = Path.Combine(userTemp, model.FileName);
+            var fileInfo = new FileInfo(tmpPath);
+            if (model.Offset == 0) {
+                if (System.IO.File.Exists(tmpPath)) {
+                    System.IO.File.Delete(tmpPath);
+                }
+                await using var stream = fileInfo.Create();
+                await stream.WriteAsync(model.Content);
+                await stream.FlushAsync();
+                stream.Close();
+                result.UploadedSize = fileInfo.Length;
             }
-            return Ok(models);
+            else {
+                await using var stream = fileInfo.OpenWrite();
+                stream.Seek(model.Offset, SeekOrigin.Begin);
+                await stream.WriteAsync(model.Content);
+                await stream.FlushAsync();
+                stream.Close();
+            }
+            if (model.Length <= model.Offset + model.Content.Length) {
+                var now = DateTime.Now;
+                var contentType = model.ContentType;
+                if (contentType.IsNullOrEmpty()) {
+                    if (contentTypeProvider.TryGetContentType(model.FileName, out var ct)) {
+                        contentType = ct;
+                    }
+                    else {
+                        contentType = "application/octet-stream";;
+                    }
+                }
+                var attachmentModel = new AppAttachmentModel {
+                    FileName = model.FileName,
+                    Length = model.Length,
+                    ContentType = contentType,
+                    CreatedAt = now,
+                    CreatorId = userId,
+                    BusinessId = model.BusinessId,
+                };
+                await repository.SaveAsync(attachmentModel, fileInfo, User);
+            }
+            result.UploadedSize = fileInfo.Length;
+            return Ok(result);
         }
         catch (Exception ex) {
             logger.LogError(ex, "Can not save to attachments.");
@@ -132,16 +132,21 @@ public class AppAttachmentController : Controller {
     /// <response code="404"> 附件 不存在</response>
     /// <response code="500">服务器内部错误</response>
     [HttpGet("{id:long}")]
-    [Authorize("app_attachments.read_by_id")]
+    // [Authorize("app_attachments.read_by_id")]
     public async Task<ActionResult> GetById(long id, [FromQuery]string? action) {
         try {
             var model = await repository.GetByIdAsync(id);
             if (model == null) {
                 return NotFound();
             }
-            var content = await repository.GetContentAsync(id);
-            var result = new FileContentResult(content, model.ContentType) {
-                LastModified = new DateTimeOffset(model.CreatedAt)
+            var filePath = Path.Combine(repository.GetAttachmentStorageDirectory(), model.FilePath);
+            if (!System.IO.File.Exists(filePath)) {
+                logger.LogError($"File {filePath} does not exist, please check storage!");
+                return NotFound();
+            }
+            var result = new PhysicalFileResult(filePath, model.ContentType) {
+                LastModified = new DateTimeOffset(model.CreatedAt),
+                EnableRangeProcessing = true
             };
             if (action != null && action.EqualsOrdinalIgnoreCase("download")) {
                 result.FileDownloadName = model.FileName;
@@ -150,6 +155,32 @@ public class AppAttachmentController : Controller {
         }
         catch (Exception ex) {
             logger.LogError(ex, $"Can not get app_attachments by id {id}.");
+            return this.InternalServerError(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取指定的附件的缩略图
+    /// </summary>
+    /// <response code="200">返回 缩略图 信息</response>
+    /// <response code="404"> 缩略图 不存在</response>
+    /// <response code="500">服务器内部错误</response>
+    [HttpGet("{id:long}/thumbnail")]
+    // [Authorize("app_attachments.read_by_id")]
+    public async Task<ActionResult> GetThumbnailById(long id) {
+        try {
+            var entity = await repository.GetByIdAsync(id);
+            if (entity == null) {
+                return NotFound();
+            }
+            var content = await repository.GetThumbnailAsync(id);
+            if (content.Length == 0) {
+                return NotFound();
+            }
+            return File(content, entity.ContentType);
+        }
+        catch (Exception ex) {
+            logger.LogError(ex, $"Can not get app_attachments thumbnail by id {id}.");
             return this.InternalServerError(ex);
         }
     }
