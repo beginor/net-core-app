@@ -103,7 +103,7 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppN
         }
         Argument.NotNull(model, nameof(model));
         Argument.NotNullOrEmpty(userName, nameof(userName));
-        var entity = await Session.LoadAsync<AppNavItem>(id);
+        var entity = await Session.GetAsync<AppNavItem>(id);
         if (entity == null) {
             throw new InvalidOperationException(
                 $"导航节点 {id} 不存在！"

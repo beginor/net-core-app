@@ -72,7 +72,7 @@ public partial class AppPrivilegeRepository : HibernateRepository<AppPrivilege, 
     ) {
         var tx = Session.BeginTransaction();
         try {
-            var entity = await Session.LoadAsync<AppPrivilege>(id, token);
+            var entity = await Session.GetAsync<AppPrivilege>(id, token);
             if (entity == null) {
                 return;
             }

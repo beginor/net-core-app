@@ -162,7 +162,7 @@ public partial class AppOrganizeUnitRepository(
         }
         Argument.NotNull(model, nameof(model));
         Argument.NotNull(user, nameof(user));
-        var entity = await Session.LoadAsync<AppOrganizeUnit>(id, token);
+        var entity = await Session.GetAsync<AppOrganizeUnit>(id, token);
         if (entity == null) {
             throw new InvalidOperationException($"组织单元 {id} 不存在！");
         }
@@ -248,7 +248,7 @@ public partial class AppOrganizeUnitRepository(
         ClaimsPrincipal user,
         CancellationToken token = default
     ) {
-        var entity = await Session.LoadAsync<AppOrganizeUnit>(unitId, token);
+        var entity = await Session.GetAsync<AppOrganizeUnit>(unitId, token);
         return entity;
     }
 
