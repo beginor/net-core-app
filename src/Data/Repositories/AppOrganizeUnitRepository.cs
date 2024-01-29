@@ -263,4 +263,18 @@ public partial class AppOrganizeUnitRepository(
         return path;
     }
 
+    public async Task CheckOrganizeUnitAsync(
+        AppOrganizeUnit unit,
+        ClaimsPrincipal user,
+        CancellationToken token = default
+    ) {
+        var userOrgUnitId = user.GetOrganizeUnitId();
+        var canView = await CanViewOrganizeUnitAsync(userOrgUnitId, unit.Id, token);
+        if (!canView) {
+            throw new InvalidOperationException(
+                $"AppOrganize unit {unit.Id} is not allowed to access by user {user.GetUserName()}"
+            );
+        }
+    }
+
 }

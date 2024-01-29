@@ -28,4 +28,6 @@ public partial interface IAppOrganizeUnitRepository : IRepository<AppOrganizeUni
 
     Task<bool> CanViewOrganizeUnitAsync(long userUnitId, long unitId, CancellationToken token = default);
 
+    Task CheckOrganizeUnitAsync(AppOrganizeUnit unit, ClaimsPrincipal user, CancellationToken token = default);
+
 }
