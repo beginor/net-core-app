@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Security.Claims;
 using Beginor.AppFx.Core;
 
@@ -42,6 +43,15 @@ public static class ClaimsPrincipalExtensions {
         var id = user.GetOrganizeUnitId();
         var code = user.GetOrganizeUnitCode();
         return (id, code);
+    }
+
+    public static string[] GetRoles(this ClaimsPrincipal user) {
+        return user.FindAll(ClaimTypes.Role).Select(c => c.Value).ToArray();
+    }
+
+    public static bool IsInRole(this ClaimsPrincipal user, string role) {
+        var claim = user.FindFirst(c => c.Type == ClaimTypes.Role && c.Value.EqualsOrdinalIgnoreCase(role));
+        return claim != null;
     }
 
 }
