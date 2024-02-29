@@ -1,26 +1,24 @@
--- table: public.app_json_data
+-- Table: public.app_json_data
 
--- drop table public.app_json_data;
+-- DROP TABLE IF EXISTS public.app_json_data;
 
-create table public.app_json_data
+CREATE TABLE IF NOT EXISTS public.app_json_data
 (
-    id bigint not null,
-    value jsonb not null,
-    constraint pk_app_json_data primary key (id)
+    id bigint NOT NULL,
+    value jsonb NOT NULL,
+    CONSTRAINT pk_app_json_data PRIMARY KEY (id)
 )
-with (
-    oids = false
-)
-tablespace pg_default;
 
-alter table public.app_json_data
-    owner to postgres;
+TABLESPACE pg_default;
 
-comment on table public.app_json_data
-    is 'json 数据';
+ALTER TABLE IF EXISTS public.app_json_data
+    OWNER to postgres;
 
-comment on column public.app_json_data.id
-    is 'json 数据id';
+COMMENT ON TABLE public.app_json_data
+    IS 'JSON 数据';
 
-comment on column public.app_json_data.value
-    is 'json值';
+COMMENT ON COLUMN public.app_json_data.id
+    IS 'JSON 数据ID';
+
+COMMENT ON COLUMN public.app_json_data.value
+    IS 'JSON 值';

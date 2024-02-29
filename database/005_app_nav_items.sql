@@ -1,90 +1,88 @@
--- table: public.app_nav_items
+-- Table: public.app_nav_items
 
--- drop table public.app_nav_items;
+-- DROP TABLE IF EXISTS public.app_nav_items;
 
-create table public.app_nav_items
+CREATE TABLE IF NOT EXISTS public.app_nav_items
 (
-    id bigint not null default public.snow_flake_id(),
+    id bigint NOT NULL DEFAULT snow_flake_id(),
     parent_id bigint,
-    title character varying(16) collate pg_catalog."default" not null,
-    tooltip character varying(64) collate pg_catalog."default",
-    icon character varying(32) collate pg_catalog."default",
-    url character varying(256) collate pg_catalog."default",
+    title character varying(16) COLLATE pg_catalog."default" NOT NULL,
+    tooltip character varying(64) COLLATE pg_catalog."default",
+    icon character varying(32) COLLATE pg_catalog."default",
+    url character varying(256) COLLATE pg_catalog."default",
     sequence real,
-    creator_id character varying(32) collate pg_catalog."default" not null,
-    created_at timestamp without time zone not null,
-    updater_id character varying(32) collate pg_catalog."default" not null,
-    updated_at timestamp without time zone not null,
-    is_deleted boolean not null,
-    roles character varying(64)[],
-    target character varying(16),
-    constraint pk_app_nav_items primary key (id),
-    constraint fk_app_nav_items_creator foreign key (creator_id)
-        references public.app_users (id) match simple
-        on update cascade
-        on delete cascade,
-    constraint fk_feaure_maps_updator foreign key (updater_id)
-        references public.app_users (id) match simple
-        on update no action
-        on delete no action
+    creator_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updater_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    is_deleted boolean NOT NULL,
+    roles character varying(64)[] COLLATE pg_catalog."default",
+    target character varying(16) COLLATE pg_catalog."default" DEFAULT ''::character varying,
+    frame_url character varying(256) COLLATE pg_catalog."default",
+    is_hidden boolean,
+    CONSTRAINT pk_app_nav_items PRIMARY KEY (id),
+    CONSTRAINT fk_app_nav_items_creator FOREIGN KEY (creator_id)
+        REFERENCES public.app_users (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_app_navitems_updator FOREIGN KEY (updater_id)
+        REFERENCES public.app_users (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 )
-with (
-    oids = false
-)
-tablespace pg_default;
 
-alter table public.app_nav_items
-    owner to postgres;
-comment on table public.app_nav_items
-    is '导航节点（菜单）';
+TABLESPACE pg_default;
 
-comment on column public.app_nav_items.id
-    is '节点id';
+ALTER TABLE IF EXISTS public.app_nav_items
+    OWNER to postgres;
 
-comment on column public.app_nav_items.title
-    is '标题';
+COMMENT ON TABLE public.app_nav_items
+    IS '导航节点（菜单）';
 
-comment on column public.app_nav_items.tooltip
-    is '提示文字';
+COMMENT ON COLUMN public.app_nav_items.id
+    IS '节点ID';
 
-comment on column public.app_nav_items.url
-    is '导航地址';
+COMMENT ON COLUMN public.app_nav_items.parent_id
+    IS '父节点ID';
 
-comment on column public.app_nav_items.creator_id
-    is '创建者id';
+COMMENT ON COLUMN public.app_nav_items.title
+    IS '标题';
 
-comment on column public.app_nav_items.created_at
-    is '创建时间';
+COMMENT ON COLUMN public.app_nav_items.tooltip
+    IS '提示文字';
 
-comment on column public.app_nav_items.updater_id
-    is '更新者id';
+COMMENT ON COLUMN public.app_nav_items.icon
+    IS '图标';
 
-comment on column public.app_nav_items.updated_at
-    is '更新时间';
+COMMENT ON COLUMN public.app_nav_items.url
+    IS '导航地址';
 
-comment on column public.app_nav_items.is_deleted
-    is '是否删除';
+COMMENT ON COLUMN public.app_nav_items.sequence
+    IS '顺序';
 
-comment on column public.app_nav_items.sequence
-    is '顺序';
+COMMENT ON COLUMN public.app_nav_items.creator_id
+    IS '创建者ID';
 
-comment on column public.app_nav_items.icon
-    is '图标';
+COMMENT ON COLUMN public.app_nav_items.created_at
+    IS '创建时间';
 
-comment on column public.app_nav_items.roles
-    is '能看到该菜单项的角色';
+COMMENT ON COLUMN public.app_nav_items.updater_id
+    IS '更新者ID';
 
-comment on column public.app_nav_items.target
-    is '导航目标';
+COMMENT ON COLUMN public.app_nav_items.updated_at
+    IS '更新时间';
 
-alter table public.app_nav_items
-    add column frame_url character varying(256);
+COMMENT ON COLUMN public.app_nav_items.is_deleted
+    IS '是否删除';
 
-comment on column public.app_nav_items.frame_url
-    is '内嵌窗口地址';
+COMMENT ON COLUMN public.app_nav_items.roles
+    IS '能看到该菜单项的角色';
 
-alter table public.app_nav_items
-    add column is_hidden boolean;
+COMMENT ON COLUMN public.app_nav_items.target
+    IS '导航目标';
 
-comment on column public.app_nav_items.is_hidden
-    is '是否隐藏';
+COMMENT ON COLUMN public.app_nav_items.frame_url
+    IS '内嵌窗口地址';
+
+COMMENT ON COLUMN public.app_nav_items.is_hidden
+    IS '是否隐藏';

@@ -1,46 +1,64 @@
--- table: public.app_client_errors
+-- Table: public.app_audit_logs
 
--- drop table public.app_client_errors;
+-- DROP TABLE IF EXISTS public.app_audit_logs;
 
-create table public.app_client_errors
+CREATE TABLE IF NOT EXISTS public.app_audit_logs
 (
-    id bigint not null default snow_flake_id(),
-    user_name character varying(64) collate pg_catalog."default" not null,
-    occured_at timestamp with time zone not null,
-    user_agent character varying(512) collate pg_catalog."default" not null,
-    path character varying(1024) collate pg_catalog."default",
-    message character varying(2048) collate pg_catalog."default",
-    constraint app_client_errors_pkey primary key (id)
+    id bigint NOT NULL DEFAULT nextval('snow_flake_id_seq'::regclass),
+    request_path character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    request_method character varying(8) COLLATE pg_catalog."default" NOT NULL,
+    user_name character varying(64) COLLATE pg_catalog."default" NOT NULL,
+    start_at timestamp without time zone NOT NULL,
+    duration double precision NOT NULL,
+    response_code integer NOT NULL,
+    controller_name character varying(64) COLLATE pg_catalog."default",
+    action_name character varying(64) COLLATE pg_catalog."default",
+    description character varying(256) COLLATE pg_catalog."default",
+    ip character varying(64) COLLATE pg_catalog."default",
+    host_name character varying(32) COLLATE pg_catalog."default",
+    CONSTRAINT pk_app_audit_logs PRIMARY KEY (id)
 )
-with (
-    oids = false
-)
-tablespace pg_default;
 
-alter table public.app_client_errors
-    owner to postgres;
-comment on table public.app_client_errors
-    is '客户端错误记录';
+TABLESPACE pg_default;
 
-comment on column public.app_client_errors.id
-    is '客户端错误记录ID';
+ALTER TABLE IF EXISTS public.app_audit_logs
+    OWNER to postgres;
 
-comment on column public.app_client_errors.user_name
-    is '用户名';
+COMMENT ON TABLE public.app_audit_logs
+    IS '审计日志';
 
-comment on column public.app_client_errors.occured_at
-    is '错误发生时间';
+COMMENT ON COLUMN public.app_audit_logs.id
+    IS '审计日志ID';
 
-comment on column public.app_client_errors.user_agent
-    is '用户浏览器代理';
+COMMENT ON COLUMN public.app_audit_logs.request_path
+    IS '请求路径';
 
-comment on column public.app_client_errors.path
-    is '错误发生的路径地址';
+COMMENT ON COLUMN public.app_audit_logs.request_method
+    IS '请求方法';
 
-comment on column public.app_client_errors.message
-    is '错误消息';
+COMMENT ON COLUMN public.app_audit_logs.user_name
+    IS '用户名';
 
-create index idx_app_client_errors_occured_at
-    on public.app_client_errors using btree
-    (occured_at desc nulls last)
-    tablespace pg_default;
+COMMENT ON COLUMN public.app_audit_logs.start_at
+    IS '开始时间';
+
+COMMENT ON COLUMN public.app_audit_logs.duration
+    IS '耗时(毫秒)';
+
+COMMENT ON COLUMN public.app_audit_logs.response_code
+    IS '响应状态码';
+
+COMMENT ON COLUMN public.app_audit_logs.controller_name
+    IS '控制器名称';
+
+COMMENT ON COLUMN public.app_audit_logs.action_name
+    IS '动作名称';
+
+COMMENT ON COLUMN public.app_audit_logs.description
+    IS '描述';
+
+COMMENT ON COLUMN public.app_audit_logs.ip
+    IS '客户端IP地址';
+
+COMMENT ON COLUMN public.app_audit_logs.host_name
+    IS '请求的主机名';

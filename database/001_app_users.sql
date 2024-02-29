@@ -1,46 +1,48 @@
--- table: public.app_users
+-- Table: public.app_users
 
--- drop table if exists public.app_users;
+-- DROP TABLE IF EXISTS public.app_users;
 
-create table if not exists public.app_users
+CREATE TABLE IF NOT EXISTS public.app_users
 (
-    id character varying(32) collate pg_catalog."default" not null,
-    create_time timestamp without time zone not null default now(),
+    id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    create_time timestamp without time zone NOT NULL DEFAULT now(),
     last_login timestamp without time zone,
-    login_count integer default 0,
-    organize_unit_id bigint not null default 0,
-    display_name character varying(64) collate pg_catalog."default",
-    constraint pk_app_users primary key (id),
-    constraint fk_app_users_organize_unit foreign key (organize_unit_id)
-        references public.app_organize_units (id) match simple
-        on update no action
-        on delete no action
-        not valid,
-    constraint fk_aspnet_users_id foreign key (id)
-        references public.aspnet_users (id) match simple
-        on update cascade
-        on delete cascade
+    login_count integer DEFAULT 0,
+    organize_unit_id bigint NOT NULL DEFAULT 0,
+    display_name character varying(64) COLLATE pg_catalog."default",
+    CONSTRAINT pk_app_users PRIMARY KEY (id),
+    CONSTRAINT fk_app_users_organize_unit FOREIGN KEY (organize_unit_id)
+        REFERENCES public.app_organize_units (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_aspnet_users_id FOREIGN KEY (id)
+        REFERENCES public.aspnet_users (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 )
 
-tablespace pg_default;
+TABLESPACE pg_default;
 
-alter table if exists public.app_users
-    owner to postgres;
+ALTER TABLE IF EXISTS public.app_users
+    OWNER to postgres;
 
-comment on table public.app_users
-    is 'application users table.';
+COMMENT ON TABLE public.app_users
+    IS '用户扩展信息';
 
-comment on column public.app_users.create_time
-    is 'create time';
+COMMENT ON COLUMN public.app_users.id
+    IS '用户ID';
 
-comment on column public.app_users.last_login
-    is 'last login time';
+COMMENT ON COLUMN public.app_users.create_time
+    IS '创建时间';
 
-comment on column public.app_users.login_count
-    is 'login count';
+COMMENT ON COLUMN public.app_users.last_login
+    IS '最近登录时间';
 
-comment on column public.app_users.organize_unit_id
-    is 'organize unit id';
+COMMENT ON COLUMN public.app_users.login_count
+    IS '登录次数';
 
-comment on column public.app_users.display_name
-    is 'display name';
+COMMENT ON COLUMN public.app_users.organize_unit_id
+    IS '组织单元ID';
+
+COMMENT ON COLUMN public.app_users.display_name
+    IS '显示名称';

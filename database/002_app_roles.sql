@@ -1,34 +1,36 @@
--- table: public.app_roles
+-- Table: public.app_roles
 
--- drop table public.app_roles;
+-- DROP TABLE IF EXISTS public.app_roles;
 
-create table public.app_roles
+CREATE TABLE IF NOT EXISTS public.app_roles
 (
-    id character varying(32) collate pg_catalog."default" not null,
-    description character varying(256) collate pg_catalog."default",
-    is_default boolean default false,
-    is_anonymous boolean default false,
-    constraint pk_app_roles primary key (id),
-    constraint fk_aspnet_roles_id foreign key (id)
-        references public.aspnet_roles (id) match simple
-        on update cascade
-        on delete cascade
+    id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    description character varying(256) COLLATE pg_catalog."default",
+    is_default boolean DEFAULT false,
+    is_anonymous boolean DEFAULT false,
+    CONSTRAINT pk_app_roles PRIMARY KEY (id),
+    CONSTRAINT fk_aspnet_roles_id FOREIGN KEY (id)
+        REFERENCES public.aspnet_roles (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 )
-with (
-    oids = false
-)
-tablespace pg_default;
 
-alter table public.app_roles
-    owner to postgres;
-comment on table public.app_roles
-    is 'application roles table.';
+TABLESPACE pg_default;
 
-comment on column public.app_roles.description
-    is 'roles description';
+ALTER TABLE IF EXISTS public.app_roles
+    OWNER to postgres;
 
-comment on column public.app_roles.is_default
-    is 'is default role';
+COMMENT ON TABLE public.app_roles
+    IS '角色扩展信息';
 
-comment on column public.app_roles.is_anonymous
-    is 'is anonymous role';
+COMMENT ON COLUMN public.app_roles.id
+    IS '角色ID';
+
+COMMENT ON COLUMN public.app_roles.description
+    IS '角色描述';
+
+COMMENT ON COLUMN public.app_roles.is_default
+    IS '是否默认角色';
+
+COMMENT ON COLUMN public.app_roles.is_anonymous
+    IS '是否匿名角色';

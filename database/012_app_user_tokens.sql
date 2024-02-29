@@ -1,57 +1,57 @@
--- table: public.app_user_tokens
+-- Table: public.app_user_tokens
 
--- drop table public.app_user_tokens;
+-- DROP TABLE IF EXISTS public.app_user_tokens;
 
-create table if not exists public.app_user_tokens
+CREATE TABLE IF NOT EXISTS public.app_user_tokens
 (
-    id bigint not null default snow_flake_id(),
-    user_id character varying(32) collate pg_catalog."default" not null,
-    name character varying(16) collate pg_catalog."default" not null,
-    value character varying(32) collate pg_catalog."default" not null,
-    roles character varying(64)[] collate pg_catalog."default",
-    privileges character varying(64)[] collate pg_catalog."default",
-    urls character varying(64)[] collate pg_catalog."default",
+    id bigint NOT NULL DEFAULT snow_flake_id(),
+    user_id character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    name character varying(16) COLLATE pg_catalog."default" NOT NULL,
+    value character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    privileges character varying(64)[] COLLATE pg_catalog."default",
+    urls character varying(64)[] COLLATE pg_catalog."default",
+    update_time timestamp without time zone NOT NULL,
     expires_at timestamp without time zone,
-    update_time timestamp without time zone not null,
-    constraint pk_app_user_tokens primary key (id),
-    constraint uk_app_user_tokens_user_id_name unique (user_id, name),
-    constraint fk_app_user_tokens_user_id foreign key (user_id)
-        references public.app_users (id) match simple
-        on update no action
-        on delete no action
+    roles character varying(64)[] COLLATE pg_catalog."default",
+    CONSTRAINT pk_app_user_tokens PRIMARY KEY (id),
+    CONSTRAINT uk_app_user_tokens_user_id_name UNIQUE (user_id, name),
+    CONSTRAINT fk_app_user_tokens_user_id FOREIGN KEY (user_id)
+        REFERENCES public.app_users (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 )
 
-tablespace pg_default;
+TABLESPACE pg_default;
 
-alter table public.app_user_tokens
-    owner to postgres;
+ALTER TABLE IF EXISTS public.app_user_tokens
+    OWNER to postgres;
 
-comment on table public.app_user_tokens
-    is '用户凭证';
+COMMENT ON TABLE public.app_user_tokens
+    IS '用户凭证';
 
-comment on column public.app_user_tokens.id
-    is '凭证id';
+COMMENT ON COLUMN public.app_user_tokens.id
+    IS '凭证ID';
 
-comment on column public.app_user_tokens.user_id
-    is '用户id';
+COMMENT ON COLUMN public.app_user_tokens.user_id
+    IS '用户ID';
 
-comment on column public.app_user_tokens.name
-    is '凭证名称';
+COMMENT ON COLUMN public.app_user_tokens.name
+    IS '凭证名称';
 
-comment on column public.app_user_tokens.value
-    is '凭证值';
+COMMENT ON COLUMN public.app_user_tokens.value
+    IS '凭证值';
 
-comment on column public.app_user_tokens.privileges
-    is '凭证权限';
+COMMENT ON COLUMN public.app_user_tokens.privileges
+    IS '凭证权限';
 
-comment on column public.app_user_tokens.urls
-    is '允许的 url 地址';
+COMMENT ON COLUMN public.app_user_tokens.urls
+    IS '允许的 url 地址';
 
-comment on column public.app_user_tokens.update_time
-    is '更新时间';
+COMMENT ON COLUMN public.app_user_tokens.update_time
+    IS '更新时间';
 
-comment on column public.app_user_tokens.expires_at
-    is '过期时间';
+COMMENT ON COLUMN public.app_user_tokens.expires_at
+    IS '过期时间';
 
-comment on column public.app_user_tokens.roles
-    is '凭证代表的角色';
+COMMENT ON COLUMN public.app_user_tokens.roles
+    IS '凭证代表的角色';

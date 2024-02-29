@@ -1,39 +1,36 @@
--- table: public.app_storages
+-- Table: public.app_storages
 
--- drop table public.app_storages;
+-- DROP TABLE IF EXISTS public.app_storages;
 
-create table if not exists public.app_storages
+CREATE TABLE IF NOT EXISTS public.app_storages
 (
-    id bigint not null default snow_flake_id(),
-    alias_name character varying(32) collate pg_catalog."default" not null,
-    root_folder character varying(128) collate pg_catalog."default" not null,
-    readonly boolean not null default true,
-    roles character varying(64)[] collate pg_catalog."default",
-    constraint pk_app_storages primary key (id)
+    id bigint NOT NULL DEFAULT snow_flake_id(),
+    alias_name character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    root_folder character varying(128) COLLATE pg_catalog."default" NOT NULL,
+    readonly boolean NOT NULL DEFAULT true,
+    roles character varying(64)[] COLLATE pg_catalog."default",
+    CONSTRAINT pk_app_storages PRIMARY KEY (id)
 )
 
-tablespace pg_default;
+TABLESPACE pg_default;
 
-alter table public.app_storages
-    owner to postgres;
+ALTER TABLE IF EXISTS public.app_storages
+    OWNER to postgres;
 
-comment on table public.app_storages
-    is '应用存储';
+COMMENT ON TABLE public.app_storages
+    IS '应用存储';
 
-comment on column public.app_storages.id
-    is '存储id';
+COMMENT ON COLUMN public.app_storages.id
+    IS '存储ID';
 
-comment on column public.app_storages.alias_name
-    is '存储别名';
+COMMENT ON COLUMN public.app_storages.alias_name
+    IS '存储别名';
 
-comment on column public.app_storages.root_folder
-    is '存储根路径';
+COMMENT ON COLUMN public.app_storages.root_folder
+    IS '存储根路径';
 
-comment on column public.app_storages.readonly
-    is '是否只读';
+COMMENT ON COLUMN public.app_storages.readonly
+    IS '是否只读';
 
-comment on column public.app_storages.roles
-    is '可访问此存储的角色';
-
-INSERT INTO public.app_storages (alias_name, root_folder, readonly, roles)
-VALUES ('icons', '!/web/assets/icons/', true, '{users}');
+COMMENT ON COLUMN public.app_storages.roles
+    IS '可访问此存储的角色';
