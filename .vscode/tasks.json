@@ -3,8 +3,8 @@
   "tasks": [
     {
       "label": "dotnet:build",
-      "command": "dotnet",
       "type": "shell",
+      "command": "dotnet",
       "args": ["build"],
       "problemMatcher": ["$msCompile"],
       "group": { "kind": "build", "isDefault": true },
@@ -14,8 +14,8 @@
     },
     {
       "label": "dotnet:run",
-      "command": "dotnet",
       "type": "shell",
+      "command": "dotnet",
       "args": ["run"],
       "problemMatcher": ["$msCompile"],
       "group": "none",
@@ -26,8 +26,8 @@
     },
     {
       "label": "dotnet:watch-run",
-      "command": "dotnet",
       "type": "shell",
+      "command": "dotnet",
       "args": ["watch", "run"],
       "problemMatcher": ["$msCompile"],
       "group": "none",
