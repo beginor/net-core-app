@@ -20,12 +20,12 @@
 
 - `Angular` ， 已开启 TypeScript 严格模式以及 Angular 的严格模板检查；
 - `BootStrap` 以及 `Bootstrap-icons` ；
-- `ng-bootstrap`；
+- `ng-zorro-antd`；
 - `Angular Component/Material`；
 
 Angular 多项目结构， `projects` 提供了多个三个项目，分别是：
 
-- `web` 针对 PC 浏览器的后台管理界面， 使用 `ng-bootstrap` 实现；
+- `web` 针对 PC 浏览器的后台管理界面， 使用 `ng-zorro-antd` 实现；
 - `handset` 针对手持设备的界面， 比较简单， 仅作为示例， 使用 `Angular Component/Material` 实现；
 - `app-shared` 在 `web` 和 `handset` 两个项目中共享的组件和服务；
 
