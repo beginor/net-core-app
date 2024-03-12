@@ -17,7 +17,7 @@ ALTER SEQUENCE public.snow_flake_id_seq
 -- DROP FUNCTION IF EXISTS public.snow_flake_id();
 
 CREATE OR REPLACE FUNCTION public.snow_flake_id(
-	)
+    )
     RETURNS bigint
     LANGUAGE 'sql'
     COST 100
