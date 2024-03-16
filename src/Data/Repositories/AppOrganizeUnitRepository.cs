@@ -61,6 +61,12 @@ public partial class AppOrganizeUnitRepository(
         return result;
     }
 
+    public async Task<AppOrganizeUnit> GetDefaultAsync(CancellationToken token = default) {
+        var defaultId = 1L;
+        var defaultUnit = await Session.GetAsync<AppOrganizeUnit>(defaultId, token);
+        return defaultUnit;
+    }
+
     public async Task<AppOrganizeUnitModel> GetByIdAsync(
         long id,
         ClaimsPrincipal user,

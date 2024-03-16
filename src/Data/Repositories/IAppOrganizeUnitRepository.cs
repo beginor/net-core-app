@@ -14,6 +14,8 @@ public partial interface IAppOrganizeUnitRepository : IRepository<AppOrganizeUni
     /// <summary>搜索 组织单元 ，返回分页结果。</summary>
     Task<PaginatedResponseModel<AppOrganizeUnitModel>> SearchAsync(AppOrganizeUnitSearchModel model, ClaimsPrincipal user);
 
+    Task<AppOrganizeUnit> GetDefaultAsync(CancellationToken token = default);
+
     Task<AppOrganizeUnitModel> GetByIdAsync(long id, ClaimsPrincipal user, CancellationToken token = default);
 
     Task<AppOrganizeUnit> GetEntityByIdAsync(long unitId, ClaimsPrincipal user, CancellationToken token = default);
