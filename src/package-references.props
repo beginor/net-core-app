@@ -1,10 +1,9 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.4.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Beginor.AppFx.Api" Version="8.0.5" />
@@ -19,9 +18,9 @@
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="NHibernate" Version="5.5.0" />
     <PackageReference Include="NHibernate.Mapping.Attributes" Version="5.1.0" />
-    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="8.0.3" />
-    <PackageReference Include="NHibernate.Extensions.NpgSql" Version="8.0.4" />
-    <PackageReference Include="NHibernate.NetCore" Version="8.0.4" />
+    <PackageReference Include="NHibernate.AspNetCore.Identity" Version="8.0.4" />
+    <PackageReference Include="NHibernate.Extensions.NpgSql" Version="8.0.5" />
+    <PackageReference Include="NHibernate.NetCore" Version="8.0.5" />
     <PackageReference Include="Npgsql" Version="8.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.3"/>
