@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using Beginor.AppFx.Core;
 
 #nullable disable
@@ -7,7 +8,6 @@ namespace Beginor.NetCoreApp.Models;
 
 /// <summary>审计日志模型</summary>
 public partial class AppAuditLogModel : StringEntity {
-
     /// <summary>客户端 IP 地址</summary>
     public string Ip { get; set; }
     /// <summary>请求的主机名</summary>
