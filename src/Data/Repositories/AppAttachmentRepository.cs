@@ -7,10 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using AutoMapper;
-using Beginor.AppFx.Core;
-using Beginor.AppFx.Repository.Hibernate;
 using NHibernate;
 using NHibernate.Linq;
+using Beginor.AppFx.Core;
+using Beginor.AppFx.Repository.Hibernate;
 using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
@@ -153,6 +153,14 @@ public partial class AppAttachmentRepository(
             Directory.CreateDirectory(folder);
         }
         return folder;
+    }
+
+    public async Task<int> DeleteByBusinessIdAsync(long businessId, CancellationToken token = default) {
+        var sql = "delete from public.app_attachments where business_id = :businessId";
+        var query = Session.CreateSQLQuery(sql);
+        query.SetInt64("businessId", businessId);
+        var deleted = await query.ExecuteUpdateAsync(token);
+        return deleted;
     }
 
 }

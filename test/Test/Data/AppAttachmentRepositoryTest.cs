@@ -128,4 +128,11 @@ public class AppAttachmentRepositoryTest : BaseTest<IAppAttachmentRepository> {
         }
     }
 
+    [Test]
+    public async Task _07_CanDeleteByBusinessId() {
+        var businessId = 0L;
+        var deleted = await Target.DeleteByBusinessIdAsync(businessId);
+        Assert.That(deleted, Is.EqualTo(0));
+    }
+
 }

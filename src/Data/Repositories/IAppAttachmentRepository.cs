@@ -22,4 +22,6 @@ public partial interface IAppAttachmentRepository : IRepository<AppAttachmentMod
 
     string GetAttachmentTempDirectory(string userId);
 
+    Task<int> DeleteByBusinessIdAsync(long businessId, CancellationToken token = default);
+
 }
