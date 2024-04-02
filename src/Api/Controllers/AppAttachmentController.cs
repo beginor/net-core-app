@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Api;
 using Beginor.AppFx.Core;
+
+using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
 
@@ -43,25 +45,8 @@ public class AppAttachmentController(
             var userTemp = repository.GetAttachmentTempDirectory(userId);
             var tmpPath = Path.Combine(userTemp, model.FileName);
             var fileInfo = new FileInfo(tmpPath);
-            if (model.Offset == 0) {
-                if (System.IO.File.Exists(tmpPath)) {
-                    System.IO.File.Delete(tmpPath);
-                }
-                await using var stream = fileInfo.Create();
-                await stream.WriteAsync(model.Content);
-                await stream.FlushAsync();
-                stream.Close();
-                result.UploadedSize = fileInfo.Length;
-            }
-            else {
-                await using var stream = fileInfo.OpenWrite();
-                stream.Seek(model.Offset, SeekOrigin.Begin);
-                await stream.WriteAsync(model.Content);
-                await stream.FlushAsync();
-                stream.Close();
-            }
+            await FileHelper.PartialSaveFile(model.Length, fileInfo, model.Offset, model.Content);
             if (model.Length <= model.Offset + model.Content.Length) {
-                var now = DateTime.Now;
                 var contentType = model.ContentType;
                 if (contentType.IsNullOrEmpty()) {
                     if (contentTypeProvider.TryGetContentType(model.FileName, out var ct)) {
@@ -75,7 +60,7 @@ public class AppAttachmentController(
                     FileName = model.FileName,
                     Length = model.Length,
                     ContentType = contentType,
-                    CreatedAt = now,
+                    CreatedAt = DateTime.Now,
                     CreatorId = userId,
                     BusinessId = model.BusinessId,
                 };

@@ -5,12 +5,13 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using AutoMapper;
 using NHibernate;
 using NHibernate.Linq;
 using Beginor.AppFx.Core;
 using Beginor.AppFx.Repository.Hibernate;
+
 using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Models;
@@ -21,7 +22,7 @@ namespace Beginor.NetCoreApp.Data.Repositories;
 public partial class AppAttachmentRepository(
     ISession session,
     IMapper mapper,
-    IWebHostEnvironment env,
+    IHostEnvironment env,
     CommonOption commonOption
 ) : HibernateRepository<AppAttachment, AppAttachmentModel, long>(session, mapper),
     IAppAttachmentRepository {
@@ -43,7 +44,7 @@ public partial class AppAttachmentRepository(
                 BusinessId = x.BusinessId,
                 FileName = x.FileName,
                 Length = x.Length,
-                // FilePath = x.FilePath,
+                FilePath = x.FilePath,
                 ContentType = x.ContentType,
                 Creator = new AppUser {
                     Id = x.Creator.Id,
@@ -64,20 +65,23 @@ public partial class AppAttachmentRepository(
         AppAttachmentModel model,
         FileInfo file,
         ClaimsPrincipal user,
+        Thumbnail? thumbnail = null,
         CancellationToken token = default
     ) {
         var entity = Mapper.Map<AppAttachment>(model);
-        ITransaction? trans = null;
-        try {
+        var isLocalTrans = false;
+        var trans = Session.GetCurrentTransaction();
+        if (trans == null) {
             trans = Session.BeginTransaction();
+            isLocalTrans = true;
+        }
+        try {
             entity.Creator = await Session.GetAsync<AppUser>(user.GetUserId(), token);
             entity.CreatedAt = DateTime.Now;
             await Session.SaveAsync(entity, token);
             await Session.FlushAsync(token);
-            if (model.ContentType.StartsWith("image/")) {
-                var thumbnail = FileHelper.GetThumbnail(file.FullName);
-                await SaveThumbnailAsync(entity.Id, thumbnail.Content, token);
-            }
+            thumbnail ??= FileHelper.GetThumbnail(file.FullName, env);
+            await SaveThumbnailAsync(entity.Id, thumbnail.Content, token);
             var today = DateTime.Today;
             var storageDir = GetAttachmentStorageDirectory();
             var todayFolder = Path.Combine(
@@ -94,12 +98,14 @@ public partial class AppAttachmentRepository(
             file.MoveTo(destFolder);
             entity.FilePath = filePath;
             await Session.FlushAsync(token);
-            await trans.CommitAsync(token);
+            if (isLocalTrans) {
+                await trans.CommitAsync(token);
+            }
             Session.Clear();
             Mapper.Map(entity, model);
         }
         catch (Exception) {
-            if (trans != null) {
+            if (isLocalTrans) {
                 await trans.RollbackAsync(token);
             }
             throw;
@@ -111,10 +117,9 @@ public partial class AppAttachmentRepository(
         byte[] content,
         CancellationToken token = default
     ) {
-        var sql = @"update public.app_attachments
-                    set content = :content
-                    where id = :id";
-        var query = Session.CreateSQLQuery(sql);
+        var query = Session.CreateSQLQuery(
+            "update public.app_attachments set content = :content where id = :id"
+        );
         query.SetBinary("content", content);
         query.SetInt64("id", id);
         await query.ExecuteUpdateAsync(token);
@@ -156,10 +161,11 @@ public partial class AppAttachmentRepository(
     }
 
     public async Task<int> DeleteByBusinessIdAsync(long businessId, CancellationToken token = default) {
-        var sql = "delete from public.app_attachments where business_id = :businessId";
-        var query = Session.CreateSQLQuery(sql);
-        query.SetInt64("businessId", businessId);
-        var deleted = await query.ExecuteUpdateAsync(token);
+        var sqlQuery = Session.CreateSQLQuery(
+            "delete from public.app_attachments where business_id = :businessId"
+        );
+        sqlQuery.SetInt64("businessId", businessId);
+        var deleted = await sqlQuery.ExecuteUpdateAsync(token);
         return deleted;
     }
 

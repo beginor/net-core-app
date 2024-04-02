@@ -3,6 +3,8 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Beginor.AppFx.Core;
+
+using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Models;
 
 namespace Beginor.NetCoreApp.Data.Repositories;
@@ -16,7 +18,7 @@ public partial interface IAppAttachmentRepository : IRepository<AppAttachmentMod
 
     Task<byte[]> GetThumbnailAsync(long id, CancellationToken token = default);
 
-    Task SaveAsync(AppAttachmentModel model, FileInfo file, ClaimsPrincipal user, CancellationToken token = default);
+    Task SaveAsync(AppAttachmentModel model, FileInfo file, ClaimsPrincipal user, Thumbnail? thumbnail = null, CancellationToken token = default);
 
     string GetAttachmentStorageDirectory();
 
