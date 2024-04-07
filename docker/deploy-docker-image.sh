@@ -9,5 +9,6 @@ docker tag beginor/net-core-app 127.0.0.1:5000/beginor/net-core-app \
 # Deploy to server
 ssh ubuntu@127.0.0.1 -t '
 cd /opt/docker/net-core-app
-docker compose up -d --pull=always
+docker compose pull
+docker compose up -d
 '
