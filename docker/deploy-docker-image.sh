@@ -1,11 +1,16 @@
 #!/bin/bash -e
+
+REGISTRY="127.0.0.1:5000"
+IMAGE="beginor/net-core-app"
+TAG=$(date +"%Y%m%d%H%M%S")
+
 # push images to registry
-docker tag beginor/net-core-app 127.0.0.1:5000/beginor/net-core-app \
-  && docker push 127.0.0.1:5000/beginor/net-core-app \
-  && docker rmi 127.0.0.1:5000/beginor/net-core-app \
-  && docker tag beginor/net-core-app 127.0.0.1:5000/beginor/net-core-app:$(date +%Y%m%d) \
-  && docker push 127.0.0.1:5000/beginor/net-core-app:$(date +%Y%m%d) \
-  && docker rmi 127.0.0.1:5000/beginor/net-core-app:$(date +%Y%m%d)
+docker tag $IMAGE $REGISTRY/$IMAGE \
+  && docker push $REGISTRY/$IMAGE \
+  && docker rmi $REGISTRY/$IMAGE \
+  && docker tag $IMAGE $REGISTRY/$IMAGE:$TAG \
+  && docker push $REGISTRY/$IMAGE:$TAG \
+  && docker rmi $REGISTRY/$IMAGE:$TAG
 # Deploy to server
 ssh ubuntu@127.0.0.1 -t '
 cd /opt/docker/net-core-app
