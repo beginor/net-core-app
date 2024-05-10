@@ -8,20 +8,20 @@ fi
 echo "Target runtime id is $1"
 rm -rf dist
 # Build server api image
-dotnet publish -r $1 --self-contained --configuration Release \
-  -p:PublishSingleFile=true \
-  -p:PublishTrimmed=false \
-  -p:SelfContained=true \
-  -p:PublishReadyToRun=false \
-  -p:DebugType=None \
-  -o ./dist \
-  ../src/Entry/Entry.csproj
+dotnet publish ../src/Entry/Entry.csproj \
+  --runtime $1 \
+  --self-contained \
+  --configuration Release \
+  --property:PublishSingleFile=true \
+  --property:PublishTrimmed=false \
+  --property:PublishReadyToRun=false \
+  --property:DebugType=None \
+  --output ./dist
 # modify config file to run in stagging server;
 sed -i.bak "s/ref=\"ConsoleAppender\"/ref=\"RollingFileAppender\"/g" dist/config/log.config
 sed -i.bak "s/DEBUG/ERROR/g" dist/config/log.config
 # $2 is database server.
-if [ ! -z "$2" ]
-then
+if [ ! -z "$2" ]; then
   echo "Change database server to $2 "
   sed -i.bak "s/127\.0\.0\.1/$2/g" dist/config/hibernate.config
 fi
