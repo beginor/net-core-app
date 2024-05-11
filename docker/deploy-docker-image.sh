@@ -11,6 +11,7 @@ docker tag $IMAGE $REGISTRY/$IMAGE \
   && docker tag $IMAGE $REGISTRY/$IMAGE:$TAG \
   && docker push $REGISTRY/$IMAGE:$TAG \
   && docker rmi $REGISTRY/$IMAGE:$TAG
+
 # Deploy to server
 ssh ubuntu@127.0.0.1 -t '
 cd /opt/docker/net-core-app
