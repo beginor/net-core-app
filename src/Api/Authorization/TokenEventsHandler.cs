@@ -24,6 +24,9 @@ public class TokenEventsHandler {
             context.Fail("Token expires!");
             return;
         }
+        if (token.User.LockoutEnabled && token.User.LockoutEnd > DateTimeOffset.Now) {
+            context.Fail("User is locked out!");
+        }
         if (token.Urls != null && token.Urls.Length > 0) {
             var req = context.Request;
             string referer = req.Headers.Referer!;

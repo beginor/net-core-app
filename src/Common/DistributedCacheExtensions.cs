@@ -1,6 +1,6 @@
 using System;
 using System.Text.Json;
-using System.Threading;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 
@@ -25,7 +25,12 @@ public static class DistributedCacheExtensions {
         T value,
         TimeSpan slidingExpiration
     ) {
-        var buffer = JsonSerializer.SerializeToUtf8Bytes(value);
+        var buffer = JsonSerializer.SerializeToUtf8Bytes(
+            value,
+            new JsonSerializerOptions(JsonSerializerOptions.Default) {
+                ReferenceHandler = ReferenceHandler.IgnoreCycles
+            }
+        );
         var options = new DistributedCacheEntryOptions {
             SlidingExpiration = slidingExpiration
         };

@@ -62,7 +62,23 @@ public partial class AppUserTokenRepository : HibernateRepository<AppUserToken, 
         if (entity == null) {
             entity = await Session.Query<AppUserToken>()
                 .Where(tkn => tkn.Value == tokenValue)
-                .FirstOrDefaultAsync();
+                .Select(tk => new AppUserToken {
+                    Id = tk.Id,
+                    Name = tk.Name,
+                    Value = tk.Value,
+                    ExpiresAt = tk.ExpiresAt,
+                    UpdateTime = tk.UpdateTime,
+                    Roles = tk.Roles,
+                    Privileges = tk.Privileges,
+                    Urls = tk.Urls,
+                    User = new AppUser {
+                        Id = tk.User.Id,
+                        UserName = tk.User.UserName,
+                        Email = tk.User.Email,
+                        LockoutEnabled = tk.User.LockoutEnabled,
+                        LockoutEndUnixTimeSeconds = tk.User.LockoutEndUnixTimeSeconds
+                    }
+                }).FirstOrDefaultAsync();
             if (entity != null) {
                 await cache.SetAsync<AppUserToken>(entity.Value!, entity, commonOption.Cache.MemoryExpiration);
             }
