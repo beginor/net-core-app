@@ -27,7 +27,7 @@ public class TokenEventsHandler {
         if (token.User.LockoutEnabled && token.User.LockoutEnd > DateTimeOffset.Now) {
             context.Fail("User is locked out!");
         }
-        if (token.Urls != null && token.Urls.Length > 0) {
+        if (token.Urls is { Length: > 0 }) {
             var req = context.Request;
             string referer = req.Headers.Referer!;
             if (referer.IsNullOrEmpty()) {
@@ -40,21 +40,15 @@ public class TokenEventsHandler {
                 return;
             }
         }
-        var claims = new List<Claim>() {
-            new Claim(ClaimTypes.NameIdentifier, token.Value!),
-            new Claim(ClaimTypes.Name, $"{token.User!.UserName}:{token.Name}")
+        var claims = new List<Claim> {
+            new (ClaimTypes.NameIdentifier, token.Value!),
+            new (ClaimTypes.Name, $"{token.User!.UserName}:{token.Name}")
         };
-        if (token.Privileges != null && token.Privileges.Length > 0) {
-            foreach (var privilege in token.Privileges) {
-                var claim = new Claim(AppClaimTypes.Privilege, privilege);
-                claims.Add(claim);
-            }
+        if (token.Privileges is { Length: > 0 }) {
+            claims.AddRange(token.Privileges.Select(privilege => new Claim(AppClaimTypes.Privilege, privilege)));
         }
-        if (token.Roles != null && token.Roles.Length > 0) {
-            foreach (var role in token.Roles) {
-                var claim = new Claim(ClaimTypes.Role, role);
-                claims.Add(claim);
-            }
+        if (token.Roles is { Length: > 0 }) {
+            claims.AddRange(token.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
         }
         var identity = new ClaimsIdentity(claims, context.Scheme.Name);
         var principal = new ClaimsPrincipal(identity);
