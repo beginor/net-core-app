@@ -40,8 +40,8 @@ public class AppAuditLogStatController : Controller {
     [Authorize("app_audit_logs.read_stat")]
     public async Task<ActionResult<PaginatedResponseModel<AppAuditLogTrafficStatModel>>> StatTraffic() {
         try {
-            var endDate = DateTime.Today;
-            var startDate = endDate.AddDays(-29);
+            var endDate = DateTime.Now;
+            var startDate = DateTime.Today.AddDays(-29);
             var result = await repository.StatTrafficAsync(startDate, endDate);
             return result;
         }
@@ -59,7 +59,7 @@ public class AppAuditLogStatController : Controller {
     public async Task<ActionResult<PaginatedResponseModel<AppAuditLogStatusStatModel>>> StatStatus() {
         try {
             var endDate = DateTime.Now;
-            var startDate = endDate.AddDays(-29);
+            var startDate = DateTime.Today.AddDays(-29);
             var result = await repository.StatStatusAsync(startDate, endDate);
             return result;
         }
@@ -77,7 +77,7 @@ public class AppAuditLogStatController : Controller {
     public async Task<ActionResult<PaginatedResponseModel<AppAuditLogDurationStatModel>>> StatDuration() {
         try {
             var endDate = DateTime.Now;
-            var startDate = endDate.AddDays(-29);
+            var startDate = DateTime.Today.AddDays(-29);
             var result = await repository.StatDurationAsync(startDate, endDate);
             return result;
         }
@@ -95,7 +95,7 @@ public class AppAuditLogStatController : Controller {
     public async Task<ActionResult<PaginatedResponseModel<AppAuditLogUserStatModel>>> StatUser() {
         try {
             var endDate = DateTime.Now;
-            var startDate = endDate.AddDays(-29);
+            var startDate = DateTime.Today.AddDays(-29);
             var result = await repository.StatUserAsync(startDate, endDate);
             return result;
         }
@@ -113,7 +113,7 @@ public class AppAuditLogStatController : Controller {
     public async Task<ActionResult<PaginatedResponseModel<AppAuditLogIpStatModel>>> StatIp() {
         try {
             var endDate = DateTime.Now;
-            var startDate = endDate.AddDays(-29);
+            var startDate = DateTime.Today.AddDays(-29);
             var result = await repository.StatIpAsync(startDate, endDate);
             return result;
         }

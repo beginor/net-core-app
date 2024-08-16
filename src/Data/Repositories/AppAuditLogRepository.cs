@@ -46,20 +46,34 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
     }
 
     public async Task<PaginatedResponseModel<AppAuditLogTrafficStatModel>> StatTrafficAsync(DateTime startDate, DateTime endDate) {
-        var sql = @"
-            with d as (
-                select generate_series(@startDate, @endDate, '1 day') as day
+        var sql = """
+            with logs as (
+              select
+                  logs.start_at as request_date,
+                  count(logs.id) as request_count,
+                  coalesce(avg(logs.duration), 0) as avg_duration,
+                  coalesce(max(logs.duration), 0) as max_duration,
+                  coalesce(min(logs.duration), 0) as min_duration
+              from (
+                  select
+                      l.id, date_trunc('day', l.start_at) as start_at, l.duration
+                  from public.app_audit_logs l
+                  where l.start_at >= @startDate and l.start_at < @endDate
+              ) logs
+              group by request_date
+            ),
+            date_range as (
+              select generate_series(@startDate, date_trunc('day', @endDate), '1 day') as date
             )
             select
-                date_trunc('day', d.day) as request_date,
-                count(l.*) as request_count,
-                coalesce(avg(l.duration), 0) as avg_duration,
-                coalesce(max(l.duration), 0) as max_duration,
-                coalesce(min(l.duration), 0) as min_duration
-            from d
-            left join public.app_audit_logs l on l.start_at::date = d.day
-            group by d.day;
-        ";
+              date_range.date as request_date,
+              logs.request_count,
+              logs.avg_duration,
+              logs.max_duration,
+              logs.min_duration
+            from date_range left join logs on logs.request_date = date_range.date
+            order by date_range.date;
+            """;
         var conn = Session.Connection;
         var trafics = await conn.QueryAsync<AppAuditLogTrafficStatModel>(
             sql, new { startDate, endDate }
