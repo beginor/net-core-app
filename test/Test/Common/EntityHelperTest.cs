@@ -5,7 +5,7 @@ using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 
-namespace Beginor.NetCoreApp.Test;
+namespace Beginor.NetCoreApp.Test.Common;
 
 [TestFixture]
 public class EntityHelperTest {
