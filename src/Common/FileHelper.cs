@@ -5,15 +5,14 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.Processing;
+using SkiaSharp;
 
 namespace Beginor.NetCoreApp.Common;
 
 public static class FileHelper {
 
     private static readonly int thumbSize = 480;
+    private static readonly int thumbQuality = 90;
 
     private static readonly string[] videoExts = { ".mp4", ".webm", ".mkv", ".flv" };
     private static readonly string[] imageExts = { ".png", ".jpg", ".webp", ".gif" };
@@ -34,26 +33,39 @@ public static class FileHelper {
 
     private static Thumbnail GetImageThumbnail(string imageFilePath) {
         using var memStream = new MemoryStream();
-        using var image = Image.Load(imageFilePath);
-        var imageWidth = image.Width;
-        var imageHeight = image.Height;
-        var thumbWidth = image.Width;
-        var thumbHeight = image.Height;
+        using var inputStream = File.OpenRead(imageFilePath);
+        using var skData = SKData.Create(inputStream);
+        using var codec = SKCodec.Create(skData);
+        var imageWidth = codec.Info.Width;
+        var imageHeight = codec.Info.Height;
+        var thumbWidth = imageWidth;
+        var thumbHeight = imageHeight;
+
+        SKBitmap thumbBitmap;
+
         if (imageWidth <= thumbSize && imageHeight <= thumbSize) {
-            image.Save(memStream, new JpegEncoder());
+            thumbBitmap = SKBitmap.Decode(codec);
         }
         else {
             if (imageWidth >= imageHeight) {
                 thumbWidth = thumbSize;
-                thumbHeight = imageHeight * (thumbWidth / imageWidth);
+                thumbHeight = (int)(imageHeight * ((float)thumbWidth / imageWidth));
             }
             else {
                 thumbHeight = thumbSize;
-                thumbWidth = imageWidth * (thumbHeight / imageHeight);
+                thumbWidth = (int)(imageWidth * ((float)thumbHeight / imageHeight));
             }
-            image.Mutate(x => x.Resize(thumbWidth, thumbHeight));
-            image.Save(memStream, new JpegEncoder());
+            var supportedScale = codec.GetScaledDimensions((float)thumbWidth / imageWidth);
+            var nearest = new SKImageInfo(supportedScale.Width, supportedScale.Height);
+            var destBitmap = SKBitmap.Decode(codec, nearest);
+            thumbBitmap = destBitmap.Resize(
+                new SKImageInfo(thumbWidth, thumbHeight),
+                SKFilterQuality.High
+            );
         }
+
+        using var data = thumbBitmap.Encode(SKEncodedImageFormat.Jpeg, thumbQuality);
+        data.SaveTo(memStream);
         return new Thumbnail(imageWidth, imageHeight, thumbWidth, thumbHeight, memStream.GetBuffer());
     }
 
