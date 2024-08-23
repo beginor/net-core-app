@@ -64,11 +64,8 @@ public static class FileHelper {
                 SKFilterQuality.High
             );
         }
-
         using var thumbData = thumbBitmap.Encode(SKEncodedImageFormat.Jpeg, thumbQuality);
-        using var memStream = new MemoryStream();
-        thumbData.SaveTo(memStream);
-        return new Thumbnail(imageWidth, imageHeight, thumbWidth, thumbHeight, memStream.GetBuffer());
+        return new Thumbnail(imageWidth, imageHeight, thumbWidth, thumbHeight, thumbData.ToArray());
     }
 
     public static FileType GetFileType(string fileName) {
