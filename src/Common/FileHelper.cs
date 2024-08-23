@@ -31,20 +31,21 @@ public static class FileHelper {
         return Thumbnail.Empty;
     }
 
-    private static Thumbnail GetImageThumbnail(string imageFilePath) {
-        using var memStream = new MemoryStream();
-        using var inputStream = File.OpenRead(imageFilePath);
-        using var skData = SKData.Create(inputStream);
-        using var codec = SKCodec.Create(skData);
-        var imageWidth = codec.Info.Width;
-        var imageHeight = codec.Info.Height;
+    private static Thumbnail GetImageThumbnail(string imagePath) {
+        using var inputCodec = SKCodec.Create(imagePath);
+        if (inputCodec == null) {
+            throw new FileLoadException($"Unable to load image: {imagePath}.");
+        }
+
+        var imageWidth = inputCodec.Info.Width;
+        var imageHeight = inputCodec.Info.Height;
         var thumbWidth = imageWidth;
         var thumbHeight = imageHeight;
 
         SKBitmap thumbBitmap;
 
         if (imageWidth <= thumbSize && imageHeight <= thumbSize) {
-            thumbBitmap = SKBitmap.Decode(codec);
+            thumbBitmap = SKBitmap.Decode(inputCodec);
         }
         else {
             if (imageWidth >= imageHeight) {
@@ -55,17 +56,18 @@ public static class FileHelper {
                 thumbHeight = thumbSize;
                 thumbWidth = (int)(imageWidth * ((float)thumbHeight / imageHeight));
             }
-            var supportedScale = codec.GetScaledDimensions((float)thumbWidth / imageWidth);
-            var nearest = new SKImageInfo(supportedScale.Width, supportedScale.Height);
-            var destBitmap = SKBitmap.Decode(codec, nearest);
+            var supportedScale = inputCodec.GetScaledDimensions((float)thumbWidth / imageWidth);
+            var nearestSize = new SKImageInfo(supportedScale.Width, supportedScale.Height);
+            var destBitmap = SKBitmap.Decode(inputCodec, nearestSize);
             thumbBitmap = destBitmap.Resize(
                 new SKImageInfo(thumbWidth, thumbHeight),
                 SKFilterQuality.High
             );
         }
 
-        using var data = thumbBitmap.Encode(SKEncodedImageFormat.Jpeg, thumbQuality);
-        data.SaveTo(memStream);
+        using var thumbData = thumbBitmap.Encode(SKEncodedImageFormat.Jpeg, thumbQuality);
+        using var memStream = new MemoryStream();
+        thumbData.SaveTo(memStream);
         return new Thumbnail(imageWidth, imageHeight, thumbWidth, thumbHeight, memStream.GetBuffer());
     }
 
