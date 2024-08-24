@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using SkiaSharp;
 using NUnit.Framework;
 
@@ -8,10 +9,10 @@ using Beginor.NetCoreApp.Common;
 namespace Beginor.NetCoreApp.Test.Common;
 
 [TestFixture]
-public class CaptchaTest {
+public class CaptchaResultTest {
 
     [Test]
-    public void _01_CanGenerateCode() {
+    public async Task _01_CanGenerateCaptcha() {
         var options = new CaptchaOptions {
             CodeLength = 6,
             FontFamily = "",
@@ -20,16 +21,18 @@ public class CaptchaTest {
             EnableNoisePoints = true,
             NoisePointColor = "#00FF00"
         };
-        var target = new CaptchaGenerator(options);
-        var captcha = target.Generate();
+        ICaptchaGenerator target = new CaptchaGenerator(options);
+        var captcha = await target.GenerateAsync();
         Assert.That(captcha.Code, Is.Not.Empty);
         Console.WriteLine(captcha.Code);
-        File.WriteAllBytes("captcha-01.jpeg", captcha.Data);
+        Assert.That(captcha.ContentType, Is.EqualTo("image/jpeg"));
+        await File.WriteAllBytesAsync("captcha-01.jpeg", captcha.Image);
 
-        captcha = target.Generate();
+        captcha = await target.GenerateAsync();
         Assert.That(captcha.Code, Is.Not.Empty);
         Console.WriteLine(captcha.Code);
-        File.WriteAllBytes("captcha-02.jpeg", captcha.Data);
+        Assert.That(captcha.ContentType, Is.EqualTo("image/jpeg"));
+        await File.WriteAllBytesAsync("captcha-02.jpeg", captcha.Image);
     }
 
     [Test]

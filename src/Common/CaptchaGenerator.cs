@@ -2,22 +2,50 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using SkiaSharp;
 
 namespace Beginor.NetCoreApp.Common;
 
-public class CaptchaGenerator(CaptchaOptions options) {
+public interface ICaptchaGenerator {
+    Task<CaptchaResult> GenerateAsync();
+    Task<string> GenerateCodeAsync();
+    Task<byte[]> GenerateImageAsync(string code);
+}
 
-    private static readonly string chars = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ1234567890";
+public class CaptchaGenerator(CaptchaOptions options) : ICaptchaGenerator {
 
-    public Captcha Generate() {
-        var code = GenerateCode(options.CodeLength);
-        var data = GenerateImageData(code);
-        var captcha = new Captcha {
+    private static readonly string allowedChars = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ1234567890";
+
+    public async Task<CaptchaResult> GenerateAsync() {
+        var code = await GenerateCodeAsync();
+        var data = await GenerateImageAsync(code);
+        var captcha = new CaptchaResult {
             Code = code,
-            Data = data,
+            Image = data,
+            ContentType = "image/jpeg"
         };
         return captcha;
+    }
+
+    public Task<string> GenerateCodeAsync() {
+        var random = new Random();
+        var builder = new StringBuilder();
+        for (var i = 0; i < options.CodeLength; i++) {
+            var idx = random.Next(allowedChars.Length);
+            builder.Append(allowedChars[idx]);
+        }
+        return Task.FromResult(builder.ToString());
+    }
+
+    public Task<byte[]> GenerateImageAsync(string code) {
+        using var image = GenerateImage(code);
+        var imageFormat = SKEncodedImageFormat.Jpeg;
+        if (Enum.TryParse<SKEncodedImageFormat>(options.ImageFormat, true, out var format)) {
+            imageFormat = format;
+        }
+        var data = image.Encode(imageFormat, options.ImageQuality).ToArray();
+        return Task.FromResult(data);
     }
 
     private (int newX, int newY) Distortion(int oldX, int oldY, double distortionLevel) {
@@ -38,25 +66,6 @@ public class CaptchaGenerator(CaptchaOptions options) {
         var noisePointCount = (int)(options.ImageWidth * options.ImageHeight * options.NoisePointsPercent);
         return Enumerable.Range(0, noisePointCount)
             .Select(_ => ( random.Next(options.ImageWidth), random.Next(options.ImageHeight)));
-    }
-
-    private string GenerateCode(int length) {
-        var random = new Random();
-        var builder = new StringBuilder();
-        for (var i = 0; i < length; i++) {
-            var idx = random.Next(chars.Length);
-            builder.Append(chars[idx]);
-        }
-        return builder.ToString();
-    }
-
-    private byte[] GenerateImageData(string code) {
-        using var image = GenerateImage(code);
-        var imageFormat = SKEncodedImageFormat.Jpeg;
-        if (Enum.TryParse<SKEncodedImageFormat>(options.ImageFormat, true, out var format)) {
-            imageFormat = format;
-        }
-        return image.Encode(imageFormat, options.ImageQuality).ToArray();
     }
 
     private SKImage GenerateImage(string code) {
@@ -118,9 +127,10 @@ public class CaptchaGenerator(CaptchaOptions options) {
 
 }
 
-public class Captcha {
+public class CaptchaResult {
     public string Code { get; init; } = string.Empty;
-    public byte[] Data { get; init; } = Array.Empty<byte>();
+    public byte[] Image { get; init; } = [];
+    public string ContentType { get; init; } = string.Empty;
 }
 
 public class CaptchaOptions {
@@ -128,7 +138,6 @@ public class CaptchaOptions {
     public string ForegroundColor { get; set; } = "#808080"; //
     public string BackgroundColor { get; set; } = "#F5DEB3";
     public string NoisePointColor { get; set; } = "#D3D3D3";
-
     public int ImageWidth { get; set; } = 120;
     public int ImageHeight { get; set; } = 48;
     public string ImageFormat { get; set; } = "jpeg";
@@ -140,5 +149,4 @@ public class CaptchaOptions {
     public double MaxDistortion { get; set; } = 15.0;
     public bool EnableNoisePoints { get; set; } = true;
     public double NoisePointsPercent { get; set; }  = 0.05;
-
 }
