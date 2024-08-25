@@ -50,9 +50,9 @@ partial class AccountController {
             return Forbid();
         }
         try {
-            model.CurrentPassword = Base64UrlEncoder.Decode(model.CurrentPassword);
-            model.NewPassword = Base64UrlEncoder.Decode(model.NewPassword);
-            model.ConfirmPassword = Base64UrlEncoder.Decode(model.ConfirmPassword);
+            model.CurrentPassword = SafeUrlEncoder.Decode(model.CurrentPassword);
+            model.NewPassword = SafeUrlEncoder.Decode(model.NewPassword);
+            model.ConfirmPassword = SafeUrlEncoder.Decode(model.ConfirmPassword);
             var isValid = await userMgr.CheckPasswordAsync(user, model.CurrentPassword);
             if (!isValid) {
                 return BadRequest("Invalid current password!");

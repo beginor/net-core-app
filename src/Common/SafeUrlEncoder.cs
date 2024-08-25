@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Beginor.NetCoreApp.Common;
 
-public static class Base64UrlEncoder {
+public static class SafeUrlEncoder {
 
     public static string Encode(string input) {
         var bytes = Encoding.UTF8.GetBytes(input);

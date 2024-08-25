@@ -271,8 +271,8 @@ public class UsersController : Controller {
         [FromBody]ResetPasswordModel model
     ) {
         try {
-            model.Password = Base64UrlEncoder.Decode(model.Password);
-            model.ConfirmPassword = Base64UrlEncoder.Decode(model.ConfirmPassword);
+            model.Password = SafeUrlEncoder.Decode(model.Password);
+            model.ConfirmPassword = SafeUrlEncoder.Decode(model.ConfirmPassword);
             var user = await userMgr.FindByIdAsync(id.ToString());
             if (user == null) {
                 return NotFound();
