@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,8 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 public class AppAttachmentController(
     ILogger<AppAttachmentController> logger,
     IAppAttachmentRepository repository,
-    IContentTypeProvider contentTypeProvider
+    IContentTypeProvider contentTypeProvider,
+    AppAttachmentOptions options
 ) : Controller {
 
     protected override void Dispose(bool disposing) {
@@ -40,6 +42,14 @@ public class AppAttachmentController(
             FileName = model.FileName,
             Length = model.Length
         };
+        if (options.MaxLength > 0 && model.Length > options.MaxLength) {
+            return BadRequest(/*"附件太大！"*/);
+        }
+        if (options.Forbidden.Length > 0) {
+            if (options.Forbidden.Any(ext => model.FileName.EndsWith(ext))) {
+                return BadRequest(/*$"禁止上传 {Path.GetExtension(model.FileName)} 文件！"*/);
+            }
+        }
         try {
             var userId = this.GetUserId()!;
             var userTemp = repository.GetAttachmentTempDirectory(userId);
@@ -53,7 +63,7 @@ public class AppAttachmentController(
                         contentType = ct;
                     }
                     else {
-                        contentType = "application/octet-stream";;
+                        contentType = "application/octet-stream";
                     }
                 }
                 var attachmentModel = new AppAttachmentModel {

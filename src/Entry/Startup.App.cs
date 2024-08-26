@@ -12,8 +12,8 @@ partial class Startup {
 
     private void ConfigureAppServices(IServiceCollection services, IWebHostEnvironment env) {
         var commonOption = new CommonOption();
-        var section = config.GetSection("common");
-        section.Bind(commonOption);
+        var commonSection = config.GetSection("common");
+        commonSection.Bind(commonOption);
         services.AddSingleton(commonOption);
         var cacheFolder = Path.Combine(env.ContentRootPath, commonOption.Cache.Directory);
         if (!Directory.Exists(cacheFolder)) {
@@ -31,21 +31,17 @@ partial class Startup {
             t => t.Name.EndsWith("Repository"),
             ServiceLifetime.Scoped
         );
-        var captchaOptions = new CaptchaOptions {
-            CodeLength = 6,
-            ImageWidth = 118,
-            ImageHeight = 38,
-            ImageFormat = "jpeg",
-            FontFamily = "sans-serif",
-            BackgroundColor = "#F5DEB3",
-            ForegroundColor = "#808080",
-            NoisePointColor = "#FFCC00",
-            FontSize = 24,
-            MaxDistortion = 8,
-            MinDistortion = 3
-        };
+        // captcha
+        var captchaOptions = new CaptchaOptions();
+        var captchaSection = config.GetSection("captcha");
+        captchaSection.Bind(captchaOptions);
         services.AddSingleton(captchaOptions);
         services.AddSingleton<ICaptchaGenerator, CaptchaGenerator>();
+        // attachment
+        var attachmentOptions = new AppAttachmentOptions();
+        var attachmentSection = config.GetSection("attachment");
+        attachmentSection.Bind(attachmentOptions);
+        services.AddSingleton(attachmentOptions);
     }
 
     private static void ConfigureApp(WebApplication app, IWebHostEnvironment env) {

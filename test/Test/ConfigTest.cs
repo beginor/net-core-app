@@ -99,4 +99,19 @@ public class ConfigTest : BaseTest<IConfiguration> {
         Console.WriteLine(option.Cache.Directory);
     }
 
+    [Test]
+    public void _09_CanResolveCaptchaOptions() {
+        var option = ServiceProvider.GetService<CaptchaOptions>();
+        Assert.That(option, Is.Not.Null);
+        Assert.That(option.ImageHeight, Is.EqualTo(38));
+    }
+
+    [Test]
+    public void _10_CanResolveAttachmentOptions() {
+        var option = ServiceProvider.GetService<AppAttachmentOptions>();
+        Assert.That(option, Is.Not.Null);
+        Assert.That(option.Forbidden.Length, Is.GreaterThan(0));
+        Assert.That(option.MaxLength, Is.EqualTo(10485760));
+    }
+
 }
