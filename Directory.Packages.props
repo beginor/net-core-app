@@ -33,7 +33,7 @@
     <PackageVersion Include="Npgsql" Version="8.0.3" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.7.1" />
     <PackageVersion Include="SkiaSharp" Version="2.88.8" />
-    <PackageVersion Include="SkiaSharp.NativeAssets.Linux" Version="2.88.6" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.6" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.0" />
     <PackageVersion Include="NUnit" Version="4.1.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />

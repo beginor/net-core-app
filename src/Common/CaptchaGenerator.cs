@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
 using SkiaSharp;
+using Beginor.AppFx.Core;
 
 namespace Beginor.NetCoreApp.Common;
 
@@ -11,14 +13,29 @@ public interface ICaptchaGenerator {
     Task<CaptchaResult> GenerateAsync();
     Task<string> GenerateCodeAsync();
     Task<byte[]> GenerateImageAsync(string code);
+    Task<bool> ValidateCodeAsync(string code);
 }
 
-public class CaptchaGenerator(CaptchaOptions options) : ICaptchaGenerator {
+public class CaptchaGenerator(
+    CaptchaOptions options,
+    IDistributedCache cache
+) : ICaptchaGenerator {
 
     private static readonly string allowedChars = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ1234567890";
 
+    private static readonly string KeyFormat = $"{typeof(CaptchaGenerator).FullName}_{{0}}";
+
     public async Task<CaptchaResult> GenerateAsync() {
         var code = await GenerateCodeAsync();
+        var key = string.Format(KeyFormat, code.ToLower());
+        Console.WriteLine($"key: {key}, code: {code}");
+        await cache.SetStringAsync(
+            key,
+            code,
+            new DistributedCacheEntryOptions {
+                AbsoluteExpirationRelativeToNow = options.Expiration
+            }
+        );
         var data = await GenerateImageAsync(code);
         var captcha = new CaptchaResult {
             Code = code,
@@ -46,6 +63,19 @@ public class CaptchaGenerator(CaptchaOptions options) : ICaptchaGenerator {
         }
         var data = image.Encode(imageFormat, options.ImageQuality).ToArray();
         return Task.FromResult(data);
+    }
+
+    public async Task<bool> ValidateCodeAsync(string code) {
+        var key = string.Format(KeyFormat, code.ToLower());
+        Console.WriteLine($"key: {key}");
+        var cachedValue = await cache.GetStringAsync(key);
+        Console.WriteLine($"cachedValue: {cachedValue}");
+        if (string.IsNullOrEmpty(cachedValue)) {
+            return false;
+        }
+        var isValid = code.EqualsOrdinalIgnoreCase(cachedValue);
+        await cache.RemoveAsync(key);
+        return isValid;
     }
 
     private (int newX, int newY) Distortion(int oldX, int oldY, double distortionLevel) {
@@ -149,4 +179,5 @@ public class CaptchaOptions {
     public double MaxDistortion { get; set; } = 15.0;
     public bool EnableNoisePoints { get; set; } = true;
     public double NoisePointsPercent { get; set; }  = 0.05;
+    public TimeSpan Expiration { get; set; } = TimeSpan.FromMinutes(1);
 }

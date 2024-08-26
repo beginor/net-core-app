@@ -4,13 +4,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Beginor.AppFx.DependencyInjection;
+using Beginor.NetCoreApp.Common;
 
 namespace Beginor.NetCoreApp.Entry;
 
 partial class Startup {
 
     private void ConfigureAppServices(IServiceCollection services, IWebHostEnvironment env) {
-        var commonOption = new Beginor.NetCoreApp.Common.CommonOption();
+        var commonOption = new CommonOption();
         var section = config.GetSection("common");
         section.Bind(commonOption);
         services.AddSingleton(commonOption);
@@ -26,10 +27,25 @@ partial class Startup {
         }
         services.AddDistributedMemoryCache();
         services.AddServiceWithDefaultImplements(
-            typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly,
+            typeof(Data.ModelMapping).Assembly,
             t => t.Name.EndsWith("Repository"),
             ServiceLifetime.Scoped
         );
+        var captchaOptions = new CaptchaOptions {
+            CodeLength = 6,
+            ImageWidth = 118,
+            ImageHeight = 38,
+            ImageFormat = "jpeg",
+            FontFamily = "sans-serif",
+            BackgroundColor = "#F5DEB3",
+            ForegroundColor = "#808080",
+            NoisePointColor = "#FFCC00",
+            FontSize = 24,
+            MaxDistortion = 8,
+            MinDistortion = 3
+        };
+        services.AddSingleton(captchaOptions);
+        services.AddSingleton<ICaptchaGenerator, CaptchaGenerator>();
     }
 
     private static void ConfigureApp(WebApplication app, IWebHostEnvironment env) {

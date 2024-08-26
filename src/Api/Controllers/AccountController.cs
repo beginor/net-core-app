@@ -19,49 +19,24 @@ using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
-using Base64UrlEncoder = Beginor.NetCoreApp.Common.Base64UrlEncoder;
 
 namespace Beginor.NetCoreApp.Api.Controllers;
 
 /// <summary>账户 API</summary>
 [Route("api/account")]
 [ApiController]
-public partial class AccountController : Controller {
-
-    private ILogger<AccountController> logger;
-    private UserManager<AppUser> userMgr;
-    private RoleManager<AppRole> roleMgr;
-    private JwtOption jwt;
-    private IAppNavItemRepository navRepo;
-    private IDistributedCache cache;
-    private IAppUserTokenRepository userTokenRepo;
-    private UsersController usersCtrl;
-    private IAppPrivilegeRepository privilegeRepo;
-    private CommonOption commonOption;
-
-    public AccountController(
-        ILogger<AccountController> logger,
-        UserManager<AppUser> userMgr,
-        RoleManager<AppRole> roleMgr,
-        IOptionsSnapshot<JwtOption> jwt,
-        IAppNavItemRepository navRepo,
-        IDistributedCache cache,
-        IAppUserTokenRepository userTokenRepo,
-        UsersController usersCtrl,
-        IAppPrivilegeRepository privilegeRepo,
-        CommonOption commonOption
-    ) {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
-        this.roleMgr = roleMgr ?? throw new ArgumentNullException(nameof(roleMgr));
-        this.jwt = jwt.Value ?? throw new ArgumentNullException(nameof(jwt));
-        this.navRepo = navRepo ?? throw new ArgumentNullException(nameof(navRepo));
-        this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
-        this.userTokenRepo = userTokenRepo ?? throw new ArgumentNullException(nameof(userTokenRepo));
-        this.usersCtrl = usersCtrl ?? throw new ArgumentNullException(nameof(usersCtrl));
-        this.privilegeRepo = privilegeRepo ?? throw new ArgumentNullException(nameof(privilegeRepo));
-        this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
-    }
+public partial class AccountController(
+    ILogger<AccountController> logger,
+    UserManager<AppUser> userMgr,
+    RoleManager<AppRole> roleMgr,
+    IOptionsSnapshot<JwtOption> jwt,
+    IAppNavItemRepository navRepo,
+    IDistributedCache cache,
+    IAppUserTokenRepository userTokenRepo,
+    UsersController usersCtrl,
+    IAppPrivilegeRepository privilegeRepo,
+    ICaptchaGenerator captcha
+) : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
@@ -142,8 +117,12 @@ public partial class AccountController : Controller {
         [FromBody]AccountLoginModel model
     ) {
         try {
-            model.UserName = Base64UrlEncoder.Decode(model.UserName);
-            model.Password = Base64UrlEncoder.Decode(model.Password);
+            model.UserName = SafeUrlEncoder.Decode(model.UserName);
+            model.Password = SafeUrlEncoder.Decode(model.Password);
+            var validCaptcha = await captcha.ValidateCodeAsync(model.Captcha);
+            if (!validCaptcha) {
+                return BadRequest("验证码错误，请重试！");
+            }
             var user = await userMgr.FindByNameAsync(model.UserName);
             if (user == null) {
                 return BadRequest($"登录失败， 请重试!");
@@ -209,9 +188,9 @@ public partial class AccountController : Controller {
         var handler = new JwtSecurityTokenHandler();
         var descriptor = new SecurityTokenDescriptor {
             Subject = identity,
-            Expires = DateTime.UtcNow.Add(jwt.ExpireTimeSpan),
+            Expires = DateTime.UtcNow.Add(jwt.Value.ExpireTimeSpan),
             SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(jwt.SecretKey),
+                new SymmetricSecurityKey(jwt.Value.SecretKey),
                 SecurityAlgorithms.HmacSha256Signature
             )
         };
@@ -252,7 +231,7 @@ public partial class AccountController : Controller {
                     claimsToCache.Add(roleClaim);
                 }
             }
-            await cache.SetUserClaimsAsync(user.Id, claimsToCache.ToArray(), jwt.ExpireTimeSpan);
+            await cache.SetUserClaimsAsync(user.Id, claimsToCache.ToArray(), jwt.Value.ExpireTimeSpan);
         }
         return identity;
     }
@@ -290,7 +269,7 @@ public partial class AccountController : Controller {
                 }
             }
         }
-        await cache.SetUserClaimsAsync("anonymous", claimsToCache.ToArray(), jwt.ExpireTimeSpan);
+        await cache.SetUserClaimsAsync("anonymous", claimsToCache.ToArray(), jwt.Value.ExpireTimeSpan);
         return identity;
     }
 }

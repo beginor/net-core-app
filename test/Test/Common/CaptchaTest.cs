@@ -5,11 +5,13 @@ using SkiaSharp;
 using NUnit.Framework;
 
 using Beginor.NetCoreApp.Common;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Beginor.NetCoreApp.Test.Common;
 
 [TestFixture]
-public class CaptchaResultTest {
+public class CaptchaResultTest : BaseTest {
 
     [Test]
     public async Task _01_CanGenerateCaptcha() {
@@ -21,7 +23,8 @@ public class CaptchaResultTest {
             EnableNoisePoints = true,
             NoisePointColor = "#00FF00"
         };
-        ICaptchaGenerator target = new CaptchaGenerator(options);
+        var cache = ServiceProvider.GetService<IDistributedCache>();
+        ICaptchaGenerator target = new CaptchaGenerator(options, cache);
         var captcha = await target.GenerateAsync();
         Assert.That(captcha.Code, Is.Not.Empty);
         Console.WriteLine(captcha.Code);
