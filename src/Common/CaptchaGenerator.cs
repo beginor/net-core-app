@@ -28,7 +28,6 @@ public class CaptchaGenerator(
     public async Task<CaptchaResult> GenerateAsync() {
         var code = await GenerateCodeAsync();
         var key = string.Format(KeyFormat, code.ToLower());
-        Console.WriteLine($"key: {key}, code: {code}");
         await cache.SetStringAsync(
             key,
             code,
@@ -67,9 +66,7 @@ public class CaptchaGenerator(
 
     public async Task<bool> ValidateCodeAsync(string code) {
         var key = string.Format(KeyFormat, code.ToLower());
-        Console.WriteLine($"key: {key}");
         var cachedValue = await cache.GetStringAsync(key);
-        Console.WriteLine($"cachedValue: {cachedValue}");
         if (string.IsNullOrEmpty(cachedValue)) {
             return false;
         }
