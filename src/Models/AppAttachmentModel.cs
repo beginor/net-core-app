@@ -37,8 +37,6 @@ public partial class AppAttachmentSearchModel : PaginatedRequestModel {
 public class AttachmentUploadModel {
     /// <summary>文件名</summary>
     public string FileName { get; set; } = string.Empty;
-    /// <summary>内容类型（HTTP Content Type）</summary>
-    public string ContentType { get; set; } = string.Empty;
     /// <summary>附件大小</summary>
     public long Length { get; set; } = 0;
     /// <summary>附件所属的业务ID</summary>
