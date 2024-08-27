@@ -23,4 +23,8 @@
     <ProjectReference Include="..\WeChat\WeChat.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Condition="$(RuntimeIdentifier.StartsWith('linux-'))" />
+  </ItemGroup>
+
 </Project>

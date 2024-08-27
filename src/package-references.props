@@ -24,7 +24,6 @@
     <PackageReference Include="Npgsql" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="SkiaSharp" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Condition="$(RuntimeIdentifier.StartsWith('linux-'))" />
   </ItemGroup>
 
 </Project>
