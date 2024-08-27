@@ -42,8 +42,11 @@ public class AppAttachmentController(
             FileName = model.FileName,
             Length = model.Length
         };
-        if (options.MaxLength > 0 && model.Length > options.MaxLength) {
+        if (options.MaxSize > 0 && model.Length > options.MaxSize) {
             return BadRequest(/*"附件太大！"*/);
+        }
+        if (options.MaxBlockSize > 0 && model.Content.Length > options.MaxBlockSize) {
+            return BadRequest(/*"附件超过允许的分块大小！"*/);
         }
         if (options.Forbidden.Length > 0) {
             if (options.Forbidden.Any(ext => model.FileName.EndsWith(ext))) {
@@ -57,14 +60,9 @@ public class AppAttachmentController(
             var fileInfo = new FileInfo(tmpPath);
             await FileHelper.PartialSaveFile(model.Length, fileInfo, model.Offset, model.Content);
             if (model.Length <= model.Offset + model.Content.Length) {
-                var contentType = model.ContentType;
-                if (contentType.IsNullOrEmpty()) {
-                    if (contentTypeProvider.TryGetContentType(model.FileName, out var ct)) {
-                        contentType = ct;
-                    }
-                    else {
-                        contentType = "application/octet-stream";
-                    }
+                var contentType = "application/octet-stream";
+                if (contentTypeProvider.TryGetContentType(model.FileName, out var ct)) {
+                    contentType = ct;
                 }
                 var attachmentModel = new AppAttachmentModel {
                     FileName = model.FileName,

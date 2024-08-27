@@ -111,7 +111,8 @@ public class ConfigTest : BaseTest<IConfiguration> {
         var option = ServiceProvider.GetService<AppAttachmentOptions>();
         Assert.That(option, Is.Not.Null);
         Assert.That(option.Forbidden.Length, Is.GreaterThan(0));
-        Assert.That(option.MaxLength, Is.EqualTo(10485760));
+        Assert.That(option.MaxSize, Is.GreaterThan(0));
+        Assert.That(option.MaxBlockSize, Is.GreaterThan(0));
     }
 
 }
