@@ -1,12 +1,12 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.DependencyInjection;
 using SkiaSharp;
 using NUnit.Framework;
 
 using Beginor.NetCoreApp.Common;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Beginor.NetCoreApp.Test.Common;
 
