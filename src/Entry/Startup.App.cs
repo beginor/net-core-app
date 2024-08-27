@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Beginor.AppFx.DependencyInjection;
 using Beginor.NetCoreApp.Common;
+using Beginor.NetCoreApp.Data;
 
 namespace Beginor.NetCoreApp.Entry;
 
@@ -27,7 +28,7 @@ partial class Startup {
         }
         services.AddDistributedMemoryCache();
         services.AddServiceWithDefaultImplements(
-            typeof(Data.ModelMapping).Assembly,
+            typeof(ModelMapping).Assembly,
             t => t.Name.EndsWith("Repository"),
             ServiceLifetime.Scoped
         );
