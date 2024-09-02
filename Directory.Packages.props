@@ -35,7 +35,7 @@
     <PackageVersion Include="SkiaSharp" Version="2.88.8" />
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.8" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.0" />
-    <PackageVersion Include="NUnit" Version="4.2.1" />
+    <PackageVersion Include="NUnit" Version="4.2.2" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
   </ItemGroup>
 </Project>
