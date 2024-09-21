@@ -1,6 +1,4 @@
-using System;
 using Beginor.AppFx.Core;
-using NHibernate.Extensions.NpgSql;
 using NHibernate.Mapping.Attributes;
 
 #nullable disable
@@ -28,7 +26,7 @@ public partial class AppStorage : BaseEntity<long> {
     public virtual bool Readonly { get; set; }
 
     /// <summary>可访问此存储的角色</summary>
-    [Property(Name = "Roles", Column = "roles", TypeType = typeof(StringArrayType), NotNull = false)]
+    [Property(Name = "Roles", Column = "roles", Type = "string[]", NotNull = false)]
     public virtual string[] Roles { get; set; }
 }
 

@@ -1,7 +1,6 @@
 using System;
 using System.Text.Json;
 using Beginor.AppFx.Core;
-using NHibernate.Extensions.NpgSql;
 using NHibernate.Mapping.Attributes;
 
 #nullable disable
@@ -17,6 +16,6 @@ public partial class AppJsonData : BaseEntity<long> {
     public override long Id { get { return base.Id; } set { base.Id = value; } }
 
     /// <summary>json值</summary>
-    [Property(Name = "Value", Column = "value", TypeType = typeof(JsonbType), NotNull = true)]
+    [Property(Name = "Value", Column = "value", Type = "jsonb", NotNull = true)]
     public virtual JsonElement Value { get; set; }
 }

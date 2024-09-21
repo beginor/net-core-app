@@ -20,6 +20,7 @@ public class AccountLoginModel {
     /// <summary>保持登录</summary>
     public bool IsPersistent { get; set; }
 
+    /// <summary>验证码</summary>
     [Required(ErrorMessage = "验证码必须填写！")]
     public string Captcha { get; set; }
 }

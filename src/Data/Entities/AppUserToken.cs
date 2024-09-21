@@ -1,6 +1,5 @@
 using System;
 using Beginor.AppFx.Core;
-using NHibernate.Extensions.NpgSql;
 using NHibernate.Mapping.Attributes;
 
 #nullable disable
@@ -28,22 +27,22 @@ public partial class AppUserToken : BaseEntity<long> {
     public virtual string Value { get; set; }
 
     /// <summary>凭证角色</summary>
-    [Property(Name = "Roles", Column = "roles", TypeType = typeof(StringArrayType), NotNull = false)]
+    [Property(Name = "Roles", Column = "roles", Type = "string[]", NotNull = false)]
     public virtual string[] Roles { get; set; }
 
     /// <summary>凭证权限</summary>
-    [Property(Name = "Privileges", Column = "privileges", TypeType = typeof(StringArrayType), NotNull = false)]
+    [Property(Name = "Privileges", Column = "privileges", Type = "string[]", NotNull = false)]
     public virtual string[] Privileges { get; set; }
 
     /// <summary>允许的 url 地址</summary>
-    [Property(Name = "Urls", Column = "urls", TypeType = typeof(StringArrayType), NotNull = false)]
+    [Property(Name = "Urls", Column = "urls", Type = "string[]", NotNull = false)]
     public virtual string[] Urls { get; set; }
 
     /// <summary>过期时间</summary>
-    [Property(Name = "ExpiresAt", Column = "expires_at", TypeType = typeof(NHibernate.Extensions.NpgSql.TimeStampType), NotNull = false)]
+    [Property(Name = "ExpiresAt", Column = "expires_at", Type = "timestamp", NotNull = false)]
     public virtual DateTime? ExpiresAt { get; set; }
 
     /// <summary>更新时间</summary>
-    [Property(Name = "UpdateTime", Column = "update_time", TypeType = typeof(NHibernate.Extensions.NpgSql.TimeStampType), NotNull = true)]
+    [Property(Name = "UpdateTime", Column = "update_time", Type = "timestamp", NotNull = true)]
     public virtual DateTime UpdateTime { get; set; }
 }

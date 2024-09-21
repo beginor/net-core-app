@@ -1,6 +1,5 @@
 using System;
 using Beginor.AppFx.Core;
-using NHibernate.Extensions.NpgSql;
 using NHibernate.Mapping.Attributes;
 
 #nullable disable
@@ -39,19 +38,19 @@ public partial class AppNavItem : BaseEntity<long> {
     [ManyToOne(Name = "Creator", Column = "creator_id", ClassType = typeof(AppUser), NotFound = NotFoundMode.Ignore)]
     public virtual AppUser Creator { get; set; }
     /// <summary>创建时间</summary>
-    [Property(Name = "CreatedAt", Column = "created_at", TypeType = typeof(NHibernate.Extensions.NpgSql.TimeStampType), NotNull = true)]
+    [Property(Name = "CreatedAt", Column = "created_at", Type = "timestamp", NotNull = true)]
     public virtual DateTime CreatedAt { get; set; }
     /// <summary>更新者ID</summary>
     [ManyToOne(Name = "Updater", Column = "updater_id", ClassType = typeof(AppUser), NotFound = NotFoundMode.Ignore)]
     public virtual AppUser Updater { get; set; }
     /// <summary>更新时间</summary>
-    [Property(Name = "UpdatedAt", Column = "updated_at", TypeType = typeof(NHibernate.Extensions.NpgSql.TimeStampType), NotNull = true)]
+    [Property(Name = "UpdatedAt", Column = "updated_at", Type = "timestamp", NotNull = true)]
     public virtual DateTime UpdatedAt { get; set; }
     /// <summary>是否删除</summary>
     [Property(Name = "IsDeleted", Column = "is_deleted", Type = "bool", NotNull = true)]
     public virtual bool IsDeleted { get; set; }
     /// <summary>菜单项的角色</summary>
-    [Property(Name = "Roles", Column = "roles", TypeType = typeof(StringArrayType), NotNull = false)]
+    [Property(Name = "Roles", Column = "roles", Type = "string[]", NotNull = false)]
     public virtual string[] Roles { get; set; }
     /// <summary>导航目标窗口</summary>
     [Property(Name = "Target", Column = "target", Type = "string", NotNull = false, Length = 16)]

@@ -13,7 +13,7 @@ public partial class AppLog : BaseEntity<long> {
     [Id(Name = nameof(Id), Column = "id", Type = "long", Generator = "trigger-identity")]
     public override long Id { get { return base.Id; } set { base.Id = value; } }
     /// <summary>创建时间</summary>
-    [Property(Name = nameof(CreatedAt), Column = "created_at", TypeType = typeof(NHibernate.Extensions.NpgSql.TimeStampType), NotNull = true)]
+    [Property(Name = nameof(CreatedAt), Column = "created_at", Type = "timestamp", NotNull = true)]
     public virtual DateTime CreatedAt { get; set; }
     /// <summary>线程ID</summary>
     [Property(Name = nameof(Thread), Column = "thread", Type = "string", NotNull = true, Length = 8)]

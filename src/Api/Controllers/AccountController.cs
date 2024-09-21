@@ -94,7 +94,7 @@ public partial class AccountController(
             return anonymousInfo;
         }
         var userName = identity.Name;
-        var idx = userName.IndexOf(':');
+        var idx = userName!.IndexOf(':');
         if (idx > -1) {
             userName = userName.Substring(0, idx);
         }
@@ -174,12 +174,12 @@ public partial class AccountController(
             .Where(c => c.Type == ClaimTypes.Role)
             .Select(c => c.Value)
             .Distinct()
-            .ToDictionary(r => r, r => true);
+            .ToDictionary(r => r, _ => true);
         info.Privileges = cachedClaims
             .Where(c => c.Type == AppClaimTypes.Privilege)
             .Select(c => c.Value)
             .Distinct()
-            .ToDictionary(p => p, p => true);
+            .ToDictionary(p => p, _ => true);
         info.Token = CreateJwtToken(user);
         return info;
     }

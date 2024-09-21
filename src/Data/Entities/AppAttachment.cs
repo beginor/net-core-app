@@ -17,7 +17,7 @@ public partial class AppAttachment : BaseEntity<long> {
     [Property(Name = "ContentType", Column = "content_type", Type = "string", NotNull = true, Length = 64)]
     public virtual string ContentType { get; set; }
     /// <summary>创建时间</summary>
-    [Property(Name = "CreatedAt", Column = "created_at", TypeType = typeof(NHibernate.Extensions.NpgSql.TimeStampType), NotNull = true)]
+    [Property(Name = "CreatedAt", Column = "created_at", Type = "timestamp", NotNull = true)]
     public virtual DateTime CreatedAt { get; set; }
     /// <summary>创建附件的用户</summary>
     [ManyToOne(Name = "Creator", Column = "creator_id", ClassType = typeof(AppUser), NotFound = NotFoundMode.Ignore)]

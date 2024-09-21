@@ -82,7 +82,7 @@ public class AppAttachmentRepositoryTest : BaseTest<IAppAttachmentRepository> {
     }
 
     [Test]
-    public async Task _05_CanCreateFolderForAttachment() {
+    public void _05_CanCreateFolderForAttachment() {
         var commonOption = ServiceProvider.GetService<CommonOption>();
         Assert.That(commonOption, Is.Not.Null);
         var today = DateTime.Today;

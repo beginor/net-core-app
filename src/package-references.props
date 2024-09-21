@@ -19,7 +19,7 @@
     <PackageReference Include="NHibernate" />
     <PackageReference Include="NHibernate.Mapping.Attributes" />
     <PackageReference Include="NHibernate.AspNetCore.Identity" />
-    <PackageReference Include="NHibernate.Extensions.NpgSql" />
+    <PackageReference Include="NHibernate.Extensions.Npgsql" />
     <PackageReference Include="NHibernate.NetCore" />
     <PackageReference Include="Npgsql" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
