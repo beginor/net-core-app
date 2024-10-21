@@ -23,11 +23,26 @@ public partial class AppJsonDataRepository : HibernateRepository<AppJsonData, Ap
         AppJsonDataSearchModel model
     ) {
         var query = Session.Query<AppJsonData>();
-        // todo: 添加自定义查询；
+        var businessId = model.BusinessId;
+        if (businessId > 0) {
+            query = query.Where(x => x.BusinessId == businessId);
+        }
+        var name = model.Name;
+        if (!string.IsNullOrEmpty(name)) {
+            query = query.Where(x => x.Name.Contains(name));
+        }
         var total = await query.LongCountAsync();
-        var data = await query.OrderByDescending(e => e.Id)
+        var data = await query.Select(x => new AppJsonData {
+                Id = x.Id,
+                BusinessId = x.BusinessId,
+                Name = x.Name,
+            }).OrderByDescending(e => e.Id)
             .Skip(model.Skip).Take(model.Take)
             .ToListAsync();
+        var emptyElement = JsonDocument.Parse("{}").RootElement;
+        foreach (var item in data) {
+            item.Value = emptyElement;
+        }
         return new PaginatedResponseModel<AppJsonDataModel> {
             Total = total,
             Data = Mapper.Map<IList<AppJsonDataModel>>(data),
@@ -36,16 +51,4 @@ public partial class AppJsonDataRepository : HibernateRepository<AppJsonData, Ap
         };
     }
 
-    public async Task<JsonElement> GetValueByIdAsync(long id) {
-        return await Session.Query<AppJsonData>()
-            .Where(e => e.Id == id)
-            .Select(e => e.Value)
-            .FirstOrDefaultAsync();
-    }
-
-    public async Task SaveValueAsync(long id, JsonElement value) {
-        var entity = new AppJsonData { Id = id, Value = value };
-        await Session.SaveOrUpdateAsync(entity);
-        Session.Flush();
-    }
 }

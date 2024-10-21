@@ -34,6 +34,48 @@ public class AppJsonDataController : Controller {
         base.Dispose(disposing);
     }
 
+    /// <summary>搜索 Json 数据 ， 分页返回结果</summary>
+    /// <response code="200">成功, 分页返回结果</response>
+    /// <response code="500">服务器内部错误</response>
+    [HttpGet("")]
+    [Authorize("app_json_data.read")]
+    public async Task<ActionResult<PaginatedResponseModel<AppJsonDataModel>>> Search(
+        [FromQuery]AppJsonDataSearchModel model
+    ) {
+        var businessId = model.BusinessId;
+        var name = model.Name;
+        // 必须提供 businessId 或者 Name 参数， 否则不允许查询；
+        if (businessId == 0L && string.IsNullOrEmpty(name)) {
+            return BadRequest();
+        }
+        try {
+            var result = await repository.SearchAsync(model);
+            return result;
+        }
+        catch (Exception ex) {
+            logger.LogError(ex, $"Can not search app_json_data with {model.ToJson()}.");
+            return this.InternalServerError(ex);
+        }
+    }
+
+    /// <summary> 创建 Json 数据  </summary>
+    /// <response code="200">创建 Json 数据 成功</response>
+    /// <response code="500">服务器内部错误</response>
+    [HttpPost("")]
+    [Authorize("app_json_data.create")]
+    public async Task<ActionResult<AppJsonDataModel>> Create(
+        [FromBody]AppJsonDataModel model
+    ) {
+        try {
+            await repository.SaveAsync(model);
+            return model;
+        }
+        catch (Exception ex) {
+            logger.LogError(ex, $"Can not save {model.ToJson()} to app_json_data.");
+            return this.InternalServerError(ex);
+        }
+    }
+
     /// <summary>删除 json 数据 </summary>
     /// <response code="204">删除 json 数据 成功</response>
     /// <response code="500">服务器内部错误</response>
@@ -61,11 +103,11 @@ public class AppJsonDataController : Controller {
     [Authorize("app_json_data.read_by_id")]
     public async Task<ActionResult> GetById(long id) {
         try {
-            var value = await repository.GetValueByIdAsync(id);
-            if (value.ValueKind == JsonValueKind.Undefined) {
+            var model = await repository.GetByIdAsync(id);
+            if (model == null || model.Value.ValueKind == JsonValueKind.Undefined) {
                 return NotFound();
             }
-            return Ok(value);
+            return Ok(model.Value);
         }
         catch (Exception ex) {
             logger.LogError(ex, $"Can not get app_json_data by id {id}.");
@@ -83,14 +125,14 @@ public class AppJsonDataController : Controller {
     [Authorize("app_json_data.update")]
     public async Task<ActionResult> Update(
         [FromRoute]long id,
-        [FromBody]JsonElement model
+        [FromBody]AppJsonDataModel model
     ) {
         try {
             var exists = await repository.ExistAsync(id);
             if (!exists) {
                 return NotFound();
             }
-            await repository.SaveValueAsync(id, model);
+            await repository.UpdateAsync(id, model);
             return Ok();
         }
         catch (Exception ex) {

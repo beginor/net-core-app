@@ -17,7 +17,8 @@ public class ModelMapping : AutoMapper.Profile {
             .ReverseMap()
             .ForMember(dest => dest.UserName, map => map.Ignore());
         CreateMap<AppRole, StringIdNameEntity>().ReverseMap();
-        // 添加其它的映射
+        CreateMap<AppJsonData, AppJsonDataModel>()
+            .ReverseMap();
         CreateMap<AppAttachment, AppAttachmentModel>()
             .ForMember(dest => dest.CreatorId, map => map.MapFrom(src => src.Creator.Id))
             .ForMember(dest => dest.CreatorName, map => map.MapFrom(src => src.Creator.DisplayName))

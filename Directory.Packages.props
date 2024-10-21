@@ -30,8 +30,8 @@
     <PackageVersion Include="NHibernate.AspNetCore.Identity" Version="8.0.10" />
     <PackageVersion Include="NHibernate.Extensions.Npgsql" Version="8.0.14" />
     <PackageVersion Include="NHibernate.NetCore" Version="8.0.14" />
-    <PackageVersion Include="Npgsql" Version="8.0.4" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.8.1" />
+    <PackageVersion Include="Npgsql" Version="8.0.5" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.9.0" />
     <PackageVersion Include="SkiaSharp" Version="2.88.8" />
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.8" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />

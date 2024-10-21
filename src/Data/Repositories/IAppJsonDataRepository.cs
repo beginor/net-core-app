@@ -13,8 +13,4 @@ public partial interface IAppJsonDataRepository : IRepository<AppJsonDataModel, 
         AppJsonDataSearchModel model
     );
 
-    Task<JsonElement> GetValueByIdAsync(long id);
-
-    Task SaveValueAsync(long id, JsonElement value);
-
 }
