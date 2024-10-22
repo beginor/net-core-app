@@ -51,4 +51,10 @@ public partial class AppJsonDataRepository : HibernateRepository<AppJsonData, Ap
         };
     }
 
+    public async Task<AppJsonData> GetByBusinessIdAsync(long businessId) {
+        return await Session.Query<AppJsonData>().FirstOrDefaultAsync(
+            x => x.BusinessId == businessId
+        );
+    }
+
 }
