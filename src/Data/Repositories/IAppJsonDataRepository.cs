@@ -14,6 +14,6 @@ public partial interface IAppJsonDataRepository : IRepository<AppJsonDataModel, 
         AppJsonDataSearchModel model
     );
 
-    Task<AppJsonData> GetByBusinessIdAsync(long businessId);
+    Task<AppJsonData?> GetByBusinessIdAsync(long businessId);
 
 }
