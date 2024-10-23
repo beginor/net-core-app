@@ -21,8 +21,11 @@ partial class Startup {
     }
 
     private void ConfigureCors(WebApplication app, IWebHostEnvironment env) {
-        app.UseCors();
-        app.UseRefererFiltering();
+        var corsEnv = System.Environment.GetEnvironmentVariable("ASPNETCORE_ENABLE_CORS");
+        if (!string.IsNullOrEmpty(corsEnv) && bool.TryParse(corsEnv, out var enableCors) && enableCors) {
+            app.UseCors();
+            app.UseRefererFiltering();
+        }
     }
 
 }
