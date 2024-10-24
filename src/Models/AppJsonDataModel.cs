@@ -19,6 +19,8 @@ public partial class AppJsonDataModel : StringEntity {
     /// <summary>名称</summary>
     [Required(ErrorMessage = "名称必须填写！")]
     public string Name { get; set; } = string.Empty;
+    /// <summary>更新时间</summary>
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 }
 
 /// <summary>json 数据搜索参数</summary>

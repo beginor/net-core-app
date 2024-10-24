@@ -67,6 +67,7 @@ public class AppJsonDataController : Controller {
         [FromBody]AppJsonDataModel model
     ) {
         try {
+            model.UpdatedAt = DateTime.Now;
             await repository.SaveAsync(model);
             return model;
         }
@@ -132,6 +133,7 @@ public class AppJsonDataController : Controller {
             if (!exists) {
                 return NotFound();
             }
+            model.UpdatedAt = DateTime.Now;
             await repository.UpdateAsync(id, model);
             return Ok();
         }

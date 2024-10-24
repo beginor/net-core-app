@@ -27,4 +27,8 @@ public partial class AppJsonData : BaseEntity<long> {
     [Property(Name = nameof(Name), Column = "name", Type = "string", Length = 64, NotNull = true)]
     public virtual string Name { get; set; } = string.Empty;
 
+    /// <summary>更新时间</summary>
+    [Property(Name = "UpdatedAt", Column = "updated_at", Type = "timestamp", NotNull = true)]
+    public virtual DateTime UpdatedAt { get; set; } = DateTime.Now;
+
 }

@@ -37,7 +37,8 @@ public partial class AppJsonDataRepository : HibernateRepository<AppJsonData, Ap
                 Id = x.Id,
                 BusinessId = x.BusinessId,
                 Name = x.Name,
-            }).OrderByDescending(e => e.Id)
+                UpdatedAt = x.UpdatedAt,
+            }).OrderByDescending(e => e.UpdatedAt)
             .Skip(model.Skip).Take(model.Take)
             .ToListAsync();
         var emptyElement = JsonDocument.Parse("{}").RootElement;
@@ -53,10 +54,10 @@ public partial class AppJsonDataRepository : HibernateRepository<AppJsonData, Ap
     }
 
     public async Task<AppJsonData?> GetByBusinessIdAsync(long businessId) {
-        var jsonData = await Session.Query<AppJsonData>().FirstOrDefaultAsync(
+        var entity = await Session.Query<AppJsonData>().FirstOrDefaultAsync(
             x => x.BusinessId == businessId
         );
-        return jsonData;
+        return entity;
     }
 
 }
