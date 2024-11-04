@@ -9,7 +9,7 @@
         "ASPNETCORE_PATHBASE": "/net-core-app",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://+:5000"
+      "applicationUrl": "http://+:5050"
     }
   }
 }
