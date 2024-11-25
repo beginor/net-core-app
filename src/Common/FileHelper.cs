@@ -61,7 +61,7 @@ public static class FileHelper {
             var destBitmap = SKBitmap.Decode(inputCodec, nearestSize);
             thumbBitmap = destBitmap.Resize(
                 new SKImageInfo(thumbWidth, thumbHeight),
-                SKFilterQuality.High
+                new SKSamplingOptions(SKFilterMode.Linear)
             );
         }
         using var thumbData = thumbBitmap.Encode(SKEncodedImageFormat.Jpeg, thumbQuality);

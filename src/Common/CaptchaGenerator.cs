@@ -107,14 +107,16 @@ public class CaptchaGenerator(
         plainCanvas.Clear(SKColor.Parse(options.BackgroundColor));
 
         using var paint = new SKPaint();
-        paint.Typeface = SKTypeface.FromFamilyName(options.FontFamily);
-        paint.TextSize = options.FontSize;
         paint.Color = SKColor.Parse(options.ForegroundColor);
         paint.IsAntialias = true;
 
-        var xToDraw = (options.ImageWidth - paint.MeasureText(code)) / 2;
+        var font = new SKFont();
+        font.Typeface = SKTypeface.FromFamilyName(options.FontFamily);
+        font.Size = options.FontSize;
+
+        var xToDraw = (options.ImageWidth - font.MeasureText(code)) / 2;
         var yToDraw = (options.ImageHeight - options.FontSize) / 2 + options.FontSize;
-        plainCanvas.DrawText(code, xToDraw, yToDraw, paint);
+        plainCanvas.DrawText(code, xToDraw, yToDraw, font, paint);
         plainCanvas.Flush();
 
         if (options is { EnableDistortion: false, EnableNoisePoints: false }) {
