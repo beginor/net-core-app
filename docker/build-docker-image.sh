@@ -1,8 +1,11 @@
 #!/bin/bash -e
 ./build-server.sh linux-x64 postgis
-rm -rf dist/config
 rm -rf dist/wwwroot
-# rm -rf dist/log
+rm -rf dist/config
+rm -rf dist/cache
+rm -rf dist/storage
+rm -rf dist/log
+
 ./build-client.sh
 
 # Build docker image
