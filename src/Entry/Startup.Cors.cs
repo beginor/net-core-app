@@ -12,17 +12,18 @@ partial class Startup {
 
     private void ConfigureCorsServices( IServiceCollection services, IWebHostEnvironment env) {
         var section = config.GetSection("cors");
-        var corsPolicy = section.Get<CorsPolicy>();
-        services.Configure<CorsPolicy>(section);
-        services.AddScoped<ICorsPolicyProvider, CorsPolicyProvider>();
-        services.AddCors(options => {
-            options.AddDefaultPolicy(corsPolicy!);
-        });
+        if (section.Exists()) {
+            var corsPolicy = section.Get<CorsPolicy>();
+            services.Configure<CorsPolicy>(section);
+            services.AddScoped<ICorsPolicyProvider, CorsPolicyProvider>();
+            services.AddCors(options => {
+                options.AddDefaultPolicy(corsPolicy!);
+            });
+        }
     }
 
     private void ConfigureCors(WebApplication app, IWebHostEnvironment env) {
-        var corsEnv = System.Environment.GetEnvironmentVariable("ASPNETCORE_ENABLE_CORS");
-        if (!string.IsNullOrEmpty(corsEnv) && bool.TryParse(corsEnv, out var enableCors) && enableCors) {
+        if (config.GetSection("cors").Exists()) {
             app.UseCors();
             app.UseRefererFiltering();
         }
