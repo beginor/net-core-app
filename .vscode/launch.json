@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet:build",
-      "program": "${workspaceFolder}/src/Entry/bin/Debug/net8.0/NetCoreApp.dll",
+      "program": "${workspaceFolder}/src/Entry/bin/Debug/net9.0/NetCoreApp.dll",
       "args": [],
       "cwd": "${workspaceFolder}/src/Entry",
       "stopAtEntry": false,

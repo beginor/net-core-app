@@ -8,6 +8,7 @@
     <AssemblyName>NetCoreApp</AssemblyName>
     <RootNamespace>Beginor.NetCoreApp.Entry</RootNamespace>
     <NoWarn>$(NoWarn);1591</NoWarn>
+    <StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
   </PropertyGroup>
 
   <Import Project="../package-references.props" />

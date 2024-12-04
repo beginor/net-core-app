@@ -14,7 +14,7 @@ public partial class Startup {
     private readonly IWebHostEnvironment env;
 
     private readonly log4net.ILog logger = log4net.LogManager.GetLogger(
-        MethodBase.GetCurrentMethod()!.DeclaringType
+        MethodBase.GetCurrentMethod()!.DeclaringType!
     );
 
     public Startup(IConfiguration config, IWebHostEnvironment env) {

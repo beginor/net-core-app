@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <NoWarn>$(NoWarn);NU1903</NoWarn>
   </PropertyGroup>
   <!--
   <ItemDefinitionGroup>
