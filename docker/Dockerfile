@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/runtime-deps:8.0
+FROM mcr.microsoft.com/dotnet/runtime-deps:9.0
 ENV ASPNETCORE_PATHBASE=/net-core-app \
     ASPNETCORE_HTTP_PORTS=8080 \
     TZ=Asia/Shanghai \
