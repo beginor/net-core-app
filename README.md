@@ -31,7 +31,7 @@ Angular 多项目结构， `projects` 提供了多个三个项目，分别是：
 
 ### 后端
 
-后端实现基于 .NET 6 实现， 使用到的类库有：
+后端实现基于 .NET 9 实现， 使用到的类库有：
 
 - `NHibernate` .NET 平台的老牌 ORM ， 存在多年一直都在更新维护， 非常稳定， 长期维护项目的首选；
 - `NHibernate.AspNetCore.Identity` 基于 NHibernate 的 Identity 实现， 完全不依赖微软的 EntityFramework ；
