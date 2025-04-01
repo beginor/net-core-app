@@ -42,6 +42,9 @@ public class AppClientErrorController : Controller {
         [FromBody]AppClientErrorModel model
     ) {
         try {
+            if (model.OccuredAt.Kind == DateTimeKind.Utc) {
+                model.OccuredAt = model.OccuredAt.ToLocalTime();
+            }
             await repository.SaveAsync(model);
             return model;
         }
