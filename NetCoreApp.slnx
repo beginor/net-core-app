@@ -1,0 +1,18 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/Api/Api.csproj" />
+    <Project Path="src/Common/Common.csproj" />
+    <Project Path="src/Data/Data.csproj" />
+    <Project Path="src/Entry/Entry.csproj" />
+    <Project Path="src/Models/Models.csproj" />
+    <Project Path="src/WeChat/WeChat.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Test/Test.csproj" />
+  </Folder>
+</Solution>
