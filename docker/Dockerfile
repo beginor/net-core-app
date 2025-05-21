@@ -2,8 +2,8 @@ FROM mcr.microsoft.com/dotnet/runtime-deps:9.0
 ENV ASPNETCORE_PATHBASE=/net-core-app \
     ASPNETCORE_HTTP_PORTS=8080 \
     TZ=Asia/Shanghai \
-    LANG=C.UTF8 \
-    LC_ALL=C.UTF8
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8
 RUN apt-get update && \
     apt-get install -y fonts-freefont-otf fontconfig && \
     fc-cache -f -v && \
