@@ -29,11 +29,3 @@ public partial class AppStorage : BaseEntity<long> {
     [Property(Name = "Roles", Column = "roles", Type = "string[]", NotNull = false)]
     public virtual string[] Roles { get; set; }
 }
-
-public class AppStorageCacheItem {
-    public long Id { get; set; }
-    public string AliasName { get; set; }
-    public string RootFolder { get; set; }
-    public bool Readonly { get; set; }
-    public string[] Roles { get; set; }
-}

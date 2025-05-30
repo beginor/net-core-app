@@ -17,4 +17,6 @@ public partial interface IAppStorageRepository : IRepository<AppStorageModel, lo
 
     Task<Stream?> GetFileContentAsync(string alias, string path);
 
+    Task<string> GetPhysicalPathAsync(string fullPath);
+
 }
