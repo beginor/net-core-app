@@ -49,12 +49,10 @@ git add -f ./.vscode/launch.json
 git add -f ./.vscode/tasks.json
 git commit --amend -m "Rename to ${COMPANY_NAME}.${PROJ_NAME}"
 # 移动文件至新的目录
-git mv NetCoreApp.sln ${PROJ_NAME}.sln
+git mv NetCoreApp.slnx ${PROJ_NAME}.slnx
 # 提交一下服务端文件
 git add *
 git commit --amend -m "Rename to ${COMPANY_NAME}.${PROJ_NAME}"
-# 修改项目引用路径
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ${PROJ_NAME}.sln
 grep NetCoreApp -rl server --include *.csproj | xargs sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g"
 # 删除备份文件
 find . -name '*.bak' -delete
