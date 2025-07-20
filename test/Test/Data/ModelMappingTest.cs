@@ -2,6 +2,9 @@ using AutoMapper;
 using NUnit.Framework;
 using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Data.Entities;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Beginor.NetCoreApp.Test.Data;
 
@@ -38,12 +41,15 @@ public class ModelMappingTest : BaseTest<IMapper> {
 
     [Test]
     public void _03_CanDoCustomMapping() {
-        var config = new MapperConfiguration(configure => {
-            configure.CreateMap<TestEntity, TestModel>()
-                .ForMember(t => t.UserId, m => m.MapFrom(s => s.User.Id))
-                .ForMember(t => t.UserName, m => m.MapFrom(s => s.User.Name))
-                .ReverseMap();
-        });
+        var config = new MapperConfiguration(
+            configure => {
+                configure.CreateMap<TestEntity, TestModel>()
+                    .ForMember(t => t.UserId, m => m.MapFrom(s => s.User.Id))
+                    .ForMember(t => t.UserName, m => m.MapFrom(s => s.User.Name))
+                    .ReverseMap();
+            },
+            ServiceProvider.GetRequiredService<ILoggerFactory>()
+        );
         var mapper = config.CreateMapper();
         var entity = new TestEntity {
             Id = 123,

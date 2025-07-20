@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Dapper;
 using NHibernate;
-using NHibernate.NetCore;
+using NHibernate.Extensions.NetCore;
 using NUnit.Framework;
 using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;

@@ -11,16 +11,16 @@
   </ItemDefinitionGroup>
   -->
   <ItemGroup>
-    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.11.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.0.5" />
-    <PackageVersion Include="AutoMapper" Version="14.0.0" />
-    <PackageVersion Include="Beginor.AppFx.Api" Version="9.0.3" />
-    <PackageVersion Include="Beginor.AppFx.Core" Version="9.0.3" />
-    <PackageVersion Include="Beginor.AppFx.DependencyInjection" Version="9.0.3" />
-    <PackageVersion Include="Beginor.AppFx.Logging.Log4net" Version="9.0.3" />
-    <PackageVersion Include="Beginor.AppFx.Repository.Hibernate" Version="9.0.3" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.0.7" />
+    <PackageVersion Include="AutoMapper" Version="15.0.1" />
+    <PackageVersion Include="Beginor.AppFx.Api" Version="9.0.4" />
+    <PackageVersion Include="Beginor.AppFx.Core" Version="9.0.4" />
+    <PackageVersion Include="Beginor.AppFx.DependencyInjection" Version="9.0.4" />
+    <PackageVersion Include="Beginor.AppFx.Logging.Log4net" Version="9.0.4" />
+    <PackageVersion Include="Beginor.AppFx.Repository.Hibernate" Version="9.0.4" />
     <PackageVersion Include="Beginor.AspNetCore.Authentication.Token" Version="9.0.0" />
     <PackageVersion Include="Beginor.AspNetCore.Middlewares.CustomHeader" Version="9.0.0" />
     <PackageVersion Include="Beginor.AspNetCore.Middlewares.GzipStatic" Version="9.0.0" />
@@ -29,10 +29,10 @@
     <PackageVersion Include="NHibernate" Version="5.5.2" />
     <PackageVersion Include="NHibernate.Mapping.Attributes" Version="5.1.0" />
     <PackageVersion Include="NHibernate.AspNetCore.Identity" Version="9.0.3" />
-    <PackageVersion Include="NHibernate.Extensions.Npgsql" Version="9.0.3" />
-    <PackageVersion Include="NHibernate.NetCore" Version="9.0.3" />
+    <PackageVersion Include="NHibernate.Extensions.Npgsql" Version="9.0.5" />
+    <PackageVersion Include="NHibernate.Extensions.NetCore" Version="9.0.5" />
     <PackageVersion Include="Npgsql" Version="9.0.3" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="8.1.2" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="9.0.3" />
     <PackageVersion Include="SkiaSharp" Version="3.119.0" />
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />

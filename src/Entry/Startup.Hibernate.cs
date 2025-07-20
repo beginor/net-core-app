@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using NHibernate.AspNetCore.Identity;
 using NHibernate.Cfg;
 using NHibernate.Mapping.Attributes;
-using NHibernate.NetCore;
+using NHibernate.Extensions.NetCore;
 
 namespace Beginor.NetCoreApp.Entry;
 
@@ -26,7 +26,7 @@ partial class Startup {
     }
 
     private void ConfigureHibernate(WebApplication app, IWebHostEnvironment env) {
-        // do nothing know
+        // var loggerFactory = app.Services.GetService<ILoggerFactory>();
     }
 
 }
