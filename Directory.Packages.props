@@ -11,7 +11,7 @@
   </ItemDefinitionGroup>
   -->
   <ItemGroup>
-    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.13.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.0.7" />
@@ -28,14 +28,14 @@
     <PackageVersion Include="Dapper" Version="2.1.66" />
     <PackageVersion Include="NHibernate" Version="5.5.2" />
     <PackageVersion Include="NHibernate.Mapping.Attributes" Version="5.1.0" />
-    <PackageVersion Include="NHibernate.AspNetCore.Identity" Version="9.0.3" />
+    <PackageVersion Include="NHibernate.AspNetCore.Identity" Version="9.0.4" />
     <PackageVersion Include="NHibernate.Extensions.Npgsql" Version="9.0.5" />
     <PackageVersion Include="NHibernate.Extensions.NetCore" Version="9.0.5" />
     <PackageVersion Include="Npgsql" Version="9.0.3" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="9.0.3" />
     <PackageVersion Include="SkiaSharp" Version="3.119.0" />
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="NUnit" Version="4.3.2" />
     <PackageVersion Include="NUnit3TestAdapter" Version="5.0.0" />
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
