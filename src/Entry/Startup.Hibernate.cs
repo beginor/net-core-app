@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NHibernate.AspNetCore.Identity;
 using NHibernate.Cfg;
 using NHibernate.Mapping.Attributes;
@@ -26,7 +27,8 @@ partial class Startup {
     }
 
     private void ConfigureHibernate(WebApplication app, IWebHostEnvironment env) {
-        // var loggerFactory = app.Services.GetService<ILoggerFactory>();
+        var loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
+        loggerFactory.UseAsHibernateLoggerFactory();
     }
 
 }
@@ -38,6 +40,7 @@ public static class ConfigurationExtensions {
         var stream = HbmSerializer.Default.Serialize(assembly);
         using var reader = new StreamReader(stream);
         var xml = reader.ReadToEnd();
+        // System.Console.WriteLine(xml);
         cfg.AddXml(xml);
         return cfg;
     }
