@@ -20,36 +20,62 @@ namespace Beginor.NetCoreApp.Test;
 
 public abstract class BaseTest {
 
-    protected static IServiceProvider ServiceProvider { get; private set; }
+     protected IServiceProvider ServiceProvider { get; private set; } = null!;
+     protected JsonSerializerOptions JsonSerializerOptions { get; private set; } = null!;
 
     protected BaseTest() {
-        if (ServiceProvider != null) {
-            return;
-        }
-        var services = new ServiceCollection();
+        this.InitTest();
+    }
+
+    private void InitTest() {
+        InitDapper();
+        this.JsonSerializerOptions = this.InitTestJsonOptions();
+        this.ServiceProvider = this.InitServiceProvider();
+    }
+
+    protected virtual void InitDapper() {
+        Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+    }
+     protected virtual IServiceProvider InitServiceProvider() {
+         var services = new ServiceCollection();
         // setup test hosting env
         var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-        IWebHostEnvironment env = new TestHostEnvironment();
-        env.ContentRootPath = Path.Combine(baseDir);
-        env.WebRootPath = Path.Combine(env.ContentRootPath, "..", "..", "..", "..", "..", "..", "client", "dist");
-        services.AddSingleton(env);
+        var env = new TestHostEnvironment {
+            ContentRootPath = baseDir
+        };
+        services.AddSingleton<IWebHostEnvironment>(env);
+        services.AddSingleton<IHostEnvironment>(env);
         // config files in config folder;
         var configDir = Path.Combine(env.ContentRootPath, "config");
         var config = new ConfigurationBuilder()
             .AddJsonFile(Path.Combine(configDir, "appsettings.json"))
             .AddJsonFile(
-                Path.Combine(configDir, "appsettings.Development.json")
+                Path.Combine(configDir, $"appsettings.{env.EnvironmentName}.json")
             )
             .Build();
         services.AddSingleton<IConfiguration>(config);
-        // startup and build services;
-        var startup = new Startup(config, env);
         services.AddLogging(logging => {
             logging.AddLog4net(Path.Combine(configDir, "log.config"));
         });
+        this.InitTestServices(env, services, config);
+        return services.BuildServiceProvider(false);
+     }
+
+     protected virtual void InitTestServices(
+        IWebHostEnvironment environment,
+        IServiceCollection services,
+        IConfiguration configuration
+    ) {
+        // startup and build services;
+        var startup = new Startup(configuration, environment);
         startup.ConfigureServices(services);
-        ServiceProvider = services.BuildServiceProvider(false);
-        Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+    }
+
+     protected virtual JsonSerializerOptions InitTestJsonOptions() {
+        return new JsonSerializerOptions {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            WriteIndented = true
+        };
     }
 
     protected JsonSerializerOptions GetTestJsonOption() {
@@ -89,7 +115,7 @@ public class TestHostEnvironment : IWebHostEnvironment {
 
     public string EnvironmentName { get; set; } = "Development";
 
-    public string ApplicationName { get; set; }
+    public string ApplicationName { get; set; } = "Beginor.NetCoreApp.Test";
 
     public string WebRootPath { get; set; }
 
@@ -99,6 +125,12 @@ public class TestHostEnvironment : IWebHostEnvironment {
 
     public IFileProvider ContentRootFileProvider { get; set; }
 
+    public TestHostEnvironment() {
+        this.ContentRootPath = AppDomain.CurrentDomain.BaseDirectory;
+        this.WebRootPath = AppDomain.CurrentDomain.BaseDirectory;
+        this.WebRootFileProvider = new PhysicalFileProvider(WebRootPath);
+        this.ContentRootFileProvider = new PhysicalFileProvider(ContentRootPath);
+    }
 }
 
 [TestFixture]
@@ -108,7 +140,7 @@ public class HostingEnvironmentTest {
     public void TestEnvironment() {
         var target = new TestHostEnvironment();
         Assert.That(target.IsProduction(), Is.False);
-        Assert.That(target.IsDevelopment());
+        Assert.That(target.IsDevelopment(), Is.True);
     }
 
 }
