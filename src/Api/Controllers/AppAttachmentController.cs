@@ -65,6 +65,7 @@ public class AppAttachmentController(
                     contentType = ct;
                 }
                 var attachmentModel = new AppAttachmentModel {
+                    Id = "0",
                     FileName = model.FileName,
                     Length = model.Length,
                     ContentType = contentType,
