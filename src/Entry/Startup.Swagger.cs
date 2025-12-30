@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace Beginor.NetCoreApp.Entry;
 
@@ -15,6 +15,8 @@ partial class Startup {
     private void ConfigureSwaggerServices(IServiceCollection services, IWebHostEnvironment env) {
         logger.Debug("Start add swagger related services...");
         if (env.IsDevelopment()) {
+            services.AddOpenApi();
+            /*
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(opt => {
                 opt.SwaggerDoc("v1", new OpenApiInfo {
@@ -34,7 +36,7 @@ partial class Startup {
                     }
                 };
                 opt.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
-                opt.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                opt.AddSecurityRequirement((doc) => new OpenApiSecurityRequirement {
                     [securityScheme] = new string[0]
                 });
 
@@ -50,12 +52,15 @@ partial class Startup {
                     opt.IncludeXmlComments(xmlFile, true);
                 }
             });
+            */
         }
         logger.Debug("Add swagger related service completed.");
     }
 
     private void ConfigureSwagger(WebApplication app, IWebHostEnvironment env) {
         if (app.Environment.IsDevelopment()) {
+            app.MapOpenApi();
+            /*
             app.UseSwagger().UseSwaggerUI(options => {
                 // options.RoutePrefix = pathbase;
                 options.UseRequestInterceptor("function (req) { if (req.url.endsWith('/api/account') && req.method === 'POST') { var param = JSON.parse(req.body); param.userName = (btoa(param.userName).split('=')[0]).replace('+','-').replace('/','_'); param.password = (btoa(param.password).split('=')[0]).replace('+','-').replace('/','_'); req.body = JSON.stringify(param); } return req; }");
@@ -65,6 +70,7 @@ partial class Startup {
                 );
                 options.DocumentTitle = "NetCoreApp API v1.0.0";
             });
+            */
         }
     }
 

@@ -22,7 +22,6 @@
     <PackageReference Include="NHibernate.Extensions.Npgsql" />
     <PackageReference Include="NHibernate.Extensions.NetCore" />
     <PackageReference Include="Npgsql" />
-    <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="SkiaSharp" />
   </ItemGroup>
 
