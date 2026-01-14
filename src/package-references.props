@@ -4,7 +4,6 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
     <PackageReference Include="AutoMapper" />
     <PackageReference Include="Beginor.AppFx.Api" />
     <PackageReference Include="Beginor.AppFx.Core" />
