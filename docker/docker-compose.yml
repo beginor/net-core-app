@@ -1,8 +1,9 @@
 services:
   app:
-    image: beginor/net-core-app
+    image: beginor/net-core-app:amd64
+    platform: linux/amd64
     ports:
-      - 8080:8080
+      - 5050:5050
     volumes:
       - ./config:/app/config
       - ./log:/app/log
@@ -10,7 +11,7 @@ services:
     environment:
       TZ: Asia/Shanghai
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_URLS: http://+:5050
       ASPNETCORE_PATHBASE: /net-core-app
     restart: unless-stopped
 networks:
