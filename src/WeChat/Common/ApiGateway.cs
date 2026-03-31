@@ -7,6 +7,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Beginor.AppFx.Core;
+using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.WeChat.Models;
 
 namespace Beginor.NetCoreApp.WeChat.Common;
@@ -53,7 +54,7 @@ public class ApiGateway : IDisposable {
     }
 
     public async Task<string> GetAccessTokenAsync() {
-        var key = $"{option.AppId}_{option.Secret}_{option.GrantType}_access_token";
+        var key = string.Format(CacheKeyFormat.WeChatAuthAccessToken, option.AppId, option.Secret, option.GrantType);
         var token = await cache.GetStringAsync(key);
         if (token.IsNotNullOrEmpty()) {
             return token!;

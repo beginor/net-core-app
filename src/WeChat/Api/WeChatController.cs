@@ -100,14 +100,16 @@ public class WeChatController : Controller {
 
     private async Task<(WeChatJsCode2SessionResponse, string)> GetWeChatSessionAsync(string code, string sessionId) {
         if (sessionId.IsNotNullOrEmpty()) {
-            var cachedSession = await cache.GetAsync<WeChatJsCode2SessionResponse>(sessionId);
+            var key = string.Format(CacheKeyFormat.WeChatAuthSession, sessionId);
+            var cachedSession = await cache.GetAsync<WeChatJsCode2SessionResponse>(key);
             if (cachedSession != null) {
                 return (cachedSession, sessionId);
             }
         }
         var session = await apiGateway.GetJsCode2SessionAsync(code);
-        var newSessionId = $"wechat_session_{Guid.NewGuid():N}";
-        await cache.SetAsync(newSessionId, session, TimeSpan.FromMinutes(60));
+        var newSessionId = Guid.NewGuid().ToString("N");
+        var newSessionKey = string.Format(CacheKeyFormat.WeChatAuthSession, newSessionId);
+        await cache.SetAsync(newSessionKey, session, TimeSpan.FromMinutes(60));
         return (session, newSessionId);
     }
 
@@ -129,8 +131,9 @@ public class WeChatController : Controller {
         await userMgr.UpdateAsync(user);
 
         var tmpToken = Guid.NewGuid().ToString("N");
+        var tmpTokenKey = string.Format(CacheKeyFormat.TmpToken, tmpToken);
         // 先暂存 token
-        await cache.SetStringAsync(tmpToken, user.Id);
+        await cache.SetStringAsync(tmpTokenKey, user.Id);
         res.TmpTokenKey = Consts.TmpToken;
         res.TmpTokenValue = tmpToken;
         return Ok(res);

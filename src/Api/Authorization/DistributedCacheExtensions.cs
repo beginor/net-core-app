@@ -3,6 +3,7 @@ using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Beginor.NetCoreApp.Common;
 
 namespace Beginor.NetCoreApp.Api.Authorization;
 
@@ -12,7 +13,7 @@ public static class DistributedCacheExtensions {
         this IDistributedCache cache,
         string userId
     ) {
-        var buffer = await cache.GetAsync(userId);
+        var buffer = await cache.GetAsync(string.Format(CacheKeyFormat.UserClaims, userId));
         if (buffer == null) {
             return Array.Empty<Claim>();
         }
@@ -41,7 +42,7 @@ public static class DistributedCacheExtensions {
         writer.Flush();
         var buffer = stream.GetBuffer();
         await cache.SetAsync(
-            userId,
+            string.Format(CacheKeyFormat.UserClaims, userId),
             buffer,
             new DistributedCacheEntryOptions { SlidingExpiration = slidingExpiration }
         );

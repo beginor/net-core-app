@@ -23,11 +23,9 @@ public class CaptchaGenerator(
 
     private static readonly string allowedChars = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ1234567890";
 
-    private static readonly string KeyFormat = $"{typeof(CaptchaGenerator).FullName}_{{0}}";
-
     public async Task<CaptchaResult> GenerateAsync() {
         var code = await GenerateCodeAsync();
-        var key = string.Format(KeyFormat, code.ToLower());
+        var key = string.Format(CacheKeyFormat.Captcha, code.ToLower());
         await cache.SetStringAsync(
             key,
             code,
@@ -65,7 +63,7 @@ public class CaptchaGenerator(
     }
 
     public async Task<bool> ValidateCodeAsync(string code) {
-        var key = string.Format(KeyFormat, code.ToLower());
+        var key = string.Format(CacheKeyFormat.Captcha, code.ToLower());
         var cachedValue = await cache.GetStringAsync(key);
         if (string.IsNullOrEmpty(cachedValue)) {
             return false;

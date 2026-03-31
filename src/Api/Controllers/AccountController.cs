@@ -58,8 +58,9 @@ public partial class AccountController(
             if (Request.Query.TryGetValue(Consts.TmpToken, out var value)) {
                 var tmpToken = value.ToString();
                 if (tmpToken.IsNotNullOrEmpty()) {
-                    userId = await cache.GetStringAsync(tmpToken);
-                    await cache.RemoveAsync(tmpToken);
+                    var key = string.Format(CacheKeyFormat.TmpToken, tmpToken);
+                    userId = await cache.GetStringAsync(key);
+                    await cache.RemoveAsync(key);
                 }
             }
             if (userId.IsNullOrEmpty()) {
@@ -231,7 +232,11 @@ public partial class AccountController(
                     claimsToCache.Add(roleClaim);
                 }
             }
-            await cache.SetUserClaimsAsync(user.Id, claimsToCache.ToArray(), jwt.Value.ExpireTimeSpan);
+            await cache.SetUserClaimsAsync(
+                user.Id,
+                claimsToCache.ToArray(),
+                jwt.Value.ExpireTimeSpan
+            );
         }
         return identity;
     }

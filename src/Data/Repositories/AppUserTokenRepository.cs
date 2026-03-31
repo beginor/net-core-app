@@ -58,7 +58,8 @@ public partial class AppUserTokenRepository : HibernateRepository<AppUserTokenEn
     }
 
     public async Task<AppUserTokenEntity?> GetTokenByValueAsync(string tokenValue) {
-        var entity = await cache.GetAsync<AppUserTokenEntity>(tokenValue);
+        var key = string.Format(CacheKeyFormat.UserToken, tokenValue);
+        var entity = await cache.GetAsync<AppUserTokenEntity>(key);
         if (entity == null) {
             entity = await Session.Query<AppUserTokenEntity>()
                 .Where(tkn => tkn.Value == tokenValue)
@@ -80,7 +81,11 @@ public partial class AppUserTokenRepository : HibernateRepository<AppUserTokenEn
                     }
                 }).FirstOrDefaultAsync();
             if (entity != null) {
-                await cache.SetAsync<AppUserTokenEntity>(entity.Value!, entity, commonOption.Cache.MemoryExpiration);
+                await cache.SetAsync<AppUserTokenEntity>(
+                    string.Format(CacheKeyFormat.UserToken, entity.Value!),
+                    entity,
+                    commonOption.Cache.MemoryExpiration
+                );
             }
         }
         return entity;

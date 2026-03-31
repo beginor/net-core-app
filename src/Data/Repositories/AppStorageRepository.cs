@@ -150,7 +150,7 @@ public partial class AppStorageRepository : HibernateRepository<AppStorageEntity
     }
 
     private async Task<AppStorageEntity?> GetFromCacheByAliasAsync(string alias) {
-        var key = $"NetCoreApp_AppStorage_{alias}";
+        var key = string.Format(CacheKeyFormat.Storage, alias);
         var cachedStorage = await cache.GetAsync<AppStorageEntity>(key);
         if (cachedStorage == null) {
             var storage = await Session.Query<AppStorageEntity>().FirstOrDefaultAsync(
