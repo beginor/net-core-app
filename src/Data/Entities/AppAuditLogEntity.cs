@@ -8,7 +8,7 @@ namespace Beginor.NetCoreApp.Data.Entities;
 
 /// <summary>审计日志</summary>
 [Class(Schema = "public", Table = "app_audit_logs")]
-public partial class AppAuditLog : BaseEntity<long> {
+public partial class AppAuditLogEntity : BaseEntity<long> {
 
     /// <summary>审计日志ID</summary>
     [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]

@@ -8,7 +8,7 @@ namespace Beginor.NetCoreApp.Data.Entities;
 
 [JoinedSubclass(0, Schema = "public", Table = "app_roles", ExtendsType = typeof(NHIdentityRole))]
 [Key(1, Column = "id")]
-public class AppRole : NHIdentityRole {
+public class AppRoleEntity : NHIdentityRole {
 
     [Property(Column = "description", Type = "string", NotNull = false, Length = 256)]
     public virtual string Description { get; set; }

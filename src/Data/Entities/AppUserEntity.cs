@@ -9,7 +9,7 @@ namespace Beginor.NetCoreApp.Data.Entities;
 
 [JoinedSubclass(0, Schema = "public", Table = "app_users", ExtendsType = typeof(NHIdentityUser))]
 [Key(1, Column = "id")]
-public class AppUser : NHIdentityUser {
+public class AppUserEntity : NHIdentityUser {
 
     [Property(Column = "create_time", Type = "timestamp", NotNull = true, Generated = PropertyGeneration.Insert, Update = false, Insert = false)]
     public virtual DateTime CreateTime { get; set; }
@@ -20,8 +20,8 @@ public class AppUser : NHIdentityUser {
     [Property(Column = "login_count", Type = "int", NotNull = true)]
     public virtual int LoginCount { get; set; }
 
-    [ManyToOne(Name = "OrganizeUnit", Column = "organize_unit_id", ClassType = typeof(AppOrganizeUnit), NotNull = true, Lazy = Laziness.False)]
-    public virtual AppOrganizeUnit OrganizeUnit { get; set; }
+    [ManyToOne(Name = "OrganizeUnit", Column = "organize_unit_id", ClassType = typeof(AppOrganizeUnitEntity), NotNull = true, Lazy = Laziness.False)]
+    public virtual AppOrganizeUnitEntity OrganizeUnit { get; set; }
 
     [Property(Name = nameof(DisplayName), Column = "display_name", Type = "string", NotNull = false, Length = 64)]
     public virtual string DisplayName { get; set; }

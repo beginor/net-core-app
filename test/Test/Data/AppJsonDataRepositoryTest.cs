@@ -49,7 +49,7 @@ public class AppJsonDataRepositoryTest : BaseTest<IAppJsonDataRepository> {
 
     [Test]
     public void _05_CanMapAppJsonData() {
-        var entity = new AppJsonData {
+        var entity = new AppJsonDataEntity {
             Id = 123456L,
             BusinessId = 123456L,
             Name = "test",
@@ -59,7 +59,7 @@ public class AppJsonDataRepositoryTest : BaseTest<IAppJsonDataRepository> {
         var model = mapper.Map<AppJsonDataModel>(entity);
         Assert.That(model, Is.Not.Null);
         Assert.That(model.Id, Is.EqualTo(entity.Id.ToString()));
-        entity = mapper.Map<AppJsonData>(model);
+        entity = mapper.Map<AppJsonDataEntity>(model);
         Assert.That(entity, Is.Not.Null);
         Assert.That(entity.Id, Is.EqualTo(long.Parse(model.Id)));
     }

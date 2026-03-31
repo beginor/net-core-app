@@ -17,7 +17,7 @@ public class HibernateTest : BaseTest<ISessionFactory> {
     [Test]
     public void _02_CanQueryApplicationUsers() {
         using (var session = Target.OpenSession()) {
-            var users = session.Query<AppUser>().ToList();
+            var users = session.Query<AppUserEntity>().ToList();
             Console.WriteLine(users.Count);
             Assert.That(users.Count >= 0);
         }

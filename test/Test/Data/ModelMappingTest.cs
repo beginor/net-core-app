@@ -13,28 +13,28 @@ public class ModelMappingTest : BaseTest<IMapper> {
 
     [Test]
     public void _01_CanMapAppUser() {
-        var user = new AppUser {
+        var user = new AppUserEntity {
             Id = "000000001",
             UserName = "TestUser"
         };
         var entity = Target.Map<StringIdNameEntity>(user);
         Assert.That(user.Id, Is.EqualTo(entity.Id));
         Assert.That(user.UserName, Is.EqualTo(entity.Name));
-        user = Target.Map<AppUser>(entity);
+        user = Target.Map<AppUserEntity>(entity);
         Assert.That(user.Id, Is.EqualTo(entity.Id));
         Assert.That(user.UserName, Is.EqualTo(entity.Name));
     }
 
     [Test]
     public void _02_CanMapAppRole() {
-        var role = new AppRole {
+        var role = new AppRoleEntity {
             Id = "000001",
             Name = "TestRole"
         };
         var entity = Target.Map<StringIdNameEntity>(role);
         Assert.That(role.Id, Is.EqualTo(entity.Id));
         Assert.That(role.Name, Is.EqualTo(entity.Name));
-        role = Target.Map<AppRole>(entity);
+        role = Target.Map<AppRoleEntity>(entity);
         Assert.That(role.Id, Is.EqualTo(entity.Id));
         Assert.That(role.Name, Is.EqualTo(entity.Name));
     }

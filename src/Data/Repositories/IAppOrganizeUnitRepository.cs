@@ -14,11 +14,11 @@ public partial interface IAppOrganizeUnitRepository : IRepository<AppOrganizeUni
     /// <summary>搜索 组织单元 ，返回分页结果。</summary>
     Task<PaginatedResponseModel<AppOrganizeUnitModel>> SearchAsync(AppOrganizeUnitSearchModel model, ClaimsPrincipal user);
 
-    Task<AppOrganizeUnit> GetDefaultAsync(CancellationToken token = default);
+    Task<AppOrganizeUnitEntity> GetDefaultAsync(CancellationToken token = default);
 
     Task<AppOrganizeUnitModel> GetByIdAsync(long id, ClaimsPrincipal user, CancellationToken token = default);
 
-    Task<AppOrganizeUnit> GetEntityByIdAsync(long unitId, ClaimsPrincipal user, CancellationToken token = default);
+    Task<AppOrganizeUnitEntity> GetEntityByIdAsync(long unitId, ClaimsPrincipal user, CancellationToken token = default);
 
     Task SaveAsync(AppOrganizeUnitModel model, ClaimsPrincipal user, CancellationToken token = default);
 
@@ -30,6 +30,6 @@ public partial interface IAppOrganizeUnitRepository : IRepository<AppOrganizeUni
 
     Task<bool> CanViewOrganizeUnitAsync(long userUnitId, long unitId, CancellationToken token = default);
 
-    Task CheckOrganizeUnitAsync(AppOrganizeUnit unit, ClaimsPrincipal user, CancellationToken token = default);
+    Task CheckOrganizeUnitAsync(AppOrganizeUnitEntity unit, ClaimsPrincipal user, CancellationToken token = default);
 
 }

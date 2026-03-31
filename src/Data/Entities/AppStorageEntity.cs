@@ -7,7 +7,7 @@ namespace Beginor.NetCoreApp.Data.Entities;
 
 /// <summary>应用存储</summary>
 [Class(Schema = "public", Table = "app_storages")]
-public partial class AppStorage : BaseEntity<long> {
+public partial class AppStorageEntity : BaseEntity<long> {
 
     /// <summary>存储id</summary>
     [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]

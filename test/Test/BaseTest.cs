@@ -90,7 +90,7 @@ public abstract class BaseTest {
         var userName = "admin";
         var session = ServiceProvider.GetService<ISession>();
         // using var session = factory.OpenSession();
-        var user = session.Query<AppUser>().First(x => x.UserName == userName);
+        var user = session.Query<AppUserEntity>().First(x => x.UserName == userName);
 
         var identity = new ClaimsIdentity(new [] {
             new Claim(ClaimTypes.NameIdentifier, user.Id),

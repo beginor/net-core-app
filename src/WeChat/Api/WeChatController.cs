@@ -21,13 +21,13 @@ public class WeChatController : Controller {
 
     private readonly ILogger<WeChatController> logger;
     private readonly ApiGateway apiGateway;
-    private UserManager<AppUser> userMgr;
+    private UserManager<AppUserEntity> userMgr;
     private IDistributedCache cache;
 
     public WeChatController(
         ILogger<WeChatController> logger,
         ApiGateway apiGateway,
-        UserManager<AppUser> userMgr,
+        UserManager<AppUserEntity> userMgr,
         IDistributedCache cache
     ) {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -111,7 +111,7 @@ public class WeChatController : Controller {
         return (session, newSessionId);
     }
 
-    private async Task<ActionResult> JwtResultAsync(WeChatLoginResponseModel res, AppUser? user) {
+    private async Task<ActionResult> JwtResultAsync(WeChatLoginResponseModel res, AppUserEntity? user) {
         if (user == null) {
             res.ErrCode = 40002;
             res.ErrMsg = $"登录失败， 请重试!";

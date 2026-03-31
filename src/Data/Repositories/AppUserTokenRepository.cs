@@ -15,7 +15,7 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>用户凭证仓储实现</summary>
-public partial class AppUserTokenRepository : HibernateRepository<AppUserToken, AppUserTokenModel, long>, IAppUserTokenRepository {
+public partial class AppUserTokenRepository : HibernateRepository<AppUserTokenEntity, AppUserTokenModel, long>, IAppUserTokenRepository {
 
     private IDistributedCache cache;
     private CommonOption commonOption;
@@ -37,7 +37,7 @@ public partial class AppUserTokenRepository : HibernateRepository<AppUserToken, 
         AppUserTokenSearchModel model,
         string userId = ""
     ) {
-        var query = Session.Query<AppUserToken>();
+        var query = Session.Query<AppUserTokenEntity>();
         if (userId.IsNotNullOrEmpty()) {
             query = query.Where(e => e.User!.Id == userId);
         }
@@ -57,12 +57,12 @@ public partial class AppUserTokenRepository : HibernateRepository<AppUserToken, 
         };
     }
 
-    public async Task<AppUserToken?> GetTokenByValueAsync(string tokenValue) {
-        var entity = await cache.GetAsync<AppUserToken>(tokenValue);
+    public async Task<AppUserTokenEntity?> GetTokenByValueAsync(string tokenValue) {
+        var entity = await cache.GetAsync<AppUserTokenEntity>(tokenValue);
         if (entity == null) {
-            entity = await Session.Query<AppUserToken>()
+            entity = await Session.Query<AppUserTokenEntity>()
                 .Where(tkn => tkn.Value == tokenValue)
-                .Select(tk => new AppUserToken {
+                .Select(tk => new AppUserTokenEntity {
                     Id = tk.Id,
                     Name = tk.Name,
                     Value = tk.Value,
@@ -71,7 +71,7 @@ public partial class AppUserTokenRepository : HibernateRepository<AppUserToken, 
                     Roles = tk.Roles,
                     Privileges = tk.Privileges,
                     Urls = tk.Urls,
-                    User = new AppUser {
+                    User = new AppUserEntity {
                         Id = tk.User.Id,
                         UserName = tk.User.UserName,
                         Email = tk.User.Email,
@@ -80,20 +80,20 @@ public partial class AppUserTokenRepository : HibernateRepository<AppUserToken, 
                     }
                 }).FirstOrDefaultAsync();
             if (entity != null) {
-                await cache.SetAsync<AppUserToken>(entity.Value!, entity, commonOption.Cache.MemoryExpiration);
+                await cache.SetAsync<AppUserTokenEntity>(entity.Value!, entity, commonOption.Cache.MemoryExpiration);
             }
         }
         return entity;
     }
 
     public async Task<AppUserTokenModel?> GetTokenForUserAsync(long id, string userId) {
-        var entity = await Session.Query<AppUserToken>()
+        var entity = await Session.Query<AppUserTokenEntity>()
             .FirstOrDefaultAsync(tkn => tkn.Id == id && tkn.User!.Id == userId);
         return entity == null ? null : Mapper.Map<AppUserTokenModel>(entity);
     }
 
-    public async Task SaveTokenForUserAsync(AppUserTokenModel model, AppUser user) {
-        var entity = Mapper.Map<AppUserToken>(model);
+    public async Task SaveTokenForUserAsync(AppUserTokenModel model, AppUserEntity user) {
+        var entity = Mapper.Map<AppUserTokenEntity>(model);
         entity.User = user;
         entity.UpdateTime = DateTime.Now;
         await Session.SaveAsync(entity);
@@ -103,12 +103,12 @@ public partial class AppUserTokenRepository : HibernateRepository<AppUserToken, 
     }
 
     public async Task<bool> ExistsAsync(long id, string userId) {
-        return await Session.Query<AppUserToken>()
+        return await Session.Query<AppUserTokenEntity>()
             .AnyAsync(tkn => tkn.Id == id && tkn.User!.Id == userId);
     }
 
-    public async Task UpdateTokenForUserAsync(long id, AppUserTokenModel model, AppUser user) {
-        var entity = await Session.Query<AppUserToken>()
+    public async Task UpdateTokenForUserAsync(long id, AppUserTokenModel model, AppUserEntity user) {
+        var entity = await Session.Query<AppUserTokenEntity>()
             .FirstOrDefaultAsync(tkn => tkn.Id == id && tkn.User!.Id == user.Id);
         if (entity == null) {
             throw new Exception($"entity AppUserToken with id {id} is null");
@@ -124,7 +124,7 @@ public partial class AppUserTokenRepository : HibernateRepository<AppUserToken, 
     }
 
     public async Task DeleteTokenForUserAsync(long id, string userId) {
-        var entity = await Session.Query<AppUserToken>()
+        var entity = await Session.Query<AppUserTokenEntity>()
             .FirstOrDefaultAsync(tkn => tkn.Id == id && tkn.User!.Id == userId);
         if (entity != null) {
             await cache.RemoveAsync(entity.Value!);

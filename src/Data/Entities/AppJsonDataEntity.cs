@@ -9,7 +9,7 @@ namespace Beginor.NetCoreApp.Data.Entities;
 
 /// <summary>json 数据</summary>
 [Class(Schema = "public", Table = "app_json_data")]
-public partial class AppJsonData : BaseEntity<long> {
+public partial class AppJsonDataEntity : BaseEntity<long> {
 
     /// <summary>json 数据id</summary>
     [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]

@@ -38,7 +38,7 @@ public class AppNavItemRepositoryTest : BaseTest<IAppNavItemRepository> {
         var sql = "select * from public.app_nav_items where 1 = 0";
         using var session = ServiceProvider.GetService<NHibernate.ISession>();
         var conn = session.Connection;
-        var navItems = await conn.QueryAsync<AppNavItem>(sql);
+        var navItems = await conn.QueryAsync<AppNavItemEntity>(sql);
         Assert.That(navItems, Is.Not.Null);
         Assert.That(navItems, Is.Empty);
     }

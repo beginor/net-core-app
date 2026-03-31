@@ -24,14 +24,14 @@ public partial class AppAttachmentRepository(
     IMapper mapper,
     IHostEnvironment env,
     CommonOption commonOption
-) : HibernateRepository<AppAttachment, AppAttachmentModel, long>(session, mapper),
+) : HibernateRepository<AppAttachmentEntity, AppAttachmentModel, long>(session, mapper),
     IAppAttachmentRepository {
 
     /// <summary>附件表搜索，返回分页结果。</summary>
     public async Task<PaginatedResponseModel<AppAttachmentModel>> SearchAsync(
         AppAttachmentSearchModel model
     ) {
-        var query = Session.Query<AppAttachment>();
+        var query = Session.Query<AppAttachmentEntity>();
         var businessId = model.BusinessId.GetValueOrDefault(0);
         if (businessId > 0) {
             query = query.Where(e => e.BusinessId == businessId);
@@ -39,14 +39,14 @@ public partial class AppAttachmentRepository(
         var total = await query.LongCountAsync();
         var data = await query.OrderByDescending(e => e.Id)
             .Skip(model.Skip).Take(model.Take)
-            .Select(x => new AppAttachment {
+            .Select(x => new AppAttachmentEntity {
                 Id = x.Id,
                 BusinessId = x.BusinessId,
                 FileName = x.FileName,
                 Length = x.Length,
                 FilePath = x.FilePath,
                 ContentType = x.ContentType,
-                Creator = new AppUser {
+                Creator = new AppUserEntity {
                     Id = x.Creator.Id,
                     UserName = x.Creator.UserName
                 },
@@ -68,7 +68,7 @@ public partial class AppAttachmentRepository(
         Thumbnail? thumbnail = null,
         CancellationToken token = default
     ) {
-        var entity = Mapper.Map<AppAttachment>(model);
+        var entity = Mapper.Map<AppAttachmentEntity>(model);
         var isLocalTrans = false;
         var trans = Session.GetCurrentTransaction();
         if (trans == null) {
@@ -76,7 +76,7 @@ public partial class AppAttachmentRepository(
             isLocalTrans = true;
         }
         try {
-            entity.Creator = await Session.GetAsync<AppUser>(user.GetUserId(), token);
+            entity.Creator = await Session.GetAsync<AppUserEntity>(user.GetUserId(), token);
             entity.CreatedAt = DateTime.Now;
             await Session.SaveAsync(entity, token);
             await Session.FlushAsync(token);

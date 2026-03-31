@@ -4,8 +4,8 @@ namespace Beginor.NetCoreApp.Data;
 
 public static class AppStorageExtensions {
 
-    public static AppStorage Clone(this AppStorage storage) {
-        return new AppStorage {
+    public static AppStorageEntity Clone(this AppStorageEntity storage) {
+        return new AppStorageEntity {
             Id = storage.Id,
             AliasName = storage.AliasName,
             RootFolder = storage.RootFolder,

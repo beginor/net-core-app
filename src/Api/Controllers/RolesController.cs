@@ -24,16 +24,16 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 public class RolesController : Controller {
 
     private ILogger<RolesController> logger;
-    private RoleManager<AppRole> roleMgr;
-    private UserManager<AppUser> userMgr;
+    private RoleManager<AppRoleEntity> roleMgr;
+    private UserManager<AppUserEntity> userMgr;
     private IIdentityRepository identityRepo;
     private IMapper mapper;
     private IAppOrganizeUnitRepository orgUnitRepo;
 
     public RolesController(
         ILogger<RolesController> logger,
-        RoleManager<AppRole> roleMgr,
-        UserManager<AppUser> userMgr,
+        RoleManager<AppRoleEntity> roleMgr,
+        UserManager<AppUserEntity> userMgr,
         IIdentityRepository identityRepo,
         IMapper mapper,
         IAppOrganizeUnitRepository orgUnitRepo
@@ -66,7 +66,7 @@ public class RolesController : Controller {
             if (await roleMgr.RoleExistsAsync(model.Name!)) {
                 return BadRequest($"Role already {model.Name} exists!");
             }
-            var role = mapper.Map<AppRole>(model);
+            var role = mapper.Map<AppRoleEntity>(model);
             var result = await roleMgr.CreateAsync(role);
             if (result.Succeeded) {
                 mapper.Map(role, model);

@@ -15,7 +15,7 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>json 数据仓储实现</summary>
-public partial class AppJsonDataRepository : HibernateRepository<AppJsonData, AppJsonDataModel, long>, IAppJsonDataRepository {
+public partial class AppJsonDataRepository : HibernateRepository<AppJsonDataEntity, AppJsonDataModel, long>, IAppJsonDataRepository {
 
     public AppJsonDataRepository(ISession session, IMapper mapper) : base(session, mapper) { }
 
@@ -23,7 +23,7 @@ public partial class AppJsonDataRepository : HibernateRepository<AppJsonData, Ap
     public async Task<PaginatedResponseModel<AppJsonDataModel>> SearchAsync(
         AppJsonDataSearchModel model
     ) {
-        var query = Session.Query<AppJsonData>();
+        var query = Session.Query<AppJsonDataEntity>();
         var businessId = model.BusinessId;
         if (businessId > 0) {
             query = query.Where(x => x.BusinessId == businessId);
@@ -33,7 +33,7 @@ public partial class AppJsonDataRepository : HibernateRepository<AppJsonData, Ap
             query = query.Where(x => x.Name.Contains(name));
         }
         var total = await query.LongCountAsync();
-        var data = await query.Select(x => new AppJsonData {
+        var data = await query.Select(x => new AppJsonDataEntity {
                 Id = x.Id,
                 BusinessId = x.BusinessId,
                 Name = x.Name,
@@ -53,8 +53,8 @@ public partial class AppJsonDataRepository : HibernateRepository<AppJsonData, Ap
         };
     }
 
-    public async Task<AppJsonData?> GetByBusinessIdAsync(long businessId) {
-        var entity = await Session.Query<AppJsonData>().FirstOrDefaultAsync(
+    public async Task<AppJsonDataEntity?> GetByBusinessIdAsync(long businessId) {
+        var entity = await Session.Query<AppJsonDataEntity>().FirstOrDefaultAsync(
             x => x.BusinessId == businessId
         );
         return entity;

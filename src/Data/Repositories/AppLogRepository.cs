@@ -14,7 +14,7 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>应用程序日志仓储实现</summary>
-public partial class AppLogRepository : HibernateRepository<AppLog, AppLogModel, long>, IAppLogRepository {
+public partial class AppLogRepository : HibernateRepository<AppLogEntity, AppLogModel, long>, IAppLogRepository {
 
     public AppLogRepository(ISession session, IMapper mapper) : base(session, mapper) { }
 
@@ -24,7 +24,7 @@ public partial class AppLogRepository : HibernateRepository<AppLog, AppLogModel,
     ) {
         var startDate = model.StartDate.GetValueOrDefault(DateTime.Today);
         var endDate = model.EndDate.GetValueOrDefault(DateTime.Today).AddDays(1);
-        var query = Session.Query<AppLog>().Where(
+        var query = Session.Query<AppLogEntity>().Where(
             log => log.CreatedAt >= startDate && log.CreatedAt < endDate
         );
         if (model.Level.IsNotNullOrEmpty()) {
@@ -32,7 +32,7 @@ public partial class AppLogRepository : HibernateRepository<AppLog, AppLogModel,
             query = query.Where(log => log.Level == level);
         }
         var total = await query.LongCountAsync();
-        var data = await query.Select(log => new AppLog {
+        var data = await query.Select(log => new AppLogEntity {
             Id = log.Id,
             CreatedAt = log.CreatedAt,
             Thread = log.Thread,

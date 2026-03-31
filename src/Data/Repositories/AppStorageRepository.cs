@@ -17,7 +17,7 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>应用存储仓储实现</summary>
-public partial class AppStorageRepository : HibernateRepository<AppStorage, AppStorageModel, long>, IAppStorageRepository {
+public partial class AppStorageRepository : HibernateRepository<AppStorageEntity, AppStorageModel, long>, IAppStorageRepository {
 
     private IDistributedCache cache;
     private CommonOption commonOption;
@@ -46,7 +46,7 @@ public partial class AppStorageRepository : HibernateRepository<AppStorage, AppS
     public async Task<PaginatedResponseModel<AppStorageModel>> SearchAsync(
         AppStorageSearchModel model
     ) {
-        var query = Session.Query<AppStorage>();
+        var query = Session.Query<AppStorageEntity>();
         var keywords = model.Keywords;
         if (keywords.IsNotNullOrEmpty()) {
             query = query.Where(
@@ -149,11 +149,11 @@ public partial class AppStorageRepository : HibernateRepository<AppStorage, AppS
         return string.Empty;
     }
 
-    private async Task<AppStorage?> GetFromCacheByAliasAsync(string alias) {
+    private async Task<AppStorageEntity?> GetFromCacheByAliasAsync(string alias) {
         var key = $"NetCoreApp_AppStorage_{alias}";
-        var cachedStorage = await cache.GetAsync<AppStorage>(key);
+        var cachedStorage = await cache.GetAsync<AppStorageEntity>(key);
         if (cachedStorage == null) {
-            var storage = await Session.Query<AppStorage>().FirstOrDefaultAsync(
+            var storage = await Session.Query<AppStorageEntity>().FirstOrDefaultAsync(
                 x => x.AliasName == alias
             );
             if (storage == null) {

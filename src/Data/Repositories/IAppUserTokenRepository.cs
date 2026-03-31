@@ -15,15 +15,15 @@ public partial interface IAppUserTokenRepository : IRepository<AppUserTokenModel
         AppUserTokenSearchModel model, string userId = ""
     );
 
-    Task<AppUserToken?> GetTokenByValueAsync(string tokenValue);
+    Task<AppUserTokenEntity?> GetTokenByValueAsync(string tokenValue);
 
     Task<AppUserTokenModel?> GetTokenForUserAsync(long id, string userId);
 
-    Task SaveTokenForUserAsync(AppUserTokenModel model, AppUser user);
+    Task SaveTokenForUserAsync(AppUserTokenModel model, AppUserEntity user);
 
     Task<bool> ExistsAsync(long id, string userId);
 
-    Task UpdateTokenForUserAsync(long id, AppUserTokenModel model, AppUser user);
+    Task UpdateTokenForUserAsync(long id, AppUserTokenModel model, AppUserEntity user);
 
     Task DeleteTokenForUserAsync(long id, string userId);
 

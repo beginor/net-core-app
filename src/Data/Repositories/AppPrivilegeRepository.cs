@@ -16,14 +16,14 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>系统权限仓储实现</summary>
-public partial class AppPrivilegeRepository : HibernateRepository<AppPrivilege, AppPrivilegeModel, long>, IAppPrivilegeRepository {
+public partial class AppPrivilegeRepository : HibernateRepository<AppPrivilegeEntity, AppPrivilegeModel, long>, IAppPrivilegeRepository {
 
     public AppPrivilegeRepository(ISession session, IMapper mapper) : base(session, mapper) { }
 
     public async Task<PaginatedResponseModel<AppPrivilegeModel>> SearchAsync(
         AppPrivilegeSearchModel model
     ) {
-        var query = Session.Query<AppPrivilege>();
+        var query = Session.Query<AppPrivilegeEntity>();
         if (!string.IsNullOrEmpty(model.Module)) {
             query = query.Where(p => p.Module == model.Module);
         }
@@ -41,7 +41,7 @@ public partial class AppPrivilegeRepository : HibernateRepository<AppPrivilege, 
 
     /// <summary>返回权限表的所有模块</summary>
     public async Task<IList<string>> GetModulesAsync() {
-        var modules = await Session.Query<AppPrivilege>()
+        var modules = await Session.Query<AppPrivilegeEntity>()
             .Select(p => p.Module!)
             .Distinct()
             .ToListAsync();
@@ -51,12 +51,12 @@ public partial class AppPrivilegeRepository : HibernateRepository<AppPrivilege, 
     /// <summary>同步必须的权限</summary>
     public async Task SyncRequiredAsync(IEnumerable<string> names) {
         foreach (var name in names) {
-            var exists = await Session.Query<AppPrivilege>()
+            var exists = await Session.Query<AppPrivilegeEntity>()
                 .AnyAsync(e => e.Name == name);
             if (exists) {
                 continue;
             }
-            var entity = new AppPrivilege {
+            var entity = new AppPrivilegeEntity {
                 Name = name,
                 Module = name.Substring(0, name.IndexOf('.')),
                 Description = string.Empty,
@@ -72,7 +72,7 @@ public partial class AppPrivilegeRepository : HibernateRepository<AppPrivilege, 
     ) {
         var tx = Session.BeginTransaction();
         try {
-            var entity = await Session.GetAsync<AppPrivilege>(id, token);
+            var entity = await Session.GetAsync<AppPrivilegeEntity>(id, token);
             if (entity == null) {
                 return;
             }
@@ -98,7 +98,7 @@ public partial class AppPrivilegeRepository : HibernateRepository<AppPrivilege, 
     }
 
     public async Task<IList<AppPrivilegeModel>> GetByNamesAsync(IList<string> names) {
-        var entities = await Session.Query<AppPrivilege>()
+        var entities = await Session.Query<AppPrivilegeEntity>()
             .Where(p => names.Contains(p.Name!))
             .ToListAsync();
         return Mapper.Map<IList<AppPrivilegeModel>>(entities);

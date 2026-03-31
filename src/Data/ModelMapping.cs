@@ -8,40 +8,40 @@ namespace Beginor.NetCoreApp.Data;
 public class ModelMapping : AutoMapper.Profile {
 
     public ModelMapping() {
-        CreateMap<AppRole, AppRoleModel>().ReverseMap();
-        CreateMap<AppUser, AppUserModel>()
+        CreateMap<AppRoleEntity, AppRoleModel>().ReverseMap();
+        CreateMap<AppUserEntity, AppUserModel>()
             .ReverseMap()
             .ForMember(dest => dest.DisplayName, map => map.MapFrom(src => src.Surname + src.GivenName));
-        CreateMap<AppUser, StringIdNameEntity>()
+        CreateMap<AppUserEntity, StringIdNameEntity>()
             .ForMember(dest => dest.Name, map => map.MapFrom(src => src.DisplayName))
             .ReverseMap()
             .ForMember(dest => dest.UserName, map => map.Ignore());
-        CreateMap<AppRole, StringIdNameEntity>().ReverseMap();
-        CreateMap<AppJsonData, AppJsonDataModel>()
+        CreateMap<AppRoleEntity, StringIdNameEntity>().ReverseMap();
+        CreateMap<AppJsonDataEntity, AppJsonDataModel>()
             .ReverseMap();
-        CreateMap<AppAttachment, AppAttachmentModel>()
+        CreateMap<AppAttachmentEntity, AppAttachmentModel>()
             .ForMember(dest => dest.CreatorId, map => map.MapFrom(src => src.Creator.Id))
             .ForMember(dest => dest.CreatorName, map => map.MapFrom(src => src.Creator.DisplayName))
             .ReverseMap()
             .ForMember(dest => dest.Creator, map => map.Ignore())
             .ForMember(dest => dest.CreatedAt, map => map.Ignore());
-        CreateMap<AppNavItem, AppNavItemModel>()
+        CreateMap<AppNavItemEntity, AppNavItemModel>()
             .ReverseMap();
-        CreateMap<AppPrivilege, AppPrivilegeModel>()
+        CreateMap<AppPrivilegeEntity, AppPrivilegeModel>()
             .ReverseMap();
-        CreateMap<AppAuditLog, AppAuditLogModel>()
+        CreateMap<AppAuditLogEntity, AppAuditLogModel>()
             .ReverseMap();
-        CreateMap<AppClientError, AppClientErrorModel>()
+        CreateMap<AppClientErrorEntity, AppClientErrorModel>()
             .ReverseMap();
-        CreateMap<AppStorage, AppStorageModel>()
+        CreateMap<AppStorageEntity, AppStorageModel>()
             .ReverseMap();
-        CreateMap<AppUserToken, AppUserTokenModel>()
+        CreateMap<AppUserTokenEntity, AppUserTokenModel>()
             .ReverseMap()
             .ForMember(dest => dest.User, map => map.Ignore());
-        CreateMap<AppLog, AppLogModel>();
-        CreateMap<AppOrganizeUnit, AppOrganizeUnitModel>()
+        CreateMap<AppLogEntity, AppLogModel>();
+        CreateMap<AppOrganizeUnitEntity, AppOrganizeUnitModel>()
             .ReverseMap();
-        CreateMap<AppOrganizeUnit, StringIdNameEntity>()
+        CreateMap<AppOrganizeUnitEntity, StringIdNameEntity>()
             .ReverseMap();
     }
 

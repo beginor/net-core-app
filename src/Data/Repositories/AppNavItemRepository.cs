@@ -16,14 +16,14 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>导航节点（菜单）仓储实现</summary>
-public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppNavItemModel, long>, IAppNavItemRepository {
+public partial class AppNavItemRepository : HibernateRepository<AppNavItemEntity, AppNavItemModel, long>, IAppNavItemRepository {
 
-    private UserManager<AppUser> userManager;
+    private UserManager<AppUserEntity> userManager;
 
     public AppNavItemRepository(
         ISession session,
         IMapper mapper,
-        UserManager<AppUser> userManager
+        UserManager<AppUserEntity> userManager
     ) : base(session, mapper) {
         this.userManager = userManager;
     }
@@ -41,7 +41,7 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppN
         long id,
         CancellationToken token = default(CancellationToken)
     ) {
-        var entity = await Session.GetAsync<AppNavItem>(id, token);
+        var entity = await Session.GetAsync<AppNavItemEntity>(id, token);
         if (entity == null) {
             return;
         }
@@ -54,7 +54,7 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppN
     public async Task<PaginatedResponseModel<AppNavItemModel>> SearchAsync(
         AppNavItemSearchModel model
     ) {
-        var query = Session.Query<AppNavItem>();
+        var query = Session.Query<AppNavItemEntity>();
         // todo: add custom query here;
         var total = await query.LongCountAsync();
         var data = await query.OrderByDescending(e => e.Id)
@@ -73,8 +73,8 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppN
         Argument.NotNull(model, nameof(model));
         Argument.NotNullOrEmpty(userName, nameof(userName));
         // Map to entity;
-        var entity = Mapper.Map<AppNavItem>(model);
-        var user = await Session.Query<AppUser>()
+        var entity = Mapper.Map<AppNavItemEntity>(model);
+        var user = await Session.Query<AppUserEntity>()
             .FirstOrDefaultAsync(
                 u => u.UserName == userName
             );
@@ -103,7 +103,7 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppN
         }
         Argument.NotNull(model, nameof(model));
         Argument.NotNullOrEmpty(userName, nameof(userName));
-        var entity = await Session.GetAsync<AppNavItem>(id);
+        var entity = await Session.GetAsync<AppNavItemEntity>(id);
         if (entity == null) {
             throw new InvalidOperationException(
                 $"导航节点 {id} 不存在！"
@@ -111,7 +111,7 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppN
         }
         Mapper.Map(model, entity);
         entity.Id = id;
-        entity.Updater = await Session.Query<AppUser>()
+        entity.Updater = await Session.Query<AppUserEntity>()
             .FirstAsync(u => u.UserName == userName);
         entity.UpdatedAt = DateTime.Now;
         await Session.UpdateAsync(entity);
@@ -137,7 +137,7 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppN
                 )
                 select * from cte;
             ";
-        var navItems = (await conn.QueryAsync<AppNavItem>(sql, new { roles })).ToArray();
+        var navItems = (await conn.QueryAsync<AppNavItemEntity>(sql, new { roles })).ToArray();
         var rootNavItem = navItems.OrderBy(n => n.Id).First(n => n.ParentId == null);
         var model = new MenuNodeModel {
             Id = rootNavItem.Id.ToString(),
@@ -151,7 +151,7 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItem, AppN
         return model;
     }
 
-    private static MenuNodeModel[]? FindChildrenRecursive(long id, AppNavItem[] items) {
+    private static MenuNodeModel[]? FindChildrenRecursive(long id, AppNavItemEntity[] items) {
         var childCount = items.Count(item => item.ParentId == id);
         if (childCount == 0) {
             return null;

@@ -8,7 +8,7 @@ namespace Beginor.NetCoreApp.Data.Entities;
 
 /// <summary>附件表</summary>
 [Class(Schema = "public", Table = "app_attachments")]
-public partial class AppAttachment : BaseEntity<long> {
+public partial class AppAttachmentEntity : BaseEntity<long> {
 
     /// <summary>附件表ID</summary>
     [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]
@@ -20,8 +20,8 @@ public partial class AppAttachment : BaseEntity<long> {
     [Property(Name = "CreatedAt", Column = "created_at", Type = "timestamp", NotNull = true)]
     public virtual DateTime CreatedAt { get; set; }
     /// <summary>创建附件的用户</summary>
-    [ManyToOne(Name = "Creator", Column = "creator_id", ClassType = typeof(AppUser), NotFound = NotFoundMode.Ignore)]
-    public virtual AppUser Creator { get; set; }
+    [ManyToOne(Name = "Creator", Column = "creator_id", ClassType = typeof(AppUserEntity), NotFound = NotFoundMode.Ignore)]
+    public virtual AppUserEntity Creator { get; set; }
     /// <summary>文件名</summary>
     [Property(Name = "FileName", Column = "file_name", Type = "string", NotNull = true, Length = 256)]
     public virtual string FileName { get; set; }

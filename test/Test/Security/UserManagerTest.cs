@@ -6,7 +6,7 @@ using Beginor.NetCoreApp.Data.Entities;
 namespace Beginor.NetCoreApp.Test.Security;
 
 [TestFixture]
-public class UserManagerTest : BaseTest<UserManager<AppUser>> {
+public class UserManagerTest : BaseTest<UserManager<AppUserEntity>> {
 
     [Test]
     public void _01_CanResolveTarget() {

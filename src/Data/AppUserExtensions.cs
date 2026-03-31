@@ -12,7 +12,7 @@ namespace Beginor.NetCoreApp.Data;
 public static class AppUserExtensions {
 
     public static AppUserModel ToUserModel(
-        this AppUser user,
+        this AppUserEntity user,
         IMapper mapper,
         IList<Claim> claims
     ) {
@@ -26,7 +26,7 @@ public static class AppUserExtensions {
     }
 
     public static IList<Claim> UpdateFromUserModel(
-        this AppUser user,
+        this AppUserEntity user,
         IMapper mapper,
         AppUserModel model
     ) {

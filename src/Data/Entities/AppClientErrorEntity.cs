@@ -8,7 +8,7 @@ namespace Beginor.NetCoreApp.Data.Entities;
 
 /// <summary>程序客户端错误记录</summary>
 [Class(Schema = "public", Table = "app_client_errors")]
-public partial class AppClientError : BaseEntity<long> {
+public partial class AppClientErrorEntity : BaseEntity<long> {
 
     /// <summary>客户端记录ID</summary>
     [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]

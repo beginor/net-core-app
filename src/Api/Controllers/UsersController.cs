@@ -26,15 +26,15 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 public class UsersController : Controller {
 
     private ILogger<UsersController> logger;
-    private UserManager<AppUser> userMgr;
-    private RoleManager<AppRole> roleMgr;
+    private UserManager<AppUserEntity> userMgr;
+    private RoleManager<AppRoleEntity> roleMgr;
     private IMapper mapper;
     private IAppOrganizeUnitRepository orgUnitRepo;
 
     public UsersController(
         ILogger<UsersController> logger,
-        UserManager<AppUser> userMgr,
-        RoleManager<AppRole> roleMgr,
+        UserManager<AppUserEntity> userMgr,
+        RoleManager<AppRoleEntity> roleMgr,
         IMapper mapper,
         IAppOrganizeUnitRepository orgUnitRepo
     ) {
@@ -70,7 +70,7 @@ public class UsersController : Controller {
             if (user != null) {
                 return BadRequest($"User with {model.Email} exists!");
             }
-            user = new AppUser();
+            user = new AppUserEntity();
             var claims = user.UpdateFromUserModel(mapper, model);
             var result = await userMgr.CreateAsync(user);
             // add default roles to new created user;
@@ -126,7 +126,7 @@ public class UsersController : Controller {
         [FromQuery]UserSearchRequestModel model
     ) {
         try {
-            IQueryable<AppUser> query;
+            IQueryable<AppUserEntity> query;
             if (string.IsNullOrEmpty(model.RoleName)) {
                 query = userMgr.Users;
             }
@@ -241,7 +241,7 @@ public class UsersController : Controller {
         }
     }
 
-    private async Task AddOrReplaceClaims(AppUser user, IList<Claim> claims) {
+    private async Task AddOrReplaceClaims(AppUserEntity user, IList<Claim> claims) {
         var userClaims = await userMgr.GetClaimsAsync(user);
         foreach (var claim in claims) {
             var userClaim = userClaims.FirstOrDefault(c => c.Type == claim.Type);

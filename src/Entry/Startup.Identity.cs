@@ -14,7 +14,7 @@ partial class Startup {
         var identitySection = config.GetSection("identity");
         var identitySettings = identitySection.Get<IdentityOptions>()!;
         services
-            .AddIdentity<AppUser, AppRole>(options => {
+            .AddIdentity<AppUserEntity, AppRoleEntity>(options => {
                 // user settings;
                 options.User.RequireUniqueEmail = identitySettings.User.RequireUniqueEmail;
                 // password settings;

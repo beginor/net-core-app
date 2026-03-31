@@ -11,7 +11,7 @@ using Beginor.NetCoreApp.Data.Repositories;
 namespace Beginor.NetCoreApp.Test.Security;
 
 [TestFixture]
-public class RoleManagerTest : BaseTest<RoleManager<AppRole>> {
+public class RoleManagerTest : BaseTest<RoleManager<AppRoleEntity>> {
 
     [Test]
     public void _01_CanResolveTarget() {
@@ -29,7 +29,7 @@ public class RoleManagerTest : BaseTest<RoleManager<AppRole>> {
         var exists = await Target.RoleExistsAsync("administrators");
         if (!exists) {
             // create administrators role;
-            var role = new AppRole {
+            var role = new AppRoleEntity {
                 Name = "administrators",
                 Description = "系统管理员"
             };

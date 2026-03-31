@@ -8,15 +8,15 @@ namespace Beginor.NetCoreApp.Data.Entities;
 
 /// <summary>用户凭证</summary>
 [Class(Schema = "public", Table = "app_user_tokens")]
-public partial class AppUserToken : BaseEntity<long> {
+public partial class AppUserTokenEntity : BaseEntity<long> {
 
     /// <summary>凭证id</summary>
     [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]
     public override long Id { get { return base.Id; } set { base.Id = value; } }
 
     /// <summary>用户id</summary>
-    [ManyToOne(Name = "User", Column = "user_id", ClassType = typeof(AppUser), NotFound = NotFoundMode.Ignore)]
-    public virtual AppUser User { get; set; }
+    [ManyToOne(Name = "User", Column = "user_id", ClassType = typeof(AppUserEntity), NotFound = NotFoundMode.Ignore)]
+    public virtual AppUserEntity User { get; set; }
 
     /// <summary>凭证名称</summary>
     [Property(Name = "Name", Column = "name", Type = "string", NotNull = true, Length = 16)]

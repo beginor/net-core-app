@@ -15,7 +15,7 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>审计日志仓储实现</summary>
-public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, AppAuditLogModel, long>, IAppAuditLogRepository {
+public partial class AppAuditLogRepository : HibernateRepository<AppAuditLogEntity, AppAuditLogModel, long>, IAppAuditLogRepository {
 
     public AppAuditLogRepository(ISession session, IMapper mapper) : base(session, mapper) { }
 
@@ -24,7 +24,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
     ) {
         var startDate = model.StartDate.GetValueOrDefault(DateTime.Today);
         var endDate = model.EndDate.GetValueOrDefault(DateTime.Today).AddDays(1);
-        var query = Session.Query<AppAuditLog>().Where(
+        var query = Session.Query<AppAuditLogEntity>().Where(
             log => log.StartAt >= startDate && log.StartAt < endDate
         );
 
@@ -85,7 +85,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
     }
 
     public async Task<PaginatedResponseModel<AppAuditLogStatusStatModel>> StatStatusAsync(DateTime startDate, DateTime endDate) {
-        var query = Session.Query<AppAuditLog>()
+        var query = Session.Query<AppAuditLogEntity>()
             .Where(log => log.StartAt >= startDate && log.StartAt < endDate)
             .GroupBy(log => log.ResponseCode)
             .Select(g => new AppAuditLogStatusStatModel {
@@ -126,7 +126,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
     }
 
     public async Task<PaginatedResponseModel<AppAuditLogUserStatModel>> StatUserAsync(DateTime startDate, DateTime endDate) {
-        var query = Session.Query<AppAuditLog>()
+        var query = Session.Query<AppAuditLogEntity>()
             .Where(log => log.StartAt >= startDate && log.StartAt < endDate)
             .GroupBy(log => log.UserName!)
             .Select(g => new AppAuditLogUserStatModel {
@@ -168,7 +168,7 @@ public partial class AppAuditLogRepository : HibernateRepository<AppAuditLog, Ap
     }
 
     public async Task<PaginatedResponseModel<AppAuditLogIpStatModel>> StatIpAsync(DateTime startDate, DateTime endDate) {
-        var query = Session.Query<AppAuditLog>()
+        var query = Session.Query<AppAuditLogEntity>()
             .Where(log => log.StartAt >= startDate && log.StartAt < endDate)
             .GroupBy(log => log.Ip!)
             .Select(g => new AppAuditLogIpStatModel {

@@ -27,8 +27,8 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 [ApiController]
 public partial class AccountController(
     ILogger<AccountController> logger,
-    UserManager<AppUser> userMgr,
-    RoleManager<AppRole> roleMgr,
+    UserManager<AppUserEntity> userMgr,
+    RoleManager<AppRoleEntity> roleMgr,
     IOptionsSnapshot<JwtOption> jwt,
     IAppNavItemRepository navRepo,
     IDistributedCache cache,
@@ -199,7 +199,7 @@ public partial class AccountController(
         return jwtToken;
     }
 
-    private async Task<ClaimsIdentity> CreateIdentityAsync(AppUser user) {
+    private async Task<ClaimsIdentity> CreateIdentityAsync(AppUserEntity user) {
         // create a identity;
         var identity = new ClaimsIdentity();
         identity.AddClaim(

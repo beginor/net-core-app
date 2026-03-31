@@ -8,7 +8,7 @@ namespace Beginor.NetCoreApp.Data.Entities;
 
 /// <summary>系统权限</summary>
 [Class(Schema = "public", Table = "app_privileges")]
-public partial class AppPrivilege : BaseEntity<long> {
+public partial class AppPrivilegeEntity : BaseEntity<long> {
 
     /// <summary>权限ID</summary>
     [Id(Name = "Id", Column = "id", Type = "long", Generator = "trigger-identity")]

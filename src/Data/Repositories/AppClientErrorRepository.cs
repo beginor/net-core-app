@@ -13,7 +13,7 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>程序客户端错误记录仓储实现</summary>
-public partial class AppClientErrorRepository : HibernateRepository<AppClientError, AppClientErrorModel, long>, IAppClientErrorRepository {
+public partial class AppClientErrorRepository : HibernateRepository<AppClientErrorEntity, AppClientErrorModel, long>, IAppClientErrorRepository {
 
     public AppClientErrorRepository(ISession session, IMapper mapper) : base(session, mapper) { }
 
@@ -21,7 +21,7 @@ public partial class AppClientErrorRepository : HibernateRepository<AppClientErr
     public async Task<PaginatedResponseModel<AppClientErrorModel>> SearchAsync(
         AppClientErrorSearchModel model
     ) {
-        var query = Session.Query<AppClientError>();
+        var query = Session.Query<AppClientErrorEntity>();
         // todo: 添加自定义查询；
         var total = await query.LongCountAsync();
         var data = await query.OrderByDescending(e => e.Id)

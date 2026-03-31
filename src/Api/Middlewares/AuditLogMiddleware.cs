@@ -28,7 +28,7 @@ public class AuditLogMiddleware : Disposable {
     private readonly ILogger<AuditLogMiddleware> logger;
     private ISessionFactory sessionFactory;
     private readonly CancellationTokenSource cts;
-    private readonly Channel<AppAuditLog> channel = Channel.CreateUnbounded<AppAuditLog>();
+    private readonly Channel<AppAuditLogEntity> channel = Channel.CreateUnbounded<AppAuditLogEntity>();
 
     public AuditLogMiddleware(
         RequestDelegate next,
@@ -54,7 +54,7 @@ public class AuditLogMiddleware : Disposable {
     }
 
     public async Task InvokeAsync(HttpContext context) {
-        var auditLog = new AppAuditLog {
+        var auditLog = new AppAuditLogEntity {
             HostName = context.Request.Host.Value,
             RequestPath = context.Request.Path,
             RequestMethod = context.Request.Method,
@@ -86,7 +86,7 @@ public class AuditLogMiddleware : Disposable {
 
     private async void StartSaveAuditLog(CancellationToken token) {
         const int batchSize = 128;
-        IList<AppAuditLog> logs = new List<AppAuditLog>(batchSize);
+        IList<AppAuditLogEntity> logs = new List<AppAuditLogEntity>(batchSize);
         while (!token.IsCancellationRequested) {
             while (await channel.Reader.WaitToReadAsync(token)) {
                 while (channel.Reader.TryRead(out var log)) {
@@ -110,11 +110,11 @@ public class AuditLogMiddleware : Disposable {
         }
     }
 
-    private async Task BatchSaveInTransaction(IList<AppAuditLog> logs) {
+    private async Task BatchSaveInTransaction(IList<AppAuditLogEntity> logs) {
         logger.LogInformation($"Batch save {logs.Count} audit logs to db ...");
         using var session = sessionFactory.OpenStatelessSession();
         var conn = session.Connection;
-        var sql = EntityHelper.GenerateInsertSql(typeof(AppAuditLog));
+        var sql = EntityHelper.GenerateInsertSql(typeof(AppAuditLogEntity));
         await using var tx = await conn.BeginTransactionAsync();
         try {
             var rowsAffected = await conn.ExecuteAsync(sql, logs);

@@ -29,7 +29,7 @@ public class SystemTest : BaseTest {
 
     [Test]
     public async Task _02_CanResetPassword() {
-        var manager = ServiceProvider.GetService<UserManager<AppUser>>();
+        var manager = ServiceProvider.GetService<UserManager<AppUserEntity>>();
         var username = "admin";
         var password = "1qaz@WSX";
         var user = await manager.FindByNameAsync("admin");
@@ -51,11 +51,11 @@ public class SystemTest : BaseTest {
     }
 
     private async Task CreateAdminRoleAsync(string roleName, string description) {
-        var manager = ServiceProvider.GetService<RoleManager<AppRole>>();
+        var manager = ServiceProvider.GetService<RoleManager<AppRoleEntity>>();
         var roleExists = await manager.RoleExistsAsync(roleName);
         if (!roleExists) {
             // create administrators role;
-            var role = new AppRole {
+            var role = new AppRoleEntity {
                 Name = roleName,
                 Description = description
             };
@@ -74,10 +74,10 @@ public class SystemTest : BaseTest {
     }
 
     private async Task CreateAnonymousRoleAsync(string roleName, string description) {
-        var manager = ServiceProvider.GetService<RoleManager<AppRole>>();
+        var manager = ServiceProvider.GetService<RoleManager<AppRoleEntity>>();
         var roleExists = await manager.RoleExistsAsync(roleName);
         if (!roleExists) {
-            var role = new AppRole {
+            var role = new AppRoleEntity {
                 Name = roleName,
                 Description = description,
                 IsAnonymous = true
@@ -160,11 +160,11 @@ public class SystemTest : BaseTest {
     }
 
     private async Task<string> CreateAdminUserAsync(string username, string password, string roleName) {
-        var manager = ServiceProvider.GetService<UserManager<AppUser>>();
+        var manager = ServiceProvider.GetService<UserManager<AppUserEntity>>();
         var user = await manager.FindByNameAsync(username);
         if (user == null) {
             // create admin user;
-            user = new AppUser {
+            user = new AppUserEntity {
                 UserName = username,
                 Email = "admin@local.com",
                 EmailConfirmed = true,

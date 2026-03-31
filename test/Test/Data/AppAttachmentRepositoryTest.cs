@@ -28,11 +28,11 @@ public class AppAttachmentRepositoryTest : BaseTest<IAppAttachmentRepository> {
     public void _02_CanQueryWithUser() {
         var factory = ServiceProvider.GetSessionFactory();
         using (var session = factory.OpenSession()) {
-            var query = from att in session.Query<AppAttachment>()
-                select new AppAttachment {
+            var query = from att in session.Query<AppAttachmentEntity>()
+                select new AppAttachmentEntity {
                     Id = att.Id,
                     BusinessId = att.BusinessId,
-                    Creator = new AppUser {
+                    Creator = new AppUserEntity {
                         Id = att.Creator.Id,
                         UserName = att.Creator.UserName
                     }
@@ -46,13 +46,13 @@ public class AppAttachmentRepositoryTest : BaseTest<IAppAttachmentRepository> {
     public void _03_CanProjectToModel() {
         var factory = ServiceProvider.GetSessionFactory();
         using (var session = factory.OpenSession()) {
-            var query = session.Query<AppAttachment>()
+            var query = session.Query<AppAttachmentEntity>()
                 .Where(att => att.Creator.UserName == "TestUser")
-                .Select(att => new AppAttachment {
+                .Select(att => new AppAttachmentEntity {
                     Id = att.Id,
                     FileName = att.FileName,
                     CreatedAt = att.CreatedAt,
-                    Creator = new AppUser {
+                    Creator = new AppUserEntity {
                         Id = att.Creator.Id,
                         UserName = att.Creator.UserName,
                         LoginCount = att.Creator.LoginCount,
@@ -67,7 +67,7 @@ public class AppAttachmentRepositoryTest : BaseTest<IAppAttachmentRepository> {
 
     [Test]
     public async Task _04_CanSaveAttachment() {
-        var userManager = ServiceProvider.GetService<UserManager<AppUser>>();
+        var userManager = ServiceProvider.GetService<UserManager<AppUserEntity>>();
         var user = await userManager.FindByNameAsync("testuser");
         Assert.That(user, Is.Not.Null);
         var model = new AppAttachmentModel {

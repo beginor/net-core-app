@@ -20,7 +20,7 @@ namespace Beginor.NetCoreApp.Data.Repositories;
 public partial class AppOrganizeUnitRepository(
     ISession session,
     IMapper mapper
-) : HibernateRepository<AppOrganizeUnit, AppOrganizeUnitModel, long>(session, mapper),
+) : HibernateRepository<AppOrganizeUnitEntity, AppOrganizeUnitModel, long>(session, mapper),
     IAppOrganizeUnitRepository {
 
     /// <summary>搜索 组织单元 ，返回分页结果。</summary>
@@ -54,16 +54,16 @@ public partial class AppOrganizeUnitRepository(
             from cte a
             order by a.parent_id, a.sequence;
         ";
-        var models = await conn.QueryAsync<AppOrganizeUnit>(sql, new { unitId });
+        var models = await conn.QueryAsync<AppOrganizeUnitEntity>(sql, new { unitId });
         var result = new PaginatedResponseModel<AppOrganizeUnitModel> {
             Data = Mapper.Map<IList<AppOrganizeUnitModel>>(models.ToList())
         };
         return result;
     }
 
-    public async Task<AppOrganizeUnit> GetDefaultAsync(CancellationToken token = default) {
+    public async Task<AppOrganizeUnitEntity> GetDefaultAsync(CancellationToken token = default) {
         var defaultId = 1L;
-        var defaultUnit = await Session.GetAsync<AppOrganizeUnit>(defaultId, token);
+        var defaultUnit = await Session.GetAsync<AppOrganizeUnitEntity>(defaultId, token);
         return defaultUnit;
     }
 
@@ -72,7 +72,7 @@ public partial class AppOrganizeUnitRepository(
         ClaimsPrincipal user,
         CancellationToken token = default
     ) {
-        var entity = await Session.GetAsync<AppOrganizeUnit>(id, token);
+        var entity = await Session.GetAsync<AppOrganizeUnitEntity>(id, token);
         if (entity == null) {
             throw new InvalidOperationException($"Organize unit {id} does not exist!");
         }
@@ -87,7 +87,7 @@ public partial class AppOrganizeUnitRepository(
         long id,
         CancellationToken token = default
     ) {
-        var entity = await Session.GetAsync<AppOrganizeUnit>(id, token);
+        var entity = await Session.GetAsync<AppOrganizeUnitEntity>(id, token);
         if (entity != null) {
             entity.IsDeleted = true;
             await Session.SaveAsync(entity, token);
@@ -100,7 +100,7 @@ public partial class AppOrganizeUnitRepository(
         ClaimsPrincipal user,
         CancellationToken token = default
     ) {
-        var entity = await Session.GetAsync<AppOrganizeUnit>(id, token);
+        var entity = await Session.GetAsync<AppOrganizeUnitEntity>(id, token);
         if (entity == null) {
             return;
         }
@@ -109,7 +109,7 @@ public partial class AppOrganizeUnitRepository(
             throw new InvalidOperationException($"User {user.GetUserName()} can not access organize unit {id}");
         }
         entity.IsDeleted = true;
-        entity.Updater = await Session.GetAsync<AppUser>(user.GetUserId(), token);
+        entity.Updater = await Session.GetAsync<AppUserEntity>(user.GetUserId(), token);
         entity.UpdatedAt = DateTime.Now;
         await Session.SaveAsync(entity, token);
         await Session.FlushAsync(token);
@@ -131,10 +131,10 @@ public partial class AppOrganizeUnitRepository(
             throw new InvalidOperationException($"User {user.GetUserName()} can not access organize unit {parentId}");
         }
         // Map to entity;
-        var entity = Mapper.Map<AppOrganizeUnit>(model);
+        var entity = Mapper.Map<AppOrganizeUnitEntity>(model);
         var tx = Session.BeginTransaction();
         try {
-            var creator = await Session.GetAsync<AppUser>(user.GetUserId(), token);
+            var creator = await Session.GetAsync<AppUserEntity>(user.GetUserId(), token);
             // Assign creator;
             entity.Creator = creator;
             entity.CreatedAt = DateTime.Now;
@@ -168,7 +168,7 @@ public partial class AppOrganizeUnitRepository(
         }
         Argument.NotNull(model, nameof(model));
         Argument.NotNull(user, nameof(user));
-        var entity = await Session.GetAsync<AppOrganizeUnit>(id, token);
+        var entity = await Session.GetAsync<AppOrganizeUnitEntity>(id, token);
         if (entity == null) {
             throw new InvalidOperationException($"组织单元 {id} 不存在！");
         }
@@ -182,12 +182,12 @@ public partial class AppOrganizeUnitRepository(
             var oldCode = entity.Code;
             Mapper.Map(model, entity);
             entity.Id = id;
-            var updater = await Session.GetAsync<AppUser>(user.GetUserId(), token);
+            var updater = await Session.GetAsync<AppUserEntity>(user.GetUserId(), token);
             entity.Updater = updater;
             entity.UpdatedAt = DateTime.Now;
             await Session.UpdateAsync(entity, token);
             if (entity.ParentId != oldParentId) {
-                var descendants = await Session.Query<AppOrganizeUnit>()
+                var descendants = await Session.Query<AppOrganizeUnitEntity>()
                 .Where(x => x.Code.StartsWith($"{oldCode}/"))
                 .ToListAsync(cancellationToken: token);
                 entity.UpdatedAt = DateTime.Now;
@@ -227,7 +227,7 @@ public partial class AppOrganizeUnitRepository(
         return units.Any(unit => unit.Id == userUnitId);
     }
 
-    private async Task<IList<AppOrganizeUnit>> QueryUnitPathAsync(
+    private async Task<IList<AppOrganizeUnitEntity>> QueryUnitPathAsync(
         long unitId,
         CancellationToken token = default
     ) {
@@ -243,18 +243,18 @@ public partial class AppOrganizeUnitRepository(
                 where p.is_deleted = false
             ) select * from cte
         ";
-        var query = Session.CreateSQLQuery(sql).AddEntity(typeof(AppOrganizeUnit));
+        var query = Session.CreateSQLQuery(sql).AddEntity(typeof(AppOrganizeUnitEntity));
         query.SetInt64("unitId", unitId);
-        var units = await query.ListAsync<AppOrganizeUnit>(token);
+        var units = await query.ListAsync<AppOrganizeUnitEntity>(token);
         return units;
     }
 
-    public async Task<AppOrganizeUnit> GetEntityByIdAsync(
+    public async Task<AppOrganizeUnitEntity> GetEntityByIdAsync(
         long unitId,
         ClaimsPrincipal user,
         CancellationToken token = default
     ) {
-        var entity = await Session.GetAsync<AppOrganizeUnit>(unitId, token);
+        var entity = await Session.GetAsync<AppOrganizeUnitEntity>(unitId, token);
         return entity;
     }
 
@@ -270,7 +270,7 @@ public partial class AppOrganizeUnitRepository(
     }
 
     public async Task CheckOrganizeUnitAsync(
-        AppOrganizeUnit unit,
+        AppOrganizeUnitEntity unit,
         ClaimsPrincipal user,
         CancellationToken token = default
     ) {
