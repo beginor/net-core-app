@@ -19,7 +19,7 @@
 前端基于 Angular 实现， 使用到的类库主要有：
 
 - `Angular` ， 已开启 TypeScript 严格模式以及 Angular 的严格模板检查；
-- `BootStrap` 以及 `Bootstrap-icons` ；
+- `TailWind CSS` 以及 `Bootstrap Icons` ；
 - `ng-zorro-antd`；
 - `Angular Component/Material`；
 
