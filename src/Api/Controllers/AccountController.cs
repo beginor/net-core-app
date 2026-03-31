@@ -99,11 +99,11 @@ public partial class AccountController(
         if (idx > -1) {
             userName = userName.Substring(0, idx);
         }
-        var appUser = await userMgr.FindByNameAsync(userName);
-        if (appUser == null) {
+        var userEntity = await userMgr.FindByNameAsync(userName);
+        if (userEntity == null) {
             return NotFound();
         }
-        var userIdentity = await CreateIdentityAsync(appUser);
+        var userIdentity = await CreateIdentityAsync(userEntity);
         var info = await CreateAccountInfoModel(userIdentity);
         info.Token = CreateJwtToken(userIdentity);
         return info;
