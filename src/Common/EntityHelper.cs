@@ -36,6 +36,7 @@ public static class EntityHelper {
     public static string GenerateInsertSql(Type entityType) {
         var mapping = GetEntityMapping(entityType);
         var sql = new StringBuilder();
+        // language=none
         sql.Append("insert into ");
         if (!string.IsNullOrEmpty(mapping.Schema)) {
             sql.Append($"{mapping.Schema}.");
