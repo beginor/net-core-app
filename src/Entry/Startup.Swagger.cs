@@ -7,7 +7,7 @@ namespace Beginor.NetCoreApp.Entry;
 
 partial class Startup {
 
-    private void ConfigureSwaggerServices(IServiceCollection services, IWebHostEnvironment env) {
+    private void ConfigureOpenApiServices(IServiceCollection services, IWebHostEnvironment env) {
         logger.Debug("Start add opan api related services...");
         if (env.IsDevelopment()) {
             services.AddOpenApi();
@@ -15,7 +15,7 @@ partial class Startup {
         logger.Debug("Add opan api related service completed.");
     }
 
-    private void ConfigureSwagger(WebApplication app, IWebHostEnvironment env) {
+    private void ConfigureOpenApi(WebApplication app, IWebHostEnvironment env) {
         if (app.Environment.IsDevelopment()) {
             app.MapOpenApi();
         }

@@ -39,7 +39,7 @@ public partial class Startup {
         ConfigureForwardedHeadersServices(services, env);
         ConfigureCustomHeaderServices(services, env);
         ConfigureStaticFilesServices(services, env);
-        ConfigureSwaggerServices(services, env);
+        ConfigureOpenApiServices(services, env);
         // routing and mvc
         ConfigureMiddlewareServices(services, env);
         ConfigureRoutingServices(services, env);
@@ -67,7 +67,7 @@ public partial class Startup {
         ConfigurePathBase(app, env);
         ConfigureCustomHeader(app, env);
         ConfigureStaticFiles(app, env);
-        ConfigureSwagger(app, env);
+        ConfigureOpenApi(app, env);
         // routing and mvc
         ConfigureMiddleware(app, env);
         ConfigureRouting(app, env);
