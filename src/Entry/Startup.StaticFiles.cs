@@ -44,7 +44,9 @@ partial class Startup {
         var fileProvider = app.Services.GetService<IFileProvider>();
         if (fileProvider != null) {
             app.UseStaticFiles(new StaticFileOptions {
-                FileProvider = fileProvider
+                FileProvider = fileProvider,
+                ServeUnknownFileTypes = true,
+                DefaultContentType = "application/octet-stream"
             });
         }
         else {
