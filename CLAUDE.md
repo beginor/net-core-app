@@ -4,8 +4,8 @@
 
 ## 命令
 
-- 还原依赖: `dotnet restore NetCoreApp.slnx`
-- 编译解决方案: `dotnet build NetCoreApp.slnx`
+- 还原依赖: `dotnet restore`
+- 编译解决方案: `dotnet build`
 - 运行入口项目: `cd src/Entry && dotnet run`
 - 运行单元测试: `cd test/Test && dotnet test --filter FullyQualifiedName~{TestFilter}`
 
@@ -21,3 +21,4 @@
   - `src/Common` (共享的帮助类/选项)；
   - `test/Test` (NUnit 测试)；
 - 数据库是 PostgreSQL， 通过 `src/Entry/config/hibernate.config` 配置；
+- NuGet 包的版本在 `Directory.Packages.props` 中统一管理；
