@@ -37,8 +37,13 @@ sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./src/Data/Repositories/AppStorageRepos
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./src/Entry/config/hibernate.config
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./src/Entry/config/log.config
 
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./smartcode.yml
 sed -i.bak "s/Beginor/${COMPANY_NAME}/g" ./smartcode.yml
+sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./smartcode.yml
+
+sed -i.bak "s/Beginor/${COMPANY_NAME}/g" ./CLAUDE.md
+sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./CLAUDE.md
+sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./CLAUDE.md
+
 # 删除备份文件
 find . -name '*.bak' -delete
 # 提交一下服务端文件
