@@ -42,3 +42,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `.editorconfig` 要求 UTF-8、LF、末尾换行；C# 使用 4 空格缩进，Markdown/JSON 使用 2 空格缩进。
 - C# 花括号当前风格是不在成员或块声明前单独换行；`System.*` using 排在前面。
 - 新增业务功能时，通常同时涉及 `src/Models` DTO、`src/Data/Entities` 实体、`src/Data/Repositories` 仓储、`src/Data/ModelMapping.cs` 映射、`src/Api/Controllers` 控制器，以及 `test/Test` 中对应测试。
+
+## 命名规范
+
+### 数据库
+- 数据库名、表名、字段名均使用小写字母加下划线分割（`snake_case`）；
+- 表名使用英文复数形式，表示集合（如 `users`、`order_items`）；
+- 主键统一命名为 `id`；
+- 外键格式为 `表名单数形式_字段名_id`（如 `user_id`、`order_item_id`）；
+
+### C#
+- 类名使用 PascalCase（如 `UserController`、`OrderItem`）；
+- 控制器路由前缀与表名保持一致，使用复数形式，用中划线代替下划线（如 `/users`、`/order-items`）；
