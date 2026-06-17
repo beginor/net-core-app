@@ -16,9 +16,10 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>系统权限仓储实现</summary>
-public partial class AppPrivilegeRepository : HibernateRepository<AppPrivilegeEntity, AppPrivilegeModel, long>, IAppPrivilegeRepository {
-
-    public AppPrivilegeRepository(ISession session, IMapper mapper) : base(session, mapper) { }
+public partial class AppPrivilegeRepository(
+    ISession session,
+    IMapper mapper
+) : HibernateRepository<AppPrivilegeEntity, AppPrivilegeModel, long>(session, mapper), IAppPrivilegeRepository {
 
     public async Task<PaginatedResponseModel<AppPrivilegeModel>> SearchAsync(
         AppPrivilegeSearchModel model

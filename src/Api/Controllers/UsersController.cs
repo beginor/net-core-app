@@ -23,27 +23,13 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 /// <summary>用户 API</summary>
 [Route("api/users")]
 [ApiController]
-public class UsersController : Controller {
-
-    private ILogger<UsersController> logger;
-    private UserManager<AppUserEntity> userMgr;
-    private RoleManager<AppRoleEntity> roleMgr;
-    private IMapper mapper;
-    private IAppOrganizeUnitRepository orgUnitRepo;
-
-    public UsersController(
-        ILogger<UsersController> logger,
-        UserManager<AppUserEntity> userMgr,
-        RoleManager<AppRoleEntity> roleMgr,
-        IMapper mapper,
-        IAppOrganizeUnitRepository orgUnitRepo
-    ) {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
-        this.roleMgr = roleMgr ?? throw new ArgumentNullException(nameof(roleMgr));
-        this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        this.orgUnitRepo = orgUnitRepo ?? throw new ArgumentNullException(nameof(orgUnitRepo));
-    }
+public class UsersController(
+    ILogger<UsersController> logger,
+    UserManager<AppUserEntity> userMgr,
+    RoleManager<AppRoleEntity> roleMgr,
+    IMapper mapper,
+    IAppOrganizeUnitRepository orgUnitRepo
+) : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {

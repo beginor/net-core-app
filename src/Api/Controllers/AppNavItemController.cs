@@ -13,18 +13,10 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 /// <summary>导航节点（菜单）服务接口</summary>
 [Route("api/nav-items")]
 [ApiController]
-public class AppNavItemController : Controller {
-
-    private ILogger<AppNavItemController> logger;
-    private IAppNavItemRepository repository;
-
-    public AppNavItemController(
-        ILogger<AppNavItemController> logger,
-        IAppNavItemRepository repository
-    ) {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-    }
+public class AppNavItemController(
+    ILogger<AppNavItemController> logger,
+    IAppNavItemRepository repository
+) : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {

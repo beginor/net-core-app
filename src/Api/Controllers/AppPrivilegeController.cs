@@ -15,18 +15,10 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 /// <summary>系统权限服务接口</summary>
 [Route("api/privileges")]
 [ApiController]
-public class AppPrivilegeController : Controller {
-
-    private ILogger<AppPrivilegeController> logger;
-    private IAppPrivilegeRepository repository;
-
-    public AppPrivilegeController(
-        ILogger<AppPrivilegeController> logger,
-        IAppPrivilegeRepository repository
-    ) {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-    }
+public class AppPrivilegeController(
+    ILogger<AppPrivilegeController> logger,
+    IAppPrivilegeRepository repository
+) : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {

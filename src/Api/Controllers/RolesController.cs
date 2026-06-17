@@ -21,30 +21,14 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 /// <summary>角色 API</summary>
 [Route("api/roles")]
 [ApiController]
-public class RolesController : Controller {
-
-    private ILogger<RolesController> logger;
-    private RoleManager<AppRoleEntity> roleMgr;
-    private UserManager<AppUserEntity> userMgr;
-    private IIdentityRepository identityRepo;
-    private IMapper mapper;
-    private IAppOrganizeUnitRepository orgUnitRepo;
-
-    public RolesController(
-        ILogger<RolesController> logger,
-        RoleManager<AppRoleEntity> roleMgr,
-        UserManager<AppUserEntity> userMgr,
-        IIdentityRepository identityRepo,
-        IMapper mapper,
-        IAppOrganizeUnitRepository orgUnitRepo
-    ) {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.roleMgr = roleMgr ?? throw new ArgumentNullException(nameof(roleMgr));
-        this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
-        this.identityRepo = identityRepo ?? throw new ArgumentNullException(nameof(identityRepo));
-        this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        this.orgUnitRepo = orgUnitRepo ?? throw new ArgumentNullException(nameof(orgUnitRepo));
-    }
+public class RolesController(
+    ILogger<RolesController> logger,
+    RoleManager<AppRoleEntity> roleMgr,
+    UserManager<AppUserEntity> userMgr,
+    IIdentityRepository identityRepo,
+    IMapper mapper,
+    IAppOrganizeUnitRepository orgUnitRepo
+) : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {

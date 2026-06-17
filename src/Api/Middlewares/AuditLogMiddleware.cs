@@ -26,7 +26,7 @@ public class AuditLogMiddleware : Disposable {
     private readonly IActionDescriptorCollectionProvider provider;
     private readonly IActionSelector selector;
     private readonly ILogger<AuditLogMiddleware> logger;
-    private ISessionFactory sessionFactory;
+    private readonly ISessionFactory sessionFactory;
     private readonly CancellationTokenSource cts;
     private readonly Channel<AppAuditLogEntity> channel = Channel.CreateUnbounded<AppAuditLogEntity>();
 

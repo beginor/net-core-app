@@ -20,8 +20,7 @@ namespace Beginor.NetCoreApp.Data.Repositories;
 public partial class AppOrganizeUnitRepository(
     ISession session,
     IMapper mapper
-) : HibernateRepository<AppOrganizeUnitEntity, AppOrganizeUnitModel, long>(session, mapper),
-    IAppOrganizeUnitRepository {
+) : HibernateRepository<AppOrganizeUnitEntity, AppOrganizeUnitModel, long>(session, mapper), IAppOrganizeUnitRepository {
 
     /// <summary>搜索 组织单元 ，返回分页结果。</summary>
     public async Task<PaginatedResponseModel<AppOrganizeUnitModel>> SearchAsync(

@@ -16,17 +16,11 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>导航节点（菜单）仓储实现</summary>
-public partial class AppNavItemRepository : HibernateRepository<AppNavItemEntity, AppNavItemModel, long>, IAppNavItemRepository {
-
-    private UserManager<AppUserEntity> userManager;
-
-    public AppNavItemRepository(
-        ISession session,
-        IMapper mapper,
-        UserManager<AppUserEntity> userManager
-    ) : base(session, mapper) {
-        this.userManager = userManager;
-    }
+public partial class AppNavItemRepository(
+    ISession session,
+    IMapper mapper,
+    UserManager<AppUserEntity> userManager
+) : HibernateRepository<AppNavItemEntity, AppNavItemModel, long>(session, mapper), IAppNavItemRepository {
 
     protected override void Dispose(
         bool disposing
@@ -39,7 +33,7 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItemEntity
 
     public override async Task DeleteAsync(
         long id,
-        CancellationToken token = default(CancellationToken)
+        CancellationToken token = default
     ) {
         var entity = await Session.GetAsync<AppNavItemEntity>(id, token);
         if (entity == null) {
@@ -124,19 +118,20 @@ public partial class AppNavItemRepository : HibernateRepository<AppNavItemEntity
             throw new ArgumentNullException(nameof(roles), "roles can not be null.");
         }
         var conn = Session.Connection;
-        var sql = @"
-                with recursive cte as (
-                    select p.id, p.parent_id, p.title, p.tooltip, p.icon, p.url, p.sequence, p.roles, p.target, p.frame_url, p.is_hidden
-                    from public.app_nav_items p
-                    where p.parent_id is null and p.is_deleted = false
-                    union all
-                    select c.id, c.parent_id, c.title, c.tooltip, c.icon, c.url, c.sequence, c.roles, c.target, c.frame_url, c.is_hidden
-                    from public.app_nav_items c
-                    inner join cte on cte.id = c.parent_id
-                    where (c.is_deleted = false) and (c.roles && @roles::character varying[])
-                )
-                select * from cte;
-            ";
+        // language=none
+        var sql = """
+              with recursive cte as (
+                select p.id, p.parent_id, p.title, p.tooltip, p.icon, p.url, p.sequence, p.roles, p.target, p.frame_url, p.is_hidden
+                from public.app_nav_items p
+                where p.parent_id is null and p.is_deleted = false
+                union all
+                select c.id, c.parent_id, c.title, c.tooltip, c.icon, c.url, c.sequence, c.roles, c.target, c.frame_url, c.is_hidden
+                from public.app_nav_items c
+                inner join cte on cte.id = c.parent_id
+                where (c.is_deleted = false) and (c.roles && @roles::character varying[])
+              )
+              select * from cte;
+            """;
         var navItems = (await conn.QueryAsync<AppNavItemEntity>(sql, new { roles })).ToArray();
         var rootNavItem = navItems.OrderBy(n => n.Id).First(n => n.ParentId == null);
         var model = new MenuNodeModel {

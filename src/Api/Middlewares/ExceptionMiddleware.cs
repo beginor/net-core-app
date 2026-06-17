@@ -8,22 +8,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Beginor.NetCoreApp.Api.Middlewares;
 
-public class ExceptionMiddleware {
-
-    private readonly RequestDelegate next;
-    private readonly IWebHostEnvironment env;
-
-    private readonly ILogger<ExceptionMiddleware> logger;
-
-    public ExceptionMiddleware(
-        RequestDelegate next,
-        IWebHostEnvironment env,
-        ILogger<ExceptionMiddleware> logger
-    ) {
-        this.next = next ?? throw new ArgumentNullException(nameof(next));
-        this.env = env ?? throw new ArgumentNullException(nameof(env));
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
+public class ExceptionMiddleware(
+    RequestDelegate next,
+    IWebHostEnvironment env,
+    ILogger<ExceptionMiddleware> logger
+) {
 
     public Task InvokeAsync(HttpContext context) {
         try {

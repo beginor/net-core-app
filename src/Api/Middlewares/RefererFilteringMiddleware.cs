@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +33,7 @@ public class RefererFilteringMiddleware {
 
     public Task InvokeAsync(HttpContext context) {
         var origions = this.policy.Origins;
-        if (origions == null || origions.IndexOf("*") > -1) {
+        if (origions.IndexOf("*") > -1) {
             return next(context);
         }
         var referer = context.Request.GetTypedHeaders().Referer;

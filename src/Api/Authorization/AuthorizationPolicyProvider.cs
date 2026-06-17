@@ -7,11 +7,9 @@ using Beginor.NetCoreApp.Common;
 
 namespace Beginor.NetCoreApp.Api.Authorization;
 
-public class AuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider {
-
-    public AuthorizationPolicyProvider(
-        IOptions<AuthorizationOptions> options
-    ) : base(options) { }
+public class AuthorizationPolicyProvider(
+    IOptions<AuthorizationOptions> options
+) : DefaultAuthorizationPolicyProvider(options) {
 
     public override Task<AuthorizationPolicy?> GetPolicyAsync(string policyName) {
         var builder = new AuthorizationPolicyBuilder();

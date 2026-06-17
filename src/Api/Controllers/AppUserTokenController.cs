@@ -13,18 +13,10 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 /// <summary>用户凭证 服务接口</summary>
 [ApiController]
 [Route("api/user-tokens")]
-public class AppUserTokenController : Controller {
-
-    private ILogger<AppUserTokenController> logger;
-    private IAppUserTokenRepository repository;
-
-    public AppUserTokenController(
-        ILogger<AppUserTokenController> logger,
-        IAppUserTokenRepository repository
-    ) {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-    }
+public class AppUserTokenController(
+    ILogger<AppUserTokenController> logger,
+    IAppUserTokenRepository repository
+) : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {

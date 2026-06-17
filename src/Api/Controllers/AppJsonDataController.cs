@@ -14,18 +14,10 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 /// <summary>json 数据 服务接口</summary>
 [ApiController]
 [Route("api/json")]
-public class AppJsonDataController : Controller {
-
-    private ILogger<AppJsonDataController> logger;
-    private IAppJsonDataRepository repository;
-
-    public AppJsonDataController(
-        ILogger<AppJsonDataController> logger,
-        IAppJsonDataRepository repository
-    ) {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-    }
+public class AppJsonDataController(
+    ILogger<AppJsonDataController> logger,
+    IAppJsonDataRepository repository
+) : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {

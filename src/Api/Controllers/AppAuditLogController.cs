@@ -13,18 +13,10 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 /// <summary>审计日志服务接口</summary>
 [Route("api/audit-logs")]
 [ApiController]
-public class AppAuditLogController : Controller {
-
-    private ILogger<AppAuditLogController> logger;
-    private IAppAuditLogRepository repository;
-
-    public AppAuditLogController(
-        ILogger<AppAuditLogController> logger,
-        IAppAuditLogRepository repository
-    ) {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-    }
+public class AppAuditLogController(
+    ILogger<AppAuditLogController> logger,
+    IAppAuditLogRepository repository
+) : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {

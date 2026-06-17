@@ -13,18 +13,10 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 /// <summary>程序客户端错误记录 服务接口</summary>
 [ApiController]
 [Route("api/client-errors")]
-public class AppClientErrorController : Controller {
-
-    private ILogger<AppClientErrorController> logger;
-    private IAppClientErrorRepository repository;
-
-    public AppClientErrorController(
-        ILogger<AppClientErrorController> logger,
-        IAppClientErrorRepository repository
-    ) {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-    }
+public class AppClientErrorController(
+    ILogger<AppClientErrorController> logger,
+    IAppClientErrorRepository repository
+) : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {

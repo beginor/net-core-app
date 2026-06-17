@@ -8,30 +8,30 @@ namespace Beginor.NetCoreApp.Api.Cors;
 
 public class CorsPolicyProvider : ICorsPolicyProvider {
 
-    private CorsPolicy policy;
-    private CorsOptions options;
+    private readonly CorsPolicy corsPolicy;
+    private readonly CorsOptions corsOptions;
 
     public CorsPolicyProvider(
-        IOptionsSnapshot<CorsPolicy> snapshot,
-        IOptions<CorsOptions> options
+        IOptionsSnapshot<CorsPolicy> corsPolicySnapshot,
+        IOptions<CorsOptions> corsOptions
     ) {
-        if (snapshot == null) {
-            throw new ArgumentNullException(nameof(snapshot));
+        if (corsPolicySnapshot == null) {
+            throw new ArgumentNullException(nameof(corsPolicySnapshot));
         }
-        if (options == null) {
-            throw new ArgumentNullException(nameof(options));
+        if (corsOptions == null) {
+            throw new ArgumentNullException(nameof(corsOptions));
         }
-        this.policy = snapshot.Value;
-        this.options = options.Value;
+        this.corsPolicy = corsPolicySnapshot.Value;
+        this.corsOptions = corsOptions.Value;
     }
 
     public Task<CorsPolicy?> GetPolicyAsync(HttpContext context, string? policyName) {
         if (context == null) {
             throw new ArgumentNullException(nameof(context));
         }
-        policyName ??= options.DefaultPolicyName;
-        if (options.DefaultPolicyName.Equals(policyName, StringComparison.OrdinalIgnoreCase)) {
-            return Task.FromResult<CorsPolicy?>(policy);
+        policyName ??= corsOptions.DefaultPolicyName;
+        if (corsOptions.DefaultPolicyName.Equals(policyName, StringComparison.OrdinalIgnoreCase)) {
+            return Task.FromResult<CorsPolicy?>(corsPolicy);
         }
         return Task.FromResult<CorsPolicy?>(null);
     }

@@ -14,21 +14,11 @@ namespace Beginor.NetCoreApp.Api.Controllers;
 /// <summary>应用存储 服务接口</summary>
 [ApiController]
 [Route("api/storages")]
-public partial class AppStorageController : Controller {
-
-    private ILogger<AppStorageController> logger;
-    private IAppStorageRepository repository;
-    private IContentTypeProvider contentTypeProvider;
-
-    public AppStorageController(
-        ILogger<AppStorageController> logger,
-        IAppStorageRepository repository,
-        IContentTypeProvider contentTypeProvider
-    ) {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        this.contentTypeProvider = contentTypeProvider ?? throw new ArgumentNullException(nameof(contentTypeProvider));
-    }
+public partial class AppStorageController(
+    ILogger<AppStorageController> logger,
+    IAppStorageRepository repository,
+    IContentTypeProvider contentTypeProvider
+) : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {

@@ -13,9 +13,10 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>程序客户端错误记录仓储实现</summary>
-public partial class AppClientErrorRepository : HibernateRepository<AppClientErrorEntity, AppClientErrorModel, long>, IAppClientErrorRepository {
-
-    public AppClientErrorRepository(ISession session, IMapper mapper) : base(session, mapper) { }
+public partial class AppClientErrorRepository(
+    ISession session,
+    IMapper mapper
+) : HibernateRepository<AppClientErrorEntity, AppClientErrorModel, long>(session, mapper), IAppClientErrorRepository {
 
     /// <summary>搜索 程序客户端错误记录 ，返回分页结果。</summary>
     public async Task<PaginatedResponseModel<AppClientErrorModel>> SearchAsync(

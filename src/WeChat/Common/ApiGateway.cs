@@ -14,7 +14,7 @@ namespace Beginor.NetCoreApp.WeChat.Common;
 
 public class ApiGateway : IDisposable {
 
-    private HttpClient httpClient;
+    private readonly HttpClient httpClient;
     private bool disposed;
     private readonly ILogger<ApiGateway> logger;
 

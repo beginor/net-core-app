@@ -14,9 +14,10 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>应用程序日志仓储实现</summary>
-public partial class AppLogRepository : HibernateRepository<AppLogEntity, AppLogModel, long>, IAppLogRepository {
-
-    public AppLogRepository(ISession session, IMapper mapper) : base(session, mapper) { }
+public partial class AppLogRepository(
+    ISession session,
+    IMapper mapper
+) : HibernateRepository<AppLogEntity, AppLogModel, long>(session, mapper), IAppLogRepository {
 
     /// <summary>搜索 应用程序日志 ，返回分页结果。</summary>
     public async Task<PaginatedResponseModel<AppLogModel>> SearchAsync(

@@ -15,15 +15,12 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>用户凭证仓储实现</summary>
-public partial class AppUserTokenRepository : HibernateRepository<AppUserTokenEntity, AppUserTokenModel, long>, IAppUserTokenRepository {
-
-    private IDistributedCache cache;
-    private CommonOption commonOption;
-
-    public AppUserTokenRepository(ISession session, IMapper mapper, IDistributedCache cache, CommonOption commonOption) : base(session, mapper) {
-        this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
-        this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
-    }
+public partial class AppUserTokenRepository(
+    ISession session,
+    IMapper mapper,
+    IDistributedCache cache,
+    CommonOption commonOption
+) : HibernateRepository<AppUserTokenEntity, AppUserTokenModel, long>(session, mapper), IAppUserTokenRepository {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {

@@ -17,23 +17,13 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>应用存储仓储实现</summary>
-public partial class AppStorageRepository : HibernateRepository<AppStorageEntity, AppStorageModel, long>, IAppStorageRepository {
-
-    private IDistributedCache cache;
-    private CommonOption commonOption;
-    private IFileProvider fileProvider;
-
-    public AppStorageRepository(
-        ISession session,
-        IMapper mapper,
-        IDistributedCache cache,
-        CommonOption commonOption,
-        IFileProvider fileProvider
-    ) : base(session, mapper) {
-        this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
-        this.commonOption = commonOption ?? throw new ArgumentNullException(nameof(commonOption));
-        this.fileProvider = fileProvider ?? throw new ArgumentNullException(nameof(fileProvider));
-    }
+public partial class AppStorageRepository(
+    ISession session,
+    IMapper mapper,
+    IDistributedCache cache,
+    CommonOption commonOption,
+    IFileProvider fileProvider
+) : HibernateRepository<AppStorageEntity, AppStorageModel, long>(session, mapper), IAppStorageRepository {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {

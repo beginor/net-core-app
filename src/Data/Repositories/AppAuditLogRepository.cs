@@ -15,9 +15,10 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>审计日志仓储实现</summary>
-public partial class AppAuditLogRepository : HibernateRepository<AppAuditLogEntity, AppAuditLogModel, long>, IAppAuditLogRepository {
-
-    public AppAuditLogRepository(ISession session, IMapper mapper) : base(session, mapper) { }
+public partial class AppAuditLogRepository(
+    ISession session,
+    IMapper mapper
+) : HibernateRepository<AppAuditLogEntity, AppAuditLogModel, long>(session, mapper), IAppAuditLogRepository {
 
     public async Task<PaginatedResponseModel<AppAuditLogModel>> SearchAsync(
         AppAuditLogSearchModel model

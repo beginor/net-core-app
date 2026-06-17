@@ -15,9 +15,10 @@ using Beginor.NetCoreApp.Models;
 namespace Beginor.NetCoreApp.Data.Repositories;
 
 /// <summary>json 数据仓储实现</summary>
-public partial class AppJsonDataRepository : HibernateRepository<AppJsonDataEntity, AppJsonDataModel, long>, IAppJsonDataRepository {
-
-    public AppJsonDataRepository(ISession session, IMapper mapper) : base(session, mapper) { }
+public partial class AppJsonDataRepository(
+    ISession session,
+    IMapper mapper
+) : HibernateRepository<AppJsonDataEntity, AppJsonDataModel, long>(session, mapper), IAppJsonDataRepository {
 
     /// <summary>搜索 json 数据 ，返回分页结果。</summary>
     public async Task<PaginatedResponseModel<AppJsonDataModel>> SearchAsync(

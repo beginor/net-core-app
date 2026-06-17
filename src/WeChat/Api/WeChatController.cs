@@ -17,24 +17,12 @@ namespace Beginor.NetCoreApp.WeChat.Api;
 /// <summary>微信授权相关API</summary>
 [ApiController]
 [Route("api/wechat")]
-public class WeChatController : Controller {
-
-    private readonly ILogger<WeChatController> logger;
-    private readonly ApiGateway apiGateway;
-    private UserManager<AppUserEntity> userMgr;
-    private IDistributedCache cache;
-
-    public WeChatController(
-        ILogger<WeChatController> logger,
-        ApiGateway apiGateway,
-        UserManager<AppUserEntity> userMgr,
-        IDistributedCache cache
-    ) {
-        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.apiGateway = apiGateway ?? throw new ArgumentNullException(nameof(apiGateway));
-        this.userMgr = userMgr ?? throw new ArgumentNullException(nameof(userMgr));
-        this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
-    }
+public class WeChatController(
+    ILogger<WeChatController> logger,
+    ApiGateway apiGateway,
+    UserManager<AppUserEntity> userMgr,
+    IDistributedCache cache
+) : Controller {
 
     protected override void Dispose(bool disposing) {
         if (disposing) {
