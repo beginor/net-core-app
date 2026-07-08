@@ -141,20 +141,13 @@ public static class FileHelper {
     }
 
     public static async Task PartialSaveFile(long fileSize, FileInfo fileInfo, long offset, byte[] content) {
-        FileStream stream;
-        if (offset == 0) {
-            if (fileInfo.Exists) {
-                fileInfo.Delete();
-            }
-            stream = fileInfo.Create();
+        if (offset == 0 && fileInfo.Exists) {
+            fileInfo.Delete();
         }
-        else {
-            stream = fileInfo.OpenWrite();
-        }
+        await using var stream = offset == 0 ? fileInfo.Create() : fileInfo.OpenWrite();
         stream.Seek(offset, SeekOrigin.Begin);
         await stream.WriteAsync(content);
         await stream.FlushAsync();
-        stream.Close();
     }
 
 }

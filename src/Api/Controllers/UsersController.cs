@@ -124,7 +124,10 @@ public class UsersController(
                 query = query.Where(u => u.UserName!.Contains(model.UserName!));
             }
             var currUser = await userMgr.FindByNameAsync(User.Identity!.Name!);
-            var userUnit = currUser!.OrganizeUnit!;
+            if (currUser == null) {
+                return Forbid();
+            }
+            var userUnit = currUser.OrganizeUnit!;
             var unitCode = userUnit.Code;
             if (model.OrganizeUnitId.HasValue) {
                 var unitId = model.OrganizeUnitId.Value;
@@ -208,7 +211,7 @@ public class UsersController(
             if (user == null) {
                 return NotFound();
             }
-            if (model.OrganizeUnit.Id != user.OrganizeUnit.Id.ToString()) {
+            if (model.OrganizeUnit != null && user.OrganizeUnit != null && model.OrganizeUnit.Id != user.OrganizeUnit.Id.ToString()) {
                 var unitId = long.Parse(model.OrganizeUnit.Id!);
                 user.OrganizeUnit = await orgUnitRepo.GetEntityByIdAsync(unitId, User);
             }

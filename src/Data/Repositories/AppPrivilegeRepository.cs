@@ -52,14 +52,18 @@ public partial class AppPrivilegeRepository(
     /// <summary>同步必须的权限</summary>
     public async Task SyncRequiredAsync(IEnumerable<string> names) {
         foreach (var name in names) {
+            if (string.IsNullOrEmpty(name)) {
+                continue;
+            }
             var exists = await Session.Query<AppPrivilegeEntity>()
                 .AnyAsync(e => e.Name == name);
             if (exists) {
                 continue;
             }
+            var dotIndex = name.IndexOf('.');
             var entity = new AppPrivilegeEntity {
                 Name = name,
-                Module = name.Substring(0, name.IndexOf('.')),
+                Module = dotIndex > -1 ? name.Substring(0, dotIndex) : "Default",
                 Description = string.Empty,
                 IsRequired = true
             };

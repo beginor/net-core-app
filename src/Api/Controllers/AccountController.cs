@@ -232,12 +232,12 @@ public partial class AccountController(
                     claimsToCache.Add(roleClaim);
                 }
             }
-            await cache.SetUserClaimsAsync(
-                user.Id,
-                claimsToCache.ToArray(),
-                jwt.Value.ExpireTimeSpan
-            );
         }
+        await cache.SetUserClaimsAsync(
+            user.Id,
+            claimsToCache.ToArray(),
+            jwt.Value.ExpireTimeSpan
+        );
         return identity;
     }
 

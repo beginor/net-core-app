@@ -152,6 +152,7 @@ public partial class AppOrganizeUnitRepository(
         }
         catch (Exception) {
             await tx.RollbackAsync(token);
+            throw;
         }
     }
 

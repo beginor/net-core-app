@@ -43,7 +43,7 @@ public class CaptchaGenerator(
     }
 
     public Task<string> GenerateCodeAsync() {
-        var random = new Random();
+        var random = Random.Shared;
         var builder = new StringBuilder();
         for (var i = 0; i < options.CodeLength; i++) {
             var idx = random.Next(allowedChars.Length);
@@ -87,7 +87,7 @@ public class CaptchaGenerator(
     }
 
     private IEnumerable<(int x, int y)> GenerateNoiseMap() {
-        var random = new Random();
+        var random = Random.Shared;
         var noisePointCount = (int)(options.ImageWidth * options.ImageHeight * options.NoisePointsPercent);
         return Enumerable.Range(0, noisePointCount)
             .Select(_ => ( random.Next(options.ImageWidth), random.Next(options.ImageHeight)));
@@ -126,7 +126,7 @@ public class CaptchaGenerator(
 
         var distortionLevel = 0.0;
         if (options.EnableDistortion) {
-            var random = new Random();
+            var random = Random.Shared;
             distortionLevel = options.MinDistortion + (options.MaxDistortion - options.MinDistortion) * random.NextDouble();
             if (random.NextDouble() > 0.5) {
                 distortionLevel *= -1;

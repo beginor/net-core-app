@@ -14,15 +14,15 @@ public class ExceptionMiddleware(
     ILogger<ExceptionMiddleware> logger
 ) {
 
-    public Task InvokeAsync(HttpContext context) {
+    public async Task InvokeAsync(HttpContext context) {
         try {
-            return next(context);
+            await next(context);
         }
         catch (Exception ex) {
             var message = $"Unhandled Exception with {context.Request.Method} {context.Request.Path} .";
             logger.LogError(ex, message);
             context.Response.StatusCode = 500;
-            return context.Response.WriteAsync(
+            await context.Response.WriteAsync(
                 env.IsDevelopment() ? ex.ToString() : message,
                 Encoding.UTF8
             );

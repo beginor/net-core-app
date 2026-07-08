@@ -94,13 +94,14 @@ public partial class AppAttachmentRepository(
                 Directory.CreateDirectory(attachmentFolder);
             }
             var filePath = Path.Combine(todayFolder, $"{entity.Id}{file.Extension}");
-            var destFolder = Path.Combine(storageDir, filePath);
-            file.MoveTo(destFolder);
             entity.FilePath = filePath;
             await Session.FlushAsync(token);
             if (isLocalTrans) {
                 await trans.CommitAsync(token);
             }
+            // Move file after transaction commit to avoid orphan files
+            var destFolder = Path.Combine(storageDir, filePath);
+            file.MoveTo(destFolder);
             Session.Clear();
             Mapper.Map(entity, model);
         }

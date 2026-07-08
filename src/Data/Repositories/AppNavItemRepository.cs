@@ -133,7 +133,13 @@ public partial class AppNavItemRepository(
               select * from cte;
             """;
         var navItems = (await conn.QueryAsync<AppNavItemEntity>(sql, new { roles })).ToArray();
-        var rootNavItem = navItems.OrderBy(n => n.Id).First(n => n.ParentId == null);
+        var rootNavItem = navItems.OrderBy(n => n.Id).FirstOrDefault(n => n.ParentId == null);
+        if (rootNavItem == null) {
+            return new MenuNodeModel {
+                Title = "Empty Menu",
+                Children = Array.Empty<MenuNodeModel>()
+            };
+        }
         var model = new MenuNodeModel {
             Id = rootNavItem.Id.ToString(),
             Title = rootNavItem.Title,

@@ -35,7 +35,7 @@ partial class AccountController {
     /// <summary>获取指定的用户凭证</summary>
     [HttpGet("tokens/{id:long}")]
     [Authorize]
-    public async Task<ActionResult<AppUserTokenModel>> GetById([FromQuery]long id) {
+    public async Task<ActionResult<AppUserTokenModel>> GetById([FromRoute]long id) {
         try {
             var model = await userTokenRepo.GetTokenForUserAsync(id, this.GetUserId()!);
             if (model == null) {

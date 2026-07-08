@@ -11,10 +11,12 @@ public static class ProxyUtil {
 
     public static HttpClient CreateHttpClient(string baseUrl) {
         var handler = new HttpClientHandler() {
-            ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
             AutomaticDecompression = DecompressionMethods.All,
             AllowAutoRedirect = false,
         };
+#if DEBUG
+        handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
+#endif
         var http = new HttpClient(handler);
         http.BaseAddress = new Uri(baseUrl);
         return http;

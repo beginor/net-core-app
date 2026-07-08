@@ -43,7 +43,7 @@ public class AuditLogMiddleware : Disposable {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.sessionFactory = sessionFactory ?? throw new ArgumentNullException(nameof(sessionFactory));
         cts = new CancellationTokenSource();
-        ThreadPool.QueueUserWorkItem(StartSaveAuditLog, cts.Token, preferLocal: false);
+        Task.Run(() => StartSaveAuditLog(cts.Token));
     }
 
     protected override void Dispose(bool disposing) {
@@ -84,29 +84,37 @@ public class AuditLogMiddleware : Disposable {
         }
     }
 
-    private async void StartSaveAuditLog(CancellationToken token) {
-        const int batchSize = 128;
-        IList<AppAuditLogEntity> logs = new List<AppAuditLogEntity>(batchSize);
-        while (!token.IsCancellationRequested) {
-            while (await channel.Reader.WaitToReadAsync(token)) {
-                while (channel.Reader.TryRead(out var log)) {
-                    logs.Add(log);
-                    if (logs.Count == batchSize) {
+    private async Task StartSaveAuditLog(CancellationToken token) {
+        try {
+            const int batchSize = 128;
+            IList<AppAuditLogEntity> logs = new List<AppAuditLogEntity>(batchSize);
+            while (!token.IsCancellationRequested) {
+                while (await channel.Reader.WaitToReadAsync(token)) {
+                    while (channel.Reader.TryRead(out var log)) {
+                        logs.Add(log);
+                        if (logs.Count == batchSize) {
+                            await BatchSaveInTransaction(logs);
+                            logs.Clear();
+                        }
+                    }
+                    if (logs.Count > 0) {
                         await BatchSaveInTransaction(logs);
                         logs.Clear();
                     }
                 }
-                if (logs.Count > 0) {
-                    await BatchSaveInTransaction(logs);
-                    logs.Clear();
+            }
+            if (logs.Count > 0) {
+                logger.LogWarning($"Cancellation requested, {logs.Count} unsaved logs:");
+                foreach (var log in logs) {
+                    logger.LogWarning(log.ToJson());
                 }
             }
         }
-        if (logs.Count > 0) {
-            logger.LogWarning($"Cancellation requested, {logs.Count} unsaved logs:");
-            foreach (var log in logs) {
-                logger.LogWarning(log.ToJson());
-            }
+        catch (OperationCanceledException) {
+            // normal cancellation, do nothing
+        }
+        catch (Exception ex) {
+            logger.LogCritical(ex, "Background audit log saving task failed!");
         }
     }
 
@@ -132,8 +140,11 @@ public class AuditLogMiddleware : Disposable {
         // match by route template
         var matchingDescriptors = new List<ActionDescriptor>();
         foreach (var actionDescriptor in actionDescriptors) {
+            if (actionDescriptor.AttributeRouteInfo?.Template == null) {
+                continue;
+            }
             var matchesRouteTemplate = MatchesTemplate(
-                actionDescriptor.AttributeRouteInfo!.Template!,
+                actionDescriptor.AttributeRouteInfo.Template,
                 path
             );
             if (matchesRouteTemplate) {

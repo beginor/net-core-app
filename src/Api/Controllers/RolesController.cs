@@ -99,7 +99,10 @@ public class RolesController(
     ) {
         try {
             var currUser = await userMgr.FindByNameAsync(User.Identity!.Name!);
-            var userUnit = currUser!.OrganizeUnit!;
+            if (currUser == null) {
+                return Forbid();
+            }
+            var userUnit = currUser.OrganizeUnit!;
             var unitCode = userUnit.Code;
             if (model.OrganizeUnitId.HasValue) {
                 var unitId = model.OrganizeUnitId.Value;

@@ -40,7 +40,7 @@ public static class DistributedCacheExtensions {
             claim.WriteTo(writer);
         }
         writer.Flush();
-        var buffer = stream.GetBuffer();
+        var buffer = stream.ToArray();
         await cache.SetAsync(
             string.Format(CacheKeyFormat.UserClaims, userId),
             buffer,
