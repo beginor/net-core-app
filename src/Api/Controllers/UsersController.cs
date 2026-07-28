@@ -334,7 +334,7 @@ public class UsersController(
             if (user == null) {
                 return NotFound();
             }
-            // await manager.SetLockoutEnabledAsync(user, false);
+            // await userMgr.SetLockoutEnabledAsync(user, false);
             await userMgr.SetLockoutEndDateAsync(
                 user,
                 null
