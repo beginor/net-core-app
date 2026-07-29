@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS public.app_nav_items
     roles character varying(64)[] COLLATE pg_catalog."default",
     target character varying(16) COLLATE pg_catalog."default" DEFAULT ''::character varying,
     frame_url character varying(256) COLLATE pg_catalog."default",
-    is_hidden boolean,
+    is_hidden boolean NOT NULL DEFAULT false,
     CONSTRAINT pk_app_nav_items PRIMARY KEY (id),
     CONSTRAINT fk_app_nav_items_creator FOREIGN KEY (creator_id)
         REFERENCES public.app_users (id) MATCH SIMPLE

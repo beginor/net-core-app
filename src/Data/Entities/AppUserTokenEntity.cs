@@ -43,6 +43,6 @@ public partial class AppUserTokenEntity : BaseEntity<long> {
     public virtual DateTime? ExpiresAt { get; set; }
 
     /// <summary>更新时间</summary>
-    [Property(Name = "UpdateTime", Column = "update_time", Type = "timestamp", NotNull = true)]
-    public virtual DateTime UpdateTime { get; set; }
+    [Property(Name = "UpdatedAt", Column = "updated_at", Type = "timestamp", NotNull = true)]
+    public virtual DateTime UpdatedAt { get; set; }
 }

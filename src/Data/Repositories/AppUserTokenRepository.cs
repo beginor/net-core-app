@@ -65,7 +65,7 @@ public partial class AppUserTokenRepository(
                     Name = tk.Name,
                     Value = tk.Value,
                     ExpiresAt = tk.ExpiresAt,
-                    UpdateTime = tk.UpdateTime,
+                    UpdatedAt = tk.UpdatedAt,
                     Roles = tk.Roles,
                     Privileges = tk.Privileges,
                     Urls = tk.Urls,
@@ -97,7 +97,7 @@ public partial class AppUserTokenRepository(
     public async Task SaveTokenForUserAsync(AppUserTokenModel model, AppUserEntity user) {
         var entity = Mapper.Map<AppUserTokenEntity>(model);
         entity.User = user;
-        entity.UpdateTime = DateTime.Now;
+        entity.UpdatedAt = DateTime.Now;
         await Session.SaveAsync(entity);
         await Session.FlushAsync();
         Session.Clear();
@@ -118,7 +118,7 @@ public partial class AppUserTokenRepository(
         await cache.RemoveAsync(entity.Value!);
         Mapper.Map(model, entity);
         entity.User = user;
-        entity.UpdateTime = DateTime.Now;
+        entity.UpdatedAt = DateTime.Now;
         await Session.UpdateAsync(entity);
         await Session.FlushAsync();
         Session.Clear();

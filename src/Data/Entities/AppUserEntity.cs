@@ -11,8 +11,8 @@ namespace Beginor.NetCoreApp.Data.Entities;
 [Key(1, Column = "id")]
 public class AppUserEntity : NHIdentityUser {
 
-    [Property(Column = "create_time", Type = "timestamp", NotNull = true, Generated = PropertyGeneration.Insert, Update = false, Insert = false)]
-    public virtual DateTime CreateTime { get; set; }
+    [Property(Column = "created_at", Type = "timestamp", NotNull = true, Generated = PropertyGeneration.Insert, Update = false, Insert = false)]
+    public virtual DateTime CreatedAt { get; set; }
 
     [Property(Column = "last_login", Type = "timestamp", NotNull = false)]
     public virtual DateTime? LastLogin { get; set; }

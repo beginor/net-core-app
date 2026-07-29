@@ -16,10 +16,14 @@ CREATE TABLE IF NOT EXISTS public.app_organize_units
     updated_at timestamp without time zone NOT NULL,
     is_deleted boolean NOT NULL,
     CONSTRAINT pk_app_organize_unit PRIMARY KEY (id),
+    CONSTRAINT fk_app_organize_unit_parent FOREIGN KEY (parent_id)
+        REFERENCES public.app_organize_units (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE NO ACTION,
     CONSTRAINT fk_app_organize_unit_creator FOREIGN KEY (creator_id)
         REFERENCES public.app_users (id) MATCH SIMPLE
         ON UPDATE CASCADE
-        ON DELETE CASCADE,
+        ON DELETE NO ACTION,
     CONSTRAINT fk_app_organize_unit_updator FOREIGN KEY (updater_id)
         REFERENCES public.app_users (id) MATCH SIMPLE
         ON UPDATE NO ACTION

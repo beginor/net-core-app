@@ -5,16 +5,12 @@
 CREATE TABLE IF NOT EXISTS public.app_users
 (
     id character varying(32) COLLATE pg_catalog."default" NOT NULL,
-    create_time timestamp without time zone NOT NULL DEFAULT now(),
+    created_at timestamp without time zone NOT NULL DEFAULT now(),
     last_login timestamp without time zone,
     login_count integer DEFAULT 0,
     organize_unit_id bigint NOT NULL DEFAULT 0,
     display_name character varying(64) COLLATE pg_catalog."default",
     CONSTRAINT pk_app_users PRIMARY KEY (id),
-    CONSTRAINT fk_app_users_organize_unit FOREIGN KEY (organize_unit_id)
-        REFERENCES public.app_organize_units (id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
     CONSTRAINT fk_aspnet_users_id FOREIGN KEY (id)
         REFERENCES public.aspnet_users (id) MATCH SIMPLE
         ON UPDATE CASCADE
@@ -32,7 +28,7 @@ COMMENT ON TABLE public.app_users
 COMMENT ON COLUMN public.app_users.id
     IS '用户ID';
 
-COMMENT ON COLUMN public.app_users.create_time
+COMMENT ON COLUMN public.app_users.created_at
     IS '创建时间';
 
 COMMENT ON COLUMN public.app_users.last_login

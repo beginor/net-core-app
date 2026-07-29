@@ -1,24 +1,36 @@
--- Table: public.app_json_data
+-- table: public.app_json_data
 
--- DROP TABLE IF EXISTS public.app_json_data;
+-- drop table if exists public.app_json_data;
 
-CREATE TABLE IF NOT EXISTS public.app_json_data
+create table if not exists public.app_json_data
 (
-    id bigint NOT NULL,
-    value jsonb NOT NULL,
-    CONSTRAINT pk_app_json_data PRIMARY KEY (id)
+    id bigint not null default snow_flake_id(),
+    value jsonb not null,
+    business_id bigint not null default 0,
+    name character varying(64) collate pg_catalog."default" not null default ''::character varying,
+    updated_at timestamp without time zone not null default now(),
+    constraint pk_app_json_data primary key (id)
 )
 
-TABLESPACE pg_default;
+tablespace pg_default;
 
-ALTER TABLE IF EXISTS public.app_json_data
-    OWNER to postgres;
+alter table if exists public.app_json_data
+    owner to postgres;
 
-COMMENT ON TABLE public.app_json_data
-    IS 'JSON 数据';
+comment on table public.app_json_data
+    is 'json 数据';
 
-COMMENT ON COLUMN public.app_json_data.id
-    IS 'JSON 数据ID';
+comment on column public.app_json_data.id
+    is 'json 数据id';
 
-COMMENT ON COLUMN public.app_json_data.value
-    IS 'JSON 值';
+comment on column public.app_json_data.value
+    is 'json 值';
+
+comment on column public.app_json_data.business_id
+    is '业务id';
+
+comment on column public.app_json_data.name
+    is '名称';
+
+comment on column public.app_json_data.updated_at
+    is '更新时间';

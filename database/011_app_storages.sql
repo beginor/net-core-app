@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS public.app_storages
     root_folder character varying(128) COLLATE pg_catalog."default" NOT NULL,
     readonly boolean NOT NULL DEFAULT true,
     roles character varying(64)[] COLLATE pg_catalog."default",
-    CONSTRAINT pk_app_storages PRIMARY KEY (id)
+    CONSTRAINT pk_app_storages PRIMARY KEY (id),
+    CONSTRAINT uq_app_storages_alias_name UNIQUE (alias_name)
 )
 
 TABLESPACE pg_default;

@@ -30,7 +30,7 @@ public class AppUserModel : StringEntity {
     /// <summary>是否启用两部认证</summary>
     public bool TwoFactorEnabled { get; }
     /// <summary>创建时间</summary>
-    public DateTime CreateTime { get; set; }
+    public DateTime CreatedAt { get; set; }
     /// <summary>最近登录时间</summary>
     public DateTime? LastLogin { get; set; }
     /// <summary>登录次数</summary>

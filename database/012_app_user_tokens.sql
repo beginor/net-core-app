@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS public.app_user_tokens
     value character varying(32) COLLATE pg_catalog."default" NOT NULL,
     privileges character varying(64)[] COLLATE pg_catalog."default",
     urls character varying(64)[] COLLATE pg_catalog."default",
-    update_time timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     expires_at timestamp without time zone,
     roles character varying(64)[] COLLATE pg_catalog."default",
     CONSTRAINT pk_app_user_tokens PRIMARY KEY (id),
@@ -47,7 +47,7 @@ COMMENT ON COLUMN public.app_user_tokens.privileges
 COMMENT ON COLUMN public.app_user_tokens.urls
     IS '允许的 url 地址';
 
-COMMENT ON COLUMN public.app_user_tokens.update_time
+COMMENT ON COLUMN public.app_user_tokens.updated_at
     IS '更新时间';
 
 COMMENT ON COLUMN public.app_user_tokens.expires_at

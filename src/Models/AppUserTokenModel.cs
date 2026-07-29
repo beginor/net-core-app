@@ -25,7 +25,7 @@ public partial class AppUserTokenModel : StringEntity {
     public DateTime? ExpiresAt { get; set; }
     /// <summary>更新时间</summary>
     [Required(ErrorMessage = "更新时间 必须填写！")]
-    public DateTime UpdateTime { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
 }
 
