@@ -32,9 +32,9 @@ docker rmi $IMAGE_ARM64 $IMAGE_AMD64 \
 echo "Final image is: $REGISTRY/$IMAGE:$TAG"
 
 # Deploy to server
-ssh ubuntu@127.0.0.1 -t '
+ssh ubuntu@127.0.0.1 -t "
 cd /opt/docker/net-core-app
 sed -i -E \"s|image: (127\.0\.0\.1:5000/)?beginor/net-core-app:amd64(-[0-9]{14})?|image: $REGISTRY/$IMAGE:$TAG|\" docker-compose.yaml
 docker compose pull
 docker compose up -d
-'
+"
