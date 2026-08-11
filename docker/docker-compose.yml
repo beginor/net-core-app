@@ -8,6 +8,7 @@ services:
       - ./config:/app/config
       - ./log:/app/log
       - ./cache:/app/cache
+      - ./storage:/app/storage
     environment:
       TZ: Asia/Shanghai
       ASPNETCORE_ENVIRONMENT: Development
