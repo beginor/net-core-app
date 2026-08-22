@@ -20,22 +20,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 主要项目：
 
-- `src/Entry`：ASP.NET Core Web 入口项目。`Program.cs` 创建 `WebApplication`，从 `src/Entry/config/` 加载 `appsettings*.json`、`hibernate.config`、`log.config`，再调用 `Startup`。
-- `src/Entry/Startup*.cs`：启动配置被拆成多个 partial 文件，每个负责一个横切面，详见 [`src/Entry/CLAUDE.md`](src/Entry/CLAUDE.md)。
-- `src/Api`：HTTP API 层，控制器位于 `Controllers/`，认证授权相关代码位于 `Authorization/` 和 `Middlewares/`。MVC 通过 `Startup.Mvc.cs` 显式加载 `Api` 程序集中的 controller。
-- `src/Data`：数据访问层，实体位于 `Entities/`，仓储接口与实现位于 `Repositories/`。实体使用 `NHibernate.Mapping.Attributes` 映射；仓储通常继承 `HibernateRepository<...>`；`ServiceCollectionExtensions.AddData()` 会按名称约定自动注册以 `Repository` 结尾的服务。
-- `src/Data/ModelMapping.cs`：AutoMapper Profile，维护实体与 `src/Models` DTO 之间的映射。
-- `src/Models`：请求、响应、搜索条件和 DTO 模型。
-- `src/Common`：共享选项、常量、扩展方法、文件/路径/验证码等帮助类。
-- `src/WeChat`：微信相关功能模块；当前 `Startup.cs` 中的 WeChat 服务和管线调用处于注释状态，MVC 也未加载 WeChat controller 程序集。
-- `test/Test`：NUnit 测试项目。`BaseTest` 会创建与应用相同的 DI 容器并调用 `Startup.ConfigureServices`，测试配置文件从 `src/Entry/config` 复制到测试输出目录。
+- `src/Entry`：ASP.NET Core Web 入口项目，详见 [`src/Entry/CLAUDE.md`](src/Entry/CLAUDE.md)。
+- `src/Api`：HTTP API 层，控制器在 `Controllers/`，认证授权在 `Authorization/` 和 `Middlewares/`，详见各目录 CLAUDE.md。
+- `src/Data`：数据访问层，实体在 `Entities/`，仓储在 `Repositories/`，详见各目录 CLAUDE.md；`AddData()` 会按名称约定自动注册以 `Repository` 结尾的服务。
+- `src/Models`：请求、响应、搜索条件和 DTO 模型，与实体的映射见 `src/Data/ModelMapping.cs`，详见 [`src/Models/CLAUDE.md`](src/Models/CLAUDE.md)。
+- `src/Common`：共享选项、常量、扩展方法与帮助类，详见 [`src/Common/CLAUDE.md`](src/Common/CLAUDE.md)。
+- `src/WeChat`：微信模块，当前未启用，详见 [`src/WeChat/CLAUDE.md`](src/WeChat/CLAUDE.md)。
+- `test/Test`：NUnit 测试项目，复用应用 DI 容器，详见 [`test/Test/CLAUDE.md`](test/Test/CLAUDE.md)。
 
 ## 数据库与配置
 
-- 默认数据库是 PostgreSQL，建库脚本位于 `database/`，按编号顺序执行。
+- 默认数据库是 PostgreSQL，建库脚本位于 `database/`，按编号顺序执行，详见 [`database/CLAUDE.md`](database/CLAUDE.md)。
 - NHibernate 连接串和方言配置位于 `src/Entry/config/hibernate.config`。
 - 包版本集中管理在 `Directory.Packages.props`，各项目的共享包引用集中在 `src/package-references.props`。
-- 许多测试会通过 NHibernate/Dapper 访问真实配置的数据库；运行这类测试前需要本地 PostgreSQL 与 `database/` 脚本初始化后的 schema 可用。
+- 测试通过 NHibernate/Dapper 访问真实数据库，运行前需本地 PostgreSQL 与初始化后的 schema 可用，详见 [`test/Test/CLAUDE.md`](test/Test/CLAUDE.md)。
 
 ## 编辑约定
 
