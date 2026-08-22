@@ -21,7 +21,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 主要项目：
 
 - `src/Entry`：ASP.NET Core Web 入口项目。`Program.cs` 创建 `WebApplication`，从 `src/Entry/config/` 加载 `appsettings*.json`、`hibernate.config`、`log.config`，再调用 `Startup`。
-- `src/Entry/Startup*.cs`：启动配置被拆成多个 partial 文件，分别配置 Hibernate、AutoMapper、应用服务、Identity、CORS、PathBase、ForwardedHeaders、自定义响应头、静态文件、OpenAPI、中间件、路由、认证和 MVC。
+- `src/Entry/Startup*.cs`：启动配置被拆成多个 partial 文件，每个负责一个横切面，详见 [`src/Entry/CLAUDE.md`](src/Entry/CLAUDE.md)。
 - `src/Api`：HTTP API 层，控制器位于 `Controllers/`，认证授权相关代码位于 `Authorization/` 和 `Middlewares/`。MVC 通过 `Startup.Mvc.cs` 显式加载 `Api` 程序集中的 controller。
 - `src/Data`：数据访问层，实体位于 `Entities/`，仓储接口与实现位于 `Repositories/`。实体使用 `NHibernate.Mapping.Attributes` 映射；仓储通常继承 `HibernateRepository<...>`；`ServiceCollectionExtensions.AddData()` 会按名称约定自动注册以 `Repository` 结尾的服务。
 - `src/Data/ModelMapping.cs`：AutoMapper Profile，维护实体与 `src/Models` DTO 之间的映射。
@@ -46,10 +46,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 命名规范
 
 ### 数据库
-- 数据库名、表名、字段名均使用小写字母加下划线分割（`snake_case`）；
-- 表名使用英文复数形式，表示集合（如 `users`、`order_items`）；
-- 主键统一命名为 `id`；
-- 外键格式为 `表名单数形式_字段名_id`（如 `user_id`、`order_item_id`）；
+数据库命名规范（`snake_case`、复数表名、`id` 主键、外键格式等）详见 [`database/CLAUDE.md`](database/CLAUDE.md)。
 
 ### C#
 - 类名使用 PascalCase（如 `UserController`、`OrderItem`）；
