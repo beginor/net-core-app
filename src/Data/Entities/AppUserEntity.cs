@@ -26,4 +26,24 @@ public class AppUserEntity : NHIdentityUser {
     [Property(Name = nameof(DisplayName), Column = "display_name", Type = "string", NotNull = false, Length = 64)]
     public virtual string DisplayName { get; set; }
 
+    /// <summary>姓</summary>
+    [Property(Name = nameof(Surname), Column = "surname", Type = "string", NotNull = false, Length = 32)]
+    public virtual string Surname { get; set; }
+
+    /// <summary>名</summary>
+    [Property(Name = nameof(GivenName), Column = "given_name", Type = "string", NotNull = false, Length = 32)]
+    public virtual string GivenName { get; set; }
+
+    /// <summary>出生日期</summary>
+    [Property(Name = nameof(DateOfBirth), Column = "date_of_birth", Type = "string", NotNull = false, Length = 32)]
+    public virtual string DateOfBirth { get; set; }
+
+    /// <summary>性别</summary>
+    [Property(Name = nameof(Gender), Column = "gender", Type = "string", NotNull = false, Length = 16)]
+    public virtual string Gender { get; set; }
+
+    /// <summary>地址</summary>
+    [Property(Name = nameof(StreetAddress), Column = "street_address", Type = "string", NotNull = false, Length = 256)]
+    public virtual string StreetAddress { get; set; }
+
 }

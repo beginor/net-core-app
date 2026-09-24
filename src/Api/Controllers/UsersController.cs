@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +12,6 @@ using Beginor.AppFx.Core;
 using Beginor.NetCoreApp.Common;
 using NHibernate.AspNetCore.Identity;
 using NHibernate.Linq;
-using Beginor.NetCoreApp.Data;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Data.Repositories;
 using Beginor.NetCoreApp.Models;
@@ -57,7 +55,7 @@ public class UsersController(
                 return BadRequest($"User with {model.Email} exists!");
             }
             user = new AppUserEntity();
-            var claims = user.UpdateFromUserModel(mapper, model);
+            mapper.Map(model, user);
             var result = await userMgr.CreateAsync(user);
             // add default roles to new created user;
             var defaultRoles = await roleMgr.Roles
@@ -65,7 +63,6 @@ public class UsersController(
                 .Select(r => r.Name!)
                 .ToListAsync();
             await userMgr.AddToRolesAsync(user, defaultRoles);
-            await AddOrReplaceClaims(user, claims);
             if (result.Succeeded) {
                 mapper.Map(user, model);
                 return model;
@@ -153,12 +150,7 @@ public class UsersController(
             }
 
             var data = query.Skip(model.Skip).Take(model.Take).ToList();
-            var models = new List<AppUserModel>();
-            foreach (var user in data) {
-                var claims = await userMgr.GetClaimsAsync(user);
-                var userModel = user.ToUserModel(mapper, claims);
-                models.Add(userModel);
-            }
+            var models = data.Select(u => mapper.Map<AppUserModel>(u)).ToList();
             var result = new PaginatedResponseModel<AppUserModel> {
                 Skip = model.Skip,
                 Take = model.Take,
@@ -185,8 +177,7 @@ public class UsersController(
             if (user == null) {
                 return NotFound();
             }
-            var claims = await userMgr.GetClaimsAsync(user);
-            var model = user.ToUserModel(mapper, claims);
+            var model = mapper.Map<AppUserModel>(user);
             return model;
         }
         catch (Exception ex) {
@@ -215,8 +206,7 @@ public class UsersController(
                 var unitId = long.Parse(model.OrganizeUnit.Id!);
                 user.OrganizeUnit = await orgUnitRepo.GetEntityByIdAsync(unitId, User);
             }
-            var claims = user.UpdateFromUserModel(mapper, model);
-            await AddOrReplaceClaims(user, claims);
+            mapper.Map(model, user);
             var result = await userMgr.UpdateAsync(user);
             if (result.Succeeded) {
                 mapper.Map(user, model);
@@ -227,19 +217,6 @@ public class UsersController(
         catch (Exception ex) {
             logger.LogError(ex, $"Can not update user by id {id} with {model.ToJson()}");
             return this.InternalServerError(ex);
-        }
-    }
-
-    private async Task AddOrReplaceClaims(AppUserEntity user, IList<Claim> claims) {
-        var userClaims = await userMgr.GetClaimsAsync(user);
-        foreach (var claim in claims) {
-            var userClaim = userClaims.FirstOrDefault(c => c.Type == claim.Type);
-            if (userClaim == null) {
-                await userMgr.AddClaimAsync(user, claim);
-            }
-            else {
-                await userMgr.ReplaceClaimAsync(user, userClaim, claim);
-            }
         }
     }
 

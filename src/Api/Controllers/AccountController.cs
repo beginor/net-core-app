@@ -209,9 +209,22 @@ public partial class AccountController(
         identity.AddClaim(
             new Claim(ClaimTypes.Name, user.UserName!)
         );
-        // user claims;
-        var userClaims = await userMgr.GetClaimsAsync(user);
-        identity.AddClaims(userClaims);
+        // profile claims from user entity;
+        identity.AddClaim(
+            new Claim(ClaimTypes.Surname, user.Surname ?? string.Empty)
+        );
+        identity.AddClaim(
+            new Claim(ClaimTypes.GivenName, user.GivenName ?? string.Empty)
+        );
+        identity.AddClaim(
+            new Claim(ClaimTypes.DateOfBirth, user.DateOfBirth ?? "1970-1-1")
+        );
+        identity.AddClaim(
+            new Claim(ClaimTypes.Gender, user.Gender ?? "保密")
+        );
+        identity.AddClaim(
+            new Claim(ClaimTypes.StreetAddress, user.StreetAddress ?? string.Empty)
+        );
         // save role and role privileges to cache;
         var claimsToCache = new List<Claim> {
             new (AppClaimTypes.OrganizeUnitId, user.OrganizeUnit.Id.ToString()),
