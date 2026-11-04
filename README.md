@@ -1,4 +1,4 @@
-# ASP.NET Core MVC + Angular 的后台管理模板项目
+# ASP.NET Core MVC + React 的后台管理模板项目
 
 ## 已经实现的功能
 
@@ -14,24 +14,20 @@
 
 ## 技术栈简介
 
-### Angular 前端
+### React 前端
 
-前端基于 Angular 实现， 使用到的类库主要有：
+前端基于 React 实现， 使用到的类库主要有：
 
-- `Angular` ， 已开启 TypeScript 严格模式以及 Angular 的严格模板检查；
+- `React` 以及 `TypeScript` 严格模式；
+- `Vite` 作为构建工具；
+- `Ant Design` 组件库；
 - `TailWind CSS` 以及 `Bootstrap Icons` ；
-- `ng-zorro-antd`；
-- `Angular Component/Material`；
-
-Angular 多项目结构， `projects` 提供了多个三个项目，分别是：
-
-- `web` 针对 PC 浏览器的后台管理界面， 使用 `ng-zorro-antd` 实现；
-- `handset` 针对手持设备的界面， 比较简单， 仅作为示例， 使用 `Angular Component/Material` 实现；
-- `app-shared` 在 `web` 和 `handset` 两个项目中共享的组件和服务；
+- `ECharts` 图表；
+- `zustand` 状态管理；
 
 ### 后端
 
-后端实现基于 .NET 9 实现， 使用到的类库有：
+后端实现基于 .NET 10 实现， 使用到的类库有：
 
 - `NHibernate` .NET 平台的老牌 ORM ， 存在多年一直都在更新维护， 非常稳定， 长期维护项目的首选；
 - `NHibernate.AspNetCore.Identity` 基于 NHibernate 的 Identity 实现， 完全不依赖微软的 EntityFramework ；
