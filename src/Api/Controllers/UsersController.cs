@@ -142,6 +142,12 @@ public class UsersController(
                     ':',
                     StringSplitOptions.RemoveEmptyEntries
                 );
+                if (sortInfo.Length < 2) {
+                    return BadRequest($"Invalid sort by {model.SortBy}");
+                }
+                if (typeof(AppUserEntity).GetProperty(sortInfo[0]) == null) {
+                    return BadRequest($"Invalid sort field {sortInfo[0]}");
+                }
                 var isAsc = sortInfo[1].Equals(
                     "ASC",
                     StringComparison.OrdinalIgnoreCase
