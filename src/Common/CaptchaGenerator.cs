@@ -114,7 +114,7 @@ public class CaptchaGenerator(
 
         var xToDraw = (options.ImageWidth - font.MeasureText(code)) / 2;
         var yToDraw = (options.ImageHeight - options.FontSize) / 2 + options.FontSize;
-        plainCanvas.DrawText(code, xToDraw, yToDraw, font, paint);
+        plainCanvas.DrawText(code, xToDraw, yToDraw, SKTextAlign.Left, font, paint);
         plainCanvas.Flush();
 
         if (options is { EnableDistortion: false, EnableNoisePoints: false }) {
