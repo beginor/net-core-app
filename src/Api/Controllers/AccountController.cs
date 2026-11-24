@@ -209,26 +209,15 @@ public partial class AccountController(
         identity.AddClaim(
             new Claim(ClaimTypes.Name, user.UserName!)
         );
-        // profile claims from user entity;
-        identity.AddClaim(
-            new Claim(ClaimTypes.Surname, user.Surname ?? string.Empty)
-        );
-        identity.AddClaim(
-            new Claim(ClaimTypes.GivenName, user.GivenName ?? string.Empty)
-        );
-        identity.AddClaim(
-            new Claim(ClaimTypes.DateOfBirth, user.DateOfBirth ?? "1970-1-1")
-        );
-        identity.AddClaim(
-            new Claim(ClaimTypes.Gender, user.Gender ?? "保密")
-        );
-        identity.AddClaim(
-            new Claim(ClaimTypes.StreetAddress, user.StreetAddress ?? string.Empty)
-        );
-        // save role and role privileges to cache;
+        // save profile claims from user entity to cache;
         var claimsToCache = new List<Claim> {
             new (AppClaimTypes.OrganizeUnitId, user.OrganizeUnit.Id.ToString()),
             new (AppClaimTypes.OrganizeUnitCode, user.OrganizeUnit.Code),
+            new (ClaimTypes.Surname, user.Surname ?? string.Empty),
+            new (ClaimTypes.GivenName, user.GivenName ?? string.Empty),
+            new (ClaimTypes.DateOfBirth, user.DateOfBirth ?? "1970-1-1"),
+            new (ClaimTypes.Gender, user.Gender ?? "保密"),
+            new (ClaimTypes.StreetAddress, user.StreetAddress ?? string.Empty)
         };
         // role as claim;
         var roles = await userMgr.GetRolesAsync(user);
@@ -239,6 +228,7 @@ public partial class AccountController(
             if (role == null) {
                 continue;
             }
+            // role claims is role's privileges
             var roleClaims = await roleMgr.GetClaimsAsync(role);
             foreach (var roleClaim in roleClaims) {
                 if (!identity.Claims.Any(c => c.Type == roleClaim.Type && c.Value == roleClaim.Value)) {
