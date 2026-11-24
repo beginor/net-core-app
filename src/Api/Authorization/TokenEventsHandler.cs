@@ -41,8 +41,10 @@ public class TokenEventsHandler {
             }
         }
         var claims = new List<Claim> {
-            new (ClaimTypes.NameIdentifier, token.Value!),
-            new (ClaimTypes.Name, $"{token.User!.UserName}:{token.Name}")
+            new (ClaimTypes.NameIdentifier, token.User.Id),
+            new (ClaimTypes.Name, $"{token.User!.UserName}"),
+            new (AppClaimTypes.AppUserTokenId, token.Id.ToString()),
+            new (AppClaimTypes.AppUserTokenName, token.Name)
         };
         if (token.Privileges is { Length: > 0 }) {
             claims.AddRange(token.Privileges.Select(privilege => new Claim(AppClaimTypes.Privilege, privilege)));
