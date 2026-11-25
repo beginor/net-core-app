@@ -33,10 +33,9 @@ build_docker_image() {
     docker build \
       --platform $platform/$tag \
       -t $IMAGE:$tag \
-      --output type=image .
+      --load .
     rm -rf dist
 }
 
 build_docker_image "linux" "x64"
 build_docker_image "linux" "arm64"
-
