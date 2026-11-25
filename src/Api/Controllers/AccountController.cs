@@ -94,12 +94,8 @@ public partial class AccountController(
             anonymousInfo.Token = CreateJwtToken(anonymousIdentity);
             return anonymousInfo;
         }
-        var userName = identity.Name;
-        var idx = userName!.IndexOf(':');
-        if (idx > -1) {
-            userName = userName.Substring(0, idx);
-        }
-        var userEntity = await userMgr.FindByNameAsync(userName);
+        // the token identity carries the owner user name in ClaimTypes.Name;
+        var userEntity = await userMgr.FindByNameAsync(identity.Name);
         if (userEntity == null) {
             return NotFound();
         }
@@ -167,10 +163,12 @@ public partial class AccountController(
         var info = new AccountInfoModel {
             Id = user.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value,
             UserName = user.Claims.First(c => c.Type == ClaimTypes.Name).Value,
-            Surname = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value,
-            GivenName = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value,
         };
         var cachedClaims = await cache.GetUserClaimsAsync(info.Id);
+        // profile claims are saved into cache, not into the token;
+        var profileClaims = user.Claims.Concat(cachedClaims);
+        info.Surname = profileClaims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+        info.GivenName = profileClaims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
         info.Roles = cachedClaims
             .Where(c => c.Type == ClaimTypes.Role)
             .Select(c => c.Value)

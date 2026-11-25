@@ -15,14 +15,18 @@ public class ModelMappingTest : BaseTest<IMapper> {
     public void _01_CanMapAppUser() {
         var user = new AppUserEntity {
             Id = "000000001",
-            UserName = "TestUser"
+            UserName = "TestUser",
+            DisplayName = "测试用户"
         };
         var entity = Target.Map<StringIdNameEntity>(user);
         Assert.That(user.Id, Is.EqualTo(entity.Id));
-        Assert.That(user.UserName, Is.EqualTo(entity.Name));
+        // StringIdNameEntity.Name comes from DisplayName, not UserName;
+        Assert.That(user.DisplayName, Is.EqualTo(entity.Name));
         user = Target.Map<AppUserEntity>(entity);
         Assert.That(user.Id, Is.EqualTo(entity.Id));
-        Assert.That(user.UserName, Is.EqualTo(entity.Name));
+        Assert.That(user.DisplayName, Is.EqualTo(entity.Name));
+        // UserName is ignored on the way back;
+        Assert.That(user.UserName, Is.Null.Or.Empty);
     }
 
     [Test]
