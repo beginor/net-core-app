@@ -39,12 +39,13 @@ public partial class Startup {
         ConfigureForwardedHeadersServices(services, env);
         ConfigureCustomHeaderServices(services, env);
         ConfigureStaticFilesServices(services, env);
-        ConfigureOpenApiServices(services, env);
         // routing and mvc
         ConfigureMiddlewareServices(services, env);
         ConfigureRoutingServices(services, env);
         ConfigureAuthenticationServices(services, env);
         ConfigureMvcServices(services, env);
+        // openapi services
+        ConfigureOpenApiServices(services, env);
         // wechat
         // ConfigureWeChatServices(services, env);
         logger.Info("Configure services completed!");
@@ -67,12 +68,13 @@ public partial class Startup {
         ConfigurePathBase(app, env);
         ConfigureCustomHeader(app, env);
         ConfigureStaticFiles(app, env);
-        ConfigureOpenApi(app, env);
         // routing and mvc
         ConfigureMiddleware(app, env);
         ConfigureRouting(app, env);
         ConfigureAuthentication(app, env);
         ConfigureMvc(app, env);
+        // openapi
+        ConfigureOpenApi(app, env);
         // wechat
         // ConfigureWeChat(app, env);
         logger.Info("Configure app completed.");

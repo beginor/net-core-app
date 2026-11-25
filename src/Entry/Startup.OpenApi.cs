@@ -8,17 +8,17 @@ namespace Beginor.NetCoreApp.Entry;
 partial class Startup {
 
     private void ConfigureOpenApiServices(IServiceCollection services, IWebHostEnvironment env) {
-        logger.Debug("Start add opan api related services...");
-        if (env.IsDevelopment()) {
-            services.AddOpenApi();
-        }
-        logger.Debug("Add opan api related service completed.");
+        logger.Debug("Start add openapi related services...");
+        // default document is "v1"
+        services.AddOpenApi();
+        logger.Debug("Add openapi related service completed.");
     }
 
     private void ConfigureOpenApi(WebApplication app, IWebHostEnvironment env) {
-        if (app.Environment.IsDevelopment()) {
-            app.MapOpenApi();
-        }
+        logger.Debug("Start map openapi ...");
+        // default openapi url /openapi/v1.json
+        app.MapOpenApi().RequireAuthorization("openapi.read");
+        logger.Debug("Map openapi completed!");
     }
 
 }
