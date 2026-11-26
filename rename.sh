@@ -19,6 +19,8 @@ sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/Dockerfile
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./docker/Dockerfile
 sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/docker-compose.yaml
 sed -i.bak "s/beginor/${DOCKER_USER}/g" ./docker/docker-compose.yaml
+# build-client.sh 引用前后端仓库目录名，需同步上下文根
+sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./docker/build-client.sh
 # 删除备份文件
 find . -name '*.bak' -delete
 # 提交一下 Docker 文件
@@ -36,9 +38,13 @@ grep Beginor.NetCoreApp -rl src --include '*.config'  | xargs sed -i.bak "s/Begi
 grep Beginor.NetCoreApp -rl src --include '*.csproj'  | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp -rl test --include '*.cs'     | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
 grep Beginor.NetCoreApp -rl test --include '*.csproj' | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
-# 修改各目录 CLAUDE.md：仅替换项目命名空间 Beginor.NetCoreApp，
-# 保留 Beginor.AppFx.* / Beginor.AspNetCore.* 等外部 NuGet 包引用
-grep -rl "Beginor.NetCoreApp" --include CLAUDE.md . | xargs sed -i.bak "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g"
+# 修改所有 CLAUDE.md：依次替换项目命名空间、解决方案文件名与上下文根，
+# 保留 Beginor.AppFx.* / Beginor.AspNetCore.* 等外部 NuGet 包引用（不做裸 Beginor 替换）
+grep -rlE 'NetCoreApp|net-core-app' --include CLAUDE.md . \
+  | xargs sed -i.bak \
+      -e "s/Beginor\.NetCoreApp/${SERVER_PREFIX}/g" \
+      -e "s/NetCoreApp/${PROJ_NAME}/g" \
+      -e "s/net-core-app/${CONTEXT_ROOT}/g"
 
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./src/Entry/Entry.csproj
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./src/Data/Repositories/AppStorageRepository.cs
@@ -47,10 +53,6 @@ sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./src/Entry/config/log.config
 
 sed -i.bak "s/Beginor/${COMPANY_NAME}/g" ./smartcode.yml
 sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./smartcode.yml
-
-sed -i.bak "s/Beginor/${COMPANY_NAME}/g" ./CLAUDE.md
-sed -i.bak "s/NetCoreApp/${PROJ_NAME}/g" ./CLAUDE.md
-sed -i.bak "s/net-core-app/${CONTEXT_ROOT}/g" ./CLAUDE.md
 
 # 删除备份文件
 find . -name '*.bak' -delete
