@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 还原依赖：`dotnet restore NetCoreApp.slnx`
 - 编译解决方案：`dotnet build NetCoreApp.slnx`
 - 运行后端入口项目：`cd src/Entry && dotnet run`
-  - `src/Entry/Properties/launchSettings.json` 默认监听 `http://+:5050`，并设置 `ASPNETCORE_PATHBASE=/net-core-app`。
+  - `src/Entry/Properties/launchSettings.json` 默认监听 `http://+:5050`，并设置 `ASPNETCORE_PATHBASE=/net-core-app` 与本地 `DATABASE_CONNECTION`。
 - 运行全部测试：`cd test/Test && dotnet test`
 - 运行单个测试类或方法：`cd test/Test && dotnet test --filter "FullyQualifiedName~Beginor.NetCoreApp.Test.Api.UsersControllerTest"`
   - 也可以用较短过滤词：`dotnet test --filter FullyQualifiedName~UsersControllerTest`。
@@ -31,7 +31,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 数据库与配置
 
 - 默认数据库是 PostgreSQL，建库脚本位于 `database/`，按编号顺序执行，详见 [`database/CLAUDE.md`](database/CLAUDE.md)。
-- NHibernate 连接串和方言配置位于 `src/Entry/config/hibernate.config`。
+- NHibernate 与日志 appender 的连接串配置位于 `src/Entry/config/hibernate.config`、`log.config`，均为 `${DATABASE_CONNECTION}` 占位符，实际值由环境变量 `DATABASE_CONNECTION` 在启动时注入（见 `Startup.GetDatabaseConnection()`）；运行 app 与测试都必须能解析到该变量。
 - 包版本集中管理在 `Directory.Packages.props`，各项目的共享包引用集中在 `src/package-references.props`。
 - 测试通过 NHibernate/Dapper 访问真实数据库，运行前需本地 PostgreSQL 与初始化后的 schema 可用，详见 [`test/Test/CLAUDE.md`](test/Test/CLAUDE.md)。
 

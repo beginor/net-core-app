@@ -8,9 +8,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 启动流程
 
-- `Program.cs` 创建 `WebApplication`，从 `config/` 加载 `appsettings*.json`、`hibernate.config`、`log.config`；日志用 log4net（`AddLog4net`）；读取 `kestrel` section 配置服务器选项；然后 `new Startup(config, env)`，依次调用 `ConfigureServices` 与 `Configure`。
+- `Program.cs` 创建 `WebApplication`，从 `config/` 加载 `appsettings*.json`、`hibernate.config`、`log.config`；日志用 log4net（`AddLog4netWithDatabaseConnection`，加载 `log.config` 时用 `DATABASE_CONNECTION` 覆盖 `AdoNetAppender` 连接串）；读取 `kestrel` section 配置服务器选项；然后 `new Startup(config, env)`，依次调用 `ConfigureServices` 与 `Configure`。
 - `Startup.cs` 是 partial 主类，`ConfigureServices`/`Configure` 两个方法按固定顺序调用一组 `ConfigureXxxServices`/`ConfigureXxx` 方法，每个 `Startup*.cs` 负责一个横切面：
-  - `Hibernate`：从 `config/hibernate.config` 配置 NHibernate，`AddAttributeMappingAssembly` 用 `HbmSerializer` 序列化实体程序集特性映射；开发环境开启 `ShowSql`/`FormatSql`。
+  - `Hibernate`：从 `config/hibernate.config` 配置 NHibernate（连接串为 `${DATABASE_CONNECTION}` 占位符，由 `GetDatabaseConnection()` 读环境变量覆盖），`AddAttributeMappingAssembly` 用 `HbmSerializer` 序列化实体程序集特性映射；开发环境开启 `ShowSql`/`FormatSql`。
   - `App`：`AddCommon(config, env)`（绑定选项、创建缓存/存储目录）、`AddData()`（自动注册仓储）；设 `Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true` 让 Dapper 匹配下划线列名。
   - `Identity`：`AddIdentity<AppUserEntity, AppRoleEntity>` + `AddHibernateStores()`，密码/锁定策略从 config 的 `identity` section 绑定。
   - `AutoMapper`：注册 `ModelMapping` Profile。
