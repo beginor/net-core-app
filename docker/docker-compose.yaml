@@ -14,6 +14,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:5050
       ASPNETCORE_PATHBASE: /net-core-app
+      DATABASE_CONNECTION: "server=127.0.0.1;port=5432;database=net_core_app;user id=postgres;password=pgsql@18;"
     restart: unless-stopped
 networks:
   default:
