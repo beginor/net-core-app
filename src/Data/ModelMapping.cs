@@ -30,9 +30,11 @@ public class ModelMapping : AutoMapper.Profile {
         CreateMap<AppPrivilegeEntity, AppPrivilegeModel>()
             .ReverseMap();
         CreateMap<AppAuditLogEntity, AppAuditLogModel>()
-            .ReverseMap();
+            .ReverseMap()
+            .ForMember(dest => dest.Id, map => map.Ignore());
         CreateMap<AppClientErrorEntity, AppClientErrorModel>()
-            .ReverseMap();
+            .ReverseMap()
+            .ForMember(dest => dest.Id, map => map.Ignore());
         CreateMap<AppStorageEntity, AppStorageModel>()
             .ReverseMap();
         CreateMap<AppUserTokenEntity, AppUserTokenModel>()
