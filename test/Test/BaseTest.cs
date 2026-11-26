@@ -11,7 +11,6 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using NHibernate;
 using NUnit.Framework;
-using Beginor.AppFx.Logging.Log4net;
 using Beginor.NetCoreApp.Common;
 using Beginor.NetCoreApp.Data.Entities;
 using Beginor.NetCoreApp.Entry;
@@ -36,7 +35,30 @@ public abstract class BaseTest {
     protected virtual void InitDapper() {
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
     }
+
+    // Load environment variables from the linked launchSettings.json (Entry profile);
+    // variables already set in the process environment take precedence.
+    protected virtual void InitLaunchSettingsEnvironment() {
+        var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Properties", "launchSettings.json");
+        if (!File.Exists(file)) {
+            return;
+        }
+        using var doc = JsonDocument.Parse(File.ReadAllText(file));
+        if (!doc.RootElement.TryGetProperty("profiles", out var profiles)) {
+            return;
+        }
+        if (!profiles.TryGetProperty("Entry", out var profile)
+            || !profile.TryGetProperty("environmentVariables", out var variables)) {
+            return;
+        }
+        foreach (var variable in variables.EnumerateObject()) {
+            if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable(variable.Name))) {
+                Environment.SetEnvironmentVariable(variable.Name, variable.Value.GetString());
+            }
+        }
+    }
      protected virtual IServiceProvider InitServiceProvider() {
+         InitLaunchSettingsEnvironment();
          var services = new ServiceCollection();
         // setup test hosting env
         var baseDir = AppDomain.CurrentDomain.BaseDirectory;
@@ -51,11 +73,10 @@ public abstract class BaseTest {
             .AddJsonFile(Path.Combine(configDir, "appsettings.json"))
             .AddJsonFile(
                 Path.Combine(configDir, $"appsettings.{env.EnvironmentName}.json")
-            )
-            .Build();
+            ).Build();
         services.AddSingleton<IConfiguration>(config);
         services.AddLogging(logging => {
-            logging.AddLog4net(Path.Combine(configDir, "log.config"));
+            logging.AddLog4netWithDatabaseConnection(Path.Combine(configDir, "log.config"));
         });
         this.InitTestServices(env, services, config);
         return services.BuildServiceProvider(false);

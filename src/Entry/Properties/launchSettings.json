@@ -7,7 +7,8 @@
       "launchUrl": "/",
       "environmentVariables": {
         "ASPNETCORE_PATHBASE": "/net-core-app",
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DATABASE_CONNECTION": "server=127.0.0.1;port=5432;database=net_core_app;user id=postgres;password=pgsql@18;"
       },
       "applicationUrl": "http://+:5050"
     }

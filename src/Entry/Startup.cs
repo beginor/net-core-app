@@ -86,4 +86,10 @@ public partial class Startup {
         );
     }
 
+    internal static string? GetDatabaseConnection() {
+        return SysEnvironment.GetEnvironmentVariable(
+            "DATABASE_CONNECTION"
+        );
+    }
+
 }

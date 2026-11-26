@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Beginor.AppFx.Core;
-using Beginor.AppFx.Logging.Log4net;
 
 namespace Beginor.NetCoreApp.Entry;
 
@@ -21,9 +20,10 @@ public class Program {
             .AddJsonFile(Path.Combine("config", $"appsettings.{env.EnvironmentName}.json"), true, true)
             .AddEnvironmentVariables()
             .AddCommandLine(args);
+        var logConfigFile = Path.Combine("config", "log.config");
         builder.Logging
             .ClearProviders()
-            .AddLog4net(Path.Combine("config", "log.config"));
+            .AddLog4netWithDatabaseConnection(logConfigFile);
         var section = builder.Configuration.GetSection("kestrel");
         if (section.Exists()) {
             builder.Services.Configure<KestrelServerOptions>(section);

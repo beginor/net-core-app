@@ -27,11 +27,11 @@
     <PackageVersion Include="NUnit3TestAdapter" Version="6.3.1" />
     <PackageVersion Include="SkiaSharp" Version="4.157.0" />
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="4.157.0" />
-    <PackageVersion Include="Beginor.AppFx.Api" Version="10.0.7" />
-    <PackageVersion Include="Beginor.AppFx.Core" Version="10.0.7" />
-    <PackageVersion Include="Beginor.AppFx.DependencyInjection" Version="10.0.7" />
-    <PackageVersion Include="Beginor.AppFx.Logging.Log4net" Version="10.0.7" />
-    <PackageVersion Include="Beginor.AppFx.Repository.Hibernate" Version="10.0.7" />
+    <PackageVersion Include="Beginor.AppFx.Api" Version="10.0.8" />
+    <PackageVersion Include="Beginor.AppFx.Core" Version="10.0.8" />
+    <PackageVersion Include="Beginor.AppFx.DependencyInjection" Version="10.0.8" />
+    <PackageVersion Include="Beginor.AppFx.Logging.Log4net" Version="10.0.8" />
+    <PackageVersion Include="Beginor.AppFx.Repository.Hibernate" Version="10.0.8" />
     <PackageVersion Include="Beginor.AspNetCore.Authentication.Token" Version="10.0.0" />
     <PackageVersion Include="Beginor.AspNetCore.Middlewares.CustomHeader" Version="10.0.0" />
     <PackageVersion Include="Beginor.AspNetCore.Middlewares.GzipStatic" Version="10.0.0" />

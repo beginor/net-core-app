@@ -21,6 +21,10 @@ partial class Startup {
         var isDevelopment = env.IsDevelopment().ToString();
         cfg.SetProperty(Environment.ShowSql, isDevelopment);
         cfg.SetProperty(Environment.FormatSql, isDevelopment);
+        var connectionString = GetDatabaseConnection();
+        if (!string.IsNullOrWhiteSpace(connectionString)) {
+            cfg.SetProperty(Environment.ConnectionString, connectionString);
+        }
         cfg.AddIdentityMappingsForPostgres();
         cfg.AddAttributeMappingAssembly(typeof(Beginor.NetCoreApp.Data.ModelMapping).Assembly);
         services.AddHibernate(cfg);

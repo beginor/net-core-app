@@ -48,6 +48,10 @@
     <None Update="Images\input.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\src\Entry\Properties\launchSettings.json">
+      <Link>Properties\launchSettings.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
